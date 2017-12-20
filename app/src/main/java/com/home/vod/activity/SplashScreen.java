@@ -43,6 +43,7 @@ import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
+import com.home.vod.SplashScreenHandler;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -106,6 +107,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
 
+    SplashScreenHandler splashScreenHandler;
+
 
     private void _init() {
         Util.getDPI(this);
@@ -134,7 +137,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
+        try {
+            splashScreenHandler.handleSplashscreen(imageResize);
+        } catch (Exception e) {
 
+        }
 
       imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
@@ -164,6 +171,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        splashScreenHandler = new SplashScreenHandler(this);
 
         _init();
     }

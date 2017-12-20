@@ -44,8 +44,7 @@ public class RegisterUIHandler {
     private TextView termsTextView,termsTextView1;
     private LinearLayout btnLogin;
     private EditText editName;
-    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
-    private Button loginButton;
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
     private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
@@ -64,23 +63,22 @@ public class RegisterUIHandler {
     public void setTermsTextView(LanguagePreference languagePreference){
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
-
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
         editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.muvinow.com.au/terms-privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.plusnights.co.uk/privacy-policy"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }
         });
-   }
-
+    }
     public void getRegisterName(){
         regNameStr = editName.getText().toString().trim();
         if (!regNameStr.equals("")) {
-            ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
+            ((RegisterActivity) context).registerButtonClicked(regNameStr,last_name,regPhone);
         }else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         }
@@ -92,5 +90,7 @@ public class RegisterUIHandler {
     public void callSignin(LanguagePreference languagePreference){
 
     }
+
+
 
 }
