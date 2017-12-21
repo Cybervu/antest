@@ -4071,10 +4071,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
-                if (preferenceManager.getUseridFromPref()!=null){
+                /*if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
 
             private void onApplicationDisconnected() {
@@ -4240,9 +4240,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onStatusUpdated() {
 
-                Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
+              /*  Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
             }
 
             @Override

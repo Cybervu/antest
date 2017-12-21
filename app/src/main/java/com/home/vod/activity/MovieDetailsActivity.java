@@ -1929,10 +1929,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
-                if (preferenceManager.getUseridFromPref()!=null){
+             /*   if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
 
             private void onApplicationDisconnected() {
