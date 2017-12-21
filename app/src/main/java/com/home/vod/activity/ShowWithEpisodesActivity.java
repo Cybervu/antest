@@ -723,10 +723,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
 
+            GetReviewDetails();
+
         } else {
             noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
             noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
+            noDataLayout.bringToFront();
+            noDataLayout.setVisibility(View.VISIBLE);
 
             story_layout.setVisibility(View.GONE);
             bannerImageRelativeLayout.setVisibility(View.GONE);
@@ -735,7 +738,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
 
-        GetReviewDetails();
+
 
         /***favorite *****/
     }

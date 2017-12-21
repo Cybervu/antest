@@ -3305,15 +3305,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     .placeholder(R.drawable.logo)
                     .into(moviePoster);
 
+            GetReviewDetails();
 
 
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.bringToFront();
             noDataLayout.setVisibility(View.VISIBLE);
         }
 
-        Log.v("MUVI", "call review details");
-        GetReviewDetails();
 
     }
 
