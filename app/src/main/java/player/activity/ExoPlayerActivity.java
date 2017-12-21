@@ -2327,69 +2327,41 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     public void backCalled() {
 
-        if (asynGetIpAddress != null) {
-            asynGetIpAddress.cancel(true);
-        }
-        if (asyncVideoLogDetails != null) {
-            asyncVideoLogDetails.cancel(true);
-        }
-        if (asyncFFVideoLogDetails != null) {
-            asyncFFVideoLogDetails.cancel(true);
-        }
-        if (progressView != null && progressView.isShown()) {
-            progressView = null;
-        }
-        if (timer != null) {
-            stoptimertask();
-            timer = null;
-        }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        return;
-      /*  if (video_completed == false){
-
-            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+        try{
+            if (asynGetIpAddress != null) {
+                asynGetIpAddress.cancel(true);
+            }
+            if (asyncVideoLogDetails != null) {
+                asyncVideoLogDetails.cancel(true);
+            }
+            if (asyncFFVideoLogDetails != null) {
+                asyncFFVideoLogDetails.cancel(true);
+            }
+            if (progressView != null && progressView.isShown()) {
+                progressView = null;
+            }
+            if (timer != null) {
+                stoptimertask();
+                timer = null;
+            }
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }*//*else{
-            watchStatus = "com"
-            asyncVideoLogDetails = new AsyncVideoLogDetails();
-            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        }*//*
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView!=null) {
-            emVideoView.release();
+//        return;
+
+
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView != null) {
+                emVideoView.release();
+            }
+            finish();
+            overridePendingTransition(0, 0);
+        }catch (Exception e){
+            Log.v("MUVI1","Exception =="+e.toString());
         }
-        finish();
-        overridePendingTransition(0, 0);*/
+
     }
 
-    /* public void onBackPressed() {
-         super.onBackPressed();
-         Log.v("MUVI","HHVID"+videoLogId);
-         if (asynGetIpAddress!=null){
-             asynGetIpAddress.cancel(true);
-         }
-         if (asyncVideoLogDetails!=null){
-             asyncVideoLogDetails.cancel(true);
-         }
-         if (asyncFFVideoLogDetails!=null){
-             asyncFFVideoLogDetails.cancel(true);
-         }
-         if (progressView!=null && progressView.isShown()){
-             progressView = null;
-         }
-         if (timer!=null){
-             stoptimertask();
-             timer = null;
-         }
-         mHandler.removeCallbacks(updateTimeTask);
-         if (emVideoView!=null) {
-             emVideoView.release();
-         }
-         finish();
-         overridePendingTransition(0, 0);
-     }*/
+
     @Override
     protected void onUserLeaveHint() {
 
@@ -2698,21 +2670,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         protected void onPostExecute(Void result) {
-         /*   try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                videoLogId = "0";
-            }*/
+
             if (responseStr == null) {
                 videoLogId = "0";
                 log_temp_id = "0";
 
             }
-            mHandler.removeCallbacks(updateTimeTask);
-            if (emVideoView != null) {
-                emVideoView.release();
-            }
+
+            try{
+                mHandler.removeCallbacks(updateTimeTask);
+                if (emVideoView != null) {
+                    emVideoView.release();
+                }
+            }catch (Exception e){}
+
+
             /***AD ***///
             if (video_completed == true) {
                 Log.v("MUVI", "CALLED VIDEO COMPLETED");

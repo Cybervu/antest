@@ -106,7 +106,7 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
             URL url = new URL(APIUrlConstant.getAddSubscriptionUrl());
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.withouPaymentSubscriptionRegDetailsInput.getAuthToken().trim())
-                    .appendQueryParameter(HeaderConstants.IS_ADVANCE, this.withouPaymentSubscriptionRegDetailsInput.getIs_advance().trim())
+                    .appendQueryParameter(HeaderConstants.IS_ADVANCE, this.withouPaymentSubscriptionRegDetailsInput.getIs_advance())
                     .appendQueryParameter(HeaderConstants.CARD_NAME, this.withouPaymentSubscriptionRegDetailsInput.getCard_name().trim())
                     .appendQueryParameter(HeaderConstants.EXP_MONTH, this.withouPaymentSubscriptionRegDetailsInput.getExp_month().trim())
                     .appendQueryParameter(HeaderConstants.CARD_NUMBER, this.withouPaymentSubscriptionRegDetailsInput.getCard_number().trim())
@@ -126,7 +126,7 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
                     .appendQueryParameter(HeaderConstants.CURRENCY_ID, this.withouPaymentSubscriptionRegDetailsInput.getCurrency_id().trim())
                     .appendQueryParameter(HeaderConstants.IS_SAVE_THIS_CARD, this.withouPaymentSubscriptionRegDetailsInput.getIs_save_this_card().trim())
                     .appendQueryParameter(HeaderConstants.EXISTING_CARD_ID, this.withouPaymentSubscriptionRegDetailsInput.getExisting_card_id().trim());
-            String query = builder.build().getEncodedQuery();
+            String query = (builder.build().getEncodedQuery()).replaceAll("%40","@");
             responseStr = Utils.handleHttpAndHttpsRequest(url,query,status,message);
 
 

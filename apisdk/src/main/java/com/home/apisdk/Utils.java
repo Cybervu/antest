@@ -38,10 +38,23 @@ public class Utils {
                 try{
                     String requestParameter[] = query.split("&");
                     for(int i=0;i<requestParameter.length;i++){
+
+
                         String key_value[] = requestParameter[i].split("=");
-                        conn.setRequestProperty(key_value[0].trim(),key_value[1].trim());
+                        if(requestParameter[i].trim().endsWith("=")){
+                            conn.setRequestProperty(key_value[0].trim(),"");
+                            Log.v("MUVI1","key="+key_value[0]+"  ======  value=");
+                        }else{
+                            conn.setRequestProperty(key_value[0].trim(),key_value[1].trim());
+                            Log.v("MUVI1","key="+key_value[0]+"  ======  value="+key_value[1]);
+                        }
+
+
+//
                     }
-                }catch (Exception e){}
+                }catch (Exception e){
+                    Log.v("BIBHU1","Exception ==="+e.toString());
+                }
 
 
                 InputStream ins = conn.getInputStream();

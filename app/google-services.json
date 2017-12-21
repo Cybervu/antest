@@ -886,6 +886,10 @@
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -937,6 +941,10 @@
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1129,6 +1137,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-uftcbc99to5spfhhp6pqr408v19dqnjt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.cmaxtv",
+            "certificate_hash": "183a744614bc9e6654976bf12a589426bbd8440e"
+          }
+        },
+        {
           "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -1143,8 +1159,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.release.digiosmosis"
+              }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -1300,6 +1328,37 @@
         "mobilesdk_app_id": "1:914358570958:android:9ade85033b146f2b",
         "android_client_info": {
           "package_name": "com.release.coteouest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:863590bf4e29615b",
+        "android_client_info": {
+          "package_name": "com.release.ikauf"
         }
       },
       "oauth_client": [

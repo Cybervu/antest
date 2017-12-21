@@ -723,10 +723,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
 
+            GetReviewDetails();
+
         } else {
             noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
             noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
+            noDataLayout.bringToFront();
+            noDataLayout.setVisibility(View.VISIBLE);
 
             story_layout.setVisibility(View.GONE);
             bannerImageRelativeLayout.setVisibility(View.GONE);
@@ -735,7 +738,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
 
-        GetReviewDetails();
+
 
         /***favorite *****/
     }
@@ -4071,10 +4074,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
-                if (preferenceManager.getUseridFromPref()!=null){
+                /*if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
 
             private void onApplicationDisconnected() {
@@ -4240,9 +4243,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onStatusUpdated() {
 
-                Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
+              /*  Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
             }
 
             @Override

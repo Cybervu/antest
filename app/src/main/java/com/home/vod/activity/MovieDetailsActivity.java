@@ -1929,10 +1929,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
-                if (preferenceManager.getUseridFromPref()!=null){
+             /*   if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
 
             private void onApplicationDisconnected() {
@@ -3305,15 +3305,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     .placeholder(R.drawable.logo)
                     .into(moviePoster);
 
+            GetReviewDetails();
 
 
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.bringToFront();
             noDataLayout.setVisibility(View.VISIBLE);
         }
 
-        Log.v("MUVI", "call review details");
-        GetReviewDetails();
 
     }
 
