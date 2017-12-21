@@ -106,15 +106,15 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getVoucherSubscriptionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.voucherSubscriptionInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.USER_ID, this.voucherSubscriptionInputModel.getUser_id());
-            httppost.addHeader(HeaderConstants.MOVIE_ID, this.voucherSubscriptionInputModel.getMovie_id());
-            httppost.addHeader(HeaderConstants.STREAM_ID, this.voucherSubscriptionInputModel.getStream_id());
-            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.voucherSubscriptionInputModel.getPurchase_type());
-            httppost.addHeader(HeaderConstants.VOUCHER_CODE, this.voucherSubscriptionInputModel.getVoucher_code());
-            httppost.addHeader(HeaderConstants.IS_PREORDER, this.voucherSubscriptionInputModel.getIs_preorder());
-            httppost.addHeader(HeaderConstants.SEASON, this.voucherSubscriptionInputModel.getSeason());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.voucherSubscriptionInputModel.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.voucherSubscriptionInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.voucherSubscriptionInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.voucherSubscriptionInputModel.getMovie_id().trim());
+            httppost.addHeader(HeaderConstants.STREAM_ID, this.voucherSubscriptionInputModel.getStream_id().trim());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.voucherSubscriptionInputModel.getPurchase_type().trim());
+            httppost.addHeader(HeaderConstants.VOUCHER_CODE, this.voucherSubscriptionInputModel.getVoucher_code().trim());
+            httppost.addHeader(HeaderConstants.IS_PREORDER, this.voucherSubscriptionInputModel.getIs_preorder().trim());
+            httppost.addHeader(HeaderConstants.SEASON, this.voucherSubscriptionInputModel.getSeason().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.voucherSubscriptionInputModel.getLanguage().trim());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

@@ -103,18 +103,18 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.registration_input.getAuthToken());
-            httppost.addHeader(HeaderConstants.EMAIL, this.registration_input.getEmail());
-            httppost.addHeader(HeaderConstants.MOBILE_NO, this.registration_input.getPhone());
-            httppost.addHeader(HeaderConstants.PASSWORD, this.registration_input.getPassword());
-            httppost.addHeader(HeaderConstants.NAME, this.registration_input.getName());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.registration_input.getLang_code());
-            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.registration_input.getCustom_country());
-            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.registration_input.getCustom_languages());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.registration_input.getDevice_id());
-            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.registration_input.getGoogle_id());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.registration_input.getDevice_type());
-            httppost.addHeader(HeaderConstants.Custom_last_Name, this.registration_input.getCustom_last_name());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.registration_input.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.EMAIL, this.registration_input.getEmail().trim());
+            httppost.addHeader(HeaderConstants.MOBILE_NO, this.registration_input.getPhone().trim());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.registration_input.getPassword().trim());
+            httppost.addHeader(HeaderConstants.NAME, this.registration_input.getName().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.registration_input.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.registration_input.getCustom_country().trim());
+            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.registration_input.getCustom_languages().trim());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.registration_input.getDevice_id().trim());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.registration_input.getGoogle_id().trim());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.registration_input.getDevice_type().trim());
+            httppost.addHeader(HeaderConstants.Custom_last_Name, this.registration_input.getCustom_last_name().trim());
 
             // Execute HTTP Post Request
             try {

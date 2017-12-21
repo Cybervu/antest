@@ -110,20 +110,20 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
             URL url = new URL(APIUrlConstant.getVideoLogsUrl());
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.videoLogsInputModel.getAuthToken())
-                    .appendQueryParameter(HeaderConstants.USER_ID, this.videoLogsInputModel.getUserId())
-                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.videoLogsInputModel.getIpAddress())
-                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.videoLogsInputModel.getMuviUniqueId())
-                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.videoLogsInputModel.getEpisodeStreamUniqueId())
-                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.videoLogsInputModel.getPlayedLength())
-                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.videoLogsInputModel.getWatchStatus())
-                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoLogsInputModel.getDeviceType())
-                    .appendQueryParameter(HeaderConstants.LOG_TEMP_ID, this.videoLogsInputModel.getLogTemId())
-                    .appendQueryParameter(HeaderConstants.RESUME_TIME, this.videoLogsInputModel.getResumeTime())
-                    .appendQueryParameter(HeaderConstants.CONTENT_TYPE_ID, this.videoLogsInputModel.getContentTypeId())
-                    .appendQueryParameter(HeaderConstants.LOG_ID, this.videoLogsInputModel.getVideoLogId())
-                    .appendQueryParameter(HeaderConstants.IS_STREAMING_RESTRICTION, this.videoLogsInputModel.getIs_streaming_restriction())
-                    .appendQueryParameter(HeaderConstants.RESTRICT_STREAM_ID, this.videoLogsInputModel.getRestrict_stream_id());
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.videoLogsInputModel.getAuthToken().trim())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.videoLogsInputModel.getUserId().trim())
+                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.videoLogsInputModel.getIpAddress().trim())
+                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.videoLogsInputModel.getMuviUniqueId().trim())
+                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.videoLogsInputModel.getEpisodeStreamUniqueId().trim())
+                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.videoLogsInputModel.getPlayedLength().trim())
+                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.videoLogsInputModel.getWatchStatus().trim())
+                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoLogsInputModel.getDeviceType().trim())
+                    .appendQueryParameter(HeaderConstants.LOG_TEMP_ID, this.videoLogsInputModel.getLogTemId().trim())
+                    .appendQueryParameter(HeaderConstants.RESUME_TIME, this.videoLogsInputModel.getResumeTime().trim())
+                    .appendQueryParameter(HeaderConstants.CONTENT_TYPE_ID, this.videoLogsInputModel.getContentTypeId().trim())
+                    .appendQueryParameter(HeaderConstants.LOG_ID, this.videoLogsInputModel.getVideoLogId().trim())
+                    .appendQueryParameter(HeaderConstants.IS_STREAMING_RESTRICTION, this.videoLogsInputModel.getIs_streaming_restriction().trim())
+                    .appendQueryParameter(HeaderConstants.RESTRICT_STREAM_ID, this.videoLogsInputModel.getRestrict_stream_id().trim());
 
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);

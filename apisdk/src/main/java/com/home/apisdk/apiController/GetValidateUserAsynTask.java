@@ -114,13 +114,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
             URL url = new URL(APIUrlConstant.getValidateUserForContentUrl());
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken())
-                    .appendQueryParameter(HeaderConstants.USER_ID, this.validateUserInput.getUserId())
-                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId())
-                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
-                    .appendQueryParameter(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId())
-                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
-                    .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken().trim())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.validateUserInput.getUserId().trim())
+                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId().trim())
+                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId().trim())
+                    .appendQueryParameter(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId().trim())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode().trim())
+                    .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType().trim());
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 

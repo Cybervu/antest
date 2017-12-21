@@ -105,9 +105,9 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getLogoutUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.logoutInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.LOGIN_HISTORY_ID, this.logoutInput.getLogin_history_id());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.logoutInput.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.logoutInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.LOGIN_HISTORY_ID, this.logoutInput.getLogin_history_id().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.logoutInput.getLang_code().trim());
 
             // Execute HTTP Post Request
             try {

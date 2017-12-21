@@ -104,9 +104,9 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetstaticpagesUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getStaticPagesDeatilsModelInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.getStaticPagesDeatilsModelInput.getPermalink());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.getStaticPagesDeatilsModelInput.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getStaticPagesDeatilsModelInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.getStaticPagesDeatilsModelInput.getPermalink().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.getStaticPagesDeatilsModelInput.getLanguage().trim());
 
             // Execute HTTP Post Request
             try {

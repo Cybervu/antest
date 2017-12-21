@@ -109,8 +109,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
             HttpPost httppost = new HttpPost(url);
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.IP, this.checkGeoBlockInputModel.getIp());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.IP, this.checkGeoBlockInputModel.getIp().trim());
 
 
             // Execute HTTP Post Request

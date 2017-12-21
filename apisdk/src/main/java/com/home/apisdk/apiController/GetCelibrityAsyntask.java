@@ -111,9 +111,9 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel, Void, V
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetCelibrityUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.celibrityInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.MOVIE_ID, this.celibrityInputModel.getMovie_id());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.celibrityInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.celibrityInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.celibrityInputModel.getMovie_id().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.celibrityInputModel.getLang_code().trim());
 
             Log.v("MUVISDK", "lang_code = " + this.celibrityInputModel.getLang_code());
             Log.v("MUVISDK", "authToken = " + this.celibrityInputModel.getAuthToken());

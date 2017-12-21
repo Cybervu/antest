@@ -99,9 +99,9 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.aboutUsInput.getPermalink());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.aboutUsInput.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.aboutUsInput.getPermalink().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.aboutUsInput.getLang_code().trim());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

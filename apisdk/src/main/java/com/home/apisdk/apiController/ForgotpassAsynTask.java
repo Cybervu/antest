@@ -104,9 +104,9 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getForgotPasswordUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.forgotpassword_input.getAuthToken());
-            httppost.addHeader(HeaderConstants.EMAIL, this.forgotpassword_input.getEmail());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.forgotpassword_input.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.forgotpassword_input.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.EMAIL, this.forgotpassword_input.getEmail().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.forgotpassword_input.getLang_code().trim());
 
             Log.v("MUVISDK", "responseStr" + this.forgotpassword_input.getAuthToken());
             Log.v("MUVISDK", "responseStr" + this.forgotpassword_input.getEmail());

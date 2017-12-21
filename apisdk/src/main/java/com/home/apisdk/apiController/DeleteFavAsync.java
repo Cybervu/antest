@@ -104,9 +104,9 @@ public class DeleteFavAsync extends AsyncTask<DeleteFavInputModel, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getDeleteFavList());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.deleteFavInputModel.getAuthTokenStr().trim());
-            httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.deleteFavInputModel.getMovieUniqueId());
-            httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.deleteFavInputModel.getIsEpisode());
-            httppost.addHeader(HeaderConstants.USER_ID, this.deleteFavInputModel.getLoggedInStr());
+            httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.deleteFavInputModel.getMovieUniqueId().trim());
+            httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.deleteFavInputModel.getIsEpisode().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.deleteFavInputModel.getLoggedInStr().trim());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

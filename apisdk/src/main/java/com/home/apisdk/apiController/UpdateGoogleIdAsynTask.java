@@ -106,10 +106,10 @@ public class UpdateGoogleIdAsynTask extends AsyncTask<UpdateGoogleIdInputModel, 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateGoogleid());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.updateGoogleIdInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.USER_ID, this.updateGoogleIdInputModel.getUser_id());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.updateGoogleIdInputModel.getDevice_id());
-            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.updateGoogleIdInputModel.getGoogle_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.updateGoogleIdInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.updateGoogleIdInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.updateGoogleIdInputModel.getDevice_id().trim());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.updateGoogleIdInputModel.getGoogle_id().trim());
 
 
             // Execute HTTP Post Request

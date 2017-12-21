@@ -123,12 +123,12 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id());
-            httppost.addHeader(HeaderConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id());
-            httppost.addHeader(HeaderConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed());
-            httppost.addHeader(HeaderConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.getVideoDetailsInput.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id().trim());
+            httppost.addHeader(HeaderConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id().trim());
+            httppost.addHeader(HeaderConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.getVideoDetailsInput.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.getVideoDetailsInput.getLanguage().trim());
 
             // Execute HTTP Post Request
             try {

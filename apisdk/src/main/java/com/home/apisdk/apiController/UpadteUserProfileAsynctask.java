@@ -105,15 +105,15 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateProfileUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken());
-            httppost.addHeader(HeaderConstants.USER_ID, this.update_userProfile_input.getUser_id());
-            httppost.addHeader(HeaderConstants.NAME, this.update_userProfile_input.getName());
-            httppost.addHeader(HeaderConstants.PASSWORD, this.update_userProfile_input.getPassword());
-            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.update_userProfile_input.getCustom_languages());
-            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.update_userProfile_input.getCustom_country());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.update_userProfile_input.getLang_code());
-            httppost.addHeader(HeaderConstants.MOBILE_NO, this.update_userProfile_input.getPhone_no());
-            httppost.addHeader(HeaderConstants.Custom_last_Name, this.update_userProfile_input.getCustom_last_name());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.update_userProfile_input.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.NAME, this.update_userProfile_input.getName().trim());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.update_userProfile_input.getPassword().trim());
+            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.update_userProfile_input.getCustom_languages().trim());
+            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.update_userProfile_input.getCustom_country().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.update_userProfile_input.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.MOBILE_NO, this.update_userProfile_input.getPhone_no().trim());
+            httppost.addHeader(HeaderConstants.Custom_last_Name, this.update_userProfile_input.getCustom_last_name().trim());
 
             // Execute HTTP Post Request
             try {

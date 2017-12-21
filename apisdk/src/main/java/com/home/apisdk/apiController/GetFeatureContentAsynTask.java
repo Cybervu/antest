@@ -106,9 +106,9 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.featureContentInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.SECTION_ID, this.featureContentInputModel.getSection_id());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.featureContentInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.featureContentInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.SECTION_ID, this.featureContentInputModel.getSection_id().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.featureContentInputModel.getLang_code().trim());
 
             Log.v("MuviSDK", "authToken = " + this.featureContentInputModel.getAuthToken());
             Log.v("MuviSDK", "section_id = " + this.featureContentInputModel.getSection_id());

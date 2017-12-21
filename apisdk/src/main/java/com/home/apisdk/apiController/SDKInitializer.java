@@ -142,8 +142,8 @@ public class SDKInitializer {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getInitializationUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader(HeaderConstants.AUTH_TOKEN, authToken);
-                httppost.addHeader(HeaderConstants.PACKAGE_NAME, context.getPackageName());
+                httppost.addHeader(HeaderConstants.AUTH_TOKEN, authToken.trim());
+                httppost.addHeader(HeaderConstants.PACKAGE_NAME, context.getPackageName().trim());
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);

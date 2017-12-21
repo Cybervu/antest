@@ -108,8 +108,8 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
             HttpPost httppost = new HttpPost(APIUrlConstant.getSubscriptionPlanLists());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.planListInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.planListInput.getLang());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.planListInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.planListInput.getLang().trim());
 
             Log.v("MUVISDK", "authToken = " + this.planListInput.getAuthToken());
             // Execute HTTP Post Request

@@ -105,10 +105,10 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.relatedContentInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.CONTENT_ID, this.relatedContentInput.getContentId());
-            httppost.addHeader(HeaderConstants.CONTENT_STREAM_ID, this.relatedContentInput.getContent_stream_id());
-            httppost.addHeader(HeaderConstants.LANGUAGE_CODE,this.relatedContentInput.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.relatedContentInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.CONTENT_ID, this.relatedContentInput.getContentId().trim());
+            httppost.addHeader(HeaderConstants.CONTENT_STREAM_ID, this.relatedContentInput.getContent_stream_id().trim());
+            httppost.addHeader(HeaderConstants.LANGUAGE_CODE,this.relatedContentInput.getLanguage().trim());
 
             // Execute HTTP Post Request
             try {

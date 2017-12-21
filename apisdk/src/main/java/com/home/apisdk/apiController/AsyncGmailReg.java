@@ -99,13 +99,13 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGmailRegUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("name", this.gmailLoginInput.getName());
-            httppost.addHeader("email", this.gmailLoginInput.getEmail());
+            httppost.addHeader("name", this.gmailLoginInput.getName().trim());
+            httppost.addHeader("email", this.gmailLoginInput.getEmail().trim());
             httppost.addHeader("password", "");
-            httppost.addHeader("authToken", this.gmailLoginInput.getAuthToken());
-            httppost.addHeader("gplus_userid", this.gmailLoginInput.getGmail_userid());
+            httppost.addHeader("authToken", this.gmailLoginInput.getAuthToken().trim());
+            httppost.addHeader("gplus_userid", this.gmailLoginInput.getGmail_userid().trim());
 //            httppost.addHeader("fb_userid", this.gmailLoginInput.getGmail_userid());
-            httppost.addHeader("profile_image", this.gmailLoginInput.getProfile_image());
+            httppost.addHeader("profile_image", this.gmailLoginInput.getProfile_image().trim());
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());

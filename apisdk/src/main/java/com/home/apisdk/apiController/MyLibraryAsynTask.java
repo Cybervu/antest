@@ -109,12 +109,12 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
             HttpPost httppost = new HttpPost(APIUrlConstant.getMylibraryUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.myLibraryInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.USER_ID, this.myLibraryInputModel.getUser_id());
-            httppost.addHeader(HeaderConstants.LIMIT, this.myLibraryInputModel.getLimit());
-            httppost.addHeader(HeaderConstants.OFFSET, this.myLibraryInputModel.getOffset());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.myLibraryInputModel.getCountry());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.myLibraryInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.myLibraryInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.myLibraryInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.LIMIT, this.myLibraryInputModel.getLimit().trim());
+            httppost.addHeader(HeaderConstants.OFFSET, this.myLibraryInputModel.getOffset().trim());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.myLibraryInputModel.getCountry().trim());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.myLibraryInputModel.getLang_code().trim());
 
 
             // Execute HTTP Post Request

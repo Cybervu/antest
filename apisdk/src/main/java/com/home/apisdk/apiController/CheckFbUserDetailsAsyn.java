@@ -102,8 +102,8 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput, V
             HttpPost httppost = new HttpPost(APIUrlConstant.getFbUserExistsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid().trim());
 
 
             try {

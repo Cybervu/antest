@@ -106,11 +106,11 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetMonetizationDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getMonetizationDetailsInputModel.getAuthToken());
-            httppost.addHeader(HeaderConstants.USER_ID, this.getMonetizationDetailsInputModel.getUser_id());
-            httppost.addHeader(HeaderConstants.MOVIE_ID, this.getMonetizationDetailsInputModel.getMovie_id());
-            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.getMonetizationDetailsInputModel.getPurchase_type());
-            httppost.addHeader(HeaderConstants.STREAM_ID, this.getMonetizationDetailsInputModel.getStream_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getMonetizationDetailsInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.getMonetizationDetailsInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.getMonetizationDetailsInputModel.getMovie_id().trim());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.getMonetizationDetailsInputModel.getPurchase_type().trim());
+            httppost.addHeader(HeaderConstants.STREAM_ID, this.getMonetizationDetailsInputModel.getStream_id().trim());
 
 
             // Execute HTTP Post Request

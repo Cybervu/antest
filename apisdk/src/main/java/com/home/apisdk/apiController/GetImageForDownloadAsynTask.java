@@ -105,7 +105,7 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetImageForDownloadUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getImageForDownloadInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getImageForDownloadInputModel.getAuthToken().trim());
 
 
             // Execute HTTP Post Request

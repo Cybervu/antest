@@ -109,13 +109,13 @@ public class ResumeVideoLogDetailsAsync extends AsyncTask<ResumeVideoLogDetailsI
 
             URL url = new URL(APIUrlConstant.getVideoLogsUrl());
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.resumeVideoLogDetailsInput.getAuthToken())
-                    .appendQueryParameter(HeaderConstants.USER_ID, this.resumeVideoLogDetailsInput.getUser_id())
-                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.resumeVideoLogDetailsInput.getIp_address())
-                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.resumeVideoLogDetailsInput.getMovie_id())
-                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.resumeVideoLogDetailsInput.getEpisode_id())
-                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.resumeVideoLogDetailsInput.getPlayed_length())
-                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.resumeVideoLogDetailsInput.getWatch_status());
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.resumeVideoLogDetailsInput.getAuthToken().trim())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.resumeVideoLogDetailsInput.getUser_id().trim())
+                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.resumeVideoLogDetailsInput.getIp_address().trim())
+                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.resumeVideoLogDetailsInput.getMovie_id().trim())
+                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.resumeVideoLogDetailsInput.getEpisode_id().trim())
+                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.resumeVideoLogDetailsInput.getPlayed_length().trim())
+                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.resumeVideoLogDetailsInput.getWatch_status().trim());
 
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
