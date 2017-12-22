@@ -136,7 +136,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }else {
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
-
         try {
             splashScreenHandler.handleSplashscreen(imageResize);
         } catch (Exception e) {
