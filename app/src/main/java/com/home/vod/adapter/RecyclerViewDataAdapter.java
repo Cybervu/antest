@@ -91,10 +91,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
         Log.v("BIBHU12", "position of the item in adapter ==============" + i);
+        Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" +Util.image_orentiation.size());
 
-       /* if(i>=counter)
-        {
-            counter = i;*/
         final String sectionName = dataList.get(i).getHeaderTitle();
         final String sectionId = dataList.get(i).getHeaderPermalink();
 
@@ -121,19 +119,25 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 float density = mContext.getResources().getDisplayMetrics().density;
                 if (density >= 3.5 && density <= 4.0) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
                 } else if (density <= 1.5) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
                 } else {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
                 }
-                //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
 
             } else {
                 itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
+                Log.v("BIBHU12", "position of *********** ==============" + i);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.v("BIBHU12", "recycler view adapter Exception==============" + e.toString());
+
+
         }
 
 
@@ -144,7 +148,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 Context context = v.getContext();
                 Intent i = new Intent(context, ViewMoreActivity.class);
@@ -183,8 +186,11 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     }
 
     @Override
+//    public int getItemCount() {
+//        return dataList.size();
+//    }
     public int getItemCount() {
-        return dataList.size();
+        return Util.image_orentiation.size();
     }
 
     @Override

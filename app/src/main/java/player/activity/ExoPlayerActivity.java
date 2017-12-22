@@ -42,6 +42,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
@@ -472,8 +473,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 //                        Toast.makeText(ExoPlayerActivity.this,"orientation called="+orientation,Toast.LENGTH_SHORT).show();
 
+                        Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
                         if (orientation == 1|| orientation == 3) {
-                            hideSystemUI();
+//                            hideSystemUI();
+
+                            View decorView = getWindow().getDecorView();
+                            // Hide the status bar
+                            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                              | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+                            decorView.setSystemUiVisibility(uiOptions);
+
                         }
 
                         if (video_prepared) {

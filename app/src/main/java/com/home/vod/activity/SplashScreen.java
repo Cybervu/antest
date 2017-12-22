@@ -372,15 +372,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 for (int i = 0; i < lengthJsonArr; i++) {
                     genreArrayList.add(genreListOutput.get(i).getGenre_name());
                     genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
-
-
                 }
 
                 if (genreArrayList.size() > 1) {
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
                     genreValueArrayList.add(genreValueArrayList.size(), "");
-
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
                     genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
@@ -393,7 +390,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
                     genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
-
 
                 }
                 genreArrToSend = new String[genreArrayList.size()];
@@ -421,7 +417,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                 genreArrToSend = new String[genreArrayList.size()];
                 genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
 
                 genreValueArrayToSend = new String[genreValueArrayList.size()];
                 genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);

@@ -101,11 +101,14 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
       /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         holder.itemTitle.setTypeface(castDescriptionTypeface);*/
 
+        Log.v("BIBHU12", "section adapter ==============" + i);
+
         holder.itemTitle.setText(singleItem.getTitle());
         holder.position = i;
         // holder.temPV.setTag(singleItem.get(i)); //For passing the list item index
 
-        if (singleItem.getImage()!=null) {
+        try{
+            if (singleItem.getImage()!=null) {
            /* if (singleItem.getImage().equalsIgnoreCase("transparent")) {
                 Picasso.with(mContext)
                         .load(R.drawable.logo)
@@ -119,13 +122,16 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                         .error(R.drawable.logo)      // optional
                         .into(holder.itemImage);
 //            }
-        }else{
-            Picasso.with(mContext)
-                    .load(R.drawable.logo)
-                    .placeholder(R.drawable.logo)   // optional
-                    .error(R.drawable.logo)      // optional
-                    .into(holder.itemImage);
-        }
+            }else{
+                Picasso.with(mContext)
+                        .load(R.drawable.logo)
+                        .placeholder(R.drawable.logo)   // optional
+                        .error(R.drawable.logo)      // optional
+                        .into(holder.itemImage);
+            }
+        }catch (Exception e){ Log.v("BIBHU12", "section adapter Exception==============" + e.toString());}
+
+
 
     }
 
