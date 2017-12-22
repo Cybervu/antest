@@ -443,6 +443,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+        ikauf {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.ikauf'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\" 78141a9c7e92f1f3493994553efbb7a1\""
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+        }
+        ikauf_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        ikauf_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -515,6 +534,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('ikauf') && (environment.equals('ikauf_staging_') || environment.equals('ikauf_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
