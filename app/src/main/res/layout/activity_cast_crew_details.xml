@@ -55,7 +55,7 @@
                     android:textSize="@dimen/cast_description_text" />
             </LinearLayout>
 
-            <Button
+         <!--   <Button
                 android:id="@+id/btnMore"
                 android:layout_width="@dimen/review_btn_width"
                 android:layout_height="@dimen/review_btn_height"
@@ -68,7 +68,7 @@
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/cast_btn_textsize" />
+                android:textSize="@dimen/cast_btn_textsize" />-->
 
             <View
                 android:id="@+id/borderLineView"

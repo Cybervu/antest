@@ -21,6 +21,7 @@
  <color name="cancel_button_text_color">#d60080</color>
  <color name="transparent">@android:color/transparent</color>
  <color name="castCrewTitleTextColor">#d60080</color>
+ <color name="style_circular_color_2">#d60080</color>
  <color name="subtitleListColor">#fff</color>
  <color name="episodeBackgroundColor">#f5f4f4</color>
  <color name="preOrderButtonTextColor">#DDD</color>
