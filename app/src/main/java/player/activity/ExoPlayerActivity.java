@@ -476,15 +476,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
 
                         if (orientation == 1|| orientation == 3) {
-//                            hideSystemUI();
+                            hideSystemUI();
 
-                            View decorView = getWindow().getDecorView();
+                          /*  View decorView = getWindow().getDecorView();
                             // Hide the status bar
                             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
                               | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
-                            decorView.setSystemUiVisibility(uiOptions);
+                            decorView.setSystemUiVisibility(uiOptions);*/
 
                         }
 
