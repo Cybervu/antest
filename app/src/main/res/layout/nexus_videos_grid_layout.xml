@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingRight="@dimen/marginBottom5dp"
-        android:paddingBottom="@dimen/marginBottom5dp"
+        android:layout_marginBottom="@dimen/margintop8dp"
         >
 
         <ImageView
@@ -53,6 +52,7 @@
             android:gravity="left"
             android:maxLines="1"
             android:padding="@dimen/loginImageViewMarging_top_padding"
+            android:layout_marginLeft="@dimen/loginImageViewMarging_top_padding"
             android:text=""
 
             android:textColor="@color/contentTitleColor"

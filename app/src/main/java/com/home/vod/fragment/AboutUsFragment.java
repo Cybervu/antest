@@ -20,6 +20,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -32,8 +33,10 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -50,6 +53,8 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
     boolean returnValue = false ;
+    TextView noInternetTextView;
+    RelativeLayout noInternet;
 
 
     public AboutUsFragment() {
@@ -67,9 +72,12 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+        noInternet=(RelativeLayout) view.findViewById(R.id.noInternet);
+        noInternetTextView=(TextView) view.findViewById(R.id.noInternetTextView);
 
+        noInternet.setVisibility(View.GONE);
 
-
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
 
@@ -198,7 +206,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     }
 
     @Override
-    public void onAboutUsPostExecuteCompleted(String about) {
+    public void onAboutUsPostExecuteCompleted(int status ,String about) {
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
@@ -211,21 +219,28 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
 
         progresBar.setVisibility(View.GONE);
         String bodyData = about;
+        if (status == 200) {
+          /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setText(getStyledTextFromHtml(bodyData));*/
+            int color = getActivity().getResources().getColor(R.color.aboutustextcolor);
+            String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
+            String text = "<html><head>"
+                    + "<style type=\"text/css\" >body{color:" + aboutUSTextColor + ";}"
+                    + "</style></head>"
+                    + "<body style >"
+                    + about
+                    + "</body></html>";
+
+            webView.loadData(text, "text/html", "utf-8");
+            webView.setBackgroundColor(getResources().getColor(R.color.aboutustestcolor));
+            webView.getSettings().setJavaScriptEnabled(true);
+        }else {
+
+            noInternet.setVisibility(View.VISIBLE);
+        }
 
           /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setText(getStyledTextFromHtml(bodyData));*/
-        int color =  getActivity().getResources().getColor(R.color.aboutustextcolor);
-        String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
-        String text = "<html><head>"
-                + "<style type=\"text/css\" >body{color:" + aboutUSTextColor + ";}"
-                + "</style></head>"
-                + "<body style >"
-                + about
-                + "</body></html>";
-
-        webView.loadData(text, "text/html", "utf-8");
-        webView.setBackgroundColor(getResources().getColor(R.color.aboutustestcolor));
-        webView.getSettings().setJavaScriptEnabled(true);
     }
 
 

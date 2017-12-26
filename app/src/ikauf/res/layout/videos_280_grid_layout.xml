@@ -15,7 +15,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/marginBottom5dp"
+        >
 
         <ImageView
             android:id="@+id/movieImageView"
@@ -54,6 +56,7 @@
             android:gravity="left"
             android:maxLines="1"
             android:padding="@dimen/loginImageViewMarging_top_padding"
+            android:layout_marginLeft="@dimen/loginImageViewMarging_top_padding"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="normal" />

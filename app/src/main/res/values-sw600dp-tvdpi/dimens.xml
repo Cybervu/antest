@@ -86,7 +86,7 @@
     <dimen name="list_singlecard_img_width">102dp</dimen>
     <dimen name="list_singlecard_img_height">146dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
-    <dimen name="videogrid_height">200dp</dimen>
+    <dimen name="videogrid_height">175dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
