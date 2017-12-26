@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingRight="@dimen/videogridRelativelayoutMarginRight">
+        android:paddingRight="@dimen/videogridRelativelayoutMarginRight"
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/movieImageView"
