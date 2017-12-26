@@ -144,7 +144,6 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/Login_drawing_padding"
                         android:paddingRight="@dimen/Login_drawing_padding"
-                        android:paddingBottom="@dimen/Login_drawing_padding"
                         android:paddingTop="@dimen/Login_drawing_padding">
 
                         <Button
@@ -264,7 +263,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"
@@ -280,7 +279,8 @@
                     android:orientation="horizontal"
                     android:id="@+id/rating"
                     android:layout_below="@+id/iconImageRelativeLayout"
-                    android:layout_marginLeft="@dimen/ppv_margin">
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginBottom="@dimen/marginBottom5dp">
                     <RatingBar
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"

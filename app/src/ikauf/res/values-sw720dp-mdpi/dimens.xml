@@ -95,8 +95,8 @@
     <dimen name="movieimg_height">190dp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
-    <dimen name="listitemlayout_height">330dp</dimen>
-    <dimen name="itemtitle_text_size">17sp</dimen>
+    <dimen name="listitemlayout_height">422dp</dimen>
+    <dimen name="itemtitle_text_size">18sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -138,8 +138,8 @@
 
     <!--new dimen optimization for layouts-->
     <dimen name="viewmore_btn_width">100dp</dimen>
-    <dimen name="viewmore_btn_height">50dp</dimen>
-    <dimen name="viewmore_text_size">14sp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">13sp</dimen>
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">110dp</dimen>
     <dimen name="list_singlecard_img_height">160dp</dimen>
