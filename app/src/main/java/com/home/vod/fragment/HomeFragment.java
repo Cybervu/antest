@@ -71,14 +71,15 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * Created by Muvi on 11/24/2016.
  */
-public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
+public class HomeFragment extends Fragment implements
+        GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
 //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
     GetLoadVideosAsync asynLoadVideos;
-    AsynLOADUI loadui;
+//    AsynLOADUI loadui;
     View rootView;
     int item_CountOfSections = 0;
     boolean isFirstTime = false;
@@ -308,8 +309,97 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
     }
 
+    public void loadUI(){
+        //ui_completed = ui_completed + 1;
 
-    private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
+        LogUtil.showLog("MUVI1", "videoWidth =" + videoWidth +"videoHeight="+ videoHeight);
+
+        if (videoWidth > videoHeight) {
+
+            Util.image_orentiation.add(Constant.IMAGE_LANDSCAPE_CONST);
+
+        } else {
+            Util.image_orentiation.add(Constant.IMAGE_PORTAIT_CONST);
+        }
+
+
+
+
+
+        if (getView() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+        }
+
+        if (firstTime == false) {
+
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+            firstTime = true;
+
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            } else { // it works first time
+                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                //   adapter = new AdapterClass(context,list);
+                my_recycler_view.setAdapter(adapter);
+            }
+
+        } else {
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+
+
+            if (counter >= 0 && counter >= menuList.size() - 1) {
+                footerView.setVisibility(View.GONE);
+            }
+
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = my_recycler_view.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+            if (mBundleRecyclerViewState != null) {
+                my_recycler_view.getLayoutManager().onRestoreInstanceState(listState);
+            }
+        }
+
+
+
+
+        if (counter >= 0 && counter < menuList.size() - 1) {
+            counter = counter + 1;
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            footerView.setVisibility(View.VISIBLE);
+
+                        }
+                    });
+                }
+
+                // default data
+                LoadVideoInput loadVideoInput = new LoadVideoInput();
+                loadVideoInput.setAuthToken(authTokenStr);
+                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+    }
+
+
+    /*private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             return null;
@@ -409,7 +499,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         }
 
-    }
+    }*/
 
 
     @Override
@@ -638,8 +728,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             }*/
 
             LogUtil.showLog("MUVI1", "==HHH");
-            loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
+//            loadui = new AsynLOADUI();
+//            loadui.executeOnExecutor(threadPoolExecutor);
+
+            loadUI();
         }
 
         @Override

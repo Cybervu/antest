@@ -322,14 +322,12 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-                                UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
+//                                UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
                                 editNewPassword.setVisibility(View.GONE);
                             }
-
-
                         }
                     }
                     if (editConfirmPassword.getText().toString().trim().equalsIgnoreCase("") || (editNewPassword.getText().toString().trim().equalsIgnoreCase(""))) {
@@ -348,7 +346,7 @@ public class ProfileActivity extends AppCompatActivity implements
                     editNewPassword.setVisibility(View.GONE);*/
                     editConfirmPassword.setVisibility(View.VISIBLE);
                     editNewPassword.setVisibility(View.VISIBLE);
-                    editConfirmPassword.requestFocus();
+                    editNewPassword.requestFocus();
 
                 }
 
@@ -375,44 +373,6 @@ public class ProfileActivity extends AppCompatActivity implements
 
                 profileHandler.updateProfileHandler();
 
-              /*  boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
-
-                if (isNetwork) {
-
-                    Name = editProfileNameEditText.getText().toString().trim();
-                    Password = editNewPassword.getText().toString().trim();
-
-                    if (editOldPassword.getVisibility() == View.VISIBLE) {
-                        if (!editProfileNameEditText.getText().toString().trim().equals("")
-                                && !emailAddressEditText.getText().toString().trim().equals("")
-                                && !editNewPassword.getText().toString().trim().equals("")
-                                && !editOldPassword.getText().toString().trim().equals("")) {
-                            if (editNewPassword.equals(editOldPassword)) {
-                                password_visibility = true;
-                                UpdateProfile();
-                            } else {
-                                ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.PASSWORDS_DO_NOT_MATCH,Util.DEFAULT_PASSWORDS_DO_NOT_MATCH));
-
-                            }
-                        } else {
-                            ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.NO_RECORD,Util.DEFAULT_NO_RECORD));
-
-
-                        }
-                    } else {
-                        if (!editProfileNameEditText.getText().toString().trim().equals("") && !emailAddressEditText.getText().toString().trim().equals("")) {
-                            password_visibility = false;
-                            UpdateProfile();
-                        } else {
-                            ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.NO_RECORD,Util.DEFAULT_NO_RECORD));
-
-                        }
-                    }
-
-                } else {
-
-                    ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
-                }*/
             }
         });
 

@@ -34,7 +34,7 @@
     <dimen name="user_text_size">30sp</dimen>
     <dimen name="preorderbtn_width">98dp</dimen>
     <dimen name="preorderbtn_height">40dp</dimen>
-    <dimen name="trailerbtn_text_size">16sp</dimen>
+    <dimen name="trailerbtn_text_size">14sp</dimen>
     <dimen name="vdioduration_text_size">16sp</dimen>
     <dimen name="vdiogenere_text_size">17sp</dimen>
     <dimen name="vdiotitle_text_size">17sp</dimen>
@@ -96,7 +96,7 @@
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
     <dimen name="listitemlayout_height">330dp</dimen>
-    <dimen name="itemtitle_text_size">17sp</dimen>
+    <dimen name="itemtitle_text_size">18sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -137,7 +137,7 @@
 
     <!--new dimen optimization for layouts-->
     <dimen name="viewmore_btn_width">100dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_btn_height">35dp</dimen>
     <dimen name="viewmore_text_size">14sp</dimen>
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">102dp</dimen>

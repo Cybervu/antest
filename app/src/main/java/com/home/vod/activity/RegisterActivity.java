@@ -909,6 +909,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 isSubscribedStr = registration_output.getIsSubscribed();
                 preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setIsSubscribedToPref(registration_output.getIsSubscribed());
                 preferenceManager.setUserIdToPref(registration_output.getId());
                 preferenceManager.setPwdToPref(editPassword.getText().toString().trim());
                 preferenceManager.setEmailIdToPref(registration_output.getEmail());
@@ -943,19 +944,9 @@ public class RegisterActivity extends AppCompatActivity implements
                             // Go for subscription
 
                             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
+
                                     setResultAtFinishActivity();
-                                }
+
                             } else {
                                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
@@ -3537,32 +3528,34 @@ public class RegisterActivity extends AppCompatActivity implements
                         // Go for subscription
 
                         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
+
                                 setResultAtFinishActivity();
-                            }
+
                         } else {
                             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
 
                     } else {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        removeFocusFromViews();
-                        startActivity(intent);
-                        if (LoginActivity.loginA != null) {
-                            LoginActivity.loginA.finish();
+                        if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
+                            Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+
+                            onBackPressed();
+                        } else {
+
+                            Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            onBackPressed();
                         }
-                        finish();
-                        overridePendingTransition(0, 0);
                     }
                 }
 
@@ -3848,7 +3841,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 } else {
 
-                    if (planId.equals("1") && UniversalIsSubscribed.equals("0")) {
+                    if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
                         Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
