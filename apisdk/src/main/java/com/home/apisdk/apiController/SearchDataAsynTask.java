@@ -108,10 +108,10 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
-            httppost.addHeader(HeaderConstants.LIMIT, this.search_data_input.getLimit().trim());
-            httppost.addHeader(HeaderConstants.OFFSET, this.search_data_input.getOffset().trim());
-            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ().trim().trim());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.search_data_input.getCountry().trim());
+            httppost.addHeader(HeaderConstants.LIMIT, this.search_data_input.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.search_data_input.getOffset());
+            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.search_data_input.getCountry());
            // httppost.addHeader(HeaderConstants.LANG_CODE, this.search_data_input.getLanguage_code());
 
 

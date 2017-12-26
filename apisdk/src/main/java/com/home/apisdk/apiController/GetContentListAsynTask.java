@@ -111,14 +111,14 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentListInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.contentListInput.getPermalink().trim());
-            httppost.addHeader(HeaderConstants.LIMIT, this.contentListInput.getLimit().trim());
-            httppost.addHeader(HeaderConstants.OFFSET, this.contentListInput.getOffset().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.contentListInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.contentListInput.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.contentListInput.getOffset());
 //            httppost.addHeader("orderby", this.contentListInput.getOrderby());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.contentListInput.getCountry().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.contentListInput.getLanguage().trim());
-            httppost.addHeader(HeaderConstants.ORDER_BY, this.contentListInput.getOrderby().trim());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.contentListInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.contentListInput.getLanguage());
+            httppost.addHeader(HeaderConstants.ORDER_BY, this.contentListInput.getOrderby());
 
             // Execute HTTP Post Request
             try {

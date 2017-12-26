@@ -106,11 +106,11 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getInvoicePdfInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.ID, this.getInvoicePdfInputModel.getId().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.getInvoicePdfInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.getInvoicePdfInputModel.getDevice_type().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.getInvoicePdfInputModel.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getInvoicePdfInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.ID, this.getInvoicePdfInputModel.getId());
+            httppost.addHeader(HeaderConstants.USER_ID, this.getInvoicePdfInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.getInvoicePdfInputModel.getDevice_type());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.getInvoicePdfInputModel.getLang_code());
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);

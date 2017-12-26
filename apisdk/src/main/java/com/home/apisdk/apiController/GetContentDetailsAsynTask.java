@@ -112,11 +112,11 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentDetailsInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.contentDetailsInput.getUser_id().trim());
-            httppost.addHeader("country", this.contentDetailsInput.getCountry().trim());
-            httppost.addHeader("lang_code", this.contentDetailsInput.getLanguage().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink());
+            httppost.addHeader(HeaderConstants.USER_ID, this.contentDetailsInput.getUser_id());
+            httppost.addHeader("country", this.contentDetailsInput.getCountry());
+            httppost.addHeader("lang_code", this.contentDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {

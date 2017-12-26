@@ -105,7 +105,7 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getIsRegistrationenabledUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.isRegistrationEnabledInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.isRegistrationEnabledInputModel.getAuthToken());
 
 
             // Execute HTTP Post Request

@@ -101,9 +101,9 @@ public class GetSimultaneousLogoutAsync extends AsyncTask<SimultaneousLogoutInpu
             HttpPost httppost = new HttpPost(APIUrlConstant.getLogoutAll());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.simultaneousLogoutInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.simultaneousLogoutInput.getDevice_type().trim());
-            httppost.addHeader(HeaderConstants.EMAIL_ID, this.simultaneousLogoutInput.getEmail_id().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.simultaneousLogoutInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.simultaneousLogoutInput.getDevice_type());
+            httppost.addHeader(HeaderConstants.EMAIL_ID, this.simultaneousLogoutInput.getEmail_id());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

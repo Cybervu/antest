@@ -99,8 +99,8 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
             HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.downloadContentInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.downloadContentInput.getvLink().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.downloadContentInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.downloadContentInput.getvLink());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

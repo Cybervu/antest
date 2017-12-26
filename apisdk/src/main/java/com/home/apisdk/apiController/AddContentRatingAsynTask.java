@@ -104,12 +104,12 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddContentRating());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.addContentRatingInputModel.getLang_code().trim());
-            httppost.addHeader(HeaderConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.addContentRatingInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.RATING, this.addContentRatingInputModel.getRating().trim());
-            httppost.addHeader(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.addContentRatingInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id());
+            httppost.addHeader(HeaderConstants.USER_ID, this.addContentRatingInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.RATING, this.addContentRatingInputModel.getRating());
+            httppost.addHeader(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview());
 
 
             // Execute HTTP Post Request

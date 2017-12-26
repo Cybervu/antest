@@ -105,13 +105,13 @@ public class CheckDeviceAsyncTask extends AsyncTask<Void, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getCheckDevice());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.USER_ID, this.checkDeviceInput.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkDeviceInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.DEVICE, this.checkDeviceInput.getDevice().trim());
-            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.checkDeviceInput.getGoogle_id().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.checkDeviceInput.getDevice_type().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.checkDeviceInput.getLang_code().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_INFO, this.checkDeviceInput.getDevice_info().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.checkDeviceInput.getUser_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkDeviceInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.DEVICE, this.checkDeviceInput.getDevice());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.checkDeviceInput.getGoogle_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.checkDeviceInput.getDevice_type());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.checkDeviceInput.getLang_code());
+            httppost.addHeader(HeaderConstants.DEVICE_INFO, this.checkDeviceInput.getDevice_info());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

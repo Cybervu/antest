@@ -108,10 +108,10 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
             HttpPost httppost = new HttpPost(APIUrlConstant.getPurchaseHistoryUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.purchaseHistoryInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.purchaseHistoryInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.purchaseHistoryInputModel.getLang_code().trim());
-            httppost.addHeader(HeaderConstants.ID, this.purchaseHistoryInputModel.getId().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.purchaseHistoryInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.purchaseHistoryInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.purchaseHistoryInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.ID, this.purchaseHistoryInputModel.getId());
 
 
             try {

@@ -107,11 +107,11 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getAuthUserPaymentInfoUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.authUserPaymentInfoInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.NAME_ON_CARD, this.authUserPaymentInfoInputModel.getName_on_card().trim());
-            httppost.addHeader(HeaderConstants.EXPIRY_MONTH, this.authUserPaymentInfoInputModel.getExpiryMonth().trim());
-            httppost.addHeader(HeaderConstants.EXPIRY_YEAR, this.authUserPaymentInfoInputModel.getExpiryYear().trim());
-            httppost.addHeader(HeaderConstants.CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.authUserPaymentInfoInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.NAME_ON_CARD, this.authUserPaymentInfoInputModel.getName_on_card());
+            httppost.addHeader(HeaderConstants.EXPIRY_MONTH, this.authUserPaymentInfoInputModel.getExpiryMonth());
+            httppost.addHeader(HeaderConstants.EXPIRY_YEAR, this.authUserPaymentInfoInputModel.getExpiryYear());
+            httppost.addHeader(HeaderConstants.CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber());
             httppost.addHeader(HeaderConstants.CVV, this.authUserPaymentInfoInputModel.getCvv().trim());
             httppost.addHeader(HeaderConstants.EMAIL, this.authUserPaymentInfoInputModel.getEmail().trim());
 

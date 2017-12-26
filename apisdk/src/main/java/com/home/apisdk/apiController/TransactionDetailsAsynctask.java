@@ -107,10 +107,10 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getTransactionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.transactionInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.transactionInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.ID, this.transactionInputModel.getId().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.transactionInputModel.getLanguage().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.transactionInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.transactionInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.ID, this.transactionInputModel.getId());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.transactionInputModel.getLanguage());
 
             // Execute HTTP Post Request
             try {

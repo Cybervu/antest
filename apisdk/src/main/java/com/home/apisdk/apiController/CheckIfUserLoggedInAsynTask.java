@@ -104,10 +104,10 @@ public class CheckIfUserLoggedInAsynTask extends AsyncTask<CheckIfUserLoggedInIn
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getCheckIfUserLoggedIn());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkIfUserLoggedInInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.checkIfUserLoggedInInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.checkIfUserLoggedInInputModel.getDevice_id().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.checkIfUserLoggedInInputModel.getDevice_type().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkIfUserLoggedInInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.checkIfUserLoggedInInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.checkIfUserLoggedInInputModel.getDevice_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.checkIfUserLoggedInInputModel.getDevice_type());
 
 
             // Execute HTTP Post Request

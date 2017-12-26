@@ -119,13 +119,13 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetEpisodeDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.episode_details_input.getAuthtoken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.episode_details_input.getPermalink().trim());
-            httppost.addHeader(HeaderConstants.LIMIT, this.episode_details_input.getLimit().trim());
-            httppost.addHeader(HeaderConstants.OFFSET, this.episode_details_input.getOffset().trim());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.episode_details_input.getCountry().trim());
-            httppost.addHeader(HeaderConstants.SERIES_NUMBER, this.episode_details_input.getSeries_number().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.episode_details_input.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.episode_details_input.getAuthtoken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.episode_details_input.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.episode_details_input.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.episode_details_input.getOffset());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.episode_details_input.getCountry());
+            httppost.addHeader(HeaderConstants.SERIES_NUMBER, this.episode_details_input.getSeries_number());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.episode_details_input.getLang_code());
 
             // Execute HTTP Post Request
             try {

@@ -108,11 +108,11 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel, Void, Void
             HttpPost httppost = new HttpPost(APIUrlConstant.getContactUsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contactUsInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.EMAIL, this.contactUsInputModel.getEmail().trim());
-            httppost.addHeader(HeaderConstants.NAME, this.contactUsInputModel.getName().trim());
-            httppost.addHeader(HeaderConstants.MESSAGE, this.contactUsInputModel.getMessage().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.contactUsInputModel.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contactUsInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.EMAIL, this.contactUsInputModel.getEmail());
+            httppost.addHeader(HeaderConstants.NAME, this.contactUsInputModel.getName());
+            httppost.addHeader(HeaderConstants.MESSAGE, this.contactUsInputModel.getMessage());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.contactUsInputModel.getLang_code());
 
             // Execute HTTP Post Request
             try {

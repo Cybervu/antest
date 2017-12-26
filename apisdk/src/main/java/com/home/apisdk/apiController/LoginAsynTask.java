@@ -106,10 +106,10 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.login_input.getAuthToken());
             httppost.addHeader(HeaderConstants.EMAIL, this.login_input.getEmail());
-            httppost.addHeader(HeaderConstants.PASSWORD, this.login_input.getPassword().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.login_input.getLang_code().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.login_input.getDevice_id().trim());
-            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.login_input.getGoogle_id().trim());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.login_input.getPassword());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.login_input.getLang_code());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.login_input.getDevice_id());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.login_input.getGoogle_id());
             httppost.addHeader(HeaderConstants.DEVICE_TYPE, "1");
 
             // Execute HTTP Post Request

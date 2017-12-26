@@ -109,12 +109,12 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetCastDetails());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getCastDetailsInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.getCastDetailsInput.getPermalink().trim());
-            httppost.addHeader(HeaderConstants.LIMIT, this.getCastDetailsInput.getLimit().trim());
-            httppost.addHeader(HeaderConstants.OFFSET, this.getCastDetailsInput.getOffset().trim());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.getCastDetailsInput.getCountry().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.getCastDetailsInput.getLanguage().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getCastDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.getCastDetailsInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.getCastDetailsInput.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.getCastDetailsInput.getOffset());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.getCastDetailsInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.getCastDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {

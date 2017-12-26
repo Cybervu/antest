@@ -98,8 +98,8 @@ public class GetSubCategoryListAsync extends AsyncTask<SubCategoryListInput, Voi
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetSubCategoryList());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.subCategoryListInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.subCategoryListInput.getCategory_id().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.subCategoryListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.subCategoryListInput.getCategory_id());
 
 
             // Execute HTTP Post Request

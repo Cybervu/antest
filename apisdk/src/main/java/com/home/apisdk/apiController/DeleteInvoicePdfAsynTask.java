@@ -105,9 +105,9 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getDeleteInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.deleteInvoicePdfInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.FILE_PATH, this.deleteInvoicePdfInputModel.getFilepath().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.deleteInvoicePdfInputModel.getLanguage_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.deleteInvoicePdfInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.FILE_PATH, this.deleteInvoicePdfInputModel.getFilepath());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.deleteInvoicePdfInputModel.getLanguage_code());
 
             // Execute HTTP Post Request
             try {

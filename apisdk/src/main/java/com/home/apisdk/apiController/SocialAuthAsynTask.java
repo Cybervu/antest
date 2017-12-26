@@ -105,14 +105,14 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getSocialauthUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.socialAuthInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.EMAIL, this.socialAuthInputModel.getEmail().trim());
-            httppost.addHeader(HeaderConstants.PASSWORD, this.socialAuthInputModel.getPassword().trim());
-            httppost.addHeader(HeaderConstants.NAME, this.socialAuthInputModel.getName().trim());
-            httppost.addHeader(HeaderConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.socialAuthInputModel.getLanguage().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.socialAuthInputModel.getDevice_id().trim());
-            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.socialAuthInputModel.getDevice_type().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.socialAuthInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.EMAIL, this.socialAuthInputModel.getEmail());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.socialAuthInputModel.getPassword());
+            httppost.addHeader(HeaderConstants.NAME, this.socialAuthInputModel.getName());
+            httppost.addHeader(HeaderConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.socialAuthInputModel.getLanguage());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.socialAuthInputModel.getDevice_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.socialAuthInputModel.getDevice_type());
 
             // Execute HTTP Post Request
             try {

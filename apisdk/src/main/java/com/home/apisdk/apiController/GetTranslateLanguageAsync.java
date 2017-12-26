@@ -101,8 +101,8 @@ public class GetTranslateLanguageAsync extends AsyncTask<Void, Void, String> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(urlRouteList);
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, languageListInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, languageListInputModel.getLangCode().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, languageListInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.LANG_CODE, languageListInputModel.getLangCode());
 
 
             // Execute HTTP Post Request

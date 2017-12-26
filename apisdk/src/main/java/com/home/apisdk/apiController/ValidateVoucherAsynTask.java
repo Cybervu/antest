@@ -107,14 +107,14 @@ public class ValidateVoucherAsynTask extends AsyncTask<ValidateVoucherInputModel
             HttpPost httppost = new HttpPost(APIUrlConstant.getValidateVoucherUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.validateVoucherInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.MOVIE_ID, this.validateVoucherInputModel.getMovie_id().trim());
-            httppost.addHeader(HeaderConstants.STREAM_ID, this.validateVoucherInputModel.getStream_id().trim());
-            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.validateVoucherInputModel.getPurchase_type().trim());
-            httppost.addHeader(HeaderConstants.SEASON, this.validateVoucherInputModel.getSeason().trim());
-            httppost.addHeader(HeaderConstants.VOUCHER_CODE, this.validateVoucherInputModel.getVoucher_code().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.validateVoucherInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.validateVoucherInputModel.getLanguage().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.validateVoucherInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.validateVoucherInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.STREAM_ID, this.validateVoucherInputModel.getStream_id());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.validateVoucherInputModel.getPurchase_type());
+            httppost.addHeader(HeaderConstants.SEASON, this.validateVoucherInputModel.getSeason());
+            httppost.addHeader(HeaderConstants.VOUCHER_CODE, this.validateVoucherInputModel.getVoucher_code());
+            httppost.addHeader(HeaderConstants.USER_ID, this.validateVoucherInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.validateVoucherInputModel.getLanguage());
 
             // Execute HTTP Post Request
             try {

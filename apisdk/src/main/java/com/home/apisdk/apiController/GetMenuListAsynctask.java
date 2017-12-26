@@ -110,9 +110,9 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getMenuListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.menuListInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.menuListInput.getCountry().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.menuListInput.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.menuListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.menuListInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.menuListInput.getLang_code());
 
             // Execute HTTP Post Request
             try {

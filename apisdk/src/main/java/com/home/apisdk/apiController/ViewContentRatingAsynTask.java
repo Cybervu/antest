@@ -107,10 +107,10 @@ public class ViewContentRatingAsynTask extends AsyncTask<ViewContentRatingInputM
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getViewContentRating());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewContentRatingInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.viewContentRatingInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.CONTENT_ID, this.viewContentRatingInputModel.getContent_id().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.viewContentRatingInputModel.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewContentRatingInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.viewContentRatingInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.CONTENT_ID, this.viewContentRatingInputModel.getContent_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.viewContentRatingInputModel.getLang_code());
 
 
             // Execute HTTP Post Request

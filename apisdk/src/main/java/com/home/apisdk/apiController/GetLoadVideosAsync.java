@@ -107,9 +107,9 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.loadVideoInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.SECTION_ID, this.loadVideoInput.getSection_id().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.loadVideoInput.getLang_code().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.loadVideoInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.SECTION_ID, this.loadVideoInput.getSection_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.loadVideoInput.getLang_code());
 
             Log.v("Abhi Auth", this.loadVideoInput.getAuthToken());
             Log.v("Abhi Session", this.loadVideoInput.getSection_id());

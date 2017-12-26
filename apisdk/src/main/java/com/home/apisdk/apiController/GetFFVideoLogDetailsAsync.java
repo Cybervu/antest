@@ -106,15 +106,15 @@ public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput,
             // Execute HTTP Post Request
             URL url = new URL(APIUrlConstant.getVideoLogsUrl());
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.ffVideoLogDetailsInput.getAuthToken().trim())
-                    .appendQueryParameter(HeaderConstants.USER_ID, this.ffVideoLogDetailsInput.getUser_id().trim())
-                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.ffVideoLogDetailsInput.getIp_address().trim())
-                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.ffVideoLogDetailsInput.getMovie_id().trim())
-                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.ffVideoLogDetailsInput.getEpisode_id().trim())
-                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.ffVideoLogDetailsInput.getPlayed_length().trim())
-                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.ffVideoLogDetailsInput.getWatch_status().trim())
-                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.ffVideoLogDetailsInput.getDevice_type().trim())
-                    .appendQueryParameter(HeaderConstants.LOG_ID, this.ffVideoLogDetailsInput.getLog_id().trim());
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.ffVideoLogDetailsInput.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.ffVideoLogDetailsInput.getUser_id())
+                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.ffVideoLogDetailsInput.getIp_address())
+                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.ffVideoLogDetailsInput.getMovie_id())
+                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.ffVideoLogDetailsInput.getEpisode_id())
+                    .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.ffVideoLogDetailsInput.getPlayed_length())
+                    .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.ffVideoLogDetailsInput.getWatch_status())
+                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.ffVideoLogDetailsInput.getDevice_type())
+                    .appendQueryParameter(HeaderConstants.LOG_ID, this.ffVideoLogDetailsInput.getLog_id());
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, code, message);
 

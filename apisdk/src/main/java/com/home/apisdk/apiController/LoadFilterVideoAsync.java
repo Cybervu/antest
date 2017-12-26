@@ -86,14 +86,14 @@ public class LoadFilterVideoAsync extends AsyncTask<LoadFilterVideoInput,Void,Vo
             HttpPost httppost = new HttpPost(urlRouteList);
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.loadFilterVideoInput.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.loadFilterVideoInput.getPermalink().trim());
-            httppost.addHeader(HeaderConstants.LIMIT, this.loadFilterVideoInput.getLimit().trim());
-            httppost.addHeader(HeaderConstants.OFFSET, this.loadFilterVideoInput.getOffset().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.loadFilterVideoInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.loadFilterVideoInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.loadFilterVideoInput.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.loadFilterVideoInput.getOffset());
 //            httppost.addHeader("orderby", this.contentListInput.getOrderby());
-            httppost.addHeader(HeaderConstants.COUNTRY, this.loadFilterVideoInput.getCountry().trim());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.loadFilterVideoInput.getLanguage().trim());
-            httppost.addHeader(HeaderConstants.ORDER_BY, this.loadFilterVideoInput.getOrderby().trim());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.loadFilterVideoInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.loadFilterVideoInput.getLanguage());
+            httppost.addHeader(HeaderConstants.ORDER_BY, this.loadFilterVideoInput.getOrderby());
 
             // Execute HTTP Post Request
             try {

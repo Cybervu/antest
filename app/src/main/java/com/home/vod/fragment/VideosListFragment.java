@@ -1040,6 +1040,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         genreAdapter = new GenreFilterAdapter(mdata,getActivity());
         genreListData.setAdapter(genreAdapter);
         if (mdata.size() > 0) {
+
             prevPosition = mdata.size() - 4;
         }
         mdata.get(prevPosition).setSelected(true);

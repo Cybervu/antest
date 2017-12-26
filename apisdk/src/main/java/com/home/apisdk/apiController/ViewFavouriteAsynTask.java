@@ -110,8 +110,8 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getViewFavorite());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.viewFavouriteInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.viewFavouriteInputModel.getUser_id());
 
             Log.v("SUBHA", "AUTH_TOKEN" + HeaderConstants.AUTH_TOKEN);
             Log.v("SUBHA", "USER_ID" + HeaderConstants.USER_ID);

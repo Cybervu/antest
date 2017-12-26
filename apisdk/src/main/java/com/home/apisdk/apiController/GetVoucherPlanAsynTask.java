@@ -106,11 +106,11 @@ public class GetVoucherPlanAsynTask extends AsyncTask<GetVoucherPlanInputModel, 
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetVoucherPlanUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getVoucherPlanInputModel.getAuthToken().trim());
-            httppost.addHeader(HeaderConstants.MOVIE_ID, this.getVoucherPlanInputModel.getMovie_id().trim());
-            httppost.addHeader(HeaderConstants.STREAM_ID, this.getVoucherPlanInputModel.getStream_id().trim());
-            httppost.addHeader(HeaderConstants.SEASON, this.getVoucherPlanInputModel.getSeason().trim());
-            httppost.addHeader(HeaderConstants.USER_ID, this.getVoucherPlanInputModel.getUser_id().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getVoucherPlanInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.getVoucherPlanInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.STREAM_ID, this.getVoucherPlanInputModel.getStream_id());
+            httppost.addHeader(HeaderConstants.SEASON, this.getVoucherPlanInputModel.getSeason());
+            httppost.addHeader(HeaderConstants.USER_ID, this.getVoucherPlanInputModel.getUser_id());
 
 
             // Execute HTTP Post Request

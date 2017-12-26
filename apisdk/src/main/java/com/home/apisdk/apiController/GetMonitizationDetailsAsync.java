@@ -57,11 +57,11 @@ public class GetMonitizationDetailsAsync extends AsyncTask<MonitizationDetailsIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetMonetizationDetailsUrl());
             Log.v("MUVI","Url=="+APIUrlConstant.getGetMonetizationDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", monitizationDetailsInput.getAuthToken().trim());
-            httppost.addHeader("user_id", monitizationDetailsInput.getUser_id().trim());
-            httppost.addHeader("movie_id",monitizationDetailsInput.getMovie_id().trim());
-            httppost.addHeader("stream_id", monitizationDetailsInput.getStream_id().trim());
-            httppost.addHeader("purchase_type", monitizationDetailsInput.getPurchase_type().trim());
+            httppost.addHeader("authToken", monitizationDetailsInput.getAuthToken());
+            httppost.addHeader("user_id", monitizationDetailsInput.getUser_id());
+            httppost.addHeader("movie_id",monitizationDetailsInput.getMovie_id());
+            httppost.addHeader("stream_id", monitizationDetailsInput.getStream_id());
+            httppost.addHeader("purchase_type", monitizationDetailsInput.getPurchase_type());
 
             // Execute HTTP Post Request
             try {

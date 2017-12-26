@@ -110,11 +110,11 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
             HttpPost httppost = new HttpPost(APIUrlConstant.getValidateCouponCodeUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.validateCouponCodeInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.validateCouponCodeInputModel.getAuthToken());
 
-            httppost.addHeader(HeaderConstants.USER_ID, this.validateCouponCodeInputModel.getUser_id().trim());
-            httppost.addHeader(HeaderConstants.COUPAN_CODE, this.validateCouponCodeInputModel.getCouponCode().trim());
-            httppost.addHeader(HeaderConstants.CURRENCY_ID, this.validateCouponCodeInputModel.getCurrencyId().trim());
+            httppost.addHeader(HeaderConstants.USER_ID, this.validateCouponCodeInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.COUPAN_CODE, this.validateCouponCodeInputModel.getCouponCode());
+            httppost.addHeader(HeaderConstants.CURRENCY_ID, this.validateCouponCodeInputModel.getCurrencyId());
 
 
             // Execute HTTP Post Request

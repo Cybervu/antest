@@ -113,10 +113,10 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
             URL url = new URL(APIUrlConstant.getManageDevices());
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken().trim())
-                    .appendQueryParameter(HeaderConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id().trim())
-                    .appendQueryParameter(HeaderConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice().trim())
-                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code().trim());
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
+                    .appendQueryParameter(HeaderConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
