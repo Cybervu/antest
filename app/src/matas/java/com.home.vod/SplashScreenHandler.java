@@ -17,6 +17,7 @@ public class SplashScreenHandler {
         this.context=context;
     }
     public void handleSplashscreen(ImageView imageResize) {
+        imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
     }
 
