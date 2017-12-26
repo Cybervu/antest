@@ -151,12 +151,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         if (status==200){
             setMenuItemsInDrawer(true);
         }
-
-
     }
-
-
-
 
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
@@ -175,11 +170,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
                 selectItem (position);
 
-
             }
         });
 
-      /*  expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
+      /* expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
      */
         //for expand the child content in navigation
