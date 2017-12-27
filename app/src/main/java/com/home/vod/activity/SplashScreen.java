@@ -67,6 +67,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import player.model.ContactModel1;
+import player.utils.DBHelper;
+
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -106,6 +109,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
+    DBHelper dbHelper;
 
     SplashScreenHandler splashScreenHandler;
 
@@ -113,6 +117,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private void _init() {
         Util.getDPI(this);
         Util.printMD5Key(this);
+        dbHelper=new DBHelper(SplashScreen.this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -130,19 +135,23 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
+        imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
-        if ( Util.isTablet(SplashScreen.this)){
+
+        /*if ( Util.isTablet(SplashScreen.this)){
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }else {
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
-        try {
-            splashScreenHandler.handleSplashscreen(imageResize);
-        } catch (Exception e) {
+            try {
 
-        }
+            } catch (Exception e) {
 
-      imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+            }
+        }*/
+
+        splashScreenHandler.handleSplashscreen(imageResize);
+
+
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
@@ -155,10 +164,31 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
         } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
-        }
+            // Go to my download page , if the user is pre loggged in and the user has some download content.
+            email_Id = preferenceManager.getEmailIdFromPref();
+            if (email_Id != null) {
+                ArrayList<ContactModel1> Size_Of_Download_Content = dbHelper.getContactt(email_Id, 1);
+                if (Size_Of_Download_Content.size() > 0) {
 
+                    Util.hideBcakIcon = true;
+
+                    Intent intent = new Intent(SplashScreen.this, MyDownloads.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                } else {
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                    geoBlockedLayout.setVisibility(View.GONE);
+                }
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+                geoBlockedLayout.setVisibility(View.GONE);
+            }
+        }
     }
 
 

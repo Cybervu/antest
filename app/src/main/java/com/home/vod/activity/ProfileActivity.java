@@ -322,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-//                                UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
+//                              UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
@@ -432,6 +432,13 @@ public class ProfileActivity extends AppCompatActivity implements
 
         if (code > 0) {
             if (code == 200) {
+
+
+                editConfirmPassword.setText("");
+                editNewPassword.setText("");
+                editConfirmPassword.setVisibility(View.GONE);
+                editNewPassword.setVisibility(View.GONE);
+
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(profileHandler.first_nameStr);
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&

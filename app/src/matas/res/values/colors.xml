@@ -37,6 +37,8 @@
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_drawer_text_Color">#000000</color>
  <color name="button_background">#d60080</color>
+ <color name="nav_text_line_color">#d60080</color>
+ <color name="nav_header_line_color">#d60080</color>
  <color name="genre_text_color">#d60080</color>
  <color name="cancel_button_background">#DDD</color>
  <color name="pre_order_button_background">#fff</color>

@@ -863,6 +863,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             togglePlayback();
         }
+
+        if (preferenceManager.getUseridFromPref()!=null){
+            Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override

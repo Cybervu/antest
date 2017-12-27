@@ -1700,6 +1700,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             togglePlayback();
         }
+
+        if (preferenceManager.getUseridFromPref()!=null){
+            Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override

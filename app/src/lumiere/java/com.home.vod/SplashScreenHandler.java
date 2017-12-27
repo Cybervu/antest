@@ -13,12 +13,19 @@ import android.widget.RelativeLayout;
 public class SplashScreenHandler {
 
     private Activity context;
-    public SplashScreenHandler(Activity context){
-        this.context=context;
-    }
-    public void handleSplashscreen(ImageView imageResize) {
-        imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
+    public SplashScreenHandler(Activity context) {
+        this.context = context;
     }
+
+
+    public void handleSplashscreen(ImageView imageResize) {
+
+        try {
+            imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } catch (Exception e) {
+        }
+    }
+
 
 }

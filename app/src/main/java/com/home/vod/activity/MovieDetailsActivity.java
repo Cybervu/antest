@@ -3102,6 +3102,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             togglePlayback();
         }
+
+
+           if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
     }
 
     @Override

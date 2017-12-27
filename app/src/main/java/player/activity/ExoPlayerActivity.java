@@ -315,6 +315,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
+    LinearLayout back_layout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -1013,6 +1014,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
+        back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
@@ -1265,16 +1267,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         });
 
-       /* back.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    back.setImageResource(R.drawable.ic_back);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                }
-                return false;
-            }
-        });*/
+
 
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
@@ -1381,11 +1374,23 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//              Toast.makeText(ExoPlayerActivity.this, "button clicked", Toast.LENGTH_SHORT).show();
                 backCalled();
-               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
-                finish();*/
+                finish();
+            }
+        });
+
+        back_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//              Toast.makeText(ExoPlayerActivity.this, "layout clicked", Toast.LENGTH_SHORT).show();
+                backCalled();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
             }
         });
 
