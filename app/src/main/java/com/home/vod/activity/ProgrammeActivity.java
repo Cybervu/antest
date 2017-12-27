@@ -1956,11 +1956,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                         if (entry.getValue() != null && !entry.getValue().matches("")) {
 
-                            if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
+                            if(!entry.getKey().equalsIgnoreCase("programtype")) {
 
                                 DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
                             }
-                            if (entry.getKey().equalsIgnoreCase("_____programtype") ){
+                            if (entry.getKey().equalsIgnoreCase("programtype") ){
                                 programType = entry.getValue();
 
                             }
@@ -2761,13 +2761,15 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             String trailer_urlStr = relatedContentOutput.getTrailer_url();
             String posterStr = relatedContentOutput.getPoster();
             String content_bannerStr = relatedContentOutput.getContent_banner();
-            LogUtil.showLog("SUBHA", "getPermalink()" + permalinkStr);
 
             if(relatedContentOutput.getIs_downloadable().equalsIgnoreCase("1") || relatedContentOutput.getIs_downloadable().equalsIgnoreCase("2")) {
 
 
                 Intent intent = new Intent(ProgrammeActivity.this, DietDetailsActivity.class);
                 intent.putExtra(HeaderConstants.VLINK, permalinkStr);
+
+                LogUtil.showLog("SUBHA", "getPermalink()" + permalinkStr);
+
                /* intent.putExtra("STORY", storyStr);
                 intent.putExtra("TITLE", titleStr);
                 intent.putExtra("TRAILER_URL", trailer_urlStr);

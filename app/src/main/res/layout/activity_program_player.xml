@@ -532,6 +532,7 @@
                 android:layout_below="@+id/moreVideosRelativeLayout"
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="@dimen/player_marginTop"
                 android:layout_marginLeft="@dimen/marginRight20dp"
                 android:layout_marginRight="@dimen/marginRight20dp"
                 />
@@ -653,12 +654,12 @@
 
     </LinearLayout>
 
-       <fragment
+      <!-- <fragment
            android:id="@+id/cast_mini_controller"
            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:layout_alignParentBottom="true" />
+           android:layout_alignParentBottom="true" />-->
 
 
     </RelativeLayout>

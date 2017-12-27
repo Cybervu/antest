@@ -138,7 +138,7 @@
 
     <dimen name="season_image_height">243dp</dimen>
     <dimen name="season_image_width">170dp</dimen>
-    <dimen name="card_title">23sp</dimen>
+    <dimen name="card_title">25sp</dimen>
     <dimen name="human_image_height">100dp</dimen>
     <dimen name="human_image_width">100dp</dimen>
     <dimen name="padding17dp">37dp</dimen>

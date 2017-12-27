@@ -1444,36 +1444,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
+End_Timer();
 
         mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
-      /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
-            @Override
-            public void onClick(View view, int position) {
 
-                contentPosition = position;
-                nextPosition = position + 1;
-                getData();
-                Log.v("SUBHA", "data set here");
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                return;
-            }
-        }));
-*/
-      /*  contentPosition = 0;
-        if (contentPosition < questions.size() - 1) {
-            nextPosition = 1;
-            player_next.setVisibility(View.VISIBLE);
-
-
-        }else
-        {
-            player_next.setVisibility(View.GONE);
-        }
-*/
         moreVideosRecyclerView.setAdapter(mAdapter);
         /////////////end
         if (!playerModel.getVideoUrl().trim().equals("")) {
@@ -1575,6 +1549,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
         download_layout.setVisibility(View.INVISIBLE);
+
+        Log.v("SUBHASHREE","download isoffline ==== "+playerModel.getIsOffline() + " download status ==== " +playerModel.getDownloadStatus() );
 
         if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
@@ -1683,13 +1659,19 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     player_repeat.setImageResource(R.drawable.replayshadow);
                     player_repeat.setTag("101");
                     isRepeated = true;
-                    player_next.setFocusable(false);
-                    player_next.setVisibility(View.INVISIBLE);
+//                    player_next.setFocusable(false);
+//                    player_next.setVisibility(View.INVISIBLE);
                 }else{
                     player_repeat.setTag("100");
                     player_repeat.setImageResource(R.drawable.player_repeat);
                     isRepeated = false;
                     player_next.setFocusable(true);
+                   /* int tempPos = contentPosition +1;
+                    contentPosition = tempPos;
+                    // if (tempPos < questions.size() - 1) {
+                    nextPosition = tempPos + 1;
+                    // }
+                    getData();*/
 
                 }
 
@@ -1699,6 +1681,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             @Override
             public void onClick(View v) {
                 Log.v("SUBHASS", "FGFG" + contentPosition);
+                player_repeat.setTag("100");
+                player_repeat.setImageResource(R.drawable.player_repeat);
+                isRepeated = false;
                 int tempPos = contentPosition +1;
                 contentPosition = tempPos;
                // if (tempPos < questions.size() - 1) {
@@ -1924,7 +1909,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         primary_ll = (LinearLayout) findViewById(R.id.primary_ll);
         last_ll = (LinearLayout) findViewById(R.id.last_ll);
-        last_ll = (LinearLayout) findViewById(R.id.last_ll);
         linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
 
         ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
@@ -2006,10 +1990,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 subtitleText.setText("");
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.seekTo(seekBar.getProgress());
-                current_time.setVisibility(View.VISIBLE);
+//                current_time.setVisibility(View.VISIBLE);
+                //commented for seek bar hide
+                current_time.setVisibility(View.INVISIBLE);
                 current_time.setVisibility(View.GONE);
                 showCurrentTime();
-                current_time.setVisibility(View.VISIBLE);
+//                current_time.setVisibility(View.VISIBLE);
+                //commented for seek bar hide
+                current_time.setVisibility(View.INVISIBLE);
                 updateProgressBar();
 
                 Log.v("BIBHU11", "stop tracking called");
@@ -2051,6 +2039,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
+
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
                     current_time.setVisibility(View.GONE);
@@ -2071,7 +2060,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         End_Timer();
                     } else {
                         primary_ll.setVisibility(View.VISIBLE);
-
                         if (isDrm) {
                             if (SubTitlePath.size() > 0) {
                                 subtitle_change_btn.setVisibility(View.VISIBLE);
@@ -2091,13 +2079,22 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         }
 
 
-                        last_ll.setVisibility(View.VISIBLE);
+//                        last_ll.setVisibility(View.VISIBLE);
+                        //commented for seek bar hide
+                        last_ll.setVisibility(View.INVISIBLE);
                         center_play_pause.setVisibility(View.VISIBLE);
-                        latest_center_play_pause.setVisibility(View.VISIBLE);
-                        current_time.setVisibility(View.VISIBLE);
+//                        latest_center_play_pause.setVisibility(View.VISIBLE);
+                        //commented for seek bar hide
+                        latest_center_play_pause.setVisibility(View.INVISIBLE);
+//                        current_time.setVisibility(View.VISIBLE);
+
+                        //commented for seek bar hide
+                        current_time.setVisibility(View.INVISIBLE);
                         current_time.setVisibility(View.GONE);
                         showCurrentTime();
-                        current_time.setVisibility(View.VISIBLE);
+//                        current_time.setVisibility(View.VISIBLE);
+                        //commented for seek bar hide
+                        current_time.setVisibility(View.INVISIBLE);
                         Start_Timer();
                     }
 
@@ -4103,8 +4100,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             Util.call_finish_at_onUserLeaveHint = false;
                             Util.hide_pause = true;
                             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                            latest_center_play_pause.setVisibility(View.VISIBLE);
-
+//                            latest_center_play_pause.setVisibility(View.VISIBLE);
+                            //commented for seek bar hide
+                            latest_center_play_pause.setVisibility(View.INVISIBLE);
 
                             if (emVideoView.isPlaying()) {
                                 emVideoView.pause();
@@ -5646,7 +5644,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 Util.call_finish_at_onUserLeaveHint = false;
                 Util.hide_pause = true;
                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                latest_center_play_pause.setVisibility(View.VISIBLE);
+//                latest_center_play_pause.setVisibility(View.VISIBLE);
+                //commented for seek bar hide
+                latest_center_play_pause.setVisibility(View.INVISIBLE);
                 subtitleText.setText("");
                 emVideoView.setEnabled(false);
 //                latest_center_play_pause.setEnabled(true);
@@ -5835,7 +5835,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                                 player_pause.setImageResource(R.drawable.player_pause);
 
-                                latest_center_play_pause.setVisibility(View.VISIBLE);
+//                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                                //commented for seek bar hide
+                                latest_center_play_pause.setVisibility(View.INVISIBLE);
                             }
                         });
                     } else {
@@ -5847,7 +5849,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                                 player_pause.setImageResource(R.drawable.player_play);
 
-                                latest_center_play_pause.setVisibility(View.VISIBLE);
+//                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                                //commented for seek bar hide
+                                latest_center_play_pause.setVisibility(View.INVISIBLE);
                             }
                         });
                     }
@@ -7222,10 +7226,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         if (contentPosition < questions.size() - 1 && isRepeated == false) {
             player_next.setVisibility(View.VISIBLE);
 
-        }else
+        }/*else
         {
             player_next.setVisibility(View.INVISIBLE);
-        }
+        }*/
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -7265,7 +7269,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         Util.call_finish_at_onUserLeaveHint = false;
         Util.hide_pause = true;
         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-        latest_center_play_pause.setVisibility(View.VISIBLE);
+//        latest_center_play_pause.setVisibility(View.VISIBLE);
+        //commented for seek bar hide
+        latest_center_play_pause.setVisibility(View.INVISIBLE);
         subtitleText.setText("");
         emVideoView.setEnabled(false);
 //                latest_center_play_pause.setEnabled(true);
@@ -7298,7 +7304,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             subtitle_change_btn.setVisibility(View.VISIBLE);
         mediaRouteButton.setVisibility(View.VISIBLE);
         primary_ll.setVisibility(View.VISIBLE);
-
 
         //===================================================================================================//
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
@@ -77,9 +78,9 @@ public class CustomSearchAdapter extends ArrayAdapter<GridItem> {
             }
 */
 
-
-
         row = inflater.inflate(layoutResourceId, parent, false);
+
+
         holder = new VideoFilterAdapter.ViewHolder();
         holder.title = (TextView) row.findViewById(R.id.movieTitle);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.title );

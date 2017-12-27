@@ -1538,14 +1538,27 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(DietDetailsActivity.this,"fg"+dietPlanUrl,Toast.LENGTH_LONG).show();
 
 
-                Log.v("SUBHA","CLCIKED DIET"+dietPlanUrl);
-                //String url = "http://www.facebook.com/yourfanpagename";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(dietPlanUrl));
-                startActivity(i);
+                if(dietPlanUrl != null && !dietPlanUrl.trim().equals("null") && !dietPlanUrl.trim().equals("")){
+
+                    try {
+                        Log.v("SUBHA","CLCIKED DIET"+dietPlanUrl);
+                        //String url = "http://www.facebook.com/yourfanpagename";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(dietPlanUrl));
+                        startActivity(i);
+                    }catch (Exception e)
+                    {
+                        Toast.makeText(DietDetailsActivity.this,"No Diet Plan Available.",Toast.LENGTH_LONG).show();
+                    }
+
+                }else{
+
+                    Toast.makeText(DietDetailsActivity.this,"No Diet Plan Available.",Toast.LENGTH_LONG).show();
+
+                }
+
 
             }
         });

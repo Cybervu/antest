@@ -762,7 +762,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     @Override
     public void onGetRelatedContentListPreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(ProgramDetailsActivity.this);
+        pDialog.show();
     }
 
     @Override
@@ -796,14 +797,18 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         if (status > 0) {
             if (status == 200) {
+                tutorialTitle.setVisibility(View.VISIBLE);
+                tutorialTextView.setVisibility(View.VISIBLE);
+
                 relatedContentList.setVisibility(View.VISIBLE);
                 relatedContentItemData.clear();
-
+                Log.v("SUBHASS","program type value == relatedcontent details ");
 
                 if (relatedContentListOutputArray.size() > 0) {
 
                     relatedContentList.setVisibility(View.VISIBLE);
                     tutorialTitle.setVisibility(View.VISIBLE);
+                    tutorialTextView.setVisibility(View.VISIBLE);
 
 
                     for (int i = 0; i < relatedContentListOutputArray.size(); i++) {
@@ -831,6 +836,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
                     } else {
 
+                        tutorialTitle.setVisibility(View.VISIBLE);
+                        tutorialTextView.setVisibility(View.VISIBLE);
 
                         LogUtil.showLog("BISHAL", "data show...");
                         relatedContentList.setVisibility(View.VISIBLE);
@@ -1136,13 +1143,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             }
         });
 
-        relatedContentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProgramDetailsActivity.this,"item clicked",Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
         /***favorite *****/
 
@@ -1235,21 +1235,15 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             }
         });*/
 
-       /* dietPlanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
-                startActivity(intent);
-            }
-        });*/
+
 
         relatedContentList.addOnItemTouchListener(new RecyclerTouchListener(this,
                 relatedContentList, new ClickListener() {
             @Override
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
-               /* EpisodesListModel item = itemData.get(position);
-                clickItem(item, position);*/
+                Toast.makeText(ProgramDetailsActivity.this,"No details Available",Toast.LENGTH_LONG).show();
+
 
             }
 
@@ -1521,7 +1515,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
             // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
 //            viewAllTextView.setVisibility(View.VISIBLE);
-//            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
+            tutorialTextView.setText("EXERCISES");
 //            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
             startWorkoutButton.setText("WARM UP");
             stretchWorkoutButton.setText("STRETCH");
@@ -1576,7 +1570,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
 
                 Picasso.with(ProgramDetailsActivity.this)
-                        .load(posterImageId)
+                        .load(bannerImageId)
                         .error(R.drawable.logo)
                         .placeholder(R.drawable.logo)
                         .into(bannerImageView);
@@ -1590,13 +1584,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 equipmentRelativeLayout.removeAllViews();
                 for (Map.Entry<String, String> entry : contentDetailsOutput.getMetadata().entrySet()) {
 
-                    Log.v("SUBHASS","program type value == "+entry.getValue());
+                    Log.v("SUBHASS","program type value == content details ");
 
                     if (entry.getValue() != null && !entry.getValue().matches("")) {
 
 
 
-                        if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
+                        if(!entry.getKey().equalsIgnoreCase("programtype")) {
 
                             DynamicLayout(equipmentRelativeLayout, entry.getKey().toUpperCase(), entry.getValue());
                         }
@@ -1653,7 +1647,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {
-
+        /*progressBarHandler = new ProgressBarHandler(ProgramDetailsActivity.this);
+        progressBarHandler.show();*/
     }
 
     @Override
@@ -1734,8 +1729,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                     stretchWorkoutButton.setVisibility(View.GONE);
                 }
 
-
+                Log.v("SUBHASS","program type value == episode details ");
                 tutorialTitle.setVisibility(View.VISIBLE);
+                tutorialTextView.setVisibility(View.VISIBLE);
                 LogUtil.showLog("BISHAL", "data show...");
                 relatedContentList.setVisibility(View.VISIBLE);
                 relatedContentList.setLayoutManager(mLayoutManager);
@@ -1759,9 +1755,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 }
                 relatedContentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 relatedContentListInput.setContent_id(contentIdStr);
-//                relatedContentListInput.setContent_id("62695");
                 relatedContentListInput.setContent_stream_id(contentStreamIdStr);
-//                relatedContentListInput.setContent_stream_id("109294");
                 GetRelatedContentListAsynTask asynLoadMovieDetails = new GetRelatedContentListAsynTask(relatedContentListInput, this, this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 

@@ -253,7 +253,7 @@
                 android:layout_below="@+id/line_divider"
                 android:layout_alignLeft="@+id/line_divider"
                 android:layout_marginTop="@dimen/program_left"
-                android:layout_marginBottom="@dimen/marginRight20dp"
+                android:layout_marginBottom="@dimen/marginleft10dp"
                 android:padding="@dimen/marginRight20dp"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -316,10 +316,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:visibility="gone"
-                android:layout_alignLeft="@+id/equipmentRelativeLayout"
+                android:visibility="visible"
+                android:layout_alignLeft="@+id/line_divider"
                 android:layout_below="@+id/equipmentRelativeLayout"
-                android:padding="10dp">
+                android:padding="@dimen/marginRight20dp">
 
 
 
@@ -329,6 +329,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
                     android:orientation="vertical">
 
                     <TextView
