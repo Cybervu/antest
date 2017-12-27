@@ -72,7 +72,7 @@ public class ContentDetailsInput {
         this.user_id = user_id;
     }
 
-    String user_id;
+    String user_id="";
 
     public ContentDetailsInput() {
 

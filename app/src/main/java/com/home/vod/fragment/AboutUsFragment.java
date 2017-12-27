@@ -4,6 +4,7 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.transition.Visibility;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -56,7 +57,6 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     TextView noInternetTextView;
     RelativeLayout noInternet;
 
-
     public AboutUsFragment() {
         // Required empty public constructor
     }
@@ -72,14 +72,15 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
         noInternet=(RelativeLayout) view.findViewById(R.id.noInternet);
+        progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         noInternetTextView=(TextView) view.findViewById(R.id.noInternetTextView);
 
         noInternet.setVisibility(View.GONE);
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-        progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-
 
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
 
@@ -206,7 +207,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     }
 
     @Override
-    public void onAboutUsPostExecuteCompleted(int status ,String about) {
+    public void onAboutUsPostExecuteCompleted(int status, String about) {
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
@@ -238,9 +239,6 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
 
             noInternet.setVisibility(View.VISIBLE);
         }
-
-          /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
-            textView.setText(getStyledTextFromHtml(bodyData));*/
     }
 
 
