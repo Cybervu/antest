@@ -130,19 +130,19 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
-
+        imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
         if ( Util.isTablet(SplashScreen.this)){
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }else {
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
-        try {
-            splashScreenHandler.handleSplashscreen(imageResize);
-        } catch (Exception e) {
+            try {
+                splashScreenHandler.handleSplashscreen(imageResize);
+            } catch (Exception e) {
+
+            }
 
         }
 
-      imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));

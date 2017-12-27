@@ -2,9 +2,12 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.support.v7.app.MediaRouteButton;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 
 /**
  * Created by Android on 12/19/2017.
@@ -17,7 +20,11 @@ public class SplashScreenHandler {
         this.context=context;
     }
     public void handleSplashscreen(ImageView imageResize) {
-        imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Display display = context.getWindowManager().getDefaultDisplay();
+        float dpHeight = display.getHeight();
+        float dpWidth = display.getWidth();
+        imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash_screen_new, dpWidth, dpHeight));
 
     }
 

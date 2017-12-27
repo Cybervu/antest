@@ -139,7 +139,7 @@
                         android:layout_alignLeft="@+id/bannerImageView"
                         android:layout_alignRight="@+id/bannerImageView"
                         android:layout_alignStart="@+id/bannerImageView"
-                        android:layout_marginBottom="@dimen/ppv_margin"
+                        android:layout_marginBottom="@dimen/name_user_margin_bottom"
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/Login_drawing_padding"
@@ -173,8 +173,8 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/preorderbtn_text_size"
-                            android:visibility="gone"
+                            android:textSize="@dimen/viewmore_text_size"
+                            android:visibility="visible"
 
                             />
                     </RelativeLayout>
@@ -264,7 +264,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"

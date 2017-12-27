@@ -18,6 +18,7 @@
     <dimen name="login_butn_width">100dp</dimen>
     <dimen name="login_butn_height">30dp</dimen>
     <dimen name="submit_text_size">13sp</dimen>
+    <dimen name="viewmore_text_size">10sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="registerbtn_height">35dp</dimen>
     <dimen name="submit_height_size">35sp</dimen>
@@ -85,6 +86,8 @@
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">35dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
 </resources>

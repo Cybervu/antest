@@ -101,7 +101,7 @@
 
         <!--new dimen optimization for layouts-->
         <dimen name="viewmore_btn_width">85dp</dimen>
-        <dimen name="viewmore_btn_height">30dp</dimen>
+        <dimen name="viewmore_btn_height">35dp</dimen>
         <dimen name="viewmore_text_size">12sp</dimen>
         <dimen name="homescreen_title_text_size">14sp</dimen>
         <dimen name="list_singlecard_img_width">108dp</dimen>
