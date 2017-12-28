@@ -510,6 +510,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+                Log.v("Muvi1", "onScrollStateChanged = "+scrollState);
+
                 if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
@@ -543,10 +545,12 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
+                Log.v("Muvi1", "on scroll data firstVisibleItem = "+firstVisibleItem);
+
                 if (scrolling == true && mIsScrollingUp == false) {
 
 
-                    Log.v("SUBHA", "on scroll data");
+
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
@@ -585,11 +589,12 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         });
 
 
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position <= 0){
+                if(position < 0){
                     return;
                 }
                 img = (ImageView) view.findViewById(R.id.movieImageView);
@@ -1646,52 +1651,6 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     }
 
 
-    /* @Override
-     public void onConfigurationChanged(Configuration newConfig) {
-         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-      *//*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-*//*
-
-        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
-        layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-        listView.setLayoutParams(layoutParams);
-        listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
-        listView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-
-            listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-
-
-        } else {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
-            }
-
-
-        }
-
-        super.onConfigurationChanged(newConfig);
-    }
-*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -2341,36 +2300,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             }
         }
 
-       /* List<String> indexList = new ArrayList<String>(mapIndex.keySet());
-        for (String index : indexList) {
-            textView = (TextView) getActivity().getLayoutInflater().inflate(R.layout.side_index_item, null);
-            textView.setText(index);
 
-            textView.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View view)
-                {
-                    final TextView selectedIndex = (TextView) view;
-                    listView.setSelection(mapIndex.get(selectedIndex.getText()));
-
-                    for (int j = 0;j<listOfTextview.size();j++) {
-                        if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
-                            listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
-                        }
-                        else {
-                            listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
-                        }
-                    }
-
-
-                }
-            });
-
-
-            indexLayout.addView(textView);
-
-            textView.setTag(index);
-            listOfTextview.add(textView);
-        }*/
     }
 
 

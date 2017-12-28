@@ -23,10 +23,10 @@ public class Content_List_Handler {
 
     public Fragment handleIntent(String title){
         if (title.equalsIgnoreCase("YOGA")){
-            return new YogaFragment();
+            return new FitnessFragment();
 
         }else {
-            return new FitnessFragment();
+            return new VideosListFragment();
         }
     }
 
