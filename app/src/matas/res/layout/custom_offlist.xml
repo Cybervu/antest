@@ -71,6 +71,7 @@
             android:layout_width="@dimen/recylerimg_width"
             android:layout_height="@dimen/recylerimg_height"
             android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:src="@drawable/delete" />
 
     </LinearLayout>
