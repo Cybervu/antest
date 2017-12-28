@@ -35,11 +35,15 @@
         <dimen name="login_padding">0dp</dimen>
         <dimen name="forgotlayout_margin">0dp</dimen>
         <dimen name="registerlayout_padding">0dp</dimen>
-        <dimen name="movieimg_width">85dp</dimen>
-        <dimen name="movieimg_height">120dp</dimen>
         <dimen name="video280_width">150dp</dimen>
         <dimen name="video280_height">80dp</dimen>
         <dimen name="testview2_text_size">12sp</dimen>
+
+        <dimen name="movieimg_width">115dp</dimen>
+        <dimen name="movieimg_height">135dp</dimen>
+        <dimen name="view_margin_top">10dp</dimen>
+
+
         <dimen name="episodelayout_width">135dp</dimen>
         <dimen name="episodelayout_height">76dp</dimen>
         <dimen name="playimg_width">45dp</dimen>
@@ -51,7 +55,6 @@
         <dimen name="submitcontact_width">110dp</dimen>
         <dimen name="fragmentimgview_width">120dp</dimen>
         <dimen name="fragmentimgview_height">120dp</dimen>
-        <dimen name="view_margin_top">10dp</dimen>
         <dimen name="registerimg_margin_top">300dp</dimen>
         <dimen name="layout_padding_left">10dp</dimen>
         <dimen name="layout_padding_right">10dp</dimen>
@@ -59,8 +62,8 @@
         <dimen name="register_margin_top">20dp</dimen>
         <dimen name="listitemlayout_height">200dp</dimen>
         <dimen name="slider_height">180dp</dimen>
-        <dimen name="login_butn_width">100dp</dimen>
-        <dimen name="login_butn_height">30dp</dimen>
+        <dimen name="login_butn_width">90dp</dimen>
+        <dimen name="login_butn_height">40dp</dimen>
         <dimen name="fragment_text_size">18sp</dimen>
         <dimen name="cast_width_icon">80dp</dimen>
         <dimen name="cast_height_icon">100dp</dimen>
