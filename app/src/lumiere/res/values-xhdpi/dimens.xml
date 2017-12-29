@@ -64,7 +64,7 @@
     <dimen name="episode_listing_section_textview">22sp</dimen>
     <dimen name="login_text_size">14sp</dimen>
     <dimen name="submitcontact_height">45dp</dimen>
-    <dimen name="sliderLayout_height">230dp</dimen>
+    <dimen name="sliderLayout_height">200dp</dimen>
     <dimen name="submitcontact_text_size">15sp</dimen>
     <dimen name="submitcontact_width">120dp</dimen>
     <dimen name="fragmentimgview_width">120dp</dimen>

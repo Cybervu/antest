@@ -127,7 +127,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,NavigationDrawerFragment.NavigationDrawerCallbacks ,
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
@@ -336,7 +336,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         noInternetLayout.setVisibility(View.GONE);
 
 
-
         if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
            /* if (asynLoadMenuItems != null) {
                 asynLoadMenuItems = null;
@@ -355,7 +354,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     (DrawerLayout) findViewById(R.id.drawer_layout));
 
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
 
 
         } else {
@@ -593,16 +591,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onDrawerItemSelected(View view, int position) {
         check = position;
-      //  displayView(position);
+        //  displayView(position);
 
     }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         check = position;
-        Toast.makeText(MainActivity.this,"ckjw", Toast.LENGTH_SHORT).show();
-       // displayView(position);
+        Toast.makeText(MainActivity.this, "ckjw", Toast.LENGTH_SHORT).show();
+        // displayView(position);
 
     }
+
     private void displayView(int position) {
 
         isNavigated = 1;
@@ -614,40 +614,36 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         String titleStr = menuList.get(position).getTitle();
         // state = position;
 
-        if (internetSpeedDialog!=null && internetSpeedDialog.isShowing()){
+        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
             internetSpeedDialog.hide();
             internetSpeedDialog = null;
 
         }
-        if (pDialog!=null && pDialog.isShowing()){
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
             pDialog = null;
 
         }
-        if (str !=null && !str.equalsIgnoreCase("") && !str.isEmpty() && menuList.get(position).getLinkType().equalsIgnoreCase("-101")){
+        if (str != null && !str.equalsIgnoreCase("") && !str.isEmpty() && menuList.get(position).getLinkType().equalsIgnoreCase("-101")) {
 
             fragment = new HomeFragment();
             bundle.putString("item", str);
 
 
-        }
-        else if (menuList.get(position).getLinkType().equalsIgnoreCase("102")){
+        } else if (menuList.get(position).getLinkType().equalsIgnoreCase("102")) {
 
             fragment = new MyLibraryFragment();
-            bundle.putString("title",titleStr);
+            bundle.putString("title", titleStr);
 
-        }
-        else if (menuList.get(position).getIsEnabled() == false){
+        } else if (menuList.get(position).getIsEnabled() == false) {
 
-            if(str.equals("contactus"))
-            {
+            if (str.equals("contactus")) {
 
                 fragment = new ContactUsFragment();
-                bundle.putString("title",titleStr);
+                bundle.putString("title", titleStr);
 
 
-            }
-            else{
+            } else {
 
 
               /*  if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("external")){
@@ -663,21 +659,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
                 fragment = new AboutUsFragment();
-                bundle.putString("item",str);
-                bundle.putString("title",titleStr);
+                bundle.putString("item", str);
+                bundle.putString("title", titleStr);
 
-                Log.v("ANU","item======"+str);
-                Log.v("ANU","title======"+titleStr);
+                Log.v("ANU", "item======" + str);
+                Log.v("ANU", "title======" + titleStr);
 
             }
 
 
-        }
-        else if (menuList.get(position).getIsEnabled() == true) {
+        } else if (menuList.get(position).getIsEnabled() == true) {
 
             fragment = new VideosListFragment();
             bundle.putString("item", str);
-            bundle.putString("title",titleStr);
+            bundle.putString("title", titleStr);
 
 
         }
@@ -896,7 +891,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
     }
-
 
 
     public void ShowLanguagePopup() {

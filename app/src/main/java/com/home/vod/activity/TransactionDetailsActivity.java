@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -307,7 +308,6 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 if (pDialog.isShowing() && pDialog != null) {
 
                     showDialog(languagePreference.getTextofLanguage(DOWNLOAD_INTERRUPTED, DEFAULT_DOWNLOAD_INTERRUPTED), 0);
-                    unregisterReceiver(InternetStatus);
                     pDialog.setProgress(0);
                     progressStatus = 0;
                     dismissDialog(progress_bar_type);
@@ -319,7 +319,17 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(InternetStatus);
+        try {
+            unregisterReceiver(InternetStatus);
+        }catch (Exception e) {
+        }
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(InternetStatus);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //unregisterReceiver(InternetStatus);
     }
 
     @Override
@@ -485,7 +495,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
                 showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED), 1);
 
-                unregisterReceiver(InternetStatus);
+
                 pDialog.setProgress(0);
                 progressStatus = 0;
                 dismissDialog(progress_bar_type);

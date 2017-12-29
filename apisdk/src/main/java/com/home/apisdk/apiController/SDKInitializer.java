@@ -116,7 +116,7 @@ public class SDKInitializer {
     public interface SDKInitializerListner {
         public void onPreExexuteListner();
 
-        public void onPostExecuteListner();
+        public void onPostExecuteListner(int status);
     }
 
 
@@ -131,7 +131,7 @@ public class SDKInitializer {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            sdkInitializerListner.onPostExecuteListner();
+            sdkInitializerListner.onPostExecuteListner(status);
         }
 
         @Override
@@ -173,23 +173,23 @@ public class SDKInitializer {
 
                         sdkInitializerPreference.clearSDKPref();
 
-                        if ((myJson.has("pkgname")) && myJson.getString("pkgname").trim() != null && !myJson.getString("pkgname").trim().isEmpty() && !myJson.getString("pkgname").trim().equals("null") && !myJson.getString("pkgname").trim().matches("")) {
-                            String PNAME = myJson.getString("pkgname");
+                        if ((myJson.has("pkgname")) && myJson.optString("pkgname").trim() != null && !myJson.optString("pkgname").trim().isEmpty() && !myJson.optString("pkgname").trim().equals("null") && !myJson.optString("pkgname").trim().matches("")) {
+                            String PNAME = myJson.optString("pkgname");
                             sdkInitializerPreference.setPackage_namePref(PNAME);
-                            Log.v("MUVI", "pkgname at class=" + (myJson.getString("pkgname")));
+                            Log.v("MUVI", "pkgname at class=" + (myJson.optString("pkgname")));
                         }
 
 
-                        if ((myJson.has("hashkey")) && myJson.getString("hashkey").trim() != null && !myJson.getString("hashkey").trim().isEmpty() && !myJson.getString("hashkey").trim().equals("null") && !myJson.getString("hashkey").trim().matches("")) {
-                            String hashKey = (myJson.getString("hashkey"));
+                        if ((myJson.has("hashkey")) && myJson.optString("hashkey").trim() != null && !myJson.optString("hashkey").trim().isEmpty() && !myJson.optString("hashkey").trim().equals("null") && !myJson.optString("hashkey").trim().matches("")) {
+                            String hashKey = (myJson.optString("hashkey"));
                             sdkInitializerPreference.setHash_KeyPref(hashKey);
-                            Log.v("MUVI", "Hash Key at class=" + (myJson.getString("hashkey")));
+                            Log.v("MUVI", "Hash Key at class=" + (myJson.optString("hashkey")));
                         }
 
-                        if ((myJson.has("server_time")) && myJson.getString("server_time").trim() != null && !myJson.getString("server_time").trim().isEmpty() && !myJson.getString("server_time").trim().equals("null") && !myJson.getString("server_time").trim().matches("")) {
-                            String time = (myJson.getString("server_time"));
+                        if ((myJson.has("server_time")) && myJson.optString("server_time").trim() != null && !myJson.optString("server_time").trim().isEmpty() && !myJson.optString("server_time").trim().equals("null") && !myJson.optString("server_time").trim().matches("")) {
+                            String time = (myJson.optString("server_time"));
                             sdkInitializerPreference.setTimePref(time);
-                            Log.v("MUVI", "Time at class=" + (myJson.getString("server_time")));
+                            Log.v("MUVI", "Time at class=" + (myJson.optString("server_time")));
                         }
 
                         Log.v("MUVI", "Package Name" + sdkInitializerPreference.getPackage_nameFromPreference());

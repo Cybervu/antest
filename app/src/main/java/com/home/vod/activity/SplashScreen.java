@@ -98,15 +98,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
 
- /*   private boolean isPlanlistAsyncComleted = false;
-    private boolean isRegEnableAsyncComleted = false;
-    private boolean isLanguagelistAsyncComleted = false;
-    private boolean isTranslateAsyncComleted = false;
-    private boolean isGenreAsyncComleted = false;
-    private boolean isProfileAsyncComleted = false;*/
-
-    //============================Added For FCM===========================//
-    Timer GoogleIdGeneraterTimer;
+     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
     String ipAddressStr;
@@ -138,12 +130,16 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if ( Util.isTablet(SplashScreen.this)){
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }else {
+            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
       imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
+
+       // ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
 
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
@@ -225,7 +221,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
-            } else {
+            }
+
+            else {
                 noInternetLayout.setVisibility(View.GONE);
                 geoBlockedLayout.setVisibility(View.VISIBLE);
             }
@@ -610,12 +608,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     @Override
-    public void onPostExecuteListner() {
+    public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
-        if (NetworkStatus.getInstance().isConnected(this)) {
-            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-        } else {
+        if (status==200){
+            if (NetworkStatus.getInstance().isConnected(this)) {
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+        else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
+            geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
+            noInternetLayout.setVisibility(View.GONE);
+            geoBlockedLayout.setVisibility(View.VISIBLE);
+        }
+         else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }

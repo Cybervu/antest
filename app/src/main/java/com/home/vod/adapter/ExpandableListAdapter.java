@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -62,6 +65,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), expandedListTextView);
+
         return convertView;
     }
 
@@ -105,7 +110,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView listTitleTextView = (TextView) convertView .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
-        listTitleTextView.setText(listTitle);
+        listTitleTextView.setText(Html.fromHtml(listTitle));
         iconimage=(ImageView) convertView.findViewById(R.id.iconimage);
         iconimage1=(ImageView) convertView.findViewById(R.id.iconimage1);
         //listTitleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, isExpanded ? 0 : android.R.drawable.ic_menu_more, 0);

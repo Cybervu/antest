@@ -1,11 +1,13 @@
 package com.home.vod.activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -45,11 +47,13 @@ import com.home.vod.model.GridItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -487,6 +491,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
+        itemsInServer=totalItems;
         String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
         String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -524,6 +529,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     noDataLayout.setVisibility(View.GONE);
 
 
+
                     for (int i = 0; i < contentListOutputArray.size(); i++) {
 
 
@@ -540,8 +546,12 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
 
                     videoImageStrToHeight = videoImageStr;
+
                     if (firstTime == true){
-                        Picasso.with(SearchActivity.this).load(videoImageStrToHeight
+
+                        new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                        /*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
                         ).error(R.drawable.no_image).into(new Target() {
 
                             @Override
@@ -566,7 +576,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             public void onPrepareLoad(final Drawable placeHolderDrawable) {
 
                             }
-                        });
+                        });*/
 
                     }else {
                         AsynLOADUI loadUI = new AsynLOADUI();
@@ -928,7 +938,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setIconifiedByDefault(false);
@@ -1034,6 +1044,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
                     return true;
                 }
+
                 return false;
             }
         });
@@ -1053,6 +1064,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO Auto-generated method stub
+
                 return false;
             }
 
@@ -2062,6 +2074,52 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         }
         itemsInServer = 0;
         isSearched = false;
+    }
+
+    class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+
+        private Exception exception;
+        private ProgressBarHandler phandler;
+
+        protected Void doInBackground(String... urls) {
+            try {
+
+
+                URL url = new URL(urls[0]);
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight();
+                videoWidth = bmp.getWidth();
+
+
+                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+
+                return null;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+
+           /* if (phandler != null && phandler.isShowing()) {
+                phandler.hide();
+            }*/
+
+            AsynLOADUI loadUI = new AsynLOADUI();
+            loadUI.executeOnExecutor(threadPoolExecutor);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+          /*  phandler = new ProgressBarHandler(getActivity());
+            phandler.show();*/
+
+        }
     }
 
 }

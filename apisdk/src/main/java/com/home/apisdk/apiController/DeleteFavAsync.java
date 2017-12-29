@@ -130,7 +130,7 @@ public class DeleteFavAsync extends AsyncTask<DeleteFavInputModel, Void, Void> {
             status = Integer.parseInt(myJson.optString("code"));
             sucessMsg = myJson.optString("msg");
 //                statusmsg = myJson.optString("status");
-            Log.v("BISHAL", "response delete==" + myJson);
+            Log.v("MUVI", "response delete==" + myJson);
 
 
         }

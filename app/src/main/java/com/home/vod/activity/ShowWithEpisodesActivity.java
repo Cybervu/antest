@@ -1256,7 +1256,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             /***favorite *****/
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
         }
     }
 
@@ -4071,6 +4071,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+                if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
             }
 
             private void onApplicationDisconnected() {
@@ -5403,20 +5407,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        } else if (resultCode == RESULT_OK && requestCode == 2001) {
-            if (data.getStringExtra("yes").equals("2002")) {
-
-                mSelectedMedia = Util.mSendingMedia;
-                Intent resumeIntent = new Intent(ShowWithEpisodesActivity.this, ResumePopupActivity.class);
-                startActivityForResult(resumeIntent, 1007);
-            }
-        } else if (requestCode == 2001) {
-            LogUtil.showLog("Muvi", "else conditn called");
-            watch_status_String = "start";
-            Played_Length = 0;
-            PlayThroughChromeCast();
-
-        } else if (resultCode == RESULT_OK && requestCode == 1007) {
+        }
+        else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 

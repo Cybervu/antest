@@ -116,7 +116,11 @@ public class LoadFilterVideoAsync extends AsyncTask<LoadFilterVideoInput,Void,Vo
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("status"));
-                totalItems = Integer.parseInt(myJson.optString("item_count"));
+                try {
+                    totalItems = Integer.parseInt(myJson.optString("item_count"));
+                }catch (Exception e){
+                    totalItems=0;
+                }
                 message = myJson.optString("msg");
             }
 
@@ -152,18 +156,38 @@ public class LoadFilterVideoAsync extends AsyncTask<LoadFilterVideoInput,Void,Vo
                         }
                         //videoTypeIdStr = "1";
 
-                        if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {
-                            filterVideo.setIsConverted(Integer.parseInt(jsonChildNode.optString("is_converted")));
+                        try {
+                            if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {
+                                filterVideo.setIsConverted(Integer.parseInt(jsonChildNode.optString("is_converted")));
 
+                            }else {
+                                filterVideo.setIsConverted(0);
+                            }
+                        }catch (Exception e){
+                            filterVideo.setIsConverted(0);
                         }
-                        if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
-                            filterVideo.setIsAPV(Integer.parseInt(jsonChildNode.optString("is_advance")));
+                        try {
+                            if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
+                                filterVideo.setIsAPV(Integer.parseInt(jsonChildNode.optString("is_advance")));
 
+                            }else {
+                                filterVideo.setIsAPV(0);
+                            }
+                        }catch (Exception e){
+                            filterVideo.setIsAPV(0);
                         }
-                        if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
-                            filterVideo.setIsPPV(Integer.parseInt(jsonChildNode.optString("is_ppv")));
 
+                        try {
+                            if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
+                                filterVideo.setIsPPV(Integer.parseInt(jsonChildNode.optString("is_ppv")));
+
+                            }else {
+                                filterVideo.setIsPPV(0);
+                            }
+                        }catch (Exception e){
+                            filterVideo.setIsPPV(0);
                         }
+
                         if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
                             filterVideo.setIsEpisodeStr(jsonChildNode.optString("is_episode"));
 

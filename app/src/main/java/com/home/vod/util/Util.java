@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -155,6 +156,7 @@ public class Util {
 
     public static boolean hide_pause = false;
     public static boolean call_finish_at_onUserLeaveHint = true;
+    public static int ERROR_CODE_EXPIRED_AUTHTOKEN = 410;
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
@@ -536,6 +538,7 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse, String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
+        setTranslationLanguageToPref(languagePreference, GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT, "", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "google_signin", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP, "google_signup", json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS, "view_less", json);
@@ -660,7 +663,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
-        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "profile", json);
+        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
 
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
@@ -883,6 +886,8 @@ public class Util {
 
         return inSampleSize;
     }
+
+
 
 }
 

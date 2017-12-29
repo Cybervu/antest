@@ -123,7 +123,12 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput, V
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 code = Integer.parseInt(myJson.optString("code"));
-                isNewUserStr = Integer.parseInt(myJson.optString("is_newuser"));
+                try {
+                    isNewUserStr = Integer.parseInt(myJson.optString("is_newuser"));
+                }catch (Exception e){
+                    isNewUserStr = 0;
+                }
+
             }
 
         } catch (JSONException e) {

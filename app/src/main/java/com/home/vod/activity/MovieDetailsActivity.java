@@ -1928,6 +1928,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+
+                if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
             }
 
             private void onApplicationDisconnected() {
@@ -2092,10 +2097,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             @Override
             public void onStatusUpdated() {
-
+/*
                 Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
             }
 
             @Override
@@ -2276,27 +2281,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        } else if (resultCode == RESULT_OK && requestCode == 2001) {
-            if (data.getStringExtra("yes").equals("2002")) {
-
-                mSelectedMedia = Util.mSendingMedia;
-
-
-//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
-             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
-                Log.v("bijay",""+mReceivedMedia.getContentId());
-                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
-
-                Intent resumeIntent = new Intent(MovieDetailsActivity.this, ResumePopupActivity.class);
-                startActivityForResult(resumeIntent, 1007);
-
-            } else {
-                Log.v("pratik", "else conditn called");
-                watch_status_String = "start";
-                Played_Length = 0;
-                PlayThroughChromeCast();
-            }
-
         } else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
@@ -3320,6 +3304,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     .error(R.drawable.logo)
                     .placeholder(R.drawable.logo)
                     .into(moviePoster);
+
 
 
         } else {

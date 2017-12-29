@@ -271,7 +271,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             checkDeviceInput.setUser_id(userIdStr.trim());
                         }
                         checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                         checkDeviceInput.setAuthToken(authTokenStr);
                         checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                         checkDeviceInput.setDevice_type("1");

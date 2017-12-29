@@ -14,6 +14,7 @@
     <item
         android:id="@+id/action_search"
         android:title="search"
+
         android:orderInCategory="100"
         appcompat:showAsAction="always|never"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"

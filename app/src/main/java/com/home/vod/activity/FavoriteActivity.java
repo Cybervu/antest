@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -731,7 +733,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             noDataLayout.setVisibility(View.GONE);
             videoImageStrToHeight = movieImageStr;
             if (firstTime == true) {
-                Picasso.with(this).load(videoImageStrToHeight
+
+                new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+               /* Picasso.with(this).load(videoImageStrToHeight
                 ).error(R.drawable.no_image).into(new Target() {
 
                     @Override
@@ -758,7 +763,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     public void onPrepareLoad(final Drawable placeHolderDrawable) {
 
                     }
-                });
+                });*/
 
             } else {
                 AsynLOADUI loadUI = new AsynLOADUI();
@@ -1353,6 +1358,52 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 
+    }
+
+    class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+
+        private Exception exception;
+        private ProgressBarHandler phandler;
+
+        protected Void doInBackground(String... urls) {
+            try {
+
+
+                URL url = new URL(urls[0]);
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight();
+                videoWidth = bmp.getWidth();
+
+
+                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+
+                return null;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+
+           /* if (phandler != null && phandler.isShowing()) {
+                phandler.hide();
+            }*/
+
+            AsynLOADUI loadUI = new AsynLOADUI();
+            loadUI.executeOnExecutor(threadPoolExecutor);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+          /*  phandler = new ProgressBarHandler(getActivity());
+            phandler.show();*/
+
+        }
     }
 }
 

@@ -18,11 +18,13 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.home.vod.ListItemAllignmentHandler;
 import com.home.vod.R;
 import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.Constant;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
@@ -51,6 +53,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     LanguagePreference languagePreference;
     int banner[] = {R.drawable.banner1};
 
+    ListItemAllignmentHandler listItemAllignmentHandler;
+
   /*  int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
 
@@ -64,6 +68,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         this.firstTime = firstTime;
         this.vertical = vertical;
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+        listItemAllignmentHandler=new ListItemAllignmentHandler(mContext);
 
     }
 
@@ -89,7 +95,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        LogUtil.showLog("MUVI", "position of the item in adapter ==============" + i);
+        LogUtil.showLog("MUVI1", "position of the item in adapter ==============" + i);
 
        /* if(i>=counter)
         {
@@ -107,13 +113,19 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
        /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
         itemRowHolder.itemTitle.setText(sectionName.trim());
-        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+//        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+        ///Called Handler for allinment change
+        listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
+        for(int ii=0;ii<Util.image_orentiation.size();ii++){
+            LogUtil.showLog("MUVI1", "orien==" + Util.image_orentiation.get(ii));
+        }
+
 
         try {
-            if (Util.image_orentiation.get(i) == 1) {
+            if (Util.image_orentiation.get(i) == Constant.IMAGE_PORTAIT_CONST) {
                 float density = mContext.getResources().getDisplayMetrics().density;
                 if (density >= 3.5 && density <= 4.0) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);

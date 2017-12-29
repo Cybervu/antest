@@ -100,7 +100,7 @@ public class RegisterUIHandler {
          regNameStr_last = editName_last.getText().toString().trim();
        // regNameStr = editName.getText().toString().trim();
        if (!regNameStr_first.equals("") && !regNameStr_last.equals("")) {
-           ((RegisterActivity) context).registerButtonClicked(regNameStr_first+" "+regNameStr_last,regPhone);
+           ((RegisterActivity) context).registerButtonClicked(regNameStr_first,regNameStr_last,regPhone);
        }else {
            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
        }
