@@ -128,6 +128,24 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
             httppost.addHeader(HeaderConstants.COUPAN_CODE, this.registerUserPaymentInputModel.getCouponCode());
 
 
+            // ******************************* Added Later *********************************************//
+
+            httppost.addHeader(HeaderConstants.TRANSACTION_STATUS, this.registerUserPaymentInputModel.getTransaction_status());
+            httppost.addHeader(HeaderConstants.INVOICE_ID, this.registerUserPaymentInputModel.getInvoice_id());
+            httppost.addHeader(HeaderConstants.ORDER_NUMBER, this.registerUserPaymentInputModel.getOrder_number());
+            httppost.addHeader(HeaderConstants.DOLLAR_AMOUNT, this.registerUserPaymentInputModel.getDollar_amount());
+            httppost.addHeader(HeaderConstants.AMOUNT, this.registerUserPaymentInputModel.getAmount());
+//            httppost.addHeader(HeaderConstants.RESPONSE_TEXT, (this.registerUserPaymentInputModel.getResponse_text()).toString());
+//            httppost.addHeader(HeaderConstants.RESPONSE_TEXT,"");
+            httppost.addHeader(HeaderConstants.IS_SUCCESS, this.registerUserPaymentInputModel.getIsSuccess());
+            httppost.addHeader(HeaderConstants.TRANSACTION_IS_SUCCESS, this.registerUserPaymentInputModel.getTransaction_is_success());
+
+
+
+            // ******************************* Added Later *********************************************//
+
+
+
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());

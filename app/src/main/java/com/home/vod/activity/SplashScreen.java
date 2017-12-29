@@ -43,6 +43,7 @@ import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
+import com.home.vod.SplashScreenHandler;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -65,6 +66,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import player.model.ContactModel1;
+import player.utils.DBHelper;
 
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
@@ -105,11 +109,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
+    DBHelper dbHelper;
+
+    SplashScreenHandler splashScreenHandler;
 
 
     private void _init() {
         Util.getDPI(this);
         Util.printMD5Key(this);
+        dbHelper=new DBHelper(SplashScreen.this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -127,14 +135,23 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
+        imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
-        if ( Util.isTablet(SplashScreen.this)){
+
+        /*if ( Util.isTablet(SplashScreen.this)){
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }else {
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
+            try {
 
-      imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+            } catch (Exception e) {
+
+            }
+        }*/
+
+        splashScreenHandler.handleSplashscreen(imageResize);
+
+
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
@@ -147,10 +164,31 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
         } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
-        }
+            // Go to my download page , if the user is pre loggged in and the user has some download content.
+            email_Id = preferenceManager.getEmailIdFromPref();
+            if (email_Id != null) {
+                ArrayList<ContactModel1> Size_Of_Download_Content = dbHelper.getContactt(email_Id, 1);
+                if (Size_Of_Download_Content.size() > 0) {
 
+                    Util.hideBcakIcon = true;
+
+                    Intent intent = new Intent(SplashScreen.this, MyDownloads.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                } else {
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                    geoBlockedLayout.setVisibility(View.GONE);
+                }
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+                geoBlockedLayout.setVisibility(View.GONE);
+            }
+        }
     }
 
 
@@ -162,6 +200,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        splashScreenHandler = new SplashScreenHandler(this);
 
         _init();
     }
@@ -361,15 +401,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 for (int i = 0; i < lengthJsonArr; i++) {
                     genreArrayList.add(genreListOutput.get(i).getGenre_name());
                     genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
-
-
                 }
 
                 if (genreArrayList.size() > 1) {
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
                     genreValueArrayList.add(genreValueArrayList.size(), "");
-
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
                     genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
@@ -382,7 +419,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                     genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
                     genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
-
 
                 }
                 genreArrToSend = new String[genreArrayList.size()];
@@ -410,7 +446,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                 genreArrToSend = new String[genreArrayList.size()];
                 genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
 
                 genreValueArrayToSend = new String[genreValueArrayList.size()];
                 genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);

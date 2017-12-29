@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:padding="@dimen/payment_spinner_padding"
+        android:padding="@dimen/marginright10dp"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="normal" />
@@ -25,12 +25,10 @@
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         android:layout_below="@+id/sectionTitle"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/pre_order_button_margin"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
-        android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:layout_margin="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
         android:verticalSpacing="@dimen/pre_order_button_margin"
 

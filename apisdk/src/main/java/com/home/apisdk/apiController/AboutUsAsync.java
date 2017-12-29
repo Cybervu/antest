@@ -40,7 +40,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
     private String responseStr;
     private AboutUsListener listener;
     private Context context;
-
+    private int code;
 
     /**
      * Interface used to allow the caller of a AboutUsAsync to run some code when get
@@ -60,7 +60,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
          *
          * @param about Holds content of "About US"
          */
-        void onAboutUsPostExecuteCompleted(String about);
+        void onAboutUsPostExecuteCompleted(int status, String about);
     }
 
 
@@ -121,12 +121,15 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
                     e.printStackTrace();
                 }
             }
-            try {
-                JSONObject jsonMainNode = myJson.getJSONObject("page_details");
-                about = jsonMainNode.optString("content");
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (code == 200) {
+                try {
+                    JSONObject jsonMainNode = myJson.getJSONObject("page_details");
+                    about = jsonMainNode.optString("content");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
 
@@ -144,19 +147,19 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onAboutUsPostExecuteCompleted(about);
+            listener.onAboutUsPostExecuteCompleted(code,about);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onAboutUsPostExecuteCompleted(about);
+            listener.onAboutUsPostExecuteCompleted(code,about);
         }
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        listener.onAboutUsPostExecuteCompleted(about);
+        listener.onAboutUsPostExecuteCompleted(code,about);
     }
 }

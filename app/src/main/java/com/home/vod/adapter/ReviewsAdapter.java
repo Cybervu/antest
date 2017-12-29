@@ -1,6 +1,7 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,7 +79,7 @@ public class ReviewsAdapter extends BaseAdapter {
         userReviewTextView.setTypeface(castDescriptionTypeface);*/
 
         userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
-        userReviewTextView.setText(reviewsItems.get(position).getReview());
+        userReviewTextView.setText(Html.fromHtml(reviewsItems.get(position).getReview()));
         rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
         rating.setFocusable(false);
 

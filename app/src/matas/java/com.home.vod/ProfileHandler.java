@@ -33,7 +33,7 @@ public class ProfileHandler {
     private Activity context;
     EditText editProfileNameEditText;
     LanguagePreference languagePreference;
-    String first_nameStr,last_nameStr;
+    public String first_nameStr="",last_nameStr="";
     public String final_name = "";
     public String phoneStr="";
 
@@ -62,8 +62,8 @@ public class ProfileHandler {
 
                 inputManager.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
-                final_name = editProfileNameEditText.getText().toString().trim();
-                ((ProfileActivity) context).UpdateProfile(final_name,phoneStr);
+                first_nameStr = editProfileNameEditText.getText().toString().trim();
+                ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
 
             }
 
@@ -71,7 +71,7 @@ public class ProfileHandler {
     }
 
 
-    public void setNameTxt(String nameString,String phoneNumber){
+    public void setNameTxt(String nameString,String last_name,String phoneNumber){
         editProfileNameEditText.setText(nameString.trim());
 
     }

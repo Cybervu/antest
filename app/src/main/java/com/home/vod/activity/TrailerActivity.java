@@ -127,6 +127,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton  back, center_play_pause;
+    LinearLayout back_layout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -431,7 +432,11 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
-        // pause_play = (ImageButton) findViewById(R.id.pause_play);
+
+        try{
+            back_layout = (LinearLayout) findViewById(R.id.back_layout);
+        }catch (Exception e){}
+
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
 
@@ -649,18 +654,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             }
         });
 
-        back.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                    back.setImageResource(R.drawable.ic_back);
-
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                }
-                return false;
-            }
-        });
 
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
@@ -711,17 +705,30 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                backCalled();
-               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
-                mHandler.removeCallbacks(updateTimeTask);
-                emVideoView.release();
-                finish();*/
-            }
-        });
 
+
+     try{
+         back.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 backCalled();
+                 mHandler.removeCallbacks(updateTimeTask);
+                 emVideoView.release();
+                 finish();
+             }
+         });
+
+         back_layout.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+
+                 backCalled();
+                 mHandler.removeCallbacks(updateTimeTask);
+                 emVideoView.release();
+                 finish();
+             }
+         });
+     }catch (Exception e){}
 
 
 
@@ -850,7 +857,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
             AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
+//            return;
         }
         mHandler.removeCallbacks(updateTimeTask);
         if (emVideoView!=null) {

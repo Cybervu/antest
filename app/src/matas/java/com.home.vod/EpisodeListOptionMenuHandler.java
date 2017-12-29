@@ -117,11 +117,11 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
 
-            /*if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
                     .trim()).equals("1"))
                 mydownload_menu.setVisible(true);
             else
-                mydownload_menu.setVisible(false);*/
+                mydownload_menu.setVisible(false);
 
 
         } else if (loggedInStr == null) {

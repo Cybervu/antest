@@ -42,6 +42,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
@@ -314,6 +315,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
+    LinearLayout back_layout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -472,8 +474,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 //                        Toast.makeText(ExoPlayerActivity.this,"orientation called="+orientation,Toast.LENGTH_SHORT).show();
 
+                        Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
                         if (orientation == 1|| orientation == 3) {
                             hideSystemUI();
+
+                          /*  View decorView = getWindow().getDecorView();
+                            // Hide the status bar
+                            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                              | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+                            decorView.setSystemUiVisibility(uiOptions);*/
+
                         }
 
                         if (video_prepared) {
@@ -1001,6 +1014,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
+        back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
@@ -1253,16 +1267,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         });
 
-       /* back.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    back.setImageResource(R.drawable.ic_back);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                }
-                return false;
-            }
-        });*/
+
 
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
@@ -1369,11 +1374,23 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//              Toast.makeText(ExoPlayerActivity.this, "button clicked", Toast.LENGTH_SHORT).show();
                 backCalled();
-               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
-                finish();*/
+                finish();
+            }
+        });
+
+        back_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//              Toast.makeText(ExoPlayerActivity.this, "layout clicked", Toast.LENGTH_SHORT).show();
+                backCalled();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
             }
         });
 
@@ -2327,69 +2344,41 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     public void backCalled() {
 
-        if (asynGetIpAddress != null) {
-            asynGetIpAddress.cancel(true);
-        }
-        if (asyncVideoLogDetails != null) {
-            asyncVideoLogDetails.cancel(true);
-        }
-        if (asyncFFVideoLogDetails != null) {
-            asyncFFVideoLogDetails.cancel(true);
-        }
-        if (progressView != null && progressView.isShown()) {
-            progressView = null;
-        }
-        if (timer != null) {
-            stoptimertask();
-            timer = null;
-        }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        return;
-      /*  if (video_completed == false){
-
-            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+        try{
+            if (asynGetIpAddress != null) {
+                asynGetIpAddress.cancel(true);
+            }
+            if (asyncVideoLogDetails != null) {
+                asyncVideoLogDetails.cancel(true);
+            }
+            if (asyncFFVideoLogDetails != null) {
+                asyncFFVideoLogDetails.cancel(true);
+            }
+            if (progressView != null && progressView.isShown()) {
+                progressView = null;
+            }
+            if (timer != null) {
+                stoptimertask();
+                timer = null;
+            }
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }*//*else{
-            watchStatus = "com"
-            asyncVideoLogDetails = new AsyncVideoLogDetails();
-            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        }*//*
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView!=null) {
-            emVideoView.release();
+//        return;
+
+
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView != null) {
+                emVideoView.release();
+            }
+            finish();
+            overridePendingTransition(0, 0);
+        }catch (Exception e){
+            Log.v("MUVI1","Exception =="+e.toString());
         }
-        finish();
-        overridePendingTransition(0, 0);*/
+
     }
 
-    /* public void onBackPressed() {
-         super.onBackPressed();
-         Log.v("MUVI","HHVID"+videoLogId);
-         if (asynGetIpAddress!=null){
-             asynGetIpAddress.cancel(true);
-         }
-         if (asyncVideoLogDetails!=null){
-             asyncVideoLogDetails.cancel(true);
-         }
-         if (asyncFFVideoLogDetails!=null){
-             asyncFFVideoLogDetails.cancel(true);
-         }
-         if (progressView!=null && progressView.isShown()){
-             progressView = null;
-         }
-         if (timer!=null){
-             stoptimertask();
-             timer = null;
-         }
-         mHandler.removeCallbacks(updateTimeTask);
-         if (emVideoView!=null) {
-             emVideoView.release();
-         }
-         finish();
-         overridePendingTransition(0, 0);
-     }*/
+
     @Override
     protected void onUserLeaveHint() {
 
@@ -2698,21 +2687,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         protected void onPostExecute(Void result) {
-         /*   try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                videoLogId = "0";
-            }*/
+
             if (responseStr == null) {
                 videoLogId = "0";
                 log_temp_id = "0";
 
             }
-            mHandler.removeCallbacks(updateTimeTask);
-            if (emVideoView != null) {
-                emVideoView.release();
-            }
+
+            try{
+                mHandler.removeCallbacks(updateTimeTask);
+                if (emVideoView != null) {
+                    emVideoView.release();
+                }
+            }catch (Exception e){}
+
+
             /***AD ***///
             if (video_completed == true) {
                 Log.v("MUVI", "CALLED VIDEO COMPLETED");

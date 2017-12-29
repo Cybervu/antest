@@ -148,6 +148,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 intentpayment.putExtra("currencySymbol",movieList.get(selected_subscription_plan).getPlanCurrencySymbolstr());
                 intentpayment.putExtra("price",movieList.get(selected_subscription_plan).getPurchaseValueStr());
                 intentpayment.putExtra("selected_plan_id",movieList.get(selected_subscription_plan).getPlanIdStr());
+
                 startActivity(intentpayment);
                 finish();
             }

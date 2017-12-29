@@ -863,6 +863,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             togglePlayback();
         }
+
+        if (preferenceManager.getUseridFromPref()!=null){
+            Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -3520,10 +3526,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
-                if (preferenceManager.getUseridFromPref()!=null){
+              /*  if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
 
             private void onApplicationDisconnected() {
@@ -3689,9 +3695,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             @Override
             public void onStatusUpdated() {
 
-                Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
+               /* Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
             }
 
             @Override

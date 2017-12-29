@@ -140,11 +140,11 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         // Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         // castNameTextView.setTypeface(videoGenreTextViewTypeface);
         castDescriptionTextView = (TextView) findViewById(R.id.castDescriptionTextView);
-        btnmore = (Button) findViewById(R.id.btnMore);
-        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
-        btnmore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+       // btnmore = (Button) findViewById(R.id.btnMore);
+//        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
+        //btnmore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
 
-        btnmore.setVisibility(View.GONE);
+        /*btnmore.setVisibility(View.GONE);
         btnmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +167,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 });
 
             }
-        });
+        });*/
         filmographyRecyclerView.addOnItemTouchListener(new MovieDetailsActivity.RecyclerTouchListener1(CastCrewDetailsActivity.this, filmographyRecyclerView, new MovieDetailsActivity.ClickListener1() {
             @Override
             public void onClick(View view, int position) {
@@ -313,9 +313,9 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 }
 
 
-                if (totalItems > 4) {
+                /*if (totalItems > 4) {
                     btnmore.setVisibility(View.VISIBLE);
-                }
+                }*/
                 if (getCastDetailsOutputModelArray.getCastImage().trim().matches("")) {
                     castImageView.setImageResource(R.drawable.logo);
                 } else {

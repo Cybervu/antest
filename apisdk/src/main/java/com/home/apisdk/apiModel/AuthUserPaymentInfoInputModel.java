@@ -9,12 +9,22 @@ package com.home.apisdk.apiModel;
 
 public class AuthUserPaymentInfoInputModel {
 
-    String authToken;
-    String name_on_card;
-    String expiryMonth;
-    String expiryYear;
-    String cardNumber;
-    String cvv;
+    String authToken="";
+    String name_on_card="";
+    String expiryMonth="";
+    String expiryYear="";
+    String cardNumber="";
+    String cvv="";
+
+    public String getPlan_id() {
+        return plan_id;
+    }
+
+    public void setPlan_id(String plan_id) {
+        this.plan_id = plan_id;
+    }
+
+    String plan_id="";
 
     /**
      * This Method is use to get the Email

@@ -289,6 +289,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             }
         });
 
+        if(com.home.vod.util.Util.hideBcakIcon){
+            mActionBarToolbar.setNavigationIcon(null);
+//            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            com.home.vod.util.Util.hideBcakIcon  = false;
+        }
+
 
         list = (ListView) findViewById(R.id.listView);
         nodata = (RelativeLayout) findViewById(R.id.noData);
