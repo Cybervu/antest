@@ -13,6 +13,9 @@
 
         <dimen name="singleimgwidth">90dp</dimen>
         <dimen name="singleimgheight">146dp</dimen>
+        <dimen name="movieimg_width">130dp</dimen>
+        <dimen name="movieimg_height">160dp</dimen>
+        <dimen name="view_margin_top">10dp</dimen>
 
         <dimen name="buttonheight">39dp</dimen>
         <dimen name="titletxt">14sp</dimen>
@@ -40,8 +43,6 @@
         <dimen name="login_padding">10dp</dimen>
         <dimen name="forgotlayout_margin">10dp</dimen>
         <dimen name="registerlayout_padding">10dp</dimen>
-        <dimen name="movieimg_width">108dp</dimen>
-        <dimen name="movieimg_height">150dp</dimen>
         <dimen name="video280_width">170dp</dimen>
         <dimen name="video280_height">95dp</dimen>
         <dimen name="testview2_text_size">18sp</dimen>
@@ -56,7 +57,6 @@
         <dimen name="submitcontact_width">120dp</dimen>
         <dimen name="fragmentimgview_width">120dp</dimen>
         <dimen name="fragmentimgview_height">120dp</dimen>
-        <dimen name="view_margin_top">10dp</dimen>
         <dimen name="registerimg_margin_top">300dp</dimen>
         <dimen name="layout_padding_left">25dp</dimen>
         <dimen name="layout_padding_right">25dp</dimen>
