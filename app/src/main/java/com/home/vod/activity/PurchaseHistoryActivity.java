@@ -218,6 +218,7 @@ LanguagePreference languagePreference;
                     noData.setVisibility(View.VISIBLE);
                     noDataTextView.setText(languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY) );
 
+                    Log.v("pratik","noDataText=="+languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
 
                 }
             }

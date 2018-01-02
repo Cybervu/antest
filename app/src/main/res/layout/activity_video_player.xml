@@ -464,6 +464,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:textColor="@color/cast_crew_titleCololr"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />

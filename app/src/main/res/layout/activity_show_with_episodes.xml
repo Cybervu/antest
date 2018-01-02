@@ -413,6 +413,7 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
+
                     android:popupBackground="#e2e1e1"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
