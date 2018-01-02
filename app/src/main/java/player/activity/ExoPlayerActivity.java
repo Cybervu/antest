@@ -4741,7 +4741,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 jsonObj.put("watch_status", watchStatus);
                 jsonObj.put("device_type", "2");
-                jsonObj.put("log_id", videoLogId);
+                jsonObj.put("log_id", videoLogId); //in
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);

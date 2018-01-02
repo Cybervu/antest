@@ -19,6 +19,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -957,6 +958,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         theTextArea.setBackgroundResource(R.drawable.edit);
 
         theTextArea.setHint(languagePreference.getTextofLanguage(TEXT_SEARCH_PLACEHOLDER, DEFAULT_TEXT_SEARCH_PLACEHOLDER));
+        theTextArea.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
        /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
             theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search_large, 0, 0, 0);
             v.setImageResource(R.drawable.ic_action_search_xlarge);
@@ -1027,6 +1029,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
+                            Log.v("pratik","q===="+searchTextStr.trim());
                             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
                             if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);

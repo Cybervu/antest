@@ -3794,4 +3794,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
+
+
 }
