@@ -246,6 +246,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	String UniqueId = "";
 	String streamId = "";
 	String poster = "";
+	String storydes = "";
 	boolean stopcalling_onpause = false;
 	NetworkStateReceiver networkStateReceiver;
 
@@ -391,6 +392,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		UniqueId = getIntent().getStringExtra("UniqueId").trim();
 		streamId = getIntent().getStringExtra("streamId").trim();
 		poster = getIntent().getStringExtra("poster").trim();
+		storydes = getIntent().getStringExtra("story").trim();
 
 		Chromecast_Subtitle_Url = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Url");
 		Chromecast_Subtitle_Language_Name = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Language_Name");
@@ -562,35 +564,40 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			}
 		});
 
-		if (title != null && !title.matches(""))
+		try{
 
-		{
-			videoTitle.setText(title);
-			videoTitle.setVisibility(View.VISIBLE);
-		} else {
-			videoTitle.setVisibility(View.GONE);
-		}
+			if (title != null && !title.matches("")) {
+				videoTitle.setText(title);
+				videoTitle.setVisibility(View.VISIBLE);
+			} else {
+				videoTitle.setVisibility(View.GONE);
+			}
 
-
-		if (gen != null && !gen.matches(""))
-
-		{
-			GenreTextView.setText(gen);
-			GenreTextView.setVisibility(View.VISIBLE);
-		} else {
-			GenreTextView.setVisibility(View.GONE);
-		}
+			if (gen != null && !gen.matches("")) {
+				GenreTextView.setText(gen);
+				GenreTextView.setVisibility(View.VISIBLE);
+			} else {
+				GenreTextView.setVisibility(View.GONE);
+			}
 
 
-		if (vidduration != null && !vidduration.matches(""))
+			if (vidduration != null && !vidduration.matches("")) {
+				videoDurationTextView.setText(vidduration);
+				videoDurationTextView.setVisibility(View.VISIBLE);
+				censor_layout = false;
+			} else {
+				videoDurationTextView.setVisibility(View.GONE);
+			}
 
-		{
-			videoDurationTextView.setText(vidduration);
-			videoDurationTextView.setVisibility(View.VISIBLE);
-			censor_layout = false;
-		} else {
-			videoDurationTextView.setVisibility(View.GONE);
-		}
+			if (storydes != null && !storydes.matches("")) {
+				story.setText(storydes);
+				story.setVisibility(View.VISIBLE);
+			} else {
+				story.setVisibility(View.GONE);
+			}
+
+		}catch (Exception e){}
+
 
 
 		videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
@@ -1783,6 +1790,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	}
 
 	private void hideSystemUI() {
+
+        story.setText("");
+
 		// Set the IMMERSIVE flag.
 		// Set the content to appear under the system bars so that the content
 		// doesn't resize when the system bars hide and show.
@@ -1797,6 +1807,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	}
 
 	private void showSystemUI() {
+
+        story.setText(storydes);
+
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_STABLE

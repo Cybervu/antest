@@ -50,6 +50,7 @@ public class MyDownloadAdapter extends BaseAdapter {
     String[] nextLine;
     SharedPreferences pref;
     String emailIdStr = "";
+    String genre_data = "";
     ContactModel1 audio;
     //MydownloadModel mydownloadModel;
     DBHelper dbHelper;
@@ -110,7 +111,22 @@ public class MyDownloadAdapter extends BaseAdapter {
                 .into(image);
         title.setText(downloadModel.get(position).getMUVIID());
         realise_date.setText("");
-        genre.setText(downloadModel.get(position).getGenere());
+
+        try{
+            String genre_story = downloadModel.get(position).getGenere().trim();
+            if (genre_story.equals("@@@")) {
+                genre_data = "";
+            } else {
+                String data[] = (downloadModel.get(position).getGenere().trim()).split("@@@");
+                genre_data = data[0];
+            }
+        }catch (Exception e){
+            genre_data = "";
+        }
+
+
+
+        genre.setText(genre_data);
         String dd = downloadModel.get(position).getDuration();
         LogUtil.showLog("SUBHA", dd);
         duration.setText(dd);

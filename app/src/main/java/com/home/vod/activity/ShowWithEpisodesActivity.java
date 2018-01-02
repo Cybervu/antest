@@ -1759,13 +1759,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-
             }
         } catch (IllegalArgumentException ex) {
             status = 0;
         }
         if (status == 200) {
-
 
             voucher_success.setVisibility(View.VISIBLE);
             watch_now.setBackgroundResource(R.drawable.button_radious);
