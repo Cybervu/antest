@@ -43,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -175,6 +176,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     private String content_id;
     private String content_stream_id;
     private boolean backfromactivity = false;
+    private boolean index_clicked = false;
 
     String titleStr;
     /***************
@@ -224,6 +226,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
 
+    ScrollView scroll_view;
+    View insideView;
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
         @Override
@@ -347,6 +351,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
     // UI
     private ListView listView;
+     int ScrollState = 0;
 
     ImageView img;
     //data to load videourl
@@ -391,6 +396,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         super.onStop();
     }
     TextView categoryTitle;
+    TextView index;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -436,6 +442,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         searchEdittext.addTextChangedListener(new EditTextListener());
         searchIcon = (ImageView) rootView.findViewById(R.id.search_icon);
         clearText = (ImageView) rootView.findViewById(R.id.clear_text);
+        scroll_view = (ScrollView) rootView.findViewById(R.id.scroll_view);
+        insideView = (View) rootView.findViewById(R.id.side_index);
 
 
         noInternetConnectionLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
@@ -454,6 +462,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         listView.setAdapter(fitnessAdapter);
 
         categoryTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        index = (TextView) rootView.findViewById(R.id.index);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(titleStr);
@@ -498,19 +507,31 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             footerView.setVisibility(View.GONE);
         }
         resetData();
+
+
+
+
+
         asynLoadVideos = new AsynLoadVideos();
         asynLoadVideos.execute();
 
-        CategoryListInput categoryListInput = new CategoryListInput();
+       /* CategoryListInput categoryListInput = new CategoryListInput();
         categoryListInput.setAuthToken(authTokenStr);
         GetCategoryListAsynTask getCategoryListAsynTask = new GetCategoryListAsynTask(categoryListInput, FitnessFragment.this, getActivity());
-        getCategoryListAsynTask.execute();
+        getCategoryListAsynTask.execute();*/
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
                 Log.v("Muvi1", "onScrollStateChanged = "+scrollState);
+                ScrollState = scrollState;
+
+                if(ScrollState == 1 || ScrollState == 2){
+                    index.setVisibility(View.VISIBLE);
+                }else {
+                    index.setVisibility(View.GONE);
+                }
 
                 if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
@@ -545,7 +566,46 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
-                Log.v("Muvi1", "on scroll data firstVisibleItem = "+firstVisibleItem);
+                try{
+
+                    Log.v("Muvi1", "on scroll data info = "+itemData.get(firstVisibleItem).getTitle());
+
+                    String title = itemData.get(firstVisibleItem).getTitle().trim();
+                    title = (title.replaceAll("[0-9]","")).trim();
+                    String INDEX = title.substring(0,1);
+
+                    Log.v("Muvi1", "show Index = "+INDEX);
+                    index.setText(INDEX.toUpperCase());
+
+
+                    if(!index_clicked){
+                        for (int j = 0;j<listOfTextview.size();j++) {
+                            if ((listOfTextview.get(j).getTag().toString().toLowerCase().trim()).equals(INDEX.toLowerCase().trim())){
+                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+
+                                // scroll_view.scrollTo(j, (int)insideView.getY());
+                                insideView.getParent().requestChildFocus(insideView,insideView);
+//                                listOfTextview.get(j).requestFocus();
+
+                            }
+                            else {
+                                if(mapIndex.get(listOfTextview.get(j).getText()) !=null){
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
+                                }else{
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.style_circular_color));
+                                }
+                            }
+                        }
+                    }else{
+                        index_clicked = false;
+                    }
+
+
+
+
+
+
+                }catch (Exception e){}
 
                 if (scrolling == true && mIsScrollingUp == false) {
 
@@ -638,21 +698,6 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                     });
 
 
-                   /* if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                context.startActivity(movieDetailsIntent);
-                            }
-                        });
-
-
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY, moviePermalink);
-                    }*/
                 }
 
             }
@@ -2270,23 +2315,36 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                 textView.setText(""+((char)i));
 
 
+
+
+
                 textView.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
                     {
+                        index_clicked = true;
                         final TextView selectedIndex = (TextView) view;
-                        try{
-                            listView.setSelection(mapIndex.get(selectedIndex.getText()));
-                        }catch (Exception e){}
 
+                        if(mapIndex.get(selectedIndex.getText()) !=null){
+                            for (int j = 0;j<listOfTextview.size();j++) {
+                                if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+                                }
+                                else {
+                                   // listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
 
-                        for (int j = 0;j<listOfTextview.size();j++) {
-                            if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
-                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+                                    if(mapIndex.get(listOfTextview.get(j).getText()) !=null){
+                                        listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
+                                    }else{
+                                        listOfTextview.get(j).setTextColor(getResources().getColor(R.color.style_circular_color));
+                                    }
+                                }
                             }
-                            else {
-                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
-                            }
-                        }
+
+                            try{
+                                listView.setSelection(mapIndex.get(selectedIndex.getText()));
+                            }catch (Exception e){}
+                    }
+
 
 
                     }
