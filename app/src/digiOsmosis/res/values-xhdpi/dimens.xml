@@ -122,8 +122,8 @@
     <dimen name="downloadwidth">200dp</dimen>
 
 
-    <dimen name="season_card_width">150dp</dimen>
-    <dimen name="season_card_height">150dp</dimen>
+    <dimen name="season_card_width">110dp</dimen>
+    <dimen name="season_card_height">176dp</dimen>
     <dimen name="season_layout_card_height">144dp</dimen>
 
     <!--//**********profile picture*************//-->
@@ -151,5 +151,10 @@
     <dimen name="diet_story">18sp</dimen>
     <dimen name="player_looping_layout">100dp</dimen>
     <dimen name="player_title">20dp</dimen>
-    <dimen name="player_marginTop">100dp</dimen>
+    <dimen name="player_marginTop">10dp</dimen>
+
+    <dimen name="fitness_margin_left">25dp</dimen>
+    <dimen name="fitness_margin_right">40dp</dimen>
+    <dimen name="fitness_editText_height">40dp</dimen>
+    <dimen name="fitness_editText_width">260dp</dimen>
 </resources>

@@ -59,6 +59,7 @@
                 android:focusableInTouchMode="false"
                 android:gravity="center"
                 android:maxLines="2"
+                android:minLines="2"
                 android:text=""
                 android:padding="@dimen/loginImageViewMarging_top_padding"
                 android:textColor="@color/contentTitleColor"

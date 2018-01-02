@@ -181,4 +181,9 @@
     <dimen name="player_looping_layout">100dp</dimen>
     <dimen name="player_title">20dp</dimen>
     <dimen name="player_marginTop">50dp</dimen>
+
+    <dimen name="fitness_margin_left">25dp</dimen>
+    <dimen name="fitness_margin_right">40dp</dimen>
+    <dimen name="fitness_editText_height">40dp</dimen>
+    <dimen name="fitness_editText_width">260dp</dimen>
 </resources>

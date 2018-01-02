@@ -1340,7 +1340,6 @@ String titleStr;
                     });
 
                 } catch (IOException e) {
-                    Log.v("SUBHAA", "IOException"+e.toString());
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

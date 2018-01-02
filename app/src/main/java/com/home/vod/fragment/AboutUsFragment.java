@@ -3,6 +3,7 @@ package com.home.vod.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -14,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,6 +43,9 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     Context context;
     ProgressBar progresBar;
     WebView webView;
+    LinearLayout bannerImage;
+    ImageView bannerImageView;
+    TextView line_divider;
     ProgressBarHandler pDialog;
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
@@ -62,18 +68,35 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         languagePreference = LanguagePreference.getLanguagePreference(context);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
+        line_divider = (TextView) view.findViewById(R.id.line_divider);
+        bannerImage = (LinearLayout) view.findViewById(R.id.bannerImage);
+        TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
         AboutUsInput aboutUsInput=new AboutUsInput();
         aboutUsInput.setAuthToken(authTokenStr);
         aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         String strtext = getArguments().getString("item");
         aboutUsInput.setPermalink(strtext);
+
+        if(strtext.equalsIgnoreCase("privacy-policy")){
+            bannerImage.setVisibility(View.GONE);
+            line_divider.setVisibility(View.GONE);
+            categoryTitle.setTextColor(context.getResources().getColor(R.color.pageTitleColor));
+        }else{
+            bannerImage.setVisibility(View.VISIBLE);
+            line_divider.setVisibility(View.VISIBLE);
+            categoryTitle.setTextColor(context.getResources().getColor(R.color.button_background));
+
+
+        }
+
         asyncAboutUS = new AboutUsAsync(aboutUsInput,this,context);
         asyncAboutUS.execute();
-        TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
+
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
-        /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);*/
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(getArguments().getString("title"));
+//        categoryTitle.setText("SHILPA SHETTY KUNDRA");
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();

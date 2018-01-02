@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,22 +52,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavDrawerItem current = data.get(position);
-        holder.title.setText(current.getTitle().toString());
-        LogUtil.showLog("Alok ::",current.getTitle());
+        holder.title.setText(Html.fromHtml(current.getTitle().toString()));
 
-/*
-
-        if(current.getTitle().toString().contains(Util.getTextofLanguage(context,Util.MY_LIBRARY,Util.DEFAULT_MY_LIBRARY)))
-        {
-            holder.textViewLine.setVisibility(View.VISIBLE);
-            Util.my_library_visibility = true;
-            Util.drawer_line_visibility = false;
-        }
-        else
-        {
-            Util.my_library_visibility = false;
-        }
-*/
 
         if (current.getIsEnabled() == false) {
 

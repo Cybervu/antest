@@ -1966,12 +1966,15 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             }
 //                            programType= "WeekBased";
 
+                            try {
 
-                            if (programType != null && !programType.matches("")) {
-                                startProgramButton.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                startProgramButton.setVisibility(View.INVISIBLE);
+                                if (programType != null && !programType.matches("")) {
+                                    startProgramButton.setVisibility(View.VISIBLE);
+                                } else {
+                                    startProgramButton.setVisibility(View.INVISIBLE);
+                                }
+                            }catch (Exception e){
+
                             }
                     }
 

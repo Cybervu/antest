@@ -1117,6 +1117,8 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
 
 
         editProfileNameEditText.setText(get_userProfile_output.getDisplay_name());
+        int textLength = editProfileNameEditText.getText().length();
+        editProfileNameEditText.setSelection(textLength, textLength);
         name_of_user.setText(get_userProfile_output.getDisplay_name());
         emailAddressEditText.setText(get_userProfile_output.getEmail());
 

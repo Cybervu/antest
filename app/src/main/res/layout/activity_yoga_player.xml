@@ -373,6 +373,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/marginBottom5dp"
+                    android:visibility="gone"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/titleTextView"
@@ -402,8 +403,8 @@
                     android:id="@+id/durationLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/durationRelativeLayout"
-                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/detailsTitleLineDivider"
+                    android:layout_marginTop="@dimen/program_left"
                     android:orientation="horizontal">
 
 
@@ -422,8 +423,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-
-                            android:textColor="@color/pageTitleColor"
+                            android:drawableTop="@drawable/duration"
+                            android:textColor="@color/button_background"
                             android:textSize="@dimen/duration_title_text" />
 
                         <TextView
@@ -431,15 +432,56 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAllCaps="true"
-                            android:textColor="@color/videotextColor"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/duration" />
 
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/lineTextview1"
+                        android:layout_width="@dimen/weight_width"
+                        android:layout_height="@dimen/weight_height"
+                        android:background="@color/disableTextColor"
+                        android:visibility="gone"
+                        android:textSize="1dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/diffcultyTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:drawableTop="@drawable/difficulty"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/button_background"
+                            android:textSize="@dimen/duration_title_text" />
+
+                        <TextView
+                            android:id="@+id/difficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/duration" />
+
+                    </LinearLayout>
+
+
+                    <TextView
                         android:id="@+id/lineTextview"
                         android:layout_width="@dimen/weight_width"
                         android:layout_height="@dimen/weight_height"
+                        android:visibility="gone"
                         android:background="@color/disableTextColor"
                         android:textSize="1dp" />
 
@@ -460,8 +502,9 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textStyle="bold"
-
-                            android:textColor="@color/pageTitleColor"
+                            android:drawableTop="@drawable/repetitions3"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/button_background"
                             android:textSize="@dimen/duration_title_text" />
 
                         <TextView
@@ -469,112 +512,80 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAllCaps="true"
-                            android:textColor="@color/videotextColor"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/duration" />
 
                     </LinearLayout>
 
 
-                    <TextView
-                        android:id="@+id/lineTextview1"
-                        android:layout_width="@dimen/weight_width"
-                        android:layout_height="@dimen/weight_height"
-                        android:background="@color/disableTextColor"
-                        android:textSize="1dp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingLeft="10dp">
-
-                        <TextView
-                            android:id="@+id/diffcultyTitleTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="@color/pageTitleColor"
-                            android:textSize="@dimen/duration_title_text" />
-
-                        <TextView
-                            android:id="@+id/difficulty"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAllCaps="true"
-                            android:textColor="@color/videotextColor"
-                            android:textSize="@dimen/duration" />
-
-                    </LinearLayout>
 
                 </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/benefitsTitleLineDivider"
+
+                    android:layout_alignLeft="@+id/durationLinearLayout"
+                    android:layout_alignRight="@+id/durationLinearLayout"
+                    android:layout_below="@+id/durationLinearLayout"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="@dimen/program_left"
+                    android:layout_marginBottom="@dimen/program_left"
+                    android:visibility="visible"
+                    android:background="@color/line_divider_detailsPage"
+                    android:padding="@dimen/marginRight20dp" />
+
 
 
                 <LinearLayout
                     android:id="@+id/benefitsLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/durationLinearLayout"
+                    android:layout_below="@+id/benefitsTitleLineDivider"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:layout_marginBottom="10dp"
                     android:padding="@dimen/marginleft10dp">
 
 
-                    <TextView
-                        android:layout_width="@dimen/sideTitle_line_width"
-                        android:layout_height="@dimen/sideTitle_line_height"
-                        android:id="@+id/colortitle1"
-                        android:background="@color/colorPrimary"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        />
-
-
-                    <TextView
-                        android:id="@+id/benefitsTitleTextView"
+                    <LinearLayout
+                        android:id="@+id/equipmentTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sample title"
-                        android:textAllCaps="true"
-                        android:textColor="@color/videotextColor"
-                        android:textSize="@dimen/itemtitle_text_size"
-                        android:layout_marginLeft="@dimen/marginRight20dp"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:visibility="gone"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/colortitle1"
+                            android:layout_width="@dimen/sideTitle_line_height"
+                            android:layout_height="@dimen/sideTitle_line_width"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:visibility="visible"
+                            android:background="@color/colorPrimary" />
 
 
-                   <!-- <TextView
-                        android:id="@+id/colortitle1"
-                        android:layout_width="@dimen/sideTitle_line_width"
-                        android:layout_height="@dimen/sideTitle_line_height"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginRight="@dimen/marginleft10dp"
-                        android:visibility="gone"
+                        <TextView
+                            android:id="@+id/benefitsTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:visibility="visible"
+                            android:layout_marginTop="@dimen/program_left"
+                            android:text="Benefits"
+                            android:textAllCaps="true"
+                            android:textColor="@color/videotextColor"
+                            android:textSize="@dimen/story_title_text_size" />
 
-                        android:layout_marginTop="55dp"
-                        android:background="@color/colorPrimary" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/benefitsTitleTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text=""
-                        android:textAllCaps="true"
-                        android:visibility="gone"
 
-                        android:textColor="@color/videotextColor"
-                        android:textSize="@dimen/story_title_text_size" />
--->
+
+
+
                     <TextView
                         android:id="@+id/benefitsStoryTextView"
                         android:layout_width="match_parent"
@@ -603,28 +614,37 @@
                     android:visibility="gone"
                     android:padding="10dp">
 
-                    <View
-                        android:id="@+id/view1"
-                        android:layout_width="@dimen/sideTitle_line_width"
-                        android:layout_height="@dimen/sideTitle_line_height"
-                        android:layout_alignBottom="@+id/tutorialTextView"
-                        android:layout_alignTop="@+id/tutorialTextView"
-                        android:layout_marginLeft="8dp"
 
-                        android:background="@color/colorPrimary"
-                        android:paddingLeft="10dp" />
-
-
-                    <TextView
-                        android:id="@+id/tutorialTextView"
+                    <LinearLayout
+                        android:id="@+id/tutorialTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:textSize="@dimen/story_title_text_size"
-                        android:text=""
-                        android:layout_toRightOf="@+id/view1"
-                        android:textColor="@color/videotextColor"
-                        android:textStyle="bold" />
+                        android:layout_centerVertical="true"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/view1"
+                            android:layout_width="@dimen/sideTitle_line_height"
+                            android:layout_height="@dimen/sideTitle_line_width"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:visibility="visible"
+                            android:background="@color/colorPrimary" />
+
+
+                        <TextView
+                            android:id="@+id/tutorialTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:visibility="visible"
+                            android:layout_marginTop="@dimen/marginBottom5dp"
+                            android:text="Exercises"
+                            android:textAllCaps="true"
+                            android:textColor="@color/videotextColor"
+                            android:textSize="@dimen/story_title_text_size" />
+
+                    </LinearLayout>
 
 
 
@@ -646,6 +666,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:padding="10dp"
+                    android:layout_marginTop="@dimen/marginleft10dp"
                     android:layout_below="@+id/viewLine"
                     android:layout_alignParentStart="true">
 
@@ -750,12 +771,24 @@
                         android:textAllCaps="true"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/videotextColor"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/story_title_text_size"
 
                         />
 
                 </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/detailsTitleLineDivider"
+                    android:layout_alignLeft="@+id/titleTextView"
+                    android:layout_below="@+id/titleTextView"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/line_divider_detailsPage"
+                    android:padding="@dimen/marginRight20dp"
+                    android:visibility="visible"/>
 
             </RelativeLayout>
         </LinearLayout>

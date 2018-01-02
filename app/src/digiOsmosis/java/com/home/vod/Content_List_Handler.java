@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.home.vod.activity.ProgrammeActivity;
+import com.home.vod.fragment.FitnessFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.fragment.YogaFragment;
 
@@ -21,8 +22,8 @@ public class Content_List_Handler {
     }
 
     public Fragment handleIntent(String title){
-        if (title.equalsIgnoreCase("YOGA")){
-            return new YogaFragment();
+        if (title.equalsIgnoreCase("yoga") || title.equalsIgnoreCase("fitness-exersize")){
+            return new FitnessFragment();
 
         }else {
             return new VideosListFragment();

@@ -30,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -709,6 +710,33 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         }
 /***************chromecast**********************/
 
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        //drawer_collapse_expand_imageview.clear();
+
+                        final Intent startIntent = new Intent(context, MainActivity.class);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+
+                                getActivity().finish();
+
+                            }
+                        });
+                    }
+                }
+                return false;
+            }
+        });
 
         return rootView;
     }

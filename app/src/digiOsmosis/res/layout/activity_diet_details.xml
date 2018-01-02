@@ -389,7 +389,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/dietPlanButton"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginRight="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/marginleft10dp"
                         android:padding="@dimen/marginleft10dp">
@@ -434,10 +433,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/titleTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_alignLeft="@+id/titleTextView"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginRight="@dimen/marginleft10dp"
+
                         android:ellipsize="end"
-                        android:padding="@dimen/marginRight20dp"
+                        android:padding="5dp"
                         android:text=""
                         android:textColor="@color/videotextColor"
                         android:textSize="@dimen/diet_story" />

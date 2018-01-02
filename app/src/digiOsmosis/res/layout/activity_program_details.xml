@@ -346,9 +346,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/marginBottom5dp"
-                        android:text="Exercises"
+                        android:text=""
                         android:textAllCaps="true"
                         android:textColor="@color/videotextColor"
                         android:textSize="@dimen/story_title_text_size" />

@@ -268,8 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/viewLine"
-
-            android:fillViewport="true">
+            android:fillViewport="false">
 
         <LinearLayout
             android:id="@+id/new_detailsLayout"
@@ -325,7 +324,6 @@
                     android:layout_width="@dimen/downloadwidth"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
-
                     android:layout_weight="0.72"
                     android:visibility="visible">
 
@@ -357,9 +355,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignEnd="@+id/progressBar"
-
                         android:layout_alignRight="@+id/progressBar"
-
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/marginright10dp"
                         android:gravity="center"
@@ -381,142 +377,7 @@
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/GenreTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/videoTitle"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="@dimen/marginleft10dp"
-                android:layout_marginRight="@dimen/marginright10dp"
-                android:layout_marginTop="@dimen/margintop8dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="Hot Yoga"
-                android:visibility="gone"
-                android:textColor="@color/exercise_imagecolor"
-                android:textSize="@dimen/genre_textsize" />
 
-
-            <RelativeLayout
-                android:id="@+id/descriptionDetailsTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/marginleft10dp"
-                android:visibility="gone"
-                android:layout_below="@+id/videoTitle">
-
-                <TextView
-                    android:id="@+id/descriptionTitleTextVIew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/marginleft10dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
-                    android:layout_marginTop="@dimen/margintop8dp"
-                    android:text="DESCRIPTION"
-                    android:textColor="@color/exercise_imagecolor"
-                    android:textSize="@dimen/genre_textsize" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/durationRelativeLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/clocktime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/player_circle"
-                    android:elevation="4dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="10 to 15"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@color/appBackgroundColor" />
-
-                <TextView
-                    android:id="@+id/durationTitleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/clocktime"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:textSize="@dimen/duration_title_text"
-                    android:text="DURATION"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@color/textColorAll"
-                     />
-
-                <TextView
-                    android:id="@+id/durationTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/durationTitleTextView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="7dp"
-                    android:gravity="center"
-                    android:text="09:21"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/duration_color"
-                    android:textSize="@dimen/duration"
-                     />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/moreVideosRelativeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/durationLinearLayout"
-                android:visibility="gone"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="@dimen/sideTitle_line_width"
-                    android:layout_height="@dimen/sideTitle_line_height"
-                    android:id="@+id/view1"
-                    android:background="@color/colorPrimary"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    />
-
-
-                <TextView
-                    android:id="@+id/moreVideoTitleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sample title"
-                    android:textAllCaps="true"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/videotextColor"
-                    android:textSize="@dimen/itemtitle_text_size"
-                    android:layout_marginLeft="@dimen/marginRight20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-
-            </RelativeLayout>
 
 
 
@@ -531,29 +392,21 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moreVideosRelativeLayout"
                 android:layout_gravity="center|center_vertical"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="@dimen/player_marginTop"
                 android:layout_marginLeft="@dimen/marginRight20dp"
+
                 android:layout_marginRight="@dimen/marginRight20dp"
                 />
 
 
-            <!--<TextView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_above="@+id/controlsLayout"
-                android:id="@+id/belowlineTextView"
-                android:layout_marginTop="@dimen/player_looping_layout"
-                android:padding="@dimen/marginleft10dp"
-                android:background="@color/colorPrimary"/>-->
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/marginleft10dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:padding="@dimen/marginleft10dp"
-                android:layout_marginBottom="@dimen/marginleft10dp"
+                android:paddingLeft="@dimen/marginleft10dp"
+                android:paddingRight="@dimen/marginleft10dp"
+                android:paddingBottom="@dimen/marginleft10dp"
                 android:id="@+id/controlsLayout"
                 android:orientation="vertical"
                 android:gravity="bottom"
@@ -603,50 +456,7 @@
 
 
 
-            <RelativeLayout
-                android:id="@+id/seasonScroller"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/player_season_height"
-                android:background="@color/colorPrimary"
-                >
-                <TextView
-                    android:id="@+id/season_change_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/player_season_height"
-                    android:gravity="center_horizontal"
-                    android:textAllCaps="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/marginLeft15dp"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:text="DAYS 3 OF 20 "
-                    />
-                <ImageView
-                    android:id="@+id/next_season"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center_horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@id/season_change_textview"
-                    android:layout_marginLeft="@dimen/marginLeft15dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/next"/>
-                <ImageView
-                    android:id="@+id/previous_season"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="@dimen/marginLeft15dp"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center_horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toLeftOf="@id/season_change_textview"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/previous"/>
-            </RelativeLayout>
+
         </LinearLayout>
 
         </ScrollView>

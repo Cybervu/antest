@@ -1148,12 +1148,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
             if (questions.size() <= 0) {
 
-                moreVideosRelativeLayout.setVisibility(View.GONE);
+                // commmented for release V & VI
+//                moreVideosRelativeLayout.setVisibility(View.GONE);
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
-                moreVideosRelativeLayout.setVisibility(View.GONE);
-                moreVideoTitleTextView.setVisibility(View.GONE);
+                // commmented for release V & VI
+               /* moreVideosRelativeLayout.setVisibility(View.GONE);
+                moreVideoTitleTextView.setVisibility(View.GONE);*/
                 moreVideosRecyclerView.setVisibility(View.VISIBLE);
                 moreVideosRecyclerView.setLayoutManager(mLayoutManager);
                 moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -1260,7 +1262,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         if (counter >= totalSeason -1) {
             next_season.setVisibility(View.GONE);
         }
-        season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+//        season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
         Episode_Details_input episode_details_input = new Episode_Details_input();
         permalinkStr = getIntent().getStringExtra("PERMALINK");
         episode_details_input.setAuthtoken(authTokenStr);
@@ -1355,7 +1357,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         pDialog = new ProgressBarHandler(ProgramPlayerActivity.this);
         ////////////changed by nihar  ///start
         clocktimetv = (TextView) findViewById(R.id.clocktime);
-        RelativeLayout seasonScroller = (RelativeLayout) findViewById(R.id.seasonScroller);
+
+
+        // commented for release V & VI
+
+      /*  RelativeLayout seasonScroller = (RelativeLayout) findViewById(R.id.seasonScroller);
 
         season_change_textview = (TextView) findViewById(R.id.season_change_textview);
         FontUtls.loadFont(ProgramPlayerActivity.this, getResources().getString(R.string.regular_fonts), season_change_textview);
@@ -1382,15 +1388,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 EpisodeDetails(totalSeasonModel.get(counter).getSeasonId());
 
-               /* if (totalSeason >= current_season) {
-                 *//*   current_season += 1;
-                    EpisodeDetails(totalSeasonModel.get(current_season).getSeasonId());*//*
+               *//* if (totalSeason >= current_season) {
+                 *//**//*   current_season += 1;
+                    EpisodeDetails(totalSeasonModel.get(current_season).getSeasonId());*//**//*
 
-                }*/
+                }*//*
             }
-        });
+        });*/
         preferenceManager = PreferenceManager.getPreferenceManager(this);
-        if((ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY) != null) {
+       /* if((ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY) != null) {
             totalSeasonModel = (ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
             totalSeason = totalSeasonModel.size();
             season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
@@ -1415,6 +1421,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         if (counter >= totalSeason -1) {
             next_season.setVisibility(View.GONE);
         }
+
+        */
             //something here
 
 
@@ -1656,7 +1664,7 @@ End_Timer();
             public void onClick(View v) {
 
                 if (player_repeat.getTag() == "100"){
-                    player_repeat.setImageResource(R.drawable.replayshadow);
+                    player_repeat.setImageResource(R.drawable.replay_new);
                     player_repeat.setTag("101");
                     isRepeated = true;
 //                    player_next.setFocusable(false);
@@ -1708,11 +1716,16 @@ End_Timer();
         subtitle_change_btn.setVisibility(View.INVISIBLE);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-        moreVideoTitleTextView = (TextView) findViewById(R.id.moreVideoTitleTextView);
-        moreVideosRelativeLayout = (RelativeLayout) findViewById(R.id.moreVideosRelativeLayout);
-        moreVideoTitleTextView.setText(languagePreference.getTextofLanguage(MORE_VIDEOS,DEFAULT_MORE_VIDEOS));
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
+
+
+// commmented for release V & VI
+
+       /* moreVideoTitleTextView = (TextView) findViewById(R.id.moreVideoTitleTextView);
+        moreVideosRelativeLayout = (RelativeLayout) findViewById(R.id.moreVideosRelativeLayout);
+        moreVideoTitleTextView.setText(languagePreference.getTextofLanguage(MORE_VIDEOS,DEFAULT_MORE_VIDEOS));
+
         moreVideoTitleTextView.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
@@ -1723,13 +1736,13 @@ End_Timer();
         clocktime = (TextView) findViewById(R.id.clocktime);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         clocktime.setTypeface(videoDurationTextViewface);
-        durationTextView = (TextView) findViewById(R.id.durationTextView);
+       durationTextView = (TextView) findViewById(R.id.durationTextView);
         Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         durationTextView.setTypeface(videoCensorRatingTextViewface);
         durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         durationTitleTextView.setTypeface(videoCensorRatingTextView1face);
-
+*/
       /*  story = (TextView) findViewById(R.id.story);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);*/
@@ -1867,12 +1880,12 @@ End_Timer();
 
         {
             videoTitle.setText(playerModel.getVideoTitle().trim());
-            videoTitle.setVisibility(View.GONE);
+            videoTitle.setVisibility(View.INVISIBLE);
         } else {
-            videoTitle.setVisibility(View.GONE);
+            videoTitle.setVisibility(View.INVISIBLE);
         }
 
-
+ /*
         if (playerModel.getVideoGenre().trim() != null && !playerModel.getVideoGenre().trim().matches(""))
 
         {
@@ -1883,7 +1896,7 @@ End_Timer();
         }
 
 
-        if (playerModel.getVideoDuration().trim() != null && !playerModel.getVideoDuration().trim().matches(""))
+       if (playerModel.getVideoDuration().trim() != null && !playerModel.getVideoDuration().trim().matches(""))
 
         {
             durationTextView.setText(playerModel.getVideoDuration().trim());
@@ -1902,6 +1915,7 @@ End_Timer();
         } else {
             descriptionTitleTextVIew.setVisibility(View.GONE);
         }
+        */
 
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         player_layout_height = player_layout.getHeight();
@@ -3158,6 +3172,9 @@ End_Timer();
                                     End_Timer();
                                     Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
                                     EpisodesListModel listModel = questions.get(contentPosition);
+
+                                    // commmented for release V & VI
+
                                     durationTextView.setText(listModel.getEpisodeDuration());
                                     playerModel.setVideoDuration(listModel.getEpisodeDuration());
                                     playerModel.setVideoTitle(listModel.getEpisodeTitle());

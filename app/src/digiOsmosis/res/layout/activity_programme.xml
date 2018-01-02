@@ -380,7 +380,7 @@
 
                         <Button
                             android:id="@+id/dietPlanButton"
-                            android:layout_width="80dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/programme_details_button_background"
@@ -396,7 +396,7 @@
 
                         <RelativeLayout
                             android:id="@+id/startProgramButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -444,7 +444,7 @@
 
                         <Button
                             android:id="@+id/favoriteImageView"
-                            android:layout_width="80dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/startProgramButton"
                             android:layout_centerInParent="true"
@@ -571,6 +571,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAllCaps="true"
+                                android:maxLines="1"
+                                android:ellipsize="end"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/duration" />
 

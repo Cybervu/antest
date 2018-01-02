@@ -158,14 +158,7 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDE
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-/*
-import com.twotoasters.jazzylistview.JazzyGridView;
-import com.twotoasters.jazzylistview.JazzyHelper;
-*/
 
-/**
- * Created by user on 28-06-2015.
- */
 public class FitnessFragment extends Fragment implements GetCategoryListAsynTask.GetCategoryListListener{
 
     public static boolean clearClicked = false;
@@ -589,12 +582,14 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position <= 0){
+                if(position < 0){
                     return;
                 }
                 img = (ImageView) view.findViewById(R.id.movieImageView);
 
-                Log.v("SUBHA", "grid view item called");
+
+
+
 
 
                 YogaItem item = itemData.get(position );
@@ -620,6 +615,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
                 } else {
 
+                    Log.v("SUBHA", "grid view item called");
+                    Toast.makeText(context,"grid view item called ======= ",Toast.LENGTH_SHORT).show();
                     final Intent movieDetailsIntent = new Intent(context, YogaPlayerActivity.class);
                     movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, item.getPermalink());
                     movieDetailsIntent.putExtra("CONTENT_ID", item.getContent_id());
@@ -633,21 +630,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                     });
 
 
-                   /* if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                context.startActivity(movieDetailsIntent);
-                            }
-                        });
 
-
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY, moviePermalink);
-                    }*/
                 }
 
             }

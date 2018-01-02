@@ -83,7 +83,7 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
 
         public void bind(final RelatedContentListItem item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getTitle());
-            movieStory.setText("Story data ");
+            movieStory.setText(item.getStory());
             // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getImage();

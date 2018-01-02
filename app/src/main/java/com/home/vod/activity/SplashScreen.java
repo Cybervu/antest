@@ -1,6 +1,7 @@
 package com.home.vod.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -168,7 +169,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         setContentView(R.layout.activity_splash_screen);
 
         ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
-
+/*
 
         float density = getResources().getDisplayMetrics().density;
         if (density >= 3.5 && density <= 4.0) {
@@ -179,13 +180,23 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
 
+        */
+
 
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
         float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         Log.v("nihar_gg", dpHeight + "////////" + dpWidth);
 
-        imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+
+
+        if(isTablet(SplashScreen.this)){
+            imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen1280x1920, dpWidth, dpHeight));
+        }else{
+            imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen900x1600, dpWidth, dpHeight));
+        }
+        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.release.digiosmosis",  // replace with your unique package name
@@ -795,6 +806,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
 
         return inSampleSize;
+    }
+
+
+    public  boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 }

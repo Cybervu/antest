@@ -671,7 +671,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                     relatedContentList.setVisibility(View.VISIBLE);
                     tutorialRelativeLayout.setVisibility(View.VISIBLE);
-
+                    moreVideosTextView.setVisibility(View.VISIBLE);
 
                     for (int i = 0; i < relatedContentListOutputArray.size(); i++) {
 
@@ -703,7 +703,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         relatedContentList.setVisibility(View.VISIBLE);
                         relatedContentList.setLayoutManager(mLayoutManager);
                         relatedContentList.setItemAnimator(new DefaultItemAnimator());
-                        RelatedContentListDataAdapter mAdapter = new RelatedContentListDataAdapter(YogaPlayerActivity.this, R.layout.list_card_program_details, itemData);
+                        RelatedContentListDataAdapter mAdapter = new RelatedContentListDataAdapter(YogaPlayerActivity.this, R.layout.related_content_listing, itemData);
 
 
                         relatedContentList.setAdapter(mAdapter);
@@ -961,7 +961,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();
 
         FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), moreVideosTextView);
-        moreVideosTextView.setText(languagePreference.getTextofLanguage(MORE_VIDEOS, DEFAULT_MORE_VIDEOS));
+        moreVideosTextView.setText("EXERCISES");
 
         mLayoutManager = new LinearLayoutManager(YogaPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
         if (((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
@@ -1990,7 +1990,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
            /* isPPV = contentDetailsOutput.getIsPpv();
             isPPV = contentDetailsOutput.getIsApv();*/
             movieUrl = contentDetailsOutput.getMovieUrl();
-            lineTextview.setVisibility(View.VISIBLE);
+            lineTextview.setVisibility(View.GONE);
             Util.currencyModel = contentDetailsOutput.getCurrencyDetails();
             Util.apvModel = contentDetailsOutput.getApvDetails();
             Util.ppvModel = contentDetailsOutput.getPpvDetails();
@@ -2060,15 +2060,17 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             if (videoDurationStr.matches("")) {
                 durationRelativeLayout.setVisibility(View.GONE);
             } else {
-                durationRelativeLayout.setVisibility(View.VISIBLE);
+                durationRelativeLayout.setVisibility(View.GONE);
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), clocktime);
                 clocktime.setText(videoDurationStr);
             }
             if (repetition.matches("")) {
-                repetitionTitleTextView.setVisibility(View.GONE);
+                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
+                repetitionTitleTextView.setVisibility(View.VISIBLE);
                 lineTextview1.setVisibility(View.GONE);
             } else {
-                lineTextview1.setVisibility(View.VISIBLE);
+                lineTextview1.setVisibility(View.GONE);
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                 repetitionTextView.setText(repetition);
@@ -2094,7 +2096,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), detailsTextView);
 
                 detailsTextView.setText(name);
-                colortitle.setVisibility(View.VISIBLE);
+                colortitle.setVisibility(View.GONE);
             }
 
 
@@ -3495,13 +3497,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         /////View
         View view = new View(this);
-        int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,18, getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width - 1, height + 2);
         view.setLayoutParams(parms);
-        int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 11, getResources().getDisplayMetrics());
         parms.setMargins(marginleft, paddingleft, 0, 0);
         view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
@@ -3541,7 +3543,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         LinearLayout.LayoutParams detailsParam = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
         detail_text.setLayoutParams(detailsParam);
 
-        detailsParam.setMargins(textviewheader, textviewheader, textviewheader, textviewheader);
+        detailsParam.setMargins(0, textviewheader, textviewheader, textviewheader);
 
 
         ///main layout view set
