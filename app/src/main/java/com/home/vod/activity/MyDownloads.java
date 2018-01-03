@@ -976,10 +976,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             MpdVideoUrl = _video_details_output.getVideoUrl();
             licenseUrl = _video_details_output.getLicenseUrl();
 
-            upadateResumeWatchTable();
 
             Played_Length = Util.isDouble(_video_details_output.getPlayed_length());
             Played_Length = Played_Length * 1000;
+
+            upadateResumeWatchTable(""+Played_Length);
+
 
             Chromecast_Subtitle_Url.clear();
             Chromecast_Subtitle_Language_Name.clear();
@@ -1436,7 +1438,6 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
             togglePlayback();
         }
-
     }
 
     @Override
@@ -1475,13 +1476,13 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         super.onStop();
     }
 
-    public void upadateResumeWatchTable() {
+    public void upadateResumeWatchTable(final String playedLength) {
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
+                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "' , PlayedDuration = '"+playedLength+"'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
                 DB.execSQL(Qry1);
             }
         }).start();
