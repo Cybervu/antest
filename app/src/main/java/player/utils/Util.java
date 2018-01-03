@@ -467,6 +467,10 @@ public class Util {
     public static String IS_CHROMECAST = "IS_CHROMECAST";
     public static String DEFAULT_IS_CHROMECAST = "0";
 
+    public static  String TEXT_NUMBER= "TEXT_NUMBER";
+    public static String CONFIRM_EMAIL = "CONFIRM_EMAIL";
+
+
 
 
 
@@ -636,6 +640,8 @@ public class Util {
     public static String DEAFULT_CANCEL_BUTTON = "Cancel";
     public static String DEAFULT_CONTINUE_BUTTON = "Continue";
 
+    public static  String DEFAULT_TEXT_NUMBER= "Enter your Mobile";
+    public static  String DEFAULT_CONFIRM_EMAIL = "Confirm your Email Address";
     /*****************chromecvast*-------------------------------------*/
 
 

@@ -331,7 +331,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
 //Magic Movies
-           // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
@@ -408,8 +408,8 @@ android {
             dimension 'vendor'
             applicationId 'com.release.gabejaramillo'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-           buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
             targetSdkVersion 25
             versionCode 3
             versionName '1.0.2'
@@ -532,16 +532,13 @@ android.variantFilter { variant ->
     } else if (vendor.equals('cote_ouest') && (environment.equals('cote_ouest_staging_') || environment.equals('cote_ouest_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
+    } else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('fdghana') && (environment.equals('fdghana_staging_') || environment.equals('fdghana_Prod_'))
+    } else if (vendor.equals('fdghana') && (environment.equals('fdghana_staging_') || environment.equals('fdghana_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else {
+    } else {
         variant.setIgnore(true)
     }
 }
@@ -553,6 +550,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

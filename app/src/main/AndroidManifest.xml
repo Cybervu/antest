@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.home.vod">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -8,7 +9,6 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
 
     <!-- Permission to use camera - required -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -38,7 +38,6 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-
         <activity
             android:name=".activity.SplashScreen"
             android:configChanges="orientation|screenSize"
@@ -68,7 +67,6 @@
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".activity.MyDownloads"
             android:screenOrientation="portrait" />
@@ -86,8 +84,7 @@
         <service
             android:name="player.activity.DataConsumptionService"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true" />
         <service
             android:name="player.service.PopUpService"
             android:enabled="true"
@@ -103,12 +100,10 @@
             android:name="player.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="player.activity.ResolutionChangeActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="player.activity.ResumePopupActivity"
             android:configChanges="screenSize|orientation"
@@ -141,10 +136,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PaymentInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PPvPaymentInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:label=""
@@ -165,15 +160,12 @@
             android:name=".activity.MarlinBroadbandExample"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
-
-
         <activity
             android:name=".activity.TrailerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
         <activity xmlns:tools="http://schemas.android.com/tools"
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -196,7 +188,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <!--chromecast-->
+        <!-- chromecast -->
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.home.vod.CastOptionsProvider" />
@@ -225,13 +217,11 @@
             </intent-filter>
         </activity>
 
-
         <service android:name=".FCM_Support.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".FCM_Support.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -248,25 +238,21 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SubscriptionActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name="player.activity.MyLibraryPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name="player.activity.AdPlayerActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name="player.activity.MyActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.MyLibraryResumePopupActivity"
             android:configChanges="screenSize|orientation"
@@ -277,14 +263,11 @@
             android:name=".activity.ManageDevices"
             android:label=""
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.CastCrewDetailsActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.ReviewActivity" />
         <activity android:name=".activity.SeasonActivity" />
@@ -293,6 +276,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
+
+        <activity android:name=".activity.PreLoginActivity" />
+        <activity android:name=".activity.FdGhana_loginActivity"></activity>
     </application>
 
 </manifest>

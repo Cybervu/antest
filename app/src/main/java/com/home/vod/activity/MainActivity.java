@@ -61,6 +61,7 @@ import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
+import com.home.vod.LoginRegisterHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -435,9 +436,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 return false;
             case R.id.action_login:
 
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                Intent loginIntent = new LoginRegisterHandler(MainActivity.this).login();
+                Intent loginIntent=new Intent(MainActivity.this,PreLoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
+
                 // Not implemented here
                 return false;
             case R.id.action_register:

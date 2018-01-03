@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/signinback"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+
+    <ImageView
+        android:id="@+id/registerImageView"
+        android:layout_width="@dimen/loginimagewidth"
+        android:layout_height="@dimen/loginimagewidth"
+        android:layout_below="@+id/toolbar"
+
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/logo" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_below="@+id/registerImageView"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/activity_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+
+            <Button
+                android:id="@+id/loginWithFacebookButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittextheight"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/facebook_button_bg"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textAllCaps="false"
+                android:stateListAnimator="@null"
+                android:visibility="visible"
+
+                />
+
+
+            <!--<com.facebook.login.widget.LoginButton
+                android:visibility="gone"
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp" />-->
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittextheight"
+                android:layout_below="@+id/loginWithFacebookButton"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_radius1"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:text="login"
+                android:textAllCaps="false"
+                android:visibility="visible"
+                android:stateListAnimator="@null"
+
+                />
+
+
+
+
+
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
