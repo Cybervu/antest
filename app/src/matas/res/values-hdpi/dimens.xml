@@ -17,7 +17,9 @@
         <dimen name="titletxt">13sp</dimen>
         <dimen name="indicatorheight">130dp</dimen>
         <dimen name="trailer_btn_text_size">14sp</dimen>
-
+        <dimen name="movieimg_width">115dp</dimen>
+        <dimen name="movieimg_height">135dp</dimen>
+        <dimen name="view_margin_top">10dp</dimen>
         <dimen name="forgot_logo_width">120dp</dimen>
         <dimen name="filter_marginLeft">50dp</dimen>
         <dimen name="forgot_logo_height">120dp</dimen>
@@ -35,8 +37,6 @@
         <dimen name="login_padding">0dp</dimen>
         <dimen name="forgotlayout_margin">0dp</dimen>
         <dimen name="registerlayout_padding">0dp</dimen>
-        <dimen name="movieimg_width">85dp</dimen>
-        <dimen name="movieimg_height">120dp</dimen>
         <dimen name="video280_width">150dp</dimen>
         <dimen name="video280_height">80dp</dimen>
         <dimen name="testview2_text_size">12sp</dimen>
@@ -51,7 +51,6 @@
         <dimen name="submitcontact_width">110dp</dimen>
         <dimen name="fragmentimgview_width">120dp</dimen>
         <dimen name="fragmentimgview_height">120dp</dimen>
-        <dimen name="view_margin_top">10dp</dimen>
         <dimen name="registerimg_margin_top">300dp</dimen>
         <dimen name="layout_padding_left">10dp</dimen>
         <dimen name="layout_padding_right">10dp</dimen>
