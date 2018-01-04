@@ -504,6 +504,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        leasy {
+            minSdkVersion 15
+            applicationId 'com.release.leasy'
+            targetSdkVersion 23
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            dimension 'vendor'
+            buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
+            versionCode 1
+            versionName '1.0'
+        }
+        leasy_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        leasy_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
     }
 }
 
@@ -591,6 +610,11 @@ android.variantFilter { variant ->
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
+    else if (vendor.equals('leasy') && (environment.equals('leasy_staging_') || environment.equals('leasy_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+
     else {
         variant.setIgnore(true)
     }

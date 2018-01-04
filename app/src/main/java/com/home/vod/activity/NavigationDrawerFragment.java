@@ -457,6 +457,30 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 super.onDrawerOpened (drawerView);
                 setMenuItemsInDrawer(false);
 
+             /*   Boolean isMyLibraryAdded=false;
+                int isLogin=preferenceManager.getLoginFeatureFromPref();
+
+
+                for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+                    if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY))) {
+                        isMyLibraryAdded=true;
+                    }
+                }
+                if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null){
+                    if(isMyLibraryAdded){
+
+                    }else{
+                        setMenuItemsInDrawer(false);
+                    }
+                }else {
+                    if(isMyLibraryAdded)
+                        setMenuItemsInDrawer(false);
+                    else{}
+
+                }
+                    */
+
             }
         };
 
@@ -562,6 +586,34 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
     public void setMenuItemsInDrawer(boolean loadHomeFragment){
+
+        if(!loadHomeFragment){
+            try{
+                boolean my_libary_added1 = false;
+
+                for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+                    if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
+                        my_libary_added1 = true;
+                    }
+                }
+
+                if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+                    if(my_libary_added1)
+                    {
+                        return;
+                    }
+                }
+                else{
+                    if(!my_libary_added1)
+                    {
+                        return;
+                    }
+                }
+
+            }catch (Exception e){}
+        }
+
         loggedInStr = preferenceManager.getUseridFromPref();
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         menusOutputModelLocal = new MenusOutputModel();
@@ -588,7 +640,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
 
-            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY))) {
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                 my_libary_added = true;
             }
         }
