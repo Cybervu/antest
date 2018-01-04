@@ -5301,6 +5301,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         toast.setView(toastRoot);
 //        toast.setText("Added to Favorites");
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 
