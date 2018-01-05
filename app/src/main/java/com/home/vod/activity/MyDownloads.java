@@ -111,6 +111,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     static String path, filename, _filename, token, title, poster, genre, duration, rdate, movieid, user, uniqid;
     ArrayList<ContactModel1> download;
     ProgressBarHandler pDialog;
+
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
 
@@ -130,6 +131,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     String SubtitleLanguage = "";
     String SubtitleCode = "";
     String seek_status = "";
+    String gen="",story="";
     String resume_time = "0";
 
     LanguagePreference languagePreference;
@@ -288,6 +290,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 finish();
             }
         });
+
+        if(com.home.vod.util.Util.hideBcakIcon){
+            mActionBarToolbar.setNavigationIcon(null);
+//            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            com.home.vod.util.Util.hideBcakIcon  = false;
+        }
 
 
         list = (ListView) findViewById(R.id.listView);
@@ -968,10 +976,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             MpdVideoUrl = _video_details_output.getVideoUrl();
             licenseUrl = _video_details_output.getLicenseUrl();
 
-            upadateResumeWatchTable();
 
             Played_Length = Util.isDouble(_video_details_output.getPlayed_length());
             Played_Length = Played_Length * 1000;
+
+            upadateResumeWatchTable(""+Played_Length);
+
 
             Chromecast_Subtitle_Url.clear();
             Chromecast_Subtitle_Language_Name.clear();
@@ -1078,13 +1088,34 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
                 final String pathh = download.get(Position).getPath();
                 final String titles = download.get(Position).getMUVIID();
-                final String gen = download.get(Position).getGenere();
                 final String tok = download.get(Position).getToken();
                 final String contentid = download.get(Position).getContentid();
                 final String muviid = download.get(Position).getMuviid();
                 final String poster = download.get(Position).getPoster();
                 final String vidduration = download.get(Position).getDuration();
                 final String filename = pathh.substring(pathh.lastIndexOf("/") + 1);
+
+
+                try{
+                    String genre_story = download.get(Position).getGenere().trim();
+                    if (genre_story.equals("@@@")) {
+                        gen = "";
+                        story = "";
+                    } else {
+                        String data[] = (download.get(Position).getGenere().trim()).split("@@@");
+
+                        if (data.length == 1) {
+                            gen = data[0];
+                            story = "";
+                        } else {
+                            gen = data[0];
+                            story = data[1];
+                        }
+                    }
+                }catch (Exception e){
+                    gen = "";
+                    story = "";
+                }
 
 
                 try {
@@ -1109,6 +1140,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                             in.putExtra("poster", poster);
                             in.putExtra("contid", contentid);
                             in.putExtra("gen", gen);
+                            in.putExtra("story", story);
                             in.putExtra("muvid", muviid);
                             in.putExtra("vid", vidduration);
                             in.putExtra("FNAME", filename);
@@ -1406,7 +1438,6 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
             togglePlayback();
         }
-
     }
 
     @Override
@@ -1445,13 +1476,13 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         super.onStop();
     }
 
-    public void upadateResumeWatchTable() {
+    public void upadateResumeWatchTable(final String playedLength) {
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
+                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "' , PlayedDuration = '"+playedLength+"'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
                 DB.execSQL(Qry1);
             }
         }).start();

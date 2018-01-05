@@ -40,8 +40,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
     private String responseStr;
     private AboutUsListener listener;
     private Context context;
-    int code;
-
+    private int code;
 
     /**
      * Interface used to allow the caller of a AboutUsAsync to run some code when get
@@ -61,7 +60,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
          *
          * @param about Holds content of "About US"
          */
-        void onAboutUsPostExecuteCompleted(int status,String about);
+        void onAboutUsPostExecuteCompleted(int status, String about);
     }
 
 

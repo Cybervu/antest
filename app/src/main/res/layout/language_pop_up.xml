@@ -25,10 +25,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/videoCensorRatingTextView_margin"
                 android:layout_marginLeft="@dimen/pre_order_button_margin"
+                android:textAlignment="viewStart"
                 android:layout_marginTop="@dimen/login_button_margin"
                 android:textColor="@color/textColor"
                 android:textSize="@dimen/languagepop_text_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="start" />
 
 
             <LinearLayout

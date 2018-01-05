@@ -110,7 +110,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
             httppost.addHeader(HeaderConstants.LIMIT, this.search_data_input.getLimit());
             httppost.addHeader(HeaderConstants.OFFSET, this.search_data_input.getOffset());
-            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ().trim());
+            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ());
             httppost.addHeader(HeaderConstants.COUNTRY, this.search_data_input.getCountry());
            // httppost.addHeader(HeaderConstants.LANG_CODE, this.search_data_input.getLanguage_code());
 
@@ -167,6 +167,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
                             }
                             if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
                                 content.setName(jsonChildNode.optString("name"));
+                                Log.v("pratik","search name=="+jsonChildNode.optString("name"));
                             }
                             if ((jsonChildNode.has("poster_url")) && jsonChildNode.optString("poster_url").trim() != null && !jsonChildNode.optString("poster_url").trim().isEmpty() && !jsonChildNode.optString("poster_url").trim().equals("null") && !jsonChildNode.optString("poster_url").trim().matches("")) {
                                 content.setPoster_url(jsonChildNode.optString("poster_url"));

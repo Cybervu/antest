@@ -315,6 +315,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
+    LinearLayout back_layout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -1013,6 +1014,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
+        back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
@@ -1265,16 +1267,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         });
 
-       /* back.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    back.setImageResource(R.drawable.ic_back);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                }
-                return false;
-            }
-        });*/
+
 
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
@@ -1381,11 +1374,23 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//              Toast.makeText(ExoPlayerActivity.this, "button clicked", Toast.LENGTH_SHORT).show();
                 backCalled();
-               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
-                finish();*/
+                finish();
+            }
+        });
+
+        back_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//              Toast.makeText(ExoPlayerActivity.this, "layout clicked", Toast.LENGTH_SHORT).show();
+                backCalled();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
             }
         });
 
@@ -4095,7 +4100,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
-        contactModel1.setGenere(playerModel.getVideoGenre().trim());
+        contactModel1.setGenere(playerModel.getVideoGenre().trim()+"@@@"+playerModel.getVideoStory());
         contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
         contactModel1.setDuration(playerModel.getVideoDuration().trim());
         contactModel1.setStreamId(playerModel.getStreamUniqueId().trim());
@@ -4736,7 +4741,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 jsonObj.put("watch_status", watchStatus);
                 jsonObj.put("device_type", "2");
-                jsonObj.put("log_id", videoLogId);
+                jsonObj.put("log_id", videoLogId); //in
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);

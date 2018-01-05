@@ -20,7 +20,7 @@ public class VideolistFragmentHandler {
 
         MenuItem item;
         item= menu.findItem(R.id.action_filter);
-         item.setVisible(true);
+         item.setVisible(false);
 
     }
 }

@@ -112,7 +112,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
         try {
                 URL url = new URL(APIUrlConstant.getGetLanguageListUrl());
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.languageListInputModel.getAuthToken().trim());
+                        .appendQueryParameter("authToken", this.languageListInputModel.getAuthToken());
                 String query = builder.build().getEncodedQuery();
                 responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
