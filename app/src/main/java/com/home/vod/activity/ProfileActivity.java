@@ -322,7 +322,6 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
 
-
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

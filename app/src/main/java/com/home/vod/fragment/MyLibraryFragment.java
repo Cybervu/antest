@@ -1792,99 +1792,94 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     @Override
     public void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, String totalItems, String message) {
 
-        String movieImageStr = "";
+        try{
 
-        for (int i = 0; i < myLibraryOutputModelArray.size(); i++) {
-            movieImageStr = myLibraryOutputModelArray.get(i).getPosterUrl();
-            String movieName = myLibraryOutputModelArray.get(i).getName();
-            String videoTypeIdStr = myLibraryOutputModelArray.get(i).getContentTypesId();
-            String movieGenreStr = myLibraryOutputModelArray.get(i).getGenre();
-            String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
-            String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
-            movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
-            movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
-            int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
-            int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
-            int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
+            if(status == 200){
 
-            itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
-        }
+                String movieImageStr = "";
 
-        if (message == null)
-            message = "0";
-        if ((message.trim().equals("0"))) {
-            try {
-                if (videoPDialog != null && videoPDialog.isShowing()) {
-                    videoPDialog.hide();
-                    videoPDialog = null;
+                for (int i = 0; i < myLibraryOutputModelArray.size(); i++) {
+                    movieImageStr = myLibraryOutputModelArray.get(i).getPosterUrl();
+                    String movieName = myLibraryOutputModelArray.get(i).getName();
+                    String videoTypeIdStr = myLibraryOutputModelArray.get(i).getContentTypesId();
+                    String movieGenreStr = myLibraryOutputModelArray.get(i).getGenre();
+                    String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
+                    String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
+                    movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
+                    movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
+                    int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
+                    int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
+                    int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
+
+                    itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
                 }
-            } catch (IllegalArgumentException ex) {
 
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
-                footerView.setVisibility(View.GONE);
-            }
-            noDataLayout.setVisibility(View.VISIBLE);
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            footerView.setVisibility(View.GONE);
-        } else {
-            if (itemData.size() <= 0) {
-                try {
-                    if (videoPDialog != null && videoPDialog.isShowing()) {
-                        videoPDialog.hide();
-                        videoPDialog = null;
+                if (message == null)
+                    message = "0";
+                if ((message.trim().equals("0"))) {
+                    try {
+                        if (videoPDialog != null && videoPDialog.isShowing()) {
+                            videoPDialog.hide();
+                            videoPDialog = null;
+                        }
+                    } catch (IllegalArgumentException ex) {
+
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
                     }
-                } catch (IllegalArgumentException ex) {
-
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     gridView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
+                } else {
+                    if (itemData.size() <= 0) {
+                        try {
+                            if (videoPDialog != null && videoPDialog.isShowing()) {
+                                videoPDialog.hide();
+                                videoPDialog = null;
+                            }
+                        } catch (IllegalArgumentException ex) {
+
+                            noDataLayout.setVisibility(View.VISIBLE);
+                            noInternetConnectionLayout.setVisibility(View.GONE);
+                            gridView.setVisibility(View.GONE);
+                            footerView.setVisibility(View.GONE);
+                        }
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
+                    } else {
+                        footerView.setVisibility(View.GONE);
+                        gridView.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        noDataLayout.setVisibility(View.GONE);
+                        videoImageStrToHeight = movieImageStr;
+                        if (firstTime == true) {
+
+
+                            new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+
+                        } else {
+                            AsynLOADUI loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+                    }
                 }
+
+            }else{
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
-            } else {
-                footerView.setVisibility(View.GONE);
-                gridView.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.GONE);
-                videoImageStrToHeight = movieImageStr;
-                if (firstTime == true) {
-
-
-                    new RetrieveFeedTask().execute(videoImageStrToHeight);
-                    /*    Picasso.with(context).load(videoImageStrToHeight
-                        ).into(new Target() {
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                videoWidth = bitmap.getWidth();
-                                videoHeight = bitmap.getHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(final Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
-
-                            }
-                        });*/
-
-                } else {
-                    AsynLOADUI loadUI = new AsynLOADUI();
-                    loadUI.executeOnExecutor(threadPoolExecutor);
-                }
             }
-        }
+
+        }catch (Exception e){}
+
+
     }
 
     //Load Films Videos
