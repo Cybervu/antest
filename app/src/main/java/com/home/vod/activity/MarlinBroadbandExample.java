@@ -313,7 +313,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 	Animation myAnim;
-	LinearLayout volume_brightness_control_layout;
+	LinearLayout volume_brightness_control_layout,back_layout;
 	ImageButton volume_brightness_control;
 	TextView volume_bright_value;
 	Window mWindow;
@@ -464,9 +464,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
 
+
 		download = (ImageView) findViewById(R.id.downloadImageView);
 		Progress = (ProgressBar) findViewById(R.id.progressBar);
 		percentg = (TextView) findViewById(R.id.percentage);
+		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
 		// Adding Chromecast in Offline Player
 
@@ -1002,6 +1004,14 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		});
 
 		back.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				backCalled();
+
+			}
+		});
+
+		back_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				backCalled();
