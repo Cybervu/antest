@@ -102,6 +102,7 @@ import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EXIT_APP_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
@@ -112,6 +113,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.EXIT_APP_WARNING;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -275,6 +277,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     public static ProgressBarHandler progressBarHandler;
     PreferenceManager preferenceManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -290,6 +293,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fooerMenuHandler = new FooterMenuHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        loggedInStr = preferenceManager.getLoginStatusFromPref();
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -346,12 +351,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
             //********new expandable navigation drawer  by bishal***************
-            mNavigationDrawerFragment = (NavigationDrawerFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
             mTitle = getTitle();
 
-            mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-                    (DrawerLayout) findViewById(R.id.drawer_layout));
+            mNavigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
 
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -832,7 +835,40 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         // Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_body);
 
 
-        super.onBackPressed();
+
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(EXIT_APP_WARNING, DEFAULT_EXIT_APP_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                final Intent startIntent = new Intent(MainActivity.this, Login.class);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(startIntent);
+                finish();
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+
+        dlgAlert.create().show();
+
+
+
+
 
 
     }
@@ -865,7 +901,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(MainActivity.this, Splash.class);
+                    final Intent startIntent = new Intent(MainActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

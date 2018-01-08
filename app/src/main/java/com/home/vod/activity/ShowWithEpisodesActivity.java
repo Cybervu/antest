@@ -279,6 +279,9 @@ MonetizationHandler monetizationHandler;
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
 
+    // Menuitems //
+    MenuItem action_searchmenu;
+
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
         LogUtil.showLog("PINTU", "translate pdlog show");
@@ -351,7 +354,7 @@ MonetizationHandler monetizationHandler;
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(ShowWithEpisodesActivity.this, Splash.class);
+                    final Intent startIntent = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1863,6 +1866,7 @@ MonetizationHandler monetizationHandler;
 
         if (Build.VERSION.SDK_INT < 23) {
             season_spinner.setBackgroundResource(R.drawable.lollipop_spinner_theme);
+
         }
 
         season_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -5154,7 +5158,7 @@ MonetizationHandler monetizationHandler;
         // Set layout to toast
         toast.setView(toastRoot);
 //        toast.setText("Added to Favorites");
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 

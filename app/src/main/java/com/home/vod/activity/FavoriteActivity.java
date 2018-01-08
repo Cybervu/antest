@@ -213,6 +213,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     //Adapter for GridView
     private FavoriteAdapter customGridAdapter;
     boolean a=false;
+    boolean isNetwork;
 
 
     //Model for GridView
@@ -227,19 +228,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     RelativeLayout footerView;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     ///
-
+    // Menuitems //
+    MenuItem action_searchmenu;
     //////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_more);
-        /////
 
-
-        /////
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        isNetwork = player.utils.Util.checkNetwork(FavoriteActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -287,32 +287,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         //MUVIlaxmi
         gridView.setVisibility(View.VISIBLE);
-      /*  ArrayList<GridItem> tempData = new ArrayList<GridItem>();
-
-
-        for (int i = 0; i <= 10; i ++){
-            tempData.add(new GridItem("","Loading","","","","","","","","",0,0,0));
-            float density = getResources().getDisplayMetrics().density;
-
-            if (density >= 3.5 && density <= 4.0){
-                customGridAdapter = new GridViewAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout, itemData, new GridViewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(GridItem item) {
-                        clickItem(item);
-
-                    }
-                });
-            }else{
-                customGridAdapter = new GridViewAdapter(FavoriteActivity.this, R.layout.videos_280_grid_layout, itemData, new GridViewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(GridItem item) {
-                        clickItem(item);
-
-                    }
-                });
-
-            }
-        }*/
 
         gridView.setAdapter(customGridAdapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -479,16 +453,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         });
 
 
-        //Detect Network Connection
-
-
-        if (!NetworkStatus.getInstance().isConnected(this)) {
-            noInternetConnectionLayout.setVisibility(View.VISIBLE);
-            noDataLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            footerView.setVisibility(View.GONE);
-        }
-
         ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
         gridView.setLayoutParams(layoutParams);
@@ -513,19 +477,20 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
         scrolling = false;
 
+        if (isNetwork == true) {
+            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+            viewFavouriteInputModel.setAuthToken(preferenceManager.getAuthToken());
+            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        LogUtil.showLog("MUVI","favorite calling");
-        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(preferenceManager.getAuthToken());
-        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
-
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
-        LogUtil.showLog("MUVI","authtokenn = "+ preferenceManager.getAuthToken());
-        LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
-
-
+            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
+            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+        }
+        else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
 
 
     }
@@ -606,7 +571,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(FavoriteActivity.this, Splash.class);
+                    final Intent startIntent = new Intent(FavoriteActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

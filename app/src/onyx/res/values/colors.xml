@@ -20,7 +20,7 @@
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#242424</color>
     <color name="preOrderButtonTextColor">#DDD</color>
-    <color name="spinnerDropDownListColor">#000</color>
+    <color name="spinnerDropDownListColor">#ffffff</color>
     <color name="leftMenuBackground">#ffffff</color>
     <color name="colorPrimary">#000</color>
     <color name="nav_lineColor">#0cb9f2</color>
@@ -75,4 +75,8 @@
     <color name="purchaseBackgroundColor">#fff</color>
     <color name="purchaseBackground">#414141</color>
     <color name="purchaseTextColor">#000</color>
+    <color name="lollipop_spiner_color2">#000</color>
+    <color name="spinnerbackground">#000</color>
+    <color name="lollipop_spiner_color">#000</color>
+    <color name="style_circular_color_2">#0cb9f2</color>
 </resources>

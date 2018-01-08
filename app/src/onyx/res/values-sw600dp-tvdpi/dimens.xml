@@ -14,8 +14,8 @@
     <dimen name="singleimgheight">216dp</dimen>
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
-    <dimen name="forgot_logo_width">150dp</dimen>
-    <dimen name="forgot_logo_height">150dp</dimen>
+    <dimen name="forgot_logo_width">170dp</dimen>
+    <dimen name="forgot_logo_height">170dp</dimen>
     <dimen name="email_text_size">18sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
@@ -135,4 +135,8 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+    <dimen name="trailer_button_width">120dp</dimen>
+    <dimen name="trailer_button_height">40dp</dimen>
+    <dimen name="exitApp_layout_height">55dp</dimen>
+    <dimen name="exitApp_textsize">18sp</dimen>
 </resources>

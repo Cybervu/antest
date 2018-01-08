@@ -22,7 +22,7 @@ public class PreferenceManager {
     public  final String GENRE_VALUES_ARRAY_PREF_KEY = "genreValueArray";
     public final String LANGUAGE_LIST_PREF = "VishwamLanguageListPref";
     public  final String PREFS_LOGIN_ISSUBSCRIBED_KEY = "isSubscribed";
-    public  final String PREFS_LOGGEDIN_KEY = "pref_loged_in";
+    public  final String PREFS_LOGGEDIN_KEY = "pref_logged_in";
     public  final String PREFS_LOGGEDIN_PASSWORD_KEY = "password";
     public  final String PREFS_LOGIN_DISPLAY_NAME_KEY = "displayName";
     public  final String PREFS_LOGIN_DISPLAY_PHONE_KEY = "mobilenumber";
@@ -34,10 +34,12 @@ public class PreferenceManager {
     public static final String SHARED_PREF = "ah_firebase";
     public static final String authToken = "authToken";
 
+    public static String EXIT_APP_KEY = "exit_app_key";
 
 
 
     private PreferenceManager(Context mContext){
+        mSharedPreferences = mContext.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
         mSharedPreferences = mContext.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -218,6 +220,14 @@ public class PreferenceManager {
         mEditor.commit();
     }
 
+    public int getExitAppKey() {
+        return mSharedPreferences.getInt(EXIT_APP_KEY,0);
+    }
+
+    public void setExitAppKey(int key) {
+        mEditor.putInt(EXIT_APP_KEY,key);
+        mEditor.commit();
+    }
 
 
     public void clearLoginPref(){

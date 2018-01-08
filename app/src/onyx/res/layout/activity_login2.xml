@@ -35,27 +35,17 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/logo" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/loginTitleTextView"
-            android:text="Use your Muvi credentials to login"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/hint_color"
-            android:layout_below="@+id/logooo"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/forgot_text_size"/>
+
 
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/loginTitleTextView"
+            android:layout_below="@id/logooo"
             android:padding="25dp"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
 
 
 
@@ -68,6 +58,7 @@
                 android:paddingBottom="15dp"
                 android:layout_gravity="center"
                 android:textColor="#fff"
+                android:text=""
                 android:layout_margin="15dp"
                 android:layout_centerHorizontal="true"
                 android:textSize="@dimen/pass_text_size"
@@ -81,6 +72,7 @@
                 android:paddingBottom="15dp"
                 android:paddingLeft="15dp"
                 android:textColor="#fff"
+                android:text=""
                 android:layout_margin="15dp"
                 android:layout_gravity="center"
                 android:textSize="@dimen/pass_text_size"/>

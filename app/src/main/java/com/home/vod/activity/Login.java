@@ -36,6 +36,7 @@ import com.home.apisdk.apiController.GetStudioAuthkeyAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
@@ -51,6 +52,7 @@ import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
+import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.BuildConfig;
@@ -101,8 +103,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_EMPTY_FI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
@@ -118,9 +122,11 @@ import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATI
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.SORT_BY;
@@ -147,7 +153,8 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
         GetStudioAuthkeyAsynTask.GetStudioAuthkeyListener,
         FcmNotificationcountAsynTask.FcmNotificationcountListener,
-        SDKInitializer.SDKInitializerListner {
+        SDKInitializer.SDKInitializerListner,
+        LogoutAsynctask.LogoutListener {
 
     TextView noInternetTextView;
     TextView geoTextView;
@@ -163,7 +170,8 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     String email,password;
     String key;
     String Default_Language = "";
-    String ipAddressStr;
+    String ipAddressStr,loggedInStr,authToken,loginHistoryIdStr;
+
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -214,7 +222,11 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference((this));
+        loggedInStr = preferenceManager.getLoginStatusFromPref();
+        authToken = preferenceManager.getAuthToken();
+        loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
 
+        deleteExistingUser();
 
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -263,8 +275,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE,0);
         isNetwork = Util.checkNetwork(Login.this);
 
-
-
+        preferenceManager.setExitAppKey(1);
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1027,5 +1038,33 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
     }
 */
+
+
+
+ public void deleteExistingUser() {
+
+     preferenceManager.clearLoginPref();
+
+     if (loggedInStr!=null) {
+         LogoutInput logoutInput = new LogoutInput();
+         logoutInput.setAuthToken(authToken.trim());
+         logoutInput.setLogin_history_id(loginHistoryIdStr);
+         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
+         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+     }
+
+ }
+
+    @Override
+    public void onLogoutPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+
+
+    }
 
 }

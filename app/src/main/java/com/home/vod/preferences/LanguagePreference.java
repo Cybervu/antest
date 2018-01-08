@@ -168,6 +168,7 @@ public class LanguagePreference {
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
     public static final String SIGN_OUT_WARNING = "SIGN_OUT_WARNING";
+    public static final String EXIT_APP_WARNING = "EXIT_APP_WARNING";
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
@@ -374,7 +375,8 @@ public class LanguagePreference {
     public static final String DEFAULT_ADVANCE_PURCHASE = "Advance Purchase";
     public static final String DEFAULT_FAILURE = "Failure !";
     public static final String DEFAULT_NO_RECORD = "No record found!!!";
-    public static final String DEFAULT_SIGN_OUT_WARNING = "Are you sure you want to sign out ?";
+    public static final String DEFAULT_SIGN_OUT_WARNING = "Are you sure you want to logout ?";
+    public static final String DEFAULT_EXIT_APP_WARNING = "Are you sure you want to exit app ?";
     public static final String DEFAULT_SEARCH_ALERT = "Enter some text to search ...";
     public static final String DEFAULT_TEXT_EMIAL = "Enter your Email Address";
     public static final String DEFAULT_TEXT_PASSWORD = "Enter your Password";

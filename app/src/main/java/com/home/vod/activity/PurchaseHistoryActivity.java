@@ -37,11 +37,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -90,7 +92,7 @@ LanguagePreference languagePreference;
         recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
         purchaseHistoryTitleTextView = (TextView)findViewById(R.id.purchaseHistoryTitleTextView);
 
-        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA,DEFAULT_NO_INTERNET_NO_DATA));
+        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
         tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN,DEFAULT_TRY_AGAIN));
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);

@@ -93,7 +93,7 @@ public class MyDownloads extends AppCompatActivity {
     //public static ProgressDialog  pDialog;
     Context context;
     ListView list;
-    TextView noDataTextView;
+    TextView noDataTextView,pageTitleTextView;
     RelativeLayout nodata;
     MyDownloadAdapter adapter;
     SharedPreferences pref;
@@ -283,6 +283,7 @@ public class MyDownloads extends AppCompatActivity {
         list= (ListView)findViewById(R.id.listView);
         nodata= (RelativeLayout) findViewById(R.id.noData);
         noDataTextView= (TextView) findViewById(R.id.noDataTextView);
+        pageTitleTextView = (TextView) findViewById(R.id.mydownloads_textview);
         //  islogin = preferenceManager.getLoginFeatureFromPref();
         if (preferenceManager!=null){
             emailIdStr= preferenceManager.getEmailIdFromPref();
@@ -294,9 +295,6 @@ public class MyDownloads extends AppCompatActivity {
 
         }
 
-        list= (ListView)findViewById(R.id.listView);
-        nodata= (RelativeLayout) findViewById(R.id.noData);
-        noDataTextView= (TextView) findViewById(R.id.noDataTextView);
 
         download=dbHelper.getContactt(emailIdStr,1);
         if(download.size()>0) {

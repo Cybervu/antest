@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
+import com.home.vod.activity.ProfileActivity;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
@@ -29,7 +31,9 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -46,6 +50,12 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
+
+    private RelativeLayout noInternetConnectionLayout;
+
+    TextView noInternetTextView;
+
+    boolean isNetwork;
 
 
     public AboutUsFragment() {
@@ -64,15 +74,27 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
         preferenceManager = PreferenceManager.getPreferenceManager(context);
+        isNetwork = player.utils.Util.checkNetwork(context);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
-        AboutUsInput aboutUsInput = new AboutUsInput();
-        aboutUsInput.setAuthToken(preferenceManager.getAuthToken().trim());
-        aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        String strtext = getArguments().getString("item");
-        aboutUsInput.setPermalink(strtext);
-        asyncAboutUS = new AboutUsAsync(aboutUsInput, this, context);
-        asyncAboutUS.execute();
+        noInternetConnectionLayout = (RelativeLayout) view.findViewById(R.id.noInternet);
+        noInternetTextView =(TextView) view.findViewById(R.id.noInternetTextView);
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+
+        if (isNetwork == true) {
+
+            AboutUsInput aboutUsInput = new AboutUsInput();
+            aboutUsInput.setAuthToken(preferenceManager.getAuthToken().trim());
+            aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            String strtext = getArguments().getString("item");
+            aboutUsInput.setPermalink(strtext);
+            asyncAboutUS = new AboutUsAsync(aboutUsInput, this, context);
+            asyncAboutUS.execute();
+        }
+        else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+        }
+
         TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), categoryTitle);
         /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));

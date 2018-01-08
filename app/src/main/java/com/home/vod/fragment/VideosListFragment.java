@@ -455,6 +455,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     private TextView mDescriptionView;
     private TextView mStartText;
     private TextView mEndText;
+    private TextView categoryTitle;
+
     private SeekBar mSeekbar;
     private ImageView mPlayPause;
     private ProgressBar mLoading;
@@ -675,7 +677,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+        categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         //FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);

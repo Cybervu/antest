@@ -62,7 +62,7 @@ public class EpisodeListOptionMenuHandler {
         int isLogin = preferenceManager.getLoginFeatureFromPref();
 
         MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
-                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu,notification_menu;
+                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu,notification_menu,option_menu;
 
         filter_menu = menu.findItem(R.id.action_filter);
         menu_language = menu.findItem(R.id.menu_item_language);
@@ -73,8 +73,12 @@ public class EpisodeListOptionMenuHandler {
         register_menu = menu.findItem(R.id.action_register);
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
-        action_searchmenu=menu.findItem(R.id.action_search);
         notification_menu = menu.findItem(R.id.action_notification);
+        option_menu = menu.findItem(R.id.submenu);
+        action_searchmenu=menu.findItem(R.id.action_search);
+
+
+
 
         /***************chromecast**********************/
 
@@ -94,6 +98,9 @@ public class EpisodeListOptionMenuHandler {
         notification_menu.setTitle(languagePreference.getTextofLanguage(NOTIFICATION, DEFAULT_NOTIFICATION));
 
         filter_menu.setVisible(false);
+        action_searchmenu.setVisible(true);
+        option_menu.setVisible(true);
+
         if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
             mediaRouteMenuItem.setVisible(true);
         else

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/header_layout"
+        layout="@layout/drawer_header"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="1dp"
+        android:gravity="center"
+        android:id="@+id/exit_app"
+        android:background="@color/button_background">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/exitApp_layout_height"
+            android:text="Exit App"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/leftMenuBackground"/>
+
+    </LinearLayout>
+
+
+
+    <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/list_slidermenu"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/actionbar_background"
+        android:choiceMode="singleChoice"
+        android:divider="#ffffff"
+        android:dividerHeight="0.2dp"
+        android:groupIndicator="@null"
+        android:alpha="255"
+        android:scrollbars="none"
+        android:paddingBottom="1dp"
+        android:layout_below="@+id/header_layout"
+        android:layout_above="@+id/exit_app">
+    </ExpandableListView>
+
+
+
+
+
+    </RelativeLayout>

@@ -138,6 +138,18 @@ public class ReviewActivity extends AppCompatActivity implements
         submitReviewTextView.setHint(languagePreference.getTextofLanguage(ENTER_REVIEW_HERE,DEFAULT_ENTER_REVIEW_HERE));
         String clickHereStr = languagePreference.getTextofLanguage(NEED_LOGIN_TO_REVIEW,DEFAULT_NEED_LOGIN_TO_REVIEW) + " " + languagePreference.getTextofLanguage(CLICK_HERE,DEFAULT_CLICK_HERE) + " "+ languagePreference.getTextofLanguage(TO_LOGIN,DEFAULT_TO_LOGIN);
 
+
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        if (loggedInStr == null) {
+
+            clickHereToLogin.setVisibility(View.VISIBLE);
+            submitRatingLayout.setVisibility(View.GONE);
+        }
+        else {
+            clickHereToLogin.setVisibility(View.GONE);
+            submitRatingLayout.setVisibility(View.VISIBLE);
+        }
+
         /*******enter key of keyboard *************/
 
         InputFilter filter = new InputFilter() {
@@ -158,7 +170,6 @@ public class ReviewActivity extends AppCompatActivity implements
         SpannableString mySpannableString = new SpannableString(clickHereStr);
         mySpannableString.setSpan(new UnderlineSpan(), 0, mySpannableString.length(), 0);
         clickHereToLogin.setText(mySpannableString);
-        clickHereToLogin.setVisibility(View.GONE);
         clickHereToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -312,12 +323,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();
-                        if (loggedInStr == null) {
-                            LogUtil.showLog("MUVI","loggedInStr");
-
-                            clickHereToLogin.setVisibility(View.VISIBLE);
-                            submitRatingLayout.setVisibility(View.GONE);
-                        }else{
+                        if(loggedInStr != null) {
                             if (viewContentRatingOutputModel.getShowrating() == 0){
                                 submitRatingLayout.setVisibility(View.GONE);
                             }else{

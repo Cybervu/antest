@@ -79,6 +79,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.ProfileActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
@@ -359,8 +360,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     int prevPosition = 5;
     String filterPermalink = "";
     int scrolledPosition = 0;
+
     boolean scrolling;
+    boolean isNetwork;
     boolean isSearched = false;
+
     RecyclerView genreListData;
     RelativeLayout footerView;
     TextView sectionTitle;
@@ -433,6 +437,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
+        isNetwork = player.utils.Util.checkNetwork(getActivity());
         sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
@@ -470,7 +475,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         //Detect Network Connection
 
 
-        if (!NetworkStatus.getInstance().isConnected(getActivity())) {
+        if (isNetwork != true) {
+            Log.v("ANU","test1");
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -480,16 +486,18 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.v("ANU","test3");
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
+                Log.v("ANU","test4");
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
 
             } else {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
             }
         } else {
+            Log.v("ANU","test5");
             //Call whatever you want
-            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+            if (isNetwork == true) {
 
                 MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
                 myLibraryInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
@@ -507,8 +515,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                sectionTitle.setVisibility(View.GONE);
+                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                noDataLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
             }
         }
 
@@ -2474,6 +2485,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
     public void resetData() {
+        Log.v("ANU","test2");
         if (itemData != null && itemData.size() > 0) {
             itemData.clear();
         }

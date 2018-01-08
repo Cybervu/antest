@@ -289,6 +289,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     private String ipAddressStr = "";
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
 
+    // Menuitems //
+    MenuItem action_searchmenu;
 
     public void resetData() {
         if (itemData != null && itemData.size() > 0) {
@@ -1170,7 +1172,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     }*/
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(Episode_list_Activity.this, Splash.class);
+                    final Intent startIntent = new Intent(Episode_list_Activity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -2856,7 +2858,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
-
         return true;
     }
 

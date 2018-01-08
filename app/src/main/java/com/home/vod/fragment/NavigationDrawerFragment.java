@@ -1,6 +1,7 @@
 package com.home.vod.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,18 +27,24 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
 import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
+import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.Login;
 import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.adapter.ExpandableListAdapter;
 import com.home.vod.fragment.AboutUsFragment;
 import com.home.vod.fragment.ContactUsFragment;
@@ -59,14 +67,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EXIT_APP_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.EXIT_APP_WARNING;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -98,6 +118,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     GetAppMenuAsync asynLoadMenuItems = null;
     ProgressBarHandler progressDialog;
 
+    RelativeLayout header_layout;
+
     boolean my_libary_added = false;
     MenusOutputModel menusOutputModelLocal,menusOutputModelFromAPI = new MenusOutputModel();
     int status;
@@ -107,7 +129,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10, statusCode;
-    TextView text;
+    LinearLayout exitApp;
     String str = "#", abs;
     String Title, Permalink, ID, TitleChild, PermalinkChild, IDChild, ClasChild, UserTitleChild,
             UserIDChild, UserParentIdChild, UserPermalinkChild, UserClasChild, fdomain, flink_type, fid, fdisplay_name,
@@ -188,7 +210,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         }
 
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 
 
 
@@ -205,7 +227,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        mDrawerListView = (ExpandableListView) inflater.inflate (R.layout.drawer_drawer, container, false);
+        View v = inflater.inflate(R.layout.drawer_drawer, container, false);
+//        mDrawerListView = (ExpandableListView) inflater.inflate (R.layout.drawer_drawer, container, false);
+        mDrawerListView = (ExpandableListView) v.findViewById(R.id.list_slidermenu);
+        exitApp = (LinearLayout) v.findViewById(R.id.exit_app);
         mDrawerListView.setOnItemClickListener (new AdapterView.OnItemClickListener () {
             @Override
             public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
@@ -216,10 +241,50 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             }
         });
 
+
+
+
       /*  expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
      */
         //for expand the child content in navigation
+
+        exitApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(EXIT_APP_WARNING, DEFAULT_EXIT_APP_WARNING));
+                dlgAlert.setTitle("");
+
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        final Intent startIntent = new Intent(getActivity(), Login.class);
+                        startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(startIntent);
+                        getActivity().finish();
+                    }
+                });
+
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+                // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+                dlgAlert.setCancelable(false);
+
+                dlgAlert.create().show();
+
+            }
+        });
+
         mDrawerListView.setOnGroupExpandListener (new OnGroupExpandListener() {
 
             @Override
@@ -439,13 +504,16 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         mDrawerListView.setItemChecked (mCurrentSelectedPosition, true);
 
-        View header = inflater.inflate (R.layout.drawer_header, null);
-        mDrawerListView.addHeaderView (header);
+        /*View header = inflater.inflate (R.layout.drawer_header, null);
+        mDrawerListView.addHeaderView (header);*/
 
 
 
-        return mDrawerListView;
+        return v;
     }
+
+
+
 
 
     public boolean isDrawerOpen () {

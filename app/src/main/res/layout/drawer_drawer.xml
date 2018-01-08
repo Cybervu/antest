@@ -11,5 +11,6 @@
     android:dividerHeight="0.2dp"
     android:groupIndicator="@null"
     android:alpha="255"
+    android:scrollbars="none"
 >
     </ExpandableListView>

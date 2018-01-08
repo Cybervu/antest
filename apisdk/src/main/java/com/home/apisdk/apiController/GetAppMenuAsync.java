@@ -75,7 +75,6 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
     String isSubcategoryPresent;
     String category_id;
 
-
     /**
      * Interface used to allow the caller of a GetMenusAsynTask to run some code when get
      * responses.
@@ -145,7 +144,6 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
 
     @Override
     protected Void doInBackground(GetMenusInputModel... params) {
-
 
         try {
             HttpClient httpclient = new DefaultHttpClient();

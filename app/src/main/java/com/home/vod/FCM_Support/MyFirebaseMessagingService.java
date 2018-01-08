@@ -135,8 +135,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
 
 
         preferenceManager.setNOTI_COUNT(count);
-        LogUtil.showLog("ANU","COUNT======="+count);
-        LogUtil.showLog("ANU","device_id======="+Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
     }
 

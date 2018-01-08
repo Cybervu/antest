@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,12 +97,19 @@ public class ProfileActivity extends AppCompatActivity implements
     EditText emailAddressEditText;
     Button changePassword, update_profile, manage_devices;
 
+    private RelativeLayout noInternetConnectionLayout,profileLayout;
+
     String Name, Password;
+
     boolean password_visibility = false;
+    boolean isNetwork;
 
     String User_Id = "";
     String Email_Id = "";
+
     TextView name_of_user;
+    TextView noInternetTextView;
+
     ProgressBarHandler pDialog;
     LanguagePreference languagePreference;
 
@@ -128,6 +137,7 @@ public class ProfileActivity extends AppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProfileActivity.this);
+        isNetwork = player.utils.Util.checkNetwork(ProfileActivity.this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
@@ -139,6 +149,13 @@ public class ProfileActivity extends AppCompatActivity implements
         changePassword = (Button) findViewById(R.id.changePasswordButton);
         update_profile = (Button) findViewById(R.id.update_profile);
         manage_devices = (Button) findViewById(R.id.manage_devices);
+        profileLayout = (RelativeLayout) findViewById(R.id.profileLayout);
+        noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
+        noInternetTextView =(TextView) findViewById(R.id.noInternetTextView);
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+
+
+        noInternetConnectionLayout.setVisibility(View.GONE);
 
 
         if (!languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
@@ -294,25 +311,40 @@ public class ProfileActivity extends AppCompatActivity implements
 
 // =======End ===========================//
 
-        Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-        get_userProfile_input.setAuthToken(preferenceManager.getAuthToken().trim());
-        get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
-        get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
-        get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        if(isNetwork == true) {
+            Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+            get_userProfile_input.setAuthToken(preferenceManager.getAuthToken().trim());
+            get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
+            get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
+            get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
-        GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+            GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
+        }
+        else {
+
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            profileLayout.setVisibility(View.GONE);
+        }
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                editConfirmPassword.setVisibility(View.VISIBLE);
+                editNewPassword.setVisibility(View.VISIBLE);
+                changePassword.setVisibility(View.GONE);
+                editNewPassword.requestFocus();
 
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                /*InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                Log.v("ANU","inputManager==="+inputManager);
+
+                if (ProfileActivity.this.getCurrentFocus() != null && inputManager != null) {
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }
 
                 if (changePassword.isClickable() && editConfirmPassword.isShown() && editNewPassword.isShown()) {
 
@@ -328,7 +360,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-                                UpdateProfile(profileHandler.final_name,profileHandler.phoneStr);
+//                                UpdateProfile(profileHandler.final_name,profileHandler.phoneStr);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
@@ -345,21 +377,21 @@ public class ProfileActivity extends AppCompatActivity implements
                         editNewPassword.setVisibility(View.GONE);
                         // editProfileNameEditText.requestFocus();
                     }
-                    /*editOldPassword.setText("");
-                    editNewPassword.setText("");*/
+                    *//*editOldPassword.setText("");
+                    editNewPassword.setText("");*//*
                 } else {
-                   /* editOldPassword.setText("");
-                    editNewPassword.setText("");*/
-                 /*   editOldPassword.setVisibility(View.GONE);
-                    editNewPassword.setVisibility(View.GONE);*/
+                   *//* editOldPassword.setText("");
+                    editNewPassword.setText("");*//*
+                 *//*   editOldPassword.setVisibility(View.GONE);
+                    editNewPassword.setVisibility(View.GONE);*//*
                     editConfirmPassword.setVisibility(View.VISIBLE);
                     editNewPassword.setVisibility(View.VISIBLE);
-                    editConfirmPassword.requestFocus();
+                    editNewPassword.requestFocus();
 
                 }
 
 
-               /* if (editOldPassword.getText().toString().trim() != null && !(editOldPassword.getText().toString().trim().equalsIgnoreCase(""))) {
+               *//* if (editOldPassword.getText().toString().trim() != null && !(editOldPassword.getText().toString().trim().equalsIgnoreCase(""))) {
                     if (Util.isConfirmPassword(editOldPassword.getText().toString(), editNewPassword.getText().toString()) == false) {
                         Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, Util.DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
 
@@ -477,6 +509,14 @@ public class ProfileActivity extends AppCompatActivity implements
 
         if (code > 0) {
             if (code == 200) {
+
+                editConfirmPassword.setText("");
+                editNewPassword.setText("");
+                editNewPassword.requestFocus();
+                editConfirmPassword.setVisibility(View.GONE);
+                editNewPassword.setVisibility(View.GONE);
+                changePassword.setVisibility(View.VISIBLE);
+
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(profileHandler.final_name);
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&

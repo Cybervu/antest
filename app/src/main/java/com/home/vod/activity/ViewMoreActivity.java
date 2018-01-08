@@ -220,6 +220,9 @@ public class ViewMoreActivity extends AppCompatActivity implements
     RelativeLayout footerView;
     LanguagePreference languagePreference;
 
+    // Menuitems //
+    MenuItem action_searchmenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -670,7 +673,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(ViewMoreActivity.this, Splash.class);
+                    final Intent startIntent = new Intent(ViewMoreActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1725,6 +1728,12 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(profileIntent);
                 // Not implemented here
                 return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(ViewMoreActivity.this, MyDownloads.class);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
             case R.id.action_purchage:
 
                 Intent purchaseintent = new Intent(ViewMoreActivity.this, PurchaseHistoryActivity.class);
@@ -1736,6 +1745,15 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 Intent notificationIntent = new Intent(ViewMoreActivity.this, Notification.class);
                 startActivity(notificationIntent);
 
+                return false;
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+//                favoriteIntent.putExtra("EMAIL",email);
+//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
+                // Not implemented here
                 return false;
             case R.id.action_logout:
 

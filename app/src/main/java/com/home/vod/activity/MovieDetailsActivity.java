@@ -346,6 +346,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     // voucher ends here //
 
+
+    // Menuitems //
+    MenuItem action_searchmenu;
+
     @Override
     protected void onResume() {
 
@@ -534,7 +538,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(MovieDetailsActivity.this, Splash.class);
+                    final Intent startIntent = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -2148,7 +2152,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         // Set layout to toast
         toast.setView(toastRoot);
 //        toast.setText("Added to Favorites");
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 

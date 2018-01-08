@@ -97,6 +97,9 @@
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
+    <dimen name="padding_bottom">50dp</dimen>
+    <dimen name="exitApp_layout_height">55dp</dimen>
+    <dimen name="exitApp_textsize">14sp</dimen>
 
 
 </resources>

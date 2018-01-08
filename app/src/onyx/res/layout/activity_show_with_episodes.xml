@@ -166,7 +166,7 @@
                         <Button
                             android:id="@+id/viewTrailerButton"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/trailer_button_height"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/view_more_button_background"
                             android:padding="@dimen/payment_spinner_padding"
@@ -280,6 +280,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/rating"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginRight="@dimen/ppv_margin"
                     android:layout_below="@+id/iconImageRelativeLayout">
                     <RatingBar
                         android:id="@+id/ratingBar"
@@ -422,16 +424,17 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="#e2e1e1"
+                    android:popupBackground="#000000"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
 
                 <Button
                     android:id="@+id/btnMore"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/trailer_button_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

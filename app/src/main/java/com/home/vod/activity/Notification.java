@@ -126,7 +126,6 @@ public class Notification extends AppCompatActivity implements FcmNotificationli
 
 
 //        sideMenuHandler.sendBroadCast();
-        LogUtil.showLog("ANU","AFTER reading===="+preferenceManager.getNOTI_COUNT());
 
     }
 
