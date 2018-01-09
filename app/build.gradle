@@ -341,8 +341,8 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
             targetSdkVersion 23
-            versionCode 2
-            versionName '1.1'
+            versionCode 3
+            versionName '2.1'
         }
         onyx_staging_ {
             dimension 'environment'
