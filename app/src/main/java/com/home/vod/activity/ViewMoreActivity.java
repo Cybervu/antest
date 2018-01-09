@@ -1754,6 +1754,12 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 dlgAlert.create().show();
 
                 return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(ViewMoreActivity.this, MyDownloads.class);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
             default:
                 break;
         }

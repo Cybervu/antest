@@ -34,7 +34,7 @@
  <color name="languagePopupColor">#fff</color>
  <color name="languagePopupFadeColor">#50696969</color>
  <color name="filterTextColor">#5c6873</color>
- <color name="nav_drawer_lineColor">#ffd20a</color>
+ <color name="nav_drawer_lineColor">#000000</color>
  <color name="nav_drawer_text_Color">#000000</color>
  <color name="button_background">#ffd20a</color>
  <color name="genre_text_color">#ffd20a</color>
@@ -79,6 +79,7 @@
  <color name="aboutustestcolor">#fff</color>
  <color name="borderColor">#ffd20a</color>
  <color name="buttonbg">#ffd20a</color>
- <color name="cast_crew_titleCololr">#ffd20a</color>
+ <color name="cast_crew_titleCololr">#6c6c6c</color>
  <color name="nav_text_line_color">#ffd20a</color>
+ <color name="nav_header_line_color">#ffd20a</color>
 </resources>

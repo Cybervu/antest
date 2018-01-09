@@ -62,7 +62,9 @@ public class ProfileHandler {
 
                 inputManager.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
+                editProfileNameEditText.setSelection(editProfileNameEditText.getText().length());
                 first_nameStr = editProfileNameEditText.getText().toString().trim();
+
                 ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
 
             }
@@ -73,6 +75,7 @@ public class ProfileHandler {
 
     public void setNameTxt(String nameString,String last_name,String phoneNumber){
         editProfileNameEditText.setText(nameString.trim());
+        editProfileNameEditText.setSelection(editProfileNameEditText.getText().length());
 
     }
 
