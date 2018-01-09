@@ -87,7 +87,8 @@
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
             android:textColor="@color/pageTitleColor"
-            android:textSize="@dimen/itemtitle_text_size" />
+            android:textSize="@dimen/itemtitle_text_size"
+            />
 
         <Button
             android:id="@+id/btnMore"

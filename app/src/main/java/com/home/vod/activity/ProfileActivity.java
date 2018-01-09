@@ -397,6 +397,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(profileHandler.first_nameStr);
+
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
