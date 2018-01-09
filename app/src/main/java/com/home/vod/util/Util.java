@@ -544,7 +544,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP, "google_signup", json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS, "view_less", json);
         setTranslationLanguageToPref(languagePreference, ALREADY_MEMBER, DEFAULT_ALREADY_MEMBER, "already_member", json);
-        setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription completed", json);
+        setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription_completed", json);
 
         setTranslationLanguageToPref(languagePreference, ACTIAVTE_PLAN_TITLE, DEFAULT_ACTIAVTE_PLAN_TITLE, "activate_plan_title", json);
         setTranslationLanguageToPref(languagePreference, APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE, "app_expired", json);
@@ -559,7 +559,7 @@ public class Util {
         //setTranslationLanguageToPref(languagePreference, GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN, "google_fcm_token", json);
 
         setTranslationLanguageToPref(languagePreference, EPISODE_TITLE, DEFAULT_EPISODE_TITLE, "episodes_title", json);
-        setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
+        //setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z, "sort_alpha_a_z", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A, "sort_alpha_z_a", json);
         setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK, "login_facebook", json);
@@ -659,11 +659,13 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, BTN_PAYNOW, "", "btn_paynow", json);
         setTranslationLanguageToPref(languagePreference, PAY_WITH_CREDIT_CARD, "", "pay_with_credit_card", json);
         setTranslationLanguageToPref(languagePreference, PAYMENT_OPTIONS_TITLE, DEFAULT_PAYMENT_OPTIONS_TITLE, "payment_options_title", json);
-        setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
+        //setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
         setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
         setTranslationLanguageToPref(languagePreference, ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, "activate_subscription_watch_video", json);
 
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
+        setTranslationLanguageToPref(languagePreference, ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW, "add_a_review", json);
+        setTranslationLanguageToPref(languagePreference, REVIEWS, DEFAULT_REVIEWS, "reviews", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
@@ -672,6 +674,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
         setTranslationLanguageToPref(languagePreference, TRANSACTION_DETAIL_PURCHASE_DATE, DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE, "transaction_detail_purchase_date", json);
         setTranslationLanguageToPref(languagePreference, PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY, "purchase_history", json);
+        setTranslationLanguageToPref(languagePreference, NO_PURCHASE_HISTORY, DEFAULT_NO_PURCHASE_HISTORY, "no_purchase_history", json);
         setTranslationLanguageToPref(languagePreference, MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD, "my_download", json);
         setTranslationLanguageToPref(languagePreference, BTN_REGISTER, DEFAULT_BTN_REGISTER, "btn_register", json);
         setTranslationLanguageToPref(languagePreference, SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE, "sort_release_date", json);
@@ -743,6 +746,7 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, YOUR_DEVICE, DEFAULT_YOUR_DEVICE, "your_device", json);
         setTranslationLanguageToPref(languagePreference, DEREGISTER, DEFAULT_DEREGISTER, "deregister", json);
+        setTranslationLanguageToPref(languagePreference, FILMOGRAPHY, DEFAULT_FILMOGRAPHY, "filmography", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

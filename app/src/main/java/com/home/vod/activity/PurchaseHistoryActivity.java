@@ -38,11 +38,13 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
@@ -216,9 +218,9 @@ LanguagePreference languagePreference;
                     primary_layout.setVisibility(View.GONE);
 
                     noData.setVisibility(View.VISIBLE);
-                    noDataTextView.setText(languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY) );
+                    noDataTextView.setText(languagePreference.getTextofLanguage(NO_PURCHASE_HISTORY,DEFAULT_NO_PURCHASE_HISTORY));
 
-                    Log.v("pratik","noDataText=="+languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+                    Log.v("pratik","noDataText=="+languagePreference.getTextofLanguage(NO_PURCHASE_HISTORY,DEFAULT_NO_PURCHASE_HISTORY));
 
                 }
             }

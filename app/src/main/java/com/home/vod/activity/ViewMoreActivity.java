@@ -132,10 +132,8 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
 

@@ -108,6 +108,8 @@ public class LanguagePreference {
     public static final String INVALID_COUPON = "INVALID_COUPON";
     public static final String DISCOUNT_ON_COUPON = "DISCOUNT_ON_COUPON";
     public static final String HOME = "HOME";
+    public static String HAS_FAVORITE = "HAS_FAVORITE";
+    public static String DEFAULT_HAS_FAVORITE = "0";
     public static final String CONTACT_US = "contactus";
     public static final String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
     public static final String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
@@ -429,6 +431,14 @@ public class LanguagePreference {
     public static String DEFAULT_DURATION_TITLE = " Duration";
     public static String RESUME_MESSAGE = "RESUME_MESSAGE";
     public static String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
+    public static String DEFAULT_ADD_A_REVIEW = "Add a Review";
+    public static String DEFAULT_REVIEWS = "Reviews";
+    public static String ADD_A_REVIEW = "ADD_A_REVIEW";
+    public static String REVIEWS = "REVIEWS";
+    public static String NO_PURCHASE_HISTORY = "NO_PURCHASE_HISTORY";
+    public static String DEFAULT_NO_PURCHASE_HISTORY = "No Purchase History";
+    public static String FILMOGRAPHY = "FILMOGRAPHY";
+    public static String DEFAULT_FILMOGRAPHY = "filmography";
 
 
     /**
