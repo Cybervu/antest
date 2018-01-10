@@ -439,6 +439,18 @@ public class LanguagePreference {
     public static String DEFAULT_NO_PURCHASE_HISTORY = "No Purchase History";
     public static String FILMOGRAPHY = "FILMOGRAPHY";
     public static String DEFAULT_FILMOGRAPHY = "filmography";
+    public static String ERROR_IN_DATA_FETCHING = "ERROR_IN_DATA_FETCHING";
+    public static String DEFAULT_ERROR_IN_DATA_FETCHING = "Error in data fetching. Please try again";
+    public static String ENTER_YOUR_MESSAGE = "ENTER_YOUR_MESSAGE";
+    public static String DEFAULT_ENTER_YOUR_MESSAGE = "Enter Your Message";
+    public static String DEFAULT_VALID_CONFIRM_PASSWORD = "Please enter confirm password";
+    public static String WANT_DOWNLOAD_CANCEL = "WANT_DOWNLOAD_CANCEL";
+    public static String DEFAULT_WANT_DOWNLOAD_CANCEL = "Do you want to cancel the download ?";
+    public static String DOWNLOAD_CANCEL = "DOWNLOAD_CANCEL";
+    public static String DEFAULT_DOWNLOAD_CANCEL = "Download Cancelled";
+    public static String NO_DOWNLOADED_VIDEOS = "NO_DOWNLOADED_VIDEOS";
+    public static String DEFAULT_NO_DOWNLOADED_VIDEOS = "No downloaded video(s) available";
+
 
 
     /**

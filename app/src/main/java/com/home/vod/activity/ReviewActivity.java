@@ -52,6 +52,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_POST_REVIE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CLICK_HERE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REVIEW_HERE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEED_LOGIN_TO_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -59,10 +60,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBMIT_YOUR_RATING_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TO_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REVIEW_HERE;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.NEED_LOGIN_TO_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SUBMIT_YOUR_RATING_TITLE;
 import static com.home.vod.preferences.LanguagePreference.TO_LOGIN;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -269,7 +270,7 @@ public class ReviewActivity extends AppCompatActivity implements
             ViewContentRatingAsynTask viewContentRatingAsynTask = new ViewContentRatingAsynTask(viewContentRatingInputModel, ReviewActivity.this, ReviewActivity.this);
             viewContentRatingAsynTask.executeOnExecutor(threadPoolExecutor);
         }else{
-            Util.showToast(ReviewActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+            Util.showToast(ReviewActivity.this, languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING));
         }
 
 
