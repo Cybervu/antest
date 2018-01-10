@@ -598,6 +598,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, HOME, DEFAULT_HOME, "home", json);
 
         setTranslationLanguageToPref(languagePreference, EMAIL_EXISTS, DEFAULT_EMAIL_EXISTS, "email_exists", json);
+        setTranslationLanguageToPref(languagePreference, RESUME, DEFAULT_RESUME, "resume", json);
         setTranslationLanguageToPref(languagePreference, EMAIL_DOESNOT_EXISTS, DEFAULT_EMAIL_DOESNOT_EXISTS, "email_does_not_exist", json);
         setTranslationLanguageToPref(languagePreference, EMAIL_PASSWORD_INVALID, DEFAULT_EMAIL_PASSWORD_INVALID, "email_password_invalid", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CODE_HINT, DEFAULT_COUPON_CODE_HINT, "coupon_code_hint", json);
@@ -691,9 +692,11 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS, "no_downloaded_videos_available", json);
 
         setTranslationLanguageToPref(languagePreference, SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE, "signup_title", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOAD_COMPLETED, DEFAULT_SIGN_UP_TITLE, "download_completed", json);
         setTranslationLanguageToPref(languagePreference, SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION, "slow_internet_connection", json);
         setTranslationLanguageToPref(languagePreference, SLOW_ISSUE_INTERNET_CONNECTION, "", "slow_issue_internet_connection", json);
         setTranslationLanguageToPref(languagePreference, SORRY, DEFAULT_SORRY, "sorry", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOADED_ACCESS_EXPIRED, DEFAULT_DOWNLOADED_ACCESS_EXPIRED, "downloaded_access_expired", json);
         setTranslationLanguageToPref(languagePreference, GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT, "geo_blocked_alert", json);
         setTranslationLanguageToPref(languagePreference, ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING, "error_data_fetching", json);
 

@@ -82,12 +82,14 @@ import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DOWNLOADED_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_DOWNLOADED_VIDEOS;
@@ -1235,7 +1237,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 return true;
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg("You don't have access to play this video.");
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
 
             }
@@ -1249,12 +1251,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                     return true;
                 } else {
                     // Show Restriction Meassge
-                    ShowRestrictionMsg("You don't have access to play this video.");
+                    ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                     return false;
                 }
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg("You don't have access to play this video.");
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
             }
         }

@@ -450,6 +450,11 @@ public class LanguagePreference {
     public static String DEFAULT_DOWNLOAD_CANCEL = "Download Cancelled";
     public static String NO_DOWNLOADED_VIDEOS = "NO_DOWNLOADED_VIDEOS";
     public static String DEFAULT_NO_DOWNLOADED_VIDEOS = "No downloaded video(s) available";
+    public static String DOWNLOADED_ACCESS_EXPIRED = "DOWNLOADED_ACCESS_EXPIRED";
+    public static String DEFAULT_DOWNLOADED_ACCESS_EXPIRED = "You don't have access to play this video";
+    public static String RESUME = "RESUME";
+    public static String DEFAULT_RESUME = "Resume";
+
 
 
 

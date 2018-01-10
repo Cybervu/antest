@@ -178,6 +178,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTT
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
@@ -195,6 +196,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_VIDEO_WON
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
@@ -5163,16 +5165,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         Dwonload_Complete_Msg = myJson.optString("download_complete_msg");
 
-                        if (Dwonload_Complete_Msg.trim().equals(""))
-                            Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                        if (Dwonload_Complete_Msg.trim().equals("")) {
 
+                            Dwonload_Complete_Msg = languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED);
 
+                        }
                         String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
                                 "watch_period = '0',access_period = '" + myJson.optLong("access_expiry_time") + "' WHERE download_id = '" + f_url[0].trim() + "'";
 
                         DB1.execSQL(query1);
                     } else {
-                        Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                        Dwonload_Complete_Msg = languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED);
                         String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
                                 "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
 
