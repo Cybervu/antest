@@ -113,7 +113,7 @@
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
                     <EditText
-                        android:id="@+id/editConfirmPassword"
+                        android:id="@+id/editNewPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/countrySpinner"
@@ -143,7 +143,7 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/editNewPassword"
+                        android:id="@+id/editConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editOldPassword"
