@@ -379,6 +379,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     @Override
                     public void run() {
 
+
+
+                        try{
+
+                            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                            int orientation = display.getRotation();
+
+                            Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                            if (orientation == 1|| orientation == 3) {
+                                hideSystemUI();
+                            }}catch (Exception e){}
+
                         if(video_prepared){
                             if (mediaRouteButton.isEnabled()) {
                                 //  mediaRouteButton.setVisibility(View.VISIBLE);
@@ -426,6 +439,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     // Whether an ad is displayed.
     private boolean mIsAdDisplayed;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
+    LinearLayout back_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -435,6 +449,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
+        back_layout = (LinearLayout) findViewById(R.id.back_layout);
         handleOfflineInExoplayer=new HandleOfflineInExoplayer(this);
         // setContentView(layout);
         mSdkFactory = ImaSdkFactory.getInstance();
@@ -1034,6 +1049,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View view) {
 
+
+                try{
+
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    int orientation = display.getRotation();
+
+                    Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                    if (orientation == 1|| orientation == 3) {
+                        hideSystemUI();
+                    }}catch (Exception e){}
+
+
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
                 }
@@ -1282,16 +1310,38 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
         });
 
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 backCalled();
-               /* Toast.makeText(MyLibraryPlayer.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
-                finish();*/
+                finish();
             }
         });
+
+        back_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                backCalled();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
+            }
+        });
+      /*
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backCalled();
+               *//* Toast.makeText(MyLibraryPlayer.this, "test", Toast.LENGTH_SHORT).show();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();*//*
+            }
+        });*/
 
 
 //commented by me
@@ -2156,50 +2206,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
         asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
         return;
-      /*  if (video_completed == false){
 
-            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }*//*else{
-            watchStatus = "com"
-            asyncVideoLogDetails = new AsyncVideoLogDetails();
-            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        }*//*
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView!=null) {
-            emVideoView.release();
-        }
-        finish();
-        overridePendingTransition(0, 0);*/
     }
 
-    /* public void onBackPressed() {
-         super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
-         if (asynGetIpAddress!=null){
-             asynGetIpAddress.cancel(true);
-         }
-         if (asyncVideoLogDetails!=null){
-             asyncVideoLogDetails.cancel(true);
-         }
-         if (asyncFFVideoLogDetails!=null){
-             asyncFFVideoLogDetails.cancel(true);
-         }
-         if (progressView!=null && progressView.isShown()){
-             progressView = null;
-         }
-         if (timer!=null){
-             stoptimertask();
-             timer = null;
-         }
-         mHandler.removeCallbacks(updateTimeTask);
-         if (emVideoView!=null) {
-             emVideoView.release();
-         }
-         finish();
-         overridePendingTransition(0, 0);
-     }*/
     @Override
     protected void onUserLeaveHint() {
 
@@ -3558,7 +3567,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 dialog.cancel();
                                 downloading = true;
 
-                                int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+                                int currentApiVersion = Build.VERSION.SDK_INT;
                                 if (currentApiVersion >= Build.VERSION_CODES.M) {
                                     requestStoragePermission();
                                 } else {

@@ -902,7 +902,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         favorite_view.setVisibility(View.GONE);
 
-
         favorite_view.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override

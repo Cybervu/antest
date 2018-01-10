@@ -16,10 +16,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:padding="@dimen/marginright10dp"
+        android:layout_marginLeft="@dimen/marginright5dp"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
 
     <GridView
         android:id="@+id/imagesGridView"

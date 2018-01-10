@@ -177,7 +177,7 @@ android {
             applicationId 'com.release.matas'
             versionCode 5
             targetSdkVersion 25
-            versionName '1.1.2'
+            versionName '1.1.3'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -186,13 +186,11 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         matas_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         /*Structuring Monetizer flavour with dimension*/
         monetizer {
@@ -374,7 +372,6 @@ android {
             targetSdkVersion 25
             versionCode 1
             versionName '1.0'
-
         }
         ionsporty_staging_ {
             dimension 'environment'
@@ -403,9 +400,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
-
-
         avin {
             minSdkVersion 16
             dimension 'vendor'
@@ -426,8 +420,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
-
         gabejaramillo {
             minSdkVersion 21
             dimension 'vendor'
@@ -503,6 +495,44 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        leasy {
+            minSdkVersion 15
+            applicationId 'com.release.leasy'
+            targetSdkVersion 23
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            dimension 'vendor'
+            buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
+            versionCode 1
+            versionName '1.0'
+        }
+        leasy_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        leasy_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        stuffPix {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.stuffpix'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
+        }
+        stuffPix_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
+        }
+        stuffPix_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -588,7 +618,17 @@ android.variantFilter { variant ->
     } else if (vendor.equals('euroman') && (environment.equals('euroman_staging_') || environment.equals('euroman_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    } else {
+    }
+    else if (vendor.equals('leasy') && (environment.equals('leasy_staging_') || environment.equals('leasy_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('stuffPix') && (environment.equals('stuffPix_staging_') || environment.equals('stuffPix_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+
+    else {
         variant.setIgnore(true)
     }
 }

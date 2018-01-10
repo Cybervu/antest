@@ -1128,6 +1128,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
 
+                try{
+
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    int orientation = display.getRotation();
+
+                    Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                    if (orientation == 1|| orientation == 3) {
+                        hideSystemUI();
+                    }}catch (Exception e){}
+
+
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
                 }
@@ -4105,7 +4117,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
-        contactModel1.setGenere(playerModel.getVideoGenre().trim());
+        contactModel1.setGenere(playerModel.getVideoGenre().trim()+"@@@"+playerModel.getVideoStory());
         contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
         contactModel1.setDuration(playerModel.getVideoDuration().trim());
         contactModel1.setStreamId(playerModel.getStreamUniqueId().trim());

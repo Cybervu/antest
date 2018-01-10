@@ -182,9 +182,6 @@ public class Util {
 
     public static String rootUrl(){
         String rootUrl = BuildConfig.SERVICE_BASE_PATH;
-//        String rootUrl = "http://muvistudio.edocent.com/rest/";
-       // String rootUrl = "http://www.muvi.com/rest/";
-        //String rootUrl = "https://www.idogic.com/rest/";
         return rootUrl;
 
     }

@@ -2,10 +2,15 @@ package player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -41,6 +46,12 @@ public class SubtitleList extends Activity{
         listView = (ListView) findViewById(R.id.listView);
         total_layout = (LinearLayout) findViewById(R.id.total_layout);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
+
         Util.call_finish_at_onUserLeaveHint = true;
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -50,8 +61,17 @@ public class SubtitleList extends Activity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        hideSystemUI();
-                        Log.v("MUVI1","");
+
+                        try{
+
+                            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                            int orientation = display.getRotation();
+
+                            Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                            if (orientation == 1|| orientation == 3) {
+                                hideSystemUI();
+                            }}catch (Exception e){}
                     }
                 });
             }

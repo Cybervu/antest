@@ -304,67 +304,23 @@ public class ProfileActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                try{
+                    InputMethodManager inputManager = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
 
-                if (changePassword.isClickable() && editConfirmPassword.isShown() && editNewPassword.isShown()) {
-
-
-                    if (editConfirmPassword.getText().toString().trim() != null && !(editConfirmPassword.getText().toString().trim().equalsIgnoreCase(""))) {
-                        if (Util.isConfirmPassword(editConfirmPassword.getText().toString(), editNewPassword.getText().toString()) == false) {
-                            Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
-
-                            editConfirmPassword.setText("");
-                            editNewPassword.setText("");
-
-                            return;
-
-                        } else {
-                            if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-//                              UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
-                                editConfirmPassword.setText("");
-                                editNewPassword.setText("");
-                                editConfirmPassword.setVisibility(View.GONE);
-                                editNewPassword.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-                    if (editConfirmPassword.getText().toString().trim().equalsIgnoreCase("") || (editNewPassword.getText().toString().trim().equalsIgnoreCase(""))) {
-                        editConfirmPassword.setText("");
-                        editNewPassword.setText("");
-                        editConfirmPassword.setVisibility(View.GONE);
-                        editNewPassword.setVisibility(View.GONE);
-                        // editProfileNameEditText.requestFocus();
-                    }
-                    /*editOldPassword.setText("");
-                    editNewPassword.setText("");*/
-                } else {
-                   /* editOldPassword.setText("");
-                    editNewPassword.setText("");*/
-                 /*   editOldPassword.setVisibility(View.GONE);
-                    editNewPassword.setVisibility(View.GONE);*/
+                    editConfirmPassword.setText("");
+                    editNewPassword.setText("");
+                    editNewPassword.requestFocus();
                     editConfirmPassword.setVisibility(View.VISIBLE);
                     editNewPassword.setVisibility(View.VISIBLE);
-                    editNewPassword.requestFocus();
+                    changePassword.setVisibility(View.GONE);
+                }catch (Exception e){}
 
-                }
-
-
-               /* if (editOldPassword.getText().toString().trim() != null && !(editOldPassword.getText().toString().trim().equalsIgnoreCase(""))) {
-                    if (Util.isConfirmPassword(editOldPassword.getText().toString(), editNewPassword.getText().toString()) == false) {
-                        Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, Util.DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
-
-                        return;
-                    }
-                }*/
             }
         });
-
-
-
 
 
 
@@ -443,6 +399,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(profileHandler.first_nameStr);
+
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
