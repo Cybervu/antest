@@ -1123,6 +1123,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
 
+                try{
+
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    int orientation = display.getRotation();
+
+                    Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                    if (orientation == 1|| orientation == 3) {
+                        hideSystemUI();
+                    }}catch (Exception e){}
+
+
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
                 }

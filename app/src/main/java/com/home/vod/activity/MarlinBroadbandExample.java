@@ -340,6 +340,17 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					@Override
 					public void run() {
 
+						try{
+
+						Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+						int orientation = display.getRotation();
+
+						Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+						if (orientation == 1|| orientation == 3) {
+							hideSystemUI();
+						}}catch (Exception e){}
+
 						SQLiteDatabase DB = MarlinBroadbandExample.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 						Cursor cursor = DB.rawQuery("SELECT Flag FROM " + DBHelper.RESUME_WATCH + " WHERE UniqueId = '" + UniqueId + "'", null);
 						int count = cursor.getCount();
@@ -809,6 +820,19 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		emVideoView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+
+
+				try{
+
+					Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+					int orientation = display.getRotation();
+
+					Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+					if (orientation == 1|| orientation == 3) {
+						hideSystemUI();
+					}}catch (Exception e){}
+
 
 				if (Util.hide_pause) {
 					Util.hide_pause = false;
