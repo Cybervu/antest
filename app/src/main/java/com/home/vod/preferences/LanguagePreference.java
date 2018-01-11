@@ -454,6 +454,8 @@ public class LanguagePreference {
     public static String DEFAULT_DOWNLOADED_ACCESS_EXPIRED = "You don't have access to play this video";
     public static String RESUME = "RESUME";
     public static String DEFAULT_RESUME = "Resume";
+    public static String NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "NO_RESULT_FOUND_REFINE_YOUR_SEARCH";
+    public static String DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "No result found. Please refine your search.";
 
 
 

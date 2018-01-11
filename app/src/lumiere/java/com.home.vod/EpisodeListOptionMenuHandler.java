@@ -34,6 +34,7 @@ import com.home.vod.util.Util;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
@@ -43,6 +44,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO;
@@ -101,7 +103,7 @@ public class EpisodeListOptionMenuHandler{
                 R.id.media_route_menu_item);
         /***************chromecast**********************/
 
-        login_menu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+        login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));

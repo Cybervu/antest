@@ -632,6 +632,7 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
         setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        setTranslationLanguageToPref(languagePreference, NO_RESULT_FOUND_REFINE_YOUR_SEARCH, DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH, "no_result_found_refine_your_search", json);
         setTranslationLanguageToPref(languagePreference, FIRST_NAME, DEFAULT_FIRST_NAME, "first_name", json);
         setTranslationLanguageToPref(languagePreference, LAST_NAME, DEFAULT_LAST_NAME, "last_name", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);

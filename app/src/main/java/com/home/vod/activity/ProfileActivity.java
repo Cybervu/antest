@@ -158,7 +158,7 @@ public class ProfileActivity extends AppCompatActivity implements
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);
 
         //  editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
-        editConfirmPassword.setHint(languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD));
+        editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
         editNewPassword.setHint(languagePreference.getTextofLanguage(NEW_PASSWORD, DEFAULT_NEW_PASSWORD));
         changePassword.setText(languagePreference.getTextofLanguage(CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD));
         update_profile.setText(languagePreference.getTextofLanguage(UPDATE_PROFILE, DEFAULT_UPDATE_PROFILE));
@@ -330,7 +330,7 @@ public class ProfileActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
                 profileHandler.updateProfileHandler();
-
+                changePassword.setVisibility(View.VISIBLE);
             }
         });
 

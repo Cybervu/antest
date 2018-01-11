@@ -122,8 +122,8 @@
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
                         android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
                         android:textSize="@dimen/edit_text_size"
                         android:visibility="gone" />
 
@@ -154,7 +154,7 @@
                         android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/edit_text_size"
                         android:visibility="gone" />
 
                     <Button
