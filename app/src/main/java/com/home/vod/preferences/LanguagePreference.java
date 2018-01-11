@@ -456,6 +456,11 @@ public class LanguagePreference {
     public static String DEFAULT_RESUME = "Resume";
     public static String NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "NO_RESULT_FOUND_REFINE_YOUR_SEARCH";
     public static String DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "No result found. Please refine your search.";
+    public static String NO_DEVICE_AVAILABE = "NO_DEVICE_AVAILABE";
+    public static String DEFAULT_NO_DEVICE_AVAILABE = "No devices available for this user.";
+    public static String REMOVE_DEVICE_SUCCESS = "REMOVE_DEVICE_SUCCESS";
+    public static String DEFAULT_REMOVE_DEVICE_SUCCESS = "Remove device request successful.";
+
 
 
 

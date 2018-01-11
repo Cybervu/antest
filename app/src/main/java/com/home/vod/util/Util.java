@@ -758,6 +758,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DEREGISTER, DEFAULT_DEREGISTER, "deregister", json);
         setTranslationLanguageToPref(languagePreference, FILMOGRAPHY, DEFAULT_FILMOGRAPHY, "filmography", json);
         setTranslationLanguageToPref(languagePreference, ENTER_YOUR_MESSAGE, DEFAULT_ENTER_YOUR_MESSAGE, "text_message_placeholder", json);
+        setTranslationLanguageToPref(languagePreference, NO_DEVICE_AVAILABE, DEFAULT_NO_DEVICE_AVAILABE, "no_devices_available", json);
+        setTranslationLanguageToPref(languagePreference, REMOVE_DEVICE_SUCCESS, DEFAULT_REMOVE_DEVICE_SUCCESS, "remove_device_request_succ", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

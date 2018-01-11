@@ -50,10 +50,12 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DEREGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REMOVE_DEVICE_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEREGISTER;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.REMOVE_DEVICE_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -195,7 +197,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
             // Show Success Message
 
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(message);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(REMOVE_DEVICE_SUCCESS,DEFAULT_REMOVE_DEVICE_SUCCESS));
             dlgAlert.setTitle(null);
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
