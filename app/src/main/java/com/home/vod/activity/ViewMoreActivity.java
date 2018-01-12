@@ -246,7 +246,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         isLogin = preferenceManager.getLoginFeatureFromPref();
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
+        FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         if (getIntent().getStringExtra("sectionName") != null) {
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);
@@ -255,7 +255,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
         }
 
-        posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
@@ -409,12 +409,14 @@ public class ViewMoreActivity extends AppCompatActivity implements
                             featureContentInputModel.setAuthToken(authTokenStr);
                             featureContentInputModel.setSection_id(sectionId.trim());
                             featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
+                            GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel, ViewMoreActivity.this, ViewMoreActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
 
                             scrolling = false;
 
+                        } else {
+                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -457,14 +459,16 @@ public class ViewMoreActivity extends AppCompatActivity implements
             limit = 15;
         }
         scrolling = false;
-
-        FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
-        featureContentInputModel.setAuthToken(authTokenStr);
-        featureContentInputModel.setSection_id(sectionId.trim());
-        featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
-        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
-
+        if (NetworkStatus.getInstance().isConnected(ViewMoreActivity.this)) {
+            FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
+            featureContentInputModel.setAuthToken(authTokenStr);
+            featureContentInputModel.setSection_id(sectionId.trim());
+            featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel, ViewMoreActivity.this, ViewMoreActivity.this);
+            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+        }
              /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
@@ -782,7 +786,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         }
         String movieImageStr = "";
 
-        Log.v("Muvi","featurecontent size="+featureContentOutputModelArray.size());
+        Log.v("Muvi", "featurecontent size=" + featureContentOutputModelArray.size());
 
         for (int i = 0; i < featureContentOutputModelArray.size(); i++) {
             movieImageStr = featureContentOutputModelArray.get(i).getPoster_url();
@@ -2230,7 +2234,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         if (status > 0 && status == 200) {
 
             try {
-                Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
+                Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
 
                 //Call For Language PopUp Dialog
 
@@ -2253,7 +2257,6 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
 
 // Added by Bibhu
-
 
 
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {

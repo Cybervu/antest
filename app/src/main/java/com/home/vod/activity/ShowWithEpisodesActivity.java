@@ -676,7 +676,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 //                season_spinner.setBackgroundResource(R.drawable.spinner_theme);
 
-            if (TextUtils.isEmpty(bannerImageId)) {
+
 
                 if (TextUtils.isEmpty(posterImageId)) {
 
@@ -700,8 +700,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             .placeholder(R.drawable.logo)
                             .into(moviePoster);
 
-                }
-
+                
 
 
                 /*ImageLoader imageLoader = ImageLoader.getInstance();
