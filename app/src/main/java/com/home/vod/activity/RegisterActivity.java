@@ -133,6 +133,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
@@ -149,12 +150,14 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
@@ -171,6 +174,7 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
@@ -182,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity implements
         LogoutAsynctask.LogoutListener,
         CheckDeviceAsyncTask.CheckDeviceListener,
         CheckFbUserDetailsAsyn.CheckFbUserDetailsListener, AsyncGmailReg.AsyncGmailListener,
-        GoogleApiClient.OnConnectionFailedListener,GetIpAddressAsynTask.IpAddressListener {
+        GoogleApiClient.OnConnectionFailedListener, GetIpAddressAsynTask.IpAddressListener {
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
     String deviceName = "";
@@ -798,7 +802,7 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    public void registerButtonClicked(String first_name,String last_name, String phone) {
+    public void registerButtonClicked(String first_name, String last_name, String phone) {
 
      /*   regNameStr_first = editName_first.getText().toString().trim();
         regNameStr_last = editName_last.getText().toString().trim();
@@ -809,7 +813,77 @@ public class RegisterActivity extends AppCompatActivity implements
         regPasswordStr = editPassword.getText().toString();
         regConfirmPasswordStr = editConfirmPassword.getText().toString();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
+
+            if(first_name.trim().equals("")){
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(FIRST_NAME, DEFAULT_FIRST_NAME), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(regEmailStr.trim().equals("")){
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
+                return;
+            }
+            boolean isValidEmail = Util.isValidMail(regEmailStr);
+            if(!isValidEmail){
+                //msg
+                return;
+            }
+
+            if(regPasswordStr.trim().equals("")){
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
+
+                return;
+            }
+
+            if(regConfirmPasswordStr.trim().equals("")){
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
+
+            Registration_input registration_input = new Registration_input();
+            registration_input.setAuthToken(authTokenStr);
+            registration_input.setName(first_name);
+            registration_input.setCustom_last_name(last_name);
+            registration_input.setEmail(regEmailStr);
+            registration_input.setPhone(phone);
+            registration_input.setPassword(regPasswordStr);
+            registration_input.setCustom_country(registerUIHandler.selected_Country_Id);
+            registration_input.setCustom_languages(registerUIHandler.selected_Language_Id);
+            registration_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            registration_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+            registration_input.setDevice_type("1");
+            registration_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+            asyncReg = new RegistrationAsynTask(registration_input, this, this);
+            asyncReg.executeOnExecutor(threadPoolExecutor);
+
+
+/*
             // if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
             if ((!regEmailStr.matches("")) && (!regPasswordStr.matches(""))) {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
@@ -843,9 +917,28 @@ public class RegisterActivity extends AppCompatActivity implements
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
 
             }
+            */
+
+
+
         } else {
             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
@@ -946,7 +1039,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
 
-                                    setResultAtFinishActivity();
+                                setResultAtFinishActivity();
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING), Toast.LENGTH_LONG).show();
@@ -3530,7 +3623,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
 
-                                setResultAtFinishActivity();
+                            setResultAtFinishActivity();
 
                         } else {
                             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING), Toast.LENGTH_LONG).show();
@@ -4339,9 +4432,9 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
     public void setResultAtFinishActivity() {
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            finish();
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
 

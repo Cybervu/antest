@@ -15,17 +15,25 @@ import com.home.vod.util.FontUtls;
 import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.ALERT;
+import static com.home.vod.preferences.LanguagePreference.CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 
 /**
  * Created by MUVI on 10/27/2017.
@@ -33,16 +41,28 @@ import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH
 
 public class ProfileHandler {
     private Activity context;
+    EditText editNewPassword;
+    EditText editConfirmPassword;
     EditText editProfileNameEditText;
     LanguagePreference languagePreference;
     public String first_nameStr="",last_nameStr="";
     public String final_name = "";
     public String phoneStr="";
+    String newPasswod;
 
     public ProfileHandler(Activity context){
         this.context=context;
         editProfileNameEditText = (EditText) context.findViewById(R.id.editProfileNameEditText);
+
+        editNewPassword = (EditText) context.findViewById(R.id.editNewPassword);
+        editConfirmPassword = (EditText) context.findViewById(R.id.editConfirmPassword);
+
+        newPasswod=editNewPassword.getText().toString().trim();
+
+
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editProfileNameEditText);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editNewPassword);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editConfirmPassword);
         languagePreference = LanguagePreference.getLanguagePreference(context);
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT,DEFAULT_NAME_HINT));
 
@@ -54,6 +74,20 @@ public class ProfileHandler {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(FIRST_NAME, DEFAULT_FIRST_NAME).toString().toLowerCase());
             return;
         }
+
+        else if(editNewPassword.getText().toString().trim().equals("")){
+            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD).toString().toLowerCase());
+
+            return;
+        }
+
+        else if(editConfirmPassword.getText().toString().trim().equals("")){
+            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD).toString().toLowerCase());
+
+            return;
+        }
+
+
         else if (!((ProfileActivity) context).passwordMatchValidation()) {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(ALERT, DEFAULT_ALERT), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
 
