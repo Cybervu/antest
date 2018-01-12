@@ -402,12 +402,15 @@ public class ProfileActivity extends AppCompatActivity implements
             }
         } catch (IllegalArgumentException ex) {
 
-        }
+    }
+
+
 
         if (code > 0) {
             if (code == 200) {
 
 
+                changePassword.setVisibility(View.VISIBLE);
                 editConfirmPassword.setText("");
                 editNewPassword.setText("");
                 editConfirmPassword.setVisibility(View.GONE);

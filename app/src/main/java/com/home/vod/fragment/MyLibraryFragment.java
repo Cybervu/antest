@@ -507,8 +507,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                noDataLayout.setVisibility(View.GONE);
+                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
             }
         }
 
