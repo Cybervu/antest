@@ -14,6 +14,8 @@ import com.home.vod.util.FontUtls;
 
 import player.utils.Util;
 
+import static com.home.vod.preferences.LanguagePreference.ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
@@ -53,7 +55,7 @@ public class ProfileHandler {
             return;
         }
         else if (!((ProfileActivity) context).passwordMatchValidation()) {
-            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
+            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(ALERT, DEFAULT_ALERT), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
 
         }else {
             if (NetworkStatus.getInstance().isConnected(context)) {

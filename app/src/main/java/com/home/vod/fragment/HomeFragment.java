@@ -200,7 +200,7 @@ public class HomeFragment extends Fragment implements
 
 
         } else {
-            noInternetTextView.setVisibility(View.VISIBLE);
+            noInternetLayout.setVisibility(View.VISIBLE);
         }
         return v;
 

@@ -149,6 +149,7 @@ public class LanguagePreference {
     public static final String PAYMENT_OPTIONS_TITLE = "PAYMENT_OPTIONS_TITLE";
     public static final String UPDATE_PROFILE_ALERT = "UPDATE_PROFILE_ALERT";
     public static final String ALERT = "ALERT";
+    public static final String DEFAULT_ALERT = "ALERT!";
     public static final String STORY_TITLE = "STORY_TITLE";
     public static final String NO_DETAILS_AVAILABLE = "NO_DETAILS_AVAILABLE";
     public static final String SORRY = "SORRY";
