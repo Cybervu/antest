@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/VOD.iml" filepath="$PROJECT_DIR$/.idea/VOD.iml" />
-      <module fileurl="file://E:/NewCodebase/VOD/VOD.iml" filepath="E:/NewCodebase/VOD/VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
