@@ -987,7 +987,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         theTextArea.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == event.KEYCODE_SEARCH) {
                     // Your piece of code on keyboard search click
                     String query = theTextArea.getText().toString().trim();
                     if (query.equalsIgnoreCase("") || query == null) {

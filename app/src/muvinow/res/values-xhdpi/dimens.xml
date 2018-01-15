@@ -31,7 +31,6 @@
     <dimen name="purchasevalue_text_size">45sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
-    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
@@ -82,7 +81,7 @@
     <dimen name="plainrow_mrgin_top">25dp</dimen>
     <dimen name="preorderbtn_padding">14dp</dimen>
 
-
+    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
     <dimen name="cast_textsize">17sp</dimen>
@@ -97,12 +96,15 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">90dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
+
     <dimen name="viewmore_text_size">13sp</dimen>
     <dimen name="homescreen_title_text_size">13sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">16sp</dimen>
 
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">35dp</dimen>
+    <dimen name="toolbar_image_height">45dp</dimen>
+    <dimen name="toolbar_image_width">95dp</dimen>
 </resources>

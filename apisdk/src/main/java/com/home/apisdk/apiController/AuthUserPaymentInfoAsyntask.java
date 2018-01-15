@@ -251,9 +251,11 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
         } catch (
                 Exception e)
 
+
         {
             code = 0;
             message = "";
+            responseMessageStr = message;
 
         }
         return null;

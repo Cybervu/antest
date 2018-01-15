@@ -156,17 +156,16 @@
 
 
 
-
-
-
     <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">95dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
+
     <dimen name="viewmore_text_size">13sp</dimen>
     <dimen name="homescreen_title_text_size">15sp</dimen>
     <dimen name="list_singlecard_img_width">140dp</dimen>
     <dimen name="list_singlecard_img_height">200dp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
 
+
+    <dimen name="toolbar_image_height">58dp</dimen>
+    <dimen name="toolbar_image_width">108dp</dimen>
 
 </resources>
