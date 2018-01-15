@@ -3523,9 +3523,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             // TODO: check this.exception
             // TODO: do something with the feed
 
-            if (phandler != null && phandler.isShowing()) {
+          /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
-            }
+            }*/
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);
@@ -3534,8 +3534,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            phandler = new ProgressBarHandler(getActivity());
-            phandler.show();
+//            phandler = new ProgressBarHandler(getActivity());
+//            phandler.show();
 
         }
     }
