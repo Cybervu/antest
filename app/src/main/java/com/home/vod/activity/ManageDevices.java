@@ -31,9 +31,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DEVICE_AVAILABE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.NO_DEVICE_AVAILABE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.YOUR_DEVICE;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -126,7 +128,7 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
 
         } else {
             // Show The Error Message Here
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_DEVICE_AVAILABE,DEFAULT_NO_DEVICE_AVAILABE), Toast.LENGTH_LONG).show();
             finish();
         }
     }

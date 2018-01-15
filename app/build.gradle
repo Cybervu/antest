@@ -53,10 +53,10 @@ android {
             versionName "1.04"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
-//            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
+            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
 //liveStripe
         }
         defaultFlavor_staging_ {
@@ -177,7 +177,7 @@ android {
             applicationId 'com.release.matas'
             versionCode 5
             targetSdkVersion 25
-            versionName '1.1.2'
+            versionName '1.1.3'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -600,11 +600,10 @@ android.variantFilter { variant ->
     } else if (vendor.equals('ionsporty') && (environment.equals('ionsporty_staging_') || environment.equals('ionsporty_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-     else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+    } else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
+    } else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     } else if (vendor.equals('cote_ouest') && (environment.equals('cote_ouest_staging_') || environment.equals('cote_ouest_Prod_'))

@@ -544,7 +544,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP, "google_signup", json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS, "view_less", json);
         setTranslationLanguageToPref(languagePreference, ALREADY_MEMBER, DEFAULT_ALREADY_MEMBER, "already_member", json);
-        setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription completed", json);
+        setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription_completed", json);
 
         setTranslationLanguageToPref(languagePreference, ACTIAVTE_PLAN_TITLE, DEFAULT_ACTIAVTE_PLAN_TITLE, "activate_plan_title", json);
         setTranslationLanguageToPref(languagePreference, APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE, "app_expired", json);
@@ -555,11 +555,11 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, ENTER_EMPTY_FIELD, DEFAULT_ENTER_EMPTY_FIELD, "enter_register_fields_data", json);
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);
-        setTranslationLanguageToPref(languagePreference, ALERT, "", "alert", json);
+        setTranslationLanguageToPref(languagePreference, ALERT, DEFAULT_ALERT, "alert", json);
         //setTranslationLanguageToPref(languagePreference, GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN, "google_fcm_token", json);
 
         setTranslationLanguageToPref(languagePreference, EPISODE_TITLE, DEFAULT_EPISODE_TITLE, "episodes_title", json);
-        setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
+        //setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z, "sort_alpha_a_z", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A, "sort_alpha_z_a", json);
         setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK, "login_facebook", json);
@@ -598,6 +598,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, HOME, DEFAULT_HOME, "home", json);
 
         setTranslationLanguageToPref(languagePreference, EMAIL_EXISTS, DEFAULT_EMAIL_EXISTS, "email_exists", json);
+        setTranslationLanguageToPref(languagePreference, RESUME, DEFAULT_RESUME, "resume", json);
         setTranslationLanguageToPref(languagePreference, EMAIL_DOESNOT_EXISTS, DEFAULT_EMAIL_DOESNOT_EXISTS, "email_does_not_exist", json);
         setTranslationLanguageToPref(languagePreference, EMAIL_PASSWORD_INVALID, DEFAULT_EMAIL_PASSWORD_INVALID, "email_password_invalid", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CODE_HINT, DEFAULT_COUPON_CODE_HINT, "coupon_code_hint", json);
@@ -633,11 +634,13 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
         setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        setTranslationLanguageToPref(languagePreference, NO_RESULT_FOUND_REFINE_YOUR_SEARCH, DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH, "no_result_found_refine_your_search", json);
         setTranslationLanguageToPref(languagePreference, FIRST_NAME, DEFAULT_FIRST_NAME, "first_name", json);
         setTranslationLanguageToPref(languagePreference, LAST_NAME, DEFAULT_LAST_NAME, "last_name", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOAD_CANCELED, DEFAULT_DOWNLOAD_CANCELED, "download_cancelled", json);
 
         setTranslationLanguageToPref(languagePreference, NEW_PASSWORD, DEFAULT_NEW_PASSWORD, "new_password", json);
         setTranslationLanguageToPref(languagePreference, NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE, "new_here_title", json);
@@ -668,6 +671,14 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
         setTranslationLanguageToPref(languagePreference, FREE_FOR_COUPON, DEFAULT_FREE_FOR_COUPON, "free_for_coupon", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
+        setTranslationLanguageToPref(languagePreference, BTN_DISCARD, DEFAULT_BTN_DISCARD, "btn_discard", json);
+        setTranslationLanguageToPref(languagePreference, BTN_KEEP, DEFAULT_BTN_KEEP, "btn_keep", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOAD_CANCEL, DEFAULT_DOWNLOAD_CANCEL, "download_cancelled", json);
+        setTranslationLanguageToPref(languagePreference, WANT_DOWNLOAD_CANCEL, DEFAULT_WANT_DOWNLOAD_CANCEL, "want_download_cancel", json);
+        setTranslationLanguageToPref(languagePreference, TRANSACTION_ORDER_ID, DEFAULT_TRANSACTION_ORDER_ID, "transaction_detail_order_id", json);
+        setTranslationLanguageToPref(languagePreference, ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW, "add_a_review", json);
+        setTranslationLanguageToPref(languagePreference, REVIEWS, DEFAULT_REVIEWS, "reviews", json);
+        setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD, "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
@@ -676,6 +687,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
         setTranslationLanguageToPref(languagePreference, TRANSACTION_DETAIL_PURCHASE_DATE, DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE, "transaction_detail_purchase_date", json);
         setTranslationLanguageToPref(languagePreference, PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY, "purchase_history", json);
+        setTranslationLanguageToPref(languagePreference, NO_PURCHASE_HISTORY, DEFAULT_NO_PURCHASE_HISTORY, "no_purchase_history", json);
         setTranslationLanguageToPref(languagePreference, MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD, "my_download", json);
         setTranslationLanguageToPref(languagePreference, BTN_REGISTER, DEFAULT_BTN_REGISTER, "btn_register", json);
         setTranslationLanguageToPref(languagePreference, SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE, "sort_release_date", json);
@@ -685,12 +697,16 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SEASON, DEFAULT_SEASON, "season", json);
         setTranslationLanguageToPref(languagePreference, SELECT_OPTION_TITLE, "", "select_option_title", json);
         setTranslationLanguageToPref(languagePreference, SELECT_PLAN, DEFAULT_SELECT_PLAN, "select_plan", json);
+        setTranslationLanguageToPref(languagePreference, NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS, "no_downloaded_videos_available", json);
 
         setTranslationLanguageToPref(languagePreference, SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE, "signup_title", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOAD_COMPLETED, DEFAULT_SIGN_UP_TITLE, "download_completed", json);
         setTranslationLanguageToPref(languagePreference, SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION, "slow_internet_connection", json);
         setTranslationLanguageToPref(languagePreference, SLOW_ISSUE_INTERNET_CONNECTION, "", "slow_issue_internet_connection", json);
         setTranslationLanguageToPref(languagePreference, SORRY, DEFAULT_SORRY, "sorry", json);
+        setTranslationLanguageToPref(languagePreference, DOWNLOADED_ACCESS_EXPIRED, DEFAULT_DOWNLOADED_ACCESS_EXPIRED, "downloaded_access_expired", json);
         setTranslationLanguageToPref(languagePreference, GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT, "geo_blocked_alert", json);
+        setTranslationLanguageToPref(languagePreference, ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING, "error_data_fetching", json);
 
         setTranslationLanguageToPref(languagePreference, SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR, "sign_out_error", json);
         setTranslationLanguageToPref(languagePreference, ALREADY_PURCHASE_THIS_CONTENT, DEFAULT_ALREADY_PURCHASE_THIS_CONTENT, "already_purchase_this_content", json);
@@ -747,6 +763,10 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, YOUR_DEVICE, DEFAULT_YOUR_DEVICE, "your_device", json);
         setTranslationLanguageToPref(languagePreference, DEREGISTER, DEFAULT_DEREGISTER, "deregister", json);
+        setTranslationLanguageToPref(languagePreference, FILMOGRAPHY, DEFAULT_FILMOGRAPHY, "filmography", json);
+        setTranslationLanguageToPref(languagePreference, ENTER_YOUR_MESSAGE, DEFAULT_ENTER_YOUR_MESSAGE, "text_message_placeholder", json);
+        setTranslationLanguageToPref(languagePreference, NO_DEVICE_AVAILABE, DEFAULT_NO_DEVICE_AVAILABE, "no_devices_available", json);
+        setTranslationLanguageToPref(languagePreference, REMOVE_DEVICE_SUCCESS, DEFAULT_REMOVE_DEVICE_SUCCESS, "remove_device_request_succ", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

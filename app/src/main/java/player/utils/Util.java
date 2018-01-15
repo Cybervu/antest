@@ -455,8 +455,8 @@ public class Util {
     public static String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
     public static String DEFAULT_IS_RESTRICT_DEVICE = "0";
 
-    public static String HAS_FAVORITE = "HAS_FAVORITE";
-    public static String DEFAULT_HAS_FAVORITE = "0";
+   /* public static String HAS_FAVORITE = "HAS_FAVORITE";
+    public static String DEFAULT_HAS_FAVORITE = "0";*/
 
     public static String IS_OFFLINE = "IS_OFFLINE";
     public static String DEFAULT_IS_OFFLINE = "0";

@@ -43,6 +43,7 @@ import java.io.IOException;
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
@@ -51,6 +52,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_E
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
 import static com.home.vod.preferences.LanguagePreference.MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
@@ -122,7 +124,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
         Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
         editMessageStr.setTypeface(editMessageStrTypeface);
-        editMessageStr.setHint(languagePreference.getTextofLanguage(MESSAGE, DEFAULT_MESSAGE));
+        editMessageStr.setHint(languagePreference.getTextofLanguage(ENTER_YOUR_MESSAGE, DEFAULT_ENTER_YOUR_MESSAGE));
 
         submit = (Button) v.findViewById(R.id.submit_cont);
         Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));

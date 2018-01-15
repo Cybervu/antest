@@ -82,13 +82,17 @@ import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DOWNLOADED_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.NO_DOWNLOADED_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
@@ -322,7 +326,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             list.setAdapter(adapter);
         } else {
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+            noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
         }
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -353,7 +357,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         } else {
 
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+            noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
         }
     }
 
@@ -361,9 +365,9 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
 
         dlgAlert.setMessage(msg);
-        dlgAlert.setTitle(Util.getTextofLanguage(MyDownloads.this, Util.SORRY, Util.DEFAULT_SORRY));
+        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -1233,7 +1237,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 return true;
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg("You don't have access to play this video.");
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
 
             }
@@ -1247,12 +1251,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                     return true;
                 } else {
                     // Show Restriction Meassge
-                    ShowRestrictionMsg("You don't have access to play this video.");
+                    ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                     return false;
                 }
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg("You don't have access to play this video.");
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
             }
         }

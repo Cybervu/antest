@@ -10,6 +10,54 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,8 +94,8 @@
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
                         android:drawablePadding="@dimen/Login_drawing_padding"
-                        android:padding="@dimen/login_padding_bottom"
                         android:hint="First Name"
+                        android:padding="@dimen/login_padding_bottom"
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
                         android:textSize="@dimen/edit_text_size" />
@@ -60,8 +108,8 @@
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
                         android:drawablePadding="@dimen/Login_drawing_padding"
-                        android:padding="@dimen/login_padding_bottom"
                         android:hint="Last Name"
+                        android:padding="@dimen/login_padding_bottom"
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
                         android:textSize="@dimen/edit_text_size" />
@@ -96,8 +144,8 @@
                         android:layout_marginTop="@dimen/profile_spinner_margin"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
-                        android:visibility="gone"
-                        android:theme="@style/ThemeOverlay.AppCompat.Light" />
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:visibility="gone" />
 
 
                     <Spinner
@@ -109,11 +157,11 @@
                         android:layout_marginTop="@dimen/profile_spinner_margin"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
-                        android:visibility="gone"
-                        android:theme="@style/ThemeOverlay.AppCompat.Light" />
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/editConfirmPassword"
+                        android:id="@+id/editNewPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/countrySpinner"
@@ -122,8 +170,8 @@
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
                         android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
                         android:textSize="@dimen/edit_text_size"
                         android:visibility="gone" />
 
@@ -143,7 +191,7 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/editNewPassword"
+                        android:id="@+id/editConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editOldPassword"
@@ -154,7 +202,7 @@
                         android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/edit_text_size"
                         android:visibility="gone" />
 
                     <Button
@@ -164,8 +212,8 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -178,8 +226,8 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -192,14 +240,12 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
                         />
-
-
 
 
                 </LinearLayout>
@@ -231,7 +277,7 @@
                             android:padding="@dimen/pop_up_view_height"
                             android:scaleType="fitXY"
                             android:src="@drawable/demo_image"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/edit"
@@ -243,10 +289,10 @@
                             android:layout_marginEnd="@dimen/profile_image_view_margin_end"
                             android:layout_marginRight="@dimen/forgotlayout_margin"
                             android:layout_marginTop="@dimen/profile_image_view_margin_top"
-                            android:visibility="visible"
                             android:padding="@dimen/pop_up_view_height"
                             android:scaleType="fitXY"
-                            android:src="@drawable/edit_final" />
+                            android:src="@drawable/edit_final"
+                            android:visibility="visible" />
                     </RelativeLayout>
 
                     <TextView
@@ -256,10 +302,10 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/name_user_margin_bottom"
                         android:layout_marginTop="@dimen/forgotlayout_margin"
+                        android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/userNameTextColor"
-                        android:textSize="@dimen/user_text_size"
-                        android:text=""/>
+                        android:textSize="@dimen/user_text_size" />
 
 
                     <ImageView
