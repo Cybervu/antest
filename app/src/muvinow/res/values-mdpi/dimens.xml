@@ -87,4 +87,7 @@
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
+    <dimen name="toolbar_image_height">45dp</dimen>
+    <dimen name="toolbar_image_width">95dp</dimen>
+
 </resources>

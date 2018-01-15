@@ -1538,7 +1538,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         //signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);

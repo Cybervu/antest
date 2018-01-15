@@ -136,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity implements
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        profileHandler = new ProfileHandler(this);
+        profileHandler=new ProfileHandler(this);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
@@ -345,12 +345,14 @@ public class ProfileActivity extends AppCompatActivity implements
         });
 
 
+
+
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 profileHandler.updateProfileHandler();
-                changePassword.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -407,7 +409,6 @@ public class ProfileActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
 
         }
-
 
         if (code > 0) {
             if (code == 200) {
@@ -805,6 +806,7 @@ public class ProfileActivity extends AppCompatActivity implements
             noInternetConnectionLayout.setVisibility(View.GONE);
         }
     }
+
 
 
     @Override
