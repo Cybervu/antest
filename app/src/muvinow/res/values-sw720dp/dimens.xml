@@ -20,7 +20,7 @@
     <dimen name="view_margin_top">10dp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
-    <dimen name="email_text_size">14sp</dimen>
+    <dimen name="email_text_size">18sp</dimen>
     <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
@@ -136,12 +136,16 @@
     <dimen name="plainrow_text_size">20sp</dimen>
 
     <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">95dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
-    <dimen name="viewmore_text_size">13sp</dimen>
+
+    <dimen name="viewmore_text_size">11sp</dimen>
     <dimen name="homescreen_title_text_size">15sp</dimen>
     <dimen name="list_singlecard_img_width">140dp</dimen>
     <dimen name="list_singlecard_img_height">200dp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
 
+    <dimen name="toolbar_image_height">58dp</dimen>
+    <dimen name="toolbar_image_width">108dp</dimen>
+
+    <dimen name="viewmore_btn_width">95dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
 </resources>

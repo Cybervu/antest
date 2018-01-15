@@ -8,7 +8,7 @@
     <dimen name="imgheight">150dp</dimen>
     <dimen name="imgwidth">150dp</dimen>
     <dimen name="navwide">200dp</dimen>
-
+    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="singleimgwidth">70dp</dimen>
     <dimen name="singleimgheight">126dp</dimen>
     <dimen name="movieimg_width">115dp</dimen>
@@ -55,7 +55,6 @@
     <dimen name="layout_padding_right">10dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">20dp</dimen>
-    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="slider_height">180dp</dimen>
     <dimen name="login_butn_width">100dp</dimen>
     <dimen name="login_butn_height">30dp</dimen>
@@ -98,12 +97,16 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">85dp</dimen>
-    <dimen name="viewmore_btn_height">30dp</dimen>
+
     <dimen name="viewmore_text_size">12sp</dimen>
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">14sp</dimen>
+
+    <dimen name="toolbar_image_height">45dp</dimen>
+    <dimen name="toolbar_image_width">95dp</dimen>
+    <dimen name="viewmore_btn_width">85dp</dimen>
+    <dimen name="viewmore_btn_height">35dp</dimen>
 
 </resources>

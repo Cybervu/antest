@@ -35,9 +35,13 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -55,7 +59,10 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     LanguagePreference languagePreference;
     boolean returnValue = false ;
     TextView noInternetTextView;
+
     RelativeLayout noInternet;
+
+    boolean isNetwork;
 
     public AboutUsFragment() {
         // Required empty public constructor
@@ -72,15 +79,14 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
-
+        isNetwork = player.utils.Util.checkNetwork(context);
 
         noInternet=(RelativeLayout) view.findViewById(R.id.noInternet);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         noInternetTextView=(TextView) view.findViewById(R.id.noInternetTextView);
-
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
         noInternet.setVisibility(View.GONE);
 
-        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
 
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
 
@@ -116,13 +122,19 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         });
 
 
-        AboutUsInput aboutUsInput = new AboutUsInput();
-        aboutUsInput.setAuthToken(authTokenStr);
-        aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        String strtext = getArguments().getString("item");
-        aboutUsInput.setPermalink(strtext);
-        asyncAboutUS = new AboutUsAsync(aboutUsInput, this, context);
-        asyncAboutUS.execute();
+        if (isNetwork ) {
+
+            AboutUsInput aboutUsInput = new AboutUsInput();
+            aboutUsInput.setAuthToken(authTokenStr);
+            aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            String strtext = getArguments().getString("item");
+            aboutUsInput.setPermalink(strtext);
+            asyncAboutUS = new AboutUsAsync(aboutUsInput, this, context);
+            asyncAboutUS.execute();
+        }
+        else {
+            noInternet.setVisibility(View.VISIBLE);
+        }
         TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), categoryTitle);
         /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
@@ -237,6 +249,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
             webView.getSettings().setJavaScriptEnabled(true);
         }else {
 
+            noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
             noInternet.setVisibility(View.VISIBLE);
         }
     }

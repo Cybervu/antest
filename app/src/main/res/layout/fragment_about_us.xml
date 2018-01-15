@@ -6,29 +6,7 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:id="@+id/noInternet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
-        android:padding="@dimen/main_padding"
-        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
-
-
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/categoryTitle"
@@ -84,6 +62,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
     <!-- <ScrollView
          android:layout_width="match_parent"
          android:layout_height="wrap_content"

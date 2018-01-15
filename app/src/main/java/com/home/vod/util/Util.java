@@ -610,6 +610,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD, "text_password", json);
 
         setTranslationLanguageToPref(languagePreference, ERROR_IN_PAYMENT_VALIDATION, DEFAULT_ERROR_IN_PAYMENT_VALIDATION, "error_in_payment_validation", json);
+        setTranslationLanguageToPref(languagePreference, ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION, "error_in_subscription", json);
+        setTranslationLanguageToPref(languagePreference, ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS, "error_transc_process", json);
         setTranslationLanguageToPref(languagePreference, ERROR_IN_REGISTRATION, DEFAULT_ERROR_IN_REGISTRATION, "error_in_registration", json);
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_EXPIRED, "", "transaction_status_expired", json);
         setTranslationLanguageToPref(languagePreference, DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT, "details_not_found_alert", json);
@@ -664,10 +666,12 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, "activate_subscription_watch_video", json);
 
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
+        setTranslationLanguageToPref(languagePreference, FREE_FOR_COUPON, DEFAULT_FREE_FOR_COUPON, "free_for_coupon", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
+
 
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
         setTranslationLanguageToPref(languagePreference, TRANSACTION_DETAIL_PURCHASE_DATE, DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE, "transaction_detail_purchase_date", json);

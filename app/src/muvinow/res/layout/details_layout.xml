@@ -172,7 +172,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/trailerbtn_text_size"
+                        android:textSize="@dimen/viewmore_text_size"
                         android:visibility="gone"
 
                         />
@@ -278,7 +278,8 @@
                 android:layout_below="@+id/rating"
                 android:background="@color/transparent"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/marginBottom5dp">
 
 
                 <RelativeLayout
@@ -345,7 +346,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iconImageRelativeLayout"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
+                android:visibility="gone">
 
                 <RatingBar
                     android:id="@+id/ratingBar"

@@ -173,7 +173,7 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/preorderbtn_text_size"
+                            android:textSize="@dimen/viewmore_text_size"
                             android:visibility="gone"
 
                             />
@@ -279,6 +279,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/rating"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginRight="@dimen/ppv_margin"
                     android:layout_below="@+id/iconImageRelativeLayout">
                     <RatingBar
                         android:id="@+id/ratingBar"

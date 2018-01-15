@@ -62,6 +62,7 @@ import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
 import com.home.vod.R;
+import com.home.vod.ToolbarTitleHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.fragment.AboutUsFragment;
@@ -134,6 +135,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
     public MainActivity() {
+
     }
 
     LanguagePreference languagePreference;
@@ -173,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    private ToolbarTitleHandler toolbarTitleHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -245,7 +248,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     //Toolbar
-    private Toolbar mToolbar;
+    public Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     private RelativeLayout noInternetLayout;
     public static String internetSpeed = "0";
@@ -289,6 +292,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbarTitleHandler=new ToolbarTitleHandler(this);
         LogUtil.showLog("Abhishek", "Toolbar");
 
         //**** chromecast*************//*
@@ -395,6 +399,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             e.printStackTrace();
         }*/
     }
+
+
 
 
     @Override

@@ -152,6 +152,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DISCOUNT_ON_COUPON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_PAYMENT_VALIDATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVALID_COUPON;
@@ -173,6 +174,7 @@ import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALER
 import static com.home.vod.preferences.LanguagePreference.DISCOUNT_ON_COUPON;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_PAYMENT_VALIDATION;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
+import static com.home.vod.preferences.LanguagePreference.ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.INVALID_COUPON;
@@ -872,8 +874,31 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             }
         });
-        selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice);
-        chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
+
+        String[] strValues = String.valueOf(planPrice).split("\\.");
+        String[] strValues_charged = String.valueOf(chargedPrice).split("\\.");
+
+
+        if (strValues[1].length() == 1) {
+
+            selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice + "0");
+
+        }
+        else {
+            selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice);
+
+        }
+
+        if (strValues_charged[1].length() == 1) {
+
+            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice + "0");
+
+        }
+        else {
+            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
+
+        }
+
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1574,10 +1599,19 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     }
                 }
 
+
+                String[] strValues_chargedPriceTextView = String.valueOf(chargedPrice).split("\\.");
+                if (strValues_chargedPriceTextView[1].length() == 1) {
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice + "0");
+
+                }
+                else {
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice );
+
+                }
                 creditCardLayout.setVisibility(View.VISIBLE);
                 paymentOptionLinearLayout.setVisibility(View.VISIBLE);
 
-                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
                 isCouponCodeAdded = true;
                 validCouponCode = couponCodeEditText.getText().toString().trim();
                 Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
@@ -1589,8 +1623,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON,DEFAULT_FREE_FOR_COUPON));
 
-                    withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
-                }
+                    if (strValues_chargedPriceTextView[1].length() == 1) {
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice+"0");
+
+                    }
+                    else  {
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
+
+                    }                }
 
 
             } else {
@@ -1835,7 +1875,13 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-            dlgAlert.setMessage(message);
+
+            if (message.equals(null) || message.equals("") || message == null) {
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS,DEFAULT_ERROR_TRANSACTION_PROCESS));
+            } else {
+                dlgAlert.setMessage(message);
+            }
+
             dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
@@ -2139,7 +2185,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         if (status == 0) {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
@@ -2198,7 +2244,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             } else {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
@@ -2507,7 +2553,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
@@ -2572,7 +2618,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);

@@ -280,6 +280,8 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_IN_PAYMENT_VALIDATION = "Error in payment validation";
     public static final String ERROR_IN_SUBSCRIPTION = "ERROR_IN_SUBSCRIPTION";
     public static final String DEFAULT_ERROR_IN_SUBSCRIPTION = "Error in Subscription";
+    public static final String ERROR_TRANSACTION_PROCESS = "ERROR_TRANSACTION_PROCESS";
+    public static final String DEFAULT_ERROR_TRANSACTION_PROCESS = "Error in Transaction Process";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
 
