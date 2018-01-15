@@ -148,8 +148,8 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentListListener ,
-        LoadFilterVideoAsync.LoadFilterVideoListner{
+public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentListListener,
+        LoadFilterVideoAsync.LoadFilterVideoListner {
 
     public static boolean clearClicked = false;
 
@@ -189,25 +189,25 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         String movieGenreStr = "";
         String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String isEpisodeStr = "";
         int isAPV = 0;
         int isPPV = 0;
         int isConverted = 0;
-        if (status==200){
-            itemsInServer=totalItems;
-            for (int i=0;i<contentListOutputArray.size();i++){
-                movieGenreStr=contentListOutputArray.get(i).getGenre();
-                movieName=contentListOutputArray.get(i).getName();
-                movieImageStr=contentListOutputArray.get(i).getPosterUrl();
-                moviePermalinkStr=contentListOutputArray.get(i).getPermalink();
-                videoTypeIdStr=contentListOutputArray.get(i).getContentTypesId();
-                isConverted=contentListOutputArray.get(i).getIsConverted();
-                isAPV=contentListOutputArray.get(i).getIsAPV();
-                isPPV=contentListOutputArray.get(i).getIsPPV();
-                isEpisodeStr=contentListOutputArray.get(i).getIsEpisodeStr();
+        if (status == 200) {
+            itemsInServer = totalItems;
+            for (int i = 0; i < contentListOutputArray.size(); i++) {
+                movieGenreStr = contentListOutputArray.get(i).getGenre();
+                movieName = contentListOutputArray.get(i).getName();
+                movieImageStr = contentListOutputArray.get(i).getPosterUrl();
+                moviePermalinkStr = contentListOutputArray.get(i).getPermalink();
+                videoTypeIdStr = contentListOutputArray.get(i).getContentTypesId();
+                isConverted = contentListOutputArray.get(i).getIsConverted();
+                isAPV = contentListOutputArray.get(i).getIsAPV();
+                isPPV = contentListOutputArray.get(i).getIsPPV();
+                isEpisodeStr = contentListOutputArray.get(i).getIsEpisodeStr();
                 itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
             }
 
@@ -276,9 +276,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
             }
-        }
-        else {
-            if (status==0) {
+        } else {
+            if (status == 0) {
                 try {
                     if (videoPDialog != null && videoPDialog.isShowing()) {
                         videoPDialog.hide();
@@ -336,25 +335,25 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         String movieGenreStr = "";
         String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String isEpisodeStr = "";
         int isAPV = 0;
         int isPPV = 0;
         int isConverted = 0;
-        if (status==200){
-            itemsInServer=totalItems;
-            for (int i=0;i<loadFilterVideoOutputArrayList.size();i++){
-                movieGenreStr=loadFilterVideoOutputArrayList.get(i).getGenre();
-                movieName=loadFilterVideoOutputArrayList.get(i).getName();
-                movieImageStr=loadFilterVideoOutputArrayList.get(i).getPosterUrl();
-                moviePermalinkStr=loadFilterVideoOutputArrayList.get(i).getPermalink();
-                videoTypeIdStr=loadFilterVideoOutputArrayList.get(i).getContentTypesId();
-                isConverted=loadFilterVideoOutputArrayList.get(i).getIsConverted();
-                isAPV=loadFilterVideoOutputArrayList.get(i).getIsAPV();
-                isPPV=loadFilterVideoOutputArrayList.get(i).getIsPPV();
-                isEpisodeStr=loadFilterVideoOutputArrayList.get(i).getIsEpisodeStr();
+        if (status == 200) {
+            itemsInServer = totalItems;
+            for (int i = 0; i < loadFilterVideoOutputArrayList.size(); i++) {
+                movieGenreStr = loadFilterVideoOutputArrayList.get(i).getGenre();
+                movieName = loadFilterVideoOutputArrayList.get(i).getName();
+                movieImageStr = loadFilterVideoOutputArrayList.get(i).getPosterUrl();
+                moviePermalinkStr = loadFilterVideoOutputArrayList.get(i).getPermalink();
+                videoTypeIdStr = loadFilterVideoOutputArrayList.get(i).getContentTypesId();
+                isConverted = loadFilterVideoOutputArrayList.get(i).getIsConverted();
+                isAPV = loadFilterVideoOutputArrayList.get(i).getIsAPV();
+                isPPV = loadFilterVideoOutputArrayList.get(i).getIsPPV();
+                isEpisodeStr = loadFilterVideoOutputArrayList.get(i).getIsEpisodeStr();
                 itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
             }
 
@@ -424,25 +423,24 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
             }
-        }
-        else {
-                try {
-                    if (videoPDialog != null && videoPDialog.isShowing()) {
-                        videoPDialog.hide();
-                        videoPDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-
-                    noDataLayout.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
-                    footerView.setVisibility(View.GONE);
-
+        } else {
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
                 }
+            } catch (IllegalArgumentException ex) {
+
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
+
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
 
         }
 
@@ -458,7 +456,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
-
 
 
     private VideoView mVideoView;
@@ -543,16 +540,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     }
 
 
-
-
-
     MediaInfo mediaInfo;
     /***************chromecast**********************/
 
 
-
     AsynLOADUI loadUI;
-   // AsynLoadVideos asynLoadVideos;
+    // AsynLoadVideos asynLoadVideos;
     String strtext;
     String countryCodeStr;
     GetContentListAsynTask getContentListAsynTask;
@@ -565,8 +558,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     private ProgressBarHandler gDialog;
     private SliderLayout mDemoSlider;
     String videoImageStrToHeight;
-    int  videoHeight = 185;
-    int  videoWidth = 256;
+    int videoHeight = 185;
+    int videoWidth = 256;
     PreferenceManager preferenceManager;
     LanguagePreference languagePreference;
     GridItem itemToPlay;
@@ -584,8 +577,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
     //firsttime load
-    boolean firstTime=false;
-
+    boolean firstTime = false;
 
 
     //no data
@@ -593,8 +585,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     /*The Data to be posted*/
     int offset = 1;
     int limit = 10;
-    int listSize =0;
-    int itemsInServer=0;
+    int listSize = 0;
+    int itemsInServer = 0;
 
     /*Asynctask on background thread*/
     int corePoolSize = 60;
@@ -610,9 +602,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     private VideoFilterAdapter customGridAdapter;
 
     //Model for GridView
-    ArrayList<GridItem> itemData= new ArrayList<GridItem>();
+    ArrayList<GridItem> itemData = new ArrayList<GridItem>();
     GridLayoutManager mLayoutManager;
-    String posterUrl ;
+    String posterUrl;
 
     // UI
     private GridView gridView;
@@ -633,17 +625,19 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     MenuItem filterMenuItem;
     int prevPosition = 5;
     String filterPermalink = "";
-    int scrolledPosition=0;
+    int scrolledPosition = 0;
     boolean scrolling;
-    boolean isSearched=false;
+    boolean isSearched = false;
     RecyclerView genreListData;
 
 
     RelativeLayout footerView;
+
     public VideosListFragment() {
         // Required empty public constructor
 
     }
+
     View header;
     public static boolean isLoading = false;
 
@@ -651,7 +645,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     @Override
     public void onStop() {
         // To prevent a memory leak on rotation, make sure to call stopAutoCycle() on the slider before activity or fragment is destroyed
-        if (mDemoSlider!=null) {
+        if (mDemoSlider != null) {
             mDemoSlider.stopAutoCycle();
         }
         super.onStop();
@@ -665,7 +659,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         //for search for each activity
         setHasOptionsMenu(true);
         filterOrderByStr = "";
-        videosListFragment=new VideolistFragmentHandler(getActivity());
+        videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {
@@ -679,7 +673,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
 
 
-
         // int startPosition = getInt("startPosition", 0);
         // mVideoView.setVideoURI(Uri.parse(item.getContentId()));
 
@@ -687,7 +680,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         //FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);
         categoryTitle.setText(getArguments().getString("title"));
@@ -699,19 +692,18 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
 
 
-
-        posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
 
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
 
-        noInternetConnectionLayout = (RelativeLayout)rootView.findViewById(R.id.noInternet);
-        noDataLayout = (RelativeLayout)rootView.findViewById(R.id.noData);
-        noInternetTextView =(TextView)rootView.findViewById(R.id.noInternetTextView);
-        noDataTextView =(TextView)rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT,DEFAULT_NO_CONTENT));
+        noInternetConnectionLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
+        noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -723,7 +715,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         //Detect Network Connection
 
 
-        if (!NetworkStatus.getInstance().isConnected(getActivity())){
+        if (!NetworkStatus.getInstance().isConnected(getActivity())) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -733,26 +725,32 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         strtext = getArguments().getString("item");
         filterPermalink = strtext.trim();
-        countryCodeStr=preferenceManager.getCountryCodeFromPref();
+        countryCodeStr = preferenceManager.getCountryCodeFromPref();
       /*  asynLoadVideos = new AsynLoadVideos();
         asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
-
-        ContentListInput contentListInput=new ContentListInput();
-        contentListInput.setAuthToken(authTokenStr);
-        contentListInput.setPermalink(strtext.trim());
-        contentListInput.setLimit(String.valueOf(limit));
-        contentListInput.setOffset(String.valueOf(offset));
-        contentListInput.setOrderby("");
-        if (countryCodeStr != null) {
-            contentListInput.setCountry(countryCodeStr);
+        if (!NetworkStatus.getInstance().isConnected(getActivity())) {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
         } else {
-            contentListInput.setCountry("IN");
+
+            ContentListInput contentListInput = new ContentListInput();
+            contentListInput.setAuthToken(authTokenStr);
+            contentListInput.setPermalink(strtext.trim());
+            contentListInput.setLimit(String.valueOf(limit));
+            contentListInput.setOffset(String.valueOf(offset));
+            contentListInput.setOrderby("");
+            if (countryCodeStr != null) {
+                contentListInput.setCountry(countryCodeStr);
+            } else {
+                contentListInput.setCountry("IN");
+            }
+            contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
+            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
+
         }
-        contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-        getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
-        getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
-
-
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -793,7 +791,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 if (scrolling == true && mIsScrollingUp == false) {
 
 
-                    Log.v("SUBHA","on scroll data");
+                    Log.v("SUBHA", "on scroll data");
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
@@ -805,14 +803,14 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         offset += 1;
                         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                            if ((filterOrderByStr!=null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray!=null && genreArray.size() > 0)) {
+                            if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
 
-                                Log.v("SUBHA","filterOrderByStr "+filterOrderByStr);
+                                Log.v("SUBHA", "filterOrderByStr " + filterOrderByStr);
 
                                /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
-                                LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                                LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                                 loadFilterVideoInput.setGenreArray(genreArray);
                                 loadFilterVideoInput.setAuthToken(authTokenStr);
                                 loadFilterVideoInput.setPermalink(strtext.trim());
@@ -824,18 +822,18 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 } else {
                                     loadFilterVideoInput.setCountry("IN");
                                 }
-                                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                                loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
                                 loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
 
-                            }else{
-                                Log.v("SUBHA","asynLoadVideos "+filterOrderByStr);
+                            } else {
+                                Log.v("SUBHA", "asynLoadVideos " + filterOrderByStr);
 
 /*
                                 asynLoadVideos = new AsynLoadVideos();
                                 asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
-                                ContentListInput contentListInput=new ContentListInput();
+                                ContentListInput contentListInput = new ContentListInput();
                                 contentListInput.setAuthToken(authTokenStr);
                                 contentListInput.setPermalink(strtext.trim());
                                 contentListInput.setLimit(String.valueOf(limit));
@@ -846,8 +844,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 } else {
                                     contentListInput.setCountry("IN");
                                 }
-                                contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                                getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
+                                contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
                                 getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
                             }
 
@@ -863,11 +861,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         });
 
 
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                img = (ImageView) view.findViewById(R.id.movieImageView) ;
+                img = (ImageView) view.findViewById(R.id.movieImageView);
 
                 GridItem item = itemData.get(position);
                 itemToPlay = item;
@@ -881,13 +878,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 movieUniqueId = item.getMovieUniqueId();
                 movieStreamUniqueId = item.getMovieStreamUniqueId();
 
-                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -909,9 +906,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         });
 
 
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3")) )
-                    {
-                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
+                    } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
+                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY, moviePermalink);
                     }
                 }
 
@@ -921,17 +917,15 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         filterView = (RelativeLayout) rootView.findViewById(R.id.filterBg);
 
-        filterView.setOnTouchListener (new View.OnTouchListener()
-        {
+        filterView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch (View v, MotionEvent event)
-            {
+            public boolean onTouch(View v, MotionEvent event) {
 
 
                 filterView.setVisibility(View.GONE);
                 gridView.setEnabled(true);
 
-                if ((filterOrderByStr!=null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray!=null && genreArray.size() > 0)) {
+                if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
                     firstTime = true;
 
 
@@ -950,7 +944,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     }
                     isSearched = false;
 
-                    if (!NetworkStatus.getInstance().isConnected(getActivity())){
+                    if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                         noInternetConnectionLayout.setVisibility(View.VISIBLE);
                         gridView.setVisibility(View.GONE);
                         if (filterMenuItem != null) {
@@ -960,7 +954,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
                     } else {
-                        if (pDialog!= null && pDialog.isShowing()){
+                        if (pDialog != null && pDialog.isShowing()) {
                             pDialog.hide();
                             pDialog = null;
                         }
@@ -968,15 +962,15 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             videoPDialog.hide();
                             videoPDialog = null;
                         }
-                        if (getContentListAsynTask!=null){
+                        if (getContentListAsynTask != null) {
                             getContentListAsynTask.cancel(true);
                         }
-                        if (loadUI!=null){
+                        if (loadUI != null) {
                             loadUI.cancel(true);
                         }
                         /*AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
-                        LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                        LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                         loadFilterVideoInput.setGenreArray(genreArray);
                         loadFilterVideoInput.setAuthToken(authTokenStr);
                         loadFilterVideoInput.setPermalink(strtext.trim());
@@ -988,8 +982,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         } else {
                             loadFilterVideoInput.setCountry("IN");
                         }
-                        loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                        loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                        loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
                         loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
                     }
@@ -997,7 +991,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 return false;
             }
         });
-
 
 
         final ArrayList<ListItem> mdata = new ArrayList<ListItem>();
@@ -1009,34 +1002,30 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         String[] genreValuesTempArr = genreValuesString.split(",");
 
 
-
         for (int i = 0; i < genreTempArr.length; i++) {
             mdata.add(new ListItem(genreTempArr[i], genreValuesTempArr[i]));
-            if (i == 0){
-                mdata.set(0, new ListItem(languagePreference.getTextofLanguage(FILTER_BY,DEFAULT_FILTER_BY), genreValuesTempArr[i]));
+            if (i == 0) {
+                mdata.set(0, new ListItem(languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY), genreValuesTempArr[i]));
             }
-            if (i  == genreTempArr.length - 5) {
+            if (i == genreTempArr.length - 5) {
                 mdata.set(i, new ListItem(languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY), genreValuesTempArr[i]));
             }
-            if (i  == genreTempArr.length - 4) {
+            if (i == genreTempArr.length - 4) {
                 mdata.set(i, new ListItem(languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED), genreValuesTempArr[i]));
             }
-            if (i  == genreTempArr.length - 3) {
+            if (i == genreTempArr.length - 3) {
                 mdata.set(i, new ListItem(languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE), genreValuesTempArr[i]));
             }
-            if (i  == genreTempArr.length - 2) {
+            if (i == genreTempArr.length - 2) {
                 mdata.set(i, new ListItem(languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z), genreValuesTempArr[i]));
             }
-            if (i  == genreTempArr.length - 1) {
+            if (i == genreTempArr.length - 1) {
                 mdata.set(i, new ListItem(languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A), genreValuesTempArr[i]));
             }
         }
 
 
-
-
-
-        genreAdapter = new GenreFilterAdapter(mdata,getActivity());
+        genreAdapter = new GenreFilterAdapter(mdata, getActivity());
         genreListData.setAdapter(genreAdapter);
         if (mdata.size() > 0) {
 
@@ -1048,14 +1037,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             public void onClick(View view, int position) {
 
 
-                if (position >= 1 && position <= (genreTempArr.length -6)) {
+                if (position >= 1 && position <= (genreTempArr.length - 6)) {
                     if (mdata.get(position).isSelected() == true) {
                         mdata.get(position).setSelected(false);
 
-                        for(int i=0;i<genreArray.size();i++)
-                        {
-                            if(genreArray.contains(mdata.get(position).getSectionType()))
-                            {
+                        for (int i = 0; i < genreArray.size(); i++) {
+                            if (genreArray.contains(mdata.get(position).getSectionType())) {
                                 genreArray.remove(mdata.get(position).getSectionType());
                             }
                         }
@@ -1086,7 +1073,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
             }
         }));
-
 
 
         rootView.setFocusableInTouchMode(true);
@@ -1479,7 +1465,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     }*/
 
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -1494,9 +1479,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
     public void onResume() {
         // if (genreArray!=null && genreArray.size() > 0) {
-        if ((filterOrderByStr!=null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray!=null && genreArray.size() > 0)) {
+        if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
             firstTime = true;
-            Log.v("SUBHAA","hgdjhdgjhbj"+clearClicked);
+            Log.v("SUBHAA", "hgdjhdgjhbj" + clearClicked);
 
             if (itemData != null && itemData.size() > 0) {
                 itemData.clear();
@@ -1531,7 +1516,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                /* if (itemData != null && itemData.size() > 0) {
                     itemData.clear();
                 }*/
-                if (pDialog!= null && pDialog.isShowing()){
+                if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
                 }
@@ -1539,17 +1524,17 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     videoPDialog.hide();
                     videoPDialog = null;
                 }
-                if (getContentListAsynTask!=null){
+                if (getContentListAsynTask != null) {
                     getContentListAsynTask.cancel(true);
                 }
-                if (loadUI!=null){
+                if (loadUI != null) {
                     loadUI.cancel(true);
                 }
                /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
 
-                LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                 loadFilterVideoInput.setGenreArray(genreArray);
                 loadFilterVideoInput.setAuthToken(authTokenStr);
                 loadFilterVideoInput.setPermalink(strtext.trim());
@@ -1561,8 +1546,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 } else {
                     loadFilterVideoInput.setCountry("IN");
                 }
-                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
                 loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
             }
@@ -1574,23 +1559,23 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             pDialog = null;
         }
 //        Log.v("SUBHA","JFJFJCLEA"+clearClicked);
-        if (clearClicked){
-            if (!NetworkStatus.getInstance().isConnected(getActivity())){
+        if (clearClicked) {
+            if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                 noDataLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             }
             resetData();
-            Log.v("SUBHAA","JFJFJCLEA"+clearClicked);
+            Log.v("SUBHAA", "JFJFJCLEA" + clearClicked);
 
-            clearClicked=false;
+            clearClicked = false;
 
             if (itemData != null && itemData.size() > 0) {
                 itemData.clear();
             }
 
-            ContentListInput contentListInput=new ContentListInput();
+            ContentListInput contentListInput = new ContentListInput();
             contentListInput.setAuthToken(authTokenStr);
             contentListInput.setPermalink(strtext.trim());
             contentListInput.setLimit(String.valueOf(limit));
@@ -1601,8 +1586,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             } else {
                 contentListInput.setCountry("IN");
             }
-            contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-            getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
+            contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
             getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
         }
 
@@ -1998,6 +1983,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     public void onDetach() {
         super.onDetach();
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
@@ -2021,8 +2007,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         super.onCreateOptionsMenu(menu, inflater);
 
     }
-
-
 
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
@@ -2060,21 +2044,21 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                     }
 
-                } else if (getActivity() !=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                } else if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if (getActivity()!=null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                } else if (getActivity() != null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
                     gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
@@ -2091,7 +2075,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -2099,7 +2083,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -2118,7 +2102,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -2126,7 +2110,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -2142,6 +2126,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -2202,20 +2187,18 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     }
 
 
-
-
-    public void resetData(){
+    public void resetData() {
         if (itemData != null && itemData.size() > 0) {
             itemData.clear();
         }
-        firstTime=true;
+        firstTime = true;
 
         offset = 1;
         isLoading = false;
         listSize = 0;
         if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
             limit = 30;
-        }else {
+        } else {
             limit = 15;
         }
         itemsInServer = 0;
@@ -2492,53 +2475,54 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         }
     }
-/***************chromecast**********************/
+
+    /***************chromecast**********************/
 
 
 // Added by bibhu
-class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+    class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
 
-    private Exception exception;
-    private ProgressBarHandler phandler;
+        private Exception exception;
+        private ProgressBarHandler phandler;
 
-    protected Void doInBackground(String... urls) {
-        try {
-
-
-            URL url = new URL(urls[0]);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            videoHeight = bmp.getHeight();
-            videoWidth = bmp.getWidth();
+        protected Void doInBackground(String... urls) {
+            try {
 
 
-            LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
-            LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+                URL url = new URL(urls[0]);
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight();
+                videoWidth = bmp.getWidth();
 
-            return null;
-        } catch (Exception e) {
-            this.exception = e;
-            return null;
+
+                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+
+                return null;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
         }
-    }
 
-    protected void onPostExecute(Void feed) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
+        protected void onPostExecute(Void feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
 
            /* if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }*/
 
-        AsynLOADUI loadUI = new AsynLOADUI();
-        loadUI.executeOnExecutor(threadPoolExecutor);
-    }
+            AsynLOADUI loadUI = new AsynLOADUI();
+            loadUI.executeOnExecutor(threadPoolExecutor);
+        }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
           /*  phandler = new ProgressBarHandler(getActivity());
             phandler.show();*/
 
+        }
     }
-}
 }

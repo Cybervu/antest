@@ -307,15 +307,19 @@ public class ProfileActivity extends AppCompatActivity implements
 
 // =======End ===========================//
 
-        Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-        get_userProfile_input.setAuthToken(authTokenStr);
-        get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
-        get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
-        get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
 
-        GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+            Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+            get_userProfile_input.setAuthToken(authTokenStr);
+            get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
+            get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
+            get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
+            GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+        }
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,10 +408,12 @@ public class ProfileActivity extends AppCompatActivity implements
 
         }
 
+
         if (code > 0) {
             if (code == 200) {
 
 
+                changePassword.setVisibility(View.VISIBLE);
                 editConfirmPassword.setText("");
                 editNewPassword.setText("");
                 editConfirmPassword.setVisibility(View.GONE);

@@ -179,22 +179,25 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     public void forgotPasswordButtonClicked() {
 
         loginEmailStr = editEmailStr.getText().toString().trim();
-        if (NetworkStatus.getInstance().isConnected(this)) {
             boolean isValidEmail = Util.isValidMail(loginEmailStr);
             if (isValidEmail == true) {
-                Forgotpassword_input forgotpassword_input=new Forgotpassword_input();
-                forgotpassword_input.setAuthToken(authTokenStr);
-                forgotpassword_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                forgotpassword_input.setEmail(loginEmailStr);
-                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);
-                asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
+                if (NetworkStatus.getInstance().isConnected(this)) {
+
+                    Forgotpassword_input forgotpassword_input = new Forgotpassword_input();
+                    forgotpassword_input.setAuthToken(authTokenStr);
+                    forgotpassword_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    forgotpassword_input.setEmail(loginEmailStr);
+                    ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input, this, this);
+                    asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
+                }
+                 else {
+                    ShowDialog(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+
+                }
             } else {
 
-                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE), languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL,DEFAULT_OOPS_INVALID_EMAIL));
+                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE), languagePreference.getTextofLanguage(EMAIL_DOESNOT_EXISTS,DEFAULT_EMAIL_DOESNOT_EXISTS));
 
-            }
-        } else {
-            ShowDialog(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
         }
     }

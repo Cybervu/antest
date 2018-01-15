@@ -1678,6 +1678,14 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(loginIntent);
                 // Not implemented here
                 return false;
+
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
+                // Not implemented here
+                return false;
             case R.id.action_register:
 
                 Intent registerIntent = new Intent(ViewMoreActivity.this, RegisterActivity.class);
@@ -1692,7 +1700,6 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
                 if (languageModel != null && languageModel.size() > 0) {
-
 
                     ShowLanguagePopup();
 

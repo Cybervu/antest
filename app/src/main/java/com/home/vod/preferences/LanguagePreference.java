@@ -149,6 +149,7 @@ public class LanguagePreference {
     public static final String PAYMENT_OPTIONS_TITLE = "PAYMENT_OPTIONS_TITLE";
     public static final String UPDATE_PROFILE_ALERT = "UPDATE_PROFILE_ALERT";
     public static final String ALERT = "ALERT";
+    public static final String DEFAULT_ALERT = "ALERT!";
     public static final String STORY_TITLE = "STORY_TITLE";
     public static final String NO_DETAILS_AVAILABLE = "NO_DETAILS_AVAILABLE";
     public static final String SORRY = "SORRY";
@@ -184,6 +185,8 @@ public class LanguagePreference {
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
+    public static final String DOWNLOAD_CANCELED = "DOWNLOAD_CANCELED";
+    public static final String DEFAULT_DOWNLOAD_CANCELED = "Download Cancelled";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
