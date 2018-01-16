@@ -87,6 +87,7 @@ import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -447,6 +448,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     Player playerModel;
     LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
+    FeatureHandler featureHandler;
     boolean change_resolution = false;
     boolean is_paused = false;
 
@@ -489,14 +491,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         }
 
-                        if (video_prepared) {
-                            if (mediaRouteButton.isEnabled()) {
-                                //  mediaRouteButton.setVisibility(View.VISIBLE);
-                                handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
-                            } else {
-                                mediaRouteButton.setVisibility(View.GONE);
+                        if(featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))
+                        {
+                            if (video_prepared) {
+                                if (mediaRouteButton.isEnabled()) {
+                                    //  mediaRouteButton.setVisibility(View.VISIBLE);
+                                    handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
+                                } else {
+                                    mediaRouteButton.setVisibility(View.GONE);
+                                }
                             }
+                        }else{
+                            mediaRouteButton.setVisibility(View.GONE);
                         }
+
+
                     }
                 });
             }
@@ -538,6 +547,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             isDrm = false;
         }
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        featureHandler = FeatureHandler.getFeaturePreference(ExoPlayerActivity.this);
 
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -815,6 +825,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         }
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)){
+            SubTitlePath.clear();
+            playerModel.offline_url.clear();
+        }
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_RESOLUTION,FeatureHandler.DEFAULT_IS_RESOLUTION)){
+            ResolutionUrl.clear();
+        }
+
+
         //=========================End=================================//
 
         if (isDrm) {
@@ -1161,8 +1182,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
 
                         // This is changed Later
-
-                        if (mediaRouteButton.isEnabled()) {
+                        if ((mediaRouteButton.isEnabled()) && (featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))) {
                             //mediaRouteButton.setVisibility(View.VISIBLE);
                             handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
                         } else {
@@ -1471,6 +1491,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
 
 
+
+
         } catch (ErrorCodeException e) {
             // Consult WasabiErrors.txt for resolution of the error codes
             //  onBackPressed();
@@ -1655,7 +1677,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Log.v("BIBHU6", "log_id=" + videoLogId);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
@@ -1859,7 +1881,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2400,7 +2422,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             timer = null;
         }
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.call_finish_at_onUserLeaveHint) {
 
             AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
             asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
@@ -2613,7 +2635,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2766,7 +2788,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -3140,7 +3162,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         Util.hide_pause = false;
 
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.Call_API_For_Close_Streming) {
 
             Util.Call_API_For_Close_Streming = false;
             Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
@@ -4743,7 +4765,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId); //in
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -4843,7 +4865,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");

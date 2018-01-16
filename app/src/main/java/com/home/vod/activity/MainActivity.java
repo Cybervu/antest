@@ -74,6 +74,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
@@ -267,6 +268,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     // SharedPreferences isLoginPref;
     public static ProgressBarHandler progressBarHandler;
     PreferenceManager preferenceManager;
+    FeatureHandler featureHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,6 +285,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fooerMenuHandler = new FooterMenuHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -403,10 +406,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
 
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 /************chromecast***********/
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                R.id.media_route_menu_item);
+        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
 
        /* MenuItemCompat.setActionProvider(mediaRouteMenuItem, new MediaRouteActionProvider(new ContextThemeWrapper(this, R.style.Theme_CastVideosDark)));
         mediaRouteMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/

@@ -48,6 +48,9 @@ public class RegisterUIHandler {
         language_spinner = (Spinner) context.findViewById(R.id.languageSpinner);
         editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 

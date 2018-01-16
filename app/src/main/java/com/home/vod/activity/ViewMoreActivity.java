@@ -61,6 +61,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -224,12 +225,14 @@ public class ViewMoreActivity extends AppCompatActivity implements
     // private JazzyGridView gridView;
     RelativeLayout footerView;
     LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_more);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(ViewMoreActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -673,8 +676,8 @@ public class ViewMoreActivity extends AppCompatActivity implements
         if (code > 0) {
             if (code == 200) {
                 preferenceManager.clearLoginPref();
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+
                     final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -1269,7 +1272,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         return true;
     }
     /*chromecast-------------------------------------*/

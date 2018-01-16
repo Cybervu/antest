@@ -89,6 +89,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -228,6 +229,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     private MenuItem mediaRouteMenuItem;
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
+    FeatureHandler featureHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -398,6 +400,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
 
         context = getActivity();
+        featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(new View.OnKeyListener() {
@@ -1003,16 +1006,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
-                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                                        MediaTrack.TYPE_TEXT)
-                                        .setName(playerModel.getSubTitleName().get(0))
-                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                                        .setContentId(playerModel.getFakeSubTitlePath().get(0))
-                                        .setLanguage(playerModel.getSubTitleLanguage().get(0))
-                                        .setContentType("text/vtt")
-                                        .build();
-                                tracks.add(englishSubtitle);
+                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                                for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(playerModel.getSubTitleName().get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(playerModel.getFakeSubTitlePath().get(0))
+                                            .setLanguage(playerModel.getSubTitleLanguage().get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
                             }
 
                             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -1076,16 +1082,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
-                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                                        MediaTrack.TYPE_TEXT)
-                                        .setName(playerModel.getSubTitleName().get(0))
-                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                                        .setContentId(playerModel.getFakeSubTitlePath().get(0))
-                                        .setLanguage(playerModel.getSubTitleLanguage().get(0))
-                                        .setContentType("text/vtt")
-                                        .build();
-                                tracks.add(englishSubtitle);
+                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                                for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(playerModel.getSubTitleName().get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(playerModel.getFakeSubTitlePath().get(0))
+                                            .setLanguage(playerModel.getSubTitleLanguage().get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
                             }
 
                             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -1563,7 +1572,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         });
                 dlgAlert.create().show();
             } else if (status == 428) {
-
 
                 try {
                     if (pDialog != null && pDialog.isShowing()) {

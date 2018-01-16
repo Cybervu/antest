@@ -27,6 +27,7 @@ import com.facebook.login.widget.LoginButton;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 
@@ -77,6 +78,7 @@ public class RegisterUIHandler {
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
+
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
@@ -86,6 +88,21 @@ public class RegisterUIHandler {
         googleSignView.setVisibility(View.VISIBLE);
         editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
+        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+            googleSignView.setVisibility(View.VISIBLE);
+        }else {
+            googleSignView.setVisibility(View.GONE);
+        }
     }
 
     public void setCountryList(PreferenceManager preferenceManager) {

@@ -10,9 +10,11 @@ import android.view.MenuItem;
 
 public class VideolistFragmentHandler {
     private Activity context;
+    FeatureHandler featureHandler;
 
     public VideolistFragmentHandler(Activity context){
         this.context=context;
+        featureHandler = FeatureHandler.getFeaturePreference(context);
 
     }
 
@@ -20,7 +22,25 @@ public class VideolistFragmentHandler {
 
         MenuItem item;
         item= menu.findItem(R.id.action_filter);
-         item.setVisible(true);
+        if(featureHandler.getFeatureStatus(FeatureHandler.IS_FILTER,FeatureHandler.DEFAULT_IS_FILTER).trim().equals("1")){
+            item.setVisible(true);
+        }else{
+            item.setVisible(false);
+        }
 
     }
+}
+
+    public void handleMenuFilter(Menu menu){
+
+        MenuItem item;
+        item= menu.findItem(R.id.action_filter);
+        if(featureHandler.getFeatureStatus(FeatureHandler.IS_FILTER,FeatureHandler.DEFAULT_IS_FILTER)){
+            item.setVisible(true);
+        }else{
+            item.setVisible(false);
+        }
+
+    }
+}
 }

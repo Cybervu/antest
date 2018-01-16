@@ -758,7 +758,7 @@ public class Util {
      */
     private static void setTranslationLanguageToPref(LanguagePreference languagePreference, String lanngKey,
                                                      String langValue, String jsonKey, JSONObject jsonObject) {
-        if (jsonObject.has(jsonKey))
+        if (jsonObject.has(jsonKey) && !(jsonObject.optString(jsonKey).trim()).equals(""))
             languagePreference.setLanguageSharedPrefernce(lanngKey, jsonObject.optString(jsonKey).trim());
         else
             languagePreference.setLanguageSharedPrefernce(lanngKey, langValue);

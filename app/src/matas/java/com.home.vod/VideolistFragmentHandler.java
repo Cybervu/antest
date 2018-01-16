@@ -10,17 +10,26 @@ import android.view.MenuItem;
 
 public class VideolistFragmentHandler {
     private Activity context;
+    FeatureHandler featureHandler;
 
     public VideolistFragmentHandler(Activity context){
         this.context=context;
+        featureHandler = FeatureHandler.getFeaturePreference(context);
 
     }
+
 
     public void handleMenuFilter(Menu menu){
 
         MenuItem item;
         item= menu.findItem(R.id.action_filter);
-         item.setVisible(false);
+        if(featureHandler.getFeatureStatus(FeatureHandler.IS_FILTER,FeatureHandler.DEFAULT_IS_FILTER)){
+            item.setVisible(false);
+        }else{
+            item.setVisible(false);
+        }
 
     }
 }
+}
+
