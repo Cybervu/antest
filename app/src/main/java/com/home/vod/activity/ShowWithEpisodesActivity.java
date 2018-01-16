@@ -156,6 +156,7 @@ import java.util.concurrent.TimeUnit;
 import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.ALERT;
@@ -170,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
@@ -180,9 +182,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -191,6 +195,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVA
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
@@ -206,9 +211,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -217,10 +224,12 @@ import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
@@ -240,12 +249,6 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_REVIEWS;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
@@ -673,7 +676,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 //                season_spinner.setBackgroundResource(R.drawable.spinner_theme);
 
-            if (TextUtils.isEmpty(bannerImageId)) {
+
 
                 if (TextUtils.isEmpty(posterImageId)) {
 
@@ -697,9 +700,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             .placeholder(R.drawable.logo)
                             .into(moviePoster);
 
-                }
-
-            } else {
+                
 
 
                 /*ImageLoader imageLoader = ImageLoader.getInstance();
@@ -3579,8 +3580,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
-//                favoriteIntent.putExtra("EMAIL",email);
-//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
                 // Not implemented here

@@ -46,6 +46,7 @@ public final class NetworkStatus {
 		return connected;
 	}
 
+
 	public boolean isWiFiConnected(Context context) {
 		boolean haveConnectedWifi = false;
 

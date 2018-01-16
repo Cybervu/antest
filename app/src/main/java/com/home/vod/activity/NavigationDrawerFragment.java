@@ -38,6 +38,7 @@ import com.home.vod.fragment.HomeFragment;
 import com.home.vod.fragment.MyLibraryFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
@@ -121,15 +122,18 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
+        super.onCreate(savedInstanceState);
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         loggedInStr = preferenceManager.getUseridFromPref();
-        GetMenusInputModel menuListInput = new GetMenusInputModel();
-        menuListInput.setAuthToken(authTokenStr);
-        menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynLoadMenuItems = new GetAppMenuAsync(menuListInput, NavigationDrawerFragment.this, getActivity());
-        asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+
+        if (NetworkStatus.getInstance().isConnected(getActivity())) {
+            GetMenusInputModel menuListInput = new GetMenusInputModel();
+            menuListInput.setAuthToken(authTokenStr);
+            menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynLoadMenuItems = new GetAppMenuAsync(menuListInput, NavigationDrawerFragment.this, getActivity());
+            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+        }
     }
 
     @Override

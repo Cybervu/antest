@@ -316,7 +316,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 	Animation myAnim;
-	LinearLayout volume_brightness_control_layout;
+	LinearLayout volume_brightness_control_layout,back_layout;
 	ImageButton volume_brightness_control;
 	TextView volume_bright_value;
 	Window mWindow;
@@ -342,6 +342,17 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
+
+						try{
+
+						Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+						int orientation = display.getRotation();
+
+						Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+						if (orientation == 1|| orientation == 3) {
+							hideSystemUI();
+						}}catch (Exception e){}
 
 						SQLiteDatabase DB = MarlinBroadbandExample.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 						Cursor cursor = DB.rawQuery("SELECT Flag FROM " + DBHelper.RESUME_WATCH + " WHERE UniqueId = '" + UniqueId + "'", null);
@@ -473,9 +484,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
 
+
 		download = (ImageView) findViewById(R.id.downloadImageView);
 		Progress = (ProgressBar) findViewById(R.id.progressBar);
 		percentg = (TextView) findViewById(R.id.percentage);
+		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
 		// Adding Chromecast in Offline Player
 
@@ -825,6 +838,19 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			@Override
 			public void onClick(View view) {
 
+
+				try{
+
+					Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+					int orientation = display.getRotation();
+
+					Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+					if (orientation == 1|| orientation == 3) {
+						hideSystemUI();
+					}}catch (Exception e){}
+
+
 				if (Util.hide_pause) {
 					Util.hide_pause = false;
 				}
@@ -1025,6 +1051,14 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 			}
 		});
+		back_layout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				backCalled();
+
+			}
+		});
+
 		back_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {

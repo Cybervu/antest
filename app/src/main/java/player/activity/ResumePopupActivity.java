@@ -25,7 +25,9 @@ import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CONTINUE_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.RESUME;
 import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
 
 
@@ -60,7 +62,7 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
         TextView resumeTitleTextView = (TextView) findViewById(R.id.resumeTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         resumeTitleTextView.setText(languagePreference.getTextofLanguage(RESUME_MESSAGE,DEFAULT_RESUME_MESSAGE));
-        yesButton.setText(languagePreference.getTextofLanguage(CONTINUE_BUTTON,DEAFULT_CONTINUE_BUTTON));
+        yesButton.setText(languagePreference.getTextofLanguage(RESUME,DEFAULT_RESUME));
         cancelButton.setText(languagePreference.getTextofLanguage(CANCEL_BUTTON,DEAFULT_CANCEL_BUTTON));
 
         Animation topTobottom = AnimationUtils.loadAnimation(this, R.anim.top_bottom);

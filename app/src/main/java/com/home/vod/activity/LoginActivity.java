@@ -1518,7 +1518,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         //signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
@@ -1848,8 +1848,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
-            }
+                if(regEmailStr.equals("")) {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
+                }else if(regPasswordStr.equals("")) {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
+                }
+                }
         } else {
             Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }

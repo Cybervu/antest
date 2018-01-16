@@ -127,12 +127,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+
 
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener, ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
@@ -247,6 +242,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setTitle("");
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -479,16 +475,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         });
 
 
-        //Detect Network Connection
-
-
-        if (!NetworkStatus.getInstance().isConnected(this)) {
-            noInternetConnectionLayout.setVisibility(View.VISIBLE);
-            noDataLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            footerView.setVisibility(View.GONE);
-        }
-
         ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
         gridView.setLayoutParams(layoutParams);
@@ -513,15 +499,20 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
         scrolling = false;
 
+        if (NetworkStatus.getInstance().isConnected(this)) {
 
-        LogUtil.showLog("MUVI", "favorite calling");
-        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(authTokenStr);
-        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
+            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+            viewFavouriteInputModel.setAuthToken(authTokenStr);
+            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
+            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
+            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
         LogUtil.showLog("MUVI", "authtokenn = " + authTokenStr);
         LogUtil.showLog("MUVI", "user id = " + preferenceManager.getUseridFromPref());
 

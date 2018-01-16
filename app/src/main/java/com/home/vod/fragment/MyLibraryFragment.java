@@ -510,8 +510,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                noDataLayout.setVisibility(View.GONE);
+                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
             }
         }
 
@@ -2643,8 +2645,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel, MyLibraryFragment.this, context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            getActivity().finish();
+                            noDataLayout.setVisibility(View.GONE);
+                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                            gridView.setVisibility(View.GONE);
+                            footerView.setVisibility(View.GONE);
                         }
                     } else {
                         getActivity().finish();
@@ -3522,9 +3526,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             // TODO: check this.exception
             // TODO: do something with the feed
 
-            if (phandler != null && phandler.isShowing()) {
+          /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
-            }
+            }*/
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);
@@ -3533,8 +3537,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            phandler = new ProgressBarHandler(getActivity());
-            phandler.show();
+//            phandler = new ProgressBarHandler(getActivity());
+//            phandler.show();
 
         }
     }

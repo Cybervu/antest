@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +57,11 @@ import static com.home.vod.preferences.LanguagePreference.CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHANGE_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE_UPDATED;
@@ -66,9 +69,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
@@ -77,6 +83,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
+import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class ProfileActivity extends AppCompatActivity implements
@@ -91,7 +98,10 @@ public class ProfileActivity extends AppCompatActivity implements
 
     String Name, Password;
     boolean password_visibility = false;
-
+    private RelativeLayout noInternetConnectionLayout;
+    RelativeLayout noDataLayout;
+    TextView noDataTextView;
+    TextView noInternetTextView;
     String User_Id = "";
     String Email_Id = "";
     TextView name_of_user;
@@ -134,6 +144,15 @@ public class ProfileActivity extends AppCompatActivity implements
         update_profile = (Button) findViewById(R.id.update_profile);
         manage_devices = (Button) findViewById(R.id.manage_devices);
 
+        noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) findViewById(R.id.noData);
+        noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING));
+
+        noInternetConnectionLayout.setVisibility(View.GONE);
+        noDataLayout.setVisibility(View.GONE);
 
         if (!languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
             manage_devices.setVisibility(View.GONE);
@@ -288,21 +307,25 @@ public class ProfileActivity extends AppCompatActivity implements
 
 // =======End ===========================//
 
-        Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-        get_userProfile_input.setAuthToken(authTokenStr);
-        get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
-        get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
-        get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
 
-        GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+            Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+            get_userProfile_input.setAuthToken(authTokenStr);
+            get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
+            get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
+            get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
+            GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+        }
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                try{
+                try {
                     InputMethodManager inputManager = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -315,7 +338,8 @@ public class ProfileActivity extends AppCompatActivity implements
                     editConfirmPassword.setVisibility(View.VISIBLE);
                     editNewPassword.setVisibility(View.VISIBLE);
                     changePassword.setVisibility(View.GONE);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
 
             }
         });
@@ -348,7 +372,7 @@ public class ProfileActivity extends AppCompatActivity implements
         dlgAlert.create().show();
     }
 
-    public void UpdateProfile(String first_name,String last_name,String phone_No) {
+    public void UpdateProfile(String first_name, String last_name, String phone_No) {
 
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(authTokenStr);
@@ -389,6 +413,7 @@ public class ProfileActivity extends AppCompatActivity implements
             if (code == 200) {
 
 
+                changePassword.setVisibility(View.VISIBLE);
                 editConfirmPassword.setText("");
                 editNewPassword.setText("");
                 editConfirmPassword.setVisibility(View.GONE);
@@ -396,6 +421,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(profileHandler.first_nameStr);
+
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
@@ -683,9 +709,9 @@ public class ProfileActivity extends AppCompatActivity implements
 
         }
 
-        if (code==200) {
+        if (code == 200) {
 
-            if (get_userProfile_output!=null) {
+            if (get_userProfile_output != null) {
 
 
                 if (Selected_Country_Id.equals("0")) {
@@ -774,9 +800,9 @@ public class ProfileActivity extends AppCompatActivity implements
                     }
                 }
             }
-        }else {
-            name_of_user.setText("");
-            emailAddressEditText.setText("");
+        } else {
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
         }
     }
 
@@ -814,7 +840,7 @@ public class ProfileActivity extends AppCompatActivity implements
     }
 
 
-    public boolean passwordMatchValidation(){
+    public boolean passwordMatchValidation() {
         return editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim());
     }
 }
