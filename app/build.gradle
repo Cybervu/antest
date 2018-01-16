@@ -496,9 +496,9 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
         leasy {
-            minSdkVersion 15
+            minSdkVersion 21
             applicationId 'com.release.leasy'
-            targetSdkVersion 23
+            targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""

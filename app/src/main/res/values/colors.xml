@@ -7,7 +7,7 @@
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
- <color name="toolbarTitleColor">#fff</color>
+ <color name="toolbarTitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
  <color name="navlogobackgroundcolor">#fff</color>
@@ -68,6 +68,8 @@
  <color name="edit_color2">#00FFFFFF</color>
  <color name="fb_button_background">#3b5998</color>
  <color name="edit_color">#dadada</color>
+ <color name="search_hint_color">#dadada</color>
+ <color name="search_text_color">#fff</color>
  <color name="spinner_card_color">#FF0000</color>
  <color name="colorAccent">#3b5998</color>
  <color name="spinner_card_color2">#FAFAFA</color>

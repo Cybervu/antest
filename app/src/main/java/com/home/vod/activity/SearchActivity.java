@@ -19,6 +19,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -32,6 +33,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -941,6 +943,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setIconifiedByDefault(false);
@@ -958,7 +962,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         final SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
         theTextArea.setBackgroundResource(R.drawable.edit);
-
         theTextArea.setHint(languagePreference.getTextofLanguage(TEXT_SEARCH_PLACEHOLDER, DEFAULT_TEXT_SEARCH_PLACEHOLDER));
         theTextArea.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
        /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
@@ -981,8 +984,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             v.setImageResource(R.drawable.ic_action_search_xlarge);
 
         }*/
-        theTextArea.setHintTextColor(Color.parseColor("#dadada"));//or any color that you want
-        theTextArea.setTextColor(Color.WHITE);
+        theTextArea.setHintTextColor(getResources().getColor(R.color.search_hint_color));//or any color that you want
+        theTextArea.setTextColor(getResources().getColor(R.color.search_text_color));
 
         theTextArea.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

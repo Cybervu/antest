@@ -1688,13 +1688,6 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 // Not implemented here
                 return false;
 
-            case R.id.menu_item_favorite:
-
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
-                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(favoriteIntent);
-                // Not implemented here
-                return false;
             case R.id.action_register:
 
                 Intent registerIntent = new Intent(ViewMoreActivity.this, RegisterActivity.class);

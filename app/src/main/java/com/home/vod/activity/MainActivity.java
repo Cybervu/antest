@@ -290,9 +290,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        toolbarTitleHandler=new ToolbarTitleHandler(this);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbarTitleHandler=new ToolbarTitleHandler(this);
         LogUtil.showLog("Abhishek", "Toolbar");
 
         //**** chromecast*************//*
