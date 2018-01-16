@@ -230,7 +230,6 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	String episodeId = "0";
 	String mlvfile = "";
 	String token = "";
-	LinearLayout back_layout;
 
 	private long enqueue;
 	private DownloadManager downloadManager;
