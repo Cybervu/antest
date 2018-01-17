@@ -183,8 +183,8 @@ public class FitnessActivity extends AppCompatActivity implements GetCategoryLis
     private int isFavorite = 0;
     Context adaptorContext;
     private String content_types_id;
-    private String content_id;
-    private String content_stream_id;
+    private String content_id = "";
+    private String content_stream_id = "";
     private boolean backfromactivity = false;
     private boolean index_clicked = false;
 
@@ -709,13 +709,25 @@ public class FitnessActivity extends AppCompatActivity implements GetCategoryLis
 
                 } else {
 
-                    if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
+
+                    final Intent movieDetailsIntent = new Intent(FitnessActivity.this, YogaPlayerActivity.class);
+                    movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, item.getPermalink());
+                    movieDetailsIntent.putExtra("CONTENT_ID", content_id);
+                    movieDetailsIntent.putExtra("CONTENT_STREAM_ID", content_stream_id);
+                    movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                   runOnUiThread(new Runnable() {
+                        public void run() {
+                            movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(movieDetailsIntent);
+                        }
+                    });
+                   /* if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
 
                         new Single_Part_Programme_Handler(FitnessActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         new Episode_Programme_Handler(FitnessActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
-                    }
+                    }*/
                 }
 
             }
@@ -1659,6 +1671,9 @@ public class FitnessActivity extends AppCompatActivity implements GetCategoryLis
             int isConverted = featureContentOutputModelArray.get(i).getIs_converted();
             int isPPV = featureContentOutputModelArray.get(i).getIs_ppv();
             int isAPV = featureContentOutputModelArray.get(i).getIs_advance();
+            content_id = featureContentOutputModelArray.get(i).getContent_id();
+            content_stream_id = featureContentOutputModelArray.get(i).getContent_stream_id();
+
 
             itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV,""));
             searchedItemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV,""));

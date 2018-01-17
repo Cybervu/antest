@@ -1159,7 +1159,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 moreVideosRecyclerView.setVisibility(View.VISIBLE);
                 moreVideosRecyclerView.setLayoutManager(mLayoutManager);
                 moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
+                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,getNextPosition(contentPosition));
               /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
                     @Override
                     public void onClick(View view, int position) {
@@ -1436,9 +1436,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             contentPosition = getIntent().getIntExtra("TAG", 0);
 
             questions = new ArrayList<EpisodesListModel>();
-
+            Log.v("SUBHAS", "contentPositionv for stretch" + contentPosition);
 
             questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+
             // Util.PlayListArrayModel = questions;
             String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
             clocktimetv.setText(clocktext);
@@ -1452,11 +1453,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-End_Timer();
-
-        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
+        Log.v("PROGRAM11", "called contentposition" + contentPosition);
+        Log.v("PROGRAM11", "called nextPosition" + nextPosition);
+        Log.v("PROGRAM11", "called questions" + questions.size());
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,getNextPosition(contentPosition));
 
         moreVideosRecyclerView.setAdapter(mAdapter);
+        Log.v("SUBHAS", "questions for stretch" + questions.size());
+        End_Timer();
+
         /////////////end
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -1648,7 +1653,8 @@ End_Timer();
         Log.v("Nihar", "" + questions.size() + "position :" + contentPosition);
 
         if(contentPosition >= questions.size() - 1){
-            player_next.setVisibility(View.GONE);
+            player_next.setVisibility(View.VISIBLE);
+            player_next.setClickable(false);
         }
         player_pause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3143,11 +3149,12 @@ End_Timer();
                             int totalsize = questions.size() - 1;
                             Log.v("Nihar", "" + totalsize);
                             if( isRepeated == true){
+
+                                Log.v("SUBHASS","isRepeated ===== "+isRepeated);
                                 stoptimertask();
                                 int tempPos = contentPosition;
                                 contentPosition = tempPos;
-                                // if (tempPos < questions.size() - 1) {
-                                // }
+
                                 getData();
                             }else {
                                 if (totalsize > contentPosition && contentPosition != questions.size()) {
@@ -3156,9 +3163,9 @@ End_Timer();
                                     nextPosition = nextPosition + 1;
                                     stoptimertask();
 
-                                    String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
-                                    clocktimetv.setText(clocktext);
-                                    mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions, contentPosition, nextPosition);
+                                   /* String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+                                    clocktimetv.setText(clocktext);*/
+                                    mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions, contentPosition, getNextPosition(contentPosition));
 
                                     moreVideosRecyclerView.setAdapter(mAdapter);
 
@@ -3175,12 +3182,11 @@ End_Timer();
 
                                     // commmented for release V & VI
 
-                                    durationTextView.setText(listModel.getEpisodeDuration());
+//                                    durationTextView.setText(listModel.getEpisodeDuration());
                                     playerModel.setVideoDuration(listModel.getEpisodeDuration());
                                     playerModel.setVideoTitle(listModel.getEpisodeTitle());
 
 //                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
-                                    /////genere
                                     videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
                                     ///video story text view start
@@ -3189,7 +3195,7 @@ End_Timer();
                                     String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION, DEFAULT_DESCRIPTION), "#4cbfb8");
                                     String desctitle = getColoredSpanned(listModel.getEpisodeDescription(), "#000000");
 
-                                    descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
+//                                    descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
 
 
                                     View decorView = getWindow().getDecorView();
@@ -3197,7 +3203,6 @@ End_Timer();
                                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
                                     );
-                                    ///end videostory
                                     Episodeid = listModel.getEpisodeMuviUniqueId();
                                     content_types_id = playerModel.getContentTypesId();
 
@@ -3210,7 +3215,7 @@ End_Timer();
                                     ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
                                     validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-//                                validateUserInput.setUserId("157218");
+//                                  validateUserInput.setUserId("157218");
                                     validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
                                     validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
                                     validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
@@ -4493,7 +4498,8 @@ End_Timer();
     }
 
     private void hideSystemUI() {
-        descriptionTitleTextVIew.setText("");
+        //commented for release V & VI
+//        descriptionTitleTextVIew.setText("");
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
         // doesn't resize when the system bars hide and show.
@@ -4512,7 +4518,7 @@ End_Timer();
         String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION,DEFAULT_DESCRIPTION), "#4cbfb8");
         String desctitle = getColoredSpanned(playerModel.getVideoStory(),"#000000");
 
-        descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
+//        descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
 
 
         View decorView = getWindow().getDecorView();
@@ -6937,7 +6943,7 @@ End_Timer();
        // if (video_completed == false) {
 
             AsyncResumeNextVideoLogDetails asyncResumeNextVideoLogDetails = new AsyncResumeNextVideoLogDetails();
-            asyncResumeNextVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            asyncResumeNextVideoLogDetails.execute();
        // }
         //Util.call_finish_at_onUserLeaveHint = true;
 
@@ -7179,16 +7185,18 @@ End_Timer();
 
         int totalsize = questions.size() - 1;
         Log.v("PROGRAM", "called contentposition" + contentPosition);
+        Log.v("PROGRAM", "called nextPosition" + nextPosition);
+        Log.v("PROGRAM", "called questions" + questions.size());
         //   if (totalsize > contentPosition && contentPosition != questions.size()) {
 
         // contentPosition = contentPosition + 1;
 
-        String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+       /* String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
         clocktimetv.setText(clocktext);
+*/
 
 
-
-        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,getNextPosition(contentPosition));
 
         moreVideosRecyclerView.setAdapter(mAdapter);
 
@@ -7206,7 +7214,7 @@ End_Timer();
         End_Timer();
         Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
         EpisodesListModel listModel = questions.get(contentPosition);
-        durationTextView.setText(listModel.getEpisodeDuration());
+//        durationTextView.setText(listModel.getEpisodeDuration());
         playerModel.setVideoDuration(listModel.getEpisodeDuration());
         playerModel.setVideoTitle(listModel.getEpisodeTitle());
         playerModel.setPosterImageId(listModel.getEpisodeThumbnailImageView());
@@ -7217,7 +7225,7 @@ End_Timer();
         videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
         ///video story text view start
-        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
+//        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
 //                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
 
         View decorView = getWindow().getDecorView();
@@ -7243,10 +7251,12 @@ End_Timer();
         if (contentPosition < questions.size() - 1 && isRepeated == false) {
             player_next.setVisibility(View.VISIBLE);
 
-        }/*else
+        }else
         {
-            player_next.setVisibility(View.INVISIBLE);
-        }*/
+            player_next.setVisibility(View.VISIBLE);
+            player_next.setClickable(false);
+
+        }
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -7259,7 +7269,7 @@ End_Timer();
 
         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
-        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+        asynValidateUserDetails.execute();
                           /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
                             asynLoadVideoUrls.execute();*/
         previous_matching_time = current_matching_time;
@@ -7341,5 +7351,12 @@ End_Timer();
         }
         updatePlayButton(mPlaybackState);*/
         PlayUsingCsat();
+    }
+
+    public int getNextPosition(int position) {
+        if (position == questions.size())
+            return position;
+        else
+            return ++position;
     }
 }

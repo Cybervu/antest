@@ -169,6 +169,13 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
                             content.setContent_types_id(jsonChildNode.optString("content_types_id"));
 
                         }
+                        if ((jsonChildNode.has("movie_id")) && jsonChildNode.getString("movie_id").trim() != null && !jsonChildNode.getString("movie_id").trim().isEmpty() && !jsonChildNode.getString("movie_id").trim().equals("null") && !jsonChildNode.getString("movie_id").trim().matches("")) {
+                            content.setContent_id(jsonChildNode.getString("movie_id"));
+                        }
+                        if ((jsonChildNode.has("movie_stream_id")) && jsonChildNode.getString("movie_stream_id").trim() != null && !jsonChildNode.getString("movie_stream_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_id").trim().matches("")) {
+                            content.setContent_stream_id(jsonChildNode.getString("movie_stream_id"));
+
+                        }
                         //videoTypeIdStr = "1";
 
                         if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {

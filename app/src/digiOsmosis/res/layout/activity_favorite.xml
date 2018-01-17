@@ -22,6 +22,7 @@
         android:layout_below="@+id/logo_image"
         android:id="@+id/categoryTitleRelativeLayout"
         android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_alignLeft="@+id/imagesGridView"
         android:layout_marginTop="25dp"
@@ -53,45 +54,43 @@
 
     </LinearLayout>
 
-   <!-- <RelativeLayout
+    <!-- our tablayout to display tabs  -->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_image"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        app:tabTextAppearance="@style/MineCustomTabText"
+        app:tabIndicatorHeight="0.3dp"
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        app:tabTextColor="@color/videotextColor"
+        app:tabMode="fixed"
+        android:visibility="visible"
+        app:tabMaxWidth="0dp"
+        android:theme="@style/MyMaterialTheme"/>
+
+   <!-- <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/marginRight20dp"
-        android:layout_marginBottom="@dimen/marginRight20dp"
-        android:padding="@dimen/marginleft10dp">
+        android:layout_below="@+id/logo_image"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
 
-        <TextView
-            android:layout_width="@dimen/sideTitle_line_width"
-            android:layout_height="@dimen/sideTitle_line_height"
-            android:id="@+id/colortitle"
-            android:background="@color/colorPrimary"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/marginleft10dp"
-            />
-
-
-        <TextView
-            android:id="@+id/sectionTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sample title"
-            android:textAllCaps="true"
-            android:textColor="@color/videotextColor"
-            android:textSize="@dimen/itemtitle_text_size"
-            android:layout_marginLeft="@dimen/marginRight20dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-    </RelativeLayout>
-
+        app:tabIndicatorHeight="0.3dp"
+        android:visibility="visible"
+        app:tabMaxWidth="0dp"/>
 -->
+
+    <!-- View pager to swipe views -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"/>
 
 
     <GridView

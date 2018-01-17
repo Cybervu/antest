@@ -121,12 +121,20 @@ import player.activity.ResumePopupActivity;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
@@ -167,16 +175,16 @@ import static player.utils.Util.timer;
  * @author Abhishek
  */
 
-public class DietDetailsActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,GetValidateUserAsynTask.GetValidateUserListener,
-        GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, VideoDetailsAsynctask.VideoDetailsListener {
+public class DietDetailsActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener, GetValidateUserAsynTask.GetValidateUserListener,
+        GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, VideoDetailsAsynctask.VideoDetailsListener {
 
     String PlanId = "";
     GetValidateUserAsynTask asynValidateUserDetails;
-    String dietPlanUrl= "";
-    TextView detailsTextView, videoStoryTextView, colortitle ;
+    String dietPlanUrl = "";
+    TextView detailsTextView, videoStoryTextView, colortitle;
     ImageView bannerImageView, playButton, moviePoster, share;
     TextView storyTitleLineDivider;
-    Button  dietPlanButton;
+    Button dietPlanButton;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
@@ -264,6 +272,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     EpisodesListModel itemToPlay;
     int ItemClickedPosition = 0;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+
     @Override
     public void onIPAddressPreExecuteStarted() {
 
@@ -320,7 +329,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     @Override
     public void onOrientationChange(int orientation) {
 
-        Log.v("Subhalaxmi","video done");
+        Log.v("Subhalaxmi", "video done");
 
         if (orientation == 90) {
             compressed = false;
@@ -361,27 +370,19 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         } else if (orientation == 180) {
 
             RelativeLayout.LayoutParams params1 = null;
-            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                if (DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
+                } else {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 }
-                else
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
-                }
-            }
-            else
-            {
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+            } else {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                }
-                else
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                } else {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                 }
             }
             player_layout.setLayoutParams(params1);
@@ -401,27 +402,19 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
 
             RelativeLayout.LayoutParams params1 = null;
-            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
+                } else {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
                 }
-                else
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
-                }
-            }
-            else
-            {
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+            } else {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                }
-                else
-                {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                } else {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                 }
             }
             player_layout.setLayoutParams(params1);
@@ -446,7 +439,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     public void onGetEpisodeDetailsPreExecuteStarted() {
 
 
-
         pDialog.show();
     }
 
@@ -465,17 +457,16 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
         itemData = new ArrayList<EpisodesListModel>();
 
-        if(itemData != null && itemData.size() >0){
+        if (itemData != null && itemData.size() > 0) {
             itemData.clear();
         }
 
-        Log.v("SUBHASS","data called === "+status);
+        Log.v("SUBHASS", "data called === " + status);
         if (status == 200) {
 
-            Log.v("SUBHASS","episodede ");
+            Log.v("SUBHASS", "episodede ");
             isAPV = episode_details_output.getIsAPV();
             isPPV = episode_details_output.getIs_ppv();
-
 
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
@@ -501,25 +492,25 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
             }
 
-            if(itemData!= null && itemData.size() >0){
+            if (itemData != null && itemData.size() > 0) {
                 clickItem(itemData.get(0), 0);
             }
             LogUtil.showLog("MUVI", "episode show...1");
 
             LogUtil.showLog("BISHAL", "itemdata==" + itemData);
 
-        }else{
+        } else {
 
 
             try {
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+
+                }
+            } catch (IllegalArgumentException ex) {
 
             }
-        } catch (IllegalArgumentException ex) {
-
-        }
-            Toast.makeText(DietDetailsActivity.this,"No Content Available",Toast.LENGTH_LONG).show();
+            Toast.makeText(DietDetailsActivity.this, "No Content Available", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -542,7 +533,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         boolean play_video = true;
 
 
-        Log.v("SUBHA"," video called startworkout button");
+        Log.v("SUBHA", " video called startworkout button");
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
@@ -689,7 +680,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
 
-
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
 
@@ -712,18 +702,18 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
-                    Log.v("pratik","tymg=="+playerModel.getPlayPos());
+                    Log.v("pratik", "tymg==" + playerModel.getPlayPos());
 
                     if (mCastSession != null &&
                             mCastSession.isConnected()) {
 
                         ///Added for resume cast watch
-                        Log.v("pratik","tym=="+playerModel.getPlayPos()*1000);
+                        Log.v("pratik", "tym==" + playerModel.getPlayPos() * 1000);
                         if ((playerModel.getPlayPos() * 1000) > 0) {
                             playerModel.setPlayPos(playerModel.getPlayPos());
                             Intent resumeIntent = new Intent(DietDetailsActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
-                            Log.v("pratik","tym==>0");
+                            Log.v("pratik", "tym==>0");
 
                         } else {
                            /* Played_Length = 0;
@@ -879,7 +869,71 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         }
 
         if (status > 0) {
-            if (status == 427) {
+            if (status == 425) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 426) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 427) {
 
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this);
@@ -900,6 +954,72 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                             }
                         });
                 dlgAlert.create().show();
+            } else if (status == 428) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(CROSSED_MAXIMUM_LIMIT, DEFAULT_CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                 /*   if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.CROSSED_MAXIMUM_LIMIT,Util.DEFAULT_CROSSED_MAXIMUM_LIMIT));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (Util.dataModel.getIsAPV() == 1 && status == 431) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                if (message != null && !message.equalsIgnoreCase("")) {
+                    dlgAlert.setMessage(message);
+                } else {
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ALREADY_PURCHASE_THIS_CONTENT, DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
+
+                }
+                //dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
+                        });
+                dlgAlert.create().show();
+
             } else if (status == 429 || status == 430) {
 
                 if (validUserStr != null) {
@@ -923,18 +1043,84 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             if (isAPV == 1 || isPPV == 1) {
-                                ShowPpvPopUp();
+                                //ShowPpvPopUp();
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                                Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
+                                /*Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
                                 intent.putExtra("PlayerModel", playerModel);
                                 intent.putExtra("PERMALINK", _permalink);
                                 intent.putExtra("SEASON", 0);
                                 intent.putExtra("Index", "0");
                                 intent.putExtra("Current_SEASON", 0);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
+                                startActivity(intent);*/
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
                             } else {
-                                ShowPpvPopUp();
+                                //ShowPpvPopUp();
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
                             }
                         }
 
@@ -943,16 +1129,60 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
 
             } else if (isAPV == 1 || isPPV == 1) {
-                ShowPpvPopUp();
+//                ShowPpvPopUp();
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
+                /*Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
                 intent.putExtra("PlayerModel", playerModel);
                 intent.putExtra("PERMALINK", _permalink);
                 intent.putExtra("SEASON", 0);
                 intent.putExtra("Index", "0");
                 intent.putExtra("Current_SEASON", 0);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(DietDetailsActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this);
@@ -1104,8 +1334,9 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     boolean compressed = true;
     ArrayList<EpisodesListModel> itemData;
     /* Added for trailer player ---------*/
-        ///by nihar
+    ///by nihar
     LinearLayout view_below;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1181,27 +1412,19 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         screenHeight = display.getHeight();
 
         RelativeLayout.LayoutParams params1 = null;
-        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-            if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+            if (DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
+            } else {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             }
-            else
-            {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
-            }
-        }
-        else
-        {
-            if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+        } else {
+            if (DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-            }
-            else
-            {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+            } else {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
             }
         }
 
@@ -1282,8 +1505,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                         primary_ll.setVisibility(View.GONE);
 
 
-
-
                         last_ll.setVisibility(View.VISIBLE);
                         center_play_pause.setVisibility(View.VISIBLE);
                         latest_center_play_pause.setVisibility(View.VISIBLE);
@@ -1323,27 +1544,19 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 } else {
 
                     RelativeLayout.LayoutParams params1 = null;
-                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                        if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        if (DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
+                        } else {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
                         }
-                        else
-                        {
-                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
-                        }
-                    }
-                    else
-                    {
-                        if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                    } else {
+                        if (DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                        }
-                        else
-                        {
-                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                        } else {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                         }
 
                     }
@@ -1389,8 +1602,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 //                Toast.makeText(ProgrammeActivity.this,"play button clicked",Toast.LENGTH_SHORT).show();
                 //added condition for check movieTrailerurl null or not .....by nihar #30-10-2017
 
-                if(movieTrailerUrlStr != null){
-
+                if (movieTrailerUrlStr != null) {
 
 
                     if (mCastSession != null && mCastSession.isConnected()) {
@@ -1463,13 +1675,9 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
                         togglePlayback();
 
-                    }
-
-
-                    else {
+                    } else {
                         emVideoView.setVideoURI(Uri.parse(movieTrailerUrlStr));
                     }
-
 
 
                 }
@@ -1477,8 +1685,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 //                emVideoView.setVideoURI(Uri.parse("https://d16wkdkbh7je0c.cloudfront.net/uploads/trailers/28506/Yoga_for_Weight_Loss.mp4?Expires=1509108246&Signature=IlwLU1x8mWyuE9LZaq1SdHsXG31sJzNcUB6902WnFIM3iswG589u2~syrZ138yYRHIh4SFfKOs7pDqljNWO8BLvsVrux09StsUuBOYyCuBuKTPvzeRj57E73SjS8mwFw-OD9AaQ~sdQ8n0175ghOyEdfyQl7A5dcGYZHD38wInWEYVm70X5YHvdzOqOtf5hf~XOOZ5a~7eM0So~pomwuF~LDvrEY1~2EBGwyiDQ-YnkLv6l2sSjxPGwQ0IFSSOnFUhxiHqbX4vgfmjAZpbZrGHLfawUlsxDV5rRsSy~Pw19jMFzCRVmGvAbQnCZ43acEXyEbgYUb8RXP2EtstM5WkQ__&Key-Pair-Id=APKAJYIDWFG3D6CNOYVA"));
             }
         });
-
-
 
 
         center_play_pause.setOnClickListener(new View.OnClickListener() {
@@ -1531,31 +1737,27 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         });
 
 
-
-
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
 
-
-                if(dietPlanUrl != null && !dietPlanUrl.trim().equals("null") && !dietPlanUrl.trim().equals("")){
+                if (dietPlanUrl != null && !dietPlanUrl.trim().equals("null") && !dietPlanUrl.trim().equals("")) {
 
                     try {
-                        Log.v("SUBHA","CLCIKED DIET"+dietPlanUrl);
+                        Log.v("SUBHA", "CLCIKED DIET" + dietPlanUrl);
                         //String url = "http://www.facebook.com/yourfanpagename";
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(dietPlanUrl));
                         startActivity(i);
-                    }catch (Exception e)
-                    {
-                        Toast.makeText(DietDetailsActivity.this,"No Diet Plan Available.",Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(DietDetailsActivity.this, "No Diet Plan Available.", Toast.LENGTH_LONG).show();
                     }
 
-                }else{
+                } else {
 
-                    Toast.makeText(DietDetailsActivity.this,"No Diet Plan Available.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DietDetailsActivity.this, "No Diet Plan Available.", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -1587,9 +1789,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         contentDetailsInput.setUser_id(useridStr);
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-
-
 
 
         /***favorite *****/
@@ -1732,7 +1931,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1810,8 +2009,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             contentTypesId = contentDetailsOutput.getContentTypesId();
 
 
-            Log.v("SUBHASHREE","movieTrailer === "+ movieTrailerUrlStr);
-
+            Log.v("SUBHASHREE", "movieTrailer === " + movieTrailerUrlStr);
 
 
             dietPlanButton.setText("VIEW DIET PLAN");
@@ -1823,19 +2021,18 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 colortitle1.setVisibility(View.GONE);*/
                 for (Map.Entry<String, String> entry : contentDetailsOutput.getMetadata().entrySet()) {
 
-                    Log.v("SUBHASS","program type value == "+entry.getValue());
+                    Log.v("SUBHASS", "program type value == " + entry.getValue());
 
-                        if (entry.getValue() != null && !entry.getValue().matches("")) {
+                    if (entry.getValue() != null && !entry.getValue().matches("")) {
 
                           /*  if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
 
                             }*/
-                            if (entry.getKey().equalsIgnoreCase("custom_url") ){
-                                dietPlanUrl = entry.getValue();
+                        if (entry.getKey().equalsIgnoreCase("custom_url")) {
+                            dietPlanUrl = entry.getValue();
 
-                            }
+                        }
 //                            programType= "WeekBased";
-
 
 
                     }
@@ -1852,7 +2049,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 benefitsStoryTextView.setText(benefits.trim());
                 colortitle1.setVisibility(View.VISIBLE);*/
             }
-
 
 
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -1876,9 +2072,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 playButton.setVisibility(View.VISIBLE);
                 Log.v("SUBHA", "trailer url yes === ");
             }
-
-
-
 
 
             dietPlanButton.setVisibility(View.VISIBLE);
@@ -1948,7 +2141,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
 
             }
-
 
 
             if (contentDetailsOutput.getSeason() != null) {
@@ -2138,7 +2330,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 updateProgressBar();
 
 
-
             }
 
             @Override
@@ -2169,7 +2360,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             public void onSessionEnding(CastSession session) {
 
                 cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
-                Log.v("ANU","cast_disconnected_position===="+cast_disconnected_position);
+                Log.v("ANU", "cast_disconnected_position====" + cast_disconnected_position);
 
             }
 
@@ -2182,9 +2373,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             }
 
             private void onApplicationConnected(CastSession castSession) {
-
-
-
 
 
                 try {
@@ -2256,7 +2444,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
-                if (video_prepared){
+                if (video_prepared) {
 
                     emVideoView.setEnabled(false);
                     MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
@@ -2460,7 +2648,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         if (mCastSession == null) {
             return;
         }
-      remoteMediaClient = mCastSession.getRemoteMediaClient();
+        remoteMediaClient = mCastSession.getRemoteMediaClient();
         if (remoteMediaClient == null) {
             return;
         }
@@ -2578,7 +2766,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
-        } else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+        } else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK) {
 //            new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
             // callValidateUserAPI();
 
@@ -2600,7 +2788,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                 seekBar.setProgress(34000);
             }else {*/
 
-            Log.v("Subhalaxmi","video done not complted");
+            Log.v("Subhalaxmi", "video done not complted");
 //            Toast.makeText(ProgrammeActivity.this,"video done not complted",Toast.LENGTH_SHORT).show();
             seekBar.setProgress(emVideoView.getCurrentPosition());
 //            }
@@ -2616,7 +2804,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                Log.v("Subhalaxmi","video done not started");
+                Log.v("Subhalaxmi", "video done not started");
 //                Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
                 findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
@@ -2649,7 +2837,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                         player_layout.setVisibility(View.GONE);
 
 
-                        Log.v("Subhalaxmi","video done complted");
+                        Log.v("Subhalaxmi", "video done complted");
 //                        Toast.makeText(ProgrammeActivity.this,"video done complted",Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
                             @Override
@@ -2774,9 +2962,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     }
 
 
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -2808,7 +2993,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             center_play_pause.setImageResource(R.drawable.ic_media_play);
             mHandler.removeCallbacks(updateTimeTask);
         } else {
-            Log.v("Subhalaxmi","video_completed ===== "+video_completed);
+            Log.v("Subhalaxmi", "video_completed ===== " + video_completed);
 
             if (video_completed) {
 
@@ -2816,7 +3001,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                     // onBackPressed();
 //                    backCalled();
                 }*/
-                Log.v("Subhalaxmi","video done");
+                Log.v("Subhalaxmi", "video done");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -2837,6 +3022,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
         }
     }
+
     private void hideSystemUI() {
         view_below.setVisibility(View.GONE);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -2894,19 +3080,16 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
         RelativeLayout.LayoutParams params1 = null;
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-        }
-        else
-        {
-            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+        } else {
+            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
         }
 
-    player_layout.setLayoutParams(params1);
-    compressed = true;
-    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+        player_layout.setLayoutParams(params1);
+        compressed = true;
+        compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
         view_below.setVisibility(View.VISIBLE);
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -2947,7 +3130,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     }
 
 
-
     public void initializeTimerTask() {
 
         timerTask = new TimerTask() {
@@ -2967,11 +3149,11 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         View view = new View(this);
         //int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height + 2);
         view.setLayoutParams(parms);
-      //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         parms.setMargins(0, 0, 0, 0);
         view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
@@ -2986,7 +3168,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
         FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.regular_fonts), textView);
         LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
-      //  int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        //  int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         TextViewParams.setMargins(0, topmargin, 0, 2);
         textView.setLayoutParams(TextViewParams);
@@ -3003,16 +3185,15 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         detail_text.setTextSize(13);
         // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
 
-       // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.light_fonts), detail_text);
 
         detail_text.setText(Details);
 
         LinearLayout.LayoutParams detailsParam = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
-        detailsParam.setMargins(0, 0, 0,topmargin);
+        detailsParam.setMargins(0, 0, 0, topmargin);
 
         detail_text.setLayoutParams(detailsParam);
-
 
 
         ///main layout view set
@@ -3021,33 +3202,31 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 
     }
 
-   private void loadEpisodes(){
-       Episode_Details_input episode_details_input = new Episode_Details_input();
+    private void loadEpisodes() {
+        Episode_Details_input episode_details_input = new Episode_Details_input();
 
-       episode_details_input.setAuthtoken(authTokenStr);
-       episode_details_input.setPermalink(_permalink);
-       episode_details_input.setSeries_number("");
-       episode_details_input.setLimit("10");
-       episode_details_input.setOffset("1");
-       // episode_details_input.setSeries_number("1");
-       episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-       GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, this, this);
-       getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
+        episode_details_input.setAuthtoken(authTokenStr);
+        episode_details_input.setPermalink(_permalink);
+        episode_details_input.setSeries_number("");
+        episode_details_input.setLimit("10");
+        episode_details_input.setOffset("1");
+        // episode_details_input.setSeries_number("1");
+        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, this, this);
+        getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
-       Log.v("SUBHASS","episode days");
-   }
-
+        Log.v("SUBHASS", "episode days");
+    }
 
 
     public void clickItem(EpisodesListModel item, int position) {
 
        /* Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
         startActivity(intent);*/
-        Log.v("SUBHASS","called after startbutton clicked == ");
+        Log.v("SUBHASS", "called after startbutton clicked == ");
 
         itemToPlay = item;
         ItemClickedPosition = position;
-
 
 
         SubTitleName.clear();
@@ -3079,10 +3258,10 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 //        playerModel.setCensorRating(censorRatingStr);
         playerModel.setContentTypesId(contentTypesId);
 
-        if(contentTypesId == 3){
+        if (contentTypesId == 3) {
             playerModel.setPosterImageId(item.getEpisodeThumbnailImageView());
 
-        }else {
+        } else {
             playerModel.setPosterImageId(posterImageId);
         }
 
@@ -3103,7 +3282,6 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
             } else {
 
 
-
                 Intent registerActivity = new LoginRegistrationOnContentClickHandler(DietDetailsActivity.this).handleClickOnContent();
                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 Util.check_for_subscription = 1;
@@ -3116,7 +3294,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
 //                registerActivity.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 registerActivity.putExtra("Index", 0);
                 registerActivity.putExtra("Current_SEASON", 0);
-                startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
                 //  startActivity(registerActivity);
 
 
@@ -3149,10 +3327,9 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
     }
 
 
-    public  void callForValidateUser()
-    {
-       Util.dataModel.setPurchase_type("episode");
-       Util.dataModel.setSeason_id(itemData.get(0).getEpisodeSeriesNo());
+    public void callForValidateUser() {
+        Util.dataModel.setPurchase_type("episode");
+        Util.dataModel.setSeason_id(itemData.get(0).getEpisodeSeriesNo());
 
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
@@ -3166,7 +3343,7 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }
 
-    private void ShowPpvPopUp(){
+    private void ShowPpvPopUp() {
         {
 
 
@@ -3443,9 +3620,9 @@ public class DietDetailsActivity extends AppCompatActivity implements SensorOrie
                     showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("PlayerModel", playerModel);
                     showPaymentIntent.putExtra("PERMALINK", _permalink);
-                    showPaymentIntent.putExtra("SEASON",0);
+                    showPaymentIntent.putExtra("SEASON", 0);
                     showPaymentIntent.putExtra("Current_SEASON", 0);
-                    showPaymentIntent.putExtra("Index","0");
+                    showPaymentIntent.putExtra("Index", "0");
 
                     // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 

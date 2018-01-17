@@ -197,7 +197,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             String key = iter.next();
                             try {
                                 Object value = custom_meta_data.get(key);
-                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level") ){
+                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level") || key.equalsIgnoreCase("calories") || key.equalsIgnoreCase("cooking_time") || key.equalsIgnoreCase("preparation_time") ){
 
                                 }else{
                                     String details = value.toString();
@@ -239,6 +239,25 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         }
                         else {
                             contentDetailsOutput.setDifficulty_level("");
+
+                        }
+                        if ((custom_meta_data.has("calories")) && custom_meta_data.optString("calories").trim() != null && !custom_meta_data.optString("calories").trim().isEmpty() && !custom_meta_data.optString("calories").trim().equals("null") && !custom_meta_data.optString("calories").trim().matches("")) {
+                            contentDetailsOutput.setCalories(custom_meta_data.optString("calories"));
+                        }
+                        else {
+                            contentDetailsOutput.setCalories("");
+
+                        }if ((custom_meta_data.has("cooking_time")) && custom_meta_data.optString("cooking_time").trim() != null && !custom_meta_data.optString("cooking_time").trim().isEmpty() && !custom_meta_data.optString("cooking_time").trim().equals("null") && !custom_meta_data.optString("cooking_time").trim().matches("")) {
+                            contentDetailsOutput.setCooking_time(custom_meta_data.optString("cooking_time"));
+                        }
+                        else {
+                            contentDetailsOutput.setCooking_time("");
+
+                        }if ((custom_meta_data.has("preparation_time")) && custom_meta_data.optString("preparation_time").trim() != null && !custom_meta_data.optString("preparation_time").trim().isEmpty() && !custom_meta_data.optString("preparation_time").trim().equals("null") && !custom_meta_data.optString("preparation_time").trim().matches("")) {
+                            contentDetailsOutput.setPreparation_time(custom_meta_data.optString("preparation_time"));
+                        }
+                        else {
+                            contentDetailsOutput.setPreparation_time("");
 
                         }
 

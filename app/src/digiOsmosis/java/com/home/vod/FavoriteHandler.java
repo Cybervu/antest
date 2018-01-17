@@ -2,6 +2,7 @@ package com.home.vod;
 
 import android.widget.GridView;
 
+import com.home.vod.activity.DigiOsmosisFavoriteActivity;
 import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.model.GridItem;

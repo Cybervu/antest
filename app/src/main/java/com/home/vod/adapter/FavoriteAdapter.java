@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.activity.DigiOsmosisFavoriteActivity;
 import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;

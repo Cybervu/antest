@@ -34,7 +34,7 @@
                 android:layout_height="@dimen/videogrid_height"
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
-                android:src="@drawable/data" />
+                 />
 
 
 

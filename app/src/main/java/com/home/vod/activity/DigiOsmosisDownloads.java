@@ -522,7 +522,7 @@ TextView titleTextView;
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

@@ -9,7 +9,8 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
-
+    <dimen name="view_videogrid_width">140dp</dimen>
+    <dimen name="view_videogrid_height">200dp</dimen>
     <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>
@@ -232,4 +233,6 @@
     <dimen name="fitness_margin_right">40dp</dimen>
     <dimen name="fitness_editText_height">40dp</dimen>
     <dimen name="fitness_editText_width">500dp</dimen>
+    <dimen name="player_recycler_height">250dp</dimen>
+    <dimen name="player_recycler_top">40dp</dimen>
 </resources>

@@ -80,12 +80,12 @@
         android:id="@+id/line_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/marginright5dp"
         android:layout_alignLeft="@+id/line_layout"
         android:layout_alignRight="@+id/line_layout"
         android:layout_below="@+id/line_layout"
-        android:layout_marginLeft="@dimen/marginRight20dp"
-        android:layout_marginRight="@dimen/marginRight20dp"
+        android:layout_marginLeft="@dimen/marginleft10dp"
+        android:layout_marginRight="@dimen/marginleft10dp"
         android:background="@color/line_divider_detailsPage"
         android:padding="@dimen/marginRight20dp" />
 

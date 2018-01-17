@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -22,55 +23,55 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.release.reelAfrican.R;
-import com.release.reelAfrican.actvity_audio.DemoActivity;
-import com.release.reelAfrican.adapter.FavoriteAdapter;
-import com.release.reelAfrican.adapter.VideoFilterAdapter;
-import com.release.reelAfrican.model.GridItem;
-import com.release.reelAfrican.utils.ProgressBarHandler;
-import com.release.reelAfrican.utils.Util;
+
+import com.home.apisdk.apiController.DeleteFavAsync;
+import com.home.apisdk.apiController.ViewFavouriteAsynTask;
+import com.home.apisdk.apiModel.DeleteFavInputModel;
+import com.home.apisdk.apiModel.DeleteFavOutputModel;
+import com.home.apisdk.apiModel.ViewFavouriteInputModel;
+import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
+import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.R;
+import com.home.vod.Single_Part_Programme_Handler;
+import com.home.vod.adapter.DigiOsmosisFavoriteAdapter;
+import com.home.vod.model.GridItem;
+import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
+import com.home.vod.util.ProgressBarHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
+
+import player.utils.Util;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /**
  * Created by Belal on 2/3/2016.
  */
 
 //Our class extending fragment
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements ViewFavouriteAsynTask.ViewFavouriteListener,DeleteFavAsync.DeleteFavListener{
 
     String isEpisodeStr = "";
     int videoHeight = 185;
     int videoWidth = 256;
     Bundle bundle;
-    private ArrayList<GridItem> mGridData;
     private ArrayList<String> url;
     private GridView mGridView;
     private ProgressBar mProgressBar;
     Context context;
-    private VideoFilterAdapter mGridAdapter;
-    AsynLoadVideos asynLoadVideos;
     String videoUrlStr;
     TextView nocontent;
     int offset = 1;
@@ -85,148 +86,73 @@ public class FavoritesFragment extends Fragment {
     String loggedInStr;
     SharedPreferences pref;
     int index;
-    private FavoriteAdapter customGridAdapter;
     //data to load videourl
     private String movieUniqueId;
     private String movieStreamUniqueId;
     // String videoUrlStr;
     String videoResolution = "BEST";
-
+    ProgressBarHandler pDialog,videoPDialog;
     private boolean mIsScrollingUp;
     private int mLastFirstVisibleItem;
     int scrolledPosition = 0;
     boolean scrolling;
-
+    String videoImageStrToHeight;
+    ArrayList<GridItem> itemData = new ArrayList<GridItem>();
+    PreferenceManager preferenceManager;
+    ViewFavouriteAsynTask asyncViewFavorite;
     //search
     String searchTextStr;
     boolean isSearched = false;
-
-
+    RelativeLayout noDataLayout;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle mBundleRecyclerViewState;
+    TextView noDataTextView;
+    TextView noInternetTextView;
+    RelativeLayout footerView;
+    private RelativeLayout noInternetConnectionLayout;
+    GridItem itemToPlay;
+//    private DigiOsmosisFavoriteHandler favoriteLayoutHanlder;
+    private DigiOsmosisFavoriteAdapter customGridAdapter;
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.vod, container, false);
+        View layout = inflater.inflate(R.layout.favorite_tablayout, container, false);
         mGridView = (GridView) layout.findViewById(R.id.imagesGridView);
         mProgressBar = (ProgressBar) layout.findViewById(R.id.progressBar);
-        nocontent = (TextView) layout.findViewById(R.id.nocontent);
-        mGridData = new ArrayList<>();
         url = new ArrayList<>();
         context = getActivity();
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         pref = context.getSharedPreferences(Util.LOGIN_PREF, 0);
         loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
         bundle = getArguments();
+        footerView = (RelativeLayout) layout.findViewById(R.id.loadingPanel);
+       /* favoriteLayoutHanlder = new DigiOsmosisFavoriteHandler(this);
+        favoriteLayoutHanlder.handleTitle();*/
+        noInternetConnectionLayout = (RelativeLayout) layout.findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) layout.findViewById(R.id.noData);
+        noInternetTextView = (TextView) layout.findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) layout.findViewById(R.id.noDataTextView);
+        noInternetTextView.setText(Util.getTextofLanguage(context, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(Util.getTextofLanguage(context, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
 
-        asynLoadVideos = new AsynLoadVideos();
-        asynLoadVideos.execute();
+        noInternetConnectionLayout.setVisibility(View.GONE);
+        noDataLayout.setVisibility(View.GONE);
+        footerView.setVisibility(View.GONE);
 
-        mGridView.setVisibility(View.VISIBLE);
+        LogUtil.showLog("MUVI","favorite calling");
+        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+        viewFavouriteInputModel.setAuthToken(authTokenStr);
+        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
+        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,this,context);
+        asyncViewFavorite.execute();
 
-        mGridView.setAdapter(customGridAdapter);
-        mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                a = true;
-                index = i;
-                if (customGridAdapter.getItem(i).isSelected() == false) {
-
-                    customGridAdapter.getItem(i).setSelected(true);
-                    customGridAdapter.getItem(i).setClicked(true);
-
-                    data_send = mGridData.get(i);
-
-                    String url = data_send.getImage();
-
-
-                } else {
-                    customGridAdapter.getItem(i).setSelected(false);
-
-                }
-                customGridAdapter.notifyDataSetChanged();
-                return true;
-            }
-        });
-
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                GridItem item = mGridData.get(position);
-//                itemToPlay = item;
-                String posterUrl = item.getImage();
-                String movieName = item.getTitle();
-                String movieGenre = item.getMovieGenre();
-                String moviePermalink = item.getPermalink();
+        LogUtil.showLog("MUVI","authtokenn = "+Util.authTokenStr);
+        LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
 
 
-                Log.v("bibhu", "moviePermalink =" + moviePermalink);
-                String movieTypeId = item.getVideoTypeId();
-                if (a) {
-                    a = false;
-                    return;
-                } else {
-
-                    if (moviePermalink.matches(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                        android.support.v7.app.AlertDialog.Builder dlgAlert = new android.support.v7.app.AlertDialog.Builder(getActivity());
-                        dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                        dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        dlgAlert.create().show();
-
-                    } else {
-
-                        if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                            final Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailsActivity.class);
-                            movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                            movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            getActivity().runOnUiThread(new Runnable() {
-                                public void run() {
-                                    movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(movieDetailsIntent);
-                                }
-                            });
 
 
-                        } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                            final Intent detailsIntent = new Intent(getActivity(), ShowWithEpisodesActivity.class);
-                            detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                            getActivity().runOnUiThread(new Runnable() {
-                                public void run() {
-                                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(detailsIntent);
-                                }
-                            });
-                        } else if (movieTypeId.trim().equalsIgnoreCase("5") || movieTypeId.trim().equalsIgnoreCase("6")) {
-
-                            Log.v("SUBHA", "audio data called" + movieTypeId);
-
-                            final Intent detailsIntent = new Intent(getActivity(), DemoActivity.class);
-                            detailsIntent.putExtra("PERMALINK", moviePermalink);
-                            detailsIntent.putExtra("CONTENT_TYPE", movieTypeId);
-                            getActivity().runOnUiThread(new Runnable() {
-                                public void run() {
-                                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(detailsIntent);
-                                }
-                            });
-
-
-                        }
-
-                    }
-                }
-
-
-            }
-        });
         mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -267,7 +193,7 @@ public class FavoritesFragment extends Fragment {
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
-                        listSize = mGridData.size();
+                        listSize = itemData.size();
                         if (mGridView.getLastVisiblePosition() >= itemsInServer - 1) {
                             return;
 
@@ -277,10 +203,14 @@ public class FavoritesFragment extends Fragment {
                         if (isNetwork == true) {
 
                             // default data
-                            asynLoadVideos = new AsynLoadVideos();
-                            asynLoadVideos.execute();
+                          /*  ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+                            viewFavouriteInputModel.setAuthToken(authTokenStr);
+                            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
+                            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,this,context);
+                            asyncViewFavorite.execute();
 
+*/
                             scrolling = false;
 
                         }
@@ -292,20 +222,60 @@ public class FavoritesFragment extends Fragment {
             }
         });
 
+
+        mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                a = true;
+                index = i;
+
+                Log.v("SUBHALAXMI","setOnItemLongClickListener"+ a);
+
+                if (customGridAdapter.getItem(i).isSelected() == false) {
+
+                    customGridAdapter.getItem(i).setSelected(true);
+                    customGridAdapter.getItem(i).setClicked(true);
+                    Log.v("SUBHALAXMI","data_send === "+ data_send);
+
+                    data_send = itemData.get(i);
+
+                    String url = data_send.getImage();
+
+
+                } else {
+                    customGridAdapter.getItem(i).setSelected(false);
+
+                }
+                customGridAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                GridItem item = mGridData.get(position);
+                GridItem item = itemData.get(position);
+                itemToPlay = item;
+                String posterUrl = item.getImage();
+                String movieName = item.getTitle();
+                String movieGenre = item.getMovieGenre();
                 String moviePermalink = item.getPermalink();
+
+
+                LogUtil.showLog("bibhu","moviePermalink ="+moviePermalink);
                 String movieTypeId = item.getVideoTypeId();
-                videoUrlStr = item.getVideoUrl();
-                // if searched
+                if (a){
+                    a=false;
+                    return;
+                }
+                else{
 
-                // for tv shows navigate to episodes
-                if ((movieTypeId.equalsIgnoreCase("3"))) {
                     if (moviePermalink.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
+                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context);
                         dlgAlert.setMessage(Util.getTextofLanguage(context, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
                         dlgAlert.setTitle(Util.getTextofLanguage(context, Util.SORRY, Util.DEFAULT_SORRY));
                         dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
@@ -317,62 +287,29 @@ public class FavoritesFragment extends Fragment {
                                     }
                                 });
                         dlgAlert.create().show();
+
                     } else {
 
-                        final Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(detailsIntent);
-                            }
-                        });
-                    }
+                        if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
+                           /* final Intent movieDetailsIntent = new Intent(FavoriteActivity.this, MovieDetailsActivity.class);
+                            movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                            movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(movieDetailsIntent);
+                                }
+                            });*/
+                            new Single_Part_Programme_Handler(context).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
 
-                } else if (movieTypeId.trim().equalsIgnoreCase("5") || movieTypeId.trim().equalsIgnoreCase("6")) {
-
-
-                    final Intent detailsIntent = new Intent(context, DemoActivity.class);
-                    detailsIntent.putExtra("PERMALINK", moviePermalink);
-                    detailsIntent.putExtra("CONTENT_TYPE", movieTypeId);
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(detailsIntent);
+                        } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
+                            new Episode_Programme_Handler(context).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                         }
-                    });
-
-                }
-
-
-                // for single clips and movies
-                else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                    final Intent detailsIntent = new Intent(context, MovieDetailsActivity.class);
-
-                    if (moviePermalink.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(Util.getTextofLanguage(context, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(context, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                        dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        dlgAlert.create().show();
-                    } else {
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(detailsIntent);
-                            }
-                        });
                     }
                 }
+
+
 
             }
         });
@@ -382,432 +319,152 @@ public class FavoritesFragment extends Fragment {
     }
 
 
-    public void removeFavorite(GridItem gridItem) {
+    public  void removeFavorite(GridItem gridItem,int pos){
         movieUniqueId = gridItem.getMovieUniqueId();
+        index = pos;
+        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+        deleteFavInputModel.setIsEpisode(isEpisodeStr);
+        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
+        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
 
-        AsynFavoriteDelete asynFavoriteDelete = new AsynFavoriteDelete();
-        asynFavoriteDelete.execute();
+        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel,this,context);
+        deleteFavAsync.execute();
+
+
+    }
+    @Override
+    public void onViewFavouritePreExecuteStarted() {
+        pDialog = new ProgressBarHandler(context);
+        pDialog.show();
+
     }
 
-    private class AsynFavoriteDelete extends AsyncTask<String, Void, Void> {
+    @Override
+    public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
 
+        LogUtil.showLog("MUVI","item data =="+ itemData);
 
-        String contName;
-        JSONObject myJson = null;
-        int status;
-        ProgressBarHandler pDialog;
-        String contMessage;
-        String responseStr;
-
-//    @Override
-//    protected void onPreExecute() {
-//        pDialog = new ProgressBarHandler(getActivity().getBaseContext());
-//        pDialog.show();
-//        Log.v("NIhar","onpreExecution");
-//    }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String urlRouteList = Util.rootUrl().trim() + Util.DeleteFavList.trim();
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("movie_uniq_id", movieUniqueId);
-                Log.v("Fav_act", "movieUniqueId  ========" + movieUniqueId);
-                httppost.addHeader("content_type", isEpisodeStr);
-                httppost.addHeader("user_id", loggedInStr);
-
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (pDialog != null && pDialog.isShowing()) {
-//                            pDialog.hide();
-//                            pDialog = null;
-//                        }
-//                        status = 0;
-//
-//                    }
-//
-//                });
-                }
-            } catch (IOException e) {
-//            if (pDialog != null && pDialog.isShowing()) {
-//                pDialog.hide();
-//                pDialog = null;
-//            }
-//            status = 0;
-                e.printStackTrace();
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-            if (responseStr != null) {
-                try {
-                    myJson = new JSONObject(responseStr);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                status = Integer.parseInt(myJson.optString("code"));
-                sucessMsg = myJson.optString("msg");
-//                statusmsg = myJson.optString("status");
+        }catch (IllegalArgumentException ex) {
 
-
-            }
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
+        String movieImageStr="";
 
-            showToast();
-            if (pDialog.isShowing() && pDialog != null) {
-                pDialog.hide();
+        for (int i = 0; i < viewFavouriteOutputModelArray.size(); i++) {
+
+            String movieName = viewFavouriteOutputModelArray.get(i).getTitle();
+            String contentTypesId = viewFavouriteOutputModelArray.get(i).getContentTypesId();
+            movieImageStr = viewFavouriteOutputModelArray.get(i).getPoster();
+            String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
+            isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
+            movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
+            if(contentTypesId.trim().equalsIgnoreCase("1") || contentTypesId.trim().equalsIgnoreCase("2") || contentTypesId.trim().equalsIgnoreCase("4") ) {
+                itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0, viewFavouriteOutputModelArray.get(i).getStory()));
+                LogUtil.showLog("MUVI", "item data ==" + itemData);
             }
-            Log.v("ANU", "REMOVED");
-            mGridData.remove(index);
+        }
+        if (itemData.size() <= 0) {
+
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                mGridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            mGridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        } else {
+            footerView.setVisibility(View.GONE);
+            mGridView.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            videoImageStrToHeight = movieImageStr;
+            if (firstTime == true) {
+                Picasso.with(getActivity()).load(videoImageStrToHeight
+                ).error(R.drawable.no_image).into(new Target() {
+
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        videoWidth = bitmap.getWidth();
+                        videoHeight = bitmap.getHeight();
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.execute();
+                    }
+
+                    //
+                    @Override
+                    public void onBitmapFailed(final Drawable errorDrawable) {
+                        LogUtil.showLog("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                        videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                        videoWidth = errorDrawable.getIntrinsicWidth();
+                        videoHeight = errorDrawable.getIntrinsicHeight();
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.execute();
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                    }
+                });
+
+            } else {
+                AsynLOADUI loadUI = new AsynLOADUI();
+                loadUI.execute();
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteFavPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(context);
+        pDialog.show();
+    }
+
+    @Override
+    public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
+
+        if (pDialog.isShowing() && pDialog != null) {
+            pDialog.hide();
+        }
+        if (status==200) {
+
+            this.sucessMsg=sucessMsg;
+            showToast();
+
+            LogUtil.showLog("ANU", "REMOVED"+index);
+            // gridView.setAdapter(customGridAdapter);
+
+
+            itemData.remove(index);
             mGridView.invalidateViews();
             customGridAdapter.notifyDataSetChanged();
             mGridView.setAdapter(customGridAdapter);
+
 
 
             Intent Sintent = new Intent("ITEM_STATUS");
             Sintent.putExtra("movie_uniq_id", movieUniqueId);
 
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(Sintent);
-            if (mGridData.size() <= 0) {
-
-
-                Log.v("SUBHA","item count == "+ mGridData.size());
-
-                nocontent.setVisibility(View.VISIBLE);
-            }
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(getActivity());
-            pDialog.show();
-
-
         }
     }
 
-    public class AsynLoadVideos extends AsyncTask<String, Void, Void> {
 
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int status;
-        String videoGenreStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoName = "";
-        String videoImageStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoPermalinkStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoTypeStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoTypeIdStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoUrlStr = Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA);
-
-        String movieUniqueIdStr = "";
-        String movieStreamUniqueIdStr = "";
-        int isConverted = 0;
-        int isAPV = 0;
-        int isPPV = 0;
-        String movieThirdPartyUrl = "";
-        int count;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-
-            mProgressBar.setVisibility(View.VISIBLE);
-
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            //singleItem = new ArrayList<SingleItemModel>();
-            String urlRouteList = Util.rootUrl().trim() + Util.hybridFavorite.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("limit", String.valueOf(limit));
-//                httppost.addHeader("offset", String.valueOf(offset));
-                httppost.addHeader("user_id", loggedInStr);
-                httppost.addHeader("type", "2");
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (mGridData != null) {
-                                mGridView.setVisibility(View.VISIBLE);
-                            } else {
-
-                                mGridView.setVisibility(View.GONE);
-                            }
-
-                            Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(), Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            mGridView.setVisibility(View.GONE);
-                        }
-                    });
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("status"));
-                    itemcount = Integer.parseInt(myJson.optString("item_count"));
-
-                   /* String items = myJson.optString("item_count");
-                    itemsInServer = Integer.parseInt(items);*/
-                }
-                Log.v("Nihar", "length " + status);
-                if (status > 0) {
-                    if (status == 200) {
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("movieList");
-
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            JSONObject jsonChildNode;
-                            try {
-                                jsonChildNode = jsonMainNode.getJSONObject(i);
-                                Log.v("nihar_c", "enter");
-                                movieUniqueId = jsonChildNode.getString("movie_uniq_id");
-
-//                               if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
-//                                    movieGenreStr = jsonChildNode.getString("genre");
-//
-//                                }
-                                if ((jsonChildNode.has("title")) && jsonChildNode.getString("title").trim() != null && !jsonChildNode.getString("title").trim().isEmpty() && !jsonChildNode.getString("title").trim().equals("null") && !jsonChildNode.getString("title").trim().matches("")) {
-                                    videoName = jsonChildNode.getString("title");
-                                    Log.v("mainActivity", videoName);
-                                }
-                                if ((jsonChildNode.has("poster")) && jsonChildNode.getString("poster").trim() != null && !jsonChildNode.getString("poster").trim().isEmpty() && !jsonChildNode.getString("poster").trim().equals("null") && !jsonChildNode.getString("poster").trim().matches("")) {
-                                    videoImageStr = jsonChildNode.getString("poster");
-                                    //movieImageStr = movieImageStr.replace("episode", "original");
-                                    Log.v("mainActivity", videoImageStr);
-
-                                }
-                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-                                    videoPermalinkStr = jsonChildNode.getString("permalink");
-//                                    moviePermalinkStr = "chit-kwint-she-the";
-                                    Log.v("bibhu", "Api permalink===" + videoPermalinkStr);
-
-                                }
-                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
-                                    videoTypeIdStr = jsonChildNode.getString("content_types_id");
-
-                                }
-
-                                if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
-                                    isEpisodeStr = jsonChildNode.getString("is_episode");
-
-                                }
-                                //videoTypeIdStr = "1";
-//
-
-                                mGridData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, "", "", videoPermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
-
-
-                            } catch (Exception e) {
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-
-
-                                        mGridView.setVisibility(View.GONE);
-                                    }
-                                });
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    } else {
-                        responseStr = "0";
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.v("nihar_c", "else_enter");
-
-                                mGridView.setVisibility(View.GONE);
-
-                            }
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mGridView.setVisibility(View.GONE);
-                    }
-                });
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            super.onPostExecute(result);
-
-
-            if (itemcount <= 0) {
-
-                nocontent.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                nocontent.setVisibility(View.GONE);
-                if (responseStr != null) {
-                    mProgressBar.setVisibility(View.GONE);
-
-                    if (getActivity() != null && videoImageStr != null) {
-
-                        final float density = getResources().getDisplayMetrics().density;
-
-                        Picasso.with(getActivity()).load(videoImageStr
-                        ).into(new Target() {
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                videoWidth = bitmap.getWidth();
-                                videoHeight = bitmap.getHeight();
-
-                                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-                                    if (videoWidth > videoHeight) {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
-                                    } else {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
-                                    }
-
-                                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-                                    if (videoWidth > videoHeight) {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
-                                    } else {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
-                                    }
-
-                                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-
-                                    mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
-
-
-                                } else {
-                                    if (videoWidth > videoHeight) {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
-                                    } else {
-                                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
-                                    }
-
-                                }
-                                if (videoWidth > videoHeight) {
-                                    if (density >= 3.5 && density <= 4.0) {
-                                        customGridAdapter = new FavoriteAdapter(getActivity(), R.layout.nexus_videos_grid_layout_land, mGridData, new FavoriteAdapter.closelistener() {
-                                            @Override
-                                            public void onCloseItemClick(int pos) {
-
-                                                AsynFavoriteDelete asynFavoriteDelete = new AsynFavoriteDelete();
-                                                asynFavoriteDelete.execute();
-
-                                            }
-                                        });
-                                    } else {
-                                        customGridAdapter = new FavoriteAdapter(getActivity(), R.layout.videos_280_grid_layout, mGridData, new FavoriteAdapter.closelistener() {
-                                            @Override
-                                            public void onCloseItemClick(int pos) {
-
-                                                AsynFavoriteDelete asynFavoriteDelete = new AsynFavoriteDelete();
-                                                asynFavoriteDelete.execute();
-
-                                            }
-                                        });
-
-                                    }
-                                    mGridView.setAdapter(customGridAdapter);
-                                } else {
-                                    if (density >= 3.5 && density <= 4.0) {
-                                        customGridAdapter = new FavoriteAdapter(getActivity(), R.layout.nexus_videos_grid_layout, mGridData, new FavoriteAdapter.closelistener() {
-                                            @Override
-                                            public void onCloseItemClick(int pos) {
-
-                                                AsynFavoriteDelete asynFavoriteDelete = new AsynFavoriteDelete();
-                                                asynFavoriteDelete.execute();
-                                            }
-                                        });
-                                    } else {
-                                        customGridAdapter = new FavoriteAdapter(getActivity(), R.layout.videos_grid_layout, mGridData, new FavoriteAdapter.closelistener() {
-                                            @Override
-                                            public void onCloseItemClick(int pos) {
-
-                                                AsynFavoriteDelete asynFavoriteDelete = new AsynFavoriteDelete();
-                                                asynFavoriteDelete.execute();
-
-
-                                            }
-                                        });
-
-                                    }
-                                    mGridView.setAdapter(customGridAdapter);
-                                }
-
-                            }
-
-                            @Override
-                            public void onBitmapFailed(final Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
-
-                            }
-                        });
-
-
-                    }
-
-
-                } else {
-
-
-                }
-            }
-        }
-
-    }
 
     public void showToast() {
 
@@ -828,5 +485,199 @@ public class FavoritesFragment extends Fragment {
         toast.show();
 
     }
+
+    private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            float density = getResources().getDisplayMetrics().density;
+
+            if (firstTime == true) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    mGridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+                }
+
+                mGridView.smoothScrollToPosition(0);
+                firstTime = false;
+                ViewGroup.LayoutParams layoutParams = mGridView.getLayoutParams();
+                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
+                mGridView.setLayoutParams(layoutParams);
+                mGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+                mGridView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
+                    mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
+                } else {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                    }
+
+                } if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
+                    mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
+                } else {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                    }
+
+                }
+                /*customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, mGridView, videoWidth,videoHeight);
+                mGridView.setAdapter(customGridAdapter);*/
+
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(context, R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+                    } else {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData , new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+
+                    }
+                } else {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+                    } else {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+
+                    }
+                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                }
+                mGridView.setAdapter(customGridAdapter);
+
+
+
+            } else {
+                // save RecyclerView state
+                mBundleRecyclerViewState = new Bundle();
+                Parcelable listState = mGridView.onSaveInstanceState();
+                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+
+
+              /*  if (videoWidth > videoHeight) {
+                    customGridAdapter = new VideoFilterAdapter(FavoriteActivity.this, R.layout.videos_280_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                } else {
+                    customGridAdapter = new VideoFilterAdapter(FavoriteActivity.this, R.layout.videos_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                }*/
+
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+                    } else {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+
+                    }
+                } else {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+                    } else {
+                        customGridAdapter = new DigiOsmosisFavoriteAdapter(getActivity(), R.layout.favorite_tablisting, itemData, new DigiOsmosisFavoriteAdapter.closelistener() {
+                            @Override
+                            public void onCloseItemClick(int pos) {
+                                removeFavorite(data_send,pos);
+                            }
+                        });
+
+                    }
+                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                }
+                mGridView.setAdapter(customGridAdapter);
+              /*  customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, mGridView, videoWidth,videoHeight);
+                mGridView.setAdapter(customGridAdapter);*/
+
+                if (mBundleRecyclerViewState != null) {
+                    mGridView.onRestoreInstanceState(listState);
+                }
+
+            }
+        }
+
+
+    }
+
+
 
 }

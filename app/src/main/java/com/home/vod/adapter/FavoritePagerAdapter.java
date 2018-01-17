@@ -4,11 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.release.reelAfrican.activity.Aod;
-import com.release.reelAfrican.activity.FavoriteAod;
-import com.release.reelAfrican.activity.FavoriteVod;
-import com.release.reelAfrican.activity.Physy;
-import com.release.reelAfrican.activity.Vod;
+import com.home.vod.fragment.FavoritesFragment;
+import com.home.vod.fragment.FollowedFragment;
 
 /**
  * Created by Belal on 2/3/2016.
@@ -32,10 +29,10 @@ public class FavoritePagerAdapter extends FragmentStatePagerAdapter {
         //Returning the current tabs
         switch (position) {
             case 0:
-                FavoriteVod tab1 = new FavoriteVod();
+                FavoritesFragment tab1 = new FavoritesFragment();
                 return tab1;
             case 1:
-                FavoriteAod tab2 = new FavoriteAod();
+                FollowedFragment tab2 = new FollowedFragment();
                 return tab2;
             default:
                 return null;
@@ -54,11 +51,13 @@ public class FavoritePagerAdapter extends FragmentStatePagerAdapter {
         //this is where you set the titles
         switch(position) {
             case 0:
-                return "Vod";
+                return "FAVORITES";
             case 1:
-                return "Audio";
+                return "FOLLOWED";
 
         }
         return null;
     }
 }
+
+

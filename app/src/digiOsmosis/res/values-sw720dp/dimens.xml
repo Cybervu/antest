@@ -14,7 +14,8 @@
     <dimen name="singleimgheight">216dp</dimen>
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
-
+    <dimen name="view_videogrid_width">140dp</dimen>
+    <dimen name="view_videogrid_height">200dp</dimen>
 
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>

@@ -28,6 +28,14 @@ public class Content_List_Handler {
         }else {
             return new VideosListFragment();
         }
+
+        /*if (title.equalsIgnoreCase("yoga")){
+            return new YogaFragment();
+
+        }else {
+            return new VideosListFragment();
+        }*/
+
     }
 
 }

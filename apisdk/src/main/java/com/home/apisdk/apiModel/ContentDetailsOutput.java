@@ -101,6 +101,34 @@ public class ContentDetailsOutput {
     String duration;
     String repetition;
     String difficulty_level;
+    String preparation_time;
+    String cooking_time;
+
+    public String getCalories() {
+        return calories;
+    }
+
+    public void setCalories(String calories) {
+        this.calories = calories;
+    }
+
+    public String getPreparation_time() {
+        return preparation_time;
+    }
+
+    public void setPreparation_time(String preparation_time) {
+        this.preparation_time = preparation_time;
+    }
+
+    public String getCooking_time() {
+        return cooking_time;
+    }
+
+    public void setCooking_time(String cooking_time) {
+        this.cooking_time = cooking_time;
+    }
+
+    String calories;
 
     /**
      * This Method is use to Get the Season

@@ -6,6 +6,7 @@ package com.home.vod.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +18,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.activity.SeasonActivity;
+import com.home.vod.activity.WeekActivity;
 import com.home.vod.model.WeekModel;
 import com.home.vod.preferences.LanguagePreference;
 
 import java.util.ArrayList;
+
+import static com.home.vod.util.Constant.DAYS_DATA;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.MyViewHolder> {
 
@@ -44,8 +51,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.MyViewHolder> 
         }
     }
 
-    public WeekAdapter(Context context, int layoutResourceId,
-                       ArrayList<WeekModel> data) {
+    public WeekAdapter(Context context, int layoutResourceId, ArrayList<WeekModel> data) {
         this.layoutResourceId = layoutResourceId;
         this.mContext = context;
         this.data = data;
@@ -69,6 +75,21 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+        holder.card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent(mContext, SeasonActivity.class);
+                in.putExtra(SEASON_INTENT_KEY, data.get(position).getWeekId());
+                in.putExtra(PERMALINK_INTENT_KEY, data.get(position).getPremalink());
+                in.putExtra(DAYS_DATA,data.get(position).getWeekDays());
+                in.putExtra("Index",String.valueOf(position));
+                mContext.startActivity(in);
+
+            }
+        });
+
         WeekModel album = data.get(position);
         holder.title.setText(album.getWeekName());
      //   holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_circle));

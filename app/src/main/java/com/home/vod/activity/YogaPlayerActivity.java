@@ -207,12 +207,20 @@ import player.utils.DBHelper;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
@@ -243,6 +251,7 @@ import static com.home.vod.preferences.LanguagePreference.REPETITION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.util.Constant.PERMALINK_FORCONTENT_KEY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
@@ -314,6 +323,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     String name;
     String difficulty_level;
     String repetition;
+    String preparation_time;
+    String cooking_time;
+    String calories;
     String email, id;
     long PreviousUsedData_By_DownloadContent = 0;
     String ipAddres = "";
@@ -337,8 +349,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
-    int isFreeContent = 0,  isConverted, contentTypesId ;
+    int isFreeContent = 0, isConverted, contentTypesId;
     String bannerImageId, posterImageId, permalinkStr, contentIdStr, contentStreamIdStr;
+    String permalinkForContent = "";
     String videoDurationStr = "";
     boolean castStr = false;
     int isFavorite;
@@ -347,7 +360,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     String priceForUnsubscribedStr, priceFosubscribedStr;
 
     GetIpAddressAsynTask asynGetIpAddress;
-
 
 
     ///////////////////////////////////////////////////////////////////
@@ -444,7 +456,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
     private String movieUrl;
-    private int isPPV , isAPV ;
+    private int isPPV, isAPV;
     private String emailIdStr = "";
     private String userIdStr;
     private int content_types_id;
@@ -464,6 +476,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     int current_played_length = 0;
     long cast_disconnected_position = 0;
+
     @Override
     public void onIPAddressPreExecuteStarted() {
 
@@ -474,7 +487,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         ipAddres = ipAddressStr;
 
-        Log.v("SUBHA","ipaddress value === " + ipAddres);
+        Log.v("SUBHA", "ipaddress value === " + ipAddres);
         return;
     }
 
@@ -567,7 +580,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
                 } else {
-                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
                 }
             } else {
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -914,9 +927,16 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
         }
-
+        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
+        diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
+        repetitionTitleTextView = (TextView) findViewById(R.id.repetitionTitleTextView);
         contentIdStr = getIntent().getStringExtra("CONTENT_ID");
         contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
+
+        permalinkForContent = getIntent().getStringExtra(PERMALINK_FORCONTENT_KEY);
+
+        Log.v("SUBHASHREE", "permalink for content foood   " + permalinkForContent);
+
         languagePreference = LanguagePreference.getLanguagePreference(YogaPlayerActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
@@ -937,9 +957,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         colortitle = (TextView) findViewById(R.id.colortitle);
         colortitle1 = (TextView) findViewById(R.id.colortitle1);
         benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
-        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
-        diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
-        repetitionTitleTextView = (TextView) findViewById(R.id.repetitionTitleTextView);
+
         favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView);
         relatedContentList = (RecyclerView) findViewById(R.id.featureContent);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
@@ -955,7 +973,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
 
         played_length = playerModel.getPlayPos() * 1000;
-        Log.v("pratik","played_length==============="+played_length);
+        Log.v("pratik", "played_length===============" + played_length);
         current_played_length = played_length;
         PreviousUsedDataByApp(true);
         PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();
@@ -1034,6 +1052,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 permalinkStr = item.getPermalink();
                 contentIdStr = item.getContentId();
+
                 contentStreamIdStr = item.getContentStreamId();
                 useridStr = preferenceManager.getUseridFromPref();
 
@@ -1203,7 +1222,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
             } else {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
             }
         } else {
             if (YogaPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1395,12 +1414,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 progressView.setVisibility(View.VISIBLE);
 
 
-
                 preLoadVideos(contentDetailsOutputModel);
             }
         });
-
-
 
 
         center_play_pause.setOnClickListener(new View.OnClickListener() {
@@ -1429,11 +1445,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         });
 
 
-
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
-                Log.v("ANU","PREPARED CALLED===");
+                Log.v("ANU", "PREPARED CALLED===");
 
                 video_completed = false;
                 video_prepared = true;
@@ -1480,11 +1495,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         startTimer();
 
 
-                        Log.v("SUBHA","played_length === " + played_length);
-                        Log.v("pratik","played_length when prepared=== " + Util.dataModel.getPlayPos() * 1000 );
-                        played_length=Util.dataModel.getPlayPos() * 1000;
+                        Log.v("SUBHA", "played_length === " + played_length);
+                        Log.v("pratik", "played_length when prepared=== " + Util.dataModel.getPlayPos() * 1000);
+                        played_length = Util.dataModel.getPlayPos() * 1000;
 
-                        if (Util.dataModel.getPlayPos() * 1000  > 0) {
+                        if (Util.dataModel.getPlayPos() * 1000 > 0) {
                             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                             player.utils.Util.call_finish_at_onUserLeaveHint = false;
 
@@ -1598,7 +1613,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 finish();
             }
         }
-
 
 
         /***favorite *****/
@@ -1796,7 +1810,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         }
 
 
-
         percentg.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -1862,9 +1875,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         );
 
 
-
-
-
     }
 
 /*chromecast-------------------------------------*/
@@ -1908,7 +1918,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1979,6 +1989,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
             repetition = contentDetailsOutput.getRepetition();
+            calories = contentDetailsOutput.getCalories();
+            preparation_time = contentDetailsOutput.getPreparation_time();
+            cooking_time = contentDetailsOutput.getCooking_time();
             difficulty_level = contentDetailsOutput.getDifficulty_level();
             name = contentDetailsOutput.getName();
             contentId = contentDetailsOutput.getId();
@@ -2000,10 +2013,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             diffcultyTitleTextView.setText(difficulty_level);
             repetitionTitleTextView.setText(repetition);*/
 
+
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
-            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
-            diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
-            repetitionTitleTextView.setText(languagePreference.getTextofLanguage(REPETITION_TITLE, DEFAULT_REPETITION_TITLE));
+
             if (contentDetailsOutput.getMetadata() != null || contentDetailsOutput.getMetadata().size() > 0) {
                /* benefitsTitleTextView.setVisibility(View.GONE);
                 colortitle1.setVisibility(View.GONE);*/
@@ -2039,41 +2051,15 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 colortitle1.setVisibility(View.VISIBLE);
             }*/
 
-            if (duration.matches("")) {
-                durationTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
 
-            } else {
 
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
-                days.setText(duration);
-            }
-            if (difficulty_level.matches("")) {
-                diffcultyTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
-            } else {
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
-                difficulty.setText(difficulty_level);
-            }
+
             if (videoDurationStr.matches("")) {
                 durationRelativeLayout.setVisibility(View.GONE);
             } else {
                 durationRelativeLayout.setVisibility(View.GONE);
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), clocktime);
                 clocktime.setText(videoDurationStr);
-            }
-            if (repetition.matches("")) {
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
-                repetitionTitleTextView.setVisibility(View.VISIBLE);
-                lineTextview1.setVisibility(View.GONE);
-            } else {
-                lineTextview1.setVisibility(View.GONE);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
-                repetitionTextView.setText(repetition);
             }
 
 
@@ -2085,6 +2071,82 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 difficulty.setGravity(Gravity.CENTER);
             }
 
+            if (permalinkForContent.equalsIgnoreCase("food")) {
+
+                durationTitleTextView.setText("PREP TIME");
+                diffcultyTitleTextView.setText("COOKING TIME");
+                repetitionTitleTextView.setText("CALORIES");
+
+                if (preparation_time.matches("")) {
+                    durationTitleTextView.setVisibility(View.GONE);
+                    lineTextview.setVisibility(View.GONE);
+
+                } else {
+
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
+                    days.setText(preparation_time);
+
+                }
+                if (cooking_time.matches("")) {
+                    diffcultyTitleTextView.setVisibility(View.GONE);
+                    lineTextview.setVisibility(View.GONE);
+                } else {
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
+                    difficulty.setText(cooking_time);
+                }
+                if (calories.matches("")) {
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
+                    repetitionTitleTextView.setVisibility(View.GONE);
+                    lineTextview1.setVisibility(View.GONE);
+                } else {
+                    lineTextview1.setVisibility(View.GONE);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
+                    repetitionTextView.setText(calories);
+
+                }
+            } else {
+                durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+                diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
+                repetitionTitleTextView.setText(languagePreference.getTextofLanguage(REPETITION_TITLE, DEFAULT_REPETITION_TITLE));
+
+                if (duration.matches("")) {
+                    durationTitleTextView.setVisibility(View.GONE);
+                    lineTextview.setVisibility(View.GONE);
+
+                } else {
+
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
+                    days.setText(duration);
+
+                }
+                if (difficulty_level.matches("")) {
+                    diffcultyTitleTextView.setVisibility(View.GONE);
+                    lineTextview.setVisibility(View.GONE);
+                } else {
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
+                    difficulty.setText(difficulty_level);
+                }
+                if (repetition.matches("")) {
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
+                    repetitionTitleTextView.setVisibility(View.GONE);
+                    lineTextview1.setVisibility(View.GONE);
+                } else {
+                    lineTextview1.setVisibility(View.GONE);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
+                    repetitionTextView.setText(repetition);
+
+                }
+
+
+            }
 
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 detailsTextView.setVisibility(View.GONE);
@@ -2417,7 +2479,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             @Override
             public void onSessionStarted(CastSession session, String sessionId) {
                 onApplicationConnected(session);
-                Log.v("ANU","SESSION===="+session);
+                Log.v("ANU", "SESSION====" + session);
             }
 
             @Override
@@ -2433,7 +2495,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             public void onSessionEnding(CastSession session) {
 
 
-                if (session!= null) {
+                if (session != null) {
                     cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
                     Log.v("ANU", "cast_disconnected_position" + cast_disconnected_position);
                 }
@@ -2456,8 +2518,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
                 mCastSession = castSession;
-                Log.v("ANU","mCastSession===="+mCastSession);
-                Log.v("ANU","castSession===="+castSession);
+                Log.v("ANU", "mCastSession====" + mCastSession);
+                Log.v("ANU", "castSession====" + castSession);
                 stoptimertask();
                 player.utils.Util.call_finish_at_onUserLeaveHint = false;
                 player.utils.Util.hide_pause = true;
@@ -2465,7 +2527,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 latest_center_play_pause.setVisibility(View.VISIBLE);
                 emVideoView.setEnabled(false);
 
-                Log.v("ANU","on application connected start");
+                Log.v("ANU", "on application connected start");
                 if (emVideoView.isPlaying()) {
                     emVideoView.pause();
                     latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
@@ -2488,9 +2550,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 //                if (SubTitlePath.size() > 0)
 //                    subtitle_change_btn.setVisibility(View.VISIBLE);
 //                primary_ll.setVisibility(View.VISIBLE);
-
-
-
 
 
                 mLocation = PlaybackLocation.REMOTE;
@@ -2548,8 +2607,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 }
 
 
-                Log.v("ANU","video_prepared ==****=="+video_prepared);
-                if (video_prepared){
+                Log.v("ANU", "video_prepared ==****==" + video_prepared);
+                if (video_prepared) {
 
                     emVideoView.setEnabled(false);
                     MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
@@ -2560,7 +2619,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
 
 
-                    Log.v("ANU","playerModel.getVideoTitle()===="+playerModel.getVideoTitle());
+                    Log.v("ANU", "playerModel.getVideoTitle()====" + playerModel.getVideoTitle());
                     String mediaContentType = "videos/mp4";
                     if (playerModel.getVideoUrl().contains(".mpd")) {
                         mediaContentType = "application/dash+xml";
@@ -2855,8 +2914,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
                             // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                            Log.v("ANU","DOING 2=========");
-                            Log.v("ANU","Played_Length 2========="+Played_Length);
+                            Log.v("ANU", "DOING 2=========");
+                            Log.v("ANU", "Played_Length 2=========" + Played_Length);
                             loadRemoteMedia(Played_Length, true);
 
 
@@ -2893,7 +2952,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);*/
 
-                Log.v("ANU","DOING 3=========");
+                Log.v("ANU", "DOING 3=========");
                 if (mCastSession != null && mCastSession.isConnected()) {
                     Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
 
@@ -2972,14 +3031,14 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 1001){
+        if (resultCode == RESULT_OK && requestCode == 1001) {
 
             player.utils.Util.call_finish_at_onUserLeaveHint = true;
 
 
             if (data.getStringExtra("yes").equals("1002")) {
 
-                Log.v("pratik","plaied len afer resume=="+played_length);
+                Log.v("pratik", "plaied len afer resume==" + played_length);
                 watchStatus = "halfplay";
                 playerPosition = playerModel.getPlayPos();
                 player_start_time = playerPosition;
@@ -3049,8 +3108,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 asyncVideoLogDetails = new AsyncVideoLogDetails();
                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             }
-        }
-        else if (resultCode == RESULT_OK && requestCode == 5555) {
+        } else if (resultCode == RESULT_OK && requestCode == 5555) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
@@ -3094,8 +3152,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 Played_Length = 0;
                 togglePlayback();
             }
-        }
-        else if (requestCode == 30060 && resultCode == RESULT_OK) {
+        } else if (requestCode == 30060 && resultCode == RESULT_OK) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
@@ -3120,8 +3177,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
-        }
-        else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+        } else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK) {
             callValidateUserAPI();
         }
     }
@@ -3163,10 +3219,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 } else {
                     if (current_matching_time >= emVideoView.getDuration()) {
-                        try{
+                        try {
                             stoptimertask();
                             mHandler.removeCallbacks(updateTimeTask);
-                        }catch (Exception e){}
+                        } catch (Exception e) {
+                        }
                         //  pause_play.setImageResource(R.drawable.ic_media_play);
 //                    emVideoView.release();
 //                    emVideoView.reset();
@@ -3231,7 +3288,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             double pourcent = seekBar.getProgress() / (double) seekBar.getMax();
                             int offset = seekBar.getThumbOffset();
                             int seekWidth = seekBar.getWidth();
-                            int val = (int) Math.round(pourcent * (seekWidth - 2*offset));
+                            int val = (int) Math.round(pourcent * (seekWidth - 2 * offset));
                             int labelWidth = current_time.getWidth();
                             current_time.setX(offset + seekBar.getX() + val
                                     - Math.round(pourcent * offset)
@@ -3313,8 +3370,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         total_time.setText(TotalTime);
         current_time.setText(Current_Time);
     }
-
-
 
 
     /* ------ Added for Trailer ------*/
@@ -3429,7 +3484,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
 
             } else {
-                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (screenHeight * 35) / 100);
             }
         } else {
             if (YogaPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -3499,7 +3554,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         View view = new View(this);
         int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width - 1, height + 2);
         view.setLayoutParams(parms);
@@ -3620,7 +3675,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         dbModel.setStreamUniqueId(contentDetailsOutput.getMovieStreamUniqId());
 //        dbModel.setThirdPartyUrl(contentDetailsOutput.getEpisodeThirdPartyUrl());
         dbModel.setVideoTitle(contentDetailsOutput.getName());
-        Log.v("ANU","contentDetailsOutput.getName()===="+contentDetailsOutput.getName());
+        Log.v("ANU", "contentDetailsOutput.getName()====" + contentDetailsOutput.getName());
         dbModel.setVideoStory(contentDetailsOutput.getStory());
 //        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
         dbModel.setVideoDuration(contentDetailsOutput.getVideoDuration());
@@ -3659,10 +3714,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         Util.check_for_subscription = 1;
                         resumeCast.putExtra("PlayerModel", playerModel);
-                        startActivityForResult(resumeCast,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                        startActivityForResult(resumeCast, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
 //                                        startActivity(resumeCast);
-
 
 
                     } else {
@@ -3672,7 +3726,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         Intent registerActivity = new LoginRegistrationOnContentClickHandler(YogaPlayerActivity.this).handleClickOnContent();
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         registerActivity.putExtra("PlayerModel", playerModel);
-                        startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
                     }
                     //showLoginDialog();
@@ -3709,7 +3763,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 registerActivity.putExtra("PlayerModel", playerModel);
 //                        startActivity(registerActivity);
-                startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
             }
         } else {
@@ -3733,11 +3787,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         }
 
 
-
-
     }
 
-    private void callValidateUserAPI(){
+    private void callValidateUserAPI() {
         Log.v("MUVI", "validate user details");
 
         ValidateUserInput validateUserInput = new ValidateUserInput();
@@ -3816,8 +3868,72 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         if (status > 0) {
 
-            Log.v("SUBHA11","STATUS === "+ status);
-            if (status == 427) {
+            Log.v("SUBHA11", "STATUS === " + status);
+            if (status == 425) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 426) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 427) {
 
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this);
@@ -3838,6 +3954,72 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             }
                         });
                 dlgAlert.create().show();
+            } else if (status == 428) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(CROSSED_MAXIMUM_LIMIT, DEFAULT_CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                 /*   if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.CROSSED_MAXIMUM_LIMIT,Util.DEFAULT_CROSSED_MAXIMUM_LIMIT));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (Util.dataModel.getIsAPV() == 1 && status == 431) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                if (message != null && !message.equalsIgnoreCase("")) {
+                    dlgAlert.setMessage(message);
+                } else {
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ALREADY_PURCHASE_THIS_CONTENT, DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
+
+                }
+                //dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
+                        });
+                dlgAlert.create().show();
+
             } else if (status == 429 || status == 430) {
 
                 if (validUserStr != null) {
@@ -3856,15 +4038,59 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                                if(contentTypesId == 3){
+                                if (contentTypesId == 3) {
                                     // Show Popup
-                                    ShowPpvPopUp();
+//                                    ShowPpvPopUp();
+
+                                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                    dlgAlert.setCancelable(false);
+                                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+
+
+                                                }
+                                            });
+                                    dlgAlert.create().show();
                                 } else {
                                     // Go to ppv Payment
-                                    payment_for_single_part();
+//                                    payment_for_single_part();
+
+                                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                    dlgAlert.setCancelable(false);
+                                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+
+
+                                                }
+                                            });
+                                    dlgAlert.create().show();
                                 }
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                                Intent intent = new Intent(YogaPlayerActivity.this, SubscriptionActivity.class);
+                               /* Intent intent = new Intent(YogaPlayerActivity.this, SubscriptionActivity.class);
                                 intent.putExtra("PlayerModel", playerModel);
                                 intent.putExtra("PERMALINK", permalinkStr);
                                 intent.putExtra("SEASON", season.length);
@@ -3872,9 +4098,54 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                 intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                                 intent.putExtra("Index", getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
+                                startActivity(intent);*/
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
+
                             } else {
-                                ShowPpvPopUp();
+//                                ShowPpvPopUp();
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
                             }
                         }
 
@@ -3883,9 +4154,31 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                ShowPpvPopUp();
+//                ShowPpvPopUp();
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                Intent intent = new Intent(YogaPlayerActivity.this, SubscriptionActivity.class);
+              /*  Intent intent = new Intent(YogaPlayerActivity.this, SubscriptionActivity.class);
                 intent.putExtra("PlayerModel", playerModel);
                 intent.putExtra("PERMALINK", permalinkStr);
                 intent.putExtra("SEASON", season.length);
@@ -3893,7 +4186,29 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 intent.putExtra("Index", getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(YogaPlayerActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this);
@@ -3947,7 +4262,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
 
-        Log.v("SUBHA","video details user id === " + preferenceManager.getUseridFromPref());
+        Log.v("SUBHA", "video details user id === " + preferenceManager.getUseridFromPref());
 
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, YogaPlayerActivity.this, context);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -4080,7 +4395,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
 
-            Log.v("Yoga","Played length tyymm==="+com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length()));
+            Log.v("Yoga", "Played length tyymm===" + com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length()));
             //dependency for datamodel
 
             SubTitleName = new ArrayList<>(_video_details_output.getSubTitleName());
@@ -4129,7 +4444,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             com.home.vod.util.Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
             com.home.vod.util.Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
             com.home.vod.util.Util.dataModel.setPlayPos(isDouble(_video_details_output.getPlayed_length()));
-            Log.v("Yoga","plps tyymm==="+dataModel.getPlayPos()*1000);
+            Log.v("Yoga", "plps tyymm===" + dataModel.getPlayPos() * 1000);
 
             //player model set
             playerModel.setAdDetails(_video_details_output.getAdDetails());
@@ -4149,8 +4464,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
-            Log.v("Yoga","plps tyymm==="+playerModel.getPlayPos()*1000);
-
+            Log.v("Yoga", "plps tyymm===" + playerModel.getPlayPos() * 1000);
 
 
             exoplayerdownloadhandler = new Handler();
@@ -4159,13 +4473,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             audio_1 = dbHelper.getContact(muviStreamId + emailIdStr);
 
             if (audio_1 != null) {
-                Log.v("SUBHALAXMIPANDA1","data called =============== ");
+                Log.v("SUBHALAXMIPANDA1", "data called =============== ");
                 if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
                     checkDownLoadStatusFromDownloadManager1(audio_1, false);
                 }
             }
-            Log.v("SUBHALAXMIPANDA1","STAUS"+playerModel.getContentTypesId()+"G"+playerModel.getDownloadStatus()+playerModel.getIsOffline());
-            if (playerModel.getContentTypesId()!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+            Log.v("SUBHALAXMIPANDA1", "STAUS" + playerModel.getContentTypesId() + "G" + playerModel.getDownloadStatus() + playerModel.getIsOffline());
+            if (playerModel.getContentTypesId() != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
                 download_layout.setVisibility(View.VISIBLE);
             }
 
@@ -4179,16 +4493,16 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
-                    Log.v("ANU","if mcastsession========="+mCastSession);
+                    Log.v("ANU", "if mcastsession=========" + mCastSession);
 
 
                     if (mCastSession != null && mCastSession.isConnected()) {
 
-                        Log.v("ANU","doing -1=========");
+                        Log.v("ANU", "doing -1=========");
                         progressView.setVisibility(View.GONE);
 
-                        Log.v("Yoga","pl len="+Util.dataModel.getPlayPos() * 1000);
-                        Log.v("Yoga","played_length len="+playerModel.getPlayPos());
+                        Log.v("Yoga", "pl len=" + Util.dataModel.getPlayPos() * 1000);
+                        Log.v("Yoga", "played_length len=" + playerModel.getPlayPos());
                         ///Added for resume cast watch
                         if (Util.dataModel.getPlayPos() * 1000 > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
@@ -4199,7 +4513,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             Played_Length = 0;
                             watch_status_String = "start";
 
-                            Log.v("ANU","DOING 0=========");
+                            Log.v("ANU", "DOING 0=========");
                             PlayThroughChromeCast();
                         }
 
@@ -4472,11 +4786,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader(HeaderConstants.AUTH_TOKEN, authTokenStr);
-                httppost.addHeader("stream_unique_id",muviStreamId);
+                httppost.addHeader("stream_unique_id", muviStreamId);
 
 
-                Log.v("SUBHA","authToken == "+ player.utils.Util.authTokenStr);
-                Log.v("SUBHA","stream_unique_id == "+ muviStreamId);
+                Log.v("SUBHA", "authToken == " + player.utils.Util.authTokenStr);
+                Log.v("SUBHA", "stream_unique_id == " + muviStreamId);
 
 
                 try {
@@ -4608,7 +4922,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 }
 
 
-
                 //ExoPlayerActivity.this portion is changed later because of multiple download option.
 
                 if (List_Of_Resolution_Url.size() > 0) {
@@ -4638,6 +4951,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         }
     }
+
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         ProgressBarHandler pDialog;
@@ -4670,8 +4984,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 lengthfile = (int) size;
 
 
-
-
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
@@ -4694,7 +5006,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 String lengh = String.valueOf(lengthfile);
 
-                Log.v("SUBHA","size of file === "+lengh);
+                Log.v("SUBHA", "size of file === " + lengh);
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setTitle(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.WANT_TO_DOWNLOAD, player.utils.Util.DEFAULT_WANT_TO_DOWNLOAD));
@@ -4736,6 +5048,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         }
     }
+
     private void requestStoragePermission() {
         if (ActivityCompat.checkSelfPermission(YogaPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -4749,6 +5062,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             }
         }
     }
+
     private void downloadFile(boolean singlefile) {
 
         DownloadManager.Request request;
@@ -4775,7 +5089,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             fileExtenstion = MimeTypeMap.getFileExtensionFromUrl(mlvfile);
             timestamp = System.currentTimeMillis() + ".mlv";
             //Save file to destination folder
-            Log.v("SUBHALAXMIPANDA1","isdrm");
+            Log.v("SUBHALAXMIPANDA1", "isdrm");
             request.setDestinationInExternalPublicDir("Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM", timestamp);
         } else {
             //Get download file name
@@ -4793,7 +5107,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         Progress.setProgress(0);
 
         ContactModel1 contactModel1 = new ContactModel1();
-        contactModel1.setMUVIID(name + "@@@"+ muviStreamId);
+        contactModel1.setMUVIID(name + "@@@" + muviStreamId);
         contactModel1.setDOWNLOADID((int) enqueue);
         contactModel1.setProgress(0);
         contactModel1.setUSERNAME(emailIdStr);
@@ -4805,7 +5119,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         if (isDrm) {
             contactModel1.setToken(licensetoken);
-            Log.v("SUBHALAXMIPANDA1","licensetoken");
+            Log.v("SUBHALAXMIPANDA1", "licensetoken");
 
             contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM/" + timestamp);
         } else {
@@ -4819,7 +5133,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         contactModel1.setDuration(videoDurationStr);
         contactModel1.setStory(movieDetailsStr);
 
-        Log.v("SANJAYA1234",movieDetailsStr);
+        Log.v("SANJAYA1234", movieDetailsStr);
         dbHelper.insertRecord(contactModel1);
 
         Log.d("BIBHU", emailIdStr);
@@ -4882,12 +5196,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
     }
-
-
-
-
-
-
 
 
     public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model, final boolean CallAccessPeriodApi) {
@@ -5009,12 +5317,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                 Progress.setProgress(0);
 
                                 Progress.setProgress((int) model.getProgress());
-                                Log.v("SUBHALAXMIPANDA1","model.getProgress()"+model.getProgress());
+                                Log.v("SUBHALAXMIPANDA1", "model.getProgress()" + model.getProgress());
 
                                 percentg.setText(model.getProgress() + "%");
 //
                                 if (model.getProgress() == 100) {
-                                    Log.v("SUBHALAXMIPANDA1","model.100()"+model.getProgress());
+                                    Log.v("SUBHALAXMIPANDA1", "model.100()" + model.getProgress());
 
                                     //writefilepath();
 //                                dbHelper.deleteRecord(audio);
@@ -5058,7 +5366,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         token = new String(baos.toByteArray());
         return token;
     }
-
 
 
     class AsyncWatchAccessDetails extends AsyncTask<String, String, String> {
@@ -5152,9 +5459,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
                         DB1.execSQL(query1);
-                    }else{
+                    } else {
 
-                        if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                        if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")) {
                             Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
                             SQLiteDatabase DB1 = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 
@@ -5168,7 +5475,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     }
                 }
             } catch (Exception e) {
-                if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")) {
                     Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
                     SQLiteDatabase DB1 = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 
@@ -5192,6 +5499,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             startService(intent);
         }
     }
+
     class DetectDownloadingFileSize extends AsyncTask<String, String, String> {
 
 
@@ -5249,6 +5557,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         }
     }
+
     public void ShowDownloadOptionPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
@@ -5301,6 +5610,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         });
 
     }
+
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
 
@@ -5408,7 +5718,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 */
 
 
-
             } else {
                 Toast.makeText(YogaPlayerActivity.this, player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_INTERRUPTED, player.utils.Util.DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
             }
@@ -5440,19 +5749,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     public void startTimer() {
         //set a new Timer
 
-        if(video_completed)
+        if (video_completed)
             return;
 
         timer = new Timer();
         initializeTimerTask();
         timer.schedule(timerTask, 1000, 1000); //
     }
-
-
-
-
-
-
 
 
     private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
@@ -5472,12 +5775,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 httppost.addHeader("authToken", authTokenStr);
                 httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddres.trim());
-                httppost.addHeader("movie_id",movieUniqueId.trim());
-                httppost.addHeader("episode_id",muviStreamId.trim());
+                httppost.addHeader("movie_id", movieUniqueId.trim());
+                httppost.addHeader("episode_id", muviStreamId.trim());
                 httppost.addHeader("watch_status", watchStatus);
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
-
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -5579,7 +5881,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         @Override
         protected void onPreExecute() {
-            Log.v("SUBHA","played_length === 2" );
+            Log.v("SUBHA", "played_length === 2");
             stoptimertask();
         }
 
@@ -5599,7 +5901,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateBufferLogUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken",authTokenStr);
+                httppost.addHeader("authToken", authTokenStr);
                 httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddres.trim());
                 httppost.addHeader("movie_id", movieUniqueId);
@@ -5681,7 +5983,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 videoBufferLogUniqueId = "0";
                 Location = "0";
             }
-            if (!watchStatus.equals("complete")){
+            if (!watchStatus.equals("complete")) {
                 if (mCastSession != null && mCastSession.isConnected()) {
                     return;
                 }
@@ -6265,7 +6567,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     }
 
 
-
     private Runnable subtitleProcessesor = new Runnable() {
 
         @Override
@@ -6343,7 +6644,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     }
 
 
-
     public long DataUsedByDownloadContent() {
 
         try {
@@ -6400,7 +6700,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     public void run() {
                         if (emVideoView != null) {
 
-                            Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
+                            Log.v("BIBHU", "===================****====================initializeTimerTask caled===============**==================");
 
 
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
@@ -6411,7 +6711,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             if (isFastForward == true) {
                                 isFastForward = false;
                                 log_temp_id = "0";
-                                Log.v("BIBHU1","initializeTimerTask fastforword true called");
+                                Log.v("BIBHU1", "initializeTimerTask fastforword true called");
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
@@ -6428,28 +6728,31 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                                 playerPreviousPosition = 0;
 
-                                Log.v("BIBHU1","initializeTimerTask fastforword false called");
+                                Log.v("BIBHU1", "initializeTimerTask fastforword false called");
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     watchStatus = "complete";
 
 
-                                    try{
+                                    try {
                                         stoptimertask();
                                         asyncVideoLogDetails = new AsyncVideoLogDetails();
                                         asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-                                    }catch (Exception e){Log.v("BIBHU1","Exception at complete ="+e.toString());}
+                                    } catch (Exception e) {
+                                        Log.v("BIBHU1", "Exception at complete =" + e.toString());
+                                    }
 
 
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
                                     watchStatus = "halfplay";
 
-                                    try{
+                                    try {
                                         asyncVideoLogDetails = new AsyncVideoLogDetails();
                                         asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-                                    }catch (Exception e){Log.v("BIBHU1","Exception at halfplay ="+e.toString());}
-
+                                    } catch (Exception e) {
+                                        Log.v("BIBHU1", "Exception at halfplay =" + e.toString());
+                                    }
 
 
                                 }
@@ -6470,7 +6773,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         bannerImageRelativeLayout.setVisibility(View.VISIBLE);
         player_layout.setVisibility(View.GONE);
 
-        if(emVideoView!=null)
+        if (emVideoView != null)
             emVideoView.release();
 
         if (mCastContext != null) {
@@ -6506,7 +6809,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         }*/
     }
 
-    private void PlayThroughChromeCast(){
+    private void PlayThroughChromeCast() {
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
@@ -6585,7 +6888,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 tracks.add(englishSubtitle);
             }
 
-            Log.v("ANU","playerModel.getMpdVideoUrl().trim()====="+playerModel.getMpdVideoUrl().trim());
+            Log.v("ANU", "playerModel.getMpdVideoUrl().trim()=====" + playerModel.getMpdVideoUrl().trim());
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                     .setContentType(mediaContentType)
@@ -6596,10 +6899,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             mSelectedMedia = mediaInfo;
 
 
-            Log.v("ANU","doing 1");
+            Log.v("ANU", "doing 1");
             togglePlayback();
         } else {
-            Log.v("ANU","else=========");
+            Log.v("ANU", "else=========");
             JSONObject jsonObj = null;
             try {
                 jsonObj = new JSONObject();
@@ -6621,7 +6924,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -6798,118 +7100,118 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     private void ShowPpvPopUp() {
 
-Log.v("SUBHA","show ppv popup");
+        Log.v("SUBHA", "show ppv popup");
 
-            try {
-                if (Util.currencyModel.getCurrencySymbol() == null) {
-                    Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-
-                    // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
-
-                }
-            } catch (Exception e) {
+        try {
+            if (Util.currencyModel.getCurrencySymbol() == null) {
                 Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
 
                 // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
-                return;
+
             }
+        } catch (Exception e) {
+            Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
 
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) YogaPlayerActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+            return;
+        }
 
-            View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
-            alertDialog.setView(convertView);
-            alertDialog.setTitle("");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+        LayoutInflater inflater = (LayoutInflater) YogaPlayerActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            final RadioButton completeRadioButton = (RadioButton) convertView.findViewById(R.id.completeRadioButton);
-            final RadioButton seasonRadioButton = (RadioButton) convertView.findViewById(R.id.seasonRadioButton);
-            final RadioButton episodeRadioButton = (RadioButton) convertView.findViewById(R.id.episodeRadioButton);
-            TextView episodePriceTextView = (TextView) convertView.findViewById(R.id.episodePriceTextView);
-            TextView seasonPriceTextView = (TextView) convertView.findViewById(R.id.seasonPriceTextView);
-            TextView completePriceTextView = (TextView) convertView.findViewById(R.id.completePriceTextView);
-            Button payNowButton = (Button) convertView.findViewById(R.id.payNowButton);
+        View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle("");
+
+        final RadioButton completeRadioButton = (RadioButton) convertView.findViewById(R.id.completeRadioButton);
+        final RadioButton seasonRadioButton = (RadioButton) convertView.findViewById(R.id.seasonRadioButton);
+        final RadioButton episodeRadioButton = (RadioButton) convertView.findViewById(R.id.episodeRadioButton);
+        TextView episodePriceTextView = (TextView) convertView.findViewById(R.id.episodePriceTextView);
+        TextView seasonPriceTextView = (TextView) convertView.findViewById(R.id.seasonPriceTextView);
+        TextView completePriceTextView = (TextView) convertView.findViewById(R.id.completePriceTextView);
+        Button payNowButton = (Button) convertView.findViewById(R.id.payNowButton);
 
 
+        if (Util.dataModel.getIsAPV() == 1) {
+            if (Util.apvModel.getIsEpisode() == 1) {
+                episodeRadioButton.setVisibility(View.VISIBLE);
+                episodePriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                episodeRadioButton.setVisibility(View.GONE);
+                episodePriceTextView.setVisibility(View.GONE);
+            }
+            if (Util.apvModel.getIsSeason() == 1) {
+                seasonRadioButton.setVisibility(View.VISIBLE);
+                seasonPriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                seasonRadioButton.setVisibility(View.GONE);
+                seasonPriceTextView.setVisibility(View.GONE);
+            }
+            if (Util.apvModel.getIsShow() == 1) {
+                completeRadioButton.setVisibility(View.VISIBLE);
+                completePriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                completeRadioButton.setVisibility(View.GONE);
+                completePriceTextView.setVisibility(View.GONE);
+            }
+        } else {
+            if (Util.ppvModel.getIsEpisode() == 1) {
+                episodeRadioButton.setVisibility(View.VISIBLE);
+                episodePriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                episodeRadioButton.setVisibility(View.GONE);
+                episodePriceTextView.setVisibility(View.GONE);
+            }
+            if (Util.ppvModel.getIsSeason() == 1) {
+                seasonRadioButton.setVisibility(View.VISIBLE);
+                seasonPriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                seasonRadioButton.setVisibility(View.GONE);
+                seasonPriceTextView.setVisibility(View.GONE);
+            }
+            if (Util.ppvModel.getIsShow() == 1) {
+                completeRadioButton.setVisibility(View.VISIBLE);
+                completePriceTextView.setVisibility(View.VISIBLE);
+            } else {
+                completeRadioButton.setVisibility(View.GONE);
+                completePriceTextView.setVisibility(View.GONE);
+            }
+        }
+
+
+        completeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Complete Season ");
+        seasonRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
+        episodeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
+
+        String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
+
+        if (subscriptionStr.trim().equals("1")) {
             if (Util.dataModel.getIsAPV() == 1) {
-                if (Util.apvModel.getIsEpisode() == 1) {
-                    episodeRadioButton.setVisibility(View.VISIBLE);
-                    episodePriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    episodeRadioButton.setVisibility(View.GONE);
-                    episodePriceTextView.setVisibility(View.GONE);
-                }
-                if (Util.apvModel.getIsSeason() == 1) {
-                    seasonRadioButton.setVisibility(View.VISIBLE);
-                    seasonPriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    seasonRadioButton.setVisibility(View.GONE);
-                    seasonPriceTextView.setVisibility(View.GONE);
-                }
-                if (Util.apvModel.getIsShow() == 1) {
-                    completeRadioButton.setVisibility(View.VISIBLE);
-                    completePriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    completeRadioButton.setVisibility(View.GONE);
-                    completePriceTextView.setVisibility(View.GONE);
-                }
+
+                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeSubscribedStr());
+                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonSubscribedStr());
+                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowSubscribedStr());
             } else {
-                if (Util.ppvModel.getIsEpisode() == 1) {
-                    episodeRadioButton.setVisibility(View.VISIBLE);
-                    episodePriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    episodeRadioButton.setVisibility(View.GONE);
-                    episodePriceTextView.setVisibility(View.GONE);
-                }
-                if (Util.ppvModel.getIsSeason() == 1) {
-                    seasonRadioButton.setVisibility(View.VISIBLE);
-                    seasonPriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    seasonRadioButton.setVisibility(View.GONE);
-                    seasonPriceTextView.setVisibility(View.GONE);
-                }
-                if (Util.ppvModel.getIsShow() == 1) {
-                    completeRadioButton.setVisibility(View.VISIBLE);
-                    completePriceTextView.setVisibility(View.VISIBLE);
-                } else {
-                    completeRadioButton.setVisibility(View.GONE);
-                    completePriceTextView.setVisibility(View.GONE);
-                }
+                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeSubscribedStr());
+                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonSubscribedStr());
+                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowSubscribedStr());
             }
+        } else {
+            if (Util.dataModel.getIsAPV() == 1) {
 
-
-            completeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Complete Season ");
-            seasonRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
-            episodeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
-
-            String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
-
-            if (subscriptionStr.trim().equals("1")) {
-                if (Util.dataModel.getIsAPV() == 1) {
-
-                    episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeSubscribedStr());
-                    seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonSubscribedStr());
-                    completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowSubscribedStr());
-                } else {
-                    episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeSubscribedStr());
-                    seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonSubscribedStr());
-                    completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowSubscribedStr());
-                }
+                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeUnsubscribedStr());
+                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonUnsubscribedStr());
+                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowUnsubscribedStr());
             } else {
-                if (Util.dataModel.getIsAPV() == 1) {
-
-                    episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeUnsubscribedStr());
-                    seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonUnsubscribedStr());
-                    completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowUnsubscribedStr());
-                } else {
-                    episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeUnsubscribedStr());
-                    seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonUnsubscribedStr());
-                    completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowUnsubscribedStr());
-                }
+                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeUnsubscribedStr());
+                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonUnsubscribedStr());
+                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowUnsubscribedStr());
             }
+        }
 
 
-            alert = alertDialog.show();
-            completeRadioButton.setChecked(true);
+        alert = alertDialog.show();
+        completeRadioButton.setChecked(true);
 
 
         /*if (completeRadioButton.isChecked() == true) {
@@ -6924,14 +7226,67 @@ Log.v("SUBHA","show ppv popup");
         }*/
 
 
-            // Changed later
+        // Changed later
 
-            if (completeRadioButton.getVisibility() == View.VISIBLE) {
+        if (completeRadioButton.getVisibility() == View.VISIBLE) {
 
-                completeRadioButton.setChecked(true);
+            completeRadioButton.setChecked(true);
+            episodeRadioButton.setChecked(false);
+            seasonRadioButton.setChecked(false);
+
+            if (Util.dataModel.getIsAPV() == 1) {
+                priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
+                priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
+
+            } else {
+                priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
+                priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
+            }
+
+
+        } else {
+            if (seasonRadioButton.getVisibility() == View.VISIBLE) {
+
+                completeRadioButton.setChecked(false);
+                seasonRadioButton.setChecked(true);
+                episodeRadioButton.setChecked(false);
+
+                if (Util.dataModel.getIsAPV() == 1) {
+                    priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
+                    priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
+
+                } else {
+                    priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
+                    priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
+                }
+
+
+            } else {
+                completeRadioButton.setChecked(false);
+                seasonRadioButton.setChecked(false);
+                episodeRadioButton.setChecked(true);
+
+                if (Util.dataModel.getIsAPV() == 1) {
+                    priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
+                    priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
+
+                } else {
+                    priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
+                    priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
+                }
+
+
+            }
+        }
+
+        ///////////////////////=====================////////////////////////
+
+        completeRadioButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
                 episodeRadioButton.setChecked(false);
                 seasonRadioButton.setChecked(false);
-
                 if (Util.dataModel.getIsAPV() == 1) {
                     priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
                     priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
@@ -6942,166 +7297,113 @@ Log.v("SUBHA","show ppv popup");
                 }
 
 
-            } else {
-                if (seasonRadioButton.getVisibility() == View.VISIBLE) {
-
-                    completeRadioButton.setChecked(false);
-                    seasonRadioButton.setChecked(true);
-                    episodeRadioButton.setChecked(false);
-
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
-                        priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
-
-                    } else {
-                        priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
-                        priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
-                    }
-
-
-                } else {
-                    completeRadioButton.setChecked(false);
-                    seasonRadioButton.setChecked(false);
-                    episodeRadioButton.setChecked(true);
-
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
-                        priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
-
-                    } else {
-                        priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
-                        priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
-                    }
-
-
-                }
             }
 
-            ///////////////////////=====================////////////////////////
-
-            completeRadioButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    episodeRadioButton.setChecked(false);
-                    seasonRadioButton.setChecked(false);
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
-                        priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
-
-                    } else {
-                        priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
-                        priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
-                    }
+        });
 
 
+        episodeRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                completeRadioButton.setChecked(false);
+                seasonRadioButton.setChecked(false);
+
+                if (Util.dataModel.getIsAPV() == 1) {
+                    priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
+                    priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
+
+                } else {
+                    priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
+                    priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
                 }
 
-            });
+            }
+        });
+        seasonRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                episodeRadioButton.setChecked(false);
+                completeRadioButton.setChecked(false);
+                if (Util.dataModel.getIsAPV() == 1) {
+                    priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
+                    priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
 
-
-            episodeRadioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    completeRadioButton.setChecked(false);
-                    seasonRadioButton.setChecked(false);
-
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
-                        priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
-
-                    } else {
-                        priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
-                        priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
-                    }
-
+                } else {
+                    priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
+                    priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
                 }
-            });
-            seasonRadioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    episodeRadioButton.setChecked(false);
-                    completeRadioButton.setChecked(false);
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
-                        priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
 
-                    } else {
-                        priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
-                        priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
-                    }
+            }
+        });
 
-                }
-            });
-
-            payNowButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        payNowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-                    if (completeRadioButton.isChecked()) {
-                        selectedPurchaseType = 1;
-                        Util.selected_episode_id = "0";
-                        Util.selected_season_id = "0";
-                        LogUtil.showLog("MUVI", "called 1");
-                    } else if (seasonRadioButton.isChecked()) {
-                        selectedPurchaseType = 2;
-                        Util.selected_episode_id = "0";
+                if (completeRadioButton.isChecked()) {
+                    selectedPurchaseType = 1;
+                    Util.selected_episode_id = "0";
+                    Util.selected_season_id = "0";
+                    LogUtil.showLog("MUVI", "called 1");
+                } else if (seasonRadioButton.isChecked()) {
+                    selectedPurchaseType = 2;
+                    Util.selected_episode_id = "0";
 //                        Util.selected_season_id = "" + spinnerPosition;
-                        LogUtil.showLog("MUVI", "called 2");
-                    } else {
-                        selectedPurchaseType = 3;
-                        Util.selected_episode_id = Util.dataModel.getStreamUniqueId();
-                        Util.selected_season_id = Util.dataModel.getEpisode_series_no();
-                        LogUtil.showLog("MUVI", "called 3");
-                    }
+                    LogUtil.showLog("MUVI", "called 2");
+                } else {
+                    selectedPurchaseType = 3;
+                    Util.selected_episode_id = Util.dataModel.getStreamUniqueId();
+                    Util.selected_season_id = Util.dataModel.getEpisode_series_no();
+                    LogUtil.showLog("MUVI", "called 3");
+                }
 
 
-                    LogUtil.showLog("MUVI", "Show withepisode  Activity Season Id =" + Util.selected_season_id);
-                    LogUtil.showLog("MUVI", "Show withepisode Activity episode Id =" + Util.selected_episode_id);
+                LogUtil.showLog("MUVI", "Show withepisode  Activity Season Id =" + Util.selected_season_id);
+                LogUtil.showLog("MUVI", "Show withepisode Activity episode Id =" + Util.selected_episode_id);
 
-                    alert.dismiss();
-                    final Intent showPaymentIntent = new Intent(YogaPlayerActivity.this, PPvPaymentInfoActivity.class);
-                    showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
-                    showPaymentIntent.putExtra("episodeStreamId", Util.dataModel.getStreamUniqueId().trim());
-                    showPaymentIntent.putExtra("contentTypesId", Util.dataModel.getContentTypesId());
-                    showPaymentIntent.putExtra("movieThirdPartyUrl", Util.dataModel.getThirdPartyUrl());
-                    showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
-                    showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
-                    showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
-                    showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
-                    showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
-                    showPaymentIntent.putExtra("PlayerModel", playerModel);
-                    showPaymentIntent.putExtra("PERMALINK", permalinkStr);
-                    showPaymentIntent.putExtra("SEASON", season.length);
-                    showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
-                    showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                    showPaymentIntent.putExtra("Index", getIntent().getStringExtra("Index"));
+                alert.dismiss();
+                final Intent showPaymentIntent = new Intent(YogaPlayerActivity.this, PPvPaymentInfoActivity.class);
+                showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
+                showPaymentIntent.putExtra("episodeStreamId", Util.dataModel.getStreamUniqueId().trim());
+                showPaymentIntent.putExtra("contentTypesId", Util.dataModel.getContentTypesId());
+                showPaymentIntent.putExtra("movieThirdPartyUrl", Util.dataModel.getThirdPartyUrl());
+                showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
+                showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
+                showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
+                showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
+                showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
+                showPaymentIntent.putExtra("PlayerModel", playerModel);
+                showPaymentIntent.putExtra("PERMALINK", permalinkStr);
+                showPaymentIntent.putExtra("SEASON", season.length);
+                showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                showPaymentIntent.putExtra("Index", getIntent().getStringExtra("Index"));
 
-                    // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
+                // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 
 
-                    if (selectedPurchaseType == 1)
-                        showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " Complete Season ");
-                    if (selectedPurchaseType == 2)
-                        showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim());
-                    if (selectedPurchaseType == 3)
-                        showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim());
-                    showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
-                    showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
-                    showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
-                    showPaymentIntent.putExtra("selectedPurchaseType", selectedPurchaseType);
-                    if (Util.dataModel.getIsAPV() == 1) {
-                        showPaymentIntent.putExtra("isConverted", 0);
-                    } else {
-                        showPaymentIntent.putExtra("isConverted", 1);
-
-                    }
-                    startActivityForResult(showPaymentIntent,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                if (selectedPurchaseType == 1)
+                    showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " Complete Season ");
+                if (selectedPurchaseType == 2)
+                    showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim());
+                if (selectedPurchaseType == 3)
+                    showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim());
+                showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
+                showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
+                showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
+                showPaymentIntent.putExtra("selectedPurchaseType", selectedPurchaseType);
+                if (Util.dataModel.getIsAPV() == 1) {
+                    showPaymentIntent.putExtra("isConverted", 0);
+                } else {
+                    showPaymentIntent.putExtra("isConverted", 1);
 
                 }
-            });
+                startActivityForResult(showPaymentIntent, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+
+            }
+        });
 
     }
 
@@ -7145,7 +7447,7 @@ Log.v("SUBHA","show ppv popup");
         showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
         showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
         showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle());
-        showPaymentIntent.putExtra("isPPV",Util.dataModel.getIsPPV());
+        showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
         showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
         if (Util.dataModel.getIsAPV() == 1) {
             showPaymentIntent.putExtra("isConverted", 0);
@@ -7156,11 +7458,10 @@ Log.v("SUBHA","show ppv popup");
 
         showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         showPaymentIntent.putExtra("PlayerModel", playerModel);
-        startActivityForResult(showPaymentIntent,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+        startActivityForResult(showPaymentIntent, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
         /*finish();
         overridePendingTransition(0, 0);*/
     }
-
 
 
 }

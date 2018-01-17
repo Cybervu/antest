@@ -156,6 +156,7 @@ import static com.home.vod.preferences.LanguagePreference.SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
+import static com.home.vod.util.Constant.PERMALINK_FORCONTENT_KEY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -172,6 +173,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     private boolean index_clicked = false;
 
     String titleStr;
+    String permalinkForContent;
     /***************
      * chromecast
      **********************/
@@ -429,6 +431,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
         listView = (ListView) rootView.findViewById(R.id.fitness_list);
         titleStr = getArguments().getString("title");
+        permalinkForContent  = getArguments().getString("item");
+
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
         indexLayout = (LinearLayout) rootView.findViewById(R.id.side_index);
         searchEdittext = (EditText) rootView.findViewById(R.id.search_edittext);
@@ -682,6 +686,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
                     final Intent movieDetailsIntent = new Intent(context, YogaPlayerActivity.class);
                     movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, item.getPermalink());
+                    movieDetailsIntent.putExtra(PERMALINK_FORCONTENT_KEY, permalinkForContent);
                     movieDetailsIntent.putExtra("CONTENT_ID", item.getContent_id());
                     movieDetailsIntent.putExtra("CONTENT_STREAM_ID", item.getContent_stream_id());
                     movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1442,59 +1447,46 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
                                 if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
                                     movieGenreStr = jsonChildNode.getString("genre");
-                                    Log.v("SUBHAA", "movieGenreStr "+movieGenreStr);
                                 }
                                 if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
                                     movieName = jsonChildNode.getString("name");
-                                    Log.v("SUBHAA", "movieName "+movieName);
                                 }
                                 if ((jsonChildNode.has("story")) && jsonChildNode.getString("story").trim() != null && !jsonChildNode.getString("story").trim().isEmpty() && !jsonChildNode.getString("story").trim().equals("null") && !jsonChildNode.getString("story").trim().matches("")) {
                                     movieStory = jsonChildNode.getString("story");
-                                    Log.v("SUBHAA", "movieStory "+movieStory);
                                 }
                                 if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
                                     movieImageStr = jsonChildNode.getString("poster_url");
                                     //movieImageStr = movieImageStr.replace("episode", "original");
-                                    Log.v("SUBHAA", "movieImageStr "+movieImageStr);
                                 }
                                 if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
                                     moviePermalinkStr = jsonChildNode.getString("permalink");
-                                    Log.v("SUBHAA", "moviePermalinkStr "+moviePermalinkStr);
                                 }
                                 if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
                                     videoTypeIdStr = jsonChildNode.getString("content_types_id");
-                                    Log.v("SUBHAA", "videoTypeIdStr "+videoTypeIdStr);
                                 }
                                 //videoTypeIdStr = "1";
 
                                 if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
                                     isConverted = Integer.parseInt(jsonChildNode.getString("is_converted"));
-                                    Log.v("SUBHAA", "isConverted "+isConverted);
                                 }
                                 if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
                                     isAPV = Integer.parseInt(jsonChildNode.getString("is_advance"));
-                                    Log.v("SUBHAA", "isAPV "+isAPV);
                                 }
                                 if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
                                     isPPV = Integer.parseInt(jsonChildNode.getString("is_ppv"));
-                                    Log.v("SUBHAA", "isPPV "+isPPV);
                                 }
                                 if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
                                     isEpisodeStr = jsonChildNode.getString("is_episode");
-                                    Log.v("SUBHAA", "isEpisodeStr "+isEpisodeStr);
                                 }
                                 if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
                                     movieUniqueId = jsonChildNode.getString("muvi_uniq_id");
-                                    Log.v("SUBHAA", "movieUniqueId "+movieUniqueId);
                                 }
                                 if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
                                     content_types_id = jsonChildNode.getString("content_types_id");
-                                    Log.v("SUBHAA", "content_types_id "+content_types_id);
                                 }
 
                                 if ((jsonChildNode.has("is_favorite")) && jsonChildNode.getString("is_favorite").trim() != null && !jsonChildNode.getString("is_favorite").trim().isEmpty() && !jsonChildNode.getString("is_favorite").trim().equals("null") && !jsonChildNode.getString("is_favorite").trim().matches("")) {
                                     isFavorite = Integer.parseInt(jsonChildNode.getString("is_favorite"));
-                                    Log.v("SUBHAA", "isFavorite "+isFavorite);
                                 }
                                 if ((jsonChildNode.has("movie_id")) && jsonChildNode.getString("movie_id").trim() != null && !jsonChildNode.getString("movie_id").trim().isEmpty() && !jsonChildNode.getString("movie_id").trim().equals("null") && !jsonChildNode.getString("movie_id").trim().matches("")) {
                                     content_id = jsonChildNode.getString("movie_id");

@@ -23,7 +23,7 @@
     <integer name="configuration_large_horizontal">1</integer>
     <integer name="configuration_small_horizontal">1</integer>
 
-    <integer name="search_configuration_xlarge_horizontal">3</integer>
+    <integer name="search_configuration_xlarge_horizontal">4</integer>
     <integer name="search_configuration_normal_horizontal">2</integer>
     <integer name="search_configuration_large_horizontal">3</integer>
     <integer name="search_configuration_small_horizontal">4</integer>
@@ -37,7 +37,7 @@
     <integer name="configuration_large_vertical">1</integer>
     <integer name="configuration_small_vertical">1</integer>
 
-    <integer name="search_configuration_xlarge_vertical">3</integer>
+    <integer name="search_configuration_xlarge_vertical">4</integer>
     <integer name="search_configuration_normal_vertical">2</integer>
     <integer name="search_configuration_large_vertical">3</integer>
     <integer name="search_configuration_small_vertical">4</integer>

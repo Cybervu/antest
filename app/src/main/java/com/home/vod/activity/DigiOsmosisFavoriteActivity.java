@@ -9,7 +9,10 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -48,15 +51,12 @@ import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
-import com.home.vod.Episode_Programme_Handler;
-import com.home.vod.FavoriteHandler;
 import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
-import com.home.vod.Single_Part_Programme_Handler;
-import com.home.vod.adapter.FavoriteAdapter;
+import com.home.vod.adapter.DigiOsmosisFavoriteAdapter;
+import com.home.vod.adapter.FavoritePagerAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
@@ -93,10 +93,9 @@ import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
+public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements OnTabSelectedListener, GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
         ,DeleteFavAsync.DeleteFavListener{
 
@@ -175,7 +174,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
     int isLogin = 0;
     PreferenceManager preferenceManager;
     //Adapter for GridView
-    private FavoriteAdapter customGridAdapter;
+    private DigiOsmosisFavoriteAdapter customGridAdapter;
     boolean a=false;
 
 
@@ -190,8 +189,12 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
     // private JazzyGridView gridView;
     RelativeLayout footerView;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
-    private FavoriteHandler favoriteLayoutHanlder;
+//    private DigiOsmosisFavoriteHandler favoriteLayoutHanlder;
 
+    //This is our tablayout
+    private TabLayout tabLayout;
+    //This is our viewPager
+    private ViewPager viewPager;
     ///
 
     //////
@@ -200,15 +203,27 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_view_more);
-        /////
+        setContentView(R.layout.activity_favorite);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout.Tab firstTab = tabLayout.newTab(); // Create a new Tab names "First Tab"
+        //Adding the tabs using addTab() method
+
+        tabLayout.addTab(tabLayout.newTab().setText("FAVORITES"));
+        tabLayout.addTab(tabLayout.newTab().setText("FOLLOWED"));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
+        firstTab.setText("First Tab");
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        //Initializing viewPager
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        tabLayout.setOnTabSelectedListener(this);
 
 
-        /////
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
+        mActionBarToolbar.setTitle("");
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,8 +235,8 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
-        favoriteLayoutHanlder = new FavoriteHandler(DigiOsmosisFavoriteActivity.this);
-        favoriteLayoutHanlder.handleTitle();
+       /* favoriteLayoutHanlder = new DigiOsmosisFavoriteHandler(DigiOsmosisFavoriteActivity.this);
+        favoriteLayoutHanlder.handleTitle();*/
         loggedInStr =preferenceManager.getUseridFromPref();
         episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
 
@@ -255,36 +270,15 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
-        sectionTitle.setVisibility(View.VISIBLE);
+        sectionTitle.setVisibility(View.GONE);
 
+
+        tabLayout.setVisibility(View.VISIBLE);
+        FavoritePagerAdapter adapter = new FavoritePagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
         //MUVIlaxmi
-        gridView.setVisibility(View.VISIBLE);
-      /*  ArrayList<GridItem> tempData = new ArrayList<GridItem>();
-
-
-        for (int i = 0; i <= 10; i ++){
-            tempData.add(new GridItem("","Loading","","","","","","","","",0,0,0));
-            float density = getResources().getDisplayMetrics().density;
-
-            if (density >= 3.5 && density <= 4.0){
-                customGridAdapter = new GridViewAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout, itemData, new GridViewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(GridItem item) {
-                        clickItem(item);
-
-                    }
-                });
-            }else{
-                customGridAdapter = new GridViewAdapter(FavoriteActivity.this, R.layout.videos_280_grid_layout, itemData, new GridViewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(GridItem item) {
-                        clickItem(item);
-
-                    }
-                });
-
-            }
-        }*/
+        gridView.setVisibility(View.GONE);
 
        // gridView.setAdapter(customGridAdapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -318,65 +312,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
             }
         });
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                GridItem item = itemData.get(position);
-                itemToPlay = item;
-                String posterUrl = item.getImage();
-                String movieName = item.getTitle();
-                String movieGenre = item.getMovieGenre();
-                String moviePermalink = item.getPermalink();
-
-
-                LogUtil.showLog("bibhu","moviePermalink ="+moviePermalink);
-                String movieTypeId = item.getVideoTypeId();
-                if (a){
-                    a=false;
-                    return;
-                }
-                else{
-
-                    if (moviePermalink.matches(Util.getTextofLanguage(DigiOsmosisFavoriteActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DigiOsmosisFavoriteActivity.this);
-                        dlgAlert.setMessage(Util.getTextofLanguage(DigiOsmosisFavoriteActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(DigiOsmosisFavoriteActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(DigiOsmosisFavoriteActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                        dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(DigiOsmosisFavoriteActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        dlgAlert.create().show();
-
-                    } else {
-
-                        if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                           /* final Intent movieDetailsIntent = new Intent(FavoriteActivity.this, MovieDetailsActivity.class);
-                            movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                            movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(movieDetailsIntent);
-                                }
-                            });*/
-                            new Single_Part_Programme_Handler(DigiOsmosisFavoriteActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
-
-
-                        } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                            new Episode_Programme_Handler(DigiOsmosisFavoriteActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
-                        }
-                    }
-                }
-
-
-
-            }
-        });
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -428,6 +364,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
                         if (isNetwork == true) {
 
                             // default data
+/*
 
                             ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
                             viewFavouriteInputModel.setAuthToken(authTokenStr);
@@ -436,6 +373,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
                             asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,DigiOsmosisFavoriteActivity.this,DigiOsmosisFavoriteActivity.this);
                             asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
+*/
 
 
 
@@ -486,7 +424,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
         scrolling = false;
 
 
-        LogUtil.showLog("MUVI","favorite calling");
+      /*  LogUtil.showLog("MUVI","favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
         viewFavouriteInputModel.setAuthToken(authTokenStr);
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
@@ -496,7 +434,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
 
         LogUtil.showLog("MUVI","authtokenn = "+Util.authTokenStr);
         LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
-
+*/
 
 
 
@@ -662,7 +600,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
         } else {
             footerView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
-            sectionTitle.setVisibility(View.VISIBLE);
+            sectionTitle.setVisibility(View.GONE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
             videoImageStrToHeight = movieImageStr;
@@ -738,6 +676,21 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
         }
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
@@ -798,7 +751,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
                     }
 
                 }
-                customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, gridView, videoWidth,videoHeight);
+//                customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, gridView, videoWidth,videoHeight);
                 gridView.setAdapter(customGridAdapter);
 
               /*  if (videoWidth > videoHeight) {
@@ -852,7 +805,7 @@ public class DigiOsmosisFavoriteActivity extends AppCompatActivity implements Ge
                     }
                 }
                 gridView.setAdapter(customGridAdapter);*/
-                customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, gridView, videoWidth,videoHeight);
+//                customGridAdapter = favoriteLayoutHanlder.handleLayout(customGridAdapter, itemData, gridView, videoWidth,videoHeight);
                 gridView.setAdapter(customGridAdapter);
 
                 if (mBundleRecyclerViewState != null) {

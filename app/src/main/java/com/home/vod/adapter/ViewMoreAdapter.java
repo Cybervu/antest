@@ -55,6 +55,7 @@ public class ViewMoreAdapter extends ArrayAdapter<GridItem> {
 
 
             Log.v("SUBHASS","pos === "+ position);
+/*
 
             try {
 
@@ -72,11 +73,12 @@ public class ViewMoreAdapter extends ArrayAdapter<GridItem> {
             }catch (Exception e){
 
             }
+*/
 
 
 
 
-//            row = inflater.inflate(R.layout.row_programe_layout, parent, false);
+            row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
             FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.title );

@@ -2000,7 +2000,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
                 // Not implemented here

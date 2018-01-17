@@ -90,17 +90,17 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
             holder.videoImageview.getLayoutParams().height = height;
             holder.videoImageview.getLayoutParams().width = width;*/
 
-            if ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+           /* if ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,context.getDrawable(R.id.movieImageView).getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
             }
             else if ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,context.getDrawable(R.id.movieImageView).getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
             }
             else if ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+                holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,context.getDrawable(R.id.movieImageView).getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
             }
@@ -108,7 +108,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
                 holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
-            }
+            }*/
             row.setTag(holder);
 
         /*} else {

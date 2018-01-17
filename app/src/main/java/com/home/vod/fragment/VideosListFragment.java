@@ -540,7 +540,11 @@ public class VideosListFragment extends Fragment   {
                                 context.startActivity(movieDetailsIntent);
                             }
                         });*/
-                        new Single_Part_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
+                        String permalinkForContent = getArguments().getString("item");
+
+                        Log.v("SUBHASHREE","permalink for content" + permalinkForContent);
+
+                        new Single_Part_Programme_Handler(getActivity()).handleIntent(permalinkForContent,moviePermalink);
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) )

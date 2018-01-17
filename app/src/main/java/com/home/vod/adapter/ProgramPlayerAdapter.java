@@ -143,19 +143,21 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdap
         posT = position;
         //int nextPosInt = nextPosition;
 
-        Log.v("Subhalaxmi","position"+position);
-        Log.v("Subhalaxmi","pos"+pos);
-        Log.v("Subhalaxmi", "position" + nextPosition);
+        Log.v("SUBHAS","position"+position);
+        Log.v("SUBHAS","pos"+pos);
+        Log.v("SUBHAS", "position" + nextPosition);
 
         holder.itemView.setLayoutParams(param);
         holder.itemView.setVisibility(View.VISIBLE);
-        Log.v("SUBHASS","POs === "+pos + nextPosition + position);
+        Log.v("SUBHAS","POs === "+pos + nextPosition + position);
         if (pos == position || nextPosition == position) {
             holder.itemView.setLayoutParams(param);
             holder.itemView.setVisibility(View.VISIBLE);
 
 
-            if(pos == position){
+            if(position == pos){
+
+                Log.v("SUBHAS","POs ===  NOW "+pos + nextPosition + position);
                 holder.episodeNowTextView.setText(" NOW ");
                 holder.episodeNowTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
                 holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
@@ -163,7 +165,8 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdap
                 holder.belowlineTextView.setVisibility(View.VISIBLE);
 
             }
-            else if(nextPosition == position){
+            else if(position == nextPosition ){
+                Log.v("SUBHAS","POs ===  NEXT "+pos + nextPosition + position);
                 holder.episodeNowTextView.setText(" NEXT ");
                 holder.episodeNowTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
                 holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
@@ -177,7 +180,7 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdap
         } else {
             param.height = 0;
             param.width = 0;
-            Log.v("Subhalaxmi", "VISIBLE" + position);
+            Log.v("SUBHAS", "VISIBLE" + position);
             holder.itemView.setLayoutParams(param);
             holder.itemView.setVisibility(View.GONE);
         }

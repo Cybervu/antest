@@ -59,7 +59,7 @@ import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
 import com.home.vod.Single_Part_Programme_Handler;
 import com.home.vod.adapter.LanguageCustomAdapter;
-import com.home.vod.adapter.VideoFilterAdapter;
+import com.home.vod.adapter.ViewMoreAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.network.NetworkStatus;
@@ -212,7 +212,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     int isLogin = 0;
 
     //Adapter for GridView
-    private VideoFilterAdapter customGridAdapter;
+    private ViewMoreAdapter customGridAdapter;
 
     //Model for GridView
     ArrayList<GridItem> itemData = new ArrayList<GridItem>();
@@ -1158,58 +1158,74 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_horizontal) : (int) getResources().getInteger(R.integer.configuration_large_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_large_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_large_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_vertical) : (int) getResources().getInteger(R.integer.configuration_large_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_large_vertical) : (int) getResources().getInteger(R.integer.search_configuration_large_vertical));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
 
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_horizontal) : (int) getResources().getInteger(R.integer.configuration_normal_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_normal_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_normal_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_vertical) : (int) getResources().getInteger(R.integer.configuration_normal_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_normal_vertical) : (int) getResources().getInteger(R.integer.search_configuration_normal_vertical));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_small_horizontal) : (int) getResources().getInteger(R.integer.configuration_small_horizontal));
+                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_small_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_small_horizontal));
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_horizontal) : (int) getResources().getInteger(R.integer.configuration_xlarge_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_xlarge_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_xlarge_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.configuration_xlarge_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.search_configuration_xlarge_vertical));
                     }
 
                 }
-                if (videoWidth > videoHeight) {
+               /* if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
 
                     }
-                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                }
-
-              /*  if (videoWidth > videoHeight) {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                } else {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
                     gridView.setAdapter(customGridAdapter);
                 }*/
+
+
+
+
+
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
+                    }else{
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+
+                    }
+                    gridView.setAdapter(customGridAdapter);
+                } else {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout, itemData);
+                    }else{
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+
+                    }
+                    gridView.setAdapter(customGridAdapter);
+                }
+
+
+
 
 
             } else {
@@ -1220,26 +1236,26 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
 
               /*  if (videoWidth > videoHeight) {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+                    customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
                     gridView.setAdapter(customGridAdapter);
                 } else {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+                    customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
                     gridView.setAdapter(customGridAdapter);
                 }*/
 
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+                        customGridAdapter = new ViewMoreAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
@@ -1663,7 +1679,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

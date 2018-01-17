@@ -1,9 +1,11 @@
 
 package com.home.vod.adapter;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +33,23 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
     private int layoutResourceId;
     boolean close = false;
     private ArrayList<GridItem> data = new ArrayList<GridItem>();
-    private DigiOsmosisFavoriteActivity mActivity;
+    private Context mActivity;
     LanguagePreference languagePreference;
+    private closelistener listener;
 
-    public DigiOsmosisFavoriteAdapter(DigiOsmosisFavoriteActivity mActivity, int layoutResourceId, ArrayList<GridItem> data) {
+    public  interface closelistener{
+        void onCloseItemClick(int pos);
+    }
+    public DigiOsmosisFavoriteAdapter(Context mActivity, int layoutResourceId, ArrayList<GridItem> data,closelistener listener) {
         super(mActivity, layoutResourceId, data);
         this.mActivity = mActivity;
         this.layoutResourceId = layoutResourceId;
         this.data = data;
         languagePreference = LanguagePreference.getLanguagePreference(mActivity);
+        this.listener = listener;
     }
+
+
 
 
     @Override
@@ -49,11 +58,11 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
         ViewHolder holder = null;
 
         if (row == null) {
-            LayoutInflater inflater = (mActivity).getLayoutInflater();
+            LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
-            holder.movieDescription = (TextView) row.findViewById(R.id.movieDescription);
+//            holder.movieDescription = (TextView) row.findViewById(R.id.movieDescription);
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
             holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
             holder.closeAlbumArt.setVisibility(View.VISIBLE);
@@ -63,7 +72,7 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
 
 
             FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.title);
-            FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.movieDescription);
+//            FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.movieDescription);
 /*
             Typeface castDescriptionTypeface = Typeface.createFromAsset(mActivity.getAssets(),mActivity.getResources().getString(R.string.regular_fonts));
             holder.title.setTypeface(castDescriptionTypeface);*/
@@ -100,7 +109,7 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
 
         final GridItem item = data.get(position);
         holder.title.setText(item.getTitle());
-        holder.movieDescription.setText(item.getStory());
+//        holder.movieDescription.setText(item.getStory());
         String imageId = item.getImage();
 
 
@@ -115,8 +124,10 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
 
                if (data.get(position).isClicked()){
 
+                   listener.onCloseItemClick(position);
 
-                   mActivity.removeFavorite(item,position);
+
+//                   removeFavorite
 
                }
 
@@ -130,7 +141,7 @@ public class DigiOsmosisFavoriteAdapter extends ArrayAdapter<GridItem> {
             holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite);
         }else {
-            holder.closeAlbumArt.setVisibility(View.VISIBLE);
+            holder.closeAlbumArt.setVisibility(View.GONE);
 //            feb_bt.setImageResource(R.drawable.favorite_unselected);
 
         }

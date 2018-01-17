@@ -181,9 +181,9 @@
                         android:layout_width="@dimen/subtitle_change_btn_width"
                         android:layout_height="@dimen/subtitle_change_btn_height"
                         android:layout_marginRight="@dimen/marginRight20dp"
-                        android:visibility="gone"
                         android:background="@drawable/cc_button_radious"
-                        android:src="@drawable/subtitle_image" />
+                        android:src="@drawable/subtitle_image"
+                        android:visibility="gone" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -263,60 +263,54 @@
 
             android:background="@color/exercise_imagecolor" />
 
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/viewLine"
-            android:fillViewport="false">
-
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/new_detailsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/appBackgroundColor"
             android:layout_marginTop="@dimen/marginLeft15dp"
+            android:background="@color/appBackgroundColor"
             android:orientation="vertical"
             android:visibility="visible">
 
+
             <LinearLayout
+                android:id="@+id/titledetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="@dimen/marginleft10dp"
+                android:orientation="horizontal"
                 android:weightSum="1">
 
 
                 <TextView
+                    android:id="@+id/colortitle"
                     android:layout_width="@dimen/sideTitle_line_width"
                     android:layout_height="@dimen/sideTitle_line_height"
-                    android:id="@+id/colortitle"
-                    android:background="@color/colorPrimary"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
-                    android:visibility="gone"
-
                     android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/marginleft10dp"
-                    />
+
+                    android:background="@color/colorPrimary"
+                    android:visibility="gone" />
 
 
                 <TextView
                     android:id="@+id/videoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sample title"
-                    android:textAllCaps="true"
-                    android:maxLines="1"
-                    android:visibility="gone"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
 
                     android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Sample title"
+                    android:textAllCaps="true"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/itemtitle_text_size"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:visibility="gone" />
 
 
                 <RelativeLayout
@@ -324,31 +318,8 @@
                     android:layout_width="@dimen/downloadwidth"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
-                    android:layout_weight="0.72"
+                    android:layout_weight="0.75"
                     android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/downloadImageView"
-                        android:layout_width="@dimen/downloadimg_width"
-                        android:layout_height="@dimen/downloadimg_height"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/marginRight20dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:src="@drawable/download_black"
-                        android:visibility="visible" />
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="@dimen/progressbar_width"
-                        android:layout_height="@dimen/progressbar_height"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/marginright15dp"
-                        android:indeterminate="false"
-                        android:max="100"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/style_circular"
-                        android:secondaryProgress="100" />
 
                     <TextView
                         android:id="@+id/percentage"
@@ -364,112 +335,126 @@
                         android:textSize="@dimen/percentage_text_size"
                         android:visibility="gone" />
 
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/progressbar_width"
+                        android:layout_height="@dimen/progressbar_height"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/style_circular"
+                        android:secondaryProgress="100"
+                        android:layout_marginEnd="10dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <ImageView
+                        android:id="@+id/downloadImageView"
+                        android:layout_width="@dimen/downloadimg_width"
+                        android:layout_height="@dimen/downloadimg_height"
+                        android:src="@drawable/download_black"
+                        android:visibility="visible"
+                        android:layout_marginLeft="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignStart="@+id/progressBar" />
+
                 </RelativeLayout>
 
                 <ImageView
                     android:id="@+id/share"
                     android:layout_width="20dp"
-                    android:layout_marginRight="@dimen/marginleft10dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/marginleft10dp"
                     android:src="@drawable/share" />
 
             </LinearLayout>
 
 
-
-
-
-
-
-
-
-
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/moreVideosRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/moreVideosRelativeLayout"
-                android:layout_gravity="center|center_vertical"
+                android:layout_height="150dp"
+                android:scrollbars="none"
+                android:overScrollMode="never"
                 android:layout_marginLeft="@dimen/marginRight20dp"
-
                 android:layout_marginRight="@dimen/marginRight20dp"
-                />
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/titledetails"
+                android:layout_centerHorizontal="true" />
+
+
+        </RelativeLayout>
 
 
 
+
+        <LinearLayout
+            android:id="@+id/controlsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/marginleft10dp"
+            android:layout_marginBottom="@dimen/marginleft10dp"
+            android:paddingLeft="@dimen/marginleft10dp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:paddingRight="@dimen/marginleft10dp">
+
+            <TextView
+                android:id="@+id/belowlineTextView"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_above="@+id/controlsLayout"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/marginleft10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:paddingLeft="@dimen/marginleft10dp"
-                android:paddingRight="@dimen/marginleft10dp"
-                android:paddingBottom="@dimen/marginleft10dp"
-                android:id="@+id/controlsLayout"
-                android:orientation="vertical"
-                android:gravity="bottom"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_above="@+id/controlsLayout"
-                    android:id="@+id/belowlineTextView"
-                    android:layout_marginTop="@dimen/player_looping_layout"
-                    android:padding="@dimen/marginleft10dp"
-                    android:background="@color/colorPrimary"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginleft10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3"
-                    >
+                android:layout_marginTop="@dimen/marginleft10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
                     android:id="@+id/player_repeat"
-                    android:clickable="true"
-                    android:src="@drawable/player_repeat"/>
-                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/player_repeat" />
+
+                <ImageView
                     android:id="@+id/player_pause"
-                    android:clickable="true"
-
-                    android:src="@drawable/player_pause"/>
-                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:id="@+id/player_next"
                     android:clickable="true"
-                    android:src="@drawable/player_next"/>
 
-                </LinearLayout>
+                    android:src="@drawable/player_pause" />
+
+                <ImageView
+                    android:id="@+id/player_next"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/player_next" />
 
             </LinearLayout>
 
-
-
-
         </LinearLayout>
-
-        </ScrollView>
 
 
     </LinearLayout>
 
-      <!-- <fragment
-           android:id="@+id/cast_mini_controller"
-           class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_alignParentBottom="true" />-->
+    <!-- <fragment
+         android:id="@+id/cast_mini_controller"
+         class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true" />-->
 
 
-    </RelativeLayout>
+</RelativeLayout>

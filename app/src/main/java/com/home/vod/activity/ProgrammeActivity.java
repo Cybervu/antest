@@ -131,12 +131,20 @@ import player.activity.ResumePopupActivity;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
@@ -188,6 +196,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, VideoDetailsAsynctask.VideoDetailsListener {
 
     String PlanId = "";
+    int Played_Length = 0;
+    String watch_status_String = "start";
+    String seek_status = "";
     GetValidateUserAsynTask asynValidateUserDetails;
     String programType = "";
     TextView detailsTextView, videoStoryTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView,startProgrammeTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
@@ -210,6 +221,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     LinearLayout benefitsLinearLayout;
     String difficulty_level;
     String repetition;
+    String preparation_time;
+    String cooking_time;
+    String calories;
     String email, id;
     public int totaldays;
     String ipAddres = "";
@@ -747,11 +761,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             Log.v("pratik","tym==>0");
 
                         } else {
-                           /* Played_Length = 0;
+//                            Played_Length = 0;
                             watch_status_String = "start";
 
                             Log.v("pratik","timee elsee");
-                            PlayThroughChromeCast();*/
+                            PlayThroughChromeCast();
                         }
 
                     } else {
@@ -900,7 +914,71 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         }
 
         if (status > 0) {
-            if (status == 427) {
+            if (status == 425) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                   /* if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 426) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 427) {
 
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this);
@@ -921,7 +999,73 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             }
                         });
                 dlgAlert.create().show();
-            } else if (status == 429 || status == 430) {
+            } else if (status == 428) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(CROSSED_MAXIMUM_LIMIT, DEFAULT_CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                 /*   if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.CROSSED_MAXIMUM_LIMIT,Util.DEFAULT_CROSSED_MAXIMUM_LIMIT));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (Util.dataModel.getIsAPV() == 1 && status == 431) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                if (message != null && !message.equalsIgnoreCase("")) {
+                    dlgAlert.setMessage(message);
+                } else {
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ALREADY_PURCHASE_THIS_CONTENT, DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
+
+                }
+                //dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
+
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
+                        });
+                dlgAlert.create().show();
+
+            }else if (status == 429 || status == 430) {
 
                 if (validUserStr != null) {
 
@@ -944,18 +1088,87 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             if (isAPV == 1 || isPPV == 1) {
-                                ShowPpvPopUp();
+//                                ShowPpvPopUp();
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
+
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                                Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
+                                /*Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
                                 intent.putExtra("PlayerModel", playerModel);
                                 intent.putExtra("PERMALINK", _permalink);
                                 intent.putExtra("SEASON", 0);
                                 intent.putExtra("Index", "0");
                                 intent.putExtra("Current_SEASON", 0);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
+                                startActivity(intent);*/
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
+
                             } else {
-                                ShowPpvPopUp();
+//                                ShowPpvPopUp();
+
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                                dlgAlert.setCancelable(false);
+                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+
+                                            }
+                                        });
+                                dlgAlert.create().show();
+
                             }
                         }
 
@@ -964,16 +1177,64 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
             } else if (isAPV == 1 || isPPV == 1) {
-                ShowPpvPopUp();
+//                ShowPpvPopUp();
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
+              /*  Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
                 intent.putExtra("PlayerModel", playerModel);
                 intent.putExtra("PERMALINK", _permalink);
                 intent.putExtra("SEASON", 0);
                 intent.putExtra("Index", "0");
                 intent.putExtra("Current_SEASON", 0);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+
+                            }
+                        });
+                dlgAlert.create().show();
+
+
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(ProgrammeActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this);
@@ -1613,15 +1874,59 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RelatedContentInput relatedContentInput = new RelatedContentInput();
-                LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
+                String loggedInStr = preferenceManager.getLoginStatusFromPref();
+                if (isLogin == 1) {
+                    if (loggedInStr != null) {
+                        if (NetworkStatus.getInstance().isConnected(ProgrammeActivity.this)) {
 
-                relatedContentInput.setAuthToken(authTokenStr);
-                relatedContentInput.setContentId(contentId);
-                relatedContentInput.setContent_stream_id(muviStreamId);
-                relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ProgrammeActivity.this, ProgrammeActivity.this);
-                asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
+
+                            RelatedContentInput relatedContentInput = new RelatedContentInput();
+                            LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
+
+                            relatedContentInput.setAuthToken(authTokenStr);
+                            relatedContentInput.setContentId(contentId);
+                            relatedContentInput.setContent_stream_id(muviStreamId);
+                            relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ProgrammeActivity.this, ProgrammeActivity.this);
+                            asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
+
+                        } else {
+                            Util.showToast(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                            //  Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
+                        }
+
+                    } else {
+
+
+                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(ProgrammeActivity.this).handleClickOnContent();
+                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        Util.check_for_subscription = 1;
+                        registerActivity.putExtra("PLAY_LIST", itemData);
+                        registerActivity.putExtra("TAG", ItemClickedPosition);
+                        registerActivity.putExtra("PlayerModel", playerModel);
+                        registerActivity.putExtra("PERMALINK", permalinkStr);
+                        registerActivity.putExtra("SEASON", season.length);
+                        registerActivity.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        registerActivity.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        registerActivity.putExtra("Index", getIntent().getStringExtra("Index"));
+                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                        //  startActivity(registerActivity);
+
+
+                    }
+                } else {
+                    RelatedContentInput relatedContentInput = new RelatedContentInput();
+                    LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
+
+                    relatedContentInput.setAuthToken(authTokenStr);
+                    relatedContentInput.setContentId(contentId);
+                    relatedContentInput.setContent_stream_id(muviStreamId);
+                    relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ProgrammeActivity.this, ProgrammeActivity.this);
+                    asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
+
+                }
 
             }
         });
@@ -1857,7 +2162,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1928,6 +2233,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             duration = contentDetailsOutput.getDuration();
             repetition = contentDetailsOutput.getRepetition();
             difficulty_level = contentDetailsOutput.getDifficulty_level();
+            calories = contentDetailsOutput.getCalories();
+            preparation_time = contentDetailsOutput.getPreparation_time();
+            cooking_time = contentDetailsOutput.getCooking_time();
             name = contentDetailsOutput.getName();
             contentId = contentDetailsOutput.getId();
             muviStreamId = contentDetailsOutput.getMovieStreamId();
@@ -2034,9 +2342,12 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             } else {
 
+
                 durationLayout.setVisibility(View.VISIBLE);
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
-                days.setText(duration);
+
+                    days.setText(duration);
+
             }
             if (difficulty_level.matches("")) {
                 difficultyLayout.setVisibility(View.GONE);
@@ -2045,7 +2356,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             } else {
                 difficultyLayout.setVisibility(View.VISIBLE);
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), diffcultyTitleTextView);
-                difficulty.setText(difficulty_level);
+                    difficulty.setText(difficulty_level);
+
+
             }
 
             if (difficulty_level.matches("") && duration != null) {
@@ -2799,7 +3112,41 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         Log.v("BKS", "elseclickedddddd");
 
-        if (requestCode == 30060 && resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode == 1001) {
+            if (data.getStringExtra("yes").equals("1002")) {
+                watch_status_String = "halfplay";
+                seek_status = "first_time";
+                Played_Length =playerModel.getPlayPos() * 1000;
+                PlayThroughChromeCast();
+
+            } else {
+                watch_status_String = "start";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
+        } else if (resultCode == RESULT_OK && requestCode == 2001) {
+            if (data.getStringExtra("yes").equals("2002")) {
+
+                mSelectedMedia = Util.mSendingMedia;
+
+
+//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
+             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
+                Log.v("bijay",""+mReceivedMedia.getContentId());
+                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
+
+                Intent resumeIntent = new Intent(ProgrammeActivity.this, ResumePopupActivity.class);
+                startActivityForResult(resumeIntent, 1007);
+
+            }
+        } else if (requestCode == 2001) {
+
+
+            Log.v("pratik", "else conditn called");
+            watch_status_String = "start";
+            Played_Length = 0;
+            PlayThroughChromeCast();
+        }else if (requestCode == 30060 && resultCode == RESULT_OK) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
@@ -3720,6 +4067,199 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             });
         }
     }
+
+
+    private void PlayThroughChromeCast(){
+        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
+        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+        String mediaContentType = "videos/mp4";
+        if (playerModel.getVideoUrl().contains(".mpd")) {
+            mediaContentType = "application/dash+xml";
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", playerModel.getVideoTitle());
+                jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                jsonObj.put("ip_address", ipAddres.trim());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+
+                if (contentTypesId == 3){
+                    jsonObj.put("episode_id", playerModel.getStreamUniqueId());
+                }
+                else{
+                    jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+                }
+
+                jsonObj.put("watch_status", watch_status_String);
+
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", "0");
+                jsonObj.put("active_track_index", "0");
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "1");
+                } else {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "0");
+                }
+
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                //=====================End===================//
+
+                // This code is changed according to new Video log //
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time", "0");
+                jsonObj.put("seek_status", seek_status);
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time", "0");
+                jsonObj.put("end_time", "0");
+                jsonObj.put("log_unique_id", "0");
+                jsonObj.put("location", "0");
+                jsonObj.put("bandwidth_log_id", "0");
+                jsonObj.put("video_type", "mped_dash");
+                jsonObj.put("drm_bandwidth_by_sender", "0");
+
+
+                Log.v("SUBHASHREE","authTokenStr" + authTokenStr);
+                Log.v("SUBHASHREE","user_id" + preferenceManager.getUseridFromPref());
+                Log.v("SUBHASHREE","ipAddres " + ipAddres.trim());
+                Log.v("SUBHASHREE","playerModel.getMovieUniqueId()" + playerModel.getMovieUniqueId());
+                Log.v("SUBHASHREE","watch_status_String" + watch_status_String);
+                Log.v("SUBHASHREE","seek_status" + seek_status);
+                Log.v("SUBHASHREE","domain_name" + BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+
+
+                //====================End=====================//
+
+            } catch (JSONException e) {
+            }
+            List tracks = new ArrayList();
+            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                        MediaTrack.TYPE_TEXT)
+                        .setName(SubTitleName.get(0))
+                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                        .setContentId(FakeSubTitlePath.get(0))
+                        .setLanguage(SubTitleLanguage.get(0))
+                        .setContentType("text/vtt")
+                        .build();
+                tracks.add(englishSubtitle);
+            }
+
+            mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+
+            togglePlayback();
+        } else {
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", playerModel.getVideoTitle());
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                jsonObj.put("ip_address", ipAddres.trim());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                jsonObj.put("episode_id", playerModel.getStreamUniqueId());
+                jsonObj.put("watch_status", watch_status_String);
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", "0");
+                jsonObj.put("active_track_index", "0");
+                jsonObj.put("seek_status", "");
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time", "0");
+                jsonObj.put("seek_status", seek_status);
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "1");
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
+                }
+
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                //=====================End===================//
+
+
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time", "0");
+                jsonObj.put("end_time", "0");
+                jsonObj.put("log_unique_id", "0");
+                jsonObj.put("location", "0");
+                jsonObj.put("video_type", "");
+                jsonObj.put("totalBandwidth", "0");
+
+                //====================End=====================//
+
+            } catch (JSONException e) {
+            }
+
+            List tracks = new ArrayList();
+            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                        MediaTrack.TYPE_TEXT)
+                        .setName(SubTitleName.get(0))
+                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                        .setContentId(FakeSubTitlePath.get(0))
+                        .setLanguage(SubTitleLanguage.get(0))
+                        .setContentType("text/vtt")
+                        .build();
+                tracks.add(englishSubtitle);
+            }
+
+            mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setStreamDuration(15 * 1000)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+
+            togglePlayback();
+        }
+    }
+
 
 }
 

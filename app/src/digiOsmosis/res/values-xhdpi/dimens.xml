@@ -157,4 +157,8 @@
     <dimen name="fitness_margin_right">40dp</dimen>
     <dimen name="fitness_editText_height">40dp</dimen>
     <dimen name="fitness_editText_width">260dp</dimen>
+    <dimen name="downloadimg_width">30dp</dimen>
+    <dimen name="downloadimg_height">20dp</dimen>
+    <dimen name="player_recycler_height">400dp</dimen>
+    <dimen name="player_recycler_top">70dp</dimen>
 </resources>

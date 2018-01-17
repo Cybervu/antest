@@ -490,7 +490,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -735,7 +735,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             fragment = null;
         }
         else if(menuList.get(position).getPermalink().equals("favourite_Permalink")){
-            Intent favouriteintent = new Intent(MainActivity.this, FavoriteActivity.class);
+            Intent favouriteintent = new Intent(MainActivity.this, DigiOsmosisFavoriteActivity.class);
             startActivity(favouriteintent);
             fragment = null;
         }
@@ -785,7 +785,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         else {
             contentListHandler = new Content_List_Handler(this);
-            fragment = contentListHandler.handleIntent(titleStr);
+            fragment = contentListHandler.handleIntent(str);
             bundle.putString("item", str);
             bundle.putString("title", titleStr);
         }

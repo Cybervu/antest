@@ -183,21 +183,19 @@ import static player.utils.Util.timer;
 public class ExpertsDetailsActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,GetValidateUserAsynTask.GetValidateUserListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, VideoDetailsAsynctask.VideoDetailsListener {
 
+
+    TextView videoStoryTextView,colortitle,categoryTitle,categoryTitle1,line_divider;
+    ImageView moviePoster;
+    LinearLayout line_layout;
     String PlanId = "";
     int Played_Length = 0;
     String watch_status_String = "start";
     String seek_status = "";
     GetValidateUserAsynTask asynValidateUserDetails;
     String programType = "";
-    TextView detailsTextView, videoStoryTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView,startProgrammeTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
-    ImageView bannerImageView, playButton, moviePoster, share;
-    TextView benefitsTitleLineDivider,storyTitleLineDivider,detailsTitleLineDivider;
-    Button  dietPlanButton;
-    RelativeLayout startProgramButton;
-    LinearLayout durationLayout,difficultyLayout;
+    ImageView bannerImageView, playButton;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
-    LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr = "", isEpisode = "";
     String duration = "";
@@ -206,7 +204,6 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
     String name;
     int selectedPurchaseType = 0;
     AlertDialog alert;
-    LinearLayout benefitsLinearLayout;
     String difficulty_level;
     String repetition;
     String preparation_time;
@@ -223,7 +220,6 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
     VideoDetailsAsynctask asynLoadVideoUrls;
     String movieReleaseDateStr = "";
     PreferenceManager preferenceManager;
-    Button favorite_view_episode;
     Toolbar mActionBarToolbar;
     static String _permalink;
     String sucessMsg;
@@ -1380,43 +1376,26 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_programme);
+        setContentView(R.layout.activity_expertsdetails);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ExpertsDetailsActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         playButton.setVisibility(View.GONE);
-        benefitsLinearLayout = (LinearLayout) findViewById(R.id.benefitsRelativeLayout);
-        detailsTextView = (TextView) findViewById(R.id.detailsTextView);
-        difficulty = (TextView) findViewById(R.id.difficulty);
-        lineTextview = (TextView) findViewById(R.id.lineTextview);
-        days = (TextView) findViewById(R.id.days);
-        videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
-        benefitsTitleLineDivider = (TextView) findViewById(R.id.benefitsTitleLineDivider);
-        detailsTitleLineDivider = (TextView) findViewById(R.id.detailsTitleLineDivider);
-        storyTitleLineDivider = (TextView) findViewById(R.id.line_divider);
-        colortitle = (TextView) findViewById(R.id.colortitle);
-        colortitle1 = (TextView) findViewById(R.id.colortitle1);
-        PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
-        benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
-        startProgramButton = (RelativeLayout) findViewById(R.id.startProgramButton);
-        durationLayout = (LinearLayout) findViewById(R.id.durationLayout);
-        difficultyLayout = (LinearLayout) findViewById(R.id.difficultyLayout);
-        dietPlanButton = (Button) findViewById(R.id.dietPlanButton);
-        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
-        startProgrammeTextView = (TextView) findViewById(R.id.startProgrammeTextView);
-        diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
-        favorite_view_episode = (Button) findViewById(R.id.favoriteImageView);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        share = (ImageView) findViewById(R.id.share);
+        videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
+        colortitle = (TextView) findViewById(R.id.colortitle);
+        line_divider = (TextView) findViewById(R.id.line_divider);
+        categoryTitle = (TextView) findViewById(R.id.categoryTitle);
+        categoryTitle1 = (TextView) findViewById(R.id.categoryTitle1);
+        line_layout = (LinearLayout) findViewById(R.id.line_layout);
+        PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
+
         isLogin = preferenceManager.getLoginFeatureFromPref();
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
-        colortitle.setVisibility(View.GONE);
-        colortitle1.setVisibility(View.GONE);
-        lineTextview.setVisibility(View.GONE);
+
         progressBarHandler = new ProgressBarHandler(ExpertsDetailsActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -1659,14 +1638,11 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
         Util.dataModel = dbModel;
-        lineTextview.setVisibility(View.GONE);
 
 
         image_logo.bringToFront();
 
-        FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.regular_fonts), startProgrammeTextView);
-        FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.regular_fonts), favorite_view_episode);
-        FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.regular_fonts), dietPlanButton);
+
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1820,118 +1796,9 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
         });
 
 
-        startProgramButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Log.v("SUBHASS","clicked" +programType );
-                // TODO Auto-generated method stub
-                if (programType.equalsIgnoreCase("WeekBased")){
-                    Log.v("SUBHASS","week days");
-
-                    if (season != null && season.length > 0) {
-                        Intent i = new Intent(getApplicationContext(), WeekActivity.class);
-                        i.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                        startActivity(i);
-                        bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                        player_layout.setVisibility(View.GONE);
-                    } else {
-                        Toast.makeText(ExpertsDetailsActivity.this, "No Content Available", Toast.LENGTH_SHORT).show();
-                    }
 
 
-                }else if (programType.equalsIgnoreCase("DayBased")){
-                    Log.v("SUBHASS","day days");
-                    Intent i = new Intent(getApplicationContext(), SeasonActivity.class);
-                    i.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                    i.putExtra(DAYS_DATA,totaldays);
-                    startActivity(i);
-                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                    player_layout.setVisibility(View.GONE);
 
-                }else if (programType.equalsIgnoreCase("TimeBased")){
-                    Log.v("SUBHASS","time days");
-
-                    loadEpisodes();
-                }
-
-            }
-        });
-
-        dietPlanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String loggedInStr = preferenceManager.getLoginStatusFromPref();
-                if (isLogin == 1) {
-                    if (loggedInStr != null) {
-                        if (NetworkStatus.getInstance().isConnected(ExpertsDetailsActivity.this)) {
-
-
-                            RelatedContentInput relatedContentInput = new RelatedContentInput();
-                            LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
-
-                            relatedContentInput.setAuthToken(authTokenStr);
-                            relatedContentInput.setContentId(contentId);
-                            relatedContentInput.setContent_stream_id(muviStreamId);
-                            relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ExpertsDetailsActivity.this, ExpertsDetailsActivity.this);
-                            asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
-
-                        } else {
-                            Util.showToast(ExpertsDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
-                            //  Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-                        }
-
-                    } else {
-
-
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(ExpertsDetailsActivity.this).handleClickOnContent();
-                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        registerActivity.putExtra("PLAY_LIST", itemData);
-                        registerActivity.putExtra("TAG", ItemClickedPosition);
-                        registerActivity.putExtra("PlayerModel", playerModel);
-                        registerActivity.putExtra("PERMALINK", permalinkStr);
-                        registerActivity.putExtra("SEASON", season.length);
-                        registerActivity.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
-                        registerActivity.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                        registerActivity.putExtra("Index", getIntent().getStringExtra("Index"));
-                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-                        //  startActivity(registerActivity);
-
-
-                    }
-                } else {
-                    RelatedContentInput relatedContentInput = new RelatedContentInput();
-                    LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
-
-                    relatedContentInput.setAuthToken(authTokenStr);
-                    relatedContentInput.setContentId(contentId);
-                    relatedContentInput.setContent_stream_id(muviStreamId);
-                    relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ExpertsDetailsActivity.this, ExpertsDetailsActivity.this);
-                    asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
-
-                }
-
-            }
-        });
-
-       /* dietPlanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProgrammeActivity.this, DietPlanActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
-        share.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Util.shareIt(ExpertsDetailsActivity.this);
-            }
-        });
 
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
@@ -1953,64 +1820,8 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
 
-        /***favorite *****/
-        favorite_view_episode.setVisibility(View.GONE);
-
-        favorite_view_episode.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-
-                if (preferenceManager != null) {
-                    loggedInStr = preferenceManager.getUseridFromPref();
-                }
-
-                if (loggedInStr != null) {
-                    if (isFavorite == 1) {
-
-                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
-                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
-                        deleteFavInputModel.setIsEpisode(isEpisode);
-
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, ExpertsDetailsActivity.this, ExpertsDetailsActivity.this);
-                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
-                       /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
-                        asynFavoriteDelete.execute();*/
-                    } else {
-
-                        LogUtil.showLog("MUVI", "favorite");
-                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
-                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                        AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ExpertsDetailsActivity.this, ExpertsDetailsActivity.this);
-                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
 
 
-                    }
-                } else {
-                    Util.favorite_clicked = true;
-
-                    Intent registerActivity = new Intent(ExpertsDetailsActivity.this, RegisterActivity.class);
-                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    registerActivity.putExtra("from", this.getClass().getName());
-                    startActivityForResult(registerActivity, 30060);
-
-                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                    player_layout.setVisibility(View.GONE);
-
-                }
-
-            }
-        });
-
-
-        /***favorite *****/
 /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
@@ -2232,85 +2043,40 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
 
 
             Log.v("SUBHASHREE","movieTrailer === "+ movieTrailerUrlStr);
-            lineTextview.setVisibility(View.GONE);
-
-            benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
-            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
-            diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
-            startProgrammeTextView.setText(languagePreference.getTextofLanguage(PROGRAM_BUTTON, DEFAULT_PROGRAM_BUTTON));
-            favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
-            dietPlanButton.setText(languagePreference.getTextofLanguage(DIET_BUTTON, DEFAULT_DIET_BUTTON));
 
 
-            if (contentDetailsOutput.getMetadata() != null || contentDetailsOutput.getMetadata().size() > 0) {
-               /* benefitsTitleTextView.setVisibility(View.GONE);
-                colortitle1.setVisibility(View.GONE);*/
-                benefitsLinearLayout.removeAllViews();
-                for (Map.Entry<String, String> entry : contentDetailsOutput.getMetadata().entrySet()) {
 
-                    Log.v("SUBHASS","program type value == "+entry.getValue());
-
-                        if (entry.getValue() != null && !entry.getValue().matches("")) {
-
-                            if(!entry.getKey().equalsIgnoreCase("programtype")) {
-
-                                DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
-                            }
-                            if (entry.getKey().equalsIgnoreCase("programtype") ){
-                                programType = entry.getValue();
-
-                            }
-//                            programType= "WeekBased";
-
-                            try {
-
-                                if (programType != null && !programType.matches("")) {
-                                    startProgramButton.setVisibility(View.VISIBLE);
-                                } else {
-                                    startProgramButton.setVisibility(View.INVISIBLE);
-                                }
-                            }catch (Exception e){
-
-                            }
-                    }
-
-
-                }
-              /*  RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.BELOW, R.id.benefitsLinearLayout);
-                relatedContentList.setLayoutParams(params);*/
-
-            } else {
-               /* FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), benefitsTitleTextView);
-                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
-                benefitsStoryTextView.setText(benefits.trim());
-                colortitle1.setVisibility(View.VISIBLE);*/
-                benefitsLinearLayout.setVisibility(View.GONE);
-            }
-
-            if (benefits.matches("") || benefits.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                benefitsTitleTextView.setVisibility(View.GONE);
-                colortitle1.setVisibility(View.GONE);
-            } else {
-                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.medium_fonts), benefitsTitleTextView);
-                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
-                benefitsStoryTextView.setText(benefits.trim());
-                colortitle1.setVisibility(View.VISIBLE);
-                benefitsTitleLineDivider.setVisibility(View.VISIBLE);
-                benefitsTitleTextView.setVisibility(View.VISIBLE);
-            }
 
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                detailsTextView.setVisibility(View.GONE);
+                categoryTitle.setVisibility(View.GONE);
+                categoryTitle1.setVisibility(View.GONE);
+                line_layout.setVisibility(View.GONE);
                 colortitle.setVisibility(View.GONE);
 
             } else {
+                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.medium_fonts), categoryTitle);
+                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.medium_fonts), categoryTitle1);
+
+                if (name.contains("-")) {
+                    String Data[] = name.split("-");
+                    categoryTitle.setVisibility(View.VISIBLE);
+                    categoryTitle1.setVisibility(View.VISIBLE);
+
+                    categoryTitle.setText(Data[0].toString() + " - ");
+                    categoryTitle1.setText( Data[1].toString());
+                    colortitle.setVisibility(View.VISIBLE);
+
+                } else {
+                    categoryTitle.setVisibility(View.VISIBLE);
+                    categoryTitle1.setVisibility(View.GONE);
+                    colortitle.setVisibility(View.VISIBLE);
+                    categoryTitle.setText(name.toString());
+                }
 
 
-                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.medium_fonts), detailsTextView);
-                detailsTextView.setVisibility(View.VISIBLE);
-                detailsTitleLineDivider.setVisibility(View.VISIBLE);
-                detailsTextView.setText(name);
+
+                line_layout.setVisibility(View.VISIBLE);
+
                 colortitle.setVisibility(View.GONE);
             }
 
@@ -2323,57 +2089,15 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
                 Log.v("SUBHA", "trailer url yes === ");
             }
 
-            if (duration.matches("") || preparation_time.matches("")) {
-                durationLayout.setVisibility(View.GONE);
-                durationTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
-
-            } else {
 
 
-                durationLayout.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
-                if(!duration.matches("") ) {
-                    days.setText(duration);
-                }else if( !preparation_time.matches("")){
-                    days.setText(preparation_time);
-                }
-            }
-            if (difficulty_level.matches("") || cooking_time.matches("")) {
-                difficultyLayout.setVisibility(View.GONE);
-                diffcultyTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
-            } else {
-                difficultyLayout.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.regular_fonts), diffcultyTitleTextView);
-                if(!difficulty_level.matches("") ) {
-                    difficulty.setText(difficulty_level);
-                }else if( !cooking_time.matches("")){
-                    difficulty.setText(cooking_time);
-                }
 
-            }
-
-            if (difficulty_level.matches("") && duration != null) {
-                lineTextview.setVisibility(View.GONE);
-                days.setGravity(Gravity.CENTER);
-            } else if (duration.matches("") && difficulty_level != null) {
-                lineTextview.setVisibility(View.GONE);
-                difficulty.setGravity(Gravity.CENTER);
-            }
-
-            dietPlanButton.setVisibility(View.VISIBLE);
-            // Util.favorite_clicked = false;
-
-
-            /***favorite *****/
             if (movieDetailsStr.matches("") || movieDetailsStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 videoStoryTextView.setVisibility(View.GONE);
 
             } else {
                 //  videoStoryTextView.setMaxLines(3);
                 videoStoryTextView.setVisibility(View.VISIBLE);
-                storyTitleLineDivider.setVisibility(View.VISIBLE);
 
                 FontUtls.loadFont(ExpertsDetailsActivity.this, getResources().getString(R.string.light_fonts), videoStoryTextView);
 
@@ -2428,34 +2152,6 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
                         .into(moviePoster);
 
 
-            }
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
-                    .trim()).equals("1")) {
-                favorite_view_episode.setVisibility(View.VISIBLE);
-                if (preferenceManager != null) {
-                    loggedInStr = preferenceManager.getUseridFromPref();
-                }
-                if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
-
-                    Util.favorite_clicked = false;
-                    Log.v("SUBHA", "favorite ----");
-
-                    AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                    addToFavInputModel.setAuthToken(authTokenStr);
-                    addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                    addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                    addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                    AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ExpertsDetailsActivity.this, ExpertsDetailsActivity.this);
-                    asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-                } else if (loggedInStr != null && isFavorite == 1) {
-
-//                    favorite_view_episode.setImageResource(R.drawable.favorite_red);
-                    favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
-                }
-
-            } else {
-                favorite_view_episode.setVisibility(View.GONE);
             }
 
 
@@ -2544,7 +2240,6 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
 
         ExpertsDetailsActivity.this.sucessMsg = sucessMsg;
 //        favorite_view_episode.setImageResource(R.drawable.favorite);
- favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
 
 
 //        showToast();
@@ -2594,7 +2289,6 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
 //            favorite_view_episode.setImageResource(R.drawable.favorite_red);
-            favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
             isFavorite = 1;
 
 //            showToast();

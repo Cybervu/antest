@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/movieImageView"
-                android:layout_width="@dimen/videogrid_width"
-                android:layout_height="@dimen/videogrid_height"
+                android:layout_width="@dimen/view_videogrid_width"
+                android:layout_height="@dimen/view_videogrid_height"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
@@ -38,8 +38,8 @@
 
             <ImageView
                 android:id="@+id/movieImageOverlay"
-                android:layout_width="@dimen/videogrid_width"
-                android:layout_height="@dimen/videogrid_height"
+                android:layout_width="@dimen/view_videogrid_width"
+                android:layout_height="@dimen/view_videogrid_height"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"

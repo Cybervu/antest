@@ -449,7 +449,7 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
                 return false;
             case R.id.menu_item_favorite:
 
-                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                Intent favoriteIntent = new Intent(this, DigiOsmosisFavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -529,7 +529,7 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
                         Log.v("SUBHA","weeks days ==="+weeks);
                     }
 
-                    for (int k = 0; k < weeks; k++) {
+                   /* for (int k = 0; k < weeks; k++) {
                         int remainDays = 7;
                         if (days % 7 > 0){
                             remainDays = days%7;
@@ -537,16 +537,26 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
                         Log.v("SUBHA","remainDays"+remainDays);
                         totaldays = remainDays;
                         int weekNumber = k +1;
-                        week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[k]), "Week" +" "+ weekNumber ,remainDays));
+                        week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[k]), "Week" +" "+ weekNumber ,remainDays,permalinkStr));
 
-                    }
+                    }*/
+
+                for(int k = 0;k<weeks-1 ;k++){
+                    week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[k]), "Week" +" "+ k+1 ,7,permalinkStr));
+                }
+                if((days % 7) == 0){
+                    week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[weeks-1]), "Week" +" "+ weeks ,7,permalinkStr));
+                }
+                else{
+                    week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[weeks-1]), "Week" +" "+ weeks ,days % 7,permalinkStr));
+                }
 
 
 
 
                 adapter = new WeekAdapter(WeekActivity.this, R.layout.week_card_row, week) ;
 
-                seasonGridView.addOnItemTouchListener(new RecyclerTouchListener2(this,
+           /*     seasonGridView.addOnItemTouchListener(new RecyclerTouchListener2(this,
                         seasonGridView, new ClickListener2() {
                     @Override
                     public void onClick(View view, final int position) {
@@ -566,7 +576,7 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
 
                         return;
                     }
-                }));
+                }));*/
                /* adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(SeasonModel item,int pos) {
@@ -639,7 +649,10 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
         in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
 //        in.putExtra(PERMALINK_INTENT_ARRAY, week);
         Log.v("SUBHASS","totaldays === "+totaldays);
+        Log.v("SUBHASS","pos === "+pos);
         in.putExtra(DAYS_DATA,totaldays);
+
+
         in.putExtra("Index",String.valueOf(pos));
         startActivity(in);
     }

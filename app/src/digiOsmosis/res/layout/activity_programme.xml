@@ -490,48 +490,6 @@
                         android:layout_marginRight="@dimen/marginRight20dp"
                         android:background="@color/line_divider_detailsPage"
                         android:padding="@dimen/marginRight20dp" />
-                    <!--<TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        an
-                        android:layout_below="@+id/videoStoryTextView"
-                        android:layout_marginBottom="@dimen/marginleft10dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="16dp"
-                        android:background="@color/line_divider_detailsPage"
-                        android:padding="20dp" />
--->
-
-                    <!-- <Button
-                         android:id="@+id/startProgramButton"
-                         android:layout_width="@dimen/start_program_button"
-                         android:layout_height="wrap_content"
-                         android:layout_centerInParent="true"
-                         android:background="@drawable/my_button"
-                         android:padding="6dp"
-                         android:stateListAnimator="@null"
-                         android:text="Start Programme"
-                         android:textAllCaps="false"
-                         android:textColor="@color/buttonTextColor"
-                         android:textSize="@dimen/program_button_text_size"
-                         android:visibility="gone" />-->
-
-                    <!--  <Button
-                          android:id="@+id/dietPlanButton"
-                          android:layout_width="@dimen/start_program_button"
-                          android:layout_height="wrap_content"
-                          android:layout_below="@+id/startProgramButton"
-                          android:layout_centerInParent="true"
-                          android:layout_marginTop="15dp"
-                          android:background="@drawable/my_button"
-                          android:padding="6dp"
-                          android:stateListAnimator="@null"
-                          android:text="Diet Plan"
-                          android:textAllCaps="false"
-                          android:textColor="@color/buttonTextColor"
-                          android:textSize="@dimen/program_button_text_size"
-                          android:visibility="gone" />-->
-
 
                     <LinearLayout
                         android:id="@+id/durationLinearLayout"
@@ -629,12 +587,12 @@
                         android:layout_height="1dp"
                         android:id="@+id/benefitsTitleLineDivider"
 
-                        android:layout_alignLeft="@+id/durationLinearLayout"
-                        android:layout_alignRight="@+id/durationLinearLayout"
+                        android:layout_alignLeft="@+id/line_divider"
+                        android:layout_alignRight="@+id/line_divider"
                         android:layout_below="@+id/durationLinearLayout"
-                        android:layout_marginLeft="@dimen/program_left"
+                        android:layout_marginLeft="@dimen/marginRight20dp"
+                        android:layout_marginRight="@dimen/marginRight20dp"
                         android:visibility="gone"
-                        android:layout_marginRight="@dimen/program_left"
                         android:background="@color/line_divider_detailsPage"
                         android:padding="@dimen/marginRight20dp" />
 
@@ -721,8 +679,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignLeft="@+id/benefitsTitleLineDivider"
                         android:layout_below="@+id/durationLinearLayout"
-                        android:layout_marginLeft="@dimen/program_left"
-                        android:layout_marginRight="@dimen/program_left"
+                        android:layout_marginLeft="@dimen/marginLeft15dp"
+                        android:layout_marginRight="@dimen/marginLeft15dp"
                         android:layout_marginBottom="@dimen/program_left"
                         android:layout_marginTop="30dp"
                         android:orientation="vertical"

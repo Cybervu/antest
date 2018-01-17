@@ -7,7 +7,8 @@
     <dimen name="txt">50sp</dimen>
     <dimen name="imgheight">40dp</dimen>
     <dimen name="imgwidth">40dp</dimen>
-
+    <dimen name="view_videogrid_width">125dp</dimen>
+    <dimen name="view_videogrid_height">178dp</dimen>
 
     <dimen name="nav_drawer_width">260dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

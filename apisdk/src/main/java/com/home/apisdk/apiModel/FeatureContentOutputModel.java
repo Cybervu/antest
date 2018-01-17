@@ -12,6 +12,25 @@ public class FeatureContentOutputModel {
     String permalink;
     String content_types_id;
     String is_episode;
+    String content_id;
+
+    public String getContent_stream_id() {
+        return content_stream_id;
+    }
+
+    public void setContent_stream_id(String content_stream_id) {
+        this.content_stream_id = content_stream_id;
+    }
+
+    public String getContent_id() {
+        return content_id;
+    }
+
+    public void setContent_id(String content_id) {
+        this.content_id = content_id;
+    }
+
+    String content_stream_id;
 
     int is_converted;
     int is_ppv;

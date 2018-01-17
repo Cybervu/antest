@@ -9,14 +9,25 @@ import java.io.Serializable;
 public class WeekModel  {
     private String weekId = "";
     private String weekName = "";
+    private String premalink = "";
 
-    public WeekModel(String weekId, String weekName, int weekDays) {
+
+    public WeekModel(String weekId, String weekName, int weekDays, String premalink) {
         this.weekId = weekId;
         this.weekName = weekName;
         this.weekDays = weekDays;
+        this.premalink = premalink;
     }
 
     private int weekDays = 7;
+
+    public String getPremalink() {
+        return premalink;
+    }
+
+    public void setPremalink(String premalink) {
+        this.premalink = premalink;
+    }
 
 
     public int getWeekDays() {

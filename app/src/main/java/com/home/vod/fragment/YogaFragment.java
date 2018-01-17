@@ -568,6 +568,7 @@ String titleStr;
 
                     final Intent movieDetailsIntent = new Intent(context, YogaPlayerActivity.class);
                     movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, item.getPermalink());
+
                     movieDetailsIntent.putExtra("CONTENT_ID", item.getContent_id());
                     movieDetailsIntent.putExtra("CONTENT_STREAM_ID", item.getContent_stream_id());
                     movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

@@ -222,7 +222,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
-        favoriteLayoutHanlder = new FavoriteHandler(FavoriteActivity.this);
+        favoriteLayoutHanlder = new FavoriteHandler(this);
         favoriteLayoutHanlder.handleTitle();
         loggedInStr =preferenceManager.getUseridFromPref();
         episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
