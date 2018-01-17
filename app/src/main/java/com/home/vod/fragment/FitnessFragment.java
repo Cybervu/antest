@@ -43,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -168,6 +169,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     private String content_id;
     private String content_stream_id;
     private boolean backfromactivity = false;
+    private boolean index_clicked = false;
 
     String titleStr;
     /***************
@@ -217,6 +219,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
 
+    ScrollView scroll_view;
+    View insideView;
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
         @Override
@@ -340,6 +344,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
     // UI
     private ListView listView;
+     int ScrollState = 0;
 
     ImageView img;
     //data to load videourl
@@ -384,6 +389,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         super.onStop();
     }
     TextView categoryTitle;
+    TextView index;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -429,6 +435,8 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         searchEdittext.addTextChangedListener(new EditTextListener());
         searchIcon = (ImageView) rootView.findViewById(R.id.search_icon);
         clearText = (ImageView) rootView.findViewById(R.id.clear_text);
+        scroll_view = (ScrollView) rootView.findViewById(R.id.scroll_view);
+        insideView = (View) rootView.findViewById(R.id.side_index);
 
 
         noInternetConnectionLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
@@ -447,6 +455,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
         listView.setAdapter(fitnessAdapter);
 
         categoryTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        index = (TextView) rootView.findViewById(R.id.index);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(titleStr);
@@ -491,17 +500,31 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             footerView.setVisibility(View.GONE);
         }
         resetData();
+
+
+
+
+
         asynLoadVideos = new AsynLoadVideos();
         asynLoadVideos.execute();
 
-        CategoryListInput categoryListInput = new CategoryListInput();
+       /* CategoryListInput categoryListInput = new CategoryListInput();
         categoryListInput.setAuthToken(authTokenStr);
         GetCategoryListAsynTask getCategoryListAsynTask = new GetCategoryListAsynTask(categoryListInput, FitnessFragment.this, getActivity());
-        getCategoryListAsynTask.execute();
+        getCategoryListAsynTask.execute();*/
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                Log.v("Muvi1", "onScrollStateChanged = "+scrollState);
+                ScrollState = scrollState;
+
+                if(ScrollState == 1 || ScrollState == 2){
+                    index.setVisibility(View.VISIBLE);
+                }else {
+                    index.setVisibility(View.GONE);
+                }
 
                 if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
@@ -536,10 +559,51 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
+                try{
+
+                    Log.v("Muvi1", "on scroll data info = "+itemData.get(firstVisibleItem).getTitle());
+
+                    String title = itemData.get(firstVisibleItem).getTitle().trim();
+                    title = (title.replaceAll("[0-9]","")).trim();
+                    String INDEX = title.substring(0,1);
+
+                    Log.v("Muvi1", "show Index = "+INDEX);
+                    index.setText(INDEX.toUpperCase());
+
+
+                    if(!index_clicked){
+                        for (int j = 0;j<listOfTextview.size();j++) {
+                            if ((listOfTextview.get(j).getTag().toString().toLowerCase().trim()).equals(INDEX.toLowerCase().trim())){
+                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+
+                                // scroll_view.scrollTo(j, (int)insideView.getY());
+                                insideView.getParent().requestChildFocus(insideView,insideView);
+//                                listOfTextview.get(j).requestFocus();
+
+                            }
+                            else {
+                                if(mapIndex.get(listOfTextview.get(j).getText()) !=null){
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
+                                }else{
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.style_circular_color));
+                                }
+                            }
+                        }
+                    }else{
+                        index_clicked = false;
+                    }
+
+
+
+
+
+
+                }catch (Exception e){}
+
                 if (scrolling == true && mIsScrollingUp == false) {
 
 
-                    Log.v("SUBHA", "on scroll data");
+
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
@@ -576,6 +640,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
             }
         });
+
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -615,8 +680,6 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
                 } else {
 
-                    Log.v("SUBHA", "grid view item called");
-                    Toast.makeText(context,"grid view item called ======= ",Toast.LENGTH_SHORT).show();
                     final Intent movieDetailsIntent = new Intent(context, YogaPlayerActivity.class);
                     movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, item.getPermalink());
                     movieDetailsIntent.putExtra("CONTENT_ID", item.getContent_id());
@@ -1629,52 +1692,6 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
     }
 
 
-    /* @Override
-     public void onConfigurationChanged(Configuration newConfig) {
-         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-      *//*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-*//*
-
-        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
-        layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-        listView.setLayoutParams(layoutParams);
-        listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
-        listView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-
-            listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-
-
-        } else {
-            if (videoWidth > videoHeight) {
-                listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            } else {
-                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
-            }
-
-
-        }
-
-        super.onConfigurationChanged(newConfig);
-    }
-*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -2294,23 +2311,36 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                 textView.setText(""+((char)i));
 
 
+
+
+
                 textView.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
                     {
+                        index_clicked = true;
                         final TextView selectedIndex = (TextView) view;
-                        try{
-                            listView.setSelection(mapIndex.get(selectedIndex.getText()));
-                        }catch (Exception e){}
 
+                        if(mapIndex.get(selectedIndex.getText()) !=null){
+                            for (int j = 0;j<listOfTextview.size();j++) {
+                                if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
+                                    listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+                                }
+                                else {
+                                   // listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
 
-                        for (int j = 0;j<listOfTextview.size();j++) {
-                            if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
-                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
+                                    if(mapIndex.get(listOfTextview.get(j).getText()) !=null){
+                                        listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
+                                    }else{
+                                        listOfTextview.get(j).setTextColor(getResources().getColor(R.color.style_circular_color));
+                                    }
+                                }
                             }
-                            else {
-                                listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
-                            }
-                        }
+
+                            try{
+                                listView.setSelection(mapIndex.get(selectedIndex.getText()));
+                            }catch (Exception e){}
+                    }
+
 
 
                     }
@@ -2324,36 +2354,7 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
             }
         }
 
-       /* List<String> indexList = new ArrayList<String>(mapIndex.keySet());
-        for (String index : indexList) {
-            textView = (TextView) getActivity().getLayoutInflater().inflate(R.layout.side_index_item, null);
-            textView.setText(index);
 
-            textView.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View view)
-                {
-                    final TextView selectedIndex = (TextView) view;
-                    listView.setSelection(mapIndex.get(selectedIndex.getText()));
-
-                    for (int j = 0;j<listOfTextview.size();j++) {
-                        if ((listOfTextview.get(j).getTag().toString().trim()).equals(selectedIndex.getTag().toString().trim())){
-                            listOfTextview.get(j).setTextColor(getResources().getColor(R.color.colorAccent));
-                        }
-                        else {
-                            listOfTextview.get(j).setTextColor(getResources().getColor(R.color.sideIndex_color));
-                        }
-                    }
-
-
-                }
-            });
-
-
-            indexLayout.addView(textView);
-
-            textView.setTag(index);
-            listOfTextview.add(textView);
-        }*/
     }
 
 

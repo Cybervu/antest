@@ -332,7 +332,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             startActivity(startIntent);
                             Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
-
                         }
                     });
                 }

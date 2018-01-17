@@ -19,9 +19,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.home.vod.R;
+import com.home.vod.activity.FitnessActivity;
 import com.home.vod.activity.ViewMoreActivity;
-import com.home.vod.fragment.FitnessFragment;
-import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
@@ -136,19 +135,18 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             @Override
             public void onClick(View v) {
 
-                if (sectionName.equalsIgnoreCase("YOGA") && sectionName.equalsIgnoreCase("Exercise")){
-                    Context context = v.getContext();
-                    Intent i = new Intent(context, ViewMoreActivity.class);
-                    i.putExtra("SectionId", sectionId);
-                    i.putExtra("sectionName", sectionName);
-                    context.startActivity(i);
-                }else {
-                    Context context = v.getContext();
-                    Intent i = new Intent(context, ViewMoreActivity.class);
-                    i.putExtra("SectionId", sectionId);
-                    i.putExtra("sectionName", sectionName);
-                    context.startActivity(i);                }
+                Context context = v.getContext();
+                Intent i;
 
+                if(sectionName.equalsIgnoreCase("YOGA")){
+                    i = new Intent(context, FitnessActivity.class);
+                }else{
+                    i = new Intent(context, ViewMoreActivity.class);
+                }
+
+                i.putExtra("SectionId", sectionId);
+                i.putExtra("sectionName", sectionName);
+                context.startActivity(i);
             }
         });
 
