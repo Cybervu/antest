@@ -17,12 +17,12 @@ repositories {
 
 android {
     flavorDimensions 'environment', 'vendor'
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.home.vod"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -40,7 +40,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 
     productFlavors {
         /*Structuring Default flavour with dimension*/
@@ -48,7 +50,7 @@ android {
             dimension 'vendor'
             applicationId 'com.release.muvisdk'
             minSdkVersion 15
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 4
             versionName "1.04"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
@@ -57,13 +59,12 @@ android {
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
 //            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
-//            buildConfigField "String", "AUTH_TOKEN", "\"27cb93a599d3fc8d4eb906f56275f0b9\""
 //liveStripe
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
-//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
@@ -75,7 +76,7 @@ android {
             dimension 'vendor'
             applicationId 'com.release.vishwamtv'
             minSdkVersion 15
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -95,7 +96,7 @@ android {
             dimension 'vendor'
             applicationId "com.release.newthoughtchannel"
             minSdkVersion 15
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -117,7 +118,7 @@ android {
             dimension 'vendor'
             minSdkVersion 15
             applicationId 'com.release.aatto'
-            targetSdkVersion 23
+            targetSdkVersion 27
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             versionCode 1
             versionName '1.0'
@@ -136,7 +137,7 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.digiosmosis'
-            targetSdkVersion 23
+            targetSdkVersion 27
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             versionCode 1
             versionName '1.0'
@@ -157,7 +158,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
             versionCode 18
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName '3.1.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
@@ -177,7 +178,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.matas'
             versionCode 5
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName '1.1.3'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
@@ -201,7 +202,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.monetiser'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"d3c3848c41852daea8f707a7b1b14230\""
@@ -220,7 +221,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.plusnights'
             versionCode 5
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.4.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
@@ -240,7 +241,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.metrox'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"97082c300cc83c4f0234f61ae50ff336\""
@@ -259,7 +260,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.wuntustreaming'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
@@ -277,7 +278,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.cmaxtv'
             versionCode 4
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"a2478e71219f606cb5b7a3d3f7a35fe8\""
@@ -295,7 +296,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.quickflix'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
@@ -313,7 +314,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.ondemand'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
@@ -335,7 +336,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
 //Magic Movies
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
@@ -353,7 +354,7 @@ android {
             applicationId 'com.release.UberEatsVOD'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"45cfb681ab026427eb9c031e3f6c1f08\""
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
@@ -372,7 +373,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             buildConfigField "String", "AUTH_TOKEN", "\"848ff43117a71e967354b42f5735e2cc\""
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
@@ -391,7 +392,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionCode 3
             versionName '1.0.2'
         }
@@ -411,7 +412,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 3
             versionName '1.0.2'
         }
@@ -432,7 +433,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionCode 3
             versionName '1.0.2'
         }
@@ -451,7 +452,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"0f05eecafd0c3cb4290050ee055118e8\""
-            targetSdkVersion 23
+            targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
@@ -470,7 +471,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             buildConfigField "String", "AUTH_TOKEN", "\" 78141a9c7e92f1f3493994553efbb7a1\""
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionCode 1
             versionName '1.0'
         }
@@ -485,7 +486,7 @@ android {
         euroman {
             minSdkVersion 15
             applicationId 'com.release.euroman'
-            targetSdkVersion 23
+            targetSdkVersion 27
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
@@ -503,7 +504,7 @@ android {
         leasy {
             minSdkVersion 21
             applicationId 'com.release.leasy'
-            targetSdkVersion 25
+            targetSdkVersion 27
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
@@ -524,7 +525,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.stuffpix'
             versionCode 1
-            targetSdkVersion 25
+            targetSdkVersion 27
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -641,6 +642,8 @@ android.variantFilter { variant ->
 
 android {
     useLibrary 'org.apache.http.legacy'
+
+
 }
 
 
@@ -663,25 +666,25 @@ dependencies {
         transitive = false
     }
     compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
     // compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.pkmmte.view:circularimageview:1.1'
-    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.card:android-sdk:5.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
-    compile 'com.devbrackets.android:exomedia:3.0.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.google.android.gms:play-services-cast-framework:9.4.0'
+    compile 'com.devbrackets.android:exomedia:4.1.0'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.google.android.gms:play-services-cast-framework:10.2.1'
     compile 'com.googlecode.android-query:android-query:0.25.9'
-    compile 'com.android.support:mediarouter-v7:25.3.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
-    compile 'com.google.firebase:firebase-messaging:9.4.0'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:palette-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-auth:9.4.0'
-    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
+    compile 'com.android.support:mediarouter-v7:27.0.2'
+    compile 'com.facebook.android:facebook-android-sdk:4.22.1'
+    compile 'com.google.firebase:firebase-messaging:10.2.1'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:cardview-v7:27.0.2'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.android.support:palette-v7:27.0.2'
+    compile 'com.google.android.gms:play-services-auth:10.2.1'
+    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4'
 }
 
 

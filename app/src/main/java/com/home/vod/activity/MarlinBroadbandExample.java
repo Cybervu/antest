@@ -1,6 +1,7 @@
 
 package com.home.vod.activity;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -26,7 +27,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
@@ -54,6 +54,7 @@ import player.subtitle_support.FormatSRT_WithoutCaption;
 import player.subtitle_support.TimedTextObject;
 
 import com.androidquery.AQuery;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
@@ -104,7 +105,6 @@ import java.util.concurrent.TimeUnit;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import javax.net.ssl.HttpsURLConnection;
 
 import player.activity.ResumePopupActivity;
@@ -219,7 +219,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			videoCastCrewTitleTextView;
 	TextView story;
 
-	private EMVideoView emVideoView;
+	private VideoView emVideoView;
 	int seek_label_pos = 0;
 	int content_types_id = 0;
 
@@ -449,7 +449,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 
-		emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+		emVideoView = (VideoView) findViewById(R.id.emVideoView);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
 		subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
@@ -529,7 +529,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		// Added For Chromecast By BIBHU//
 
 
-		Context castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+		@SuppressLint("RestrictedApi") Context castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
 		Drawable drawable = null;
 		TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
 		drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
@@ -753,7 +753,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				mHandler.removeCallbacks(updateTimeTask);
-				playerStartPosition = emVideoView.getCurrentPosition();
+				playerStartPosition = (int) emVideoView.getCurrentPosition();
 
 				asyncVideoLogDetails = new AsyncVideoLogDetails();
 				asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
@@ -781,7 +781,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					playerPreviousPosition = playerStartPosition;
 
 					log_temp_id = "0";
-					player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+					player_start_time = millisecondsToString((int) emVideoView.getCurrentPosition());
 					playerPosition = player_start_time;
 
 
@@ -1022,7 +1022,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							Log.v("BIBHU3", " called 1============");
 
 							emVideoView.start();
-							seekBar.setProgress(emVideoView.getCurrentPosition());
+							seekBar.setProgress((int) emVideoView.getCurrentPosition());
 							updateProgressBar();
 
 							if (SubTitlePath.size() > 0) {
@@ -1335,10 +1335,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
-			seekBar.setProgress(emVideoView.getCurrentPosition());
-			seekBarProgress = emVideoView.getCurrentPosition();
-			current_played_length = emVideoView.getCurrentPosition();
-			seekBar.setMax(emVideoView.getDuration());
+			seekBar.setProgress((int) emVideoView.getCurrentPosition());
+			seekBarProgress = (int) emVideoView.getCurrentPosition();
+			current_played_length = (int) emVideoView.getCurrentPosition();
+			seekBar.setMax((int) emVideoView.getDuration());
 			Calcute_Currenttime_With_TotalTime();
 			mHandler.postDelayed(this, 1000);
 
@@ -1347,9 +1347,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			}
 
 			current_matching_time = emVideoView.getCurrentPosition();
-			playerPosition = millisecondsToString(emVideoView.getCurrentPosition());
+			playerPosition = millisecondsToString((int) emVideoView.getCurrentPosition());
 
-			int duration = emVideoView.getDuration() / 1000;
+			int duration = (int) (emVideoView.getDuration() / 1000);
 			/*if (currentPositionStr > 0 && currentPositionStr == duration) {
 				asyncVideoLogDetails = new AsyncVideoLogDetails();
 				watchStatus = "complete";
@@ -1357,7 +1357,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 			if (player.utils.Util.checkNetwork(MarlinBroadbandExample.this)) {
-				if (emVideoView.getCurrentPosition() > 0 && ((millisecondsToString(emVideoView.getCurrentPosition())) % 60) == 0) {
+				if (emVideoView.getCurrentPosition() > 0 && ((millisecondsToString((int) emVideoView.getCurrentPosition())) % 60) == 0) {
 
 					watchStatus = "halfplay";
 					asyncVideoLogDetails = new AsyncVideoLogDetails();
@@ -1721,7 +1721,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 				} else {
 					emVideoView.start();
-					seekBar.setProgress(emVideoView.getCurrentPosition());
+					seekBar.setProgress((int) emVideoView.getCurrentPosition());
 					updateProgressBar();
 				}
 
@@ -1883,7 +1883,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		@Override
 		public void run() {
 			if (emVideoView != null && emVideoView.isPlaying()) {
-				int currentPos = emVideoView.getCurrentPosition();
+				int currentPos = (int) emVideoView.getCurrentPosition();
 				Collection<Caption> subtitles = srt.captions.values();
 				for (Caption caption : subtitles) {
 					if (currentPos >= caption.start.mseconds
@@ -2559,6 +2559,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 				@Override
 				public void onSendingRemoteMediaRequest() {
+				}
+
+				@Override
+				public void onAdBreakStatusUpdated() {
+
 				}
 			});
 

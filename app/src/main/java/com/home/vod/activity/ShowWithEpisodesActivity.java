@@ -4272,6 +4272,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override

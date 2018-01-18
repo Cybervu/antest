@@ -12,8 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -191,7 +191,7 @@ import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PPvPaymentInfoActivity extends ActionBarActivity implements
+public class PPvPaymentInfoActivity extends AppCompatActivity implements
         VideoDetailsAsynctask.VideoDetailsListener,
         ValidateCouponCodeAsynTask.ValidateCouponCodeLIstener,
         AuthUserPaymentInfoAsyntask.AuthUserPaymentInfoListener,
@@ -3347,6 +3347,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {

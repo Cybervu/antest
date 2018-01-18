@@ -2117,6 +2117,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override
@@ -3395,6 +3400,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 } else {
                     viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
+
                 }
             }
 

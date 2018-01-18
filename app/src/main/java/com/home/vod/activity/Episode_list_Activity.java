@@ -3729,6 +3729,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }

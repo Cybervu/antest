@@ -282,8 +282,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         pDialog.hide();
                         pDialog = null;
                     }
+                    LogUtil.showLog("MUVI", "isRestrictDevice called===" + (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)));
 
-                    if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
+                    if ((languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)).trim().equals("1")) {
 
                         LogUtil.showLog("MUVI", "isRestrictDevice called");
                         // Call For Check Api.
@@ -3613,6 +3614,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
         finish();
@@ -3910,7 +3916,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     }
 
 
-                    if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
+                    if ((languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)).trim().equals("1")) {
 
                         LogUtil.showLog("MUVI", "isRestrictDevice called");
                         // Call For Check Api.
@@ -5456,7 +5462,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
 
                 //load video urls according to resolution
-                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))){
+                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
 
                     Log.v("BIBHU", "isRestrictDevice called");
                     // Call For Check Api.

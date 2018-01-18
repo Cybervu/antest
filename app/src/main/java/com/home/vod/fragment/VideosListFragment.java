@@ -2408,6 +2408,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }

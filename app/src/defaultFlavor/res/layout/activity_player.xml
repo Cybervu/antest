@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,13 +26,13 @@
                 android:orientation="vertical">
 
 
-               <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+               <com.devbrackets.android.exomedia.ui.widget.VideoView
                     android:id="@+id/emVideoView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#000000"
                     android:visibility="visible"
-                    EMVideoView:useDefaultControls="false">
+                    app:useDefaultControls="false">
 
 
                     <ProgressBar
@@ -153,7 +154,7 @@
                          android:textSize="18dp"
                          android:visibility="visible" />-->
 
-                </com.devbrackets.android.exomedia.ui.widget.EMVideoView>
+                </com.devbrackets.android.exomedia.ui.widget.VideoView>
 
             </LinearLayout>
 

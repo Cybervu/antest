@@ -2,6 +2,7 @@
 package player.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
@@ -59,7 +60,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
 import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
 import com.google.ads.interactivemedia.v3.api.AdEvent;
@@ -370,7 +371,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             videoCastCrewTitleTextView;
     TextView story;
 
-    private EMVideoView emVideoView;
+    private VideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
 
@@ -423,6 +424,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     // =====================End==============================//
 
+//    String url234 = "ms3:\\/\\/ms3.test.expressplay.com:8443\\/hms\\/ms3\\/rights\\/?b=ABMABAADERwACURSTTQtTXV2aWlNABBOELjXWtuclUaAAQ2wgs5zAICyOgajhieDrsH_qWA66KMhNJIG7GiLO5CuxizpSFLf_GvJtv8DWpHrU3dmlJFc-0XL3Ar2gBxtbeiyYGoH57KBGm0fCsxFExaLpiwjeY5lPp4uLCSWCDiXvFezl3n2pDvgj27mdvTuYn8WjCRLdrNzUBCQlCWukj28Gt8QBi4RSAAAABT-Z9Rsw8ZN6E0n0R7KdzCkMqXehA#https%3A%2F%2Fd2s30ldydr6857.cloudfront.net%2Fuploads%2Fmovie_stream%2Ffull_movie%2F122766%2Fstream.mpd";
+    String url234 = "ms3://ms3.service.expressplay.com:8443/hms/ms3/rights/?b=ABMABAAAFIwACURSTTQtTXV2aSmbABDGrWNOfn9KqvruezaD0z_7AIBCXWJwaXNW6FcxasEd2GhawKSxAXHqoCd0pIJUmTXNLjUi3bdlXVhqI9yDVj7mYcfttxKJl-6GEfY1ZmWiyCQ1VwGl626cgXCw802hg007DfrucZQ9DrVmiMkiqMVfusYjRH7xZ3jo1PshlH7BEGbPLpWkVGdBBWkou51ZDRJ4_QAAABTdBsHcBKkkCZA-h6TMD4ne0xPVGQ#https%3A%2F%2Fvimeoassets-singapore.s3-ap-southeast-1.amazonaws.com%2F4050%2FEncodedVideo%2Fuploads%2Fmovie_stream%2Ffull_movie%2F91003%2Fstream.mpd";
 
     /*----------------chromecast-------------------------------------*/
     View view;
@@ -538,7 +541,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int) emVideoView.getCurrentPosition());
                 updateProgressBar();
             }
         }
@@ -710,7 +713,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         // Added For Chromecast By BIBHU//
 
 
-        Context castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+        @SuppressLint("RestrictedApi") Context castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
         Drawable drawable = null;
         TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
         drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
@@ -731,7 +734,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         movieId = playerModel.getMovieUniqueId();
         episodeId = playerModel.getEpisode_id();
 
-        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -865,7 +868,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setVisibility(View.INVISIBLE);
                 Log.v("BIBHU1", "subtitle_image button Invisible called");
             } else {
-                Util.DefaultSubtitle = SubTitleName.get(0);
                 subtitle_change_btn.setBackgroundResource(0);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
@@ -1105,7 +1107,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mHandler.removeCallbacks(updateTimeTask);
-                playerStartPosition = emVideoView.getCurrentPosition();
+                playerStartPosition = (int) emVideoView.getCurrentPosition();
 
                 // Call New Video Log Api.
 
@@ -1133,7 +1135,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 playerPreviousPosition = playerStartPosition;
 
                 log_temp_id = "0";
-                player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+                player_start_time = millisecondsToString((int) emVideoView.getCurrentPosition());
                 playerPosition = player_start_time;
 
                 // ============End=====================//
@@ -1325,7 +1327,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     change_resolution = false;
                     emVideoView.start();
                     emVideoView.seekTo(seekBarProgress);
-                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    seekBar.setProgress((int) emVideoView.getCurrentPosition());
 
                     if (is_paused) {
                         is_paused = false;
@@ -1392,7 +1394,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                                 }
                                 emVideoView.start();
-                                seekBar.setProgress(emVideoView.getCurrentPosition());
+                                seekBar.setProgress((int) emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
                                 if (SubTitlePath.size() > 0) {
@@ -1508,7 +1510,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 			 */
             String contentTypeValue = contentType.toString();
             if (playerModel.getVideoUrl().contains(".mpd")) {
-                String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+                String url = playerProxy.makeUrl(url234.replace("\\",""), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
                 emVideoView.setVideoURI(Uri.parse(url));
 
             } else {
@@ -1839,7 +1841,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     public void run() {
                         if (emVideoView != null) {
 
-                            int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
+                            int currentPositionStr = millisecondsToString((int) emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
 
@@ -1849,7 +1851,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 log_temp_id = "0";
 
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int) (emVideoView.getDuration() / 1000);
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "complete";
@@ -1864,7 +1866,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                                 playerPreviousPosition = 0;
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int) (emVideoView.getDuration() / 1000);
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
@@ -2199,20 +2201,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         public void run() {
 
 
-            seekBarProgress = emVideoView.getCurrentPosition();
+            seekBarProgress = (int) emVideoView.getCurrentPosition();
 
             if (emVideoView.getCurrentPosition() % 2 == 0)
                 BufferBandWidth();
 
-            current_played_length = emVideoView.getCurrentPosition();
+            current_played_length = (int) emVideoView.getCurrentPosition();
 
           /*  if (played_length > 0) {
                 emVideoView.seekTo(34000);
                 seekBar.setProgress(34000);
             }else {*/
-            seekBar.setProgress(emVideoView.getCurrentPosition());
+            seekBar.setProgress((int) emVideoView.getCurrentPosition());
 //            }
-            seekBar.setMax(emVideoView.getDuration());
+            seekBar.setMax((int) emVideoView.getDuration());
             Calcute_Currenttime_With_TotalTime();
             mHandler.postDelayed(this, 1000);
 
@@ -2931,7 +2933,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 emVideoView.start();
              /*   emVideoView.seekTo(played_length);
                 seekBar.setProgress(played_length);*/
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int) emVideoView.getCurrentPosition());
 
                 updateProgressBar();
 
@@ -2949,7 +2951,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 seekBar.setProgress(played_length);
                 updateProgressBar();
                 emVideoView.start();*/
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int) emVideoView.getCurrentPosition());
                 updateProgressBar();
 
             }
@@ -3063,7 +3065,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
                     } else {
                         emVideoView.start();
-                        seekBar.setProgress(emVideoView.getCurrentPosition());
+                        seekBar.setProgress((int) emVideoView.getCurrentPosition());
                         updateProgressBar();
                     }
                 }
@@ -3316,7 +3318,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         public void run() {
             if (emVideoView != null && emVideoView.isPlaying()) {
-                int currentPos = emVideoView.getCurrentPosition();
+                int currentPos = (int) emVideoView.getCurrentPosition();
                 Collection<Caption> subtitles = srt.captions.values();
                 for (Caption caption : subtitles) {
                     if (currentPos >= caption.start.mseconds
@@ -4744,6 +4746,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
 
 
@@ -5364,7 +5371,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int) emVideoView.getCurrentPosition());
 
               /*  emVideoView.seekTo(played_length);
                 seekBar.setProgress(played_length);*/
@@ -5396,7 +5403,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
         latest_center_play_pause.setVisibility(View.GONE);
         center_play_pause.setImageResource(R.drawable.ic_media_pause);
-        seekBar.setProgress(emVideoView.getCurrentPosition());
+        seekBar.setProgress((int) emVideoView.getCurrentPosition());
         updateProgressBar();
     }
 
