@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/OLD_VOD.iml" filepath="$PROJECT_DIR$/OLD_VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/VOD_FOR_MATAS.iml" filepath="$PROJECT_DIR$/VOD_FOR_MATAS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/VOD.iml" filepath="$PROJECT_DIR$/.idea/VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
