@@ -3395,7 +3395,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 } else {
                     viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
-
                 }
             }
 

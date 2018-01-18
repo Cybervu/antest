@@ -57,12 +57,13 @@ android {
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
 //            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"27cb93a599d3fc8d4eb906f56275f0b9\""
 //liveStripe
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
