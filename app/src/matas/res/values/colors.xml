@@ -82,4 +82,8 @@
  <color name="borderColor">#d60080</color>
  <color name="buttonbg">#d60080</color>
  <color name="cast_crew_titleCololr">#d60080</color>
+
+ <!--added for subtitle color-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#ff00ff</color>
 </resources>

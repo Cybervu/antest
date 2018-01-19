@@ -294,6 +294,12 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
+
+                    if(Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
                         onBackPressed();
@@ -636,6 +642,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     if (Util.check_for_subscription == 1) {
                         Util.check_for_subscription = 1;
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                    }
+
+                    if (Util.favorite_clicked) {
+                        Util.favorite_clicked = true;
                     }
                     detailsIntent.putExtra("PlayerModel", playerModel);
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1030,6 +1040,12 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
+
+                    if(Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
                     if (getIntent().getStringExtra("from") != null) {
                         /** review **/
                         onBackPressed();
@@ -3618,6 +3634,11 @@ public class RegisterActivity extends AppCompatActivity implements
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
 
+                    if(Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
                     if (Util.check_for_subscription == 1) {
                         // Go for subscription
 
@@ -3934,6 +3955,11 @@ public class RegisterActivity extends AppCompatActivity implements
                     }
 
                 } else {
+
+                    if (Util.favorite_clicked == true) {
+                        finish();
+                        return;
+                    }
 
                     if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
                         Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);

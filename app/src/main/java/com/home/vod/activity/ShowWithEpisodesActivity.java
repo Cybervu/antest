@@ -1240,6 +1240,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
 
+
+        } else {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+        }
+
+
+        try {
             /***favorite *****/
 
             if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
@@ -1258,9 +1266,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 favorite_view_episode.setImageResource(R.drawable.favorite_red);
             }
             /***favorite *****/
-        } else {
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
+        }catch (Exception e) {
+
         }
     }
 

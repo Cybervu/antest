@@ -80,4 +80,7 @@
     <color name="OsTextColor">#757575</color>
     <color name="purchaseBackgroundColor">#ff2c54</color>
     <color name="purchaseTextColor">#fff</color>
+
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#ff00ff</color>
 </resources>

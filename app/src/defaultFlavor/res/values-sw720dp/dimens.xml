@@ -142,4 +142,8 @@
     <dimen name="homescreen_title_text_size">15sp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
 
+    <!--added for subtitle outline-->
+    <dimen name="subtitle_text_size">23sp</dimen>
+    <item name="stroke_width" format="float" type="dimen">0.5</item>
+
 </resources>

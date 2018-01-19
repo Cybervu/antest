@@ -311,4 +311,9 @@
 
     <!--new  dimen optimization for menu-->
     <dimen name="slider_menu_width">300dp</dimen>
+
+
+    <dimen name="censor_rating_marginleft">9dp</dimen>
+
+
 </resources>

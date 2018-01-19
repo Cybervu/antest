@@ -82,4 +82,8 @@
  <color name="cast_crew_titleCololr">#6c6c6c</color>
  <color name="nav_text_line_color">#ffd20a</color>
  <color name="nav_header_line_color">#ffd20a</color>
+
+ <!--added for subtitle color-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#ff00ff</color>
 </resources>

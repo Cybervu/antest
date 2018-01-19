@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -115,7 +116,24 @@
                             android:visibility="gone" />
 
 
-                        <TextView
+                        <com.home.vod.util.StrokedTextView
+                            android:id="@+id/offLine_subtitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:layout_marginBottom="@dimen/offline_margin_bottom"
+                            android:ellipsize="middle"
+                            android:gravity="center"
+                            android:text=""
+                            android:textSize="@dimen/subtitle_text_size"
+                            android:textColor="@color/subtitle_solid_color"
+                            strokeAttrs:textStrokeColor="@color/subtitle_outline_color"
+                            strokeAttrs:textStrokeWidth="@dimen/stroke_width"
+                        />
+
+                       <!-- <TextView
                             android:id="@+id/offLine_subtitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -130,7 +148,7 @@
                             android:shadowDy="3"
                             android:shadowRadius="1"
                             android:text=""
-                            android:textSize="@dimen/offLine_subtitleText_textsize" />
+                            android:textSize="@dimen/offLine_subtitleText_textsize" />-->
                         <!-- <TextView
                              android:id="@+id/detais_text"
                              android:layout_width="wrap_content"

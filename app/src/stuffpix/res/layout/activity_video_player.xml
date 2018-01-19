@@ -401,7 +401,7 @@
                 android:layout_alignRight="@+id/bannerImageView"
                 android:layout_alignStart="@+id/bannerImageView"
                 android:layout_below="@+id/videoGenreTextView"
-
+                android:layout_marginLeft="@dimen/censor_rating_marginleft"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/Login_drawing_padding">
 
@@ -409,7 +409,6 @@
                     android:id="@+id/videoDurationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/ppv_margin"
                     android:layout_marginRight="@dimen/textColor_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""

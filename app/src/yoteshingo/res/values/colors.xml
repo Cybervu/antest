@@ -89,4 +89,8 @@
     <color name="cast_crew_titleCololr">#662D91</color>
     <color name="checkboxcolor">#5c6873</color>
     <color name="languageDividerColor">#5c6873</color>
+
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#ff00ff</color>
 </resources>

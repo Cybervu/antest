@@ -53,6 +53,7 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
     private String is_featured;
     private String banner_text;
 
+
     /**
      * Interface used to allow the caller of a HomePageAsynTask to run some code when get
      * responses.

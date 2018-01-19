@@ -94,4 +94,8 @@
     <color name="cast_crew_textcolor">#ff5a75</color>
     <color name="difficulty_color">#66e066</color>
 
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#ff00ff</color>
+
 </resources>

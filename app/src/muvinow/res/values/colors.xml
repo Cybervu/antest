@@ -91,4 +91,8 @@
     <color name="purchaseTextColor">#000</color>
     <color name="buttonbg">#eb0609</color>
     <color name="nav_header_line_color">#eb0609</color>
+
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#ff00ff</color>
 </resources>

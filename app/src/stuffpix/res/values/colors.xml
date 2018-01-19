@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
- <color name="appBackgroundColor">#fff </color>
+ <color name="appBackgroundColor">#ffffff </color>
  <color name="textColor">#000</color>
  <color name="videotextColor">#000</color>
  <color name="loginTextViewColor">#E34A00 </color>
@@ -30,7 +30,7 @@
  <color name="languagePopupFadeColor">#50696969</color>
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000</color>
- <color name="nav_drawer_text_Color">#000000</color>
+ <color name="nav_header_line_color">#E34A00</color>
  <color name="button_background">#E34A00 </color>
  <color name="cancel_button_background">#DDD</color>
  <color name="pre_order_button_background">#fff</color>
@@ -54,6 +54,8 @@
  <color name="videomovieTitleColor">#000</color>
  <color name="resumePopupColor">#fff</color>
  <color name="dividerColor">#E34A00 </color>
+ <color name="nav_text_line_color">#E34A00</color>
+ <color name="nav_drawer_text_Color">#000000</color>
  <color name="playerColor">#000000</color>
  <color name="playPauseColor">#00000000</color>
  <color name="waterMarkTextColor">#80ffffff</color>
@@ -90,4 +92,8 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseTextColor">#000</color>
  <color name="buttonbg">#E34A00</color>
+
+ <!--added for subtitle color-->
+ <color name="subtitle_solid_color">#ffffff</color>
+ <color name="subtitle_outline_color">#000000</color>
 </resources>

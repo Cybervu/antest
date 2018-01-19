@@ -74,4 +74,8 @@
     <color name="aboutustestcolor">#fff</color>
     <color name="videotextColor">#666</color>
     <color name="dialogepopupbackgroundcolor">#1e292d</color>
+
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#ff00ff</color>
 </resources>
