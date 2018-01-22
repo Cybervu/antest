@@ -66,6 +66,11 @@
             android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".activity.MarlinBroadbandExample"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
@@ -161,10 +166,6 @@
             android:name=".activity.FilterActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MarlinBroadbandExample"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
 
 
         <activity

@@ -446,7 +446,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     // Whether an ad is displayed.
     private boolean mIsAdDisplayed;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
-    LinearLayout back_layout;
+    LinearLayout back_layout,cc_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -630,6 +630,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 
@@ -779,6 +780,35 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             }
         });
+
+        cc_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Util.call_finish_at_onUserLeaveHint = false;
+
+                    if (isDrm) {
+                        Intent intent = new Intent(MyLibraryPlayer.this, SubtitleList.class);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    } else {
+                        Intent intent = new Intent(MyLibraryPlayer.this, Subtitle_Resolution.class);
+                        intent.putExtra("ResolutionFormat", ResolutionFormat);
+                        intent.putExtra("ResolutionUrl", ResolutionUrl);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    }
+
+
+                } catch (Exception e) {
+                }
+
+            }
+        });
+
 
         if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches(""))
 

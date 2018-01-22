@@ -346,6 +346,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     long previous_matching_time = 0, current_matching_time = 0;
     boolean center_pause_paly_timer_is_running = false;
     RelativeLayout player_layout;
+    LinearLayout cc_layout;
 
     boolean compressed = true;
     int player_layout_height, player_layout_width;
@@ -732,6 +733,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         episodeId = playerModel.getEpisode_id();
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -901,6 +903,39 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             }
         });
+
+        cc_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Util.call_finish_at_onUserLeaveHint = false;
+
+                    if (isDrm) {
+                        Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    } else {
+                        Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                        intent.putExtra("ResolutionFormat", ResolutionFormat);
+                        intent.putExtra("ResolutionUrl", ResolutionUrl);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    }
+
+
+                } catch (Exception e) {
+                }
+
+            }
+        });
+
+
+
+
+
 
         if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches(""))
 

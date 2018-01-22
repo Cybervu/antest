@@ -315,7 +315,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 	Animation myAnim;
-	LinearLayout volume_brightness_control_layout,back_layout;
+	LinearLayout volume_brightness_control_layout,back_layout,cc_layout;
 	ImageButton volume_brightness_control;
 	TextView volume_bright_value;
 	Window mWindow;
@@ -450,6 +450,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
 		subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
@@ -585,6 +586,22 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 		subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				try {
+					Util.call_finish_at_onUserLeaveHint = false;
+					Intent intent = new Intent(MarlinBroadbandExample.this, SubtitleList.class);
+					intent.putExtra("SubTitleName", SubTitleName);
+					intent.putExtra("SubTitlePath", SubTitlePath);
+					startActivityForResult(intent, 222);
+				} catch (Exception e) {
+				}
+
+			}
+		});
+
+		cc_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
