@@ -3,7 +3,9 @@ package com.home.vod;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.home.vod.activity.FdGhana_loginActivity;
 import com.home.vod.activity.LoginActivity;
+import com.home.vod.activity.PreLoginActivity;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.util.Util;
@@ -19,7 +21,7 @@ public class LoginRegistrationOnContentClickHandler {
     }
 
     public Intent handleClickOnContent(){
-        return new Intent(activity, RegisterActivity.class);
+        return new Intent(activity, PreLoginActivity.class);
 
 
     }

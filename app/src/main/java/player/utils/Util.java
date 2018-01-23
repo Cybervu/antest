@@ -470,6 +470,28 @@ public class Util {
     public static  String TEXT_NUMBER= "TEXT_NUMBER";
     public static String CONFIRM_EMAIL = "CONFIRM_EMAIL";
 
+    public static  String GOOGLE_STATUS= "GOOGLE_STATUS";
+    public static  String DEFAULT_GOOGLE_STATUS= "0";
+
+    public static  String FACEBOOK_STATUS= "FACEBOOK_STATUS";
+    public static  String DEFAULT_FACEBOOK_STATUS= "0";
+
+    public static String FACEBOOK_APP_ID= "FACEBOOK_APP_ID";
+    public static String DEFAULT_FACEBOOK_APP_ID = "";
+
+    public static String GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID";
+    public static String DEFAULT_GOOGLE_CLIENT_ID = "";
+
+    public static String GOOGLE_CLIENT_SECRET = "GOOGLE_CLIENT_SECRET";
+    public static String DEFAULT_GOOGLE_CLIENT_SECRET = "";
+
+    public static String FACEBOOK_APP_SECRET = "FACEBOOK_APP_SECRET";
+    public static String DEFAULT_FACEBOOK_APP_SECRET = "";
+
+    public static String FACEBOOK_APP_VERSION = "FACEBOOK_APP_VERSION";
+    public static String DEFAULT_FACEBOOK_APP_VERSION = "";
+
+
 
 
 

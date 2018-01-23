@@ -82,6 +82,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         languagePreference.setLanguageSharedPrefernce(GOOGLE_FCM_TOKEN, refreshedToken);
         Log.e(TAG, "sendRegistrationToServer: " + refreshedToken);
 
+        storeRegIdInPref(refreshedToken);
         onCreate();
     }
 
@@ -127,5 +128,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         protected void onPostExecute(Void result) {
 
         }
+    }
+
+    private void storeRegIdInPref(String token) {
+        preferenceManager.setSharedPref(token);
+
     }
 }

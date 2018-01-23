@@ -62,6 +62,10 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.Notification"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
             android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""

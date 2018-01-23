@@ -5,7 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackgroundColor">
+    android:background="@drawable/background">
 
     <include
         android:id="@+id/toolbar"
@@ -80,7 +80,7 @@
             android:id="@+id/detailsRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/appBackgroundColor">
+            android:background="@drawable/background">
 
 
             <RelativeLayout
@@ -366,7 +366,7 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text=""
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/transaction_text_color"
                     android:textSize="@dimen/preorderbtn_text_size"
                     android:textStyle="bold" />
             </RelativeLayout>

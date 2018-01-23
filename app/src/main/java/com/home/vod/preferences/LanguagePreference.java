@@ -175,6 +175,11 @@ public class LanguagePreference {
     public static final String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static final String CONTINUE_BUTTON = "CONTINUE_BUTTON";
 
+    //********Notification***********
+    public static String NO_NOTIFICATION = "NO_NOTIFICATION";
+    public static String NOTIFICATION_TITLE = "NOTIFICATION_TITLE";
+    public static  String DEFAULT_NO_NOTIFICATION = "No notification Sent.";
+    public static  String DEFAULT_NOTIFICATION_TITLE = "Notification (s)";
 
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
@@ -201,6 +206,8 @@ public class LanguagePreference {
 
     public static final String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static final String ENTER_REGISTER_FIELDS_DATA = "ENTER_REGISTER_FIELDS_DATA";
+
+    public static final String NOTIFICATION = "NOTIFICATION";
 
     public static final String MY_LIBRARY = "MY_LIBRARY";
     public static final String ABOUT_US = "ABOUT_US";
@@ -295,8 +302,11 @@ public class LanguagePreference {
     public static final String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
     public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
     public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+    public static final String DEFAULT_NOTIFICATION = "Notification";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
+
+
 
 
     public static final String DEFAULT_TRY_AGAIN = "Try Again !";

@@ -89,6 +89,7 @@ import com.home.vod.BuildConfig;
 import com.home.vod.CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HandleRatingbar;
+import com.home.vod.LoginRegisterHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
@@ -434,7 +435,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 return false;
             case R.id.action_login:
 
-                Intent loginIntent = new Intent(MovieDetailsActivity.this, LoginActivity.class);
+                Intent loginIntent = new LoginRegisterHandler(MovieDetailsActivity.this).login();
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
                 // Not implemented here
@@ -1420,8 +1421,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 final Intent registerActivity = new Intent(MovieDetailsActivity.this, CastAndCrewActivity.class);
                 runOnUiThread(new Runnable() {
                     public void run() {
-
-
                         registerActivity.putExtra("cast_movie_id", movieUniqueId);
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(registerActivity);

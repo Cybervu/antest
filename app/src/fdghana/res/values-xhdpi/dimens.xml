@@ -106,4 +106,6 @@
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">16sp</dimen>
 
+    <dimen name="badge_text_size">14sp</dimen>
+
 </resources>

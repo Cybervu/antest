@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
+import com.home.apisdk.apiController.FcmNotificationcountAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
@@ -32,6 +34,8 @@ import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountInputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountOutputModel;
 import com.home.apisdk.apiModel.GenreListInput;
 import com.home.apisdk.apiModel.GenreListOutput;
 import com.home.apisdk.apiModel.Get_UserProfile_Input;
@@ -66,6 +70,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.apisdk.apiController.HeaderConstants.GOOGLE_ID;
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -74,6 +79,13 @@ import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
+import static player.utils.Util.FACEBOOK_APP_ID;
+import static player.utils.Util.FACEBOOK_APP_SECRET;
+import static player.utils.Util.FACEBOOK_APP_VERSION;
+import static player.utils.Util.FACEBOOK_STATUS;
+import static player.utils.Util.GOOGLE_CLIENT_ID;
+import static player.utils.Util.GOOGLE_CLIENT_SECRET;
+import static player.utils.Util.GOOGLE_STATUS;
 import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -84,8 +96,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         IsRegistrationEnabledAsynTask.IsRegistrationenabledListener,
         GetLanguageListAsynTask.GetLanguageListListener,
         GetGenreListAsynctask.GenreListListener,
+        FcmNotificationcountAsynTask.FcmNotificationcountListener,
         GetUserProfileAsynctask.Get_UserProfileListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, SDKInitializer.SDKInitializerListner {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, SDKInitializer.SDKInitializerListner
+{
 
     private String[] genreArrToSend;
     private String[] genreValueArrayToSend;
@@ -199,6 +213,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
+
+        Log.v("pratik","FcmNotificationcountAsynTask called");
+        FcmNotificationcountInputModel fcmNotificationcountInputModel = new FcmNotificationcountInputModel();
+        fcmNotificationcountInputModel.setAuthToken(authTokenStr);
+        fcmNotificationcountInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        FcmNotificationcountAsynTask fcmNotificationcountAsynTask = new FcmNotificationcountAsynTask(fcmNotificationcountInputModel,this,this);
+        fcmNotificationcountAsynTask.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
@@ -281,6 +302,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
         languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
         languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
+
+        languagePreference.setLanguageSharedPrefernce(GOOGLE_STATUS,""+isRegistrationEnabledOutputModel.getGoogleLoginDetailsModel().getStatus());
+        languagePreference.setLanguageSharedPrefernce(GOOGLE_CLIENT_ID,""+isRegistrationEnabledOutputModel.getGoogleLoginDetailsModel().getClient_id());
+        languagePreference.setLanguageSharedPrefernce(GOOGLE_CLIENT_SECRET,""+isRegistrationEnabledOutputModel.getGoogleLoginDetailsModel().getClient_secret());
+
+        languagePreference.setLanguageSharedPrefernce(FACEBOOK_STATUS,""+isRegistrationEnabledOutputModel.getFacebookLoginDetailsModel().getStatus());
+        languagePreference.setLanguageSharedPrefernce(FACEBOOK_APP_ID,""+isRegistrationEnabledOutputModel.getFacebookLoginDetailsModel().getApp_id());
+        languagePreference.setLanguageSharedPrefernce(FACEBOOK_APP_SECRET,""+isRegistrationEnabledOutputModel.getFacebookLoginDetailsModel().getApp_secret());
+        languagePreference.setLanguageSharedPrefernce(FACEBOOK_APP_VERSION,""+isRegistrationEnabledOutputModel.getFacebookLoginDetailsModel().getApp_version());
 
 
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
@@ -635,4 +665,18 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     }
 
+    @Override
+    public void onFcmNotificationcountPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onFcmNotificationcountPostExecuteCompleted(FcmNotificationcountOutputModel fcmNotificationcountOutputModel, int count, String sucessMsg) {
+
+        preferenceManager.setNOTI_COUNT(count);
+
+        Log.v("pratikNoti","COUNT in onFcmNotificationcountPostExecuteCompleted ======="+count);
+        LogUtil.showLog("pratik","COUNT======="+count);
+        LogUtil.showLog("pratik","device_id======="+Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+    }
 }

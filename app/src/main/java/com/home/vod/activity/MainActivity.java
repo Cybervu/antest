@@ -48,12 +48,14 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
@@ -131,7 +133,8 @@ import static com.home.vod.util.Util.languageModel;
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,NavigationDrawerFragment.NavigationDrawerCallbacks ,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
+        FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener{
 
 
     public MainActivity() {
@@ -139,6 +142,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     LanguagePreference languagePreference;
     FooterMenuHandler fooerMenuHandler;
+
+    @Override
+    public void onFcmRegistrationDetailsPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel, String sucessMsg) {
+
+    }
 
 
     //*** chromecast**************//*
@@ -436,8 +449,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 return false;
             case R.id.action_login:
 
-//                Intent loginIntent = new LoginRegisterHandler(MainActivity.this).login();
-                Intent loginIntent=new Intent(MainActivity.this,PreLoginActivity.class);
+                Intent loginIntent = new LoginRegisterHandler(MainActivity.this).login();
+//                Intent loginIntent=new Intent(MainActivity.this,PreLoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
 
@@ -465,6 +478,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
+
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(MainActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
+
             case R.id.menu_item_language:
 
                 // Not implemented here

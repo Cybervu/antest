@@ -13,6 +13,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -41,6 +43,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.vod.BadgeDrawable;
 import com.home.vod.BuildConfig;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
@@ -910,6 +913,23 @@ public class Util {
             }
         }
         catch(Exception ex){}
+    }
+
+    public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
+
+        BadgeDrawable badge;
+
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+        if (reuse != null && reuse instanceof BadgeDrawable) {
+            badge = (BadgeDrawable) reuse;
+        } else {
+            badge = new BadgeDrawable(context);
+        }
+
+        badge.setCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, badge);
     }
 }
 

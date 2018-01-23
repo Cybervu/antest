@@ -2,7 +2,9 @@ package com.home.vod;
 
 import android.app.Activity;
 
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
@@ -17,12 +20,14 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NOTIFICATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.NOTIFICATION;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
@@ -57,7 +62,7 @@ public class EpisodeListOptionMenuHandler {
 
         MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
                 login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu
-                ,submenu;
+                ,submenu,notification_menu;
 
         filter_menu = menu.findItem(R.id.action_filter);
         menu_language = menu.findItem(R.id.menu_item_language);
@@ -70,6 +75,7 @@ public class EpisodeListOptionMenuHandler {
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         action_searchmenu=menu.findItem(R.id.action_search);
         submenu=menu.findItem(R.id.submenu);
+        notification_menu = menu.findItem(R.id.action_notification);
 
         /***************chromecast**********************/
 
@@ -86,6 +92,7 @@ public class EpisodeListOptionMenuHandler {
         mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+        notification_menu.setTitle(languagePreference.getTextofLanguage(NOTIFICATION, DEFAULT_NOTIFICATION));
 
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
@@ -123,13 +130,16 @@ public class EpisodeListOptionMenuHandler {
             else
                 mydownload_menu.setVisible(false);
 
+            notification_menu.setVisible(true);
+
+
 
         } else if (loggedInStr == null) {
 
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                register_menu.setVisible(true);
+                register_menu.setVisible(false);
 
             } else {
                 login_menu.setVisible(false);
@@ -145,5 +155,10 @@ public class EpisodeListOptionMenuHandler {
             favorite_menu.setVisible(false);
 
         }
+
+        LayerDrawable icon2 = (LayerDrawable) notification_menu.getIcon();
+        Util.setBadgeCount(activity, icon2, preferenceManager.getNOTI_COUNT());
+
+        Log.v("pratikNoti","badgecnt in EpLiMeHan==="+preferenceManager.getNOTI_COUNT());
     }
 }

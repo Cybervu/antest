@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +28,10 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
@@ -71,7 +75,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsync.GetMenusListener {
+public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsync.GetMenusListener,  FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
@@ -144,6 +148,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             progressDialog.hide();
             progressDialog = null;
         }
+
+        FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
+        fcmRegistrationDetailsInputModel.setAuthToken(authTokenStr);
+        fcmRegistrationDetailsInputModel.setDevice_id(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        fcmRegistrationDetailsInputModel.setDevice_type(1);
+        fcmRegistrationDetailsInputModel.setFcm_token(preferenceManager.getSharedPref());
+        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel,NavigationDrawerFragment.this,getActivity());
+        fcmRegistrationDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
+
         this.menusOutputModelLocal =menusOutputModel;
         this.menusOutputModelFromAPI =menusOutputModel;
         this.status=status;
@@ -554,6 +567,22 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     private ActionBar getActionBar () {
         return ((ActionBarActivity) getActivity ()).getSupportActionBar ();
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPreExecuteStarted() {
+        progressDialog = new ProgressBarHandler(getActivity ());
+        progressDialog.show();
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel, String sucessMsg) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+            progressDialog = null;
+
+        }
+        Log.v("pratikNoti","**in onFcmRegistrationDetailsPostExecuteCompleted**");
     }
 
     /**

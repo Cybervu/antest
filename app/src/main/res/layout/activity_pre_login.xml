@@ -48,25 +48,67 @@
                 android:textSize="18dp"
                 android:textAllCaps="false"
                 android:stateListAnimator="@null"
-                android:visibility="visible"
+                android:visibility="gone"
 
                 />
 
+            <RelativeLayout
+                android:padding="6dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/google_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:visibility="gone"
+                android:elevation="2dp"
+                android:background="@drawable/gbg"
+                android:layout_below="@+id/loginWithFacebookButton"
+                android:layout_centerVertical="true">
 
-            <!--<com.facebook.login.widget.LoginButton
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:fontFamily="@string/regular_fonts"
+                    android:text="Login with Google"
+                    android:layout_gravity="start"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+
+                    android:textColor="#a49f9f"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <ImageView
+                    android:layout_toLeftOf="@+id/textView"
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/google_icon_svg" />
+
+            </RelativeLayout>
+
+
+
+            <com.facebook.login.widget.LoginButton
                 android:visibility="gone"
                 android:id="@+id/login_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp" />-->
+                android:layout_marginTop="@dimen/login_facebook_margin"
+                android:layout_marginBottom="@dimen/login_facebook_margin" />
+
+
 
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edittextheight"
-                android:layout_below="@+id/loginWithFacebookButton"
+                android:layout_below="@+id/google_sign_in_button"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button_radius1"
                 android:textColor="@color/white"

@@ -12,6 +12,8 @@ public class IsRegistrationEnabledOutputModel {
     int has_favourite = 0;
     int rating = 0;
     int isRestrictDevice = 0;
+    GoogleLoginDetailsModel googleLoginDetailsModel;
+    FacebookLoginDetailsModel facebookLoginDetailsModel;
 
     /**
      * This Method is use to get the Restrict Device Details
@@ -194,5 +196,19 @@ public class IsRegistrationEnabledOutputModel {
         this.has_favourite = has_favourite;
     }
 
+    public GoogleLoginDetailsModel getGoogleLoginDetailsModel() {
+        return googleLoginDetailsModel;
+    }
 
+    public void setGoogleLoginDetailsModel(GoogleLoginDetailsModel googleLoginDetailsModel) {
+        this.googleLoginDetailsModel = googleLoginDetailsModel;
+    }
+
+    public FacebookLoginDetailsModel getFacebookLoginDetailsModel() {
+        return facebookLoginDetailsModel;
+    }
+
+    public void setFacebookLoginDetailsModel(FacebookLoginDetailsModel facebookLoginDetailsModel) {
+        this.facebookLoginDetailsModel = facebookLoginDetailsModel;
+    }
 }

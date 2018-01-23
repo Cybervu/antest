@@ -68,6 +68,10 @@
                 android:icon="@drawable/purchase_history"
                 android:title="Purchase History"/>
             <item
+                android:id="@+id/action_notification"
+                android:icon="@drawable/ic_menu_notification1"
+                android:title="Purchase History"/>
+            <item
                 android:id="@+id/action_logout"
                 android:icon="@drawable/logout"
                 android:title="Logout"/>
