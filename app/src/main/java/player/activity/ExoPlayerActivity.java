@@ -868,11 +868,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setVisibility(View.INVISIBLE);
                 Log.v("BIBHU1", "subtitle_image button Invisible called");
             } else {
-                Util.DefaultSubtitle = SubTitleName.get(0);
                 subtitle_change_btn.setBackgroundResource(0);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("BIBHU1", "subtitle_image button visible called");
+
+
+                try {
+                    Util.DefaultSubtitle = SubTitleName.get(0);
+                }catch (Exception e){}
+
             }
         }
 

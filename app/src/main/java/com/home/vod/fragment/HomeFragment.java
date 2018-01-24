@@ -197,13 +197,10 @@ public class HomeFragment extends Fragment implements
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
-
-
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
         }
         return v;
-
 
     }
 

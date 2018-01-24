@@ -1803,6 +1803,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, String totalItems, String message) {
 
         try{
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                }
+            } catch (Exception ex) {}
 
             if(status == 200){
 
@@ -1830,7 +1835,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     try {
                         if (videoPDialog != null && videoPDialog.isShowing()) {
                             videoPDialog.hide();
-                            videoPDialog = null;
                         }
                     } catch (IllegalArgumentException ex) {
 
@@ -1848,7 +1852,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         try {
                             if (videoPDialog != null && videoPDialog.isShowing()) {
                                 videoPDialog.hide();
-                                videoPDialog = null;
                             }
                         } catch (IllegalArgumentException ex) {
 

@@ -490,7 +490,7 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.0.1'
         }
         euroman_staging_ {
             dimension 'environment'
@@ -509,7 +509,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.0.1'
         }
         leasy_staging_ {
             dimension 'environment'

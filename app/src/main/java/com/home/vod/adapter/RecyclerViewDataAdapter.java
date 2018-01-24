@@ -98,7 +98,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         Log.v("BIBHU12", "position of the item in adapter ==============" + i);
         Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" +Util.image_orentiation.size());
 
-        final String sectionName = dataList.get(i).getHeaderTitle();
+        final String sectionName = dataList.get(i).getHeaderTitle().trim();
         final String sectionId = dataList.get(i).getHeaderPermalink();
 
         singleSectionItems = dataList.get(i).getAllItemsInSection();

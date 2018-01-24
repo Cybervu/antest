@@ -11,6 +11,15 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <ImageView
+        android:id="@+id/registerImageView"
+        android:layout_width="@dimen/offlinebtn_width"
+        android:layout_height="@dimen/offlinebtn_height"
+        android:layout_below="@+id/toolbar"
+
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/logo" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,14 +77,7 @@
 
                 />
 
-            <ImageView
-                android:id="@+id/registerImageView"
-                android:layout_width="@dimen/offlinebtn_width"
-                android:layout_height="@dimen/offlinebtn_height"
 
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/logo" />
 
 
         </RelativeLayout>
