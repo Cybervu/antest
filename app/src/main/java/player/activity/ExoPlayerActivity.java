@@ -187,6 +187,8 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMIN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
@@ -208,6 +210,8 @@ import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTI
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SAVE;
+import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
@@ -217,10 +221,7 @@ import static com.home.vod.preferences.LanguagePreference.WANT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.preferences.LanguagePreference.YOUR_VIDEO_WONT_BE_SAVED;
-import static player.utils.Util.DEFAULT_SAVE;
-import static player.utils.Util.DEFAULT_SAVE_OFFLINE_VIDEO;
-import static player.utils.Util.SAVE;
-import static player.utils.Util.SAVE_OFFLINE_VIDEO;
+
 
 
 enum ContentTypes2 {
@@ -1642,16 +1643,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                             dlgAlert.setCancelable(false);
                                             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES),
                                                     new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
-
-                                                        }
-                                                    });
-                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), null);
-                                            dlgAlert.setCancelable(false);
-                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO),
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
+                                                        public void onClick(DialogInterface dialog, int id){
                                                             dialog.cancel();
                                                             downloading = false;
                                                             audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
@@ -1687,6 +1679,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                                                             Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(DOWNLOAD_CANCEL, DEFAULT_DOWNLOAD_CANCEL), Toast.LENGTH_SHORT).show();
 
+                                                        }
+                                                    });
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
                                                         }
                                                     });
 

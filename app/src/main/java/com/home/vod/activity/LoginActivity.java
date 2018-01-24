@@ -1453,13 +1453,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         if (playerModel != null) {
             playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         }
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
             LogUtil.showLog("MUVI", "Called");
         } else {
-            LogUtil.showLog("MUVI", "Called============" + (languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)));
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -1525,14 +1523,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
 
-       /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });*/
 
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -1578,63 +1568,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });
 
         PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
-
-
-
-
-
-      /*  callbackManager=CallbackManager.Factory.create();
-
-        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-
-        btnLogin= (LinearLayout) findViewById(R.id.btnLogin);*/
-
-     /*   btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressDialog = new ProgressBarHandler(LoginActivity.this);
-                progressDialog.show();
-              *//* progressDialog = new ProgressDialog(LoginActivity.this);
-
-                progressDialog.setMessage("Loading...");
-                progressDialog.show();
-*//*
-                loginWithFacebookButton.performClick();
-
-                loginWithFacebookButton.setPressed(true);
-
-                loginWithFacebookButton.invalidate();
-
-                if (AccessToken.getCurrentAccessToken() ==null) {
-
-                    loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
-                }
-
-                loginWithFacebookButton.setPressed(false);
-
-                loginWithFacebookButton.invalidate();
-
-            }
-        });
-*/
-       /* loginWithFacebookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AccessToken token = AccessToken.getCurrentAccessToken();
-                if (token != null) {
-                }
-                onFblogin();
-            }
-        });*/
-
-      /*  loginNewUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent detailsIntent = new Intent(LoginActivity.this, PurchaseHistoryActivity.class);
-                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(detailsIntent);
-            }
-        });*/
 
 
         callbackManager = CallbackManager.Factory.create();

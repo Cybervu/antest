@@ -4,17 +4,11 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.home.vod.util.FeatureHandler;
+
 /**
  * Created by MUVI on 10/27/2017.
  */
-
-public class VideolistFragmentHandler {
-    private Activity context;
-
-    public VideolistFragmentHandler(Activity context){
-        this.context=context;
-
-    }
 
     public class VideolistFragmentHandler {
         private Activity context;
@@ -35,7 +29,6 @@ public class VideolistFragmentHandler {
             }else{
                 item.setVisible(false);
             }
-
         }
-    }
+
 }

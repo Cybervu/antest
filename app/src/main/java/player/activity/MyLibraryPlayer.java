@@ -150,9 +150,15 @@ import player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.SAVE;
+import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 
@@ -4717,9 +4723,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Button save = (Button) convertView.findViewById(R.id.save);
         Button cancel = (Button) convertView.findViewById(R.id.cancel);
 
-        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE, Util.DEFAULT_SAVE));
-        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON));
-        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE_OFFLINE_VIDEO, Util.DEFAULT_SAVE_OFFLINE_VIDEO));
+        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this, SAVE, DEFAULT_SAVE));
+        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON));
+        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this, SAVE_OFFLINE_VIDEO, DEFAULT_SAVE_OFFLINE_VIDEO));
 
         DownloadOptionAdapter adapter = new DownloadOptionAdapter(MyLibraryPlayer.this, List_Of_FileSize, List_Of_Resolution_Format);
         resolution_list.setAdapter(adapter);

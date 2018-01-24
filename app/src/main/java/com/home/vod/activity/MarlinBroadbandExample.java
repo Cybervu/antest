@@ -176,6 +176,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	Timer timerr;
 	String download_content_type="";
 	FeatureHandler featureHandler;
+	boolean resume_orientation = false;
+
 
 
 
@@ -329,6 +331,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	protected void onResume() {
 		super.onResume();
+		resume_orientation = false;
 		SensorOrientationChangeNotifier.getInstance(MarlinBroadbandExample.this).addListener(this);
 		Util.app_is_in_player_context = true;
 
@@ -418,6 +421,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		streamId = getIntent().getStringExtra("streamId").trim();
 		poster = getIntent().getStringExtra("poster").trim();
 		storydes = getIntent().getStringExtra("story").trim();
+
+
 
 		Chromecast_Subtitle_Url = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Url");
 		Chromecast_Subtitle_Language_Name = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Language_Name");
@@ -1030,7 +1035,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
 							Util.call_finish_at_onUserLeaveHint = false;
 
-
+							resume_orientation = true;
 							Intent resumeIntent = new Intent(MarlinBroadbandExample.this, ResumePopupActivity.class);
 							startActivityForResult(resumeIntent, 1001);
 
@@ -1230,6 +1235,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	public void onOrientationChange(int orientation) {
 
+		if(resume_orientation){
+			Util.player_description = true;
+			return;
+		}
 
 		if (orientation == 90) {
 
