@@ -87,7 +87,9 @@
                 android:layout_marginTop="@dimen/marginLeft15dp"
                 android:text="sasasasasasassaas"
                 android:textColor="@color/border_color"
-                android:textSize="@dimen/cast_textsize" />
+                android:textSize="@dimen/cast_textsize"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"/>
 
 
             <android.support.v7.widget.RecyclerView
@@ -95,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="@dimen/compress_expand_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/ppv_margin"
                 android:clipToPadding="false"
                 android:padding="@dimen/Login_drawing_padding"

@@ -293,7 +293,7 @@ android {
             applicationId 'com.release.quickflix'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.2.2"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
         }
@@ -533,6 +533,24 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
         }
 
+        aeonVideo {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.aeonvideotest'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"5989d8312c5e04a6ae52e3e4cd75e483\""
+        }
+        aeonVideo_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        aeonVideo_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -624,6 +642,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('stuffPix') && (environment.equals('stuffPix_staging_') || environment.equals('stuffPix_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('aeonVideo') && (environment.equals('aeonVideo_staging_') || environment.equals('aeonVideo_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

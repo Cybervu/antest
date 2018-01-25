@@ -109,7 +109,7 @@
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/button_background</item>
         <!-- Used for the title and text -->
-        <item name="android:textColorPrimary">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/alertbox_text_color</item>
         <!-- Used for the background -->
         <item name="android:background">@color/alertPopupColor</item>
     </style>
@@ -136,5 +136,12 @@
     </style>
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
+    </style>
+
+    <style name="ThemeSpinner">
+        <!-- Color when pressed -->
+        <item name="colorAccent">@color/button_background</item>
+        <!-- Default color for the dropdown arrow and line -->
+        <item name="colorControlNormal">@color/hint_color</item>
     </style>
 </resources>
