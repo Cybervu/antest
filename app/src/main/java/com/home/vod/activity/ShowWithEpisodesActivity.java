@@ -674,53 +674,30 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 season_spinner.setAdapter(adapter);
             }
 
-//                season_spinner.setBackgroundResource(R.drawable.spinner_theme);
 
+            try{
+                if(bannerImageId != null && !bannerImageId.equals("")){
+                    Picasso.with(ShowWithEpisodesActivity.this)
+                            .load(bannerImageId.trim())
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(moviePoster);
 
-
-                if (TextUtils.isEmpty(posterImageId)) {
-
-                    moviePoster.setImageResource(R.drawable.logo);
-                } else {
-
-
-                    /*ImageLoader imageLoader = ImageLoader.getInstance();
-                    imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                            .cacheOnDisc(true).resetViewBeforeLoading(true)
-                            .showImageForEmptyUri(R.drawable.logo)
-                            .showImageOnFail(R.drawable.logo)
-                            .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(posterImageId, moviePoster, options);*/
-
+                }else if (posterImageId != null && !posterImageId.equals("")){
                     Picasso.with(ShowWithEpisodesActivity.this)
                             .load(posterImageId)
                             .error(R.drawable.logo)
                             .placeholder(R.drawable.logo)
                             .into(moviePoster);
-
-                
-
-
-                /*ImageLoader imageLoader = ImageLoader.getInstance();
-                imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .cacheOnDisc(true).resetViewBeforeLoading(true)
-                        .showImageForEmptyUri(R.drawable.logo)
-                        .showImageOnFail(R.drawable.logo)
-                        .showImageOnLoading(R.drawable.logo).build();
-                imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
-
-                Picasso.with(ShowWithEpisodesActivity.this)
-                        .load(bannerImageId.trim())
-                        .error(R.drawable.logo)
-                        .placeholder(R.drawable.logo)
-                        .into(moviePoster);
-
-
+                }else{
+                    moviePoster.setImageResource(R.drawable.logo);
+                }
+            }catch (Exception e){
+                moviePoster.setImageResource(R.drawable.logo);
             }
+
+
+
 
             GetReviewDetails();
 

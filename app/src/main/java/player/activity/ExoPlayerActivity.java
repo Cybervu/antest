@@ -4232,14 +4232,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (cursor.getCount() > 0) {
             String query = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET download_id = '" + enqueue + "' , " +
                     "stream_unique_id = '" + playerModel.getStreamUniqueId() + "',initial_played_time = '0'," +
-                    "updated_server_current_time = '0' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
+                    "updated_server_current_time = '0', watch_period = '0',access_period = '" + -1 + "' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "update called");
 
         } else {
-            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email) VALUES" +
-                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "')";
+            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email,watch_period,access_period) VALUES" +
+                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "','0','"+-1+"')";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "insert called");

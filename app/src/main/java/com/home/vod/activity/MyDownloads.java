@@ -1242,8 +1242,17 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
             }
         } else {
+
+
+            if(access_period == -1){
+                String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
+                        " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
+                DB.execSQL(Qry);
+                return true;
+            }
+
             if (updated_server_current_time < System.currentTimeMillis()) {
-                if (access_period == -1 || (System.currentTimeMillis() < access_period)) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
+                if (System.currentTimeMillis() < access_period) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
                 {
                     String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
                             " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
