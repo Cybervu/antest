@@ -16,6 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -129,7 +132,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
     private boolean mIsScrollingUp;
     private int mLastFirstVisibleItem;
     int scrolledPosition = 0;
-    boolean scrolling;
+    boolean scrolling = false;
     AlertDialog alert;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
@@ -142,11 +145,13 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
     GridItem itemToPlay;
     LanguagePreference languagePreference;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    SearchDataAsynTask searchDataAsynTask;
 
     private static int firstVisibleInListview;
 
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
+    ProgressBarHandler searchProgressBarHandler ;
 
     //for no internet
 
@@ -166,6 +171,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
     String searchTextStr;
     boolean isSearched = false;
     private SearchView.SearchAutoComplete theTextArea;
+    Toast toast;
 
 
 
@@ -234,6 +240,8 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
         titleTextView.setText(languagePreference.getTextofLanguage(SEARCH_RESULTS, DEFAULT_SEARCH_RESULTS));
         titleLayout.setVisibility(View.GONE);
 
+        searchProgressBarHandler = new ProgressBarHandler(CustomSearchActivity.this);
+
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         logo_image = (RelativeLayout) findViewById(R.id.logo_image);
         logo_image.bringToFront();
@@ -290,6 +298,63 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
         theTextArea.setHintTextColor(Color.parseColor("#dadada"));//or any color that you want
         theTextArea.setTextColor(getResources().getColor(R.color.textColor));
 
+        theTextArea.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(theTextArea.getText().toString().trim().length()>=3){
+
+                    if(searchDataAsynTask!=null){
+                        searchDataAsynTask.cancel(true);
+                    }
+
+                    searchTextStr = theTextArea.getText().toString().trim();
+                    getSearchData();
+
+                    if(toast != null){
+                        toast.cancel();
+                    }
+
+
+                }else{
+
+                    try {
+                        if (searchDataAsynTask != null) {
+                            searchDataAsynTask.cancel(true);
+                        }
+
+                        if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
+                            searchProgressBarHandler.hide();
+                        }
+
+                        if(toast != null){
+                            toast.cancel();
+                        }
+
+                    } catch (IllegalArgumentException ex) {
+
+                    }
+
+                    // Show message.
+                    ShowToast(CustomSearchActivity.this,"Please enter three letters for search .");
+                }
+                resetData();
+                noDataLayout.setVisibility(View.GONE);
+                titleLayout.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         theTextArea.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -311,43 +376,15 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                         dlgAlert.create().show();
                     } else {
                         resetData();
-                        firstTime = true;
-
-                        offset = 1;
-                        listSize = 0;
-                        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                            limit = 20;
-                        } else {
-                            limit = 15;
-                        }
-                        itemsInServer = 0;
-                        isLoading = false;
                         searchTextStr = query;
-                        if (itemData != null && itemData.size() > 0) {
-                            itemData.clear();
-                        }
-                        isSearched = true;
+
                         if (!NetworkStatus.getInstance().isConnected(CustomSearchActivity.this)) {
                             noInternetConnectionLayout.setVisibility(View.VISIBLE);
                             gridView.setVisibility(View.GONE);
                             titleLayout.setVisibility(View.GONE);
 
-
                         } else {
-                            Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken(authTokenStr);
-                            search_data_input.setLimit(String.valueOf(limit));
-                            search_data_input.setOffset(String.valueOf(offset));
-                            search_data_input.setQ(searchTextStr.trim());
-                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-                            if (countryCodeStr != null) {
-                                search_data_input.setCountry(countryCodeStr);
-                            } else {
-                                search_data_input.setCountry("IN");
-                            }
-                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, CustomSearchActivity.this, CustomSearchActivity.this);
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
-
+                           getSearchData();
                         }
                     }
                     return true;
@@ -486,7 +523,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                /*if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
 
@@ -512,13 +549,20 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
                     scrolling = true;
 
-                }
+                }*/
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+                int daat = gridView.getLastVisiblePosition();
 
+                if((gridView.getLastVisiblePosition() == totalItemCount-1)  && (itemsInServer > totalItemCount) && !scrolling){
+                    scrolling = true;
+                    offset += 1;
+                    getSearchData();
+                }
+/*
                 if (scrolling == true && mIsScrollingUp == false) {
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
@@ -528,7 +572,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                             return;
 
                         }
-                        offset += 1;
+
 
                         if (NetworkStatus.getInstance().isConnected(CustomSearchActivity.this)) {
 
@@ -544,8 +588,8 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                             } else {
                                 search_data_input.setCountry("IN");
                             }
-                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, CustomSearchActivity.this, CustomSearchActivity.this);
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                            SearchDataAsynTask searchDataAsynTask = new SearchDataAsynTask(search_data_input, CustomSearchActivity.this, CustomSearchActivity.this);
+                            searchDataAsynTask.executeOnExecutor(threadPoolExecutor);
 
 
                             scrolling = false;
@@ -554,61 +598,11 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
                     }
 
-                }
+                }*/
 
             }
         });
 
-
-
-
-       /* AsynLoadVideos asyncViewFavorite = new AsynLoadVideos();
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);*/
-    /*    gridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-
-                int visibleItemCount = recyclerView.getChildCount();
-                int totalItemCount = mLayoutManager.getItemCount();
-                int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (isLoading) {
-                    if (totalItemCount > previousTotal) {
-                        isLoading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!isLoading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem)) {
-                    // End has been reached
-                    listSize = itemData.size();
-                    if (mLayoutManager.findLastVisibleItemPosition() >= itemsInServer - 1) {
-                        footerView.setVisibility(View.GONE);
-                        return;
-
-                    }
-                    offset += 1;
-                    boolean isNetwork = Util.checkNetwork(SearchActivity.this);
-                    if (isNetwork == true) {
-
-
-                        // searched data
-                        AsynLoadSearchVideos asyncViewFavorite = new AsynLoadSearchVideos();
-                        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
-                    }
-                    //isLoading = true;
-                }
-            }
-        });
-*/
 
     }
 
@@ -632,23 +626,16 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
     @Override
     public void onSearchDataPreexecute() {
-        {
-            if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
-                pDialog = MainActivity.internetSpeedDialog;
-            } else {
-                pDialog = new ProgressBarHandler(CustomSearchActivity.this);
 
-                if (listSize == 0) {
-
-                    pDialog.show();
-                    footerView.setVisibility(View.GONE);
-                } else {
-                    pDialog.hide();
-                    footerView.setVisibility(View.VISIBLE);
-                }
-            }
-
-
+        if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
+        } else {
+            searchProgressBarHandler = new ProgressBarHandler(CustomSearchActivity.this);
+        }
+        searchProgressBarHandler.show();
+        if (listSize == 0) {
+            footerView.setVisibility(View.GONE);
+        } else {
+            footerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -669,14 +656,23 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
         int isAPV = 0;
         int isPPV = 0;
         String movieThirdPartyUrl = "";
+        itemsInServer = totalItems;
+        scrolling = false;
 
         try {
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
-                pDialog = null;
+            if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
+                searchProgressBarHandler.hide();
             }
         }catch (IllegalArgumentException ex) {
 
+        }
+        try {
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        } catch (Exception e) {
         }
 
         if (status>0){
@@ -738,7 +734,6 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 titleLayout.setVisibility(View.GONE);
-
                 footerView.setVisibility(View.GONE);
 
             }
@@ -1825,21 +1820,26 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
 
     public void resetData() {
-        if (itemData != null && itemData.size() > 0) {
-            itemData.clear();
-        }
-        firstTime = true;
 
-        offset = 1;
-        isLoading = false;
-        listSize = 0;
-        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-            limit = 20;
-        } else {
-            limit = 15;
-        }
-        itemsInServer = 0;
-        isSearched = false;
+        try{
+            if (itemData != null && itemData.size() > 0) {
+                itemData.clear();
+                customGridAdapter.notifyDataSetChanged();
+            }
+            firstTime = true;
+
+            offset = 1;
+            isLoading = false;
+            listSize = 0;
+            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                limit = 20;
+            } else {
+                limit = 15;
+            }
+            itemsInServer = 0;
+            isSearched = false;
+            scrolling = false;
+        }catch (Exception e){}
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -2182,6 +2182,32 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
     }
 
+    /*
+        This method is responsible for getting searching data form server .
+     */
+
+    public void getSearchData(){
+        Search_Data_input search_data_input = new Search_Data_input();
+        search_data_input.setAuthToken(authTokenStr);
+        search_data_input.setLimit(String.valueOf(limit));
+        search_data_input.setOffset(String.valueOf(offset));
+        search_data_input.setQ(searchTextStr.trim());
+        String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+        if (countryCodeStr != null) {
+            search_data_input.setCountry(countryCodeStr);
+        } else {
+            search_data_input.setCountry("IN");
+        }
+        searchDataAsynTask = new SearchDataAsynTask(search_data_input, CustomSearchActivity.this, CustomSearchActivity.this);
+        searchDataAsynTask.executeOnExecutor(threadPoolExecutor);
+    }
+
+
+        public void ShowToast(Context context, String info) {
+            toast = Toast.makeText(context, Html.fromHtml("<font color='#FF0000' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
 
 }
 
