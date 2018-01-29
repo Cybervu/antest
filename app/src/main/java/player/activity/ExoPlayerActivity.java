@@ -462,6 +462,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     PreferenceManager preferenceManager;
     boolean change_resolution = false;
     boolean is_paused = false;
+    LinearLayout cc_layout;
 
 
     @Override
@@ -721,6 +722,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         movieId = playerModel.getMovieUniqueId();
         episodeId = playerModel.getEpisode_id();
 
+        cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
@@ -879,6 +881,44 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             }
         });
+
+        cc_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Util.call_finish_at_onUserLeaveHint = false;
+
+                    if (isDrm) {
+                        Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    } else {
+                        Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                        intent.putExtra("ResolutionFormat", ResolutionFormat);
+                        intent.putExtra("ResolutionUrl", ResolutionUrl);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    }
+
+
+                } catch (Exception e) {
+                }
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
 
         if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches(""))
 

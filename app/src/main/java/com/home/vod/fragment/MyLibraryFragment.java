@@ -522,7 +522,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
-
                 }
 
                 if (view.getId() == gridView.getId()) {

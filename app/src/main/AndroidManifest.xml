@@ -70,6 +70,14 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
+            android:name=".activity.MarlinBroadbandExample"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+
+
+        <activity
             android:name=".activity.MyDownloads"
             android:screenOrientation="portrait" />
         <activity
@@ -161,11 +169,6 @@
             android:name=".activity.FilterActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MarlinBroadbandExample"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-
 
         <activity
             android:name=".activity.TrailerActivity"
