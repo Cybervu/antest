@@ -90,4 +90,21 @@
 
  <color name="subtitle_solid_color">#FFFFFF</color>
  <color name="subtitle_outline_color">#000000 </color>
+ <!--              new key added      -->
+
+
+ <color name="videoTitleTextColor">#000</color>
+ <color name="exoTitleTextColor">#fff</color>
+ <color name="casttextColor">#000</color>
+ <color name="cast_crew_textcolor">#E34A00</color>
+ <color name="borderColor">#000</color>
+ <color name="aboutustestcolor">#fff</color>
+ <color name="aboutustextcolor">#000</color>
+ <color name="checkboxcolor">#000</color>
+ <color name="cast_crew_titleCololr">#E34A00</color>
+ <color name="navdrawerImageBelowLineColor">#000</color>
+ <color name="purchaseBackgroundColor">#909293</color>
+ <color name="purchaseTextColor">#000</color>
+ <color name="buttonbg">#E34A00</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

@@ -768,6 +768,12 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, NO_DEVICE_AVAILABE, DEFAULT_NO_DEVICE_AVAILABE, "no_devices_available", json);
         setTranslationLanguageToPref(languagePreference, REMOVE_DEVICE_SUCCESS, DEFAULT_REMOVE_DEVICE_SUCCESS, "remove_device_request_succ", json);
 
+        setTranslationLanguageToPref(languagePreference, SAVE, DEFAULT_SAVE, "btn_save", json);
+        setTranslationLanguageToPref(languagePreference, SAVE_OFFLINE_VIDEO, DEFAULT_SAVE_OFFLINE_VIDEO, "save_offline_video", json);
+        setTranslationLanguageToPref(languagePreference, DELETE_BTN, DEFAULT_DELETE_BTN, "delete_btn", json);
+        setTranslationLanguageToPref(languagePreference, SEND, DEFAULT_SEND, "btn_send", json);
+        setTranslationLanguageToPref(languagePreference, CONFIRM_DELETE_MESSAGE, DEFAULT_CONFIRM_DELETE_MESSAGE, "confirm_delete_message", json);
+
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
     }

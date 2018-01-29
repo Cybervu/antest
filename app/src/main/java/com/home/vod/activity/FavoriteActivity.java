@@ -66,6 +66,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -136,6 +137,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
     LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
     String Default_Language = "";
     String Previous_Selected_Language = "";
     int prevPosition = 0;
@@ -236,6 +238,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         /////
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -928,7 +931,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         MenuItem favorite_menu;
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         favorite_menu.setVisible(false);

@@ -85,6 +85,17 @@ public class RegisterUIHandler {
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 

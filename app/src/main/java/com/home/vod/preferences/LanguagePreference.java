@@ -305,6 +305,16 @@ public class LanguagePreference {
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
 
+    public static String SAVE = "SAVE";
+    public static String DEFAULT_SAVE = "Save";
+
+    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
+    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Download Options";
+    public static String SEND = "SEND";
+    public static String DEFAULT_SEND = "Send";
+    public static String CONFIRM_DELETE_MESSAGE = "Send";
+    public static String DEFAULT_CONFIRM_DELETE_MESSAGE = "Are you sure to Delete?";
+
 
     public static final String DEFAULT_TRY_AGAIN = "Try Again !";
     public static final String DEFAULT_FILL_FORM_BELOW = "Fill the form below.";

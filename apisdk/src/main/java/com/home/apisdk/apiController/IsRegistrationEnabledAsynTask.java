@@ -63,7 +63,7 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
          * @param message                          On Success Message
          */
 
-        void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message);
+        void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message , String response);
     }
 
 
@@ -263,22 +263,20 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
+            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
+            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
             return;
         }
-
     }
-
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
+        listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
 
     }
 

@@ -185,12 +185,12 @@
                         android:id="@+id/back_layout"
                         android:layout_height="wrap_content">
 
-                        <ImageButton
-                            android:id="@+id/back"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/ic_back" />
+                    <ImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_back1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -210,6 +210,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:id="@+id/cc_layout"
                         android:layout_gravity="center_vertical|right"
                         android:orientation="horizontal">
 

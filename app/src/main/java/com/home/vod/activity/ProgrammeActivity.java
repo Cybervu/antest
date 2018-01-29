@@ -49,6 +49,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -124,6 +125,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     String loggedInStr;
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+    FeatureHandler featureHandler;
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -244,6 +246,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programme);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
@@ -464,7 +467,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         return true;
     }
 

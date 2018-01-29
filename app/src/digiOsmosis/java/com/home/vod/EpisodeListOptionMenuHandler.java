@@ -45,7 +45,7 @@ public class EpisodeListOptionMenuHandler {
     }
 
 
-    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference) {
+    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference,FeatureHandler featureHandler) {
 
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -84,7 +84,7 @@ public class EpisodeListOptionMenuHandler {
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 
         filter_menu.setVisible(false);
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
+        if ((featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST, FeatureHandler.DEFAULT_CHROMECAST).trim()).equals("1"))
             mediaRouteMenuItem.setVisible(true);
         else
             mediaRouteMenuItem.setVisible(false);
@@ -102,7 +102,7 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(true);
 
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE).trim()).equals("1"))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
@@ -111,8 +111,7 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
 
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1"))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE).trim()).equals("1"))
                 mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);

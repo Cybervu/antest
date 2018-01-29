@@ -228,6 +228,7 @@
     <color name="pre_orderbutton_title">#784128</color>
     <color name="editunselected">#dec6af</color>
     <color name="listTitleContentColor">#ffffff</color>
+    <color name="chromecast_color">#ffffff</color>
 
     <!--added for subtitle color-->
     <color name="subtitle_solid_color">#fff</color>

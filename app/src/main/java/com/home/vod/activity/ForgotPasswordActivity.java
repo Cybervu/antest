@@ -180,6 +180,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
 
         loginEmailStr = editEmailStr.getText().toString().trim();
             boolean isValidEmail = Util.isValidMail(loginEmailStr);
+
+        if(!loginEmailStr.equals("")){
+
             if (isValidEmail == true) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
@@ -190,16 +193,18 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                     ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input, this, this);
                     asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
                 }
-                 else {
+                else {
                     ShowDialog(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
                 }
             } else {
 
                 ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE), languagePreference.getTextofLanguage(EMAIL_DOESNOT_EXISTS,DEFAULT_EMAIL_DOESNOT_EXISTS));
-
-
+            }
+        }else{
+            ShowDialog(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY), languagePreference.getTextofLanguage(TEXT_EMIAL,DEFAULT_TEXT_EMIAL));
         }
+
     }
 
     @Override
