@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+ <color name="appBackgroundColor">#fff </color>
+ <color name="textColor">#000</color>
+ <color name="videotextColor">#000</color>
+ <color name="loginTextViewColor">#E34A00 </color>
+ <color name="buttonTextColor">#fff</color>
+ <color name="castandcrewbackground">#999</color>
+ <color name="forgotPasswordTextViewColor">#E34A00 </color>
+ <color name="fb_text_color">#fff</color>
+ <color name="login_new_user_text_color">#000</color>
+ <color name="sign_up_text_color">#E34A00 </color>
+ <color name="hint_color">#999</color>
+ <color name="alreadyMemberTextColor">#000</color>
+ <color name="alreadyHaveALoginButtonTextColor">#E34A00 </color>
+ <color name="border_color">#E34A00</color>
+ <color name="cancel_button_text_color">#E34A00 </color>
+ <color name="transparent">@android:color/transparent</color>
+ <color name="castCrewTitleTextColor">#E34A00 </color>
+ <color name="toolbarTitleColor">#fff</color>
+ <color name="subtitleListColor">#fff</color>
+ <color name="episodeBackgroundColor">#999</color>
+ <color name="preOrderButtonTextColor">#E34A00</color>
+ <color name="spinnerDropDownListColor">#000</color>
+ <color name="leftMenuBackground">#fff</color>
+ <color name="colorPrimary">#111111</color>
+ <color name="colorPrimaryDark">#5c6873</color>
+ <color name="languagePopupColor">#fff</color>
+ <color name="languagePopupFadeColor">#50696969</color>
+ <color name="filterTextColor">#5c6873</color>
+ <color name="nav_drawer_lineColor">#000</color>
+ <color name="nav_drawer_text_Color">#000000</color>
+ <color name="button_background">#E34A00 </color>
+ <color name="cancel_button_background">#DDD</color>
+ <color name="pre_order_button_background">#fff</color>
+ <color name="color_card_background">#000</color>
+ <color name="fb_button_background">#3b5998</color>
+ <color name="colorAccent">#E34A00</color>
+ <color name="textColorPrimary">#3b5998</color>
+ <color name="windowBackground">#000</color>
+ <color name="selected_color">#000</color>
+ <color name="unselected_color">#fff</color>
+
+ <color name="filter_text_color">#000</color>
+ <color name="censorRatingBackground">#E34A00</color>
+
+ <color name="loader_color">#E34A00 </color>
+ <color name="hint_background">#E34A00 </color>
+ <color name="pageTitleColor">#000</color>
+ <color name="noInternetColor">#000</color>
+ <color name="editTextColor">#000</color>
+ <color name="movieTitleColor">#fff</color>
+ <color name="videomovieTitleColor">#000</color>
+ <color name="resumePopupColor">#fff</color>
+ <color name="dividerColor">#E34A00 </color>
+ <color name="playerColor">#000000</color>
+ <color name="playPauseColor">#00000000</color>
+ <color name="waterMarkTextColor">#80ffffff</color>
+ <color name="seekTimeTextColor">#80ffffff</color>
+ <color name="subTitleTextColor">#000</color>
+ <color name="totalTimeTxtColor">#ffffff</color>
+ <color name="contentTitleColor">#fff</color>
+ <color name="languageTextColor">#000</color>
+ <color name="spinnerTextColor">#fff</color>
+ <color name="filterBgColor">#fff</color>
+ <color name="alertPopupColor">#fff</color>
+ <color name="contactFormTitle">#000</color>
+ <color name="drawerAppColor">#44083b</color>
+
+ <color name="teal_100">#FFCDD2</color>
+ <color name="teal_500">#F44336</color>
+ <color name="disableTextColor">#50757575</color>
+ <color name="OsTextColor">#757575</color>
+ <color name="devi">#757575</color>
+
+ <!--              new key added      -->
+
+
+ <color name="videoTitleTextColor">#000</color>
+ <color name="exoTitleTextColor">#fff</color>
+ <color name="casttextColor">#000</color>
+ <color name="cast_crew_textcolor">#E34A00</color>
+ <color name="borderColor">#000</color>
+ <color name="aboutustestcolor">#fff</color>
+ <color name="aboutustextcolor">#000</color>
+ <color name="checkboxcolor">#000</color>
+ <color name="cast_crew_titleCololr">#E34A00</color>
+ <color name="navdrawerImageBelowLineColor">#000</color>
+ <color name="purchaseBackgroundColor">#909293</color>
+ <color name="purchaseTextColor">#000</color>
+ <color name="buttonbg">#E34A00</color>
+</resources>
