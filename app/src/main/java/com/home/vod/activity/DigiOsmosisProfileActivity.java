@@ -716,7 +716,7 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
         protected Void doInBackground(Void... params) {
             String selectedFilePath = SelectedPath;
 
-            Log.v("BIBHU2","selectedFilePath=="+selectedFilePath);
+            Log.v("ANU","selectedFilePath=="+selectedFilePath);
 
             if (loginPref != null) {
                 loggedInIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
@@ -724,7 +724,7 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
             if (!selectedFilePath.equals("")) {
                 String urlRouteList = APIUrlConstant.getUpdateProfileUrl();
 //            String urlRouteList = "http://192.168.17.136/test/index.php";
-                Log.v("BIBHU2","selectedFilePath inside if=="+selectedFilePath);
+                Log.v("ANU","selectedFilePath inside if=="+selectedFilePath);
                 int serverResponseCode = 0;
 
                 final HttpURLConnection connection;
@@ -794,7 +794,7 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
                     serverResponseCode = connection.getResponseCode();
                     String serverResponseMessage = connection.getResponseMessage();
 
-                    Log.v("BIBHU3", "Server Response is: " + serverResponseMessage + ": " + serverResponseCode);
+                    Log.v("ANU", "Server Response is: " + serverResponseMessage + ": " + serverResponseCode);
 
                     //response code of 200 indicates the server status OK
                     if (serverResponseCode == 200) {
@@ -814,15 +814,15 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
                                     if (responseStr != null) {
                                         myJson = new JSONObject(responseStr);
                                         statusCode = Integer.parseInt(myJson.optString("code"));
-                                        Log.v("BIBHU3", "statusCode 1==" + statusCode);
+                                        Log.v("ANU", "statusCode 1==" + statusCode);
 
                                     }
 
-                                    Log.v("BIBHU3", "Server Response is: " + responseStr);
+                                    Log.v("Anu", "Server Response is: " + responseStr);
 
 
                                 } catch (Exception e) {
-                                    Log.v("BIBHU3", "Exception is: " + e.toString());
+                                    Log.v("Anu", "Exception is: " + e.toString());
                                 }
 
                     }
@@ -835,12 +835,12 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
 
                 } catch (Exception e) {
                     statusCode = 0;
-                    Log.v("BIBHU3", "Exception 1" + e.toString());
+                    Log.v("ANU", "Exception 1" + e.toString());
 
                 }
             }else {
 
-                Log.v("BIBHU3","inside else block");
+                Log.v("ANU","inside else block");
 
                 String urlRouteList =APIUrlConstant.getUpdateProfileUrl().trim();
                 try {
@@ -1252,7 +1252,7 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
                 String tempPath = getPath(selectedImageUri, DigiOsmosisProfileActivity.this);
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
                 bm = BitmapFactory.decodeFile(tempPath);
-                Log.v("ANU","bm===="+bm);
+                Log.v("ANU","SelectedPath === "+SelectedPath);
 
                 Log.v("temporaryPath", tempPath);
                 profile_image.setImageBitmap(bm);

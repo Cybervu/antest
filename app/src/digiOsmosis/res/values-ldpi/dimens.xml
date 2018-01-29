@@ -10,7 +10,7 @@
     <dimen name="view_videogrid_width">125dp</dimen>
     <dimen name="view_videogrid_height">178dp</dimen>
 
-    <dimen name="nav_drawer_width">260dp</dimen>
+    <dimen name="nav_drawer_width">270dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
     <dimen name="recy_margin">8dp</dimen>
@@ -188,7 +188,7 @@
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="listitemlayout_height">150dp</dimen>
-    <dimen name="itemtitle_text_size">18sp</dimen>
+    <dimen name="itemtitle_text_size">19sp</dimen>
 
     <dimen name="changepas_height">40dp</dimen>
     <dimen name="view_margin_top">20dp</dimen>
@@ -215,7 +215,7 @@
     <dimen name="downloadwidth">200dp</dimen>
     <dimen name="button_padding">6dp</dimen>
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
 

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/toolbar"
-        android:layout_marginTop="@dimen/marginleft10dp"
+        android:layout_marginTop="@dimen/program_left"
         android:layout_marginRight="@dimen/marginleft10dp"
         android:layout_alignParentStart="true"
         >

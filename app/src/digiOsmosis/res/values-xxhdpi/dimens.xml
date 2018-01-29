@@ -37,9 +37,9 @@
     <dimen name="movieimg_width">100dp</dimen>
     <dimen name="movieimg_height">100dp</dimen>
     <dimen name="video280_width">170dp</dimen>
-    <dimen name="videogrid_width">160dp</dimen>
-    <dimen name="videogrid_height">229dp</dimen>
     <dimen name="video280_height">95dp</dimen>
+    <dimen name="videogrid_width">165dp</dimen>
+    <dimen name="videogrid_height">235dp</dimen>
     <dimen name="testview2_text_size">18sp</dimen>
     <dimen name="episodelayout_width">151dp</dimen>
     <dimen name="episodelayout_height">85dp</dimen>
@@ -64,8 +64,8 @@
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="editbox_text_size">16sp</dimen>
-    <dimen name="itemtitle_text_size">20sp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle_text_size">21sp</dimen>
+    <dimen name="itemtitle1_text_size">20sp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
@@ -97,7 +97,7 @@
 
     <dimen name="season_image_height">186dp</dimen>
     <dimen name="season_image_width">130dp</dimen>
-    <dimen name="card_title">20sp</dimen>
+    <dimen name="card_title">22sp</dimen>
     <dimen name="card_title_padding">2dp</dimen>
     <dimen name="human_image_height">80dp</dimen>
     <dimen name="human_image_width">80dp</dimen>
@@ -106,12 +106,12 @@
 
     <!--//**********program activity*************//-->
     <dimen name="story_margin_left">10dp</dimen>
-    <dimen name="story_title_text_size">17sp</dimen>
+    <dimen name="story_title_text_size">18sp</dimen>
     <dimen name="program_button_text_size">16sp</dimen>
     <dimen name="start_program_button">200dp</dimen>
     <dimen name="duration_title_text">17sp</dimen>
-    <dimen name="duration">12sp</dimen>
-    <dimen name="story_text_size">15sp</dimen>
+    <dimen name="duration">15sp</dimen>
+    <dimen name="story_text_size">16sp</dimen>
     <dimen name="weight_height">55dp</dimen>
     <dimen name="weight_width">3dp</dimen>
 
@@ -123,14 +123,14 @@
     <dimen name="loginImageViewMarging_top">45dp</dimen>
     <dimen name="loginRelativeLayoutMarging_top">0dp</dimen>
     <dimen name="contactUs_Heading">10dp</dimen>
-    <dimen name="list_itemmarginTop">10dp</dimen>
+    <dimen name="list_itemmarginTop">30dp</dimen>
     <dimen name="login_new_user_padding">5dp</dimen>
     <dimen name="marginleft10dp">10dp</dimen>
     <dimen name="card_padding">4dp</dimen>
     <dimen name="card_radius">7dp</dimen>
     <dimen name="card_elevation">7dp</dimen>
     <dimen name="loginImageViewMarging_top_padding">7dp</dimen>
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">10dp</dimen>
 
@@ -186,4 +186,6 @@
     <dimen name="fitness_margin_right">40dp</dimen>
     <dimen name="fitness_editText_height">40dp</dimen>
     <dimen name="fitness_editText_width">260dp</dimen>
+    <dimen name="programdetails_start_button_width">100dp</dimen>
+    <dimen name="programdetails_start_button_text">16dp</dimen>
 </resources>

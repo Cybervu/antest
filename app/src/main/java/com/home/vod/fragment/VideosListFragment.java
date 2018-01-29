@@ -372,9 +372,10 @@ public class VideosListFragment extends Fragment   {
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.medium_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(getArguments().getString("title"));
+        categoryTitle.setLetterSpacing(0.05f);
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);

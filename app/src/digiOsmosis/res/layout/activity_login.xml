@@ -117,7 +117,7 @@
                 <TextView
                     android:layout_width="@dimen/login_line_width"
                     android:layout_height="1dp"
-                    android:background="@color/appBackgroundColor"
+                    android:background="#90ffffff"
                     android:gravity="center"
                     android:textSize="15dp" />
 
@@ -136,7 +136,7 @@
                 <TextView
                     android:layout_width="@dimen/login_line_width"
                     android:layout_height="1dp"
-                    android:background="@color/appBackgroundColor"
+                    android:background="#90ffffff"
                     android:gravity="center"
                     android:textSize="15dp" />
 

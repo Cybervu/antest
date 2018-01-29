@@ -29,7 +29,8 @@
         card_view:cardUseCompatPadding="true"
         card_view:cardPreventCornerOverlap="true"
         card_view:cardBackgroundColor="@color/transparent"
-        card_view:cardCornerRadius="@dimen/card_radius">
+        card_view:cardCornerRadius="7dp"
+        card_view:cardElevation="6dp">
 
 
         <RelativeLayout
@@ -45,6 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_centerVertical="true"
+                android:foregroundGravity="center"
                 android:textAllCaps="true"
                 android:text="Day 1"
                 android:textColor="@color/seasonTextColor"

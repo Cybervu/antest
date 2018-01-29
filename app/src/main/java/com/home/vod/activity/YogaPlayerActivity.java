@@ -980,6 +980,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), moreVideosTextView);
         moreVideosTextView.setText("EXERCISES");
+        detailsTextView.setLetterSpacing(0.05f);
 
         mLayoutManager = new LinearLayoutManager(YogaPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
         if (((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
@@ -1058,7 +1059,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 contentDetailsInput.setAuthToken(authTokenStr);
 
-                Log.v("SUBHA", "authToken === " + authTokenStr);
+                Log.v("SUBHA", "authToken === relatedcontent " + authTokenStr);
+                Log.v("SUBHA", "permalinkStr === relatedcontent" + item.getPermalink());
+                Log.v("SUBHA", "contentIdStr === relatedcontent" + item.getContentId());
+                Log.v("SUBHA", "contentStreamIdStr === relatedcontent " + item.getContentStreamId());
                 if (preferenceManager != null) {
                     String countryPref = preferenceManager.getCountryCodeFromPref();
                     contentDetailsInput.setCountry(countryPref);
@@ -1600,6 +1604,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 } else {
                     contentDetailsInput.setCountry("IN");
                 }
+                Log.v("SUBHA", "authToken === relatedcontent " + authTokenStr);
+                Log.v("SUBHA", "permalinkStr === relatedcontent" + permalinkStr);
+                Log.v("SUBHA", "contentIdStr === relatedcontent" + contentIdStr);
+                Log.v("SUBHA", "contentStreamIdStr === relatedcontent " + contentStreamIdStr);
                 contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(useridStr);
@@ -2082,8 +2090,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     lineTextview.setVisibility(View.GONE);
 
                 } else {
-
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
+                    durationTitleTextView.setVisibility(View.VISIBLE);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
                     days.setText(preparation_time);
 
@@ -2092,17 +2100,19 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     diffcultyTitleTextView.setVisibility(View.GONE);
                     lineTextview.setVisibility(View.GONE);
                 } else {
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
+                    diffcultyTitleTextView.setVisibility(View.VISIBLE);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), diffcultyTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
                     difficulty.setText(cooking_time);
                 }
                 if (calories.matches("")) {
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTitleTextView.setVisibility(View.GONE);
                     lineTextview1.setVisibility(View.GONE);
                 } else {
                     lineTextview1.setVisibility(View.GONE);
+                    repetitionTitleTextView.setVisibility(View.VISIBLE);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTextView.setText(calories);
@@ -2118,7 +2128,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     lineTextview.setVisibility(View.GONE);
 
                 } else {
-
+                    durationTitleTextView.setVisibility(View.VISIBLE);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
                     days.setText(duration);
@@ -2128,6 +2138,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     diffcultyTitleTextView.setVisibility(View.GONE);
                     lineTextview.setVisibility(View.GONE);
                 } else {
+                    diffcultyTitleTextView.setVisibility(View.VISIBLE);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
                     difficulty.setText(difficulty_level);
@@ -2139,6 +2150,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     lineTextview1.setVisibility(View.GONE);
                 } else {
                     lineTextview1.setVisibility(View.GONE);
+                    repetitionTitleTextView.setVisibility(View.VISIBLE);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTextView.setText(repetition);
@@ -2201,7 +2213,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
 
                 Picasso.with(YogaPlayerActivity.this)
-                        .load(posterImageId)
+                        .load(bannerImageId)
                         .error(R.drawable.logo)
                         .placeholder(R.drawable.logo)
                         .into(moviePoster);
@@ -3566,6 +3578,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         TextView textView = new TextView(this);
         textView.setText(Header);
         textView.setAllCaps(true);
+        textView.setLetterSpacing(0.05f);
         textView.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int titleTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_title_text_size) , getResources().getDisplayMetrics());
 
@@ -3574,7 +3587,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.medium_fonts), textView);
         LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
         int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
         TextViewParams.setMargins(textview, topmargin, 0, 2);
         textView.setLayoutParams(TextViewParams);
 
@@ -3587,13 +3600,16 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         detail_text.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int detailTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_text_size) , getResources().getDisplayMetrics());
 
-        detail_text.setTextSize(13);
+        detail_text.setTextSize(15);
+        detail_text.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
+
         // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
 
         int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.light_fonts), detail_text);
 
-        detail_text.setText(Details);
+//        detail_text.setText(Details);
+        detail_text.setText(Html.fromHtml(Details));
 
         LinearLayout.LayoutParams detailsParam = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
         detail_text.setLayoutParams(detailsParam);
@@ -4368,7 +4384,15 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+
+                        if (pDialog != null && pDialog.isShowing()) {
+                            LogUtil.showLog("PINTU", "videodetails pdlog hide");
+                            pDialog.hide();
+
+                        }
                         playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                        emVideoView.pause();
+
 
                     }
 
@@ -5681,6 +5705,60 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 111: {
+
+                if (grantResults.length > 0) {
+                    if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+                        //Call whatever you want
+
+                        if (NetworkStatus.getInstance().isConnected(YogaPlayerActivity.this)) {
+
+                            ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                            permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                            contentIdStr = getIntent().getStringExtra("CONTENT_ID");
+                            contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
+                            useridStr = preferenceManager.getUseridFromPref();
+
+                            contentDetailsInput.setAuthToken(authTokenStr);
+
+                            Log.v("SUBHA", "authToken === " + authTokenStr);
+                            if (preferenceManager != null) {
+                                String countryPref = preferenceManager.getCountryCodeFromPref();
+                                contentDetailsInput.setCountry(countryPref);
+                            } else {
+                                contentDetailsInput.setCountry("IN");
+                            }
+                            Log.v("SUBHA", "authToken === permission " + authTokenStr);
+                            Log.v("SUBHA", "permalinkStr === permission" + permalinkStr);
+                            Log.v("SUBHA", "contentIdStr ===permission " + contentIdStr);
+                            Log.v("SUBHA", "contentStreamIdStr ===permission " + contentStreamIdStr);
+
+                            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            contentDetailsInput.setPermalink(permalinkStr);
+                            contentDetailsInput.setUser_id(useridStr);
+                            asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
+                            asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                        } else {
+                            Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                            // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
+
+                return;
+            }
+        }
+
         if (requestCode == REQUEST_STORAGE) {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -5693,12 +5771,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     downloadFile(true);
                 }*/
 
-               /* RelatedContentListItem item = itemData.get(position);
+//                RelatedContentListItem item = itemData.get(posi)
 
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                permalinkStr = item.getPermalink();
-                contentIdStr = item.getContentId();
-                contentStreamIdStr = item.getContentStreamId();
+                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                contentIdStr = getIntent().getStringExtra("CONTENT_ID");
+                contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
                 useridStr = preferenceManager.getUseridFromPref();
 
                 contentDetailsInput.setAuthToken(authTokenStr);
@@ -5710,12 +5788,17 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 } else {
                     contentDetailsInput.setCountry("IN");
                 }
+                Log.v("SUBHA", "authToken === permission " + authTokenStr);
+                Log.v("SUBHA", "permalinkStr === permission" + permalinkStr);
+                Log.v("SUBHA", "contentIdStr ===permission " + contentIdStr);
+                Log.v("SUBHA", "contentStreamIdStr ===permission " + contentStreamIdStr);
+
                 contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(useridStr);
-                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, YogaPlayerActivity.this, YogaPlayerActivity.this);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-*/
+
 
 
             } else {
@@ -7067,35 +7150,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     }
 
 
-   /* private void CalLoadMovieDetails(int itemPosition) {
 
-        RelatedContentListItem item = itemData.get(itemPosition);
-        //Values are passing to activity & to fragment as well
-               *//* EpisodesListModel item = itemData.get(position);
-                clickItem(item, position);*//*
-        ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-        permalinkStr = item.getPermalink();
-        contentIdStr = item.getContentId();
-        contentStreamIdStr = item.getContentStreamId();
-        useridStr = preferenceManager.getUseridFromPref();
-
-        contentDetailsInput.setAuthToken(authTokenStr);
-
-        Log.v("SUBHA", "authToken === " + authTokenStr);
-        if (preferenceManager != null) {
-            String countryPref = preferenceManager.getCountryCodeFromPref();
-            contentDetailsInput.setCountry(countryPref);
-        } else {
-            contentDetailsInput.setCountry("IN");
-        }
-        contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        contentDetailsInput.setPermalink(permalinkStr);
-        contentDetailsInput.setUser_id(useridStr);
-        asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, YogaPlayerActivity.this, YogaPlayerActivity.this);
-        asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-
-    }*/
 
 
     private void ShowPpvPopUp() {

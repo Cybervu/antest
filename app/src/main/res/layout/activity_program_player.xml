@@ -375,12 +375,13 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/moreVideosRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:overScrollMode="never"
                 android:layout_marginLeft="@dimen/marginRight20dp"
                 android:layout_marginRight="@dimen/marginRight20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_below="@+id/titledetails"
                 android:layout_centerHorizontal="true" />
 
@@ -419,27 +420,35 @@
 
                 <ImageView
                     android:id="@+id/player_repeat"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
                     android:clickable="true"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/drawable_name"
                     android:src="@drawable/player_repeat" />
 
                 <ImageView
                     android:id="@+id/player_pause"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
                     android:clickable="true"
-
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/drawable_name"
                     android:src="@drawable/player_pause" />
 
                 <ImageView
                     android:id="@+id/player_next"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
                     android:clickable="true"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/drawable_name"
                     android:src="@drawable/player_next" />
 
             </LinearLayout>

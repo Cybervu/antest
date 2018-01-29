@@ -15,7 +15,7 @@
         android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_alignLeft="@+id/imagesGridView"
-        android:layout_marginTop="@dimen/padding25dp"
+        android:layout_marginTop="@dimen/program_left"
         android:padding="@dimen/padding17dp"
         >
 

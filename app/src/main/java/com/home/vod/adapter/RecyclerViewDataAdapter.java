@@ -105,7 +105,10 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         singleSectionItems = dataList.get(i).getAllItemsInSection();
         pemalink=dataList.get(i).getHeaderPermalink();
 
-        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),itemRowHolder.itemTitle);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.medium_fonts),itemRowHolder.itemTitle);
+        itemRowHolder.itemTitle.setLetterSpacing(0.05f);
+        itemRowHolder.btnMore.setLetterSpacing(0.05f);
+
 
         itemRowHolder.itemTitle.setText(sectionName);
         SectionListDataAdapter itemListDataAdapter = null;
@@ -279,7 +282,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
             this.btnMoreLayout= (RelativeLayout) view.findViewById(R.id.btnMoreLayout);
 
-            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),this.btnMore);
+            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.medium_fonts),this.btnMore);
 
 /*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));

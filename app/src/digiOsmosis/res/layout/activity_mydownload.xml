@@ -48,12 +48,13 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
     <GridView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gridView"
         android:layout_below="@+id/line_layout"
         android:layout_alignLeft="@+id/line_layout"
         android:dividerHeight="@dimen/manage_device_padding"
+        android:numColumns="2"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"

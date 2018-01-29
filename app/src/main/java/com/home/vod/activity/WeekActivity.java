@@ -49,6 +49,7 @@ import com.home.vod.model.SeasonModel;
 import com.home.vod.model.WeekModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -266,6 +267,7 @@ public class WeekActivity extends AppCompatActivity implements GetContentDetails
         });
 
         itemTitle.setText("SELECT A WEEK");
+        FontUtls.loadFont(WeekActivity.this,getResources().getString(R.string.medium_fonts),itemTitle);
 
 //        itemTitle.setText(languagePreference.getTextofLanguage(DAYS_TITLE,DEFAULT_DAYS_TITLE));
         // seasonGridView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));

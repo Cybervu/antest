@@ -1158,31 +1158,29 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_large_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_large_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_large_vertical) : (int) getResources().getInteger(R.integer.search_configuration_large_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_normal_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_normal_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_normal_vertical) : (int) getResources().getInteger(R.integer.search_configuration_normal_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_small_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_small_horizontal));
+                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_xlarge_horizontal) : (int) getResources().getInteger(R.integer.search_configuration_xlarge_horizontal));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.search_configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.search_configuration_xlarge_vertical));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
                     }
-
                 }
                /* if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {

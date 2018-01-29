@@ -460,15 +460,22 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
         categoryTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         index = (TextView) rootView.findViewById(R.id.index);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.medium_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(titleStr);
+        categoryTitle.setLetterSpacing(0.05f);
         //Detect Network Connection
 
         clearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchEdittext.setText("");
+                if(searchEdittext.getText().toString().equalsIgnoreCase("")){
+                    searchEdittext.setVisibility(View.GONE);
+                    clearText.setVisibility(View.GONE);
+                }else{
+                    searchEdittext.setText("");
+                }
+
             }
         });
 
@@ -484,8 +491,9 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                     click = false;
                 }
                 else {
-                    InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
+                   /* InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);*/
                     searchEdittext.setVisibility(View.GONE);
                     clearText.setVisibility(View.GONE);
                     click = true;
@@ -567,7 +575,13 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
 
                     Log.v("Muvi1", "on scroll data info = "+itemData.get(firstVisibleItem).getTitle());
 
-                    String title = itemData.get(firstVisibleItem).getTitle().trim();
+                    String title = "";
+                    if(listView.getLastVisiblePosition() == itemData.size()-1){
+                        title = itemData.get(itemData.size()-1).getTitle().trim();
+                    }else{
+                        title = itemData.get(firstVisibleItem).getTitle().trim();
+                    }
+
                     title = (title.replaceAll("[0-9]","")).trim();
                     String INDEX = title.substring(0,1);
 

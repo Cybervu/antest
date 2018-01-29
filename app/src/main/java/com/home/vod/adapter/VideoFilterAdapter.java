@@ -80,7 +80,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
 //            row = inflater.inflate(R.layout.row_programe_layout, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
-            FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.title );
+            FontUtls.loadFont(context, context.getResources().getString(R.string.semibold_fonts), holder.title );
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
             holder.titleRelativeLayout = (RelativeLayout) row.findViewById(R.id.titleRelativeLayout);
 

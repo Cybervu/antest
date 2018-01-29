@@ -67,7 +67,7 @@
                     android:paddingLeft="@dimen/loginImageViewMarging_top_padding"
                     android:text="Story comes here"
                     android:layout_alignLeft="@+id/itemTitle"
-                    android:maxLines="@integer/story_lines"
+                    android:maxLines="1"
                     android:ellipsize="end"
                     android:textSize="@dimen/story_text_size"
                     android:textColor="@color/colorPrimary"

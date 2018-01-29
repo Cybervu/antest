@@ -3,6 +3,7 @@ package com.home.vod.adapter;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,7 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
         public void bind(final RelatedContentListItem item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getTitle());
             movieStory.setText(item.getStory());
-            // episodeNameTextView.setText(item.getEpisodeNumber());
+           Log.v("SUBHASHREE","related content " + item.getStory());
 
             String imageId = item.getImage();
             LogUtil.showLog("MUVI","kjshdvuih");

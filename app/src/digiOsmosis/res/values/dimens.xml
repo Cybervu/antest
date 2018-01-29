@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_drawer_width">260dp</dimen>
+    <dimen name="nav_drawer_width">270dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
     <dimen name="recy_margin">8dp</dimen>
@@ -274,7 +274,7 @@
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="listitemlayout_height">158dp</dimen>
-    <dimen name="itemtitle_text_size">18sp</dimen>
+    <dimen name="itemtitle_text_size">19sp</dimen>
 
     <dimen name="changepas_height">40dp</dimen>
     <dimen name="view_margin_top">20dp</dimen>
@@ -361,15 +361,16 @@
     <dimen name="padding17dp">0dp</dimen>
     <dimen name="padding25dp">25dp</dimen>
     <dimen name="row_gap">15dp</dimen>
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">10dp</dimen>
-
+    <dimen name="list_itemmarginTop">20dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
     <dimen name="week_days">100dp</dimen>
     <dimen name="week_days_title">55dp</dimen>
     <dimen name="yogaDownloadWidth">70dp</dimen>
-    <dimen name="programdetails_start_button_width">100dp</dimen>
+    <dimen name="programdetails_start_button_width">120dp</dimen>
+    <dimen name="programdetails_start_button_text">14dp</dimen>
     <dimen name="week_left">10dp</dimen>
     <dimen name="week_top">10dp</dimen>
     <dimen name="player_marginTop">100dp</dimen>

@@ -126,6 +126,8 @@ TextView titleTextView;
     String Default_Language = "";
     String Previous_Selected_Language = "";
     int prevPosition = 0;
+    int videoHeight = 185;
+    int videoWidth = 256;
     LanguageCustomAdapter languageCustomAdapter;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     String download_id_from_watch_access_table = "";
@@ -357,9 +359,28 @@ TextView titleTextView;
             nodata.setVisibility(View.VISIBLE);
             noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT,DEFAULT_NO_CONTENT));
         }
+        if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+
+            gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
 
 
+        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
 
+            gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
+        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
+            gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
+        } else {
+
+            gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+
+        }
+
+/*
         if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
 
             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_vertical) : (int) getResources().getInteger(R.integer.configuration_large_vertical));
@@ -377,7 +398,7 @@ TextView titleTextView;
         } else {
             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.configuration_xlarge_vertical));
 
-        }
+        }*/
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

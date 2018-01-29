@@ -107,12 +107,12 @@
 
     <!--//**********program activity*************//-->
     <dimen name="story_margin_left">10dp</dimen>
-    <dimen name="story_title_text_size">16sp</dimen>
+    <dimen name="story_title_text_size">17sp</dimen>
     <dimen name="program_button_text_size">14sp</dimen>
     <dimen name="start_program_button">200dp</dimen>
     <dimen name="duration_title_text">16sp</dimen>
-    <dimen name="duration">12sp</dimen>
-    <dimen name="story_text_size">12sp</dimen>
+    <dimen name="duration">15sp</dimen>
+    <dimen name="story_text_size">13sp</dimen>
     <dimen name="weight_height">55dp</dimen>
     <dimen name="weight_width">3dp</dimen>
 

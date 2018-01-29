@@ -18,9 +18,18 @@ public class RelatedContentListOutput {
 
     String contentStreamId;
 
+    public String getStory() {
+        return story;
+    }
+
+    public void setStory(String story) {
+        this.story = story;
+    }
+
+    String story;
     String permalink;
     String name;
-  /*  String story;
+  /*
     String releaseDate;*/
     String contentTypesId;
     String posterUrl;

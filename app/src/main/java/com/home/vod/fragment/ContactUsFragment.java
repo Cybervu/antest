@@ -35,16 +35,20 @@ import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
+import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
 import static com.home.vod.preferences.LanguagePreference.MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -180,7 +184,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             }
         });
 
-        editNameStr.addTextChangedListener(new TextWatcher() {
+        /*editNameStr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -251,7 +255,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
 
 
@@ -271,9 +275,40 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         regEmailStr = editEmailStr.getText().toString().trim();
         regNameStr = editNameStr.getText().toString().trim();
         regMessageStr = editMessageStr.getText().toString().trim();
+        regMessageStr = regMessageStr.replaceAll("(\r\n|\n\r|\r|\n|<br />)", " ");
 
+        boolean isNetwork = NetworkStatus.getInstance().isConnected(context);
+        if (isNetwork) {
+            if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regMessageStr.matches(""))) {
+                boolean isValidEmail = Util.isValidMail(regEmailStr);
+                if (isValidEmail) {
+                    if (validate){
+                        ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
+                        contactUsInputModel.setAuthToken(authTokenStr);
+                        contactUsInputModel.setEmail(String.valueOf(regEmailStr));
+                        contactUsInputModel.setName(String.valueOf(regNameStr));
+                        contactUsInputModel.setMessage(String.valueOf(regMessageStr));
+                        contactUsInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                        ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
+                        asynContactUs.execute();
 
-        if (regNameStr.equals("")){
+                    }else {
+                        validate=true;
+                        return ;
+                    }
+
+                } else {
+                    Toast.makeText(context, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA,DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+
+            }
+        } else {
+            Toast.makeText(context, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+        }
+
+       /* if (regNameStr.equals("")){
             editNameStr.setError("Required Field.");
             validate=false;
         }
@@ -295,27 +330,8 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         if (regMessageStr.equals("")){
             editMessageStr.setError("Required Field.");
             validate=false;
-        }
+        }*/
 
-    if (validate){
-
-        if (NetworkStatus.getInstance().isConnected(context)){
-            ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
-            contactUsInputModel.setAuthToken(authTokenStr);
-            contactUsInputModel.setEmail(String.valueOf(regEmailStr));
-            contactUsInputModel.setName(String.valueOf(regNameStr));
-            contactUsInputModel.setMessage(String.valueOf(regMessageStr));
-            contactUsInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-            ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
-            asynContactUs.execute();
-
-        }else{
-            Toast.makeText(getActivity(),languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-        }
-    }else {
-        validate=true;
-        return ;
-    }
 
 
 

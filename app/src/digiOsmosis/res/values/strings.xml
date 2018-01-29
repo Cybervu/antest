@@ -4,6 +4,7 @@
     <string name="light_fonts">fonts/Dosis-Light.ttf</string>
     <string name="fonts">fonts/Dosis-Bold.ttf</string>
     <string name="medium_fonts">fonts/Dosis-Medium.ttf</string>
+    <string name="semibold_fonts">fonts/Dosis-SemiBold.ttf</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>

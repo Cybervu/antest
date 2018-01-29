@@ -97,7 +97,7 @@
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">100dp</dimen>
     <dimen name="listitemlayout_height">350dp</dimen>
-    <dimen name="itemtitle_text_size">21sp</dimen>
+    <dimen name="itemtitle_text_size">22sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -112,7 +112,7 @@
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="cast_width_icon">150dp</dimen>
     <dimen name="cast_height_icon">130dp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle1_text_size">18sp</dimen>
     <dimen name="homelogo_height">87dp</dimen>
     <dimen name="homelogo_width">185dp</dimen>
     <dimen name="card_expiryyear_width">200dp</dimen>
@@ -143,11 +143,11 @@
 
     <dimen name="row_gap">15dp</dimen>
     <dimen name="story_margin_left">10dp</dimen>
-    <dimen name="story_title_text_size">20sp</dimen>
-    <dimen name="story_text_size">14sp</dimen>
+    <dimen name="story_title_text_size">21sp</dimen>
+    <dimen name="story_text_size">15sp</dimen>
     <dimen name="start_program_button">50dp</dimen>
     <dimen name="duration_title_text">16sp</dimen>
-    <dimen name="duration">12sp</dimen>
+    <dimen name="duration">15sp</dimen>
     <dimen name="weight_height">60dp</dimen>
     <dimen name="weight_width">5dp</dimen>
 
@@ -182,7 +182,7 @@
 
     <dimen name="detailsTextView">250dp</dimen>
 
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="week_days">100dp</dimen>
     <dimen name="week_days_title">55dp</dimen>

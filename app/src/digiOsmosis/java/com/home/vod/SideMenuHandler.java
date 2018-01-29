@@ -249,7 +249,7 @@ public class SideMenuHandler {
 
             if (isLogin == 1) {
                     menuList.add(adding_position,new NavDrawerItem(login_menu, login_menuPermalink, true, "internal"));
-                    menuList.add(adding_position+1,new NavDrawerItem(register_menu, register_menuPermalink, true, "internal"));
+//                    menuList.add(adding_position+1,new NavDrawerItem(register_menu, register_menuPermalink, true, "internal"));
             }
 
         }

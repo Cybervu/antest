@@ -27,7 +27,8 @@
         android:id="@+id/pageTitle"
         android:layout_below="@+id/logo_image"
         android:layout_marginLeft="@dimen/week_left"
-        android:layout_marginTop="@dimen/marginRight20dp"
+        android:paddingLeft="@dimen/week_left"
+        android:layout_marginTop="15dp"
         >
 
         <TextView
@@ -65,7 +66,7 @@
         android:clipToPadding="false"
         android:layout_below="@+id/pageTitle"
         android:layout_alignLeft="@+id/pageTitle"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="@dimen/marginLeft15dp"
         android:layout_marginRight="@dimen/marginLeft15dp"
         android:layout_marginBottom="@dimen/marginLeft15dp"

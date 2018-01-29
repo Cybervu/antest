@@ -101,7 +101,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
 
         SingleItemModel singleItem = itemsList.get(i);
-        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),holder.itemTitle);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),holder.itemTitle);
 
       /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         holder.itemTitle.setTypeface(castDescriptionTypeface);*/

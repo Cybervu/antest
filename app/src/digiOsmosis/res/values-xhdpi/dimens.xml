@@ -67,8 +67,8 @@
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="editbox_text_size">16sp</dimen>
-    <dimen name="itemtitle_text_size">20sp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle_text_size">21sp</dimen>
+    <dimen name="itemtitle1_text_size">18sp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
@@ -105,12 +105,12 @@
 
     <!--//**********program activity*************//-->
     <dimen name="story_margin_left">10dp</dimen>
-    <dimen name="story_title_text_size">16sp</dimen>
+    <dimen name="story_title_text_size">17sp</dimen>
     <dimen name="program_button_text_size">14sp</dimen>
     <dimen name="start_program_button">200dp</dimen>
     <dimen name="duration_title_text">16sp</dimen>
-    <dimen name="duration">12sp</dimen>
-    <dimen name="story_text_size">12sp</dimen>
+    <dimen name="duration">15sp</dimen>
+    <dimen name="story_text_size">13sp</dimen>
     <dimen name="weight_height">55dp</dimen>
     <dimen name="weight_width">3dp</dimen>
 
@@ -138,7 +138,7 @@
     <dimen name="row_gap">15dp</dimen>
     <dimen name="season_margin_left">10dp</dimen>
     <dimen name="program_banner_height">400dp</dimen>
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
     <dimen name="week_days">100dp</dimen>

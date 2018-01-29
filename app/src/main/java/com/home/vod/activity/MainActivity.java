@@ -969,7 +969,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
-            adding_position = menuList.size();
 
 
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
@@ -983,6 +982,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     }
                 }
             }
+
+            adding_position = menuList.size();
+
 //            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage("Contact Us", "Contact Us"), "contactus", false, "contactus"));
 
             originalMenuList = new ArrayList<>(menuList);

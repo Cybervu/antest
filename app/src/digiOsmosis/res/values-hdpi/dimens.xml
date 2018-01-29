@@ -65,8 +65,8 @@
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="paybtn_height">35dp</dimen>
     <dimen name="editbox_text_size">16sp</dimen>
-    <dimen name="itemtitle_text_size">19sp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle_text_size">20sp</dimen>
+    <dimen name="itemtitle1_text_size">18sp</dimen>
     <dimen name="homelogo_height">80dp</dimen>
     <dimen name="homelogo_width">150dp</dimen>
     <dimen name="btnmore_text_size">16sp</dimen>
@@ -103,7 +103,7 @@
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
     <dimen name="season_margin_left">10dp</dimen>
 
-    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_height">25dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
 
     <dimen name="detailsTextView">150dp</dimen>

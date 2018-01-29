@@ -167,10 +167,10 @@ public class GetRelatedContentListAsynTask extends AsyncTask<RelatedContentListI
                             content.setContentStreamId(jsonChildNode.optString("movie_stream_id"));
 
                         }
-                       /* if ((jsonChildNode.has("genre")) && jsonChildNode.optString("genre").trim() != null && !jsonChildNode.optString("genre").trim().isEmpty() && !jsonChildNode.optString("genre").trim().equals("null") && !jsonChildNode.optString("genre").trim().matches("")) {
-                            content.setGenre(jsonChildNode.optString("genre"));
+                        if ((jsonChildNode.has("story")) && jsonChildNode.optString("story").trim() != null && !jsonChildNode.optString("story").trim().isEmpty() && !jsonChildNode.optString("story").trim().equals("null") && !jsonChildNode.optString("story").trim().matches("")) {
+                            content.setStory(jsonChildNode.optString("story"));
 
-                        }*/
+                        }
                         if ((jsonChildNode.has("title")) && jsonChildNode.optString("title").trim() != null && !jsonChildNode.optString("title").trim().isEmpty() && !jsonChildNode.optString("title").trim().equals("null") && !jsonChildNode.optString("title").trim().matches("")) {
                             content.setName(jsonChildNode.optString("title"));
                         }

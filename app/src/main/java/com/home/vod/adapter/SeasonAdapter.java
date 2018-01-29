@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.SeasonModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -85,6 +86,8 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
         }else{
             holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         }
+
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.semibold_fonts),holder.title);
 
         // For selection
        /* if(album.isSelected() == true){

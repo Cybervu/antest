@@ -93,7 +93,7 @@ public class FitnessAdapter extends ArrayAdapter<YogaItem> {
 
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        FontUtls.loadFont(context, context.getResources().getString(R.string.fonts), holder.title);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.medium_fonts), holder.title);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.movieStory);
 
         if ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {

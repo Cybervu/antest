@@ -14,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_alignLeft="@+id/imagesGridView"
-        android:layout_marginTop="@dimen/padding25dp"
-        android:padding="@dimen/padding17dp"
+        android:layout_marginLeft="10dp"
+
+        android:paddingTop="@dimen/padding17dp"
+        android:layout_marginTop="@dimen/program_left"
         >
 
         <TextView
@@ -26,7 +26,6 @@
             android:layout_height="@dimen/sideTitle_line_width"
             android:id="@+id/colortitle"
             android:background="@color/colorPrimary"
-            android:layout_marginLeft="@dimen/marginRight20dp"
             />
 
 
@@ -40,7 +39,6 @@
             android:textColor="@color/videotextColor"
             android:textSize="@dimen/itemtitle_text_size"
             android:layout_marginTop="@dimen/marginBottom5dp"
-            android:layout_marginLeft="@dimen/marginRight20dp"
             />
 
     </LinearLayout>
@@ -54,10 +52,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/categoryTitleRelativeLayout"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_alignLeft="@+id/categoryTitleRelativeLayout"
         android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_marginTop="@dimen/pre_order_button_margin"
-
 
         />
 

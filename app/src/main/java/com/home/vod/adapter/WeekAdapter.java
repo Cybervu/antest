@@ -22,6 +22,7 @@ import com.home.vod.activity.SeasonActivity;
 import com.home.vod.activity.WeekActivity;
 import com.home.vod.model.WeekModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -92,6 +93,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.MyViewHolder> 
 
         WeekModel album = data.get(position);
         holder.title.setText(album.getWeekName());
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),holder.title);
      //   holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_circle));
         languagePreference = LanguagePreference.getLanguagePreference(mContext);
 //        holder.thumbnail.setImageResource(album.getSeasonImage());

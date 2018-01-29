@@ -1443,7 +1443,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             }
         });
 
-
+        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), startProgrammeTextView);
+        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), dietPlanButton);
+        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), favorite_view_episode);
 
          /*-------------Added for trailer ---------------*/
         bannerImageRelativeLayout.setVisibility(View.VISIBLE);
@@ -2251,7 +2253,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
             startProgrammeTextView.setText(languagePreference.getTextofLanguage(PROGRAM_BUTTON, DEFAULT_PROGRAM_BUTTON));
             favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
-            dietPlanButton.setText(languagePreference.getTextofLanguage(DIET_BUTTON, DEFAULT_DIET_BUTTON));
+//            dietPlanButton.setText(languagePreference.getTextofLanguage(DIET_BUTTON, DEFAULT_DIET_BUTTON));
 
 
             if (contentDetailsOutput.getMetadata() != null || contentDetailsOutput.getMetadata().size() > 0) {
@@ -2264,15 +2266,17 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                         if (entry.getValue() != null && !entry.getValue().matches("")) {
 
-                            if(!entry.getKey().equalsIgnoreCase("programtype")) {
+//                            if(!entry.getKey().equalsIgnoreCase("programtype")) {
 
-                                DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
-                            }
+
+//                            }
                             if (entry.getKey().equalsIgnoreCase("programtype") ){
                                 programType = entry.getValue();
 
                             }
 //                            programType= "WeekBased";
+
+                            DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
 
                             try {
 
@@ -2305,11 +2309,12 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 colortitle1.setVisibility(View.GONE);
             } else {
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), benefitsTitleTextView);
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), benefitsStoryTextView);
                 benefitsStoryTextView.setText(benefits.trim());
                 colortitle1.setVisibility(View.VISIBLE);
                 benefitsTitleLineDivider.setVisibility(View.VISIBLE);
                 benefitsTitleTextView.setVisibility(View.VISIBLE);
+                benefitsTitleTextView.setLetterSpacing(0.05f);
             }
 
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -2323,6 +2328,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 detailsTextView.setVisibility(View.VISIBLE);
                 detailsTitleLineDivider.setVisibility(View.VISIBLE);
                 detailsTextView.setText(name);
+                detailsTextView.setLetterSpacing(0.05f);
                 colortitle.setVisibility(View.GONE);
             }
 
@@ -2382,9 +2388,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 videoStoryTextView.setVisibility(View.VISIBLE);
                 storyTitleLineDivider.setVisibility(View.VISIBLE);
 
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), videoStoryTextView);
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), videoStoryTextView);
 
                 videoStoryTextView.setText(movieDetailsStr.trim());
+                videoStoryTextView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
 
             }
 
@@ -3078,7 +3085,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             String posterStr = relatedContentOutput.getPoster();
             String content_bannerStr = relatedContentOutput.getContent_banner();
 
-            if(relatedContentOutput.getIs_downloadable().equalsIgnoreCase("1") || relatedContentOutput.getIs_downloadable().equalsIgnoreCase("2")) {
+            Intent intent = new Intent(ProgrammeActivity.this, DietDetailsActivity.class);
+            intent.putExtra(HeaderConstants.VLINK, permalinkStr);
+            startActivity(intent);
+
+            /*if(relatedContentOutput.getIs_downloadable().equalsIgnoreCase("1") || relatedContentOutput.getIs_downloadable().equalsIgnoreCase("2")) {
 
 
                 Intent intent = new Intent(ProgrammeActivity.this, DietDetailsActivity.class);
@@ -3086,16 +3097,16 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                 LogUtil.showLog("SUBHA", "getPermalink()" + permalinkStr);
 
-               /* intent.putExtra("STORY", storyStr);
+               *//* intent.putExtra("STORY", storyStr);
                 intent.putExtra("TITLE", titleStr);
                 intent.putExtra("TRAILER_URL", trailer_urlStr);
                 intent.putExtra("POSTER", posterStr);
-                intent.putExtra("CONTENT_BANNER", content_bannerStr);*/
+                intent.putExtra("CONTENT_BANNER", content_bannerStr);*//*
                 startActivity(intent);
-            }
+            }*/
 
         } else
-            Toast.makeText(ProgrammeActivity.this, "There is No Diet Plan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProgrammeActivity.this, "There is No Diet Plan", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -3561,11 +3572,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         //int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3, getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height + 2);
         view.setLayoutParams(parms);
       //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
-        parms.setMargins(0, 0, 0, 0);
+        parms.setMargins(0, 10, 0, 0);
         view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         ///Title Textview
@@ -3593,7 +3604,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         detail_text.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int detailTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_text_size) , getResources().getDisplayMetrics());
 
-        detail_text.setTextSize(13);
+        detail_text.setTextSize(15);
+        detail_text.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
+
         // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
 
        // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());

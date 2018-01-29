@@ -79,14 +79,16 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdap
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
             belowlineTextView = (TextView) view.findViewById(R.id.belowlineTextView);
             middleLineTextView = (TextView) view.findViewById(R.id.middleLineTextView);
+            episodeNowTextView = (TextView) view.findViewById(R.id.itemNowTitle);
+
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.medium_fonts),episodeNowTextView);
 
            /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
             episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
             //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
-            episodeNowTextView = (TextView) view.findViewById(R.id.itemNowTitle);
 
 
             //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
@@ -169,7 +171,7 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdap
                 Log.v("SUBHAS","POs ===  NEXT "+pos + nextPosition + position);
                 holder.episodeNowTextView.setText(" NEXT ");
                 holder.episodeNowTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
-                holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
+                holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.player_next_textcolor));
                 holder.middleLineTextView.setBackgroundColor(context.getResources().getColor(R.color.player_next_linecolor));
                 holder.belowlineTextView.setVisibility(View.GONE);
 

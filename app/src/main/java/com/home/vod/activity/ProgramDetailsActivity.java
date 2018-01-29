@@ -182,7 +182,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         VideoDetailsAsynctask.VideoDetailsListener, GetRelatedContentListAsynTask.GetRelatedContentListListener, AddToFavAsync.AddToFavListener, DeleteFavAsync.DeleteFavListener {
 
     ImageView bannerImageView, playButton, share, favorite_view_episode;
-    TextView detailsTextView, tutorialTextView;
+    TextView detailsTextView, tutorialTextView,startProgrammeTextView;
     String durationText = "";
     Button startWorkoutButton, dietPlanButton, stretchWorkoutButton;
     RelativeLayout letsWorkoutButton;
@@ -994,6 +994,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
+        String videoStory = "";
         String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -1040,6 +1041,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         videoImageStr = relatedContentListOutputArray.get(i).getPosterUrl();
 
                         videoName = relatedContentListOutputArray.get(i).getName();
+                        videoStory = relatedContentListOutputArray.get(i).getStory();
 
 
                         videoTypeIdStr = relatedContentListOutputArray.get(i).getContentTypesId();
@@ -1049,7 +1051,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         //isConverted = relatedContentListOutputArray.get(i).getIsConverted();
                         // isPPV = relatedContentListOutputArray.get(i).getIsPPV();
                         // isAPV = relatedContentListOutputArray.get(i).getIsAPV();
-                        relatedContentItemData.add(new RelatedContentListItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV, "", relatedContentListOutputArray.get(i).getContentId(), relatedContentListOutputArray.get(i).getContentStreamId()));
+                        relatedContentItemData.add(new RelatedContentListItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV, videoStory, relatedContentListOutputArray.get(i).getContentId(), relatedContentListOutputArray.get(i).getContentStreamId()));
                     }
 
 
@@ -1250,6 +1252,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.titleTextView);
+        startProgrammeTextView = (TextView) findViewById(R.id.startProgrammeTextView);
         startWorkoutButton = (Button) findViewById(R.id.startWorkoutButton);
         stretchWorkoutButton = (Button) findViewById(R.id.stretchWorkoutButton);
         letsWorkoutButton = (RelativeLayout) findViewById(R.id.letsWorkoutButton);
@@ -1280,8 +1283,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), detailsTextView);
 //        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), viewAllTextView);
-        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), startWorkoutButton);
-        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), stretchWorkoutButton);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.medium_fonts), startWorkoutButton);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.medium_fonts), stretchWorkoutButton);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.medium_fonts), startProgrammeTextView);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), equipmentStoryTextView);
+        detailsTextView.setLetterSpacing(0.05f);
+
         detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
 //        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 //        viewAllTextView.setVisibility(View.GONE);
@@ -1958,7 +1965,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 }
 
                 Log.v("SUBHASS", "program type value == episode details ");
-                tutorialTitle.setVisibility(View.VISIBLE);
+               /* tutorialTitle.setVisibility(View.VISIBLE);
                 tutorialTextView.setVisibility(View.VISIBLE);
                 LogUtil.showLog("BISHAL", "data show...");
                 relatedContentList.setVisibility(View.VISIBLE);
@@ -1968,12 +1975,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
 
                 relatedContentList.setAdapter(mAdapter);
-
+*/
                 RelatedContentListInput relatedContentListInput = new RelatedContentListInput();
 
                 useridStr = preferenceManager.getUseridFromPref();
 
-                relatedContentListInput.setAuthToken(authTokenStr);
+
 
                 if (preferenceManager != null) {
                     String countryPref = preferenceManager.getCountryCodeFromPref();
@@ -1981,9 +1988,16 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 } else {
                     relatedContentListInput.setCountry("IN");
                 }
+                relatedContentListInput.setAuthToken(authTokenStr);
                 relatedContentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 relatedContentListInput.setContent_id(contentIdStr);
                 relatedContentListInput.setContent_stream_id(contentStreamIdStr);
+
+
+                Log.v("SUBHASHREE" ,"authTokenStr ==== "+authTokenStr);
+                Log.v("SUBHASHREE" ,"contentIdStr ==== "+contentIdStr);
+                Log.v("SUBHASHREE" ,"contentStreamIdStr ==== "+contentStreamIdStr);
+
                 GetRelatedContentListAsynTask asynLoadMovieDetails = new GetRelatedContentListAsynTask(relatedContentListInput, this, this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -3186,7 +3200,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         //int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height + 2);
         view.setLayoutParams(parms);
         //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
@@ -3196,6 +3210,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         ///Title Textview
         TextView textView = new TextView(this);
         textView.setText(Header);
+        textView.setLetterSpacing(0.05f);
         textView.setAllCaps(true);
         textView.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int titleTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_title_text_size) , getResources().getDisplayMetrics());
@@ -3218,7 +3233,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         detail_text.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int detailTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_text_size) , getResources().getDisplayMetrics());
 
-        detail_text.setTextSize(13);
+        detail_text.setTextSize(15);
+        detail_text.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
+
         // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
 
         // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());

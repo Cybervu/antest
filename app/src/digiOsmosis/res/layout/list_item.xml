@@ -50,7 +50,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_itemmarginTop"
+        android:layout_marginTop="@dimen/program_left"
         android:paddingLeft="@dimen/login_new_user_padding"
         android:paddingRight="@dimen/login_new_user_padding"
         android:id="@+id/btnMoreLayout"
@@ -112,9 +112,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/ppv_margin"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="@dimen/ppv_margin"
-        android:orientation="horizontal" />
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        />
 
 
 </LinearLayout>

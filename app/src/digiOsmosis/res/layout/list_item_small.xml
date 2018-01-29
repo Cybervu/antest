@@ -72,7 +72,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_itemmarginTop"
+        android:layout_marginTop="@dimen/program_left"
         android:id="@+id/btnMoreLayout"
         android:padding="@dimen/loginImageViewMarging_top_padding">
 
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/ppv_margin"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="@dimen/ppv_margin"
         android:orientation="horizontal" />
 

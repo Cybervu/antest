@@ -70,6 +70,7 @@
             android:layout_marginRight="@dimen/fitness_margin_right"
             android:layout_marginLeft="@dimen/fitness_margin_left"
             android:visibility="invisible"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:paddingLeft="2dp"
             android:textColorHint="@color/hint_color"/>
 
