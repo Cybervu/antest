@@ -49,6 +49,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -72,6 +73,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AV
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -79,14 +81,15 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.HAS_FAVORITE;
+
+
 
 /**
  * Created by MUVI on 10/6/2017.
@@ -122,6 +125,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     String loggedInStr;
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+    FeatureHandler featureHandler;
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -242,6 +246,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programme);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
@@ -462,7 +467,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         return true;
     }
 

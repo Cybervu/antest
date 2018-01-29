@@ -64,6 +64,14 @@ public class RegisterUIHandler {
         //editName_first = (EditText) context.findViewById(R.id.editNameStr_first);
         //editName_last = (EditText) context.findViewById(R.id.editNameStr_last);
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 

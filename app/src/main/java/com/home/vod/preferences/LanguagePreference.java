@@ -108,6 +108,8 @@ public class LanguagePreference {
     public static final String INVALID_COUPON = "INVALID_COUPON";
     public static final String DISCOUNT_ON_COUPON = "DISCOUNT_ON_COUPON";
     public static final String HOME = "HOME";
+    public static String HAS_FAVORITE = "HAS_FAVORITE";
+    public static String DEFAULT_HAS_FAVORITE = "0";
     public static final String CONTACT_US = "contactus";
     public static final String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
     public static final String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
@@ -147,6 +149,7 @@ public class LanguagePreference {
     public static final String PAYMENT_OPTIONS_TITLE = "PAYMENT_OPTIONS_TITLE";
     public static final String UPDATE_PROFILE_ALERT = "UPDATE_PROFILE_ALERT";
     public static final String ALERT = "ALERT";
+    public static final String DEFAULT_ALERT = "ALERT!";
     public static final String STORY_TITLE = "STORY_TITLE";
     public static final String NO_DETAILS_AVAILABLE = "NO_DETAILS_AVAILABLE";
     public static final String SORRY = "SORRY";
@@ -182,6 +185,8 @@ public class LanguagePreference {
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
+    public static final String DOWNLOAD_CANCELED = "DOWNLOAD_CANCELED";
+    public static final String DEFAULT_DOWNLOAD_CANCELED = "Download Cancelled";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
@@ -280,6 +285,8 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_IN_PAYMENT_VALIDATION = "Error in payment validation";
     public static final String ERROR_IN_SUBSCRIPTION = "ERROR_IN_SUBSCRIPTION";
     public static final String DEFAULT_ERROR_IN_SUBSCRIPTION = "Error in Subscription";
+    public static final String ERROR_TRANSACTION_PROCESS = "ERROR_TRANSACTION_PROCESS";
+    public static final String DEFAULT_ERROR_TRANSACTION_PROCESS = "Error in Transaction Process";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
 
@@ -297,6 +304,16 @@ public class LanguagePreference {
     public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
+
+    public static String SAVE = "SAVE";
+    public static String DEFAULT_SAVE = "Save";
+
+    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
+    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Download Options";
+    public static String SEND = "SEND";
+    public static String DEFAULT_SEND = "Send";
+    public static String CONFIRM_DELETE_MESSAGE = "Send";
+    public static String DEFAULT_CONFIRM_DELETE_MESSAGE = "Are you sure to Delete?";
 
 
     public static final String DEFAULT_TRY_AGAIN = "Try Again !";
@@ -429,6 +446,38 @@ public class LanguagePreference {
     public static String DEFAULT_DURATION_TITLE = " Duration";
     public static String RESUME_MESSAGE = "RESUME_MESSAGE";
     public static String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
+    public static String DEFAULT_ADD_A_REVIEW = "Add a Review";
+    public static String DEFAULT_REVIEWS = "Reviews";
+    public static String ADD_A_REVIEW = "ADD_A_REVIEW";
+    public static String REVIEWS = "REVIEWS";
+    public static String NO_PURCHASE_HISTORY = "NO_PURCHASE_HISTORY";
+    public static String DEFAULT_NO_PURCHASE_HISTORY = "No Purchase History";
+    public static String FILMOGRAPHY = "FILMOGRAPHY";
+    public static String DEFAULT_FILMOGRAPHY = "filmography";
+    public static String ERROR_IN_DATA_FETCHING = "ERROR_IN_DATA_FETCHING";
+    public static String DEFAULT_ERROR_IN_DATA_FETCHING = "Error in data fetching. Please try again";
+    public static String ENTER_YOUR_MESSAGE = "ENTER_YOUR_MESSAGE";
+    public static String DEFAULT_ENTER_YOUR_MESSAGE = "Enter Your Message";
+    public static String DEFAULT_VALID_CONFIRM_PASSWORD = "Please enter confirm password";
+    public static String WANT_DOWNLOAD_CANCEL = "WANT_DOWNLOAD_CANCEL";
+    public static String DEFAULT_WANT_DOWNLOAD_CANCEL = "Do you want to cancel the download ?";
+    public static String DOWNLOAD_CANCEL = "DOWNLOAD_CANCEL";
+    public static String DEFAULT_DOWNLOAD_CANCEL = "Download Cancelled";
+    public static String NO_DOWNLOADED_VIDEOS = "NO_DOWNLOADED_VIDEOS";
+    public static String DEFAULT_NO_DOWNLOADED_VIDEOS = "No downloaded video(s) available";
+    public static String DOWNLOADED_ACCESS_EXPIRED = "DOWNLOADED_ACCESS_EXPIRED";
+    public static String DEFAULT_DOWNLOADED_ACCESS_EXPIRED = "You don't have access to play this video";
+    public static String RESUME = "RESUME";
+    public static String DEFAULT_RESUME = "Resume";
+    public static String NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "NO_RESULT_FOUND_REFINE_YOUR_SEARCH";
+    public static String DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH = "No result found. Please refine your search.";
+    public static String NO_DEVICE_AVAILABE = "NO_DEVICE_AVAILABE";
+    public static String DEFAULT_NO_DEVICE_AVAILABE = "No devices available for this user.";
+    public static String REMOVE_DEVICE_SUCCESS = "REMOVE_DEVICE_SUCCESS";
+    public static String DEFAULT_REMOVE_DEVICE_SUCCESS = "Remove device request successful.";
+
+
+
 
 
     /**

@@ -74,12 +74,12 @@ import static com.home.vod.util.Constant.authTokenStr;
 public class HomeFragment extends Fragment implements
         GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
-//    int bannerArray[] = {R.drawable.banner1};
+    //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
     GetLoadVideosAsync asynLoadVideos;
-//    AsynLOADUI loadui;
+    //    AsynLOADUI loadui;
     View rootView;
     int item_CountOfSections = 0;
     boolean isFirstTime = false;
@@ -197,11 +197,10 @@ public class HomeFragment extends Fragment implements
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
-
-
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
         }
         return v;
-
 
     }
 
@@ -294,9 +293,9 @@ public class HomeFragment extends Fragment implements
 
             if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-            if (getActivity() != null) {
-                new RetrieveFeedTask().execute(movieImageStr);
-            }
+                if (getActivity() != null) {
+                    new RetrieveFeedTask().execute(movieImageStr);
+                }
 
 
             } else {
@@ -309,10 +308,10 @@ public class HomeFragment extends Fragment implements
 
     }
 
-    public void loadUI(){
+    public void loadUI() {
         //ui_completed = ui_completed + 1;
 
-        LogUtil.showLog("MUVI1", "videoWidth =" + videoWidth +"videoHeight="+ videoHeight);
+        LogUtil.showLog("MUVI1", "videoWidth =" + videoWidth + "videoHeight=" + videoHeight);
 
         if (videoWidth > videoHeight) {
 
@@ -321,9 +320,6 @@ public class HomeFragment extends Fragment implements
         } else {
             Util.image_orentiation.add(Constant.IMAGE_PORTAIT_CONST);
         }
-
-
-
 
 
         if (getView() != null) {
@@ -365,8 +361,6 @@ public class HomeFragment extends Fragment implements
                 my_recycler_view.getLayoutManager().onRestoreInstanceState(listState);
             }
         }
-
-
 
 
         if (counter >= 0 && counter < menuList.size() - 1) {

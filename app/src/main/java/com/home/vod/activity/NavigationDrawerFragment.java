@@ -38,8 +38,10 @@ import com.home.vod.fragment.HomeFragment;
 import com.home.vod.fragment.MyLibraryFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -84,6 +86,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
+    FeatureHandler featureHandler;
 
     public HashMap<String, ArrayList<String>> expandableListDetail;
     ArrayList<String> titleArray = new ArrayList<>();
@@ -121,15 +124,18 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
+        super.onCreate(savedInstanceState);
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         loggedInStr = preferenceManager.getUseridFromPref();
-        GetMenusInputModel menuListInput = new GetMenusInputModel();
-        menuListInput.setAuthToken(authTokenStr);
-        menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynLoadMenuItems = new GetAppMenuAsync(menuListInput, NavigationDrawerFragment.this, getActivity());
-        asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+
+        if (NetworkStatus.getInstance().isConnected(getActivity())) {
+            GetMenusInputModel menuListInput = new GetMenusInputModel();
+            menuListInput.setAuthToken(authTokenStr);
+            menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynLoadMenuItems = new GetAppMenuAsync(menuListInput, NavigationDrawerFragment.this, getActivity());
+            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+        }
     }
 
     @Override
@@ -161,8 +167,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         mDrawerListView = (ExpandableListView) inflater.inflate (R.layout.drawer_drawer, container, false);
         mDrawerListView.setOnItemClickListener (new AdapterView.OnItemClickListener () {
             @Override
@@ -172,6 +177,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
             }
         });
+
 
       /* expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
@@ -587,6 +593,9 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     public void setMenuItemsInDrawer(boolean loadHomeFragment){
 
+        featureHandler = FeatureHandler.getFeaturePreference(getActivity());
+
+
         if(!loadHomeFragment){
             try{
                 boolean my_libary_added1 = false;
@@ -598,7 +607,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     }
                 }
 
-                if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null)) {
                     if(my_libary_added1)
                     {
                         return;
@@ -647,7 +656,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
 
-        if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null) {
             if(!my_libary_added)
             {
                 MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();

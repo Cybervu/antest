@@ -399,10 +399,7 @@ public class Util {
 
     public static String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static String CONTINUE_BUTTON = "CONTINUE_BUTTON";
-    public static String SAVE = "SAVE";
-    public static String DEFAULT_SAVE = "Save";
-    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
-    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Save Offline Video";
+
 
 
     public static String ADD_TO_FAV = "ADD_TO_FAV";
@@ -455,8 +452,8 @@ public class Util {
     public static String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
     public static String DEFAULT_IS_RESTRICT_DEVICE = "0";
 
-    public static String HAS_FAVORITE = "HAS_FAVORITE";
-    public static String DEFAULT_HAS_FAVORITE = "0";
+   /* public static String HAS_FAVORITE = "HAS_FAVORITE";
+    public static String DEFAULT_HAS_FAVORITE = "0";*/
 
     public static String IS_OFFLINE = "IS_OFFLINE";
     public static String DEFAULT_IS_OFFLINE = "0";

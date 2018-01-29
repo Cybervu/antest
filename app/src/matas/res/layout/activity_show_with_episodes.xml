@@ -264,7 +264,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"

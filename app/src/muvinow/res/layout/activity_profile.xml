@@ -10,6 +10,54 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -164,7 +212,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/login_text_size"
 
                         />
 

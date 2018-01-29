@@ -38,18 +38,20 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class PurchaseHistoryActivity extends AppCompatActivity implements
-        PurchaseHistoryAsyntask.PurchaseHistoryListener{
+        PurchaseHistoryAsyntask.PurchaseHistoryListener {
     Toolbar mActionBarToolbar;
     RecyclerView recyclerView;
     ArrayList<PurchaseHistoryModel> purchaseData = new ArrayList<PurchaseHistoryModel>();
@@ -64,12 +66,12 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-LanguagePreference languagePreference;
-    String Invoice,Id,PutrcahseDate,TranactionStatus,Ppvstatus,Amount;
+    LanguagePreference languagePreference;
+    String Invoice, Id, PutrcahseDate, TranactionStatus, Ppvstatus, Amount;
     private String Currency_symbol = "";
-    private String currency_code  = "";
+    private String currency_code = "";
     String user_id = "";
-    TextView purchaseHistoryTitleTextView,no_internet_text,noDataTextView;
+    TextView purchaseHistoryTitleTextView, no_internet_text, noDataTextView;
     PreferenceManager preferenceManager;
     PurchaseHistoryModel purchaseHistoryModel;
     ArrayList<String> Id_Purchase_History;
@@ -81,23 +83,23 @@ LanguagePreference languagePreference;
         setContentView(R.layout.activity_purchase_history);
 
         languagePreference = LanguagePreference.getLanguagePreference(PurchaseHistoryActivity.this);
-        noInternet = (RelativeLayout)findViewById(R.id.noInternet);
-        primary_layout = (LinearLayout)findViewById(R.id.primary_layout);
-        noData = (RelativeLayout)findViewById(R.id.noData);
-        noDataTextView = (TextView)  findViewById(R.id.noDataTextView);
-        tryAgainButton = (Button)  findViewById(R.id.tryAgainButton);
-        no_internet_text = (TextView)  findViewById(R.id.no_internet_text);
+        noInternet = (RelativeLayout) findViewById(R.id.noInternet);
+        primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
+        noData = (RelativeLayout) findViewById(R.id.noData);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
+        tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
+        no_internet_text = (TextView) findViewById(R.id.no_internet_text);
         recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
-        purchaseHistoryTitleTextView = (TextView)findViewById(R.id.purchaseHistoryTitleTextView);
+        purchaseHistoryTitleTextView = (TextView) findViewById(R.id.purchaseHistoryTitleTextView);
 
-        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA,DEFAULT_NO_INTERNET_NO_DATA));
-        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN,DEFAULT_TRY_AGAIN));
+        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
+        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN));
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         user_id = preferenceManager.getUseridFromPref();
-        FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts),purchaseHistoryTitleTextView);
+        FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts), purchaseHistoryTitleTextView);
 
-        purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY
+        purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY
         ));
 
 
@@ -115,10 +117,9 @@ LanguagePreference languagePreference;
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(NetworkStatus.getInstance().isConnected(PurchaseHistoryActivity.this))
+                if (NetworkStatus.getInstance().isConnected(PurchaseHistoryActivity.this))
                     GetPurchaseHistoryDetails();
-                else
-                {
+                else {
                     noInternet.setVisibility(View.VISIBLE);
                     primary_layout.setVisibility(View.GONE);
                 }
@@ -148,11 +149,11 @@ LanguagePreference languagePreference;
 
                         final Intent detailsIntent = new Intent(PurchaseHistoryActivity.this, TransactionDetailsActivity.class);
 
-                        detailsIntent.putExtra("id",Id_Purchase_History.get(position));
-                        detailsIntent.putExtra("user_id",user_id);
+                        detailsIntent.putExtra("id", Id_Purchase_History.get(position));
+                        detailsIntent.putExtra("user_id", user_id);
 
-                        LogUtil.showLog("MUVI","ID = "+Id_Purchase_History.get(position));
-                        LogUtil.showLog("MUVI","user_id = "+user_id);
+                        LogUtil.showLog("MUVI", "ID = " + Id_Purchase_History.get(position));
+                        LogUtil.showLog("MUVI", "user_id = " + user_id);
 
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(detailsIntent);
@@ -163,17 +164,14 @@ LanguagePreference languagePreference;
     }
 
 
-
-
-    public void GetPurchaseHistoryDetails()
-    {
+    public void GetPurchaseHistoryDetails() {
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
-        PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
+        PurchaseHistoryInputModel purchaseHistoryInputModel = new PurchaseHistoryInputModel();
         purchaseHistoryInputModel.setUser_id(user_id);
         purchaseHistoryInputModel.setAuthToken(authTokenStr);
-        purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-        PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
+        purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel, this, this);
         asynGetPurchaseDetail.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -185,45 +183,43 @@ LanguagePreference languagePreference;
 
     @Override
     public void onPurchaseHistoryPostExecuteCompleted(ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel, int status) {
-        try{
-            if(pDialog.isShowing())
+        try {
+            if (pDialog.isShowing())
                 pDialog.hide();
-        }
-        catch(IllegalArgumentException ex)
-        {
+        } catch (IllegalArgumentException ex) {
         }
         Id_Purchase_History = new ArrayList<>();
-        if (status>0){
-            if (status==200){
+        if (status > 0) {
+            if (status == 200) {
 
-               if (purchaseHistoryOutputModel!=null && purchaseHistoryOutputModel.size()>0){
-                   for (PurchaseHistoryOutputModel model:purchaseHistoryOutputModel
-                        ) {
+                if (purchaseHistoryOutputModel != null && purchaseHistoryOutputModel.size() > 0) {
+                    for (PurchaseHistoryOutputModel model : purchaseHistoryOutputModel
+                            ) {
 
-                       purchaseData.add(new PurchaseHistoryModel(model.getInvoice_id(), model.getId(), model.getTransaction_date(), model.getTransaction_status(), model.getAmount(), model.getStatusppv()));
-                       Id_Purchase_History.add( model.getId());
-                   }
-               }
+                        purchaseData.add(new PurchaseHistoryModel(model.getInvoice_id(), model.getId(), model.getTransaction_date(), model.getTransaction_status(), model.getAmount(), model.getStatusppv()));
+                        Id_Purchase_History.add(model.getId());
+                    }
+                }
 
-                if(purchaseData.size()>0){
+                if (purchaseData.size() > 0) {
 
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
-                recyclerView.setAdapter(purchaseHistoryAdapter);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(layoutManager);
+                    PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this, purchaseData);
+                    recyclerView.setAdapter(purchaseHistoryAdapter);
 
-            }else {
+                } else {
                     primary_layout.setVisibility(View.GONE);
 
                     noData.setVisibility(View.VISIBLE);
-                    noDataTextView.setText(languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY) );
+                    noDataTextView.setText(languagePreference.getTextofLanguage(NO_PURCHASE_HISTORY, DEFAULT_NO_PURCHASE_HISTORY));
 
-                    Log.v("pratik","noDataText=="+languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+                    Log.v("pratik", "noDataText==" + languagePreference.getTextofLanguage(NO_PURCHASE_HISTORY, DEFAULT_NO_PURCHASE_HISTORY));
 
                 }
             }
 
-        }else {
+        } else {
             primary_layout.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
 
@@ -392,8 +388,7 @@ LanguagePreference languagePreference;
 //    }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();

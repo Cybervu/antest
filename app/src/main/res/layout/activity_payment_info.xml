@@ -17,7 +17,6 @@
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/login_linear_margin_top"
             android:paddingTop="@dimen/login_linear_margin_top"
-
             >
 
 
@@ -57,7 +56,7 @@
                         android:maxLines="4"
                         android:singleLine="false"
                         android:text="Your card will be charged now:"
-                        android:textColor="@color/pageTitleColor"
+                        android:textColor="@color/textColor"
                         android:textSize="@dimen/chargedetail_text_size" />
 
                     <!-- <RelativeLayout
@@ -321,7 +320,9 @@
                     android:stateListAnimator="@null"
                     android:text="Next"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/nextbtn_text_size" />
+                    android:textSize="@dimen/nextbtn_text_size"
+                    android:layout_marginLeft="@dimen/payment_margin_btn"
+                    android:layout_marginRight="@dimen/payment_margin_btn"/>
             </RelativeLayout>
 
             <RelativeLayout

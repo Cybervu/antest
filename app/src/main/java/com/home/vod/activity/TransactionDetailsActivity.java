@@ -80,6 +80,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANASCTION_DETAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_DATE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_ORDER_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_STATUS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
@@ -94,6 +95,7 @@ import static com.home.vod.preferences.LanguagePreference.PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
 import static com.home.vod.preferences.LanguagePreference.TRANSACTION_DATE;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_ORDER_ID;
 import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -184,7 +186,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
         transactionOrderTitletextView = (TextView) findViewById(R.id.transactionOrderTitletextView);
         FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionOrderTitletextView);
-        transactionOrderTitletextView.setText(languagePreference.getTextofLanguage(ORDER, DEFAULT_ORDER) + " :");
+        transactionOrderTitletextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID, DEFAULT_TRANSACTION_ORDER_ID) + " :");
 
         transactionAmountTitletextView = (TextView) findViewById(R.id.transactionAmountTitletextView);
 

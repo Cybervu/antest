@@ -87,6 +87,7 @@ import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -176,37 +177,51 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCEL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCEL;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SAVE;
+import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.WANT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.preferences.LanguagePreference.YOUR_VIDEO_WONT_BE_SAVED;
-import static player.utils.Util.DEFAULT_SAVE;
-import static player.utils.Util.DEFAULT_SAVE_OFFLINE_VIDEO;
-import static player.utils.Util.SAVE;
-import static player.utils.Util.SAVE_OFFLINE_VIDEO;
+
 
 
 enum ContentTypes2 {
@@ -332,6 +347,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     long previous_matching_time = 0, current_matching_time = 0;
     boolean center_pause_paly_timer_is_running = false;
     RelativeLayout player_layout;
+    LinearLayout cc_layout;
 
     boolean compressed = true;
     int player_layout_height, player_layout_width;
@@ -447,6 +463,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     Player playerModel;
     LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
+    FeatureHandler featureHandler;
     boolean change_resolution = false;
     boolean is_paused = false;
 
@@ -489,14 +506,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         }
 
-                        if (video_prepared) {
-                            if (mediaRouteButton.isEnabled()) {
-                                //  mediaRouteButton.setVisibility(View.VISIBLE);
-                                handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
-                            } else {
-                                mediaRouteButton.setVisibility(View.GONE);
+                        if(featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))
+                        {
+                            if (video_prepared) {
+                                if (mediaRouteButton.isEnabled()) {
+                                    //  mediaRouteButton.setVisibility(View.VISIBLE);
+                                    handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
+                                } else {
+                                    mediaRouteButton.setVisibility(View.GONE);
+                                }
                             }
+                        }else{
+                            mediaRouteButton.setVisibility(View.GONE);
                         }
+
+
                     }
                 });
             }
@@ -538,6 +562,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             isDrm = false;
         }
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        featureHandler = FeatureHandler.getFeaturePreference(ExoPlayerActivity.this);
 
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -709,6 +734,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         episodeId = playerModel.getEpisode_id();
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -815,6 +841,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         }
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)){
+            SubTitlePath.clear();
+            playerModel.offline_url.clear();
+        }
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_RESOLUTION,FeatureHandler.DEFAULT_IS_RESOLUTION)){
+            ResolutionUrl.clear();
+        }
+
+
         //=========================End=================================//
 
         if (isDrm) {
@@ -835,6 +872,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("BIBHU1", "subtitle_image button visible called");
+
+
+                try {
+                    Util.DefaultSubtitle = SubTitleName.get(0);
+                }catch (Exception e){}
+
             }
         }
 
@@ -866,6 +909,39 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             }
         });
+
+        cc_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Util.call_finish_at_onUserLeaveHint = false;
+
+                    if (isDrm) {
+                        Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    } else {
+                        Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                        intent.putExtra("ResolutionFormat", ResolutionFormat);
+                        intent.putExtra("ResolutionUrl", ResolutionUrl);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    }
+
+
+                } catch (Exception e) {
+                }
+
+            }
+        });
+
+
+
+
+
 
         if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches(""))
 
@@ -1123,6 +1199,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
 
+                try{
+
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    int orientation = display.getRotation();
+
+                    Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                    if (orientation == 1|| orientation == 3) {
+                        hideSystemUI();
+                    }}catch (Exception e){}
+
+
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
                 }
@@ -1161,8 +1249,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
 
                         // This is changed Later
-
-                        if (mediaRouteButton.isEnabled()) {
+                        if ((mediaRouteButton.isEnabled()) && (featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))) {
                             //mediaRouteButton.setVisibility(View.VISIBLE);
                             handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
                         } else {
@@ -1471,6 +1558,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
 
 
+
+
         } catch (ErrorCodeException e) {
             // Consult WasabiErrors.txt for resolution of the error codes
             //  onBackPressed();
@@ -1553,22 +1642,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                         @Override
                                         public void onClick(View v) {
                                             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                                            dlgAlert.setTitle(languagePreference.getTextofLanguage(STOP_SAVING_THIS_VIDEO, DEFAULT_STOP_SAVING_THIS_VIDEO));
-                                            dlgAlert.setMessage(languagePreference.getTextofLanguage(YOUR_VIDEO_WONT_BE_SAVED, DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
-                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BTN_KEEP, DEFAULT_BTN_KEEP), null);
+                                            dlgAlert.setTitle(languagePreference.getTextofLanguage(DOWNLOAD_CANCELED, DEFAULT_DOWNLOAD_CANCELED));
+                                            dlgAlert.setMessage(languagePreference.getTextofLanguage(WANT_DOWNLOAD_CANCEL, DEFAULT_WANT_DOWNLOAD_CANCEL));
+                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), null);
                                             dlgAlert.setCancelable(false);
-                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BTN_KEEP, DEFAULT_BTN_KEEP),
+                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES),
                                                     new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
-
-                                                        }
-                                                    });
-                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(BTN_DISCARD, DEFAULT_BTN_DISCARD), null);
-                                            dlgAlert.setCancelable(false);
-                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(BTN_DISCARD, DEFAULT_BTN_DISCARD),
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
+                                                        public void onClick(DialogInterface dialog, int id){
                                                             dialog.cancel();
                                                             downloading = false;
                                                             audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
@@ -1602,8 +1682,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                                                 }
                                                             });
 
-                                                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(DOWNLOAD_CANCELLED, DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(DOWNLOAD_CANCEL, DEFAULT_DOWNLOAD_CANCEL), Toast.LENGTH_SHORT).show();
 
+                                                        }
+                                                    });
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
                                                         }
                                                     });
 
@@ -1655,7 +1743,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Log.v("BIBHU6", "log_id=" + videoLogId);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
@@ -1859,7 +1947,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2400,7 +2488,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             timer = null;
         }
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.call_finish_at_onUserLeaveHint) {
 
             AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
             asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
@@ -2613,7 +2701,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2766,7 +2854,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -3140,7 +3228,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         Util.hide_pause = false;
 
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.Call_API_For_Close_Streming) {
 
             Util.Call_API_For_Close_Streming = false;
             Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
@@ -3839,7 +3927,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 if (lengh.toString().equals("0.0")) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING));
                     dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                     dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
@@ -4144,14 +4232,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (cursor.getCount() > 0) {
             String query = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET download_id = '" + enqueue + "' , " +
                     "stream_unique_id = '" + playerModel.getStreamUniqueId() + "',initial_played_time = '0'," +
-                    "updated_server_current_time = '0' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
+                    "updated_server_current_time = '0', watch_period = '0',access_period = '" + -1 + "' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "update called");
 
         } else {
-            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email) VALUES" +
-                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "')";
+            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email,watch_period,access_period) VALUES" +
+                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "','0','"+-1+"')";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "insert called");
@@ -4743,7 +4831,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId); //in
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -4843,7 +4931,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -4980,7 +5068,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     ShowDownloadOptionPopUp();
                 } else {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING, DEFAULT_ERROR_IN_DATA_FETCHING));
                     dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                     dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
@@ -5146,16 +5234,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         Dwonload_Complete_Msg = myJson.optString("download_complete_msg");
 
-                        if (Dwonload_Complete_Msg.trim().equals(""))
-                            Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                        if (Dwonload_Complete_Msg.trim().equals("")) {
 
+                            Dwonload_Complete_Msg = languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED);
 
+                        }
                         String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
                                 "watch_period = '0',access_period = '" + myJson.optLong("access_expiry_time") + "' WHERE download_id = '" + f_url[0].trim() + "'";
 
                         DB1.execSQL(query1);
                     } else {
-                        Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                        Dwonload_Complete_Msg = languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED);
                         String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
                                 "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
 

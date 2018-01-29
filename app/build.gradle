@@ -56,13 +56,14 @@ android {
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
-            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
+            buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""
 //liveStripe
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
@@ -175,9 +176,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.matas'
-            versionCode 5
+            versionCode 6
             targetSdkVersion 25
-            versionName '1.1.2'
+            versionName '1.1.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -374,7 +375,6 @@ android {
             targetSdkVersion 25
             versionCode 1
             versionName '1.0'
-
         }
         ionsporty_staging_ {
             dimension 'environment'
@@ -403,9 +403,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
-
-
         avin {
             minSdkVersion 16
             dimension 'vendor'
@@ -493,7 +490,7 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.0.1'
         }
         euroman_staging_ {
             dimension 'environment'
@@ -504,15 +501,15 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
         leasy {
-            minSdkVersion 15
+            minSdkVersion 21
             applicationId 'com.release.leasy'
-            targetSdkVersion 23
+            targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.0.1'
         }
         leasy_staging_ {
             dimension 'environment'
@@ -522,6 +519,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        stuffPix {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.stuffpix'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+        }
+        stuffPix_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        stuffPix_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -593,7 +609,7 @@ android.variantFilter { variant ->
      else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
+    } else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     } else if (vendor.equals('cote_ouest') && (environment.equals('cote_ouest_staging_') || environment.equals('cote_ouest_Prod_'))
@@ -610,6 +626,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('leasy') && (environment.equals('leasy_staging_') || environment.equals('leasy_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('stuffPix') && (environment.equals('stuffPix_staging_') || environment.equals('stuffPix_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

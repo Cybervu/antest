@@ -30,7 +30,7 @@
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
-    <color name="nav_drawer_text_Color">#000000</color>
+    <color name="nav_drawer_text_Color">#eb0609</color>
     <color name="button_background">#eb0609 </color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
@@ -79,7 +79,8 @@
     <color name="videoTitleTextColor">#000</color>
     <color name="exoTitleTextColor">#fff</color>
     <color name="casttextColor">#000</color>
-    <color name="cast_crew_textcolor">#eb0609</color>
+    <color name="cast_crew_textcolor">#000</color>
+    <color name="nav_text_line_color">#eb0609</color>
     <color name="borderColor">#000</color>
     <color name="aboutustestcolor">#fff</color>
     <color name="aboutustextcolor">#000</color>
@@ -89,4 +90,5 @@
     <color name="purchaseBackgroundColor">#909293</color>
     <color name="purchaseTextColor">#000</color>
     <color name="buttonbg">#eb0609</color>
+    <color name="nav_header_line_color">#eb0609</color>
 </resources>

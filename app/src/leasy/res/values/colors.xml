@@ -29,7 +29,7 @@
  <color name="leftMenuBackground">#fff</color>
  <color name="colorPrimary">#ffe35d</color>
  <color name="navlogobackgroundcolor">#fff</color>
- <color name="toolbarTitleColor">#fff</color>
+ <color name="toolbarTitleColor">#000</color>
  <color name="colorPrimaryDark">#ffe35d</color>
  <color name="languagePopupColor">#fff</color>
  <color name="languagePopupFadeColor">#50696969</color>
@@ -53,7 +53,7 @@
  <color name="white">#ffffff</color>
  <color name="loader_color">#ffd20a</color>
  <color name="hint_background">#ffd20a</color>
- <color name="pageTitleColor">#3f444a</color>
+ <color name="pageTitleColor">#000000</color>
  <color name="noInternetColor">#5c6873</color>
  <color name="editTextColor">#5c6873</color>
  <color name="movieTitleColor">#fff</color>
@@ -82,4 +82,7 @@
  <color name="cast_crew_titleCololr">#6c6c6c</color>
  <color name="nav_text_line_color">#ffd20a</color>
  <color name="nav_header_line_color">#ffd20a</color>
+ <color name="edit_color">#000</color>
+ <color name="search_hint_color">#000</color>
+ <color name="search_text_color">#000</color>
 </resources>

@@ -60,12 +60,14 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILMOGRAPHY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.FILMOGRAPHY;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -78,7 +80,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 public class CastCrewDetailsActivity extends AppCompatActivity implements GetCastDetailsAsynTask.GetCastDetailsListener {
     ProgressBarHandler pDialog;
     Toolbar mActionBarToolbar;
-    TextView castNameTextView, castDescriptionTextView;
+    TextView castNameTextView, castDescriptionTextView,filmography;
     ImageView castImageView;
     Button btnmore;
     String castpermalinkStr = "";
@@ -135,6 +137,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         }
 
         castNameTextView = (TextView) findViewById(R.id.castNameTextView);
+        filmography = (TextView) findViewById(R.id.filmography);
         filmographyRecyclerView = (RecyclerView) findViewById(R.id.filmographyRecyclerView);
         castImageView = (ImageView) findViewById(R.id.castImageView);
         // Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
@@ -143,7 +146,9 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
        // btnmore = (Button) findViewById(R.id.btnMore);
 //        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
         //btnmore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
-
+        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), filmography);
+        filmography.setText(languagePreference.getTextofLanguage(FILMOGRAPHY,DEFAULT_FILMOGRAPHY));
+        filmography.setVisibility(View.GONE);
         /*btnmore.setVisibility(View.GONE);
         btnmore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,6 +299,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     isConverted = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsConverted();
                     isPPV = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV();
                     isAPV = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance();
+                    filmography.setVisibility(View.VISIBLE);
 
                     filmogrpahyItems.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
 /*

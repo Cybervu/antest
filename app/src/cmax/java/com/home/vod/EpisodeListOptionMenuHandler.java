@@ -49,7 +49,7 @@ public class EpisodeListOptionMenuHandler {
     }
 
 
-    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference) {
+    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference,FeatureHandler featureHandler) {
 
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -80,7 +80,7 @@ public class EpisodeListOptionMenuHandler {
                 R.id.media_route_menu_item);
         /***************chromecast**********************/
 
-        login_menu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+        login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
@@ -92,7 +92,7 @@ public class EpisodeListOptionMenuHandler {
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
+        if ((featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST, FeatureHandler.DEFAULT_CHROMECAST)))
             mediaRouteMenuItem.setVisible(true);
         else
             mediaRouteMenuItem.setVisible(false);
@@ -110,7 +110,7 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(true);
 
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
@@ -119,8 +119,7 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
 
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1"))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
                 mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);

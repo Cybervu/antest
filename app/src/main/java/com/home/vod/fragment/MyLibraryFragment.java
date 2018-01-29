@@ -89,6 +89,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -228,6 +229,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     private MenuItem mediaRouteMenuItem;
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
+    FeatureHandler featureHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -398,6 +400,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
 
         context = getActivity();
+        featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(new View.OnKeyListener() {
@@ -507,8 +510,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                noDataLayout.setVisibility(View.GONE);
+                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
             }
         }
 
@@ -1003,16 +1008,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
-                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                                        MediaTrack.TYPE_TEXT)
-                                        .setName(playerModel.getSubTitleName().get(0))
-                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                                        .setContentId(playerModel.getFakeSubTitlePath().get(0))
-                                        .setLanguage(playerModel.getSubTitleLanguage().get(0))
-                                        .setContentType("text/vtt")
-                                        .build();
-                                tracks.add(englishSubtitle);
+                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                                for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(playerModel.getSubTitleName().get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(playerModel.getFakeSubTitlePath().get(0))
+                                            .setLanguage(playerModel.getSubTitleLanguage().get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
                             }
 
                             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -1076,16 +1084,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
-                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                                        MediaTrack.TYPE_TEXT)
-                                        .setName(playerModel.getSubTitleName().get(0))
-                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                                        .setContentId(playerModel.getFakeSubTitlePath().get(0))
-                                        .setLanguage(playerModel.getSubTitleLanguage().get(0))
-                                        .setContentType("text/vtt")
-                                        .build();
-                                tracks.add(englishSubtitle);
+                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                                for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(playerModel.getSubTitleName().get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(playerModel.getFakeSubTitlePath().get(0))
+                                            .setLanguage(playerModel.getSubTitleLanguage().get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
                             }
 
                             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -1564,7 +1575,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 dlgAlert.create().show();
             } else if (status == 428) {
 
-
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -1792,99 +1802,97 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     @Override
     public void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, String totalItems, String message) {
 
-        String movieImageStr = "";
-
-        for (int i = 0; i < myLibraryOutputModelArray.size(); i++) {
-            movieImageStr = myLibraryOutputModelArray.get(i).getPosterUrl();
-            String movieName = myLibraryOutputModelArray.get(i).getName();
-            String videoTypeIdStr = myLibraryOutputModelArray.get(i).getContentTypesId();
-            String movieGenreStr = myLibraryOutputModelArray.get(i).getGenre();
-            String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
-            String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
-            movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
-            movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
-            int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
-            int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
-            int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
-
-            itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
-        }
-
-        if (message == null)
-            message = "0";
-        if ((message.trim().equals("0"))) {
+        try{
             try {
                 if (videoPDialog != null && videoPDialog.isShowing()) {
                     videoPDialog.hide();
-                    videoPDialog = null;
                 }
-            } catch (IllegalArgumentException ex) {
+            } catch (Exception ex) {}
 
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
-                footerView.setVisibility(View.GONE);
-            }
-            noDataLayout.setVisibility(View.VISIBLE);
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            footerView.setVisibility(View.GONE);
-        } else {
-            if (itemData.size() <= 0) {
-                try {
-                    if (videoPDialog != null && videoPDialog.isShowing()) {
-                        videoPDialog.hide();
-                        videoPDialog = null;
+            if(status == 200){
+
+                String movieImageStr = "";
+
+                for (int i = 0; i < myLibraryOutputModelArray.size(); i++) {
+                    movieImageStr = myLibraryOutputModelArray.get(i).getPosterUrl();
+                    String movieName = myLibraryOutputModelArray.get(i).getName();
+                    String videoTypeIdStr = myLibraryOutputModelArray.get(i).getContentTypesId();
+                    String movieGenreStr = myLibraryOutputModelArray.get(i).getGenre();
+                    String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
+                    String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
+                    movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
+                    movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
+                    int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
+                    int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
+                    int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
+
+                    itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
+                }
+
+                if (message == null)
+                    message = "0";
+                if ((message.trim().equals("0"))) {
+                    try {
+                        if (videoPDialog != null && videoPDialog.isShowing()) {
+                            videoPDialog.hide();
+                        }
+                    } catch (IllegalArgumentException ex) {
+
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
                     }
-                } catch (IllegalArgumentException ex) {
-
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     gridView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
+                } else {
+                    if (itemData.size() <= 0) {
+                        try {
+                            if (videoPDialog != null && videoPDialog.isShowing()) {
+                                videoPDialog.hide();
+                            }
+                        } catch (IllegalArgumentException ex) {
+
+                            noDataLayout.setVisibility(View.VISIBLE);
+                            noInternetConnectionLayout.setVisibility(View.GONE);
+                            gridView.setVisibility(View.GONE);
+                            footerView.setVisibility(View.GONE);
+                        }
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
+                    } else {
+                        footerView.setVisibility(View.GONE);
+                        gridView.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        noDataLayout.setVisibility(View.GONE);
+                        videoImageStrToHeight = movieImageStr;
+                        if (firstTime == true) {
+
+
+                            new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+
+                        } else {
+                            AsynLOADUI loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+                    }
                 }
+
+            }else{
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
-            } else {
-                footerView.setVisibility(View.GONE);
-                gridView.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.GONE);
-                videoImageStrToHeight = movieImageStr;
-                if (firstTime == true) {
-
-
-                    new RetrieveFeedTask().execute(videoImageStrToHeight);
-                    /*    Picasso.with(context).load(videoImageStrToHeight
-                        ).into(new Target() {
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                videoWidth = bitmap.getWidth();
-                                videoHeight = bitmap.getHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(final Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
-
-                            }
-                        });*/
-
-                } else {
-                    AsynLOADUI loadUI = new AsynLOADUI();
-                    loadUI.executeOnExecutor(threadPoolExecutor);
-                }
             }
-        }
+
+        }catch (Exception e){}
+
+
     }
 
     //Load Films Videos
@@ -2640,8 +2648,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel, MyLibraryFragment.this, context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            getActivity().finish();
+                            noDataLayout.setVisibility(View.GONE);
+                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                            gridView.setVisibility(View.GONE);
+                            footerView.setVisibility(View.GONE);
                         }
                     } else {
                         getActivity().finish();
@@ -3519,9 +3529,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             // TODO: check this.exception
             // TODO: do something with the feed
 
-            if (phandler != null && phandler.isShowing()) {
+          /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
-            }
+            }*/
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);
@@ -3530,8 +3540,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            phandler = new ProgressBarHandler(getActivity());
-            phandler.show();
+//            phandler = new ProgressBarHandler(getActivity());
+//            phandler.show();
 
         }
     }

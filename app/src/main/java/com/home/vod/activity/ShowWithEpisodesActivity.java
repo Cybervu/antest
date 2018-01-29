@@ -127,6 +127,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -155,6 +156,7 @@ import java.util.concurrent.TimeUnit;
 import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.ALERT;
@@ -169,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
@@ -179,9 +182,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -190,6 +195,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVA
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
@@ -205,9 +211,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -216,10 +224,12 @@ import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
@@ -239,12 +249,6 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_REVIEWS;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
@@ -284,6 +288,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     ViewContentRatingAsynTask asynGetReviewDetails;
     int ratingAddedByUser = 1;
     LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
 
     // ProgressBarHandler pDialog;
     ProgressBarHandler pDialog;
@@ -390,13 +395,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
         if (code == 0) {
             Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
         }
         if (code > 0) {
             if (code == 200) {
                 preferenceManager.clearLoginPref();
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
                     final Intent startIntent = new Intent(ShowWithEpisodesActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -534,8 +537,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             /***favorite *****/
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
-                    .trim()).equals("1")) {
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE))) {
                 //favorite_view_episode.setVisibility(View.VISIBLE);
                 handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view_episode);
             } else {
@@ -597,7 +599,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
-
             }
 
             if (movieDetailsStr.matches("") || movieDetailsStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -673,55 +674,30 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 season_spinner.setAdapter(adapter);
             }
 
-//                season_spinner.setBackgroundResource(R.drawable.spinner_theme);
 
-            if (TextUtils.isEmpty(bannerImageId)) {
+            try{
+                if(bannerImageId != null && !bannerImageId.equals("")){
+                    Picasso.with(ShowWithEpisodesActivity.this)
+                            .load(bannerImageId.trim())
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(moviePoster);
 
-                if (TextUtils.isEmpty(posterImageId)) {
-
-                    moviePoster.setImageResource(R.drawable.logo);
-                } else {
-
-
-                    /*ImageLoader imageLoader = ImageLoader.getInstance();
-                    imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                            .cacheOnDisc(true).resetViewBeforeLoading(true)
-                            .showImageForEmptyUri(R.drawable.logo)
-                            .showImageOnFail(R.drawable.logo)
-                            .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(posterImageId, moviePoster, options);*/
-
+                }else if (posterImageId != null && !posterImageId.equals("")){
                     Picasso.with(ShowWithEpisodesActivity.this)
                             .load(posterImageId)
                             .error(R.drawable.logo)
                             .placeholder(R.drawable.logo)
                             .into(moviePoster);
-
+                }else{
+                    moviePoster.setImageResource(R.drawable.logo);
                 }
-
-            } else {
-
-
-                /*ImageLoader imageLoader = ImageLoader.getInstance();
-                imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .cacheOnDisc(true).resetViewBeforeLoading(true)
-                        .showImageForEmptyUri(R.drawable.logo)
-                        .showImageOnFail(R.drawable.logo)
-                        .showImageOnLoading(R.drawable.logo).build();
-                imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
-
-                Picasso.with(ShowWithEpisodesActivity.this)
-                        .load(bannerImageId.trim())
-                        .error(R.drawable.logo)
-                        .placeholder(R.drawable.logo)
-                        .into(moviePoster);
-
-
+            }catch (Exception e){
+                moviePoster.setImageResource(R.drawable.logo);
             }
+
+
+
 
             GetReviewDetails();
 
@@ -1281,7 +1257,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -1559,7 +1535,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     LogUtil.showLog("Muvi", "restrict_stream_id============1");
@@ -1596,16 +1572,19 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
+            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(SubTitleName.get(0))
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(FakeSubTitlePath.get(0))
+                            .setLanguage(SubTitleLanguage.get(0))
+                            .setContentType("text/vtt")
+                            .build();
+                    tracks.add(englishSubtitle);
+                }
             }
 
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -1643,7 +1622,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 jsonObj.put("resume_time", resume_time);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     LogUtil.showLog("Muvi", "restrict_stream_id============1");
@@ -1675,16 +1654,19 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
 
             List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
+            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(SubTitleName.get(0))
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(FakeSubTitlePath.get(0))
+                            .setLanguage(SubTitleLanguage.get(0))
+                            .setContentType("text/vtt")
+                            .build();
+                    tracks.add(englishSubtitle);
+                }
             }
 
             mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
@@ -2069,6 +2051,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         monetizationHandler = new MonetizationHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         handleRatingbar = new HandleRatingbar(this);
@@ -3515,7 +3498,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         return true;
     }
 
@@ -3574,8 +3557,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
-//                favoriteIntent.putExtra("EMAIL",email);
-//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
                 // Not implemented here

@@ -84,6 +84,7 @@ import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -149,9 +150,15 @@ import player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.SAVE;
+import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 
@@ -351,6 +358,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     public CastSession mCastSession = null;
     MediaInfo mediaInfo;
     MediaRouteButton mediaRouteButton;
+    FeatureHandler featureHandler;
 
     RemoteMediaClient remoteMediaClient;
     long[] tracksArray;
@@ -379,13 +387,31 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     @Override
                     public void run() {
 
-                        if(video_prepared){
-                            if (mediaRouteButton.isEnabled()) {
-                                //  mediaRouteButton.setVisibility(View.VISIBLE);
-                                handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
-                            } else {
-                                mediaRouteButton.setVisibility(View.GONE);
+
+
+                        try{
+
+                            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                            int orientation = display.getRotation();
+
+                            Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                            if (orientation == 1|| orientation == 3) {
+                                hideSystemUI();
+                            }}catch (Exception e){}
+
+                        if(featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))
+                        {
+                            if (video_prepared) {
+                                if (mediaRouteButton.isEnabled()) {
+                                    //  mediaRouteButton.setVisibility(View.VISIBLE);
+                                    handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
+                                } else {
+                                    mediaRouteButton.setVisibility(View.GONE);
+                                }
                             }
+                        }else{
+                            mediaRouteButton.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -426,7 +452,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     // Whether an ad is displayed.
     private boolean mIsAdDisplayed;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
-    LinearLayout back_layout;
+    LinearLayout back_layout,cc_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -462,7 +488,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         } else {
             isDrm = false;
         }
-
 
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -611,6 +636,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 
@@ -760,6 +786,35 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             }
         });
+
+        cc_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Util.call_finish_at_onUserLeaveHint = false;
+
+                    if (isDrm) {
+                        Intent intent = new Intent(MyLibraryPlayer.this, SubtitleList.class);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    } else {
+                        Intent intent = new Intent(MyLibraryPlayer.this, Subtitle_Resolution.class);
+                        intent.putExtra("ResolutionFormat", ResolutionFormat);
+                        intent.putExtra("ResolutionUrl", ResolutionUrl);
+                        intent.putExtra("SubTitleName", SubTitleName);
+                        intent.putExtra("SubTitlePath", SubTitlePath);
+                        startActivityForResult(intent, 222);
+                    }
+
+
+                } catch (Exception e) {
+                }
+
+            }
+        });
+
 
         if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches(""))
 
@@ -1036,6 +1091,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View view) {
 
+
+                try{
+
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    int orientation = display.getRotation();
+
+                    Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                    if (orientation == 1|| orientation == 3) {
+                        hideSystemUI();
+                    }}catch (Exception e){}
+
+
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
                 }
@@ -1274,7 +1342,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 asyncVideoLogDetails = new AsyncVideoLogDetails();
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
-
 
                         }
 
@@ -1576,7 +1643,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 Log.v("BIBHU6", "log_id=" + videoLogId);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
@@ -1783,7 +1850,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2204,7 +2271,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             timer = null;
         }
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.call_finish_at_onUserLeaveHint) {
 
 
             AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
@@ -2418,7 +2485,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2566,7 +2633,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2847,7 +2914,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Util.hide_pause = false;
 
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.Call_API_For_Close_Streming) {
 
             Util.Call_API_For_Close_Streming = false;
             Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
@@ -4397,7 +4464,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -4504,7 +4571,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -4656,9 +4723,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Button save = (Button) convertView.findViewById(R.id.save);
         Button cancel = (Button) convertView.findViewById(R.id.cancel);
 
-        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE, Util.DEFAULT_SAVE));
-        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON));
-        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE_OFFLINE_VIDEO, Util.DEFAULT_SAVE_OFFLINE_VIDEO));
+        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this, SAVE, DEFAULT_SAVE));
+        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON));
+        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this, SAVE_OFFLINE_VIDEO, DEFAULT_SAVE_OFFLINE_VIDEO));
 
         DownloadOptionAdapter adapter = new DownloadOptionAdapter(MyLibraryPlayer.this, List_Of_FileSize, List_Of_Resolution_Format);
         resolution_list.setAdapter(adapter);

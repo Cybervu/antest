@@ -75,7 +75,7 @@ public class EpisodeListOptionMenuHandler{
     }
 
 
-    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference) {
+    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference,FeatureHandler featureHandler) {
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
@@ -104,7 +104,7 @@ public class EpisodeListOptionMenuHandler{
                 R.id.media_route_menu_item);
         /***************chromecast**********************/
 
-        login_menu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+        login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
@@ -114,7 +114,7 @@ public class EpisodeListOptionMenuHandler{
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
+        if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
             mediaRouteMenuItem.setVisible(true);
         else
             mediaRouteMenuItem.setVisible(false);

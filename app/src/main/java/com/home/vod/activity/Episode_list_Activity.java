@@ -107,6 +107,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -176,6 +177,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -204,6 +206,7 @@ import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -232,12 +235,7 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+
 
 /**
  * Created by Muvi on 2/6/2017.
@@ -341,6 +339,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     int prevPosition = 0;
     ProgressBarHandler progressBarHandler;
     LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
     private String ipAddressStr = "";
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
 
@@ -394,7 +393,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -722,7 +721,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -759,16 +758,19 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
+            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(SubTitleName.get(0))
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(FakeSubTitlePath.get(0))
+                            .setLanguage(SubTitleLanguage.get(0))
+                            .setContentType("text/vtt")
+                            .build();
+                    tracks.add(englishSubtitle);
+                }
             }
 
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
@@ -806,7 +808,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("resume_time", resume_time);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -838,16 +840,19 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
 
             List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
+            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+
+                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(SubTitleName.get(0))
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(FakeSubTitlePath.get(0))
+                            .setLanguage(SubTitleLanguage.get(0))
+                            .setContentType("text/vtt")
+                            .build();
+                    tracks.add(englishSubtitle);
+                }
             }
 
             mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
@@ -1262,8 +1267,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         countryEditor.clear();
                         countryEditor.commit();
                     }*/
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
                     final Intent startIntent = new Intent(Episode_list_Activity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -1555,6 +1559,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(Episode_list_Activity.this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
@@ -3086,7 +3091,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 
         return true;
     }
@@ -3119,6 +3124,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Intent registerIntent = new Intent(Episode_list_Activity.this, RegisterActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
+                // Not implemented here
+                return false;
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+                favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
                 // Not implemented here
                 return false;
             case R.id.menu_item_language:

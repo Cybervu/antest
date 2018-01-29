@@ -31,7 +31,7 @@
                     android:id="@+id/castImageView"
                     android:layout_width="@dimen/cast_details_width"
                     android:layout_height="@dimen/cast_details_height"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp" />
 
 
                 <TextView
@@ -80,6 +80,16 @@
                 android:paddingRight="@dimen/Login_drawing_padding"
 
                 />
+
+            <TextView
+                android:id="@+id/filmography"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/marginLeft15dp"
+                android:text="sasasasasasassaas"
+                android:textColor="@color/border_color"
+                android:textSize="@dimen/cast_textsize" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/filmographyRecyclerView"

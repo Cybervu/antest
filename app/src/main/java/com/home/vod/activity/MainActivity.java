@@ -62,6 +62,7 @@ import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
 import com.home.vod.R;
+import com.home.vod.ToolbarTitleHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.fragment.AboutUsFragment;
@@ -74,6 +75,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
@@ -105,6 +107,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
@@ -115,6 +118,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
@@ -134,6 +138,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
     public MainActivity() {
+
     }
 
     LanguagePreference languagePreference;
@@ -173,6 +178,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    private ToolbarTitleHandler toolbarTitleHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -245,7 +251,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     //Toolbar
-    private Toolbar mToolbar;
+    public Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     private RelativeLayout noInternetLayout;
     public static String internetSpeed = "0";
@@ -267,6 +273,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     // SharedPreferences isLoginPref;
     public static ProgressBarHandler progressBarHandler;
     PreferenceManager preferenceManager;
+    FeatureHandler featureHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,10 +290,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fooerMenuHandler = new FooterMenuHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        toolbarTitleHandler=new ToolbarTitleHandler(this);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         LogUtil.showLog("Abhishek", "Toolbar");
@@ -397,16 +406,17 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
 
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 /************chromecast***********/
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                R.id.media_route_menu_item);
+        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
 
        /* MenuItemCompat.setActionProvider(mediaRouteMenuItem, new MediaRouteActionProvider(new ContextThemeWrapper(this, R.style.Theme_CastVideosDark)));
         mediaRouteMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
@@ -448,7 +458,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
-//                favoriteIntent.putExtra("EMAIL",email);
+                favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
