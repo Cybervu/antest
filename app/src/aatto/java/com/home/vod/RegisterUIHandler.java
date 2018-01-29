@@ -28,6 +28,7 @@ import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 
@@ -65,6 +66,8 @@ public class RegisterUIHandler {
     String fbName = "";
     private Button registerButton;
     private LanguagePreference languagePreference;
+    public  String last_name="";
+
 
     public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
 
@@ -81,7 +84,7 @@ public class RegisterUIHandler {
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
-        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
         }else {
             btnLogin.setVisibility(View.GONE);
@@ -113,7 +116,7 @@ public class RegisterUIHandler {
     public void getRegisterName(){
         regNameStr = editName.getText().toString().trim();
         if (!regNameStr.equals("")) {
-            ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
+            ((RegisterActivity) context).registerButtonClicked(regNameStr,last_name,regPhone);
         }else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         }

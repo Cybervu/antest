@@ -220,6 +220,44 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:padding="6dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:elevation="2dp"
+                android:background="@drawable/gbg"
+                android:layout_below="@+id/btnLogin"
+                android:layout_centerVertical="true">
+
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:fontFamily="@string/regular_fonts"
+                    android:text="Login with Google"
+                    android:layout_gravity="start"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+
+                    android:textColor="#a49f9f"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <ImageView
+                    android:layout_toLeftOf="@+id/textView"
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/google_icon_svg" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </ScrollView>
