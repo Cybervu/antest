@@ -67,5 +67,6 @@
     <color name="aboutustestcolor">#fff</color>
     <color name="purchaseBackgroundColor">#666666</color>
     <color name="purchaseTextColor">#000</color>
+    <color name="chromecast_color">#ffffff</color>
 
 </resources>

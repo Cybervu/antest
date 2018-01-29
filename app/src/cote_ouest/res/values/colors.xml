@@ -84,4 +84,5 @@
     <color name="videoTitleTextColor">#b70000</color>
     <color name="cast_crew_titleCololr">#b70000</color>
     <color name="drawerHeaderViewColor">#000</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

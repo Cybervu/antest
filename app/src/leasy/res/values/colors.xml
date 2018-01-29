@@ -85,4 +85,5 @@
  <color name="edit_color">#000</color>
  <color name="search_hint_color">#000</color>
  <color name="search_text_color">#000</color>
+ <color name="chromecast_color">#000</color>
 </resources>

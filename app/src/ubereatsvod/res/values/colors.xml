@@ -173,4 +173,5 @@
     <color name="pageTitleColor">#57ad57</color>
     <color name="borderColor">#555</color>
     <color name="castCrewTitleTextColor">#57ad57</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

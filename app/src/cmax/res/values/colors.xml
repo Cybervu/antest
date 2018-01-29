@@ -169,4 +169,5 @@
     <color name="purchaseBackgroundColor">#fff</color>
     <color name="purchaseBackground">#414141</color>
     <color name="purchaseTextColor">#000</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

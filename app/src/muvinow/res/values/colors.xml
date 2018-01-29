@@ -91,4 +91,5 @@
     <color name="purchaseTextColor">#000</color>
     <color name="buttonbg">#eb0609</color>
     <color name="nav_header_line_color">#eb0609</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>
