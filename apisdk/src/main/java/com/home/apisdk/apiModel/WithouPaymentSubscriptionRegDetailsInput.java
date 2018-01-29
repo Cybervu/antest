@@ -9,7 +9,7 @@ package com.home.apisdk.apiModel;
 public class WithouPaymentSubscriptionRegDetailsInput {
 
     String authToken;
-    String is_advance="";
+    String is_advance;
     String card_name;
     String exp_month;
 

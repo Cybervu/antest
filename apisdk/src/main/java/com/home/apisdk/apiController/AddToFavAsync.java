@@ -101,7 +101,7 @@ public class AddToFavAsync extends AsyncTask<AddToFavInputModel, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddtoFavlist());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addToFavInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addToFavInputModel.getAuthToken().trim());
             httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.addToFavInputModel.getMovie_uniq_id());
             httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.addToFavInputModel.getIsEpisodeStr());
             httppost.addHeader(HeaderConstants.USER_ID, this.addToFavInputModel.getLoggedInStr());

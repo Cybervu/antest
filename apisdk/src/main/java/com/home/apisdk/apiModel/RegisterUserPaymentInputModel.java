@@ -8,102 +8,24 @@ package com.home.apisdk.apiModel;
 
 public class RegisterUserPaymentInputModel {
 
-    String authToken = "";
-    String card_name = "";
-    String exp_month = "";
-    String card_number = "";
-    String exp_year = "";
-    String email = "";
-    String user_id = "";
-    String card_type = "";
-    String card_last_fourdigit = "";
-    String profile_id = "";
-    String token = "";
-    String cvv = "";
-    String country = "";
-    String season_id = "";
-    String episode_id = "";
-    String currency_id = "";
-    String plan_id = "";
-    String name = "";
-
-
-
-    String transaction_status = "";
-    String invoice_id = "";
-    String order_number = "";
-    String dollar_amount = "";
-    String amount = "";
-    String response_text = "";
-    String isSuccess = "";
-    String transaction_is_success = "";
-
-    public String getTransaction_status() {
-        return transaction_status;
-    }
-
-    public void setTransaction_status(String transaction_status) {
-        this.transaction_status = transaction_status;
-    }
-
-    public String getInvoice_id() {
-        return invoice_id;
-    }
-
-    public void setInvoice_id(String invoice_id) {
-        this.invoice_id = invoice_id;
-    }
-
-    public String getOrder_number() {
-        return order_number;
-    }
-
-    public void setOrder_number(String order_number) {
-        this.order_number = order_number;
-    }
-
-    public String getDollar_amount() {
-        return dollar_amount;
-    }
-
-    public void setDollar_amount(String dollar_amount) {
-        this.dollar_amount = dollar_amount;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getResponse_text() {
-        return response_text;
-    }
-
-    public void setResponse_text(String response_text) {
-        this.response_text = response_text;
-    }
-
-    public String getIsSuccess() {
-        return isSuccess;
-    }
-
-    public void setIsSuccess(String isSuccess) {
-        this.isSuccess = isSuccess;
-    }
-
-    public String getTransaction_is_success() {
-        return transaction_is_success;
-    }
-
-    public void setTransaction_is_success(String transaction_is_success) {
-        this.transaction_is_success = transaction_is_success;
-    }
-
-
-
+    String authToken;
+    String card_name;
+    String exp_month;
+    String card_number;
+    String exp_year;
+    String email;
+    String user_id;
+    String card_type;
+    String card_last_fourdigit;
+    String profile_id;
+    String token;
+    String cvv;
+    String country;
+    String season_id;
+    String episode_id;
+    String currency_id;
+    String plan_id;
+    String name;
 
     /**
      * This Method is use to Get the Movie Id

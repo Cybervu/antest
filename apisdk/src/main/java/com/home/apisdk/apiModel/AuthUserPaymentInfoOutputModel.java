@@ -8,87 +8,11 @@ package com.home.apisdk.apiModel;
 
 public class AuthUserPaymentInfoOutputModel {
 
-    String card_type = "";
-    String card_last_fourdigit = "";
-    String profile_id = "";
-    String response_text = "";
-    String token = "";
-
-    String transaction_invoice_id = "";
-    String transaction_order_number = "";
-    String transaction_dollar_amount = "";
-    String transaction_amount = "";
-    String transaction_response_text = "";
-    String transaction_is_success = "";
-    String transaction_status = "";
-    String isSuccess = "";
-
-
-    public String getTransaction_invoice_id() {
-        return transaction_invoice_id;
-    }
-
-    public void setTransaction_invoice_id(String transaction_invoice_id) {
-        this.transaction_invoice_id = transaction_invoice_id;
-    }
-
-    public String getTransaction_order_number() {
-        return transaction_order_number;
-    }
-
-    public void setTransaction_order_number(String transaction_order_number) {
-        this.transaction_order_number = transaction_order_number;
-    }
-
-    public String getTransaction_dollar_amount() {
-        return transaction_dollar_amount;
-    }
-
-    public void setTransaction_dollar_amount(String transaction_dollar_amount) {
-        this.transaction_dollar_amount = transaction_dollar_amount;
-    }
-
-    public String getTransaction_amount() {
-        return transaction_amount;
-    }
-
-    public void setTransaction_amount(String transaction_amount) {
-        this.transaction_amount = transaction_amount;
-    }
-
-    public String getTransaction_response_text() {
-        return transaction_response_text;
-    }
-
-    public void setTransaction_response_text(String transaction_response_text) {
-        this.transaction_response_text = transaction_response_text;
-    }
-
-    public String getTransaction_is_success() {
-        return transaction_is_success;
-    }
-
-    public void setTransaction_is_success(String transaction_is_success) {
-        this.transaction_is_success = transaction_is_success;
-    }
-
-    public String getTransaction_status() {
-        return transaction_status;
-    }
-
-    public void setTransaction_status(String transaction_status) {
-        this.transaction_status = transaction_status;
-    }
-
-    public String getIsSuccess() {
-        return isSuccess;
-    }
-
-    public void setIsSuccess(String isSuccess) {
-        this.isSuccess = isSuccess;
-    }
-
-
+    String card_type;
+    String card_last_fourdigit;
+    String profile_id;
+    String response_text;
+    String token;
 
     /**
      * This Method is use to Get the Status

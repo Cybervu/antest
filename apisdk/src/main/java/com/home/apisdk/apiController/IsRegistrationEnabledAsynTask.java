@@ -11,6 +11,8 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiModel.FacebookLoginDetailsModel;
+import com.home.apisdk.apiModel.GoogleLoginDetailsModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 
@@ -20,6 +22,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +66,7 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
          * @param message                          On Success Message
          */
 
-        void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message , String response);
+        void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message);
     }
 
 
@@ -236,6 +239,110 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
                     e.printStackTrace();
                 }
 
+                try{
+                    GoogleLoginDetailsModel googleLoginDetailsModel=new GoogleLoginDetailsModel();
+                    if ((myJson.has("google")) && myJson.optString("google").trim() != null && !myJson.optString("google").trim().isEmpty()
+                            && !myJson.optString("google").trim().equals("null") && !myJson.optString("google").trim().matches("")) {
+
+                        JSONObject googleJson=null;
+                        googleJson=myJson.getJSONObject("google");
+
+
+                        if ((googleJson.has("status")) && googleJson.optString("status").trim() != null && !googleJson.optString("status").trim().isEmpty()
+                                && !googleJson.optString("status").trim().equals("null") && !googleJson.optString("status").trim().matches("")){
+                            googleLoginDetailsModel.setStatus(googleJson.getString("status"));
+                            isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+
+                        }else{
+                            googleLoginDetailsModel.setStatus("");
+                        }
+
+                        if ((googleJson.has("client_id")) && googleJson.optString("client_id").trim() != null && !googleJson.optString("client_id").trim().isEmpty()
+                                && !googleJson.optString("client_id").trim().equals("null") && !googleJson.optString("client_id").trim().matches("")){
+                            googleLoginDetailsModel.setClient_id(googleJson.getString("client_id"));
+                            isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+                        }else{
+                            googleLoginDetailsModel.setClient_id("");
+                            isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+                        }
+
+                        if ((googleJson.has("client_secret")) && googleJson.optString("client_secret").trim() != null && !googleJson.optString("client_secret").trim().isEmpty()
+                                && !googleJson.optString("client_secret").trim().equals("null") && !googleJson.optString("client_secret").trim().matches("")){
+                            googleLoginDetailsModel.setClient_secret(googleJson.getString("client_secret"));
+                            isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+                        }else{
+                            googleLoginDetailsModel.setClient_secret("");
+                            isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+                        }
+
+                    }else {
+                        googleLoginDetailsModel.setStatus("");
+                        isRegistrationEnabledOutputModel.setGoogleLoginDetailsModel(googleLoginDetailsModel);
+
+                    }
+                }catch (Exception e){
+
+                }
+
+                try{
+
+                    FacebookLoginDetailsModel facebookLoginDetailsModel=new FacebookLoginDetailsModel();
+                    if ((myJson.has("facebook")) && myJson.optString("facebook").trim() != null && !myJson.optString("facebook").trim().isEmpty()
+                            && !myJson.optString("facebook").trim().equals("null") && !myJson.optString("facebook").trim().matches("")){
+
+                        JSONObject facebookJson=null;
+                        facebookJson=myJson.getJSONObject("facebook");
+
+                        if ((facebookJson.has("status")) && facebookJson.optString("status").trim() != null && !facebookJson.optString("status").trim().isEmpty()
+                                && !facebookJson.optString("status").trim().equals("null") && !facebookJson.optString("status").trim().matches("")){
+                            facebookLoginDetailsModel.setStatus(facebookJson.getString("status"));
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+
+                        }else{
+                            facebookLoginDetailsModel.setStatus("");
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+                        }
+
+                        if ((facebookJson.has("app_id")) && facebookJson.optString("app_id").trim() != null && !facebookJson.optString("app_id").trim().isEmpty()
+                                && !facebookJson.optString("app_id").trim().equals("null") && !facebookJson.optString("app_id").trim().matches("")){
+                            facebookLoginDetailsModel.setApp_id(facebookJson.getString("app_id"));
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+
+                        }else{
+                            facebookLoginDetailsModel.setApp_id("");
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+                        }
+
+                        if ((facebookJson.has("app_secret")) && facebookJson.optString("app_secret").trim() != null && !facebookJson.optString("app_secret").trim().isEmpty()
+                                && !facebookJson.optString("app_secret").trim().equals("null") && !facebookJson.optString("app_secret").trim().matches("")){
+                            facebookLoginDetailsModel.setApp_secret(facebookJson.getString("app_secret"));
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+
+                        }else{
+                            facebookLoginDetailsModel.setApp_secret("");
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+                        }
+
+                        if ((facebookJson.has("app_version")) && facebookJson.optString("app_version").trim() != null && !facebookJson.optString("app_version").trim().isEmpty()
+                                && !facebookJson.optString("app_version").trim().equals("null") && !facebookJson.optString("app_version").trim().matches("")){
+                            facebookLoginDetailsModel.setApp_version(facebookJson.getString("app_version"));
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+
+                        }else{
+                            facebookLoginDetailsModel.setApp_version("");
+                            isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+                        }
+                    }else{
+                        facebookLoginDetailsModel.setStatus("");
+                        isRegistrationEnabledOutputModel.setFacebookLoginDetailsModel(facebookLoginDetailsModel);
+                    }
+                }catch (Exception e){
+
+                }
+
+
+
+
 
             } else {
 
@@ -263,20 +370,22 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
+            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
+            listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
             return;
         }
+
     }
+
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message,responseStr);
+        listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel, status, message);
 
     }
 
