@@ -149,16 +149,16 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
 
             if (status == 200) {
                 getCastDetailsOutputModel = new GetCastDetailsOutputModel();
-                if ((myJson.has("name")) && myJson.optString("name").trim() != null && !myJson.optString("name").trim().isEmpty() && !myJson.optString("name").trim().equals("null") && !myJson.optString("name").trim().matches("")) {
-                    getCastDetailsOutputModel.setName(myJson.optString("name"));
+                if ((myJson.has("name")) && myJson.getString("name").trim() != null && !myJson.getString("name").trim().isEmpty() && !myJson.getString("name").trim().equals("null") && !myJson.getString("name").trim().matches("")) {
+                    getCastDetailsOutputModel.setName(myJson.getString("name"));
 
                 }
-                if ((myJson.has("summary")) && myJson.optString("summary").trim() != null && !myJson.optString("summary").trim().isEmpty() && !myJson.optString("summary").trim().equals("null") && !myJson.optString("summary").trim().matches("")) {
-                    getCastDetailsOutputModel.setSummary(myJson.optString("summary"));
+                if ((myJson.has("summary")) && myJson.getString("summary").trim() != null && !myJson.getString("summary").trim().isEmpty() && !myJson.getString("summary").trim().equals("null") && !myJson.getString("summary").trim().matches("")) {
+                    getCastDetailsOutputModel.setSummary(myJson.getString("summary"));
 
                 }
-                if ((myJson.has("cast_image")) && myJson.optString("cast_image").trim() != null && !myJson.optString("cast_image").trim().isEmpty() && !myJson.optString("cast_image").trim().equals("null") && !myJson.optString("cast_image").trim().matches("")) {
-                    getCastDetailsOutputModel.setCastImage(myJson.optString("cast_image"));
+                if ((myJson.has("cast_image")) && myJson.getString("cast_image").trim() != null && !myJson.getString("cast_image").trim().isEmpty() && !myJson.getString("cast_image").trim().equals("null") && !myJson.getString("cast_image").trim().matches("")) {
+                    getCastDetailsOutputModel.setCastImage(myJson.getString("cast_image"));
                 }
                 JSONArray jsonMainNode = myJson.getJSONArray("movieList");
                 castDetailsArrayList = new ArrayList<>();

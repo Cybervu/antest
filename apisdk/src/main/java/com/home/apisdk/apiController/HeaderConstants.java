@@ -277,6 +277,11 @@ public class HeaderConstants {
     public static final String DEVICE_ID = "device_id";
 
     /**
+     * Constant for FCM Token Header used in API Call
+     */
+    public static final String FCM_TOKEN = "fcm_token";
+
+    /**
      * Constant for Login History ID Header used in API Call
      */
     public static final String LOGIN_HISTORY_ID = "login_history_id";
@@ -349,15 +354,5 @@ public class HeaderConstants {
     public static final String RESTRICT_STREAM_ID = "restrict_stream_id";
 
     public static final String Custom_last_Name = "custom_last_name";
-
-
-    public static final String TRANSACTION_STATUS = "transaction_status";
-    public static final String INVOICE_ID = "invoice_id";
-    public static final String ORDER_NUMBER = "order_number";
-    public static final String DOLLAR_AMOUNT = "dollar_amount";
-    public static final String AMOUNT = "amount";
-    public static final String RESPONSE_TEXT = "response_text";
-    public static final String IS_SUCCESS = "is_success";
-    public static final String TRANSACTION_IS_SUCCESS = "transaction_is_success";
 
 }

@@ -141,8 +141,6 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
 
                 if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
                     addContentRatingOutputModel.setMsg(myJson.optString("msg"));
-                } else {
-                    addContentRatingOutputModel.setMsg("");
                 }
 
 

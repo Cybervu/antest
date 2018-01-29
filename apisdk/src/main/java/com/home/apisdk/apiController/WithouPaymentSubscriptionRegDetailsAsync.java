@@ -126,7 +126,7 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
                     .appendQueryParameter(HeaderConstants.CURRENCY_ID, this.withouPaymentSubscriptionRegDetailsInput.getCurrency_id())
                     .appendQueryParameter(HeaderConstants.IS_SAVE_THIS_CARD, this.withouPaymentSubscriptionRegDetailsInput.getIs_save_this_card())
                     .appendQueryParameter(HeaderConstants.EXISTING_CARD_ID, this.withouPaymentSubscriptionRegDetailsInput.getExisting_card_id());
-            String query = (builder.build().getEncodedQuery()).replaceAll("%40","@");
+            String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url,query,status,message);
 
 
