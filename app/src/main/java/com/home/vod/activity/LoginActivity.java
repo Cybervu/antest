@@ -303,6 +303,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
 
+                        if(Util.favorite_clicked) {
+                            finish();
+                            return;
+                        }
+
                         if (getIntent().getStringExtra("from") != null) {
                             /** review **/
                             onBackPressed();
@@ -1553,6 +1558,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                if (Util.favorite_clicked) {
+                    Util.favorite_clicked = true;
+                }
+
                 final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 /****rating ******/
 
@@ -3889,12 +3900,42 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         } else {
 
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(in);
+                            if(Util.favorite_clicked) {
+                                finish();
+                                return;
+                            }
 
-                            onBackPressed();
+                            if (getIntent().getStringExtra("from") != null) {
+                                /** review **/
+                                onBackPressed();
+                            } else {
+                                if (Util.check_for_subscription == 1) {
+                                    //go to subscription page
+                                    if (NetworkStatus.getInstance().isConnected(this)) {
+
+                                        setResultAtFinishActivity();
+
+
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                    }
+
+                                } else {
+                                    if (PlanId.equals("1") && socialAuthOutputModel.getIsSubscribed().equals("0")) {
+                                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(intent);
+                                        finish();
+                                        overridePendingTransition(0, 0);
+                                    } else {
+                                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(in);
+                                        finish();
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -4749,6 +4790,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 } else {
+
+                    if (Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
                     if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
                         Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -5404,6 +5451,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
+
+                    if(Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
                         onBackPressed();

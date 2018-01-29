@@ -91,7 +91,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         String imageId = item.getImage();
 
 
-        if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
+        if(imageId == null || imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             holder.videoImageview.setImageResource(R.drawable.logo);
 
         }else {

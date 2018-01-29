@@ -173,5 +173,9 @@
     <color name="pageTitleColor">#57ad57</color>
     <color name="borderColor">#555</color>
     <color name="castCrewTitleTextColor">#57ad57</color>
+
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
     <color name="chromecast_color">#ffffff</color>
 </resources>

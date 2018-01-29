@@ -230,4 +230,8 @@
     <color name="listTitleContentColor">#ffffff</color>
     <color name="chromecast_color">#ffffff</color>
 
+    <!--added for subtitle color-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
+
 </resources>

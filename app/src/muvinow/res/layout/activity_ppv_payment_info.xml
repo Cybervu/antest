@@ -120,7 +120,6 @@
 
                         <Spinner
                             android:id="@+id/cardExpiryMonthEditText"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="@dimen/card_expiry_width"
                             android:layout_height="@dimen/card_expiry_height"
                             android:overlapAnchor="false"
@@ -129,7 +128,8 @@
                             android:popupBackground="#e1e1e1"
                             android:spinnerMode="dropdown"
                             android:textColorHint="@color/hint_color"
-                            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"/>
                         <!--</RelativeLayout>-->
 
 
@@ -156,7 +156,6 @@
 
                         <Spinner
                             android:id="@+id/cardExpiryYearEditText"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="@dimen/card_expiryyear_width"
                             android:layout_height="@dimen/card_expiryyear_height"
                             android:layout_alignTop="@+id/securityCodeEditText"
@@ -168,8 +167,8 @@
                             android:popupBackground="#e1e1e1"
                             android:spinnerMode="dropdown"
                             android:textColorHint="@color/hint_color"
-                            android:theme="@style/ThemeOverlay.AppCompat.Light" />
-
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"/>
 
                         <EditText
                             android:id="@+id/securityCodeEditText"
