@@ -98,4 +98,5 @@
     <color name="cast_crew_textcolor">#60008C</color>
     <color name="purchaseBackgroundColor">#3f444a</color>
     <color name="purchaseTextColor">#757575</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

@@ -446,6 +446,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
+    Context castContext;
+    Drawable drawable = null;
+    TypedArray a;
 
 
     private CastContext mCastContext;
@@ -712,9 +715,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         // Added For Chromecast By BIBHU//
 
 
-        Context castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
-        Drawable drawable = null;
-        TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+        castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+        a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
         drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
         a.recycle();
         DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
@@ -3249,6 +3251,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         } catch (Exception e) {
 
         }
+
+        try{
+
+            a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+            a.recycle();
+            DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
+
+            CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
+            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+        }catch (Exception e){}
     }
 
     // Added Later By Bibhu For Subtitle Feature.

@@ -74,4 +74,5 @@
     <color name="aboutustestcolor">#fff</color>
     <color name="videotextColor">#666</color>
     <color name="dialogepopupbackgroundcolor">#1e292d</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

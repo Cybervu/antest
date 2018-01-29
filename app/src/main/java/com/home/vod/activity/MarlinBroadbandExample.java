@@ -326,6 +326,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	PreferenceManager preferenceManager;
 	String flag = "";
 
+	Context castContext;
+	Drawable drawable = null;
+	TypedArray a;
+
 
 
 	@Override
@@ -535,9 +539,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		// Added For Chromecast By BIBHU//
 
 
-		Context castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
-		Drawable drawable = null;
-		TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+		castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+		a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
 		drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
 		a.recycle();
 		DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
@@ -1801,7 +1804,17 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		Util.app_is_in_player_context = false;
 		this.unregisterReceiver(networkStateReceiver);
 
+		try{
 
+			a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+			drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+			a.recycle();
+			DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
+
+			CastButtonFactory.setUpMediaRouteButton(MarlinBroadbandExample.this, mediaRouteButton);
+			mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+		}catch (Exception e){}
 
 
 	}

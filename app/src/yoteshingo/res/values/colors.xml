@@ -89,4 +89,5 @@
     <color name="cast_crew_titleCololr">#662D91</color>
     <color name="checkboxcolor">#5c6873</color>
     <color name="languageDividerColor">#5c6873</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>
