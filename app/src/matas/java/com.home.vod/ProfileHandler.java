@@ -75,20 +75,23 @@ public class ProfileHandler {
             return;
         }
 
-        else if(editNewPassword.getText().toString().trim().equals("")){
-            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD).toString().toLowerCase());
+        if(!editNewPassword.getText().toString().trim().equals("") || !editConfirmPassword.getText().toString().trim().equals("")) {
 
-            return;
+            if (editNewPassword.getText().toString().trim().equals("")) {
+                ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD).toString().toLowerCase());
+
+                return;
+            }
+
+            if (editConfirmPassword.getText().toString().trim().equals("")) {
+                ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD).toString().toLowerCase());
+
+                return;
+            }
         }
 
-        else if(editConfirmPassword.getText().toString().trim().equals("")){
-            ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD).toString().toLowerCase());
 
-            return;
-        }
-
-
-        else if (!((ProfileActivity) context).passwordMatchValidation()) {
+         if (!((ProfileActivity) context).passwordMatchValidation()) {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(ALERT, DEFAULT_ALERT), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
 
         }else {
@@ -102,13 +105,17 @@ public class ProfileHandler {
                 ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
 
             }
-
         }
     }
 
 
     public void setNameTxt(String nameString,String last_name,String phoneNumber){
-        editProfileNameEditText.setText(nameString.trim());
+
+        try {
+            editProfileNameEditText.setText(nameString.trim());
+            editProfileNameEditText.setSelection(editProfileNameEditText.getText().length());
+        }catch (Exception e){}
+
 
     }
 

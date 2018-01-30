@@ -36,6 +36,7 @@ import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -123,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity implements
     String Selected_Language, Selected_Country = "0", Selected_Language_Id = "", Selected_Country_Id = "";
     PreferenceManager preferenceManager;
     List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
+    FeatureHandler featureHandler;
 
 
     @Override
@@ -132,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProfileActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(ProfileActivity.this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
@@ -154,7 +157,7 @@ public class ProfileActivity extends AppCompatActivity implements
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
 
-        if (!languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+        if (!featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE)) {
             manage_devices.setVisibility(View.GONE);
         }
 
@@ -343,7 +346,6 @@ public class ProfileActivity extends AppCompatActivity implements
 
             }
         });
-
 
 
 

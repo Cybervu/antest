@@ -72,7 +72,10 @@
  <color name="alertPopupColor">#fff</color>
  <color name="contactFormTitle">#333</color>
  <color name="btnmoretextcolor">#FFF</color>
-
-
  <color name="spinnerbackground">#e2e1e1</color>
+
+<!--added for subtitle color-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#000000</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

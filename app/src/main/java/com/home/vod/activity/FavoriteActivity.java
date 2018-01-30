@@ -66,6 +66,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -136,6 +137,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
     LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
     String Default_Language = "";
     String Previous_Selected_Language = "";
     int prevPosition = 0;
@@ -236,9 +238,11 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         /////
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setTitle("");
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -471,16 +475,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         });
 
 
-        //Detect Network Connection
-
-
-        if (!NetworkStatus.getInstance().isConnected(this)) {
-            noInternetConnectionLayout.setVisibility(View.VISIBLE);
-            noDataLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            footerView.setVisibility(View.GONE);
-        }
-
         ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
         gridView.setLayoutParams(layoutParams);
@@ -505,15 +499,20 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
         scrolling = false;
 
+        if (NetworkStatus.getInstance().isConnected(this)) {
 
-        LogUtil.showLog("MUVI", "favorite calling");
-        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(authTokenStr);
-        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
+            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+            viewFavouriteInputModel.setAuthToken(authTokenStr);
+            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
+            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
+            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
         LogUtil.showLog("MUVI", "authtokenn = " + authTokenStr);
         LogUtil.showLog("MUVI", "user id = " + preferenceManager.getUseridFromPref());
 
@@ -932,7 +931,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         MenuItem favorite_menu;
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         favorite_menu.setVisible(false);

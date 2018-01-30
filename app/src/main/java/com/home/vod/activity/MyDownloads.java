@@ -45,6 +45,7 @@ import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 
 
@@ -66,7 +67,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -122,6 +126,8 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     ArrayList<String> Chromecast_Subtitle_Url = new ArrayList<String>();
     ArrayList<String> Chromecast_Subtitle_Language_Name = new ArrayList<String>();
     ArrayList<String> Chromecast_Subtitle_Code = new ArrayList<String>();
+
+    FeatureHandler featureHandler;
 
 
     int Played_Length = 0;
@@ -238,6 +244,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        featureHandler = FeatureHandler.getFeaturePreference(this);
         dbHelper.getWritableDatabase();
         registerReceiver(UpadateDownloadList, new IntentFilter("NewVodeoAvailable"));
 
@@ -284,7 +291,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -1042,6 +1049,9 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         SubTitleName.clear();
         SubTitlePath.clear();
 
+        HashMap<String,String> subtitle_map = new HashMap<>();
+
+
         SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
         Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM " + DBHelper.TABLE_NAME_SUBTITLE_LUIMERE + " WHERE UID = '" + download.get(Position).getUniqueId() + "'", null);
         int count = cursor.getCount();
@@ -1049,15 +1059,24 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         if (count > 0) {
             if (cursor.moveToFirst()) {
                 do {
-                    SubTitleName.add(cursor.getString(0).trim());
-                    SubTitlePath.add(cursor.getString(1).trim());
 
-
+                    subtitle_map.put(cursor.getString(0).trim(),cursor.getString(1).trim());
                     Log.v("BIBHU3", "SubTitleName============" + cursor.getString(0).trim());
                     Log.v("BIBHU3", "SubTitlePath============" + cursor.getString(1).trim());
 
                 } while (cursor.moveToNext());
             }
+
+            if(subtitle_map.size()>0){
+                Iterator it = subtitle_map.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    SubTitleName.add(pair.getKey().toString().trim());
+                    SubTitlePath.add(pair.getValue().toString().trim());
+                    it.remove();
+                }
+            }
+
         }
 
 
@@ -1242,8 +1261,17 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
             }
         } else {
+
+
+            if(access_period == -1){
+                String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
+                        " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
+                DB.execSQL(Qry);
+                return true;
+            }
+
             if (updated_server_current_time < System.currentTimeMillis()) {
-                if (access_period == -1 || (System.currentTimeMillis() < access_period)) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
+                if (System.currentTimeMillis() < access_period) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
                 {
                     String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
                             " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
@@ -1294,7 +1322,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1377,7 +1405,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");

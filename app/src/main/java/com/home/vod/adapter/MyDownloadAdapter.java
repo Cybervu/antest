@@ -31,7 +31,9 @@ import player.utils.DBHelper;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.CONFIRM_DELETE_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_DELETE_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_BTN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DELETE;
 import static com.home.vod.preferences.LanguagePreference.DELETE_BTN;
@@ -139,7 +141,7 @@ public class MyDownloadAdapter extends BaseAdapter {
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle);
                 dlgAlert.setTitle("");
-                dlgAlert.setMessage(languagePreference.getTextofLanguage(WANT_TO_DELETE,DEFAULT_WANT_TO_DELETE));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(CONFIRM_DELETE_MESSAGE,DEFAULT_CONFIRM_DELETE_MESSAGE));
 
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(DELETE_BTN,DEFAULT_DELETE_BTN), null);
                 dlgAlert.setCancelable(false);

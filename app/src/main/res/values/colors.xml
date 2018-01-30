@@ -7,7 +7,7 @@
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
- <color name="toolbarTitleColor">#fff</color>
+ <color name="toolbarTitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
  <color name="navlogobackgroundcolor">#fff</color>
@@ -68,6 +68,8 @@
  <color name="edit_color2">#00FFFFFF</color>
  <color name="fb_button_background">#3b5998</color>
  <color name="edit_color">#dadada</color>
+ <color name="search_hint_color">#dadada</color>
+ <color name="search_text_color">#fff</color>
  <color name="spinner_card_color">#FF0000</color>
  <color name="colorAccent">#3b5998</color>
  <color name="spinner_card_color2">#FAFAFA</color>
@@ -106,7 +108,7 @@
  <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
  <color name="cast_crew_textcolor">#000000</color>
- <color name="device_name_color">#c3c3c3</color>
+ <color name="device_name_color">#757575</color>
 
 
  // Following code is added by Bibhuprasad Jena //
@@ -159,4 +161,9 @@
  <color name="purchaseTextColor">#000</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#32c5d2</color>
+
+ <!--added for subtitle color-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#000000</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

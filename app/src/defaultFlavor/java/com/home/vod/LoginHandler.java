@@ -140,9 +140,6 @@ public class LoginHandler {
 
                                     }
 
-                                  /*  if (fbName!=null && fbName.matches("")){
-                                        fbName = fbUserId;
-                                    }*/
                                     if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
                                         fbEmail = json.getString("email");
                                     } else {
@@ -154,36 +151,17 @@ public class LoginHandler {
                                         }
                                     }
 
-                                  /*  if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
-
-                                        fbName = json.getString("name");
-                                        fbName = json.getString("name").replace(" ","").trim();
-
-                                    }
-                                    if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
-                                        fbEmail = json.getString("email");
-                                    } else {
-                                        fbEmail = fbName + "@facebook.com";
-
-                                    }
-                                    if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
-                                        fbUserId = json.optString("id");
-                                    }*/
 
                                     registerButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
                                     ((LoginActivity)context).handleFbUserDetails(fbUserId,fbEmail,fbName);
-//
                                 }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
-//
-                        }
+              }
 
                     });
 

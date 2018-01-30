@@ -20,6 +20,7 @@ import com.facebook.CallbackManager;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 
@@ -64,6 +65,21 @@ public class RegisterUIHandler {
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
+        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+            googleSignView.setVisibility(View.VISIBLE);
+        }else {
+            googleSignView.setVisibility(View.GONE);
+        }
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 

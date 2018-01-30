@@ -38,7 +38,7 @@
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/noInternetColor"
+        android:background="@color/appBackgroundColor"
         android:visibility="gone"
         android:padding="@dimen/manage_device_padding">
 

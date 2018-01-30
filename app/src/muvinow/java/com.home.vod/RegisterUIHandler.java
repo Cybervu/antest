@@ -80,6 +80,14 @@ public class RegisterUIHandler {
         editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -95,7 +103,7 @@ public class RegisterUIHandler {
             termsTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://quickflix.muvi.com/page/terms-privacy-policy"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.muvinow.com.au/page/terms-privacy-policy"));
                     browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     context.startActivity(browserIntent);
                 }

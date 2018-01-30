@@ -71,4 +71,5 @@
  <color name="casttextColor">#fff</color>
  <color name="nav_lineColor">#930f18</color>
  <color name="resumepopupcolor">#fff</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

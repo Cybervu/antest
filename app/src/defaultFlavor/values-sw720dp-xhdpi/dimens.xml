@@ -149,15 +149,7 @@
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
-
     <dimen name="plainrow_text_size">20sp</dimen>
-
-
-
-
-
-
-
 
     <!--new dimen optimization for layouts-->
     <dimen name="viewmore_btn_width">95dp</dimen>
@@ -167,6 +159,11 @@
     <dimen name="list_singlecard_img_width">140dp</dimen>
     <dimen name="list_singlecard_img_height">200dp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
+
+    <!--added for subtitle outline-->
+    <dimen name="subtitle_text_size">23sp</dimen>
+    <item name="stroke_width" format="float" type="dimen">0.5</item>
+
 
 
 </resources>

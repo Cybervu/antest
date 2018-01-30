@@ -9,15 +9,15 @@
     <string name="drawer_close">Close</string>`
     <string name="studio_site">https://euroman.nfselected.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
-    <string name="facebook_app_id">1439149679512203</string>
-    <string name="fb_login_protocol_scheme">fb1439149679512203</string>
+    <string name="facebook_app_id">338989009917747</string>
+    <string name="fb_login_protocol_scheme">fb338989009917747</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
 
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->
-    <string name="app_id">39516FF2</string>
+    <string name="app_id">8B4F0D59</string>
     <string name="action_settings">Settings</string>
     <string name="cast_app_name">GoogleCastPlayer</string>
     <string name="media_route_menu_title">Play on&#8230;</string>

@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -119,6 +120,7 @@ public class HomeFragment extends Fragment implements
     private int listSize = 0;
     RecyclerView recycler_view_list;
     private boolean firstTime = false;
+    private boolean staticBannerImage = false;
     RecyclerViewDataAdapter adapter;
     LinearLayoutManager mLayoutManager;
     RelativeLayout footerView;
@@ -197,13 +199,10 @@ public class HomeFragment extends Fragment implements
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
-
-
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
         }
         return v;
-
 
     }
 
@@ -525,6 +524,7 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onHomePagePostExecuteCompleted(AppHomePageOutput appHomePageOutput, int status, String message) {
 
+
         if (mProgressBarHandler != null) {
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
@@ -594,33 +594,37 @@ public class HomeFragment extends Fragment implements
                     firstTime = true;
 
                     if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.Fit);
-                            // .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
+                            for (int j = 0; j < url_maps.size(); j++) {
+                                DefaultSliderView textSliderView = new DefaultSliderView(context);
+                                textSliderView
+                                        .description("")
+                                        .image(url_maps.get(j))
+                                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                                // .setOnSliderClickListener(this);
+                                textSliderView.bundle(new Bundle());
+                                textSliderView.getBundle()
+                                        .putString("extra", "");
 
-                            mDemoSlider.addSlider(textSliderView);
-                        }
+                                mDemoSlider.addSlider(textSliderView);
+                                Log.v("ANU","url==="+url_maps.get(j));
+                            }
                     } else {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.Fit);
-                            // .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
 
-                            mDemoSlider.addSlider(textSliderView);
-                        }
+                            for (int j = 0; j < url_maps.size(); j++) {
+                                DefaultSliderView textSliderView = new DefaultSliderView(context);
+                                textSliderView
+                                        .description("")
+                                        .image(url_maps.get(j))
+                                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                                // .setOnSliderClickListener(this);
+                                textSliderView.bundle(new Bundle());
+                                textSliderView.getBundle()
+                                        .putString("extra", "");
+
+                                mDemoSlider.addSlider(textSliderView);
+                            }
+
+
                     }
                 }
                 mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);

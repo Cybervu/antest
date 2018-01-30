@@ -467,7 +467,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             if(TrailerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
             {
                 params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
-
             }
             else
             {

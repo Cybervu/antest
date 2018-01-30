@@ -72,6 +72,7 @@
  <color name="teal_500">#F44336</color>
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
+ <color name="devi">#757575</color>
 
  <!--              new key added      -->
 
@@ -89,4 +90,5 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseTextColor">#000</color>
  <color name="buttonbg">#E34A00</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

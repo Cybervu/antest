@@ -228,5 +228,6 @@
     <color name="pre_orderbutton_title">#784128</color>
     <color name="editunselected">#dec6af</color>
     <color name="listTitleContentColor">#ffffff</color>
+    <color name="chromecast_color">#ffffff</color>
 
 </resources>
