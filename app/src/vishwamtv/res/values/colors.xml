@@ -81,4 +81,5 @@
  <color name="borderColor">#b70000</color>
  <color name="videoTitleTextColor">#6e6f76</color>
  <color name="cast_crew_titleCololr">#b70000</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

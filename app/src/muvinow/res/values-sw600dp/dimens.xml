@@ -14,6 +14,7 @@
     <dimen name="buttonheight">42dp</dimen>
     <dimen name="titletxt">17sp</dimen>
     <dimen name="indicatorheight">330dp</dimen>
+    <dimen name="listitemlayout_height">430dp</dimen>
     ////details layout
 
     <dimen name="movieimg_width">160dp</dimen>
@@ -27,7 +28,7 @@
     <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
-    <dimen name="email_text_size">14sp</dimen>
+    <dimen name="email_text_size">18sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="submit_text_size">14sp</dimen>
@@ -104,7 +105,6 @@
     <dimen name="purchasemonth_text_size">18sp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
-    <dimen name="listitemlayout_height">430dp</dimen>
     <dimen name="itemtitle_text_size">21sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
@@ -146,12 +146,17 @@
     <!--new dimen optimization for layouts-->
 
     <!--list item layout small and list item-->
-    <dimen name="viewmore_btn_width">100dp</dimen>
-    <dimen name="viewmore_btn_height">45dp</dimen>
+
     <dimen name="viewmore_text_size">14sp</dimen>
     <dimen name="homescreen_title_text_size">16sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">17sp</dimen>
+
+    <dimen name="toolbar_image_height">56dp</dimen>
+    <dimen name="toolbar_image_width">108dp</dimen>
+
+    <dimen name="viewmore_btn_width">100dp</dimen>
+    <dimen name="viewmore_btn_height">45dp</dimen>
 
 </resources>

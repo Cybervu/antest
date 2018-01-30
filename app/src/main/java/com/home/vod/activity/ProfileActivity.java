@@ -36,6 +36,7 @@ import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -123,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity implements
     String Selected_Language, Selected_Country = "0", Selected_Language_Id = "", Selected_Country_Id = "";
     PreferenceManager preferenceManager;
     List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
+    FeatureHandler featureHandler;
 
 
     @Override
@@ -132,11 +134,12 @@ public class ProfileActivity extends AppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProfileActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(ProfileActivity.this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        profileHandler = new ProfileHandler(this);
+        profileHandler=new ProfileHandler(this);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
@@ -154,7 +157,7 @@ public class ProfileActivity extends AppCompatActivity implements
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
 
-        if (!languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+        if (!featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE)) {
             manage_devices.setVisibility(View.GONE);
         }
 
@@ -307,15 +310,19 @@ public class ProfileActivity extends AppCompatActivity implements
 
 // =======End ===========================//
 
-        Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-        get_userProfile_input.setAuthToken(authTokenStr);
-        get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
-        get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
-        get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
 
-        GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+            Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+            get_userProfile_input.setAuthToken(authTokenStr);
+            get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
+            get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
+            get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
+            GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+        } else {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+        }
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,12 +348,13 @@ public class ProfileActivity extends AppCompatActivity implements
         });
 
 
+
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 profileHandler.updateProfileHandler();
-                changePassword.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -402,9 +410,7 @@ public class ProfileActivity extends AppCompatActivity implements
             }
         } catch (IllegalArgumentException ex) {
 
-    }
-
-
+        }
 
         if (code > 0) {
             if (code == 200) {
@@ -802,6 +808,7 @@ public class ProfileActivity extends AppCompatActivity implements
             noInternetConnectionLayout.setVisibility(View.GONE);
         }
     }
+
 
 
     @Override

@@ -80,4 +80,5 @@
     <color name="OsTextColor">#757575</color>
     <color name="purchaseBackgroundColor">#ff2c54</color>
     <color name="purchaseTextColor">#fff</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

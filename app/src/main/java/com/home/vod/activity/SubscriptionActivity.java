@@ -23,6 +23,7 @@ import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.PlanModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -81,6 +82,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
     LanguagePreference languagePreference;
     int selected_subscription_plan = 0 ;
     ProgressBarHandler progressBarHandler;
+    FeatureHandler featureHandler;
     int prevPosition = 0;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -93,10 +95,10 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         subscriptionTitleTextView = (TextView) findViewById(R.id.subscriptionTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(SubscriptionActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(SubscriptionActivity.this);
         skipButton= (Button) findViewById(R.id.skipButton);
 
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             toolbar.setNavigationIcon(null);
             toolbar.setTitle(getResources().getString(R.string.app_name));
         }
@@ -299,8 +301,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 mAdapter = new PlanAdapter(SubscriptionActivity.this,movieList);
                 subcription.setAdapter(mAdapter);
 
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP))) {
                     skipButton.setVisibility(View.VISIBLE);
 
                 }
@@ -341,389 +342,11 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
             }
         }else{
             Util.showToast(SubscriptionActivity.this,languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
-            //Toast.makeText(SubscriptionActivity.this,Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
             onBackPressed();
 
         }
-
-
-                  /* planName.setText(planNamestr);
-
-                if(planPriceStr.matches("") || planPriceStr.matches(getResources().getString(R.string.no_data_str))){
-                    purchaseValue.setVisibility(View.INVISIBLE);
-                }else{
-                    purchaseValue.setVisibility(View.VISIBLE);
-
-                    purchaseValue.setText(planPriceStr);
-
-                }
-                if(planRecurrenceStr.matches("") || planRecurrenceStr.matches(getResources().getString(R.string.no_data_str))){
-                    freeTrial.setVisibility(View.INVISIBLE);
-                }else{
-                    freeTrial.setVisibility(View.VISIBLE);
-                    planStudioIdStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", planRecurrenceStr);
-
-                    freeTrial.setText(planRecurrenceStr);
-
-                }*/
-
     }
 
-    //    private class AsynLoadPlanDetails extends AsyncTask<Void, Void, Void> {
-//        ProgressDialog pDialog;
-//        String responseStr;
-//        int status;
-//        int prevPosition = 0;
-//        String planIdStr;
-//        String planNamestr;
-//        String planStudioIdStr;
-//        String planPriceStr;
-//        String planRecurrenceStr;
-//        String planFrequencyStr;
-//        int planStatusStr = 0;
-//        String planLanguage_idStr;
-//        String currencyIdStr;
-//        String currencyCountryCodeStr;
-//        String currencySymbolStr;
-//        String currencyTrialPeriodStr;
-//        String currencyTrialRecurrenceStr;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            try {
-//                HttpClient httpclient=new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.getStudioPlanLists.trim());
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-//
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e){
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                          /*  noInternetConnectionLayout.setVisibility(View.VISIBLE);
-//                            noDataLayout.setVisibility(View.GONE);
-//                            subscriptionPlanRecyclerView.setVisibility(View.GONE);*/
-//
-//                            Toast.makeText(SubscriptionActivity.this,languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-//
-//                        }
-//
-//                    });
-//
-//                }catch (IOException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            /*noInternetConnectionLayout.setVisibility(View.GONE);
-//                            noDataLayout.setVisibility(View.VISIBLE);
-//                            subscriptionPlanRecyclerView.setVisibility(View.GONE);
-//*/
-//                        }
-//
-//                    });
-//                    e.printStackTrace();
-//                }
-//
-//                JSONObject myJson =null;
-//                if(responseStr!=null){
-//                    myJson = new JSONObject(responseStr);
-//
-//                    LogUtil.showLog("MUVI", "responseStr" + responseStr);
-//                    status = Integer.parseInt(myJson.optString("code"));
-//                }
-//                if (status > 0) {
-//
-//                    if (status == 200) {
-//
-//                        JSONArray jsonMainNode = myJson.getJSONArray("plans");
-//
-//                        int lengthJsonArr = jsonMainNode.length();
-//                        for(int i=0; i < lengthJsonArr; i++) {
-//                            JSONObject jsonChildNode;
-//                            try {
-//                                jsonChildNode = jsonMainNode.getJSONObject(i);
-//                                {
-//
-//
-//                                    if ((jsonChildNode.has("id")) && jsonChildNode.getString("id").trim() != null && !jsonChildNode.getString("id").trim().isEmpty() && !jsonChildNode.getString("id").trim().equals("null") && !jsonChildNode.getString("id").trim().matches("")) {
-//                                        planIdStr = jsonChildNode.getString("id");
-//                                    } else {
-//                                        planIdStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
-//                                        planNamestr = jsonChildNode.getString("name");
-//                                    } else {
-//                                        planNamestr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("recurrence")) && jsonChildNode.getString("recurrence").trim() != null && !jsonChildNode.getString("recurrence").trim().isEmpty() && !jsonChildNode.getString("recurrence").trim().equals("null") && !jsonChildNode.getString("recurrence").trim().matches("")) {
-//                                        planRecurrenceStr = jsonChildNode.getString("recurrence");
-//                                    } else {
-//                                        planRecurrenceStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("frequency")) && jsonChildNode.getString("frequency").trim() != null && !jsonChildNode.getString("frequency").trim().isEmpty() && !jsonChildNode.getString("frequency").trim().equals("null") && !jsonChildNode.getString("frequency").trim().matches("")) {
-//                                        planFrequencyStr = jsonChildNode.getString("frequency");
-//                                    } else {
-//                                        planFrequencyStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("studio_id")) && jsonChildNode.getString("studio_id").trim() != null && !jsonChildNode.getString("studio_id").trim().isEmpty() && !jsonChildNode.getString("studio_id").trim().equals("null") && !jsonChildNode.getString("studio_id").trim().matches("")) {
-//                                        planStudioIdStr = jsonChildNode.getString("studio_id");
-//                                    } else {
-//                                        planStudioIdStr =languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("status")) && jsonChildNode.getString("status").trim() != null && !jsonChildNode.getString("status").trim().isEmpty() && !jsonChildNode.getString("status").trim().equals("null") && !jsonChildNode.getString("status").trim().matches("")) {
-//                                        planStatusStr = Integer.parseInt(jsonChildNode.getString("status"));
-//                                    } else {
-//                                        planStatusStr = 0;
-//
-//                                    }
-//
-//                                    if ((jsonChildNode.has("language_id")) && jsonChildNode.getString("language_id").trim() != null && !jsonChildNode.getString("language_id").trim().isEmpty() && !jsonChildNode.getString("language_id").trim().equals("null") && !jsonChildNode.getString("language_id").trim().matches("")) {
-//                                        planLanguage_idStr = jsonChildNode.getString("language_id");
-//                                    } else {
-//                                        planLanguage_idStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//                                    if ((jsonChildNode.has("price")) && jsonChildNode.getString("price").trim() != null && !jsonChildNode.getString("price").trim().isEmpty() && !jsonChildNode.getString("price").trim().equals("null") && !jsonChildNode.getString("price").trim().matches("")) {
-//                                        planPriceStr = jsonChildNode.getString("price");
-//                                    } else {
-//                                        planPriceStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
-//
-//                                    }
-//                                    if (jsonChildNode.has("trial_period") && jsonChildNode.getString("trial_period").trim() != null && !jsonChildNode.getString("trial_period").trim().isEmpty() && !jsonChildNode.getString("trial_period").trim().equals("null") && !jsonChildNode.getString("trial_period").trim().matches("")) {
-//                                        currencyTrialPeriodStr = jsonChildNode.getString("trial_period");
-//                                    } else {
-//                                        currencyTrialPeriodStr = "";
-//                                    }
-//
-//                                    if (jsonChildNode.has("trial_recurrence") && jsonChildNode.getString("trial_recurrence").trim() != null && !jsonChildNode.getString("trial_recurrence").trim().isEmpty() && !jsonChildNode.getString("trial_recurrence").trim().equals("null") && !jsonChildNode.getString("trial_recurrence").trim().matches("")) {
-//                                        currencyTrialRecurrenceStr = jsonChildNode.getString("trial_recurrence");
-//                                    } else {
-//                                        currencyTrialRecurrenceStr = "";
-//                                    }
-//
-//                                    if (jsonChildNode.has("currency")) {
-//                                        JSONObject currencyJson = jsonChildNode.getJSONObject("currency");
-//                                        if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")) {
-//                                            currencyIdStr = currencyJson.getString("id");
-//                                        } else {
-//                                            currencyIdStr = "";
-//
-//                                        }
-//                                        if (currencyJson.has("country_code") && currencyJson.getString("country_code").trim() != null && !currencyJson.getString("country_code").trim().isEmpty() && !currencyJson.getString("country_code").trim().equals("null") && !currencyJson.getString("country_code").trim().matches("")) {
-//                                            currencyCountryCodeStr = currencyJson.getString("country_code");
-//                                        } else {
-//                                            currencyCountryCodeStr = "";
-//                                        }
-//                                        if (currencyJson.has("symbol") && currencyJson.getString("symbol").trim() != null && !currencyJson.getString("symbol").trim().isEmpty() && !currencyJson.getString("symbol").trim().equals("null") && !currencyJson.getString("symbol").trim().matches("")) {
-//                                            currencySymbolStr = currencyJson.getString("symbol");
-//                                        } else {
-//                                            currencySymbolStr = "";
-//                                        }
-//
-//                                    }
-//                                    if (planStatusStr == 1) {
-//                                        if (i == 0) {
-//                                            planId = planIdStr;
-//                                            movieList.add(new PlanModel(planNamestr, planPriceStr, planRecurrenceStr, planFrequencyStr, true, planStudioIdStr, planStatusStr, planLanguage_idStr, planIdStr, currencyIdStr, currencySymbolStr, currencyTrialPeriodStr, currencyTrialRecurrenceStr,currencyCountryCodeStr));
-//
-//                                        } else {
-//                                            movieList.add(new PlanModel(planNamestr, planPriceStr, planRecurrenceStr, planFrequencyStr, false, planStudioIdStr, planStatusStr, planLanguage_idStr, planIdStr, currencyIdStr, currencySymbolStr,currencyTrialPeriodStr,currencyTrialRecurrenceStr,currencyCountryCodeStr));
-//                                            LogUtil.showLog("MUVI","movieList"+movieList.size());
-//                                        }
-//                                    }
-//                                }
-//
-//                            } catch (Exception e) {
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                       /* noDataLayout.setVisibility(View.VISIBLE);
-//                                        noInternetConnectionLayout.setVisibility(View.GONE);
-//                                        subscriptionPlanRecyclerView.setVisibility(View.GONE);
-//*/
-//
-//                                    }
-//                                });
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//
-//                }
-//
-//                else{
-//                    responseStr = "0";
-//
-//                }
-//            } catch (JSONException e1) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                       /* noInternetConnectionLayout.setVisibility(View.GONE);
-//                        noDataLayout.setVisibility(View.VISIBLE);
-//                        subscriptionPlanRecyclerView.setVisibility(View.GONE);*/
-//
-//
-//
-//
-//                    }
-//
-//                });
-//                responseStr = "0";
-//                e1.printStackTrace();
-//            }
-//
-//            catch (Exception e)
-//            {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                      /*  noInternetConnectionLayout.setVisibility(View.GONE);
-//                        noDataLayout.setVisibility(View.VISIBLE);
-//                        subscriptionPlanRecyclerView.setVisibility(View.GONE);
-//*/
-//
-//
-//                    }
-//
-//                });
-//                responseStr = "0";
-//                e.printStackTrace();
-//
-//            }
-//            return null;
-//
-//        }
-//
-//        protected void onPostExecute(Void result) {
-//            try{
-//                if(progressBarHandler.isShowing())
-//                    progressBarHandler.hide();
-//            }
-//            catch(IllegalArgumentException ex)
-//            {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                       /* noInternetConnectionLayout.setVisibility(View.GONE);
-//                        noDataLayout.setVisibility(View.VISIBLE);
-//                        subscriptionPlanRecyclerView.setVisibility(View.GONE);
-//*/
-//
-//                    }
-//
-//                });
-//                responseStr = "0";
-//            }
-//            if(responseStr == null)
-//                responseStr = "0";
-//
-//            if((responseStr.trim().equals("0"))){
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                       /* noInternetConnectionLayout.setVisibility(View.GONE);
-//                        noDataLayout.setVisibility(View.VISIBLE);
-//                        subscriptionPlanRecyclerView.setVisibility(View.GONE);*/
-//
-//
-//                    }
-//
-//                });
-//                Toast.makeText(SubscriptionActivity.this,languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
-//                onBackPressed();
-//
-//            }else{
-//              /*  noInternetConnectionLayout.setVisibility(View.GONE);
-//                noDataLayout.setVisibility(View.GONE);
-//                creditCardLayout.setVisibility(View.VISIBLE);*/
-//                subcription.setVisibility(View.VISIBLE);
-//                subcription.setLayoutManager(mLayoutManager);
-//                subcription.setItemAnimator(new DefaultItemAnimator());
-//
-//                mAdapter = new PlanAdapter(SubscriptionActivity.this,movieList);
-//                subcription.setAdapter(mAdapter);
-//                activation_plan.setVisibility(View.VISIBLE);
-//                subcription.addOnItemTouchListener(new VideosListFragment.RecyclerTouchListener(SubscriptionActivity.this, subcription, new VideosListFragment.ClickListener() {
-//                    @Override
-//                    public void onClick(View view, int position) {
-//
-//                        selected_subscription_plan = position;
-//                        //Toast.makeText(getApplicationContext(),""+selected_subscription_plan,Toast.LENGTH_LONG).show();
-//
-//                        if (position > 0) {
-//                            movieList.get(prevPosition).setSelected(false);
-//                            prevPosition = position;
-//
-//                        } else if (position == 0 && prevPosition > position) {
-//                            movieList.get(prevPosition).setSelected(false);
-//                            prevPosition = position;
-//
-//                        }
-//                        planId = movieList.get(position).getPlanIdStr();
-//                        movieList.get(position).setSelected(true);
-//                        mAdapter.notifyDataSetChanged();
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onLongClick(View view, int position) {
-//                    }
-//                }));
-//                  /* planName.setText(planNamestr);
-//
-//                if(planPriceStr.matches("") || planPriceStr.matches(getResources().getString(R.string.no_data_str))){
-//                    purchaseValue.setVisibility(View.INVISIBLE);
-//                }else{
-//                    purchaseValue.setVisibility(View.VISIBLE);
-//
-//                    purchaseValue.setText(planPriceStr);
-//
-//                }
-//                if(planRecurrenceStr.matches("") || planRecurrenceStr.matches(getResources().getString(R.string.no_data_str))){
-//                    freeTrial.setVisibility(View.INVISIBLE);
-//                }else{
-//                    freeTrial.setVisibility(View.VISIBLE);
-//                    planStudioIdStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", planRecurrenceStr);
-//
-//                    freeTrial.setText(planRecurrenceStr);
-//
-//                }*/
-//
-//            }
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//
-//            progressBarHandler = new ProgressBarHandler(SubscriptionActivity.this);
-//            progressBarHandler.show();
-//        }
-//
-//
-//    }
     @Override
     public void onBackPressed()
     {

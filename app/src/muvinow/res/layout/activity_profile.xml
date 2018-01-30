@@ -212,7 +212,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/login_text_size"
 
                         />
 

@@ -80,4 +80,5 @@
  <color name="borderColor">#6c6c6c</color>
  <color name="buttonbg">#6c6c6c</color>
  <color name="cast_crew_titleCololr">#6c6c6c</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

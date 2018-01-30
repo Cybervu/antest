@@ -75,4 +75,5 @@
 
 
  <color name="spinnerbackground">#e2e1e1</color>
+ <color name="chromecast_color">#ffffff</color>
 </resources>

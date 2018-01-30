@@ -50,6 +50,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -108,6 +109,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
+    private FeatureHandler featureHandler;
     DBHelper dbHelper;
 
     SplashScreenHandler splashScreenHandler;
@@ -123,6 +125,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(SplashScreen.this);
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         geoBlockedLayout = (RelativeLayout) findViewById(R.id.geoBlocked);
@@ -311,7 +314,16 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     @Override
-    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
+    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message ,String response) {
+
+
+        try{
+
+            featureHandler.setDefaultFeaturePref(response);
+
+        }catch (Exception e){}
+        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
+
 
         languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
         languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
@@ -372,14 +384,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         else {
             defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE);
         }
-        //                  Call For Language Translation.
+
+        // Call For Language Translation.
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(authTokenStr);
         languageListInputModel.setLangCode(defaultLanguage);
         GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, this, this);
         asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
-
 
     }
 
@@ -496,14 +508,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // This Code Is Done For The One Step Registration.
 
 
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
 
             if (preferenceManager != null) {
                 user_Id = preferenceManager.getUseridFromPref();
                 email_Id = preferenceManager.getEmailIdFromPref();
 
                 if (user_Id != null && email_Id != null) {
+
                     Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
                     get_userProfile_input.setAuthToken(authTokenStr);
                     get_userProfile_input.setEmail(email_Id);
@@ -605,8 +617,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private void jumpToNextScreen() {
         Intent mIntent;
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+//        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION).trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             if (loggedInStr != null) {
                 if (isSubscribed.trim().equals("1")) {
                     mIntent = new Intent(SplashScreen.this, MainActivity.class);

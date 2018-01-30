@@ -95,4 +95,5 @@
     <color name="editTextColor">#fff</color>
     <color name="resumeTextColor">#0000</color>
     <color name="aboutustextcolor">#fff</color>
+    <color name="chromecast_color">#ffffff</color>
 </resources>

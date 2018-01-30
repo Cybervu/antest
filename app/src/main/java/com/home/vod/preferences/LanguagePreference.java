@@ -185,6 +185,8 @@ public class LanguagePreference {
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
+    public static final String DOWNLOAD_CANCELED = "DOWNLOAD_CANCELED";
+    public static final String DEFAULT_DOWNLOAD_CANCELED = "Download Cancelled";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
@@ -283,6 +285,8 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_IN_PAYMENT_VALIDATION = "Error in payment validation";
     public static final String ERROR_IN_SUBSCRIPTION = "ERROR_IN_SUBSCRIPTION";
     public static final String DEFAULT_ERROR_IN_SUBSCRIPTION = "Error in Subscription";
+    public static final String ERROR_TRANSACTION_PROCESS = "ERROR_TRANSACTION_PROCESS";
+    public static final String DEFAULT_ERROR_TRANSACTION_PROCESS = "Error in Transaction Process";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
 
@@ -300,6 +304,16 @@ public class LanguagePreference {
     public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
+
+    public static String SAVE = "SAVE";
+    public static String DEFAULT_SAVE = "Save";
+
+    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
+    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Download Options";
+    public static String SEND = "SEND";
+    public static String DEFAULT_SEND = "Send";
+    public static String CONFIRM_DELETE_MESSAGE = "Send";
+    public static String DEFAULT_CONFIRM_DELETE_MESSAGE = "Are you sure to Delete?";
 
 
     public static final String DEFAULT_TRY_AGAIN = "Try Again !";
