@@ -45,4 +45,7 @@ public class SplashScreenHandler {
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash1, dpWidth, dpHeight));
 
     }
+
+    public void changeFeatureProperties(FeatureHandler featureHandler){
+    }
 }

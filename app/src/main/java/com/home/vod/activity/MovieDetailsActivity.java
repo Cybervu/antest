@@ -206,13 +206,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCES
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -2100,6 +2094,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);*/
+
+Log.v("BIBHU123","status upadted = "+remoteMediaClient.getMediaStatus());
+
             }
 
             @Override
@@ -3340,9 +3337,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onViewContentRatingPostExecuteCompleted(ViewContentRatingOutputModel viewContentRatingOutputModel,
                                                         int status, String message) {
-        String loggedInStr = preferenceManager.getUseridFromPref();
-
-
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
@@ -3355,6 +3349,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (status == 200) {
 
+            String loggedInStr = preferenceManager.getUseridFromPref();
             Log.v("MUVI", "review data" + reviews);
             Log.v("MUVI", "rating data" + rating);
 
@@ -3400,12 +3395,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
             }
 
-
-        } else {
-
-        }
-
-        try {
             /***favorite *****/
 
             if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
@@ -3424,10 +3413,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 favorite_view.setImageResource(R.drawable.favorite_red);
             }
             /***favorite *****/
-        } catch (Exception e) {}
+        } else {
 
-
-
+        }
     }
 
     @Override

@@ -72,7 +72,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;

@@ -146,7 +146,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -525,6 +525,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
+
                 }
 
                 if (view.getId() == gridView.getId()) {
@@ -795,7 +796,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -979,7 +980,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 jsonObj.put("device_type", "2");
                                 jsonObj.put("log_id", "0");
 
-                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
                                     jsonObj.put("restrict_stream_id", "1");
                                 } else {
                                     jsonObj.put("restrict_stream_id", "0");
@@ -1053,7 +1054,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 jsonObj.put("log_id", "0");
                                 jsonObj.put("seek_status", "");
 
-                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
                                     jsonObj.put("restrict_stream_id", "1");
                                 } else {
                                     jsonObj.put("restrict_stream_id", "0");

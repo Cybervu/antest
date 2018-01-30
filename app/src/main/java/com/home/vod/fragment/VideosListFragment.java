@@ -125,7 +125,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;

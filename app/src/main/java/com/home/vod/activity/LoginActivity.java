@@ -164,9 +164,6 @@ import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.NEW_HERE_TITLE;
@@ -302,11 +299,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
-
-                        if(Util.favorite_clicked) {
-                            finish();
-                            return;
-                        }
 
                         if (getIntent().getStringExtra("from") != null) {
                             /** review **/
@@ -568,7 +560,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         then set thirdpartyurl true here and assign the url to videourl*/
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -781,7 +773,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("log_id", "0");
                                     jsonObj.put("active_track_index", "0");
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -864,7 +856,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("resume_time", "0");
 
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1100,7 +1092,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1184,7 +1176,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("resume_time", "0");
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1558,12 +1550,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                if (Util.favorite_clicked) {
-                    Util.favorite_clicked = true;
-                }
-
                 final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 /****rating ******/
 
@@ -3900,42 +3886,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         } else {
 
-                            if(Util.favorite_clicked) {
-                                finish();
-                                return;
-                            }
+                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(in);
 
-                            if (getIntent().getStringExtra("from") != null) {
-                                /** review **/
-                                onBackPressed();
-                            } else {
-                                if (Util.check_for_subscription == 1) {
-                                    //go to subscription page
-                                    if (NetworkStatus.getInstance().isConnected(this)) {
-
-                                        setResultAtFinishActivity();
-
-
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                                    }
-
-                                } else {
-                                    if (PlanId.equals("1") && socialAuthOutputModel.getIsSubscribed().equals("0")) {
-                                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(intent);
-                                        finish();
-                                        overridePendingTransition(0, 0);
-                                    } else {
-                                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(in);
-                                        finish();
-                                    }
-                                }
-                            }
+                            onBackPressed();
                         }
                     }
 
@@ -4790,12 +4746,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 } else {
-
-                    if (Util.favorite_clicked) {
-                        finish();
-                        return;
-                    }
-
                     if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
                         Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -5451,12 +5401,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
-
-                    if(Util.favorite_clicked) {
-                        finish();
-                        return;
-                    }
-
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
                         onBackPressed();

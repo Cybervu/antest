@@ -67,6 +67,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
+import com.home.vod.util.FeatureHandler;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -128,8 +129,6 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static player.utils.Util.authTokenStr;
 
 
@@ -174,6 +173,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	TextView percentg;
 	Timer timerr;
 	String download_content_type="";
+	FeatureHandler featureHandler;
+	boolean resume_orientation = false;
+
 
 
 
@@ -322,11 +324,16 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	PreferenceManager preferenceManager;
 	String flag = "";
 
+	Context castContext;
+	Drawable drawable = null;
+	TypedArray a;
+
 
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		resume_orientation = false;
 		SensorOrientationChangeNotifier.getInstance(MarlinBroadbandExample.this).addListener(this);
 		Util.app_is_in_player_context = true;
 
@@ -365,23 +372,27 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 						Log.v("SUBHA", "Falg==" + flag);
 
-
-						if (flag.equals("1")) {
-							if (video_prepared) {
-								if (mediaRouteButton.isEnabled()) {
-									mediaRouteButton.setVisibility(View.VISIBLE);
-									Log.v("SUBHA", "called1");
+						if(featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST,FeatureHandler.DEFAULT_CHROMECAST))
+						{
+							if (flag.equals("1")) {
+								if (video_prepared) {
+									if (mediaRouteButton.isEnabled()) {
+										mediaRouteButton.setVisibility(View.VISIBLE);
+										Log.v("SUBHA", "called1");
+									} else {
+										mediaRouteButton.setVisibility(View.GONE);
+										Log.v("SUBHA", "called11");
+									}
 								} else {
 									mediaRouteButton.setVisibility(View.GONE);
-									Log.v("SUBHA", "called11");
+									Log.v("SUBHA", "called111");
 								}
 							} else {
 								mediaRouteButton.setVisibility(View.GONE);
-								Log.v("SUBHA", "called111");
+								Log.v("SUBHA", "called1111");
 							}
-						} else {
+						}else{
 							mediaRouteButton.setVisibility(View.GONE);
-							Log.v("SUBHA", "called1111");
 						}
 
 					}
@@ -400,6 +411,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		setContentView(R.layout.activity_final_exoplayer);
 		languagePreference = LanguagePreference.getLanguagePreference(this);
 		preferenceManager = PreferenceManager.getPreferenceManager(this);
+		featureHandler = FeatureHandler.getFeaturePreference(MarlinBroadbandExample.this);
 
 		networkStateReceiver = new NetworkStateReceiver();
 		this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
@@ -411,6 +423,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		streamId = getIntent().getStringExtra("streamId").trim();
 		poster = getIntent().getStringExtra("poster").trim();
 		storydes = getIntent().getStringExtra("story").trim();
+
+
 
 		Chromecast_Subtitle_Url = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Url");
 		Chromecast_Subtitle_Language_Name = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Language_Name");
@@ -446,6 +460,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
 		subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
 		videoTitle = (TextView) findViewById(R.id.videoTitle);
@@ -522,9 +537,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		// Added For Chromecast By BIBHU//
 
 
-		Context castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
-		Drawable drawable = null;
-		TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+		castContext = new ContextThemeWrapper(MarlinBroadbandExample.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+		a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
 		drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
 		a.recycle();
 		DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
@@ -565,6 +579,14 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			SubTitlePath.clear();
 		}
 
+
+		if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)){
+			SubTitlePath.clear();
+			Chromecast_Subtitle_Url.clear();
+		}
+
+
+
 		if (SubTitlePath.size() < 1) {
 			subtitle_change_btn.setVisibility(View.INVISIBLE);
 		}
@@ -600,9 +622,6 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 			}
 		});
-
-
-
 
 		try{
 
@@ -1017,7 +1036,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
 							Util.call_finish_at_onUserLeaveHint = false;
 
-
+							resume_orientation = true;
 							Intent resumeIntent = new Intent(MarlinBroadbandExample.this, ResumePopupActivity.class);
 							startActivityForResult(resumeIntent, 1001);
 
@@ -1048,6 +1067,13 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		});
 
 		back.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				backCalled();
+
+			}
+		});
+		back_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				backCalled();
@@ -1210,6 +1236,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	public void onOrientationChange(int orientation) {
 
+		if(resume_orientation){
+			Util.player_description = true;
+			return;
+		}
 
 		if (orientation == 90) {
 
@@ -1772,7 +1802,17 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		Util.app_is_in_player_context = false;
 		this.unregisterReceiver(networkStateReceiver);
 
+		try{
 
+			a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+			drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+			a.recycle();
+			DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
+
+			CastButtonFactory.setUpMediaRouteButton(MarlinBroadbandExample.this, mediaRouteButton);
+			mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+		}catch (Exception e){}
 
 
 	}
@@ -2594,7 +2634,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					jsonObj.put("device_type", "2");
 					jsonObj.put("log_id", videoLogId);
 
-					if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+					if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 						jsonObj.put("restrict_stream_id", "0");
 						jsonObj.put("is_streaming_restriction", "1");
 						Log.v("BIBHU4", "restrict_stream_id============1");
@@ -2686,7 +2726,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					jsonObj.put("device_type", "2");
 					jsonObj.put("log_id", videoLogId);
 
-					if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+					if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 						jsonObj.put("restrict_stream_id", "0");
 						jsonObj.put("is_streaming_restriction", "1");
 						Log.v("BIBHU4", "restrict_stream_id============1");

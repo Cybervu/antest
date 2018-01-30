@@ -200,8 +200,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -393,7 +392,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         boolean play_video = true;
 
-        if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -721,7 +720,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -808,7 +807,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("resume_time", resume_time);
 
 
-                if (featureHandler.getFeatureStatus(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION)) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");

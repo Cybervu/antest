@@ -20,7 +20,7 @@
             android:gravity="center_vertical"
             android:maxLines="2"
             android:text="vjbrihfofher"
-            android:textColor="@color/OsTextColor"
+            android:textColor="@color/white"
             android:textSize="@dimen/cast_name_text" />
 
         <TextView

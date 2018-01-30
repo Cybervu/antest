@@ -17,7 +17,9 @@ public class SplashScreenHandler {
         this.context=context;
     }
     public void handleSplashscreen(ImageView imageResize) {
+    }
 
+    public void changeFeatureProperties(FeatureHandler featureHandler){
     }
 
 }

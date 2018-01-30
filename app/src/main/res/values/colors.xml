@@ -108,7 +108,7 @@
  <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
  <color name="cast_crew_textcolor">#000000</color>
- <color name="device_name_color">#757575</color>
+ <color name="device_name_color">#c3c3c3</color>
 
 
  // Following code is added by Bibhuprasad Jena //
@@ -161,9 +161,5 @@
  <color name="purchaseTextColor">#000</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#32c5d2</color>
-
- <!--added for subtitle color-->
- <color name="subtitle_solid_color">#fff</color>
- <color name="subtitle_outline_color">#000000</color>
  <color name="chromecast_color">#ffffff</color>
 </resources>

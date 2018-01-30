@@ -7,4 +7,6 @@
     android:singleLine="true"
     android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
     android:textColor="@color/spinnerDropDownListColor"
-    android:gravity="center_vertical" />
+    android:textAlignment="viewStart"
+
+    android:gravity="start" />
