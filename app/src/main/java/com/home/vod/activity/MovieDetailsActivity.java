@@ -2095,7 +2095,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);*/
 
-Log.v("BIBHU123","status upadted = "+remoteMediaClient.getMediaStatus());
+            Log.v("BIBHU123","status upadted = "+remoteMediaClient.getMediaStatus());
 
             }
 
