@@ -22,7 +22,7 @@ public class VodApplication extends Application {
         LogUtil.showLog("MUVI PCKG NAME", SDKInitializer.user_Package_Name_At_Api+"::::"+getPackageName());
        // SDKInitializer.hashKey="nn";
        // SDKInitializer.user_Package_Name_At_Api=getPackageName();
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         APIUrlConstant.BASE_URl=BuildConfig.SERVICE_BASE_PATH;
         LogUtil.showLog("MUVI PCKG NAME", SDKInitializer.user_Package_Name_At_Api+"::::"+getPackageName());
 

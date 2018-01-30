@@ -17,7 +17,7 @@ public class CastAndCrewDetailsIntentHandler {
 
     public void castandcrewdetailsIntentShowORHide(Intent castCrewIntent){
 
-
+        activity.startActivity(castCrewIntent);
     }
 
 

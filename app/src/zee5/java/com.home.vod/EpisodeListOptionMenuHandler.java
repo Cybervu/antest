@@ -37,7 +37,7 @@ import static player.utils.Util.IS_OFFLINE;
 
 
 /**
- * Created by MUVI on 9/25/2017.
+ * Created by Abhishek on 9/25/2017.
  */
 
 public class EpisodeListOptionMenuHandler {
@@ -116,7 +116,7 @@ public class EpisodeListOptionMenuHandler {
             else
                 favorite_menu.setVisible(false);
 
-          //  purchage_menu.setVisible(true);
+            purchage_menu.setVisible(true);
 
             logout_menu.setVisible(true);
 
@@ -131,7 +131,7 @@ public class EpisodeListOptionMenuHandler {
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                //register_menu.setVisible(true);
+                register_menu.setVisible(true);
 
             } else {
                 login_menu.setVisible(false);

@@ -26,7 +26,7 @@ public class VideolistFragmentHandler {
         MenuItem item;
         item= menu.findItem(R.id.action_filter);
         if(featureHandler.getFeatureStatus(FeatureHandler.IS_FILTER,FeatureHandler.DEFAULT_IS_FILTER)){
-            item.setVisible(false);
+            item.setVisible(true);
         }else{
             item.setVisible(false);
         }

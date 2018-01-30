@@ -538,6 +538,25 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
 
+        zee5 {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.zee5'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"00a8687fad1a84bcf0f090c780ec3669\""
+        }
+        zee5_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        zee5_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -633,7 +652,10 @@ android.variantFilter { variant ->
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
-
+    else if (vendor.equals('zee5') && (environment.equals('zee5_staging_') || environment.equals('zee5_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
     else {
         variant.setIgnore(true)
     }

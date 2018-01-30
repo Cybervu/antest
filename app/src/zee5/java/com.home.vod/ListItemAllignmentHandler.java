@@ -19,6 +19,5 @@ public class ListItemAllignmentHandler {
     }
 
     public void setAllignment(TextView textView){
-//        textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
     }
 }
