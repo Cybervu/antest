@@ -84,6 +84,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -159,15 +160,10 @@ import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
-import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -207,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity implements
     int Played_Length = 0;
     String watch_status_String = "start";
 
-
+    FeatureHandler featureHandler;
     RegisterUIHandler registerUIHandler;
     String fbUserId = "";
     String fbEmail = "";
@@ -279,7 +275,7 @@ public class RegisterActivity extends AppCompatActivity implements
             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
 
                 //load video urls according to resolution
-                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE)) {
 
                     Log.v("BIBHU", "isRestrictDevice called");
                     // Call For Check Api.
@@ -508,6 +504,7 @@ public class RegisterActivity extends AppCompatActivity implements
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
 
         languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(RegisterActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
@@ -522,8 +519,7 @@ public class RegisterActivity extends AppCompatActivity implements
         if (playerModel != null)
 
             playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         } else {
@@ -1016,7 +1012,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
                 preferenceManager.setLoginDatePref(todayStr);
 
-                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE)) {
                     // Call For Check Api.
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setAuthToken(authTokenStr);
@@ -1093,7 +1089,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -1299,7 +1295,7 @@ public class RegisterActivity extends AppCompatActivity implements
                                     jsonObj.put("log_id", "0");
                                     jsonObj.put("active_track_index", "0");
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1382,7 +1378,7 @@ public class RegisterActivity extends AppCompatActivity implements
                                     jsonObj.put("resume_time", "0");
 
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1617,7 +1613,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1701,7 +1697,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 jsonObj.put("resume_time", "0");
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -3602,7 +3598,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 preferenceManager.setLoginHistIdPref(socialAuthOutputModel.getLogin_history_id());
 
 
-                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE)) {
 
                     Log.v("BIBHU", "isRestrictDevice called");
                     // Call For Check Api.

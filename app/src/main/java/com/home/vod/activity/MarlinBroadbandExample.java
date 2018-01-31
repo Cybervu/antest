@@ -129,8 +129,6 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static player.utils.Util.authTokenStr;
 
 

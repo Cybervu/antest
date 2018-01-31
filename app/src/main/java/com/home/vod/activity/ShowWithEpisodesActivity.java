@@ -211,9 +211,8 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
-import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+
+
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;

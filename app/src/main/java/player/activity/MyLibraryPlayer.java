@@ -156,7 +156,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMIN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+
 import static com.home.vod.preferences.LanguagePreference.SAVE;
 import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;

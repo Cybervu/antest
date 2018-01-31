@@ -94,7 +94,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAIL
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOADED_ACCESS_EXPIRED;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_DOWNLOADED_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;

@@ -23,6 +23,7 @@ import com.home.vod.adapter.NavigationDrawerAdapter;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -31,7 +32,6 @@ import java.util.List;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 
 
@@ -49,6 +49,7 @@ public class FragmentDrawer extends Fragment {
     private FragmentDrawerListener drawerListener;
     private LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
+    FeatureHandler featureHandler;
 
     public FragmentDrawer() {
 
@@ -92,6 +93,7 @@ public class FragmentDrawer extends Fragment {
                              Bundle savedInstanceState) {
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
+        featureHandler = FeatureHandler.getFeaturePreference(getActivity());
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
@@ -133,13 +135,11 @@ public class FragmentDrawer extends Fragment {
                     for (int i = 0; i < titles.size(); i++) {
                         LogUtil.showLog("alok setUp ::",titles.get(i).getTitle());
                         if (titles.get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))) {
-                            LogUtil.showLog("MUVI", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
+
                             LogUtil.showLog("MUVI", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
-                            Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
 
-                            if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
-                                Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
+                            if (featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null) {
                             } else {
                                 titles.remove(i);
                                 LogUtil.showLog("MUVI", "My lib removed");
@@ -153,7 +153,7 @@ public class FragmentDrawer extends Fragment {
                             if(titles.get(i).getIsEnabled()==false)
                             {
                                 if(!mylibrary_title_added) {
-                                    if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null) {
                                         titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102",""));
                                         mylibrary_title_added = true;
                                         LogUtil.showLog("MUVI", "My lib added");

@@ -112,5 +112,5 @@
         <dimen name="movie_videotitle_size">16sp</dimen>
 
         <dimen name="testview_text_size">25sp</dimen>
-
+        <dimen name="gridbottom8dp">1dp</dimen>
     </resources>

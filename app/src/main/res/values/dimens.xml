@@ -341,6 +341,7 @@
     <dimen name="padding15dp">15dp</dimen>
     <dimen name="marginright5dp">5dp</dimen>
     <dimen name="margintop8dp">8dp</dimen>
+    <dimen name="gridbottom8dp">8dp</dimen>
     <dimen name="marginright20dp">20dp</dimen>
     <dimen name="marginright15dp">15dp</dimen>
     <dimen name="marginright10dp">10dp</dimen>

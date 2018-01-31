@@ -339,6 +339,16 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
 
+
+        /**
+         * Override feature properties.
+         */
+
+        splashScreenHandler.changeFeatureProperties(featureHandler);
+
+
+
+
         LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();

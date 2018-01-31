@@ -28,4 +28,8 @@ public class SplashScreenHandler {
     }
 
 
+    public void changeFeatureProperties(FeatureHandler featureHandler){
+    }
+
+
 }

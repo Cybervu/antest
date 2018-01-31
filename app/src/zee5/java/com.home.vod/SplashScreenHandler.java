@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.Display;
 import android.widget.ImageView;
 
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
@@ -41,5 +42,8 @@ public class SplashScreenHandler {
         float dpWidth = display.getWidth();
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash1, dpWidth, dpHeight));
 
+    }
+    public void changeFeatureProperties(FeatureHandler featureHandler){
+        featureHandler.setFeatureFlag(FeatureHandler.FACEBOOK,"1");
     }
 }

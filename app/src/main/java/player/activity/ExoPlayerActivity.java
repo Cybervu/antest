@@ -712,7 +712,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             updatePlayButton(mPlaybackState);
         }
 
-        // Added For Chromecast By BIBHU//
+        // Added For Chromecast By MUVI//
 
 
         castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
@@ -778,7 +778,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (playerModel.getSubTitleName() != null) {
             SubTitleName = playerModel.getSubTitleName();
 
-            Log.v("BIBHU1", "SubTitleName = " + SubTitleName.size());
+            Log.v("MUVI1", "SubTitleName = " + SubTitleName.size());
 
         } else {
             SubTitleName.clear();
@@ -786,7 +786,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (playerModel.getSubTitlePath() != null) {
             SubTitlePath = playerModel.getSubTitlePath();
-            Log.v("BIBHU1", "SubTitlePath = " + SubTitlePath.size());
+            Log.v("MUVI1", "SubTitlePath = " + SubTitlePath.size());
         } else {
             SubTitlePath.clear();
         }
@@ -831,13 +831,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (ResolutionFormat.size() > 0) {
                 Collections.reverse(ResolutionFormat);
                 for (int m = 0; m < ResolutionFormat.size(); m++) {
-                    Log.v("BIBHU", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
+                    Log.v("MUVI", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
                 }
             }
             if (ResolutionUrl.size() > 0) {
                 Collections.reverse(ResolutionUrl);
                 for (int n = 0; n < ResolutionUrl.size(); n++) {
-                    Log.v("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
+                    Log.v("MUVI", "RESOLUTION URL======" + ResolutionUrl.get(n));
                 }
             }
 
@@ -863,17 +863,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
-                Log.v("BIBHU1", "subtitle_image button visible called");
+                Log.v("MUVI1", "subtitle_image button visible called");
             }
         } else {
             if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
                 subtitle_change_btn.setVisibility(View.INVISIBLE);
-                Log.v("BIBHU1", "subtitle_image button Invisible called");
+                Log.v("MUVI1", "subtitle_image button Invisible called");
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
-                Log.v("BIBHU1", "subtitle_image button visible called");
+                Log.v("MUVI1", "subtitle_image button visible called");
 
 
                 try {
@@ -1052,7 +1052,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     if (center_pause_paly_timer_is_running) {
                         center_pause_paly_timer.cancel();
                         center_pause_paly_timer_is_running = false;
-                        Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+                        Log.v("MUVI11", "CastAndCrewActivity End_Timer cancel called");
 
 
                         subtitle_change_btn.setVisibility(View.INVISIBLE);
@@ -1168,7 +1168,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 current_time.setVisibility(View.VISIBLE);
                 updateProgressBar();
 
-                Log.v("BIBHU11", "stop tracking called");
+                Log.v("MUVI11", "stop tracking called");
 
                 // Changed due to New VoideoLogApi
 
@@ -1734,24 +1734,24 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6", "authToken=" + Util.authTokenStr.trim());
-                Log.v("BIBHU6", "user_id=" + userIdStr.trim());
-                Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
-                Log.v("BIBHU6", "movie_id=" + movieId.trim());
-                Log.v("BIBHU6", "episode_id=" + episodeId.trim());
-                Log.v("BIBHU6", "played_length=" + String.valueOf(playerPosition));
-                Log.v("BIBHU6", "watch_status=" + watchStatus);
-                Log.v("BIBHU6", "device_type=" + "2");
-                Log.v("BIBHU6", "log_id=" + videoLogId);
+                Log.v("MUVI6", "authToken=" + Util.authTokenStr.trim());
+                Log.v("MUVI6", "user_id=" + userIdStr.trim());
+                Log.v("MUVI6", "ip_address=" + ipAddressStr.trim());
+                Log.v("MUVI6", "movie_id=" + movieId.trim());
+                Log.v("MUVI6", "episode_id=" + episodeId.trim());
+                Log.v("MUVI6", "played_length=" + String.valueOf(playerPosition));
+                Log.v("MUVI6", "watch_status=" + watchStatus);
+                Log.v("MUVI6", "device_type=" + "2");
+                Log.v("MUVI6", "log_id=" + videoLogId);
 
 
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
-                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    Log.v("MUVI", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
 
-                    Log.v("BIBHU6", "is_streaming_restriction=" + "1");
-                    Log.v("BIBHU6", "restrict_stream_id=" + restrict_stream_id);
+                    Log.v("MUVI6", "is_streaming_restriction=" + "1");
+                    Log.v("MUVI6", "restrict_stream_id=" + restrict_stream_id);
                 }
 
                 // Following code is changed due to NewVideoLog API ;
@@ -1760,21 +1760,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
-                Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
+                Log.v("MUVI", "player_start_time===*****************=========" + player_start_time);
+                Log.v("MUVI", "playerPosition======***************8======" + playerPosition);
 
 
-                Log.v("BIBHU", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU", "resume_time============" + (playerPosition));
-                Log.v("BIBHU", "playerPosition============" + playerPosition);
-                Log.v("BIBHU", "log_id============" + videoLogId);
+                Log.v("MUVI", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI", "resume_time============" + (playerPosition));
+                Log.v("MUVI", "playerPosition============" + playerPosition);
+                Log.v("MUVI", "log_id============" + videoLogId);
 
-                Log.v("BIBHU", "user_id============" + userIdStr.trim());
-                Log.v("BIBHU", "movieId.trim()============" + movieId.trim());
-                Log.v("BIBHU", "episodeId.trim()============" + episodeId.trim());
-                Log.v("BIBHU", "watchStatus============" + watchStatus);
-                Log.v("BIBHU", "restrict_stream_id============" + restrict_stream_id);
+                Log.v("MUVI", "user_id============" + userIdStr.trim());
+                Log.v("MUVI", "movieId.trim()============" + movieId.trim());
+                Log.v("MUVI", "episodeId.trim()============" + episodeId.trim());
+                Log.v("MUVI", "watchStatus============" + watchStatus);
+                Log.v("MUVI", "restrict_stream_id============" + restrict_stream_id);
 
 
                 //===============End=============================//
@@ -1785,7 +1785,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BIBHU", "responseStr of videolog============" + responseStr);
+                    Log.v("MUVI", "responseStr of videolog============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -1811,7 +1811,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                        Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
 
 
                     } else {
@@ -1863,7 +1863,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //stop the timer, if it's not already null
         if (timer != null) {
 
-            Log.v("BIBHU", "=======================================stoptimertask caled=================================");
+            Log.v("MUVI", "=======================================stoptimertask caled=================================");
 
             timer.cancel();
             timer = null;
@@ -1951,7 +1951,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
-                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    Log.v("MUVI", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
                 }
@@ -1963,12 +1963,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
 
 
-                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU11", "resume_time============" + (playerPosition));
-                Log.v("BIBHU11", "log_id============" + videoLogId);
+                Log.v("MUVI11", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI11", "resume_time============" + (playerPosition));
+                Log.v("MUVI11", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -1977,7 +1977,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+                    Log.v("MUVI", "responseStr of responseStr============" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -2002,7 +2002,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
-//                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+//                        Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
                         log_temp_id = "0";
@@ -2340,7 +2340,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     if (center_pause_paly_timer_is_running) {
                                         center_pause_paly_timer.cancel();
                                         center_pause_paly_timer_is_running = false;
-                                        Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+                                        Log.v("MUVI11", "CastAndCrewActivity End_Timer cancel called");
 
 
                                         subtitle_change_btn.setVisibility(View.INVISIBLE);
@@ -2498,7 +2498,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (Util.call_finish_at_onUserLeaveHint) {
 
-            Log.v("BIBHU6", "finish activity");
+            Log.v("MUVI6", "finish activity");
 
             Util.call_finish_at_onUserLeaveHint = true;
 
@@ -2704,7 +2704,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
-                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    Log.v("MUVI", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
@@ -2717,10 +2717,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU11", "resume_time============" + (playerPosition));
-                Log.v("BIBHU11", "log_id============" + videoLogId);
+                Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI11", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI11", "resume_time============" + (playerPosition));
+                Log.v("MUVI11", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -2733,7 +2733,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+                    Log.v("MUVI", "responseStr of responseStr============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -2758,7 +2758,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                        Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
                         log_temp_id = "0";
@@ -2857,7 +2857,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
-                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    Log.v("MUVI", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
@@ -2872,10 +2872,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU11", "resume_time============" + (playerPosition));
-                Log.v("BIBHU11", "log_id============" + videoLogId);
+                Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI11", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI11", "resume_time============" + (playerPosition));
+                Log.v("MUVI11", "log_id============" + videoLogId);
 
 
                 httppost.addHeader("device_type", "2");
@@ -2886,7 +2886,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+                    Log.v("MUVI", "responseStr of responseStr============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -2911,7 +2911,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                        Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
                         log_temp_id = "0";
@@ -2998,7 +2998,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             if (requestCode == 22222) {
 
-                Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
+                Log.v("MUVI1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
                 Util.call_finish_at_onUserLeaveHint = true;
 
                 download.setEnabled(false);
@@ -3014,7 +3014,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         asynWithdrm = new AsynWithdrm();
                         asynWithdrm.executeOnExecutor(threadPoolExecutor);
 
-                        Log.v("BIBHU1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineUrl().size()));
+                        Log.v("MUVI1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineUrl().size()));
 
 
                         if (playerModel.getOfflineUrl().size() > 0) {
@@ -3080,7 +3080,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             if (center_pause_paly_timer_is_running) {
                                 center_pause_paly_timer.cancel();
                                 center_pause_paly_timer_is_running = false;
-                                Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+                                Log.v("MUVI11", "CastAndCrewActivity End_Timer cancel called");
 
 
                                 subtitle_change_btn.setVisibility(View.INVISIBLE);
@@ -3154,7 +3154,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                             active_track_index = "";
 
-                            Log.v("BIBHU", "selected trackid===========**" + active_track_index);
+                            Log.v("MUVI", "selected trackid===========**" + active_track_index);
 
                             // check chromecast is connected or not , if connected then remove the active track id
 
@@ -3185,7 +3185,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 active_track_index = (Integer.parseInt(data.getStringExtra("position")) - 1) + "";
                                 int id = Integer.parseInt(active_track_index);
 
-                                Log.v("BIBHU", " trackid===========" + id);
+                                Log.v("MUVI", " trackid===========" + id);
 
                                 // check chromecast is connected or not , if connected then remove the active track id
 
@@ -3225,7 +3225,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         Util.app_is_in_player_context = false;
-        Log.v("BIBHU", "***********************************************************************************Ondestory called");
+        Log.v("MUVI", "***********************************************************************************Ondestory called");
 
         Util.hide_pause = false;
 
@@ -3233,7 +3233,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.Call_API_For_Close_Streming) {
 
             Util.Call_API_For_Close_Streming = false;
-            Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
+            Log.v("MUVI", "==============Ondestory of Exoplyer called============");
 
             if (!video_completed_at_chromecast) {
                 AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
@@ -3275,7 +3275,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         public SubtitleProcessingTask(String path) {
 
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
-            Log.v("BIBHU1", "SubTitlePath==============" + SubTitlePath.get((Integer.parseInt(path) - 1)));
+            Log.v("MUVI1", "SubTitlePath==============" + SubTitlePath.get((Integer.parseInt(path) - 1)));
         }
 
         @Override
@@ -3297,11 +3297,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         R.raw.subtitle);*/
 
                 if (callWithoutCaption) {
-                    Log.v("BIBHU1", "SubTitlePath==============callWithoutCaption");
+                    Log.v("MUVI1", "SubTitlePath==============callWithoutCaption");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
                 } else {
-                    Log.v("BIBHU1", "SubTitlePath==============callWithCaption");
+                    Log.v("MUVI1", "SubTitlePath==============callWithCaption");
 
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
@@ -3476,7 +3476,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             try {
-//                Log.v("BIBHU", "BufferBandWidth==============called====");
+//                Log.v("MUVI", "BufferBandWidth==============called====");
 
                 long total = 0;
                 PackageManager pm = getPackageManager();
@@ -3490,8 +3490,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         CurrentUsedData = total - PreviousUsedData;
                         CurrentUsedData = CurrentUsedData - (DataUsedByDownloadContent() - PreviousUsedData_By_DownloadContent);
 
-                        Log.v("BIBHU", "Current_total_UsedData==================" + total + " KB");
-                        Log.v("BIBHU", "CurrentUsedData==================" + CurrentUsedData + " KB");
+                        Log.v("MUVI", "Current_total_UsedData==================" + total + " KB");
+                        Log.v("MUVI", "CurrentUsedData==================" + CurrentUsedData + " KB");
 
                     }
                 }
@@ -3521,14 +3521,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                             if (status) {
                                 PreviousUsedData = prev_data;
-                                Log.v("BIBHU", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
+                                Log.v("MUVI", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
                             } else {
-                                Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
+                                Log.v("MUVI", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
 
 
                                 PreviousUsedData = ((prev_data - PreviousUsedData) - CurrentUsedData) + PreviousUsedData;
-                                Log.v("BIBHU", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
+                                Log.v("MUVI", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
                             }
 
@@ -3577,7 +3577,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             }
                         }
 
-                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total + "KB");
+                        Log.v("MUVI11", "  TotalUsedData Download size============" + Total + "KB");
 
                     } while (cursor.moveToNext());
                 }
@@ -3626,9 +3626,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
 
 
-                Log.v("BIBHU", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
-                Log.v("BIBHU", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
-                Log.v("BIBHU", "Response of the bufferlog DataUsedByChrmoeCast======#############=" + DataUsedByChrmoeCast);
+                Log.v("MUVI", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
+                Log.v("MUVI", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
+                Log.v("MUVI", "Response of the bufferlog DataUsedByChrmoeCast======#############=" + DataUsedByChrmoeCast);
 
 
                 // Execute HTTP Post Request
@@ -3636,7 +3636,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BIBHU", "Response of the bufferlog =" + responseStr);
+                    Log.v("MUVI", "Response of the bufferlog =" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -3774,8 +3774,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 List_Of_Resolution_Url.add(jsonArray.getJSONObject(i).optString("url"));
                                 List_Of_Resolution_Url_Used_For_Download.add(jsonArray.getJSONObject(i).optString("url"));
 
-                                Log.v("BIBHU1", "resolution = " + jsonArray.getJSONObject(i).optString("resolution"));
-                                Log.v("BIBHU1", "url = " + jsonArray.getJSONObject(i).optString("url"));
+                                Log.v("MUVI1", "resolution = " + jsonArray.getJSONObject(i).optString("resolution"));
+                                Log.v("MUVI1", "url = " + jsonArray.getJSONObject(i).optString("url"));
                             }
 
                             Collections.reverse(List_Of_Resolution_Format);
@@ -4208,7 +4208,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         contactModel1.setStreamId(playerModel.getStreamUniqueId().trim());
         dbHelper.insertRecord(contactModel1);
 
-        Log.d("BIBHU", emailIdStr);
+        Log.d("MUVI", emailIdStr);
 
 
         audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
@@ -4249,14 +4249,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     "updated_server_current_time = '0', watch_period = '0',access_period = '" + -1 + "' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
             DB.execSQL(query);
 
-            Log.v("BIBHU1234", "update called");
+            
 
         } else {
             String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email,watch_period,access_period) VALUES" +
                     " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "','0','"+-1+"')";
             DB.execSQL(query);
 
-            Log.v("BIBHU1234", "insert called");
         }
 
 
@@ -4270,12 +4269,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (cursor1.getCount() > 0) {
             String query = "UPDATE " + DBHelper.RESUME_WATCH + " SET Flag='0' , PlayedDuration = '0',LatestMpdUrl = '',LicenceUrl=''  WHERE UniqueId = '" + playerModel.getStreamUniqueId() + emailIdStr + "'";
             DB.execSQL(query);
-            Log.v("BIBHU1234", "resume watch update called");
+            Log.v("MUVI1234", "resume watch update called");
         } else {
             String query = "INSERT INTO " + DBHelper.RESUME_WATCH + " (UniqueId , PlayedDuration,Flag,LicenceUrl,LatestMpdUrl) VALUES" +
                     " ('" + playerModel.getStreamUniqueId() + emailIdStr + "','0','0','','')";
             DB.execSQL(query);
-            Log.v("BIBHU1234", "resume watch insert called");
+            Log.v("MUVI1234", "resume watch insert called");
             //=====================================End=======================================//
 
         }
@@ -4361,10 +4360,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt";
                 subtitleModel.setPath(filename);
 
-                Log.v("BIBHU3", "SubTitleName============" + filename);
+                Log.v("MUVI3", "SubTitleName============" + filename);
 
                 long rowId = dbHelper.insertRecordSubtittel(subtitleModel);
-                Log.v("BIBHU3", "rowId============" + rowId + "sub id ::" + subtitleModel.getUID());
+                Log.v("MUVI3", "rowId============" + rowId + "sub id ::" + subtitleModel.getUID());
 
                 playerModel.getOfflineLanguage().remove(0);
 
@@ -4383,7 +4382,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 input.close();
 
             } catch (Exception e) {
-                Log.v("BIBHU3", "error===========" + e.getMessage());
+                Log.v("MUVI3", "error===========" + e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -4432,7 +4431,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 if (cast_disconnected_position != 0) {
 
-                    Log.v("BIBHU2", "onSessionEnded===and video log called");
+                    Log.v("MUVI2", "onSessionEnded===and video log called");
 
                     emVideoView.seekTo((int) cast_disconnected_position);
                     log_temp_id = "0";
@@ -4459,14 +4458,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 onApplicationConnected(session);
                 mCastSession = session;
 
-                Log.v("BIBHU2", "onSessionResumed");
+                Log.v("MUVI2", "onSessionResumed");
             }
 
             @Override
             public void onSessionResumeFailed(CastSession session, int error) {
                 onApplicationDisconnected();
 
-                Log.v("BIBHU2", "onSessionResumeFailed");
+                Log.v("MUVI2", "onSessionResumeFailed");
             }
 
             @Override
@@ -4479,12 +4478,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             public void onSessionStartFailed(CastSession session, int error) {
                 onApplicationDisconnected();
 
-                Log.v("BIBHU2", "onSessionStartFailed");
+                Log.v("MUVI2", "onSessionStartFailed");
             }
 
             @Override
             public void onSessionStarting(CastSession session) {
-                Log.v("BIBHU2", "onSessionStarting===cast connecting");
+                Log.v("MUVI2", "onSessionStarting===cast connecting");
             }
 
             @Override
@@ -4504,8 +4503,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     // satrt a new streaming restriction at sender end.
                     restrict_stream_id = "0";
 
-                    Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
-                    Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
+                    Log.v("MUVI3", "onSessionEnding===================" + cast_disconnected_position);
+                    Log.v("MUVI3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
                 } catch (Exception e) {
 
                 }
@@ -4518,7 +4517,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSessionSuspended(CastSession session, int reason) {
 
-                Log.v("BIBHU3", "onSessionSuspended===cast disconnected");
+                Log.v("MUVI3", "onSessionSuspended===cast disconnected");
             }
 
             private void onApplicationConnected(final CastSession castSession) {
@@ -4604,7 +4603,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (center_pause_paly_timer_is_running) {
                     center_pause_paly_timer.cancel();
                     center_pause_paly_timer_is_running = false;
-                    Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+                    Log.v("MUVI11", "CastAndCrewActivity End_Timer cancel called");
 
 
                     last_ll.setVisibility(View.GONE);
@@ -4621,7 +4620,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 //===================================================================================================//
 
 
-                Log.v("BIBHU2", "cast connected");
+                Log.v("MUVI2", "cast connected");
                 cast_disconnected_position = 0;
 
                 mCastSession = castSession;
@@ -4694,11 +4693,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             case PAUSED:
                 switch (mLocation) {
                     case LOCAL:
-                        Log.v("BIBHU2", "=============1");
+                        Log.v("MUVI2", "=============1");
                         break;
 
                     case REMOTE:
-                        Log.v("BIBHU2", "=============2");
+                        Log.v("MUVI2", "=============2");
 
                         loadRemoteMedia(0, true);
 
@@ -4709,18 +4708,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 break;
 
             case PLAYING:
-                Log.v("BIBHU2", "=============3");
+                Log.v("MUVI2", "=============3");
                 mPlaybackState = PlaybackState.PAUSED;
                 break;
 
             case IDLE:
                 switch (mLocation) {
                     case LOCAL:
-                        Log.v("BIBHU2", "=============4");
+                        Log.v("MUVI2", "=============4");
                         break;
                     case REMOTE:
                         if (mCastSession != null && mCastSession.isConnected()) {
-                            Log.v("BIBHU2", "=============5==+current_played_length==" + current_played_length);
+                            Log.v("MUVI2", "=============5==+current_played_length==" + current_played_length);
                             loadRemoteMedia(current_played_length, true);
                         } else {
                         }
@@ -4758,7 +4757,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //                remoteMediaClient.removeListener(ExoPlayerActivity.this);
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
+                    Log.v("MUVI222", "======" + remoteMediaClient.isPlaying());
 
                     if (remoteMediaClient.isPlaying()) {
                         runOnUiThread(new Runnable() {
@@ -4848,11 +4847,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    Log.v("MUVI4", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    Log.v("MUVI4", "restrict_stream_id============0");
                 }
 
                 jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
@@ -4880,9 +4879,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("video_type", "mped_dash");
 
 
-                Log.v("BIBHU4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
-                Log.v("BIBHU4", "CurrentUsedData============" + CurrentUsedData);
-                Log.v("BIBHU4", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
+                Log.v("MUVI4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
+                Log.v("MUVI4", "CurrentUsedData============" + CurrentUsedData);
+                Log.v("MUVI4", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
 
                 jsonObj.put("drm_bandwidth_by_sender", "" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
 
@@ -4893,7 +4892,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             List tracks = new ArrayList();
 
-            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            Log.v("MUVI", "url size============" + playerModel.offline_url.size());
             if (playerModel.offline_url.size() > 0) {
 
                 for (int i = 0; i < playerModel.offline_url.size(); i++) {
@@ -4948,11 +4947,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    Log.v("MUVI4", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    Log.v("MUVI4", "restrict_stream_id============0");
                 }
 
                 jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
@@ -4989,7 +4988,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             List tracks = new ArrayList();
 
-            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            Log.v("MUVI", "url size============" + playerModel.offline_url.size());
             if (playerModel.offline_url.size() > 0) {
 
                 for (int i = 0; i < playerModel.offline_url.size(); i++) {
@@ -5050,7 +5049,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             } catch (Exception e) {
-                Log.v("BIBHU11", "Exception=" + e.getMessage());
+                Log.v("MUVI11", "Exception=" + e.getMessage());
                 Util.saveLogData("Exception DetectDownloadingFileSize=" + e.toString());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -5159,7 +5158,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             String position = intent.getStringExtra("position");
-            Log.v("BIBHU1", "Got position: " + position);
+            Log.v("MUVI1", "Got position: " + position);
             selected_download_format = Integer.parseInt(position);
 
         }
@@ -5186,7 +5185,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         protected String doInBackground(String... f_url) {
 
-            Log.v("BIBHU11", "f_url[0]=======" + f_url[0]);
+            Log.v("MUVI11", "f_url[0]=======" + f_url[0]);
 
             SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
             Cursor cursor = DB.rawQuery("SELECT stream_unique_id FROM " + DBHelper.WATCH_ACCESS_INFO + " WHERE download_id = '" + f_url[0].trim() + "'", null);
@@ -5198,7 +5197,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     do {
                         Stream_Id = cursor.getString(0).trim();
 
-                        Log.v("BIBHU3", "Stream_Id============" + Stream_Id);
+                        Log.v("MUVI3", "Stream_Id============" + Stream_Id);
                     } while (cursor.moveToNext());
                 }
             }
@@ -5230,7 +5229,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }
 
 
-                Log.v("BIBHU11", "response of GetOfflineViewRemainingTime in exoplayer=======" + responseStr);
+                Log.v("MUVI11", "response of GetOfflineViewRemainingTime in exoplayer=======" + responseStr);
 
                 JSONObject myJson = null;
                 if (responseStr != null) {
@@ -5239,8 +5238,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     request_data = myJson.optString("request_data");
                     log_id = myJson.optString("log_id");
 
-                    Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("created_date"));
-                    Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("access_expiry_time"));
+                    Log.v("MUVI11", "response of server_current_time in exoplayer=======" + myJson.optLong("created_date"));
+                    Log.v("MUVI11", "response of server_current_time in exoplayer=======" + myJson.optLong("access_expiry_time"));
                     Dwonload_Complete_Msg = "";
                     SQLiteDatabase DB1 = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 

@@ -45,7 +45,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVA
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PLAN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SKIP_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;

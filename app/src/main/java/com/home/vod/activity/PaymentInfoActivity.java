@@ -47,6 +47,7 @@ import com.home.vod.model.CardModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -99,7 +100,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBSCRIPTION_C
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -221,6 +222,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     TextView creditCardDetailsTitleTextView;
+    FeatureHandler featureHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +240,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             }
         });
         languagePreference = LanguagePreference.getLanguagePreference(PaymentInfoActivity.this);
+        featureHandler = FeatureHandler.getFeaturePreference(PaymentInfoActivity.this);
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
 
@@ -245,8 +248,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
 
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             // mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         } else {

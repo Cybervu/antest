@@ -116,7 +116,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
@@ -864,8 +864,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             if (code == 200) {
                 preferenceManager.clearLoginPref();
 
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
                     final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
                         public void run() {

@@ -164,9 +164,6 @@ import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.NEW_HERE_TITLE;
@@ -563,7 +560,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         then set thirdpartyurl true here and assign the url to videourl*/
         boolean play_video = true;
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
@@ -776,7 +773,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("log_id", "0");
                                     jsonObj.put("active_track_index", "0");
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -859,7 +856,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("resume_time", "0");
 
 
-                                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
                                         Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1095,7 +1092,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");
@@ -1179,7 +1176,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("resume_time", "0");
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
                     Log.v("BIBHU4", "restrict_stream_id============1");

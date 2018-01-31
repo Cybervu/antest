@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Zee5</string>
-    <string name="regular_fonts">fonts/century_gothic-Regular.ttf</string>
-    <string name="light_fonts">fonts/century_gothic-Light.ttf</string>
+    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
+    <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>
@@ -9,7 +9,7 @@
     <string name="drawer_close">Close</string>`
     <string name="studio_site">https://euroman.nfselected.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
-    <string name="facebook_app_id">1439149679512203</string>
+    <string name="facebook_app_id">168494503769880</string>
     <string name="fb_login_protocol_scheme">fb1439149679512203</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
