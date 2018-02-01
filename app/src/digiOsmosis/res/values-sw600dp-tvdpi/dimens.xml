@@ -43,7 +43,8 @@
     <dimen name="vdiocast_text_size">18sp</dimen>
     <dimen name="btnmore_width">98dp</dimen>
     <dimen name="btnmore_height">40dp</dimen>
-    <dimen name="btnmore_text_size">13sp</dimen>
+    <dimen name="btnmore_text_size">18sp</dimen>
+    <dimen name="listing_marginLeft">20dp</dimen>
     <dimen name="banerimg_height">300dp</dimen>
     <dimen name="vdiotitle1_text_size">20sp</dimen>
     <dimen name="homefrag_height">310dp</dimen>
@@ -218,8 +219,8 @@
     <dimen name="detailsTextView">230dp</dimen>
     <dimen name="week_days">170dp</dimen>
     <dimen name="week_days_title">70dp</dimen>
-    <dimen name="videogrid_width">250dp</dimen>
-    <dimen name="videogrid_height">357dp</dimen>
+    <dimen name="videogrid_width">254dp</dimen>
+    <dimen name="videogrid_height">362dp</dimen>
     <dimen name="week_left">17dp</dimen>
     <dimen name="week_top">15dp</dimen>
     <dimen name="program_left">30dp</dimen>
@@ -235,4 +236,6 @@
     <dimen name="fitness_editText_width">500dp</dimen>
     <dimen name="player_recycler_height">250dp</dimen>
     <dimen name="player_recycler_top">40dp</dimen>
+    <dimen name="programdetails_start_button_text">19dp</dimen>
+
 </resources>

@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="vertical"
+            android:id="@+id/titleRelativeLayout"
 
             >
 
@@ -100,6 +101,7 @@
             android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
             android:text=""
+            android:layout_alignBaseline="@+id/titleRelativeLayout"
             android:textAllCaps="false"
             android:textColor="@color/nav_drawer_lineColor"
             android:textSize="@dimen/btnmore_text_size" />

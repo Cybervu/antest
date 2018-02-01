@@ -2276,6 +2276,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             }
 //                            programType= "WeekBased";
 
+
                             DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
 
                             try {
@@ -3576,7 +3577,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height + 2);
         view.setLayoutParams(parms);
       //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
-        parms.setMargins(0, 10, 0, 0);
+        parms.setMargins(0, 30, 0, 0);
         view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         ///Title Textview

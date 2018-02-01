@@ -1866,6 +1866,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                                                     //percentg.setText(0+"%");
                                                                     percentg.setVisibility(View.GONE);
                                                                     download.setVisibility(View.VISIBLE);
+                                                                    Progress.setVisibility(View.INVISIBLE);
 
 
                                                                 }
@@ -2113,7 +2114,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 } else {
                     lineTextview1.setVisibility(View.GONE);
                     repetitionTitleTextView.setVisibility(View.VISIBLE);
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTextView.setText(calories);
 
@@ -2129,7 +2130,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 } else {
                     durationTitleTextView.setVisibility(View.VISIBLE);
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), durationTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), days);
                     days.setText(duration);
 
@@ -2139,19 +2140,19 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     lineTextview.setVisibility(View.GONE);
                 } else {
                     diffcultyTitleTextView.setVisibility(View.VISIBLE);
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), diffcultyTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), diffcultyTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), difficulty);
                     difficulty.setText(difficulty_level);
                 }
                 if (repetition.matches("")) {
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTitleTextView.setVisibility(View.GONE);
                     lineTextview1.setVisibility(View.GONE);
                 } else {
                     lineTextview1.setVisibility(View.GONE);
                     repetitionTitleTextView.setVisibility(View.VISIBLE);
-                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.fonts), repetitionTitleTextView);
+                    FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTitleTextView);
                     FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), repetitionTextView);
                     repetitionTextView.setText(repetition);
 
@@ -3567,7 +3568,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width - 1, height + 2);
         view.setLayoutParams(parms);
         int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 11, getResources().getDisplayMetrics());
@@ -5128,6 +5129,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         download.setVisibility(View.GONE);
         percentg.setVisibility(View.VISIBLE);
+        Progress.setVisibility(View.VISIBLE);
         Progress.setProgress(0);
 
         ContactModel1 contactModel1 = new ContactModel1();
@@ -5338,6 +5340,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                                 download.setVisibility(View.GONE);
                                 percentg.setVisibility(View.VISIBLE);
+                                Progress.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
                                 Progress.setProgress((int) model.getProgress());

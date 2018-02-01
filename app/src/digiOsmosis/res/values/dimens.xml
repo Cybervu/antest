@@ -90,7 +90,7 @@
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
-    <dimen name="btnMore_min_height">36dp</dimen>
+    <dimen name="btnMore_min_height">45dp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
     <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">16sp</dimen>
@@ -264,7 +264,7 @@
     <dimen name="plainrow_text_size">20sp</dimen>
     <dimen name="purchasevalue_text_size">38sp</dimen>
     <dimen name="purchasemonth_text_size">16sp</dimen>
-    <dimen name="btnmore_text_size">16sp</dimen>
+    <dimen name="btnmore_text_size">18sp</dimen>
     <dimen name="plainmark_height">30dp</dimen>
     <dimen name="plainmark_width">30dp</dimen>
     <dimen name="subtitlelist_height">30dp</dimen>
@@ -378,4 +378,21 @@
     <dimen name="program_banner_height">400dp</dimen>
     <dimen name="player_looping_layout">100dp</dimen>
     <dimen name="player_title">20dp</dimen>
+
+
+
+
+
+
+    <!--Welcome sliding page  -->
+    <dimen name="welcome_images_size">360.0dip</dimen>
+    <dimen name="welcome_images_margin_top">0.0dip</dimen>
+    <dimen name="welcome_heading_margin_bottom">12.0dip</dimen>
+    <dimen name="welcome_text_margin">48.0dip</dimen>
+    <dimen name="welcome_heading">24.0sp</dimen>
+    <dimen name="welcome_text_margin_bottom">12.0dip</dimen>
+    <dimen name="welcome_content_min_height">96.0dip</dimen>
+    <dimen name="welcome_content">16.0sp</dimen>
+
+
 </resources>

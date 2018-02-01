@@ -38,6 +38,8 @@
     <dimen name="movieimg_height">100dp</dimen>
     <dimen name="video280_width">150dp</dimen>
     <dimen name="video280_height">80dp</dimen>
+    <dimen name="videogrid_width">145dp</dimen>
+    <dimen name="videogrid_height">207dp</dimen>
     <dimen name="testview2_text_size">12sp</dimen>
     <dimen name="episodelayout_width">135dp</dimen>
     <dimen name="episodelayout_height">76dp</dimen>
@@ -69,11 +71,12 @@
     <dimen name="itemtitle1_text_size">18sp</dimen>
     <dimen name="homelogo_height">80dp</dimen>
     <dimen name="homelogo_width">150dp</dimen>
-    <dimen name="btnmore_text_size">16sp</dimen>
+    <dimen name="btnmore_text_size">18sp</dimen>
     <dimen name="card_expiry_width">60dp</dimen>
     <dimen name="card_expiry_height">40dp</dimen>
     <dimen name="banner_image_height">200dp</dimen>
     <dimen name="securitycode_width">100dp</dimen>
+    <dimen name="listing_marginLeft">1dp</dimen>
     <dimen name="securitycode_height">40dp</dimen>
     <dimen name="card_expiryyear_width">80dp</dimen>
     <dimen name="card_expiryyear_height">40dp</dimen>
@@ -84,7 +87,7 @@
     <dimen name="paymentOptionsTitle_textsize">20sp</dimen>
     <dimen name="preorderbtn_padding">10dp</dimen>
     <dimen name="padding17dp">0dp</dimen>
-    <dimen name="padding25dp">25dp</dimen>
+    <dimen name="padding25dp">15dp</dimen>
     <dimen name="row_gap">15dp</dimen>
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
@@ -98,7 +101,7 @@
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
-    <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="downloadwidth">120dp</dimen>
     <dimen name="button_padding">6dp</dimen>
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
     <dimen name="season_margin_left">10dp</dimen>
@@ -115,6 +118,15 @@
     <dimen name="program_banner_height">400dp</dimen>
     <dimen name="diet_story">18sp</dimen>
     <dimen name="player_looping_layout">100dp</dimen>
-    <dimen name="player_title">20dp</dimen>
+    <dimen name="player_title">15dp</dimen>
+    <dimen name="downloadimg_width">30dp</dimen>
+    <dimen name="downloadimg_height">20dp</dimen>
+    <dimen name="progressbar_width">40dp</dimen>
+    <dimen name="progressbar_height">40dp</dimen>
+
+
+
     <dimen name="player_marginTop">100dp</dimen>
+    <dimen name="programdetails_start_button_text">12dp</dimen>
+    <dimen name="marginleft10dp">5dp</dimen>
 </resources>

@@ -169,7 +169,7 @@ import static player.utils.Util.IS_OFFLINE;
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener,FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener, FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
 
 
     public MainActivity() {
@@ -259,7 +259,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
     }
 
-    /*** chromecast**************/
+    /***
+     * chromecast
+     **************/
 
 
     public static int vertical = 0;
@@ -273,7 +275,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int adding_position = 0;
 
 
-    public HashMap <String,Integer> menuHashMap = new HashMap();
+    public HashMap<String, Integer> menuHashMap = new HashMap();
 
     private String imageUrlStr;
     // public static SharedPreferences dataPref;
@@ -438,8 +440,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            sideMenuHandler = new SideMenuHandler(MainActivity.this,preferenceManager);
-            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+            sideMenuHandler = new SideMenuHandler(MainActivity.this, preferenceManager);
+            sideMenuHandler.staticSideMenu(languagePreference, menuList, originalMenuList, preferenceManager, adding_position);
 //            sideMenuHandler.editProfile(languagePreference,preferenceManager);
             //sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
 
@@ -606,8 +608,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onResume() {
         super.onResume();
-       /// sideMenuHandler = new SideMenuHandler(this);
-       // sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+        /// sideMenuHandler = new SideMenuHandler(this);
+        // sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
 
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
@@ -626,7 +628,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
 
-    /*************chromecast*****************/
+    /*************
+     * chromecast
+     *****************/
 
 
   /*  @Override
@@ -694,52 +698,38 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
 
-        } else  if (menuList.get(position).getPermalink().equals("login_permalink")){
+        } else if (menuList.get(position).getPermalink().equals("login_permalink")) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             Util.check_for_subscription = 0;
             startActivity(loginIntent);
             fragment = null;
-        }
-
-        else  if (menuList.get(position).getPermalink().equals("register_permalink")){
+        } else if (menuList.get(position).getPermalink().equals("register_permalink")) {
             Intent loginIntent = new Intent(MainActivity.this, RegisterActivity.class);
             Util.check_for_subscription = 0;
             startActivity(loginIntent);
             fragment = null;
-        }
-
-
-
-        else  if (menuList.get(position).getPermalink().equals("profile_Permalink")){
+        } else if (menuList.get(position).getPermalink().equals("profile_Permalink")) {
             Intent profileIntent = new ProfileHandler(MainActivity.this).handleClickOnEditProfile();
             profileIntent.putExtra("EMAIL", email);
             profileIntent.putExtra("LOGID", id);
             startActivity(profileIntent);
             fragment = null;
-        }
-
-
-        else  if (menuList.get(position).getPermalink().equals("mydownload_Permalink")){
+        } else if (menuList.get(position).getPermalink().equals("mydownload_Permalink")) {
            /* Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
             startActivity(mydownload);*/
             Intent mydownload = new MyDownloadIntentHandler(MainActivity.this).handleDownloadIntent();
             startActivity(mydownload);
             fragment = null;
-        }
-
-
-        else  if (menuList.get(position).getPermalink().equals("purchase_Permalink")) {
+        } else if (menuList.get(position).getPermalink().equals("purchase_Permalink")) {
             Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
             startActivity(purchaseintent);
 
             fragment = null;
-        }
-        else if(menuList.get(position).getPermalink().equals("favourite_Permalink")){
+        } else if (menuList.get(position).getPermalink().equals("favourite_Permalink")) {
             Intent favouriteintent = new Intent(MainActivity.this, DigiOsmosisFavoriteActivity.class);
             startActivity(favouriteintent);
             fragment = null;
-        }
-        else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
+        } else if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
             fragment = null;
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
@@ -780,10 +770,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             dlgAlert.create().show();
 
-        }
-
-
-        else {
+        } else {
             contentListHandler = new Content_List_Handler(this);
             fragment = contentListHandler.handleIntent(str);
             bundle.putString("item", str);
@@ -945,7 +932,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fcmRegistrationDetailsInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         fcmRegistrationDetailsInputModel.setDevice_type(1);
         fcmRegistrationDetailsInputModel.setFcm_token(preferenceManager.getSharedPref());
-        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel,this,this);
+        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel, this, this);
         fcmRegistrationDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
 
@@ -968,32 +955,47 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     }
                 }
             }
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
+            if (loggedInStr != null) {
+                adding_position = menuList.size();
+                menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+                LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
-
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
-            LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
-
-            if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
-                for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
-                    LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
-                    if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
-                        menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
+                if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
+                    for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
+                        LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
+                        if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
+                            menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
+                        }
                     }
                 }
-            }
+            } else {
 
-            adding_position = menuList.size();
+
+                menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+                LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
+
+                if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
+                    for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
+                        LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
+                        if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
+                            menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
+                        }
+                    }
+                }
+                adding_position = menuList.size();
+            }
 
 //            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage("Contact Us", "Contact Us"), "contactus", false, "contactus"));
 
             originalMenuList = new ArrayList<>(menuList);
 
-            Log.v("BIBHU1","menuList size="+adding_position);
-            Log.v("BIBHU1","originalMenuList size="+originalMenuList.size());
+            Log.v("BIBHU1", "menuList size=" + adding_position);
+            Log.v("BIBHU1", "originalMenuList size=" + originalMenuList.size());
 
-            sideMenuHandler = new SideMenuHandler(this,preferenceManager);
-            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+            sideMenuHandler = new SideMenuHandler(this, preferenceManager);
+            sideMenuHandler.staticSideMenu(languagePreference, menuList, originalMenuList, preferenceManager, adding_position);
 
 
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
@@ -1004,7 +1006,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 internetSpeed = "0";
             }
 
-            drawerFragment = (FragmentDrawer)getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
             drawerFragment.setData(menuList);
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
             drawerFragment.setDrawerListener(MainActivity.this);
@@ -1018,7 +1020,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
     }
-
 
 
     public void ShowLanguagePopup() {
@@ -1179,7 +1180,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel,String message) {
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel, String message) {
 
 
         if (progressBarHandler != null && progressBarHandler.isShowing()) {
@@ -1189,7 +1190,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
 //        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-
 
 
     }
@@ -1927,7 +1927,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mCastContext.removeCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().removeSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
-       // unregisterReceiver(SUCCESS);
+        // unregisterReceiver(SUCCESS);
         super.onPause();
     }
 
@@ -2166,7 +2166,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
     }
 
-    /**** chromecast*************/
+    /****
+     * chromecast
+     *************/
 
 
     public void removeFocusFromViews() {
@@ -2187,7 +2189,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         startActivity(searchIntent);
     }
 
-    public  void logout() {
+    public void logout() {
 
 
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);

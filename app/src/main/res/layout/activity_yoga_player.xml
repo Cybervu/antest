@@ -326,7 +326,7 @@
                         <ImageView
                             android:id="@+id/bannerImageView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/program_banner_height"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
@@ -537,7 +537,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="@dimen/program_left"
-                    android:layout_marginBottom="@dimen/program_left"
+                    android:layout_marginBottom="@dimen/marginleft10dp"
                     android:visibility="visible"
                     android:background="@color/line_divider_detailsPage"
                     android:padding="@dimen/marginRight20dp" />
@@ -726,6 +726,7 @@
                             android:indeterminate="false"
                             android:max="100"
                             android:progress="0"
+                            android:visibility="invisible"
                             android:progressDrawable="@drawable/style_circular"
                             android:secondaryProgress="100" />
 

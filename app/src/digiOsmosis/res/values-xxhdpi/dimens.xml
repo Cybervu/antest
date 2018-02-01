@@ -68,7 +68,7 @@
     <dimen name="itemtitle1_text_size">20sp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
-    <dimen name="btnmore_text_size">13sp</dimen>
+    <dimen name="btnmore_text_size">15sp</dimen>
     <dimen name="card_expiry_width">80dp</dimen>
     <dimen name="card_expiry_height">50dp</dimen>
     <dimen name="card_expiryyear_width">100dp</dimen>
@@ -188,4 +188,5 @@
     <dimen name="fitness_editText_width">260dp</dimen>
     <dimen name="programdetails_start_button_width">100dp</dimen>
     <dimen name="programdetails_start_button_text">16dp</dimen>
+    <dimen name="listing_marginLeft">10dp</dimen>
 </resources>

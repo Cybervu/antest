@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/listing_marginLeft"
+        android:padding="@dimen/listing_marginLeft"
         android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_alignLeft="@+id/imagesGridView"
         android:layout_marginTop="@dimen/program_left"
-        android:padding="@dimen/padding17dp"
         >
 
         <TextView

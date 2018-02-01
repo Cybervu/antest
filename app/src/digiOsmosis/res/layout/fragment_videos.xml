@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_marginLeft="10dp"
-
+        android:layout_marginLeft="@dimen/listing_marginLeft"
+        android:padding="@dimen/listing_marginLeft"
         android:paddingTop="@dimen/padding17dp"
         android:layout_marginTop="@dimen/program_left"
         >

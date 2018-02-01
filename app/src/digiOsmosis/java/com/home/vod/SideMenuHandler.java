@@ -234,14 +234,15 @@ public class SideMenuHandler {
 
             if (loggedInStr != null) {
 
-                    menuList.add(adding_position,new NavDrawerItem(profile_menu, profile_menuPermalink, true, "internal"));
-                    menuList.add(adding_position+1,new NavDrawerItem(purchase_menu, purchase_menuPermalink, true, "internal"));
-                    menuList.add(adding_position+2,new NavDrawerItem(mydownload_menu, mydownload_menuPermalink, true, "internal"));
-                if ((screenSize == 1 || screenSize == 2) && ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))){
+                menuList.add(adding_position,new NavDrawerItem(mydownload_menu, mydownload_menuPermalink, true, "internal"));
+                menuList.add(adding_position+1,new NavDrawerItem(purchase_menu, purchase_menuPermalink, true, "internal"));
+
+                menuList.add(adding_position+2,new NavDrawerItem(profile_menu, profile_menuPermalink, true, "internal"));
+                if ((screenSize == 1 || screenSize == 2) && ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))) {
                     menuList.add(adding_position + 3, new NavDrawerItem(favourite_menu, favourite_menuPermalink, true, "internal"));
 
                 }
-                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
+                menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
 
             }
 

@@ -55,7 +55,7 @@
     <dimen name="spinner_height">38dp</dimen>
     <dimen name="btnmore_width">90dp</dimen>
     <dimen name="btnmore_height">38dp</dimen>
-    <dimen name="btnmore_text_size">14sp</dimen>
+    <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="banerimg_height">210dp</dimen>
     <dimen name="vdiotitle1_text_size">19sp</dimen>
     <dimen name="homefrag_height">160dp</dimen>
@@ -185,7 +185,7 @@
     <dimen name="video280_height">95dp</dimen>
     <dimen name="listitemlayout_height">520dp</dimen>
     <dimen name="itemtitle_text_size">22sp</dimen>
-
+    <dimen name="listing_marginLeft">10dp</dimen>
     <dimen name="changepas_height">50dp</dimen>
     <dimen name="view_margin_top">20dp</dimen>
     <dimen name="registerimg_margin_top">20dp</dimen>

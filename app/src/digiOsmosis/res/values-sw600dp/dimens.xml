@@ -17,10 +17,11 @@
     <dimen name="view_videogrid_width">140dp</dimen>
     <dimen name="view_videogrid_height">200dp</dimen>
     ////details layout
+    <dimen name="listing_marginLeft">10dp</dimen>
     <dimen name="play_icon_height">80dp</dimen>
     <dimen name="filter_marginLeft">50dp</dimen>
     <dimen name="play_icon_width">80dp</dimen>
-    <dimen name="btnmore_text_size">16sp</dimen>
+    <dimen name="btnmore_text_size">18sp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
     <dimen name="email_text_size">18sp</dimen>

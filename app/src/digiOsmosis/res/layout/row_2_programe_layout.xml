@@ -16,10 +16,10 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="7dp"
+        app:cardElevation="9dp"
         android:layout_marginRight="@dimen/row_gap"
         android:layout_marginTop="@dimen/row_gap"
-
+        app:cardMaxElevation="10dp"
         >
 
         <RelativeLayout
@@ -60,7 +60,8 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="7dp"
+        app:cardElevation="9dp"
+        app:cardMaxElevation="10dp"
         android:layout_marginTop="@dimen/row_gap"
         >
 

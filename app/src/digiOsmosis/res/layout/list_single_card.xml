@@ -17,8 +17,8 @@
         android:padding="@dimen/card_padding"
         app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="7dp"
-
+        app:cardElevation="9dp"
+        app:cardMaxElevation="10dp"
         >
 
         <RelativeLayout

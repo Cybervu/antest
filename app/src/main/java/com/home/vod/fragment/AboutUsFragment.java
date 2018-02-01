@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,8 +96,15 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText(getArguments().getString("title"));
-//        categoryTitle.setText("SHILPA SHETTY KUNDRA");
+        String pageTitle = getArguments().getString("title");
+        if(pageTitle.equalsIgnoreCase("About Us")){
+            categoryTitle.setText("SHILPA SHETTY KUNDRA");
+        }else{
+            categoryTitle.setText(Html.fromHtml(getArguments().getString("title")));
+
+        }
+
+//
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();

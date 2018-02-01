@@ -10,7 +10,7 @@
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="studio_site">https://monetiser-digital.muvi.com/</string>
+    <string name="studio_site">https://theshilpashetty.muvi.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
     <string name="facebook_app_id">132601487469050</string>
     <string name="fb_login_protocol_scheme">fb132601487469050</string>
@@ -559,6 +559,18 @@
         <item>or</item>
 
     </string-array>
+
+
+
+
+    <string name="welcom_head_01">Spreadsheets on the go</string>
+    <string name="welcom_content_01">Get stuff done with or without an internet connection.</string>
+    <string name="welcom_head_02">Share and edit together</string>
+    <string name="welcom_content_02">Write on your own or invite more people to contribute.</string>
+    <string name="welcom_head_03">Automatically save to the web</string>
+    <string name="welcom_content_03">Never lose your progress, so you can keep working from any computer or device.</string>
+    <string name="welcom_head_04">Edit Excel spreadsheets</string>
+    <string name="welcom_content_04">Open, edit, and save Excel files - all within Sheets.</string>
 
 
 </resources>

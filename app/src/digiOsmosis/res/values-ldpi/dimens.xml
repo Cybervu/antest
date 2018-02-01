@@ -19,7 +19,7 @@
     <dimen name="filter_marginLeft">50dp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
-    <dimen name="btnmore_text_size">16sp</dimen>
+    <dimen name="btnmore_text_size">18sp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
@@ -27,6 +27,7 @@
     <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
+    <dimen name="listing_marginLeft">10dp</dimen>
     <dimen name="login_text_size">17sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
     <dimen name="submit_width_size">170dp</dimen>

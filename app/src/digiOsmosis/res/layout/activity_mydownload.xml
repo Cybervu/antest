@@ -41,9 +41,9 @@
         android:layout_below="@+id/toolbar"
 
         android:id="@+id/line_layout"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/listing_marginLeft"
         android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:layout_marginTop="@dimen/program_left"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />

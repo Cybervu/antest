@@ -119,6 +119,8 @@ public class FitnessAdapter extends ArrayAdapter<YogaItem> {
             holder.movieStory.setText(item.getStory());
             String imageId = item.getImage();
 
+            Log.v("SUUBHA","movie story == "+ item.getStory());
+
 
             if (imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 holder.videoImageview.setImageResource(R.drawable.logo);

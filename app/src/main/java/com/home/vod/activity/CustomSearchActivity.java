@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -125,6 +126,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
     ProgressBarHandler videoPDialog;
     public static ProgressBarHandler progressBarHandler;
     int prevPosition = 0;
+    boolean stopCallingSearch = true;
 
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
     int previousTotal = 0;
@@ -223,7 +225,6 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
     View header;
     private boolean isLoading = false;
-    private int lastVisibleItem, totalItemCount;
     LinearLayout titleLayout;
     TextView titleTextView;
 
@@ -315,6 +316,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
                     searchTextStr = theTextArea.getText().toString().trim();
                     getSearchData();
+                    Log.v("SUBHASEARCH","theTextArea.addTextChangedListener ==== ");
 
                     if(toast != null){
                         toast.cancel();
@@ -355,6 +357,12 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
             }
         });
 
+        theTextArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopCallingSearch = true;
+            }
+        });
         theTextArea.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -384,6 +392,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                             titleLayout.setVisibility(View.GONE);
 
                         } else {
+                            Log.v("SUBHASEARCH","theTextArea.setOnEditorActionListener ==== ");
                            getSearchData();
                         }
                     }
@@ -555,12 +564,17 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+              /*  if(!stopCallingSearch)
+                    return;*/
+
+
                 int daat = gridView.getLastVisiblePosition();
 
-                if((gridView.getLastVisiblePosition() == totalItemCount-1)  && (itemsInServer > totalItemCount) && !scrolling){
+                if((gridView.getLastVisiblePosition() == totalItemCount-1)  && (itemsInServer > totalItemCount) && !scrolling  && itemsInServer>limit){
                     scrolling = true;
                     offset += 1;
                     getSearchData();
+                    Log.v("SUBHASEARCH","onscroll ==== ");
                 }
 /*
                 if (scrolling == true && mIsScrollingUp == false) {
@@ -614,6 +628,9 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
         if (asynLoadVideoUrls!=null){
             asynLoadVideoUrls.cancel(true);
         }*/
+
+//        stopCallingSearch = false;
+
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -676,15 +693,21 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
         }
 
         if (status>0){
+
+            Log.v("SUBHASEARCH","status 0 inside");
             if (status==200){
+
+                Log.v("SUBHASEARCH","status 200 inside");
                 gridView.setVisibility(View.VISIBLE);
 
                 titleLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.GONE);
+                Log.v("SUBHASEARCH", "status contentListOutputArray inside dtydrs4d6ryg" + contentListOutputArray.size());
 
                 if (contentListOutputArray.size()> 0) {
 
+                    Log.v("SUBHASEARCH","status > 0 inside");
                     gridView.setVisibility(View.VISIBLE);
                     titleLayout.setVisibility(View.VISIBLE);
 
@@ -693,12 +716,12 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
 
                 for (int i=0;i<contentListOutputArray.size();i++) {
-
+                    Log.v("SUBHASEARCH", "status contentListOutputArray inside" + contentListOutputArray.size());
 
                     videoImageStr = contentListOutputArray.get(i).getPoster_url();
                     if (contentListOutputArray.get(i).getIs_episode().matches("1")) {
                         videoName = contentListOutputArray.get(i).getEpisode_title();
-                    }else{
+                    } else {
                         videoName = contentListOutputArray.get(i).getName();
 
                     }
@@ -709,14 +732,15 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
                     isConverted = contentListOutputArray.get(i).getIs_converted();
                     isPPV = contentListOutputArray.get(i).getIs_ppv();
                     isAPV = contentListOutputArray.get(i).getIs_advance();
-                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV,""));
-                }
+                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV, ""));
+
 
                     videoImageStrToHeight = videoImageStr;
 
 
                     AsynLOADUI loadui = new AsynLOADUI();
                     loadui.executeOnExecutor(threadPoolExecutor);
+                }
 
                 }else {
 
@@ -2204,7 +2228,7 @@ public class CustomSearchActivity extends AppCompatActivity implements SearchDat
 
 
         public void ShowToast(Context context, String info) {
-            toast = Toast.makeText(context, Html.fromHtml("<font color='#FF0000' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
+            toast = Toast.makeText(context, Html.fromHtml("<font color='#FFFFFF' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }

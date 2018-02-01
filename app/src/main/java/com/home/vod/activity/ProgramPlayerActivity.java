@@ -657,7 +657,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         });
                 dlgAlert.create().show();
 
-            } else if (status == 429 || status == 430) {
+            } else if (status == 429 ) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
                     Log.v("SUBHA", "Video PLayer Called 1");
@@ -1536,7 +1536,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         current_time = (TextView) findViewById(R.id.current_time);
         total_time = (TextView) findViewById(R.id.total_time);
         progressView = (ProgressBar) findViewById(R.id.progress_view);
-
+        progressView.setVisibility(View.INVISIBLE);
 
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -2564,6 +2564,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             public void onClick(View v) {
 
 
+
                 if (ContextCompat.checkSelfPermission(ProgramPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(ProgramPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(ProgramPlayerActivity.this,
@@ -2597,7 +2598,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
                             Log.v("SUBHA","download btn click ==== data called");
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressView.setVisibility(View.VISIBLE);
+                                }
+                            });
                             asynWithdrm = new AsynWithdrm();
                             asynWithdrm.executeOnExecutor(threadPoolExecutor);
                         } else {
@@ -2634,63 +2640,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         percentg.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this, R.style.MyAlertDialogStyle);
-                                            dlgAlert.setTitle(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
-                                            dlgAlert.setMessage(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
-                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
-                                            dlgAlert.setCancelable(false);
-                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
+                                            cancelDownLoad();
+                                        }
+                                    }
+        );
 
-                                                        }
-                                                    });
-                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
-                                            dlgAlert.setCancelable(false);
-                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
-                                                            downloading = false;
-                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
-
-                                                            if (audio != null) {
-
-
-                                                                String k = String.valueOf(audio.getDOWNLOADID());
-
-                                                                downloadManager.remove(audio.getDOWNLOADID());
-                                                                dbHelper.deleteRecord(audio);
-
-                                                                SQLiteDatabase DB = ProgramPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                                                String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO + " WHERE download_contnet_id = '" + enqueue + "'";
-                                                                DB.execSQL(query);
-
-                                                            }
-
-
-                                                            exoplayerdownloadhandler.post(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-
-
-                                                                    Progress.setProgress((int) 0);
-                                                                    //percentg.setText(0+"%");
-                                                                    percentg.setVisibility(View.GONE);
-                                                                    download.setVisibility(View.VISIBLE);
-
-
-                                                                }
-                                                            });
-
-                                                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ProgramPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    });
-
-                                            dlgAlert.create().show();
-
+        Progress.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            cancelDownLoad();
                                         }
                                     }
         );
@@ -2854,8 +2812,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         //stop the timer, if it's not already null
         if (timer != null) {
 
-            Log.v("SUBHA", "=======================================stoptimertask caled=================================");
-            Log.v("SUBHA","played_length === 3" );
+            Log.v("PROGRAMPLAYER", "=======================================stoptimertask caled=================================");
+            Log.v("PROGRAMPLAYER","played_length === 3" );
             timer.cancel();
             timer = null;
         }
@@ -3348,7 +3306,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             Log.v("Nihar", "" + totalsize);
                             if( isRepeated == true){
 
-                                Log.v("SUBHASS","isRepeated ===== "+isRepeated);
+                                Log.v("PROGRAMPLAYER","isRepeated ===== "+isRepeated);
+                                Log.v("PROGRAMPLAYER","isRepeated ===== "+contentPosition);
                                 stoptimertask();
                                 int tempPos = contentPosition;
                                 contentPosition = tempPos;
@@ -3428,7 +3387,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             asynLoadVideoUrls.execute();*/
 
                                 } else {
-                                    Log.v("ProgramPlayer", "completed");
+                                    Log.v("PROGRAMPLAYER", "completed");
                                     backCalled();
 
                                 }
@@ -3831,11 +3790,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("PROGRAM", "played_length============" + (playerPosition - player_start_time));
-                Log.v("PROGRAM", "log_temp_id============" + log_temp_id);
-                Log.v("PROGRAM", "resume_time============" + (playerPosition));
-                Log.v("PROGRAM", "log_id============" + videoLogId);
-                Log.v("PROGRAM","video_completed1"+video_completed);
+                Log.v("PROGRAMPLAYER", "played_length============" + (playerPosition - player_start_time));
+                Log.v("PROGRAMPLAYER", "log_temp_id============" + log_temp_id);
+                Log.v("PROGRAMPLAYER", "resume_time============" + (playerPosition));
+                Log.v("PROGRAMPLAYER", "log_id============" + videoLogId);
+                Log.v("PROGRAMPLAYER","video_completed1"+video_completed);
 
                 //===============End=============================//
 
@@ -5130,7 +5089,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 }
                 Log.d("sanji", playerModel.getStreamUniqueId());
 
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressView.setVisibility(View.VISIBLE);
+                    }
+                });
                 //ProgramPlayerActivity.this portion is changed later because of multiple download option.
 
                 if (List_Of_Resolution_Url.size() > 0) {
@@ -5374,6 +5338,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
                                 download.setVisibility(View.GONE);
+                                Progress.setVisibility(View.VISIBLE);
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
@@ -7146,7 +7111,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             stoptimertask();
             timer = null;
         }
-        Log.v("PROGRAM","video_completed1"+video_completed);
+        Log.v("PROGRAMPLAYER","video_completed1"+video_completed);
 
        // if (video_completed == false) {
 
@@ -7443,6 +7408,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             //percentg.setText(0+"%");
                             percentg.setVisibility(View.GONE);
                             download.setVisibility(View.VISIBLE);
+                            Progress.setVisibility(View.INVISIBLE);
                         }
                     },500);
                 }
@@ -7455,7 +7421,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     {
 
 
-        Log.v("Program","item clicked === ");
+        Log.v("PROGRAMPLAYER","item clicked === ");
 
         seekBar.setProgress(0);
         current_time.setText("00:00:00");
@@ -7536,9 +7502,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         mediaRouteButton.setVisibility(View.VISIBLE);
         back.setVisibility(View.VISIBLE);
         End_Timer();
-        Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
+        Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition + questions.size() );
 
         if (contentPosition <= questions.size() - 1) {
+
+            Log.v("PROGRAMPLAYER", totalsize + "NextPosition   429  :" + contentPosition + questions.size() );
         EpisodesListModel listModel = questions.get(contentPosition);
 //        durationTextView.setText(listModel.getEpisodeDuration());
         playerModel.setVideoDuration(listModel.getEpisodeDuration());
@@ -7670,5 +7638,66 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             return position;
         else
             return ++position;
+    }
+
+    public void cancelDownLoad(){
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setTitle(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
+        dlgAlert.setMessage(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        dlgAlert.setNegativeButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setNegativeButton(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        downloading = false;
+                        audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+
+                        if (audio != null) {
+
+
+                            String k = String.valueOf(audio.getDOWNLOADID());
+
+                            downloadManager.remove(audio.getDOWNLOADID());
+                            dbHelper.deleteRecord(audio);
+
+                            SQLiteDatabase DB = ProgramPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+                            String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO + " WHERE download_contnet_id = '" + enqueue + "'";
+                            DB.execSQL(query);
+
+                        }
+
+
+                        exoplayerdownloadhandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+
+                                Progress.setProgress((int) 0);
+                                //percentg.setText(0+"%");
+                                percentg.setVisibility(View.GONE);
+                                download.setVisibility(View.VISIBLE);
+                                Progress.setVisibility(View.INVISIBLE);
+
+
+                            }
+                        });
+
+                        Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ProgramPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+        dlgAlert.create().show();
+
     }
 }

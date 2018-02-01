@@ -1465,8 +1465,14 @@ public class FitnessFragment extends Fragment implements GetCategoryListAsynTask
                                 if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
                                     movieName = jsonChildNode.getString("name");
                                 }
+                                else{
+                                    movieName = "";
+                                }
                                 if ((jsonChildNode.has("story")) && jsonChildNode.getString("story").trim() != null && !jsonChildNode.getString("story").trim().isEmpty() && !jsonChildNode.getString("story").trim().equals("null") && !jsonChildNode.getString("story").trim().matches("")) {
                                     movieStory = jsonChildNode.getString("story");
+                                }
+                                else{
+                                    movieStory = "";
                                 }
                                 if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
                                     movieImageStr = jsonChildNode.getString("poster_url");
