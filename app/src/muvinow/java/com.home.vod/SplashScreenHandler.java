@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
@@ -47,5 +48,7 @@ public class SplashScreenHandler {
     }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){
+
+        featureHandler.setFeatureFlag(FeatureHandler.GOOGLE,"0");
     }
 }

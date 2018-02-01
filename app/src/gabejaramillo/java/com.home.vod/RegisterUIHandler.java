@@ -30,6 +30,8 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
+import com.home.vod.util.FeatureHandler;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,6 +73,7 @@ public class RegisterUIHandler {
     String fbUserId = "";
     String fbEmail = "";
     String fbName = "";
+    public  String last_name="";
 
 
     public RegisterUIHandler(Activity context){
@@ -89,7 +92,7 @@ public class RegisterUIHandler {
 
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
-        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
         }else {
             btnLogin.setVisibility(View.GONE);
@@ -125,7 +128,7 @@ public class RegisterUIHandler {
         boolean isValidPhone = Util.isValidPhone(regPhone);
         if (!regNameStr.equals("") && !regPhone.equals("")) {
             if (isValidPhone) {
-                ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
+                ((RegisterActivity) context).registerButtonClicked(regNameStr,last_name,regPhone);
             }
             else {
                 Util.showToast(context, languagePreference.getTextofLanguage(INVALID_PHONE_NUMBER,DEFAULT_INVALID_PHONE_NUMBER));

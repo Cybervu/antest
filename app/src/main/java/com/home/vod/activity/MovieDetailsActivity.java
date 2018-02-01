@@ -3337,6 +3337,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onViewContentRatingPostExecuteCompleted(ViewContentRatingOutputModel viewContentRatingOutputModel,
                                                         int status, String message) {
+
+        String loggedInStr = preferenceManager.getUseridFromPref();
+
+
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
@@ -3349,7 +3353,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (status == 200) {
 
-            String loggedInStr = preferenceManager.getUseridFromPref();
             Log.v("MUVI", "review data" + reviews);
             Log.v("MUVI", "rating data" + rating);
 
@@ -3397,6 +3400,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             /***favorite *****/
 
+        } else {
+
+        }
+        try {
             if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
 
                 Util.favorite_clicked = false;
@@ -3413,7 +3420,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 favorite_view.setImageResource(R.drawable.favorite_red);
             }
             /***favorite *****/
-        } else {
+        }catch (Exception e) {
 
         }
     }

@@ -90,4 +90,8 @@
     <color name="nav_text_line_color">#851d86</color>
     <color name="nav_header_line_color">#851d86</color>
     <color name="chromecast_color">#ffffff</color>
+
+    <!--added for subtitle color by anu-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
 </resources>

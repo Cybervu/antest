@@ -140,6 +140,10 @@
     <dimen name="toolbar_logo_width">108dp</dimen>
     <dimen name="toolbar_logo_height">58dp</dimen>
     <dimen name="plainrow_text_size">20sp</dimen>
+
+    <!--added for subtitle outline-->
+    <dimen name="subtitle_text_size">23sp</dimen>
+    <item name="stroke_width" format="float" type="dimen">0.5</item>
 </resources>
 
     <!--

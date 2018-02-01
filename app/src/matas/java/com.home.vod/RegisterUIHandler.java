@@ -66,10 +66,11 @@ public class RegisterUIHandler {
         }
 
     }
+
     public void setCountryList(PreferenceManager preferenceManager){
 
-
     }
+
     public void setTermsTextView(LanguagePreference languagePreference){
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
