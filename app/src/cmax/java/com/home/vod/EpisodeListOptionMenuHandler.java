@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
@@ -122,7 +123,7 @@ public class EpisodeListOptionMenuHandler {
             logout_menu.setVisible(true);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(false);
+                mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);
 

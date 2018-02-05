@@ -92,6 +92,7 @@
     <dimen name="contact_name_margin">22dp</dimen>
     <dimen name="itemTitle_widht">98dp</dimen>
     <dimen name="loginImageViewMarging_top">15dp</dimen>
+    <dimen name="facebook_image_margin_right">15dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>

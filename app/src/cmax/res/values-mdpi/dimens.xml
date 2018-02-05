@@ -2,6 +2,8 @@
     <!-- Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="castcrew_text">20sp</dimen>
+
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="txt">50sp</dimen>
@@ -18,6 +20,7 @@
     <dimen name="login_butn_width">100dp</dimen>
     <dimen name="login_butn_height">30dp</dimen>
     <dimen name="submit_text_size">13sp</dimen>
+    <dimen name="viewmore_text_size">10sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="registerbtn_height">35dp</dimen>
     <dimen name="submit_height_size">35sp</dimen>
@@ -26,8 +29,11 @@
     <dimen name="login_padding">0dp</dimen>
     <dimen name="forgotlayout_margin">0dp</dimen>
     <dimen name="registerlayout_padding">0dp</dimen>
-    <dimen name="movieimg_width">85dp</dimen>
-    <dimen name="movieimg_height">120dp</dimen>
+
+    <dimen name="movieimg_width">115dp</dimen>
+    <dimen name="movieimg_height">135dp</dimen>
+    <dimen name="view_margin_top">10dp</dimen>
+
     <dimen name="video280_width">150dp</dimen>
     <dimen name="video280_height">80dp</dimen>
     <dimen name="testview2_text_size">12sp</dimen>
@@ -42,7 +48,7 @@
     <dimen name="submitcontact_width">110dp</dimen>
     <dimen name="fragmentimgview_width">120dp</dimen>
     <dimen name="fragmentimgview_height">120dp</dimen>
-    <dimen name="view_margin_top">10dp</dimen>
+
     <dimen name="registerimg_margin_top">300dp</dimen>
     <dimen name="layout_padding_left">20dp</dimen>
     <dimen name="layout_padding_right">20dp</dimen>
@@ -85,6 +91,8 @@
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">35dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
 </resources>

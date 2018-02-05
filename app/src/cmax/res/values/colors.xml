@@ -97,7 +97,7 @@
 
 
 <resources>
-
+    <color name="seasonBackgroundColor">#e2e1e1</color>
     <color name="appBackgroundColor">#000</color>
     <color name="textColor">#fff</color>
     <color name="loginTextViewColor">#fff</color>
@@ -127,7 +127,7 @@
     <color name="languagePopupColor">#000000</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
-    <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_drawer_lineColor">#fff</color>
     <color name="nav_drawer_text_Color">#525252</color>
     <color name="button_background">#f73b4c</color>
     <color name="cancel_button_background">#DDD</color>
@@ -170,4 +170,8 @@
     <color name="purchaseBackground">#414141</color>
     <color name="purchaseTextColor">#000</color>
     <color name="chromecast_color">#ffffff</color>
+    <color name="borderColor">#3084E3</color>
+    <color name="casttextColor">#3084E3</color>
+    <color name="nav_header_line_color">#000</color>
+    <color name="device_name_color">#f73b4c</color>
 </resources>
