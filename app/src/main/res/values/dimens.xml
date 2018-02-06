@@ -378,6 +378,6 @@
 
     <!--new  dimen optimization for menu-->
     <dimen name="slider_menu_width">300dp</dimen>
-
+    <dimen name="facebook_padding">6dp</dimen>
 
 </resources>

@@ -162,4 +162,5 @@
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#32c5d2</color>
  <color name="chromecast_color">#ffffff</color>
+ <color name="google_signup_color">#fcfcfc</color>
 </resources>

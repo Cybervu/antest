@@ -33,6 +33,7 @@
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/content_list_vertical_overlay"
+
             />
 
         <TextView
@@ -51,7 +52,9 @@
             android:gravity="left"
             android:maxLines="1"
             android:padding="@dimen/loginImageViewMarging_top_padding"
+            android:layout_marginLeft="@dimen/loginImageViewMarging_top_padding"
             android:text=""
+
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="normal" />

@@ -1614,10 +1614,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         // This is applicable for NON-DRM contnet.
 
                         List_Of_Resolution_Url.clear();
+                        List_Of_Resolution_Format.clear();
                         List_Of_FileSize.clear();
-                        if (List_Of_Resolution_Url.size() > 0) {
-                            for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
+                        if (ResolutionUrl.size() > 0) {
+                            for (int i = 1; i < ResolutionUrl.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
                             }
 
                             pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
@@ -3026,10 +3028,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         // This is applicable for NON-DRM contnet.
 
                         List_Of_Resolution_Url.clear();
+                        List_Of_Resolution_Format.clear();
                         List_Of_FileSize.clear();
-                        if (List_Of_Resolution_Url.size() > 0) {
-                            for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
+                        if (ResolutionUrl.size() > 0) {
+                            for (int i = 1; i < ResolutionUrl.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
                             }
 
                             pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
@@ -5046,6 +5050,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpResponse execute = client.execute(httpGet);
                 float size = calculateDownloadFileSize(execute);
                 List_Of_FileSize.add("(" + size + " MB)");
+
+
 
 
             } catch (Exception e) {

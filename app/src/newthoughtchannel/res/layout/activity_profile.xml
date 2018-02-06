@@ -85,7 +85,33 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
+                    <!--<EditText
+                        android:id="@+id/editProfileNameEditText_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="10dp"
+                        android:padding="17dp"
+                        android:hint="First Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
+                        android:textSize="16dp" />
 
+                    <EditText
+                        android:id="@+id/editProfileNameEditText_last"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="10dp"
+                        android:padding="17dp"
+                        android:hint="Last Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
+                        android:textSize="16dp" />-->
                     <EditText
                         android:id="@+id/editProfileNameEditText"
                         android:layout_width="match_parent"
@@ -98,7 +124,8 @@
                         android:padding="@dimen/login_padding_bottom"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="@dimen/edit_text_size" />
+                        android:textSize="@dimen/edit_text_size"
+                        android:visibility="visible"/>
 
                     <EditText
                         android:id="@+id/emailAddressEditText"
