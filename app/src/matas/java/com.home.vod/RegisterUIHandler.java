@@ -64,7 +64,6 @@ public class RegisterUIHandler {
         }else {
             btnLogin.setVisibility(View.GONE);
         }
-
     }
 
     public void setCountryList(PreferenceManager preferenceManager){
