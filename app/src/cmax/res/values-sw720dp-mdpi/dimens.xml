@@ -93,7 +93,7 @@
     <dimen name="purchasemonth_text_size">18sp</dimen>
 
     <dimen name="movieimg_width">160dp</dimen>
-    <dimen name="movieimg_height">205dp</dimen>
+    <dimen name="movieimg_height">210dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
 
     <dimen name="video280_width">185dp</dimen>

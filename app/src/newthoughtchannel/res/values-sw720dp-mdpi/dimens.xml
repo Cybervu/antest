@@ -93,7 +93,7 @@
     <dimen name="purchasemonth_text_size">18sp</dimen>
 
     <dimen name="movieimg_width">160dp</dimen>
-    <dimen name="movieimg_height">205dp</dimen>
+    <dimen name="movieimg_height">210dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
 
     <dimen name="video280_width">185dp</dimen>
@@ -148,6 +148,6 @@
     <dimen name="movie_videotitle_size">19sp</dimen>
     <dimen name="submitcontact_width">140dp</dimen>
     <dimen name="submitcontact_height">50dp</dimen>
-    <dimen name="gridbottom8dp">6dp</dimen>
+    <dimen name="gridbottom8dp">0dp</dimen>
     <dimen name="facebook_padding">0dp</dimen>
 </resources>
