@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.home.vod.activity.SplashScreen;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
@@ -31,7 +32,6 @@ public class SplashScreenHandler {
             try {
                handlePhoneSplashUI(imageResize);
             } catch (Exception e) {
-
             }
         }
 
@@ -44,7 +44,6 @@ public void handlePhoneSplashUI(ImageView imageResize){
     float dpHeight = display.getHeight();
     float dpWidth = display.getWidth();
     imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash1, dpWidth, dpHeight));
-
 }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){

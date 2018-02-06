@@ -174,4 +174,8 @@
     <color name="casttextColor">#3084E3</color>
     <color name="nav_header_line_color">#000</color>
     <color name="device_name_color">#f73b4c</color>
+
+    <!--added for subtitle color by anu-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
 </resources>

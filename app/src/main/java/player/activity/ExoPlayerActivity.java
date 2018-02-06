@@ -874,9 +874,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("MUVI1", "subtitle_image button visible called");
-
-
                 try {
+                    if(SubTitleName.size()>0)
                     Util.DefaultSubtitle = SubTitleName.get(0);
                 }catch (Exception e){}
 

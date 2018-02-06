@@ -13,4 +13,9 @@
         <attr name="android:minWidth" />
         <attr name="android:minHeight" />
     </declare-styleable>
+
+    <declare-styleable name="StrokedTextAttrs">
+        <attr name="textStrokeColor" format="color"/>
+        <attr name="textStrokeWidth" format="float"/>
+    </declare-styleable>
 </resources>

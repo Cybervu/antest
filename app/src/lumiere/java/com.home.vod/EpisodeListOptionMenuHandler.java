@@ -28,6 +28,7 @@ import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.SearchActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -65,7 +66,7 @@ import static player.utils.Util.IS_OFFLINE;
  * Created by Abhishek on 9/25/2017.
  */
 
-public class EpisodeListOptionMenuHandler{
+public class EpisodeListOptionMenuHandler {
 
     Activity activity;
 
@@ -75,7 +76,7 @@ public class EpisodeListOptionMenuHandler{
     }
 
 
-    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference,FeatureHandler featureHandler) {
+    public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference, FeatureHandler featureHandler) {
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
@@ -83,8 +84,7 @@ public class EpisodeListOptionMenuHandler{
         int isLogin = preferenceManager.getLoginFeatureFromPref();
 
         MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
-                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem,menu_language,action_searchmenu
-                ,submenu;
+                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language, action_searchmenu, submenu;
         filter_menu = menu.findItem(R.id.action_filter);
         filter_menu.setVisible(false);
         login_menu = menu.findItem(R.id.action_login);
@@ -93,8 +93,8 @@ public class EpisodeListOptionMenuHandler{
         purchage_menu = menu.findItem(R.id.action_purchage);
         logout_menu = menu.findItem(R.id.action_logout);
         register_menu = menu.findItem(R.id.action_register);
-        action_searchmenu=menu.findItem(R.id.action_search);
-        submenu=menu.findItem(R.id.submenu);
+        action_searchmenu = menu.findItem(R.id.action_search);
+        submenu = menu.findItem(R.id.submenu);
 
         /***************chromecast**********************/
 
@@ -118,14 +118,11 @@ public class EpisodeListOptionMenuHandler{
             mediaRouteMenuItem.setVisible(false);
 
 
-
         if (loggedInStr != null) {
 
             login_menu.setVisible(false);
             register_menu.setVisible(false);
             profile_menu.setVisible(true);
-
-
 
 
             logout_menu.setVisible(true);
@@ -151,5 +148,4 @@ public class EpisodeListOptionMenuHandler{
 
         }
     }
-
-
+}

@@ -24,3 +24,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn com.squareup.okhttp.**
+-dontwarn com.spotxchange.v3.**
+-dontwarn com.moat.analytics.**
+-optimizations   code/simplification/arithmetic,!code/simplification/cast,!field/*,!method/inlining/*
+-optimizationpasses 5
+-allowaccessmodification
+
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose

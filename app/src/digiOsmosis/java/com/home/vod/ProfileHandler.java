@@ -72,7 +72,8 @@ public class ProfileHandler {
 
     public void setNameTxt(String nameString){
         editProfileNameEditText.setText(nameString.trim());
-
+        int textLength = editProfileNameEditText.getText().length();
+        editProfileNameEditText.setSelection(textLength, textLength);
     }
 
 }

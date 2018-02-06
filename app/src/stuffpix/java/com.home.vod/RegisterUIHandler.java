@@ -28,6 +28,7 @@ import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 
@@ -80,6 +81,14 @@ public class RegisterUIHandler {
         editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
+
+        FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
+            btnLogin.setVisibility(View.VISIBLE);
+        }else {
+            btnLogin.setVisibility(View.GONE);
+        }
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -87,20 +96,20 @@ public class RegisterUIHandler {
     }
     public void setTermsTextView(LanguagePreference languagePreference){
 
-            termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
-            termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
-            FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
-            editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+        termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+        termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
-            termsTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://prod.stuffpix.co.nz/page/terms-privacy-policy"));
-                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    context.startActivity(browserIntent);
-                }
-            });
-        }
+        termsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://prod.stuffpix.co.nz/page/terms-privacy-policy"));
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                context.startActivity(browserIntent);
+            }
+        });
+    }
 
 
     public void getRegisterName(){

@@ -98,7 +98,7 @@ public class FeatureHandler {
 
 
             /**
-             * Feature status whichc are comning form CMS .
+             * Feature status which are coming from CMS .
              */
 
             JSONObject myJson1 = new JSONObject(response);

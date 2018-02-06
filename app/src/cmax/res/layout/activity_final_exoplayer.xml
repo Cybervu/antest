@@ -114,8 +114,24 @@
                             android:textSize="@dimen/current_time_textsize"
                             android:visibility="gone" />
 
+                        <com.home.vod.util.StrokedTextView
+                            android:id="@+id/offLine_subtitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:layout_marginBottom="@dimen/offline_margin_bottom"
+                            android:ellipsize="middle"
+                            android:gravity="center"
+                            android:text=""
+                            android:textSize="@dimen/subtitle_text_size"
+                            android:textColor="@color/subtitle_solid_color"
+                            strokeAttrs:textStrokeColor="@color/subtitle_outline_color"
+                            strokeAttrs:textStrokeWidth="@dimen/stroke_width"
+                        />
 
-                        <TextView
+                       <!-- <TextView
                             android:id="@+id/offLine_subtitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -193,8 +209,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|right"
-                        android:orientation="horizontal"
-                        android:id="@+id/cc_layout">
+                        android:padding="10dp"
+                        android:id="@+id/cc_layout"
+                        android:orientation="horizontal">
 
 
                         <ImageView

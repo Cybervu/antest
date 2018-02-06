@@ -84,4 +84,8 @@
     <color name="cast_crew_titleCololr">#b70000</color>
     <color name="drawerHeaderViewColor">#000</color>
     <color name="chromecast_color">#ffffff</color>
+
+    <!--added for subtitle color by anu-->
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
 </resources>

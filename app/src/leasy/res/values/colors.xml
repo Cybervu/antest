@@ -86,4 +86,8 @@
  <color name="search_hint_color">#000</color>
  <color name="search_text_color">#000</color>
  <color name="chromecast_color">#000</color>
+
+ <!--added for subtitle color by anu-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#000000</color>
 </resources>

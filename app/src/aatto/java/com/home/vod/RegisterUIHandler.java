@@ -30,6 +30,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
+import com.home.vod.util.FeatureHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +66,7 @@ public class RegisterUIHandler {
     String fbName = "";
     private Button registerButton;
     private LanguagePreference languagePreference;
+    public  String last_name="";
 
     public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
 
@@ -81,7 +83,7 @@ public class RegisterUIHandler {
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
-        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK).equals("1")) {
+        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
         }else {
             btnLogin.setVisibility(View.GONE);
