@@ -118,6 +118,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private void _init() {
 
 
+        // Last modification made by Anuradha Prusty.
 
         Util.getDPI(this);
         Util.printMD5Key(this);

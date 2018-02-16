@@ -139,8 +139,8 @@
                     android:layout_alignLeft="@+id/bannerImageView"
                     android:layout_alignRight="@+id/bannerImageView"
                     android:layout_alignStart="@+id/bannerImageView"
+                    android:layout_marginBottom="@dimen/ppv_margin"
                     android:gravity="right"
-                    android:layout_marginBottom="@dimen/name_user_margin_bottom"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/Login_drawing_padding"
                     android:paddingLeft="@dimen/Login_drawing_padding"
@@ -149,8 +149,8 @@
 
                     <Button
                         android:id="@+id/preOrderButton"
-                        android:layout_width="@dimen/viewmore_btn_width"
-                        android:layout_height="@dimen/viewmore_btn_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/pre_order_button_margin"
                         android:layout_toLeftOf="@+id/viewTrailerButton"
                         android:background="@drawable/preorder_button"
@@ -164,15 +164,15 @@
 
                     <Button
                         android:id="@+id/viewTrailerButton"
-                        android:layout_width="@dimen/viewmore_btn_width"
-                        android:layout_height="@dimen/viewmore_btn_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/view_more_button_background"
                         android:padding="@dimen/payment_spinner_padding"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/viewmore_text_size"
+                        android:textSize="@dimen/trailerbtn_text_size"
                         android:visibility="gone"
 
                         />
@@ -254,7 +254,7 @@
                     android:maxLines="1"
                     android:text=""
                     android:textColor="@color/movieTitleColor"
-                    android:textSize="@dimen/movie_videotitle_size"
+                    android:textSize="@dimen/preorderbtn_text_size"
                     android:visibility="gone" />
 
                 <TextView
@@ -267,7 +267,8 @@
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:paddingRight="@dimen/videoGenreTextView_padding"
                     android:text=""
-                    android:textColor="@color/movieTitleColor"/>
+                    android:textColor="@color/movieTitleColor"
+                    android:textSize="@dimen/preorderbtn_text_size" />
 
             </RelativeLayout>
 
@@ -288,7 +289,7 @@
                     android:layout_marginBottom="@dimen/name_user_margin_bottom"
                     android:layout_marginLeft="@dimen/ppv_margin"
                     android:layout_marginRight="@dimen/ppv_margin"
-                    >
+                    android:layout_marginTop="@dimen/compress_expand_margin">
 
                     <TextView
                         android:id="@+id/videoStoryTextView"

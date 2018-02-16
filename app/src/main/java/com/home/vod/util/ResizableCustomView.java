@@ -25,7 +25,6 @@ public class ResizableCustomView {
     public static Context mcontext;
     public static boolean isViewMore = false;
 
-
     public static void doResizeTextView(Context context, final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
         mcontext = context;
 
@@ -64,16 +63,9 @@ public class ResizableCustomView {
                     if (maxLine > 0 && tv.getLineCount() >= maxLine) {
 
                         LogUtil.showLog("sanjay:--------","story data maxline "+tv.getLineCount());
-                        LogUtil.showLog("BKS","expandtext="+expandText.length());
 
                         int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
-
-                        String text = null;
-                        try {
-                            text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                        } catch (StringIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                         tv.setText(text);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         tv.setText(

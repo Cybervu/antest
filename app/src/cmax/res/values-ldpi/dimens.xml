@@ -1,7 +1,7 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-
-
+    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="txt">50sp</dimen>
@@ -16,7 +16,6 @@
 
     <dimen name="castcrew_text">18sp</dimen>
     <dimen name="filter_marginLeft">50dp</dimen>
-    <dimen name="viewmore_text_size">12sp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="btnmore_text_size">16sp</dimen>
@@ -208,10 +207,9 @@
     <dimen name="review_edittext_size">16sp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
     <dimen name="review_btn_height">38dp</dimen>
-    <dimen name="viewmore_btn_width">90dp</dimen>
-    <dimen name="viewmore_btn_height">35dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
+
 
 </resources>

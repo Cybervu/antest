@@ -20,7 +20,7 @@
         android:textSize="@dimen/review_text_size"
         android:textColor="@color/pageTitleColor"
         android:layout_marginTop="@dimen/ppv_margin"
-        android:text="@string/addReview"/>
+        android:text="Click here"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

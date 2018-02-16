@@ -41,7 +41,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textColor="@color/casttextColor"
+                android:textColor="@color/videotextColor"
                 android:textSize="@dimen/cast_name_text" />
 
             <TextView

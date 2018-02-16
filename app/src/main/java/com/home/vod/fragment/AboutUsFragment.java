@@ -34,13 +34,10 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
-import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
@@ -251,7 +248,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
             webView.getSettings().setJavaScriptEnabled(true);
         }else {
 
-            noInternetTextView.setText(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+            noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
             noInternet.setVisibility(View.VISIBLE);
         }
     }

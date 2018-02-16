@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/gridbottom8dp">
+        android:padding="@dimen/videoCensorRatingTextView_padding">
 
         <ImageView
             android:id="@+id/movieImageView"

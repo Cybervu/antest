@@ -13,12 +13,10 @@ import com.home.vod.util.FeatureHandler;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FeatureHandler;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
@@ -26,7 +24,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
@@ -102,7 +99,7 @@ public class EpisodeListOptionMenuHandler {
             mediaRouteMenuItem.setVisible(false);
 
         if (preferenceManager.getLanguageListFromPref().equals("1"))
-            menu_language.setVisible(true);
+            menu_language.setVisible(false);
         else
             menu_language.setVisible(true);
 

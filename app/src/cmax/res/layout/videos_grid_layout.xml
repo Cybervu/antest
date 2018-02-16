@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingRight="@dimen/videogridRelativelayoutMarginRight"
-        android:layout_marginLeft="@dimen/view_margin_top">
+        >
 
         <ImageView
             android:id="@+id/movieImageView"
@@ -33,6 +32,7 @@
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/content_list_vertical_overlay"
+
             />
 
         <TextView

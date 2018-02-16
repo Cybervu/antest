@@ -3,7 +3,6 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:background="@color/appBackgroundColor"
     android:orientation="vertical">
 
@@ -27,7 +26,6 @@
             style="@style/AndroidImageSlider_Corner_Oval_Orange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/payment_relative_margin" />
         <!--  <com.daimajia.slider.library.Indicators.PagerIndicator
@@ -59,31 +57,34 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Sample title"
             android:textAllCaps="true"
             android:textColor="@color/videotextColor"
             android:textSize="@dimen/itemtitle_text_size"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:maxLines="1"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            />
+            android:layout_alignParentStart="true" />
 
 
         <Button
             android:id="@+id/btnMore"
-            android:layout_width="@dimen/viewmore_btn_width"
-            android:layout_height="@dimen/viewmore_btn_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/view_more_button_background"
             android:minHeight="@dimen/btnMore_min_height"
+            android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
             android:text="vfewgafeqfgqeg"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="@dimen/viewmore_text_size" />
+            android:textSize="@dimen/btnmore_text_size" />
 
 
     </RelativeLayout>

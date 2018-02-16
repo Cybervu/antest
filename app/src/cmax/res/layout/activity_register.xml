@@ -151,21 +151,21 @@
             <LinearLayout
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/registerbtn_height"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/registerButton"
                 android:layout_marginTop="@dimen/login_btn_margin_top"
                 android:background="@drawable/fbbg"
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:padding="@dimen/facebook_padding">
+                android:padding="@dimen/payment_spinner_padding">
 
                 <ImageView
                     android:id="@+id/fbIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/facebook_image_margin_right"
+                    android:layout_marginRight="@dimen/loginImageViewMarging_top"
                     android:src="@drawable/fb_icon" />
 
                 <TextView

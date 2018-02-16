@@ -15,7 +15,6 @@ import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -23,7 +22,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
@@ -123,7 +121,7 @@ public class EpisodeListOptionMenuHandler {
             logout_menu.setVisible(true);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
 

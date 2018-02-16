@@ -191,7 +191,6 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
     @Override
     protected void onPostExecute(Void result) {
         listener.onGetValidateUserPostExecuteCompleted(validateUserOutput, status, message);
-
     }
 
 }

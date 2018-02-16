@@ -76,6 +76,7 @@
         android:layout_marginRight="@dimen/marginright5dp"
         >
 
+
         <TextView
             android:id="@+id/itemTitle"
             android:layout_width="wrap_content"

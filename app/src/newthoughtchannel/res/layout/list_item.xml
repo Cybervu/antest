@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/sliderRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/slider_height"
         android:background="@color/appBackgroundColor">
 
 
@@ -67,8 +67,7 @@
             android:textSize="@dimen/itemtitle_text_size"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            />
+            android:layout_alignParentStart="true" />
 
 
         <Button
@@ -79,6 +78,7 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/view_more_button_background"
             android:minHeight="@dimen/btnMore_min_height"
+            android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
             android:text="vfewgafeqfgqeg"
             android:textAllCaps="false"

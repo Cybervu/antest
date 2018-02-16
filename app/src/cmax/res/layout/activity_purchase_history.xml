@@ -38,7 +38,7 @@
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/noInternetColor"
         android:visibility="gone"
         android:padding="@dimen/manage_device_padding">
 
@@ -62,10 +62,12 @@
             android:background="@color/button_background"
             android:stateListAnimator="@null"
             android:padding="@dimen/manage_device_padding"
+            android:textAllCaps="false"
             android:text="Try again !"
             android:textColor="@color/buttonTextColor"
             android:textSize="@dimen/tryagainbtn_text_size" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/noData"
         android:layout_width="match_parent"
@@ -89,6 +91,5 @@
 
 
     </RelativeLayout>
-
 
 </LinearLayout>

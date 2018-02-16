@@ -92,7 +92,6 @@
     <dimen name="contact_name_margin">22dp</dimen>
     <dimen name="itemTitle_widht">98dp</dimen>
     <dimen name="loginImageViewMarging_top">15dp</dimen>
-    <dimen name="facebook_image_margin_right">15dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
@@ -342,7 +341,6 @@
     <dimen name="padding15dp">15dp</dimen>
     <dimen name="marginright5dp">5dp</dimen>
     <dimen name="margintop8dp">8dp</dimen>
-    <dimen name="gridbottom8dp">8dp</dimen>
     <dimen name="marginright20dp">20dp</dimen>
     <dimen name="marginright15dp">15dp</dimen>
     <dimen name="marginright10dp">10dp</dimen>
@@ -378,7 +376,7 @@
 
     <!--new  dimen optimization for menu-->
     <dimen name="slider_menu_width">300dp</dimen>
-    <dimen name="facebook_padding">6dp</dimen>
+
 
     <dimen name="censor_rating_marginleft">9dp</dimen>
 

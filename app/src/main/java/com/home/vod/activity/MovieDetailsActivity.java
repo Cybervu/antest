@@ -3215,6 +3215,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playButton.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
+            } else if (contentDetailsOutput.getIsConverted() == 0) {
+                playButton.setVisibility(View.INVISIBLE);
+                preorderButton.setVisibility(View.GONE);
+
             }
 
 
@@ -3319,18 +3323,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             GetReviewDetails();
 
 
-        }else if (status==414){
-            noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
-
-            story_layout.setVisibility(View.GONE);
-            bannerImageRelativeLayout.setVisibility(View.GONE);
-            iconImageRelativeLayout.setVisibility(View.GONE);
-            return;
-        }
-
-        else {
+        } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.bringToFront();
             noDataLayout.setVisibility(View.VISIBLE);
