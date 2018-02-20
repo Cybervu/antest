@@ -498,7 +498,13 @@ public class FitnessActivity extends AppCompatActivity implements GetCategoryLis
         clearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchEdittext.setText("");
+                if(searchEdittext.getText().toString().equalsIgnoreCase("")){
+                    searchEdittext.setVisibility(View.GONE);
+                    clearText.setVisibility(View.GONE);
+                }else{
+                    searchEdittext.setText("");
+                }
+
             }
         });
 
@@ -603,12 +609,19 @@ public class FitnessActivity extends AppCompatActivity implements GetCategoryLis
 
                     Log.v("Muvi1", "on scroll data info = "+itemData.get(firstVisibleItem).getTitle());
 
-                    String title = itemData.get(firstVisibleItem).getTitle().trim();
+                    String title = "";
+                    if(listView.getLastVisiblePosition() == itemData.size()-1){
+                        title = itemData.get(itemData.size()-1).getTitle().trim();
+                    }else{
+                        title = itemData.get(firstVisibleItem).getTitle().trim();
+                    }
+
                     title = (title.replaceAll("[0-9]","")).trim();
                     String INDEX = title.substring(0,1);
 
                     Log.v("Muvi1", "show Index = "+INDEX);
                     index.setText(INDEX.toUpperCase());
+
 
 
                     if(!index_clicked){

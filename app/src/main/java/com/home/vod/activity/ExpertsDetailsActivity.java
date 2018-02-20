@@ -193,7 +193,7 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
     String seek_status = "";
     GetValidateUserAsynTask asynValidateUserDetails;
     String programType = "";
-    ImageView bannerImageView, playButton;
+    ImageView bannerImageView, playButton,twitter,facebook,youtube,instagram;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     String movieUniqueId = "";
@@ -240,7 +240,7 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
     Player playerModel;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
-    String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr;
+    String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr,facebook_link,twitter_link,instagram_link,youtube_link;
     boolean castStr = false;
     int isFavorite;
 
@@ -1380,6 +1380,10 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ExpertsDetailsActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
+        youtube = (ImageView) findViewById(R.id.youtube);
+        instagram = (ImageView) findViewById(R.id.instagram);
+        facebook = (ImageView) findViewById(R.id.facebook);
+        twitter = (ImageView) findViewById(R.id.twitter);
         playButton.setVisibility(View.GONE);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
@@ -1389,7 +1393,10 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
         categoryTitle1 = (TextView) findViewById(R.id.categoryTitle1);
         line_layout = (LinearLayout) findViewById(R.id.line_layout);
         PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
-
+        instagram.setVisibility(View.GONE);
+        facebook.setVisibility(View.GONE);
+        youtube.setVisibility(View.GONE);
+        twitter.setVisibility(View.GONE);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
@@ -1731,7 +1738,10 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
                     }
 
 
-                    else {
+                    else
+                    {
+
+                        Log.v("SUBHA","movieTrailerUrlStr ========== "+ movieTrailerUrlStr);
                         emVideoView.setVideoURI(Uri.parse(movieTrailerUrlStr));
                     }
 
@@ -2023,6 +2033,10 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
 
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
             benefits = contentDetailsOutput.getBenefit();
+            facebook_link = contentDetailsOutput.getFacebook();
+            twitter_link = contentDetailsOutput.getTwitter();
+            instagram_link = contentDetailsOutput.getInstagram();
+            youtube_link = contentDetailsOutput.getYoutube();
             season = contentDetailsOutput.getSeason();
             movieDetailsStr = contentDetailsOutput.getStory();
             _permalink = contentDetailsOutput.getPermalink();
@@ -2047,6 +2061,57 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
 
 
 
+
+
+            if(facebook_link != null && !facebook_link.matches("")){
+                facebook.setVisibility(View.VISIBLE);
+                facebook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebook_link));
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(browserIntent);
+                    }
+                });
+            }
+
+            if(twitter_link != null && !twitter_link.matches("")){
+                twitter.setVisibility(View.VISIBLE);
+                twitter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(twitter_link));
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(browserIntent);
+                    }
+                });
+            }
+
+
+            if(instagram_link != null && !instagram_link.matches("")){
+                instagram.setVisibility(View.VISIBLE);
+                instagram.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(instagram_link));
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(browserIntent);
+                    }
+                });
+            }
+
+            if(youtube_link != null && !youtube_link.matches("")) {
+                youtube.setVisibility(View.VISIBLE);
+                youtube.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_link));
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(browserIntent);
+                    }
+                });
+
+            }
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 categoryTitle.setVisibility(View.GONE);
                 categoryTitle1.setVisibility(View.GONE);
@@ -2062,8 +2127,8 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
                     categoryTitle.setVisibility(View.VISIBLE);
                     categoryTitle1.setVisibility(View.VISIBLE);
 
-                    categoryTitle.setText(Data[0].toString() + " - ");
-                    categoryTitle1.setText( Data[1].toString());
+                    categoryTitle.setText(Data[0].toString());
+                    categoryTitle1.setText(" - "+ Data[1].toString());
                     colortitle.setVisibility(View.VISIBLE);
 
                 } else {
@@ -2077,7 +2142,7 @@ public class ExpertsDetailsActivity extends AppCompatActivity implements SensorO
 
                 line_layout.setVisibility(View.VISIBLE);
 
-                colortitle.setVisibility(View.GONE);
+//                colortitle.setVisibility(View.GONE);
             }
 
 

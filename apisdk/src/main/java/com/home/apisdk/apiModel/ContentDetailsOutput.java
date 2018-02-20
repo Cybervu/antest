@@ -49,6 +49,43 @@ public class ContentDetailsOutput {
     }
 
     String Benefit="";
+    String facebook="";
+    String instagram="";
+    String twitter="";
+
+    public String getYoutube() {
+        return youtube;
+    }
+
+    public void setYoutube(String youtube) {
+        this.youtube = youtube;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
+
+    String youtube="";
     String muviUniqId = "";
     String censorRating = "";
     String releaseDate = "";

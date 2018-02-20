@@ -449,7 +449,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
+                        android:layout_gravity="center_vertical|center"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -491,7 +491,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_gravity="center_vertical|right"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -524,6 +524,9 @@
 
 
                 </LinearLayout>
+
+
+
 
 
                 <TextView

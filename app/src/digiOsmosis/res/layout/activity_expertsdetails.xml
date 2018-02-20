@@ -367,7 +367,8 @@
                         android:layout_centerVertical="true"
                         android:orientation="vertical"
                         android:layout_marginTop="30dp"
-
+                        android:paddingLeft="@dimen/marginRight20dp"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
                         android:id="@+id/line_layout"
                         >
 
@@ -376,7 +377,7 @@
                             android:layout_height="@dimen/sideTitle_line_width"
                             android:id="@+id/colortitle"
                             android:background="@color/colorPrimary"
-
+                            android:paddingLeft="@dimen/marginRight20dp"
                             android:layout_marginLeft="@dimen/marginleft10dp"
                             />
 
@@ -427,14 +428,53 @@
                         android:id="@+id/line_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/marginright5dp"
-                        android:layout_alignLeft="@+id/line_layout"
-                        android:layout_alignRight="@+id/line_layout"
+
                         android:layout_below="@+id/line_layout"
                         android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:paddingLeft="@dimen/program_left"
                         android:layout_marginRight="@dimen/marginleft10dp"
                         android:background="@color/line_divider_detailsPage"
-                        android:padding="@dimen/marginRight20dp" />
+                        />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/marginleft10dp"
+                    android:paddingLeft="@dimen/program_left"
+                    android:orientation="horizontal">
+                    
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/youtube"
+                        android:padding="@dimen/marginleft10dp"
+                        android:src="@drawable/youtube"
+                        />
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/facebook"
+
+                        android:padding="@dimen/marginleft10dp"
+                        android:src="@drawable/facebook"
+                        />
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/instagram"
+                        android:padding="@dimen/marginleft10dp"
+                        android:src="@drawable/instagram"
+                        />
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/twitter"
+                        android:padding="@dimen/marginleft10dp"
+                        android:src="@drawable/twitter"
+                        />
+                    
+                </LinearLayout>
+
 
 
                     <TextView
@@ -445,8 +485,8 @@
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginRight="@dimen/marginleft10dp"
                         android:ellipsize="end"
-                        android:padding="@dimen/marginRight20dp"
-                        android:layout_marginTop="30dp"
+                        android:paddingLeft="@dimen/marginRight20dp"
+                        android:layout_marginTop="25dp"
                         android:text=""
                         android:textColor="@color/videotextColor"
                         android:textSize="@dimen/story_text_size" />

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
-public class RelatedContentListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RelatedContentListDataAdapter extends RecyclerView.Adapter<RelatedContentListDataAdapter.ViewHolder> {
 
 
     private String bannerImageUrl = "";
@@ -85,10 +85,9 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
         public void bind(final RelatedContentListItem item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getTitle());
             movieStory.setText(item.getStory());
-           Log.v("SUBHASHREE","related content " + item.getStory());
+           Log.v("SUBHA","related content " + item.getStory());
 
             String imageId = item.getImage();
-            LogUtil.showLog("MUVI","kjshdvuih");
 
 
             if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
@@ -119,29 +118,38 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutResourceId, parent, false));
     }
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
         ViewHolder groupViewHolder = (ViewHolder) holder;
         // groupViewHolder.mImage.setText(labels.get(position - 1));
         groupViewHolder.bind(data.get(position), listener);
     }
 
 
+
+
     @Override
     public int getItemCount() {
-        int itemcount;
+        /*int itemcount;
         if (data.size()>4){
             itemcount = 4;
         }else{
             itemcount = data.size();
-        }
-        return  itemcount;
+        }*/
+
+        Log.v("SUBHA","data size in item count ===== "+ data.size());
+        return  data.size();
     }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
         final int height = opt.outHeight;

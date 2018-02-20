@@ -1786,7 +1786,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         Log.v("SUBHASHREE","download isoffline ==== "+playerModel.getIsOffline() + " download status ==== " +playerModel.getDownloadStatus() );
 
-        if (content_types_id != 4 && playerModel.getIsOffline().equals("1") /*&& playerModel.getDownloadStatus().equals("1")*/) {
+        if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
         }
 
@@ -7342,7 +7342,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             }
 */
 
-            if (content_types_id != 4 && playerModel.getIsOffline().equals("1") /*&& playerModel.getDownloadStatus().equals("1")*/) {
+            if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
                 download_layout.setVisibility(View.VISIBLE);
             }
 
@@ -7545,11 +7545,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView.pause();
         playerPosition = 0;
         playerPreviousPosition = 0;
-        Log.v("contentPosition", contentPosition + "NextPosition   429  :" + questions.size());
+        Log.v("PROGRAMPLAYER", contentPosition + "NextPosition   429  :" + questions.size());
 
         if (contentPosition <= questions.size() - 1 && isRepeated == false) {
 
-            Log.v("contentPosition", contentPosition + "NextPosition   429  :" + questions.size());
+            Log.v("PROGRAMPLAYER", "not repeating ==== " + questions.size()  + isRepeated);
             player_next.setVisibility(View.VISIBLE);
             ValidateUserInput validateUserInput = new ValidateUserInput();
             validateUserInput.setAuthToken(authTokenStr);
@@ -7569,9 +7569,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         }else
         {
+//            emVideoView.seekTo(0);
+//            emVideoView.start();
+            setPlayVideoUrl(playerModel.getVideoUrl());
+            Log.v("PROGRAMPLAYER", contentPosition + "drepeated" + questions.size() + isRepeated);
             player_next.setVisibility(View.VISIBLE);
-            player_next.setClickable(false);
-            player_next.setEnabled(false);
+            player_next.setClickable(true);
+            player_next.setEnabled(true);
 
         }
 

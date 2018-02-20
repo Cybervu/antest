@@ -76,7 +76,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> 
             holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
             holder.snap.setVisibility(View.INVISIBLE);
         }else{
-            holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.button_background));
+            holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
             holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
             holder.snap.setVisibility(View.VISIBLE);
 
