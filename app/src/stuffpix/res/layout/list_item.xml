@@ -79,7 +79,6 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/view_more_button_background"
             android:minHeight="@dimen/btnMore_min_height"
-            android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
             android:text="vfewgafeqfgqeg"
             android:textAllCaps="false"

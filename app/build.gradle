@@ -47,7 +47,6 @@ android {
         }
     }
 
-
     productFlavors {
         /*Structuring Default flavour with dimension*/
         defaultFlavor {
@@ -102,8 +101,8 @@ android {
             applicationId "com.release.newthoughtchannel"
             minSdkVersion 15
             targetSdkVersion 23
-            versionCode 1
-            versionName "1.0"
+            versionCode 2
+            versionName "2.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
@@ -245,9 +244,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.metrox'
-            versionCode 1
+            versionCode 2
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"97082c300cc83c4f0234f61ae50ff336\""
             //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
@@ -282,11 +281,13 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.cmaxtv'
-            versionCode 4
+            versionCode 7
             targetSdkVersion 25
-            versionName "1.1.0"
+            versionName "2.1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"a2478e71219f606cb5b7a3d3f7a35fe8\""
+//             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+
         }
         cmax_staging_ {
             dimension 'environment'
@@ -302,7 +303,7 @@ android {
             applicationId 'com.release.quickflix'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.2.2"
+            versionName "1.2.4"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
         }
@@ -514,8 +515,8 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"2d103b7611f9acf3b621efa31b3d9d06\""
-            versionCode 1
-            versionName '1.0.1'
+            versionCode 3
+            versionName '1.1.2'
         }
         leasy_staging_ {
             dimension 'environment'
@@ -531,7 +532,7 @@ android {
             applicationId 'com.release.stuffpix'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
         }
@@ -562,6 +563,46 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
+        zee5 {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.zee5'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"00a8687fad1a84bcf0f090c780ec3669\""
+        }
+        zee5_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        zee5_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        yesflix {
+            minSdkVersion 21
+            applicationId 'com.release.yesflix'
+            targetSdkVersion 25
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            dimension 'vendor'
+            buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
+
+            versionCode 1
+            versionName '1.0'
+        }
+        yesflix_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        yesflix_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -662,6 +703,14 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
 
+    else if (vendor.equals('zee5') && (environment.equals('zee5_staging_') || environment.equals('zee5_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('yesflix') && (environment.equals('yesflix_staging_') || environment.equals('yesflix_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
     else {
         variant.setIgnore(true)
     }

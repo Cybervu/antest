@@ -138,6 +138,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;*/
 
+
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();

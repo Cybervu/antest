@@ -73,9 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/loginImageViewMarging_top"
-        android:layout_marginRight="@dimen/marginright5dp"
+        android:padding="@dimen/loginImageViewMarging_top_padding"
         >
-
 
         <TextView
             android:id="@+id/itemTitle"
@@ -101,7 +100,7 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/view_more_button_background"
             android:minHeight="@dimen/btnMore_min_height"
-            android:padding="@dimen/Login_drawing_padding"
+            android:padding="@dimen/paddingBottom5dp"
             android:stateListAnimator="@null"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"

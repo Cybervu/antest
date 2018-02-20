@@ -116,6 +116,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             if (responseStr != null) {
                 try {
                     myJson = new JSONObject(responseStr);
+                    code=Integer.parseInt(myJson.optString("code"));
                 } catch (JSONException e) {
 
                     e.printStackTrace();

@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -340,8 +341,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), chargedPriceTextView);
         FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts), payNowButton);
         payNowButton.setText(languagePreference.getTextofLanguage(BUTTON_PAY_NOW, DEFAULT_BUTTON_PAY_NOW));
-
-
 
        /* if (planIdForPaypal == 0){
             payByPaypalButton.setVisibility(View.GONE);

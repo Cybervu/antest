@@ -639,10 +639,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         Util.check_for_subscription = 1;
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     }
-                    if(Util.favorite_clicked) {
-                        finish();
-                        return;
-                    }
+
                     detailsIntent.putExtra("PlayerModel", playerModel);
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(detailsIntent);

@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.Util;
+
 /**
  * Created by Android on 12/19/2017.
  */
@@ -17,6 +20,8 @@ public class SplashScreenHandler {
         this.context=context;
     }
     public void handleSplashscreen(ImageView imageResize) {
+
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
     }
 

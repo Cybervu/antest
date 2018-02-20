@@ -152,7 +152,10 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 intentpayment.putExtra("selected_plan_id",movieList.get(selected_subscription_plan).getPlanIdStr());
 
                 startActivity(intentpayment);
-                finish();
+                if (!featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP)){
+                    finish();
+                }
+               // finish();
             }
         });
 
