@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/marginright5dp"
+        android:layout_marginLeft="@dimen/videolistleftmargin"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="normal"

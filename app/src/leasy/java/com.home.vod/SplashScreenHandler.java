@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.Display;
 import android.widget.ImageView;
 
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;

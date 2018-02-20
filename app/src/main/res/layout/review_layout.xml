@@ -56,8 +56,6 @@
                 android:layout_marginTop="@dimen/textColor_margin"
                 android:ellipsize="marquee"
                 android:gravity="center_vertical"
-                android:maxLines="10"
-                android:lines="2"
                 android:inputType="textMultiLine"
                 android:text="jhhhhh"
                 android:textColor="@color/pageTitleColor"

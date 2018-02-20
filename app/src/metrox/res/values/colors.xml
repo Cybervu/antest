@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="textColor">#757575</color>
     <color name="videotextColor">#000000</color>
@@ -99,4 +99,7 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="borderColor">#0e6296</color>
+    <color name="nav_header_line_color">#0e6296</color>
+    <color name="nav_text_line_color">#0e6296</color>
 </resources>

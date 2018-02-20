@@ -384,5 +384,6 @@
     <dimen name="margin_right18dp">18dp</dimen>
 
     <dimen name="gridbottom8dp">1dp</dimen>
+    <dimen name="trailer_btn_padding">6dp</dimen>
 </resources>
 

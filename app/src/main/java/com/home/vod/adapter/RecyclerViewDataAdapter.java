@@ -97,24 +97,24 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
         Log.v("BIBHU12", "position of the item in adapter ==============" + i);
         Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" +Util.image_orentiation.size());
+        try {
+            final String sectionName = dataList.get(i).getHeaderTitle().trim();
+            final String sectionId = dataList.get(i).getHeaderPermalink();
 
-        final String sectionName = dataList.get(i).getHeaderTitle().trim();
-        final String sectionId = dataList.get(i).getHeaderPermalink();
-
-        singleSectionItems = dataList.get(i).getAllItemsInSection();
-        pemalink = dataList.get(i).getHeaderPermalink();
+            singleSectionItems = dataList.get(i).getAllItemsInSection();
+            pemalink = dataList.get(i).getHeaderPermalink();
         /*for (int j = 0; j > bannerUrls.size(); j++) {
             //image = bannerUrls.get(j);
         }*/
-        FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
 
        /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
-        itemRowHolder.itemTitle.setText(sectionName.trim());
+            itemRowHolder.itemTitle.setText(sectionName.trim());
 //        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-        ///Called Handler for allinment change
-        listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
-        SectionListDataAdapter itemListDataAdapter = null;
+            ///Called Handler for allinment change
+            listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
+            SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
         /*for(int ii=0;ii<Util.image_orentiation.size();ii++){
@@ -122,7 +122,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         }*/
 
 
-        try {
             if (Util.image_orentiation.get(i) == Constant.IMAGE_PORTAIT_CONST) {
                 float density = mContext.getResources().getDisplayMetrics().density;
                 if (density >= 3.5 && density <= 4.0) {
@@ -141,54 +140,54 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 Log.v("BIBHU12", "position of *********** ==============" + i);
 
             }
-        } catch (Exception e) {
+
+
+            itemRowHolder.recycler_view_list.setHasFixedSize(true);
+            itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
+
+            itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Context context = v.getContext();
+                    Intent i = new Intent(context, ViewMoreActivity.class);
+                    i.putExtra("SectionId", sectionId);
+                    i.putExtra("sectionName", sectionName);
+                    context.startActivity(i);
+                }
+            });
+
+            if (i == 0) {
+                itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
+            } else {
+                itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
+
+            }
+            LogUtil.showLog("SUBHA", "hggf" + singleSectionItems.size());
+            //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+
+            if (singleSectionItems.size() <= 0) {
+                itemRowHolder.itemTitle.setVisibility(View.GONE);
+                itemRowHolder.btnMore.setVisibility(View.GONE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+            } else if (singleSectionItems.size() == 1) {
+                itemRowHolder.btnMore.setVisibility(View.GONE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+
+            } else {
+                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
+
+
+            }
+            // }
+        }catch (Exception e) {
             e.printStackTrace();
             Log.v("BIBHU12", "recycler view adapter Exception==============" + e.toString());
 
 
         }
-
-
-        itemRowHolder.recycler_view_list.setHasFixedSize(true);
-        itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-        itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
-
-        itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Context context = v.getContext();
-                Intent i = new Intent(context, ViewMoreActivity.class);
-                i.putExtra("SectionId", sectionId);
-                i.putExtra("sectionName", sectionName);
-                context.startActivity(i);
-            }
-        });
-
-        if (i == 0) {
-            itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
-        } else {
-            itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
-
-        }
-        LogUtil.showLog("SUBHA", "hggf" + singleSectionItems.size());
-        //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-
-        if (singleSectionItems.size() <= 0) {
-            itemRowHolder.itemTitle.setVisibility(View.GONE);
-            itemRowHolder.btnMore.setVisibility(View.GONE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-        } else if (singleSectionItems.size() == 1) {
-            itemRowHolder.btnMore.setVisibility(View.GONE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-
-        } else {
-            itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
-
-
-        }
-        // }
 
 
     }

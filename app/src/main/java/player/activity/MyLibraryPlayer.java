@@ -379,7 +379,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         super.onResume();
 
+        try{
 
+            a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+            a.recycle();
+            DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
+
+            CastButtonFactory.setUpMediaRouteButton(MyLibraryPlayer.this, mediaRouteButton);
+            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+        }catch (Exception e){}
         CheckAvailabilityOfChromecast = new Timer();
         CheckAvailabilityOfChromecast.schedule(new TimerTask() {
             @Override
@@ -463,6 +473,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_exoplayer);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        featureHandler = FeatureHandler.getFeaturePreference(MyLibraryPlayer.this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
@@ -2910,7 +2921,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     @Override
     public void onDestroy() {
         super.onDestroy();
+        try{
 
+            a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+            a.recycle();
+            DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
+
+            CastButtonFactory.setUpMediaRouteButton(MyLibraryPlayer.this, mediaRouteButton);
+            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+        }catch (Exception e){}
         mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
 
         Util.app_is_in_player_context = false;
@@ -3038,7 +3059,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     @Override
     protected void onPause() {
+        try{
 
+            a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+            a.recycle();
+            DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
+
+            CastButtonFactory.setUpMediaRouteButton(MyLibraryPlayer.this, mediaRouteButton);
+            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+
+        }catch (Exception e){}
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 

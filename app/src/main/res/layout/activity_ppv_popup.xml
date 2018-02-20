@@ -28,81 +28,108 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/completeSeasonRelativeLayout"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/manage_device_padding"
-            android:paddingLeft="@dimen/ppv_margin">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/ppv_margin"
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/completeRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
-                android:text="Arrow Completeseason"
+                android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
+                />
 
             <TextView
                 android:id="@+id/completePriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight=".2"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/seasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/forgotlayout_margin"
-            android:paddingLeft="@dimen/ppv_margin">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/ppv_margin"
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/seasonRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
-                android:text="Arrow Season3"
+                android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
+                />
 
             <TextView
                 android:id="@+id/seasonPriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:paddingRight="@dimen/login_facebook_margin"
-                android:text="$05.00"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight="0.2"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/episodeRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
             android:layout_marginTop="@dimen/ppv_margin"
-            android:paddingLeft="@dimen/Login_drawing_padding">
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/episodeRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
-                android:text="Arrow  S03  E01"
+                android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
+                />
 
             <TextView
                 android:id="@+id/episodePriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:paddingRight="@dimen/login_facebook_margin"
-                android:text="$03.00"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-
-                android:textSize="@dimen/radiobtn_text_size" />
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight="0.2"/>
         </LinearLayout>
 
         <Button
