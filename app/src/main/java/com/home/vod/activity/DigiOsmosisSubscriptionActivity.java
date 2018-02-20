@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.PlanModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -83,7 +85,9 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
     LanguagePreference languagePreference;
     int selected_subscription_plan = 0 ;
     ProgressBarHandler progressBarHandler;
+    PreferenceManager preferenceManager;
     int prevPosition = 0;
+    String useridStr;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -92,13 +96,14 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_subscription);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         subcription= (RecyclerView) findViewById(R.id.recyclerViewSubscription);
         activation_plan= (Button) findViewById(R.id.activationplan);
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         subscriptionTitleTextView = (TextView) findViewById(R.id.subscriptionTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         skipButton= (Button) findViewById(R.id.skipButton);
-
+        useridStr = preferenceManager.getUseridFromPref();
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             toolbar.setNavigationIcon(null);
@@ -139,7 +144,12 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
         activation_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DigiOsmosisSubscriptionActivity.this,"SUBScription plsn button clicked =====",Toast.LENGTH_LONG).show();
+
+                // Return to ProgrammeActivity
+                Log.v("SUBHA","selected plan id"+movieList.get(selected_subscription_plan).getPlanIdStr());
+                Log.v("SUBHA","selected plan id"+movieList.get(selected_subscription_plan).getPlanCurrencyIdStr());
+                Log.v("SUBHA","User id"+useridStr);
+                Toast.makeText(DigiOsmosisSubscriptionActivity.this,"SUBScription plan button clicked =====",Toast.LENGTH_LONG).show();
             }
         });
 
