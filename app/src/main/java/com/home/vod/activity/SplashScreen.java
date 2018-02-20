@@ -57,9 +57,13 @@ import com.home.vod.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -102,10 +106,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
 
-     Timer GoogleIdGeneraterTimer;
+    Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
-    String ipAddressStr;
+    String ipAddressStr="";
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
@@ -117,8 +121,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     private void _init() {
 
-
-        // Last modification made by Anuradha Prusty.
 
         Util.getDPI(this);
         Util.printMD5Key(this);
@@ -138,7 +140,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;*/
 
-
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
@@ -156,17 +157,24 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             }
         }*/
 
-        splashScreenHandler.handleSplashscreen(imageResize);
 
+        splashScreenHandler.handleSplashscreen(imageResize);
 
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
 
-       // ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
+        // ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
 
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP){
+            // Do something for lollipop and above versions
+            noInternetTextView.setText("The app is not compatible for this OS.");
+            noInternetLayout.setVisibility(View.VISIBLE);
+            return;
+        }
 
         if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
@@ -188,10 +196,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     finish();
                     overridePendingTransition(0, 0);
                 } else {
+                    noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
                     noInternetLayout.setVisibility(View.VISIBLE);
                     geoBlockedLayout.setVisibility(View.GONE);
                 }
             } else {
+                noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
                 noInternetLayout.setVisibility(View.VISIBLE);
                 geoBlockedLayout.setVisibility(View.GONE);
             }
@@ -235,7 +245,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        Log.v("MUVI11","ipAddressStr====="+ipAddressStr);
+        Log.v("MUVI11","getIPAddress====="+getIPAddress(true));
+
+
         if (ipAddressStr.equals("")) {
+            noInternetTextView.setText("Could not detect your IP.");
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         } else {
@@ -269,10 +285,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
             }
-
-            else {
+            else if(status == 454){
                 noInternetLayout.setVisibility(View.GONE);
                 geoBlockedLayout.setVisibility(View.VISIBLE);
+            }
+            else {
+                noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                noInternetLayout.setVisibility(View.VISIBLE);
+                geoBlockedLayout.setVisibility(View.GONE);
             }
         }
 
@@ -673,16 +693,32 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         SDKInitializer.setData(this);
         if (status==200){
             if (NetworkStatus.getInstance().isConnected(this)) {
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+//                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+//                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+                ipAddressStr = getIPAddress(true);
+                if (ipAddressStr.equals("")) {
+                    noInternetTextView.setText("Could not detect your IP.");
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                    geoBlockedLayout.setVisibility(View.GONE);
+                } else {
+                    CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
+                    checkGeoBlockInputModel.setAuthToken(authTokenStr);
+                    checkGeoBlockInputModel.setIp(ipAddressStr);
+                    CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
+                    asynGetCountry.executeOnExecutor(threadPoolExecutor);
+                }
+
             }
         }
         else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
             geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
+//            geoTextView.setText("Thanks for visiting Plusnights. The trial has now ended, but keep your eyes peeled for more information coming later this year. Thanks, and we hope you enjoyed your film!");
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
         }
-         else {
+        else {
+            noInternetTextView.setText("Oops something went wrong.Please try again later .");
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
@@ -694,6 +730,34 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         super.onStop();
         LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
 
+    }
+
+
+    public static String getIPAddress(boolean useIPv4) {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress();
+                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
+                        boolean isIPv4 = sAddr.indexOf(':')<0;
+
+                        if (useIPv4) {
+                            if (isIPv4)
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
+                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) { } // for now eat exceptions
+        return "";
     }
 
 }

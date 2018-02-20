@@ -48,8 +48,7 @@ public class SplashScreenHandler {
     }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){
-    featureHandler.setFeatureFlag(FeatureHandler.FACEBOOK,"1");
-    featureHandler.setFeatureFlag(FeatureHandler.GOOGLE,"1");
+
 
     }
 }

@@ -1608,8 +1608,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 } else {
 
                     download.setEnabled(false);
-// Modified in ANuradha system when push
-                    
+
                     if (isDrm) {
                         // This is applicable for DRM content.
 
@@ -1625,10 +1624,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         // This is applicable for NON-DRM contnet.
 
                         List_Of_Resolution_Url.clear();
+                        List_Of_Resolution_Format.clear();
                         List_Of_FileSize.clear();
                         if (ResolutionUrl.size() > 0) {
                             for (int i = 1; i < ResolutionUrl.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
                             }
 
                             pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
@@ -3013,7 +3014,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Util.call_finish_at_onUserLeaveHint = true;
 
                 download.setEnabled(false);
-// Modified in ANuradha system when push
+
                 if (isDrm) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(ExoPlayerActivity.this)) {
                         List_Of_Resolution_Format.clear();
@@ -3037,10 +3038,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         // This is applicable for NON-DRM contnet.
 
                         List_Of_Resolution_Url.clear();
+                        List_Of_Resolution_Format.clear();
                         List_Of_FileSize.clear();
                         if (ResolutionUrl.size() > 0) {
                             for (int i = 1; i < ResolutionUrl.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
                             }
 
                             pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
@@ -5079,6 +5082,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpResponse execute = client.execute(httpGet);
                 float size = calculateDownloadFileSize(execute);
                 List_Of_FileSize.add("(" + size + " MB)");
+
+
 
 
             } catch (Exception e) {

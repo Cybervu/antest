@@ -68,7 +68,7 @@ public class RegisterUIHandler {
     private LanguagePreference languagePreference;
     public  String last_name="";
 
-    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
 
     public RegisterUIHandler(Activity context){
         this.context=context;

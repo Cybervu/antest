@@ -599,7 +599,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		if (SubTitlePath.size() < 1) {
-			subtitle_change_btn.setVisibility(View.INVISIBLE);
+			cc_layout.setVisibility(View.INVISIBLE);
 		}
 
 		subtitle_change_btn.setOnClickListener(new View.OnClickListener() {

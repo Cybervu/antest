@@ -176,12 +176,19 @@
                 android:paddingTop="@dimen/name_user_margin_bottom"
                 android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/back"
+                <LinearLayout
+                    android:id="@+id/back_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/profile_spinner_margin"
-                    android:background="@drawable/ic_back" />
+                    android:padding="@dimen/marginLeft15dp">
+
+                    <ImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_back" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -352,7 +359,6 @@
                         android:layout_marginRight="15dp"
                         android:indeterminate="false"
                         android:max="100"
-
                         android:progress="0"
                         android:progressDrawable="@drawable/style_circular"
                         android:secondaryProgress="100" />
@@ -415,11 +421,10 @@
                     android:id="@+id/videoCensorRatingTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/videoCensorRatingTextView_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:background="@drawable/button_bg_orange"
-                    android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
-                    android:paddingRight="@dimen/videoCensorRatingTextView_padding"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginRight="@dimen/textColor_margin"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
@@ -429,7 +434,8 @@
                     android:id="@+id/videoCensorRatingTextView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/my_download_margin"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginRight="@dimen/textColor_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""
                     android:textColor="@color/videotextColor"

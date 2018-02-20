@@ -33,7 +33,6 @@
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/content_list_vertical_overlay"
-
             />
 
         <TextView
