@@ -1576,7 +1576,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1658,7 +1658,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
 
             List tracks = new ArrayList();
-            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -2750,7 +2750,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
-                // MUVIlaxmi
+
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(authTokenStr);

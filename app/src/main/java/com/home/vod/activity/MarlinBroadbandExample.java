@@ -333,17 +333,6 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	protected void onResume() {
 		super.onResume();
-		try{
-
-			a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
-			drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
-			a.recycle();
-			DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
-
-			CastButtonFactory.setUpMediaRouteButton(MarlinBroadbandExample.this, mediaRouteButton);
-			mediaRouteButton.setRemoteIndicatorDrawable(drawable);
-
-		}catch (Exception e){}
 		resume_orientation = false;
 		SensorOrientationChangeNotifier.getInstance(MarlinBroadbandExample.this).addListener(this);
 		Util.app_is_in_player_context = true;
@@ -599,7 +588,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		if (SubTitlePath.size() < 1) {
-			cc_layout.setVisibility(View.INVISIBLE);
+			subtitle_change_btn.setVisibility(View.INVISIBLE);
 		}
 
 		subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
@@ -1779,17 +1768,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		try{
 
-			a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
-			drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
-			a.recycle();
-			DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
-
-			CastButtonFactory.setUpMediaRouteButton(MarlinBroadbandExample.this, mediaRouteButton);
-			mediaRouteButton.setRemoteIndicatorDrawable(drawable);
-
-		}catch (Exception e){}
 		try{
 			if (emVideoView.getCurrentPosition() > 0 && (emVideoView.getCurrentPosition() >= emVideoView.getDuration())) {
 				watchStatus = "complete";
@@ -1916,17 +1895,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	protected void onPause() {
 		super.onPause();
-		try{
 
-			a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
-			drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
-			a.recycle();
-			DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
-
-			CastButtonFactory.setUpMediaRouteButton(MarlinBroadbandExample.this, mediaRouteButton);
-			mediaRouteButton.setRemoteIndicatorDrawable(drawable);
-
-		}catch (Exception e){}
 		if (CheckAvailabilityOfChromecast != null)
 			CheckAvailabilityOfChromecast.cancel();
 

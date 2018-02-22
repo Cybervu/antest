@@ -474,6 +474,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onResume() {
         super.onResume();
+
         try{
 
             a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
@@ -485,6 +486,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
         }catch (Exception e){}
+
         AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
@@ -538,7 +540,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     }
                 });
             }
-        }, 3000, 3000);
+        }, 1000, 1000);
 
         SensorOrientationChangeNotifier.getInstance(ExoPlayerActivity.this).addListener(this);
 
@@ -885,8 +887,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
                 subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("MUVI1", "subtitle_image button visible called");
+
+
                 try {
-                    if(SubTitleName.size()>0)
                     Util.DefaultSubtitle = SubTitleName.get(0);
                 }catch (Exception e){}
 
@@ -1769,7 +1772,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
                 Log.v("MUVI", "player_start_time===*****************=========" + player_start_time);
@@ -1823,6 +1826,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
+                        player_start_time = playerPosition ;
                         Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
 
 
@@ -1971,7 +1975,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
@@ -2013,6 +2017,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
+                        player_start_time = playerPosition ;
 
 //                        Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
@@ -2726,7 +2731,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
                 Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
@@ -2770,6 +2775,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
+                        player_start_time = playerPosition ;
                         Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
@@ -2880,7 +2886,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
@@ -2923,6 +2929,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
+                        player_start_time = playerPosition ;
                         Log.v("MUVI", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
@@ -3246,6 +3253,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
         }catch (Exception e){}
+
+
         if (mCastContext != null) {
             mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
         }
@@ -3278,17 +3287,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         }
 
-        try{
-
-            a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
-            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
-            a.recycle();
-            DrawableCompat.setTint(drawable, getResources().getColor(R.color.chromecast_color));
-
-            CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
-            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
-
-        }catch (Exception e){}
     }
 
     // Added Later By Bibhu For Subtitle Feature.
@@ -3395,9 +3393,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
         }catch (Exception e){}
+
+
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 
+        Log.v("PINTU", "onPause called");
         super.onPause();
     }
 
@@ -4929,20 +4930,22 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             List tracks = new ArrayList();
 
             Log.v("MUVI", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                if (playerModel.offline_url.size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                    for (int i = 0; i < playerModel.offline_url.size(); i++) {
 
-                    MediaTrack mediaTrack = new MediaTrack.Builder(i,
-                            MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
-                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
-                            .setContentType("text/vtt")
-                            .build();
+                        MediaTrack mediaTrack = new MediaTrack.Builder(i,
+                                MediaTrack.TYPE_TEXT)
+                                .setName(playerModel.offline_language.get(i))
+                                .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                .setContentId(playerModel.offline_url.get(i))
+                                .setLanguage(playerModel.SubTitleLanguage.get(i))
+                                .setContentType("text/vtt")
+                                .build();
 
-                    tracks.add(mediaTrack);
+                        tracks.add(mediaTrack);
+                    }
                 }
             }
 
@@ -5025,20 +5028,22 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             List tracks = new ArrayList();
 
             Log.v("MUVI", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                if (playerModel.offline_url.size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                    for (int i = 0; i < playerModel.offline_url.size(); i++) {
 
-                    MediaTrack mediaTrack = new MediaTrack.Builder(i,
-                            MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
-                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
-                            .setContentType("text/vtt")
-                            .build();
+                        MediaTrack mediaTrack = new MediaTrack.Builder(i,
+                                MediaTrack.TYPE_TEXT)
+                                .setName(playerModel.offline_language.get(i))
+                                .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                .setContentId(playerModel.offline_url.get(i))
+                                .setLanguage(playerModel.SubTitleLanguage.get(i))
+                                .setContentType("text/vtt")
+                                .build();
 
-                    tracks.add(mediaTrack);
+                        tracks.add(mediaTrack);
+                    }
                 }
             }
 
@@ -5082,8 +5087,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpResponse execute = client.execute(httpGet);
                 float size = calculateDownloadFileSize(execute);
                 List_Of_FileSize.add("(" + size + " MB)");
-
-
 
 
             } catch (Exception e) {

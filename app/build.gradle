@@ -164,7 +164,7 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 18
             targetSdkVersion 25
-            versionName '3.1.4'
+            versionName '3.1.7'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -533,7 +533,7 @@ android {
             applicationId 'com.release.stuffpix'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.1"
+            versionName "1.2"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
         }
