@@ -341,7 +341,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     FeatureHandler featureHandler;
     private String ipAddressStr = "";
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
-
+// This method is to reset all item data
 
     public void resetData() {
         if (itemData != null && itemData.size() > 0) {
