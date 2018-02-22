@@ -56,7 +56,7 @@ android {
             minSdkVersion 15
             targetSdkVersion 23
             versionCode 4
-            versionName "1.04"
+            versionName "1.5"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
