@@ -27,11 +27,6 @@ public class DigiOsmosisPayment extends AppCompatActivity {
     ProgressBarHandler progressBarHandler;
     ProgressBar progressBar;
 
-    String authToken = "d2896f37d78aeed68f17a1186cd8db2c";
-    String plan_id = "ec308b0a889b64c850dc1ec73da39eef";
-    String user_id = "1530";
-    String studio_id = "403";
-    String curriency_id = "68";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +41,11 @@ public class DigiOsmosisPayment extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        String authToken = getIntent().getStringExtra("authToken");
+        String plan_id = getIntent().getStringExtra("plan_id");
+        String user_id = getIntent().getStringExtra("user_id");
+        String curriency_id = getIntent().getStringExtra("curriency_id");
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         webView = (WebView) findViewById(R.id.webView);
@@ -90,11 +90,7 @@ public class DigiOsmosisPayment extends AppCompatActivity {
         webView.setFocusableInTouchMode(true);
         webView.requestFocus();
 
-        String authToken = "d2896f37d78aeed68f17a1186cd8db2c";
-        String plan_id = "ec308b0a889b64c850dc1ec73da39eef";
-        String user_id = "1530";
-        String studio_id = "403";
-        String curriency_id = "68";
+
 
 
         try{
@@ -103,7 +99,6 @@ public class DigiOsmosisPayment extends AppCompatActivity {
                     .appendQueryParameter("authToken", authToken)
                     .appendQueryParameter("plan_id",plan_id)
                     .appendQueryParameter("user_id",user_id)
-                    .appendQueryParameter("studio_id",studio_id)
                     .appendQueryParameter("curriency_id",curriency_id);
             String query = (builder.build().getEncodedQuery()).replaceAll("%40","@");
             webView.loadUrl(url+"?"+query);
@@ -129,10 +124,13 @@ public class DigiOsmosisPayment extends AppCompatActivity {
         }
 
         @android.webkit.JavascriptInterface
-        public void getResponse(String toast){
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        public void ccAvenueResponse(String reponse){
+//            Toast.makeText(mContext, reponse, Toast.LENGTH_SHORT).show();
+
             Intent intent = new Intent();
+            intent.putExtra("gateWayResponse",reponse);
             setResult(RESULT_OK,intent);
+            finish();
         }
     }
 

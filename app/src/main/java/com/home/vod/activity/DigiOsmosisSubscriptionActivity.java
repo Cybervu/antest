@@ -30,6 +30,8 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -142,12 +144,20 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
             asynLoadPlanDetails.executeOnExecutor(threadPoolExecutor);
         }
 
-
         activation_plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String authToken = "c88cceba1bf3e1394861c42e9692f86b";
+                String plan_id = "93dc7707b44cce1a4d7602d9970e3d1b1";
+                String user_id = "2212";
+                String curriency_id = "68";
+
                 Intent intent = new Intent(DigiOsmosisSubscriptionActivity.this,DigiOsmosisPayment.class);
+                intent.putExtra("authToken",authToken);
+                intent.putExtra("plan_id",plan_id);
+                intent.putExtra("user_id",user_id);
+                intent.putExtra("curriency_id",curriency_id);
                 startActivityForResult(intent,PAYMENT_CODE);
 
                 // Return to ProgrammeActivity
@@ -354,9 +364,31 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
 
         if(requestCode == PAYMENT_CODE && resultCode == RESULT_OK){
 
+            try{
+
+                String ccAvenueResponse = data.getStringExtra("gateWayResponse").trim();
+
+                if(ccAvenueResponse.equals("")){
+                    Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Something went wrong. Please try again.",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                JSONObject jsonObject = new JSONObject(ccAvenueResponse);
+                int code = Integer.parseInt(jsonObject.optString("code"));
+                String message = jsonObject.optString("msg");
+
+                if(code == 200){
+                    Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Payment successful",Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(DigiOsmosisSubscriptionActivity.this,message,Toast.LENGTH_LONG).show();
+                }
+
+            }catch (Exception e){
+                Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Something went wrong. Please try again.",Toast.LENGTH_LONG).show();
+            }
         }else
         {
-            Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Paymnet Cancelled",Toast.LENGTH_LONG).show();
+            Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Payment Cancelled",Toast.LENGTH_LONG).show();
         }
     }
 }
