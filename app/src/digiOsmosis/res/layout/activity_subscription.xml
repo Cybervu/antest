@@ -13,27 +13,66 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+
+            <LinearLayout
+                android:id="@+id/subscriptionTitleRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/listing_marginLeft"
+                android:padding="@dimen/listing_marginLeft"
+                android:layout_marginRight="@dimen/pre_order_button_margin"
+                android:layout_alignLeft="@+id/imagesGridView"
+                android:layout_marginTop="@dimen/program_left"
+                >
+
+                <TextView
+                    android:layout_width="@dimen/sideTitle_line_height"
+                    android:layout_height="@dimen/sideTitle_line_width"
+                    android:id="@+id/colortitle"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginLeft="@dimen/marginRight20dp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/subscriptionTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sample title"
+
+                    android:textAllCaps="true"
+                    android:textColor="@color/videotextColor"
+                    android:textSize="@dimen/itemtitle_text_size"
+                    android:layout_marginTop="@dimen/marginBottom5dp"
+                    android:layout_marginLeft="@dimen/marginRight20dp"
+                    />
+
+            </LinearLayout>
+
+
+          <!--  <TextView
                 android:id="@+id/subscriptionTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ppv_margin"
                 android:text="Select Your Plan"
                 android:textColor="@color/pageTitleColor"
-                android:textSize="@dimen/subscription_text_size" />
+                android:textSize="@dimen/subscription_text_size" />-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewSubscription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/subscriptionTitleTextView"
+                android:layout_below="@+id/subscriptionTitleRelativeLayout"
                 android:layout_margin="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/ppv_margin"
                 android:gravity="center"

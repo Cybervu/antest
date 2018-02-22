@@ -197,11 +197,11 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             String key = iter.next();
                             try {
                                 Object value = custom_meta_data.get(key);
-                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level") || key.equalsIgnoreCase("calories") || key.equalsIgnoreCase("cooking_time") || key.equalsIgnoreCase("preparation_time") ){
-
+                                if (key.equalsIgnoreCase("Duration") || key.equalsIgnoreCase("Repetitions") || key.equalsIgnoreCase("Difficulty_Level") || key.equalsIgnoreCase("Calories") || key.equalsIgnoreCase("Cooking_Time") || key.equalsIgnoreCase("Preparation_Time") ){
+                                    Log.v("Subha", "duration setOnPreparedListener not started ===="+key + value);
                                 }else{
                                     String details = value.toString();
-                                    Log.v("Subhalaxmi", "duration setOnPreparedListener not started"+key);
+                                    Log.v("Subha", "duration setOnPreparedListener not started"+key);
 
                                     metadata.put(key,details);
                                 }
@@ -212,49 +212,83 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         }
 
                         contentDetailsOutput.setMetadata(metadata);
-                        if ((custom_meta_data.has("duration")) && custom_meta_data.optString("duration").trim() != null && !custom_meta_data.optString("duration").trim().isEmpty() && !custom_meta_data.optString("duration").trim().equals("null") && !custom_meta_data.optString("duration").trim().matches("")) {
-                            contentDetailsOutput.setDuration(custom_meta_data.optString("duration"));
+                        if ((custom_meta_data.has("Duration")) && custom_meta_data.optString("Duration").trim() != null && !custom_meta_data.optString("Duration").trim().isEmpty() && !custom_meta_data.optString("Duration").trim().equals("null") && !custom_meta_data.optString("Duration").trim().matches("")) {
+                            contentDetailsOutput.setDuration(custom_meta_data.optString("Duration"));
+
                         }
                         else {
                             contentDetailsOutput.setDuration("");
 
                         }
+                        if ((custom_meta_data.has("Twitter")) && custom_meta_data.optString("Twitter").trim() != null && !custom_meta_data.optString("Twitter").trim().isEmpty() && !custom_meta_data.optString("Twitter").trim().equals("null") && !custom_meta_data.optString("Twitter").trim().matches("")) {
+                            contentDetailsOutput.setTwitter(custom_meta_data.optString("Twitter"));
 
-                        if ((custom_meta_data.has("benefits")) && custom_meta_data.optString("benefits").trim() != null && !custom_meta_data.optString("benefits").trim().isEmpty() && !custom_meta_data.optString("benefits").trim().equals("null") && !custom_meta_data.optString("benefits").trim().matches("")) {
-                            contentDetailsOutput.setBenefit(custom_meta_data.optString("benefits"));
+                        }
+                        else {
+                            contentDetailsOutput.setTwitter("");
+
+                        }
+                        if ((custom_meta_data.has("Instagram")) && custom_meta_data.optString("Instagram").trim() != null && !custom_meta_data.optString("Instagram").trim().isEmpty() && !custom_meta_data.optString("Instagram").trim().equals("null") && !custom_meta_data.optString("Instagram").trim().matches("")) {
+                            contentDetailsOutput.setInstagram(custom_meta_data.optString("Instagram"));
+
+                        }
+                        else {
+                            contentDetailsOutput.setInstagram("");
+
+                        }
+                        if ((custom_meta_data.has("facebook")) && custom_meta_data.optString("facebook").trim() != null && !custom_meta_data.optString("facebook").trim().isEmpty() && !custom_meta_data.optString("facebook").trim().equals("null") && !custom_meta_data.optString("facebook").trim().matches("")) {
+                            contentDetailsOutput.setFacebook(custom_meta_data.optString("facebook"));
+
+                        }
+                        else {
+                            contentDetailsOutput.setFacebook("");
+
+                        }
+                        if ((custom_meta_data.has("Youtube")) && custom_meta_data.optString("Youtube").trim() != null && !custom_meta_data.optString("Youtube").trim().isEmpty() && !custom_meta_data.optString("Youtube").trim().equals("null") && !custom_meta_data.optString("Youtube").trim().matches("")) {
+                            contentDetailsOutput.setYoutube(custom_meta_data.optString("Youtube"));
+
+                        }
+                        else {
+                            contentDetailsOutput.setYoutube("");
+
+                        }
+
+
+                        if ((custom_meta_data.has("Benefits")) && custom_meta_data.optString("Benefits").trim() != null && !custom_meta_data.optString("Benefits").trim().isEmpty() && !custom_meta_data.optString("Benefits").trim().equals("null") && !custom_meta_data.optString("Benefits").trim().matches("")) {
+                            contentDetailsOutput.setBenefit(custom_meta_data.optString("Benefits"));
                         }
                         else {
                             contentDetailsOutput.setBenefit("");
 
                         }
-                        if ((custom_meta_data.has("repetition")) && custom_meta_data.optString("repetition").trim() != null && !custom_meta_data.optString("repetition").trim().isEmpty() && !custom_meta_data.optString("repetition").trim().equals("null") && !custom_meta_data.optString("repetition").trim().matches("")) {
-                            contentDetailsOutput.setRepetition(custom_meta_data.optString("repetition"));
+                        if ((custom_meta_data.has("Repetitions")) && custom_meta_data.optString("Repetitions").trim() != null && !custom_meta_data.optString("Repetitions").trim().isEmpty() && !custom_meta_data.optString("Repetitions").trim().equals("null") && !custom_meta_data.optString("Repetitions").trim().matches("")) {
+                            contentDetailsOutput.setRepetition(custom_meta_data.optString("Repetitions"));
                         }
                         else {
                             contentDetailsOutput.setRepetition("");
 
                         }
-                        if ((custom_meta_data.has("difficulty_level")) && custom_meta_data.optString("difficulty_level").trim() != null && !custom_meta_data.optString("difficulty_level").trim().isEmpty() && !custom_meta_data.optString("difficulty_level").trim().equals("null") && !custom_meta_data.optString("difficulty_level").trim().matches("")) {
-                            contentDetailsOutput.setDifficulty_level(custom_meta_data.optString("difficulty_level"));
+                        if ((custom_meta_data.has("Difficulty_Level")) && custom_meta_data.optString("Difficulty_Level").trim() != null && !custom_meta_data.optString("Difficulty_Level").trim().isEmpty() && !custom_meta_data.optString("Difficulty_Level").trim().equals("null") && !custom_meta_data.optString("Difficulty_Level").trim().matches("")) {
+                            contentDetailsOutput.setDifficulty_level(custom_meta_data.optString("Difficulty_Level"));
                         }
                         else {
                             contentDetailsOutput.setDifficulty_level("");
 
                         }
-                        if ((custom_meta_data.has("calories")) && custom_meta_data.optString("calories").trim() != null && !custom_meta_data.optString("calories").trim().isEmpty() && !custom_meta_data.optString("calories").trim().equals("null") && !custom_meta_data.optString("calories").trim().matches("")) {
-                            contentDetailsOutput.setCalories(custom_meta_data.optString("calories"));
+                        if ((custom_meta_data.has("Calories")) && custom_meta_data.optString("Calories").trim() != null && !custom_meta_data.optString("Calories").trim().isEmpty() && !custom_meta_data.optString("Calories").trim().equals("null") && !custom_meta_data.optString("Calories").trim().matches("")) {
+                            contentDetailsOutput.setCalories(custom_meta_data.optString("Calories"));
                         }
                         else {
                             contentDetailsOutput.setCalories("");
 
-                        }if ((custom_meta_data.has("cooking_time")) && custom_meta_data.optString("cooking_time").trim() != null && !custom_meta_data.optString("cooking_time").trim().isEmpty() && !custom_meta_data.optString("cooking_time").trim().equals("null") && !custom_meta_data.optString("cooking_time").trim().matches("")) {
-                            contentDetailsOutput.setCooking_time(custom_meta_data.optString("cooking_time"));
+                        }if ((custom_meta_data.has("Cooking_Time")) && custom_meta_data.optString("Cooking_Time").trim() != null && !custom_meta_data.optString("Cooking_Time").trim().isEmpty() && !custom_meta_data.optString("Cooking_Time").trim().equals("null") && !custom_meta_data.optString("Cooking_Time").trim().matches("")) {
+                            contentDetailsOutput.setCooking_time(custom_meta_data.optString("Cooking_Time"));
                         }
                         else {
                             contentDetailsOutput.setCooking_time("");
 
-                        }if ((custom_meta_data.has("preparation_time")) && custom_meta_data.optString("preparation_time").trim() != null && !custom_meta_data.optString("preparation_time").trim().isEmpty() && !custom_meta_data.optString("preparation_time").trim().equals("null") && !custom_meta_data.optString("preparation_time").trim().matches("")) {
-                            contentDetailsOutput.setPreparation_time(custom_meta_data.optString("preparation_time"));
+                        }if ((custom_meta_data.has("Preparation_Time")) && custom_meta_data.optString("Preparation_Time").trim() != null && !custom_meta_data.optString("Preparation_Time").trim().isEmpty() && !custom_meta_data.optString("Preparation_Time").trim().equals("null") && !custom_meta_data.optString("Preparation_Time").trim().matches("")) {
+                            contentDetailsOutput.setPreparation_time(custom_meta_data.optString("Preparation_Time"));
                         }
                         else {
                             contentDetailsOutput.setPreparation_time("");

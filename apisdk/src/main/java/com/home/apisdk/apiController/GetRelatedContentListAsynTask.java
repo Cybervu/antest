@@ -142,7 +142,7 @@ public class GetRelatedContentListAsynTask extends AsyncTask<RelatedContentListI
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
-               // totalItems = Integer.parseInt(myJson.optString("total_count"));
+                totalItems = Integer.parseInt(myJson.optString("total_count"));
                 message = myJson.optString("msg");
             }
 

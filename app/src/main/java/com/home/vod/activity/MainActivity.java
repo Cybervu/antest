@@ -72,9 +72,11 @@ import com.home.vod.Content_List_Handler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MainActivityHeaderHandler;
 import com.home.vod.MyDownloadIntentHandler;
+import com.home.vod.PrefConstants;
 import com.home.vod.ProfileHandler;
 import com.home.vod.ProfileHandler;
 import com.home.vod.R;
+import com.home.vod.SAppUtil;
 import com.home.vod.SearchIntentHandler;
 import com.home.vod.SideMenuHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -317,7 +319,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        checkShowTutorial();
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
@@ -420,7 +422,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         Global globalVariable = (Global) getApplicationContext();
-        // isLogin = ((Global) getApplicationContext()).getIsLogin();
+        // isLogin = ((Global) getApplicationContext()).getIsLogi   n();
 
         if (genreArray.length > 0){
             globalVariable.setGenreArray(genreArray);
@@ -2230,6 +2232,21 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         dlgAlert.setCancelable(false);
 
         dlgAlert.create().show();
+    }
+
+
+    private void checkShowTutorial(){
+        int oldVersionCode = PrefConstants.getAppPrefInt(this, "version_code");
+        int currentVersionCode = SAppUtil.getAppVersionCode(this);
+
+        Log.v("SUBHA","old version ==== "+ oldVersionCode);
+        Log.v("SUBHA","current Version Code ==== "+ currentVersionCode);
+
+        if(currentVersionCode>oldVersionCode){
+            startActivity(new Intent(MainActivity.this,ProductTourActivity.class));
+//            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            PrefConstants.putAppPrefInt(this, "version_code", currentVersionCode);
+        }
     }
 
 }

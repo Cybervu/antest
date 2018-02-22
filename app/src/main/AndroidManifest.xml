@@ -119,6 +119,10 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ProductTourActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ViewMoreActivity"
             android:label=""
             android:screenOrientation="portrait" />
@@ -345,6 +349,8 @@
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.DigiOsmosisSubscriptionActivity" />
+        <activity android:name=".activity.DigiOsmosisPayment"></activity>
     </application>
 
 </manifest>

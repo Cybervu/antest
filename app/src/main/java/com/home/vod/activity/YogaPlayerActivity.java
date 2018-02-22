@@ -313,10 +313,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     private SubtitleProcessingTask subsFetchTask;
     TextView detailsTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview, repetitionTitleTextView, repetitionTextView, lineTextview1;
     ImageView bannerImageView, playButton, moviePoster, share;
+    LinearLayout durationLinearLayout,durationLinearLayoutForYoga;
     int selectedPurchaseType = 0;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
-    String movieUniqueId = "", movieGenre = "";
+    String movieUniqueId = "", movieGenre = "" ;
     String movieTrailerUrlStr = "", isEpisode = "";
     String duration = "";
     String[] season;
@@ -354,7 +355,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     String permalinkForContent = "";
     String videoDurationStr = "";
     boolean castStr = false;
-    int isFavorite;
+    int isFavorite = 0;
     int itemClickedPosistion;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
     String priceForUnsubscribedStr, priceFosubscribedStr;
@@ -673,11 +674,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         }
 
         Log.v("SUBHA", "data called here 273ry    " + status);
+        Log.v("SUBHA", "data called here 273ry    " + totalItems);
 
         if (status > 0) {
             if (status == 200) {
                 relatedContentList.setVisibility(View.VISIBLE);
-                itemData.clear();
+//                itemData.clear();
 
 
                 if (relatedContentListOutputArray.size() > 0) {
@@ -712,7 +714,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     } else {
 
 
-                        LogUtil.showLog("BISHAL", "data show...");
+                        LogUtil.showLog("SUBHA", "itemData.size......=======..." + itemData.size());
                         relatedContentList.setVisibility(View.VISIBLE);
                         relatedContentList.setLayoutManager(mLayoutManager);
                         relatedContentList.setItemAnimator(new DefaultItemAnimator());
@@ -949,6 +951,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         moreVideosTextView = (TextView) findViewById(R.id.tutorialTextView);
         clocktime = (TextView) findViewById(R.id.clocktime);
         durationRelativeLayout = (RelativeLayout) findViewById(R.id.durationRelativeLayout);
+        durationLinearLayout = (LinearLayout) findViewById(R.id.durationLinearLayout);
+
 
         days = (TextView) findViewById(R.id.days);
         tutorialRelativeLayout = (RelativeLayout) findViewById(R.id.tutorialRelativeLayout);
@@ -982,7 +986,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         moreVideosTextView.setText("EXERCISES");
         detailsTextView.setLetterSpacing(0.05f);
 
-        mLayoutManager = new LinearLayoutManager(YogaPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(YogaPlayerActivity.this, LinearLayoutManager.VERTICAL, false);
         if (((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((YogaPlayerActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
 
 
@@ -1988,6 +1992,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (status == 200) {
 
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
+            isEpisode = contentDetailsOutput.getIsEpisode();
             movieGenre = contentDetailsOutput.getGenre();
             benefits = contentDetailsOutput.getBenefit();
             season = contentDetailsOutput.getSeason();
@@ -2078,8 +2083,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             } else if (duration.matches("") && difficulty_level != null) {
                 lineTextview.setVisibility(View.GONE);
                 difficulty.setGravity(Gravity.CENTER);
+            }else if (repetition.matches("") && difficulty_level != null && duration != null) {
+                Log.v("SUBHA","data called ==== 11123234 == ");
+                lineTextview.setVisibility(View.GONE);
+                difficulty.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
             }
-
             if (permalinkForContent.equalsIgnoreCase("food")) {
 
                 durationTitleTextView.setText("PREP TIME");
@@ -2377,7 +2385,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             favorite_view_episode.setImageResource(R.drawable.favorite_red);
             isFavorite = 1;
-            Util.favorite_clicked = true;
+            Util.favorite_clicked = false;
             showToast();
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "addd fav pdlog hide");

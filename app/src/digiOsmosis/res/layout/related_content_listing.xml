@@ -54,8 +54,9 @@
                     android:layout_marginTop="@dimen/marginleft10dp"
                     android:padding="@dimen/loginImageViewMarging_top_padding"
                     android:text="Padhastana"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/story_text_size"
-                    android:textColor="@color/pageTitleColor"
+
                      />
 
                 <TextView
@@ -70,7 +71,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textSize="@dimen/story_text_size"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/pageTitleColor"
                     android:visibility="visible" />
 
             </RelativeLayout>

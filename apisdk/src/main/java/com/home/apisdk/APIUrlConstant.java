@@ -186,6 +186,7 @@ public class APIUrlConstant {
     public static String GmailRegUrl = "socialAuth";
     public static String DownloadContent = "DownloadContent";
     public static String RelatedContent = "RelatedContent";
+    public static String TutorialScreen = "tutorialScreen";
 
 
     public static String getGmailRegUrl() {
@@ -393,6 +394,9 @@ public class APIUrlConstant {
     }
     public static String getRelatedContent() {
         return BASE_URl + RelatedContent;
+    }
+    public static String getTutorialScreen() {
+        return BASE_URl + TutorialScreen;
     }
 
     public static String getFbUserExistsUrl() {

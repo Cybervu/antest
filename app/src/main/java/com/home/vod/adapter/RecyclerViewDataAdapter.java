@@ -141,11 +141,11 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
                 Context context = v.getContext();
                 Intent i;
 
-               /* if(sectionName.equalsIgnoreCase("yoga") || sectionName.equalsIgnoreCase("fitness-exersize")){
+               if(sectionName.equalsIgnoreCase("yoga") || sectionName.equalsIgnoreCase("fitness-exersize")){
                     i = new Intent(context, FitnessActivity.class);
-                }else{*/
+                }else{
                     i = new Intent(context, ViewMoreActivity.class);
-//                }
+                }
 
                 i.putExtra("SectionId", sectionId);
                 i.putExtra("sectionName", sectionName);
