@@ -349,7 +349,8 @@
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.DigiOsmosisSubscriptionActivity"></activity>
+        <activity android:name=".activity.DigiOsmosisSubscriptionActivity" />
+        <activity android:name=".activity.DigiOsmosisPayment"></activity>
     </application>
 
 </manifest>

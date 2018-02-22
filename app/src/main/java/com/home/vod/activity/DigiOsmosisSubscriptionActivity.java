@@ -1,5 +1,6 @@
 package com.home.vod.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -65,6 +66,7 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
     PlanAdapter mAdapter;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
+    static final int PAYMENT_CODE = 100;
     String responseStr;
     String planIdStr;
     String planNamestr;
@@ -145,11 +147,13 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(DigiOsmosisSubscriptionActivity.this,DigiOsmosisPayment.class);
+                startActivityForResult(intent,PAYMENT_CODE);
+
                 // Return to ProgrammeActivity
                 Log.v("SUBHA","selected plan id"+movieList.get(selected_subscription_plan).getPlanIdStr());
                 Log.v("SUBHA","selected plan id"+movieList.get(selected_subscription_plan).getPlanCurrencyIdStr());
                 Log.v("SUBHA","User id"+useridStr);
-                Toast.makeText(DigiOsmosisSubscriptionActivity.this,"SUBScription plan button clicked =====",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -344,4 +348,15 @@ public class DigiOsmosisSubscriptionActivity extends AppCompatActivity implement
         super.onBackPressed();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PAYMENT_CODE && resultCode == RESULT_OK){
+
+        }else
+        {
+            Toast.makeText(DigiOsmosisSubscriptionActivity.this,"Paymnet Cancelled",Toast.LENGTH_LONG).show();
+        }
+    }
 }
