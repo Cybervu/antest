@@ -7,6 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/VOD_FOR_MATAS.iml" filepath="$PROJECT_DIR$/VOD_FOR_MATAS.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
