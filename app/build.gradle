@@ -68,7 +68,7 @@ android {
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
@@ -193,13 +193,11 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         matas_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         /*Structuring Monetizer flavour with dimension*/
         monetizer {
@@ -288,7 +286,6 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"a2478e71219f606cb5b7a3d3f7a35fe8\""
 //             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-
         }
         cmax_staging_ {
             dimension 'environment'
@@ -431,8 +428,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
-
         gabejaramillo {
             minSdkVersion 21
             dimension 'vendor'
@@ -545,7 +540,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
         }
-
         aeonVideo {
             dimension 'vendor'
             minSdkVersion 21
@@ -564,7 +558,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         zee5 {
             dimension 'vendor'
             minSdkVersion 21
@@ -591,7 +584,6 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
             //buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
-
             versionCode 1
             versionName '1.0'
         }
@@ -603,7 +595,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
-
     }
 }
 
