@@ -116,7 +116,7 @@
 
  <color name="playerBgColor">#000000</color>
  <color name="videoTitleTextColor">#32c5d2</color>
- <color name="detailsPageTextColor">#fff</color>
+ <color name="detailsPageTextColor">#ffffff</color>
  <color name="cast_crew_titleCololr">#32c5d2</color>
  <color name="resumeTitleTextColor">#ffffff</color>
  <color name="search_close_color">#ffffff</color>
