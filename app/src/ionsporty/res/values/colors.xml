@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#000000</color>
+ <color name="background_end_color">#000000</color>
    <color name="appBackgroundColor">#000000</color>
     <color name="textColor">#ffffff</color>
     <color name="loginTextViewColor">#930f18</color>

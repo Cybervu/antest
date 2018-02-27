@@ -176,12 +176,19 @@
                 android:paddingTop="@dimen/name_user_margin_bottom"
                 android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/back"
+                <LinearLayout
+                    android:id="@+id/back_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/profile_spinner_margin"
-                    android:background="@drawable/ic_back" />
+                    android:padding="@dimen/marginLeft15dp">
+
+                    <ImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_back" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -352,7 +359,6 @@
                         android:layout_marginRight="15dp"
                         android:indeterminate="false"
                         android:max="100"
-
                         android:progress="0"
                         android:progressDrawable="@drawable/style_circular"
                         android:secondaryProgress="100" />

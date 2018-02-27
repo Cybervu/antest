@@ -139,7 +139,7 @@
                         android:layout_alignLeft="@+id/bannerImageView"
                         android:layout_alignRight="@+id/bannerImageView"
                         android:layout_alignStart="@+id/bannerImageView"
-                        android:layout_marginBottom="@dimen/ppv_margin"
+                        android:layout_marginBottom="@dimen/name_user_margin_bottom"
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/Login_drawing_padding"
@@ -152,7 +152,7 @@
                             android:layout_width="@dimen/viewmore_btn_width"
                             android:layout_height="@dimen/viewmore_btn_height"
                             android:background="@drawable/preorder_button"
-                            android:padding="@dimen/payment_spinner_padding"
+                            android:padding="@dimen/trailer_btn_padding"
                             android:layout_toLeftOf="@+id/viewTrailerButton"
                             android:textAllCaps="false"
                             android:stateListAnimator="@null"
@@ -169,11 +169,11 @@
                             android:layout_height="@dimen/viewmore_btn_height"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/view_more_button_background"
-                            android:padding="@dimen/payment_spinner_padding"
+                            android:padding="@dimen/trailer_btn_padding"
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/preorderbtn_text_size"
+                            android:textSize="@dimen/viewmore_text_size"
                             android:visibility="gone"
 
                             />
@@ -264,7 +264,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/videomovieTitleColor"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"
@@ -347,17 +347,17 @@
                             android:textColor="@color/button_background"
                             android:layout_centerVertical="true"/>
                     </RelativeLayout>
-                   <!-- <com.release.cube.utils.ExpandableTextView
-                        android:id="@+id/videoStoryTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="7dp"
+                    <!-- <com.release.cube.utils.ExpandableTextView
+                         android:id="@+id/videoStoryTextView"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_marginBottom="5dp"
+                         android:layout_marginLeft="10dp"
+                         android:layout_marginRight="10dp"
+                         android:layout_marginTop="7dp"
 
-                        android:textColor="@color/videotextColor"
-                        android:textSize="14dp" />-->
+                         android:textColor="@color/videotextColor"
+                         android:textSize="14dp" />-->
 
                     <TextView
                         android:id="@+id/videoCastCrewTitleTextView"
@@ -421,7 +421,7 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="@color/appBackgroundColor"
+                    android:popupBackground="@color/seasonBackgroundColor"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
                     android:visibility="gone" />
@@ -435,8 +435,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:stateListAnimator="@null"
-                    android:padding="@dimen/payment_spinner_padding"
                     android:layout_marginRight="@dimen/ppv_margin"
+                    android:layout_marginLeft="@dimen/ppv_margin"
                     android:background="@color/button_background"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"

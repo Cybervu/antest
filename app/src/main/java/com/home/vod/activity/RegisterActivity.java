@@ -528,6 +528,7 @@ public class RegisterActivity extends AppCompatActivity implements
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+            mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
@@ -639,10 +640,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         Util.check_for_subscription = 1;
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     }
-                    if(Util.favorite_clicked) {
-                        finish();
-                        return;
-                    }
+
                     detailsIntent.putExtra("PlayerModel", playerModel);
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(detailsIntent);

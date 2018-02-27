@@ -4,14 +4,14 @@
     xmlns:custom="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/sliderRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:visibility="gone">
 
 
@@ -99,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 
@@ -123,7 +123,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 

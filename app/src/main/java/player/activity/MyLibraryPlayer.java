@@ -87,6 +87,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
+import com.home.vod.util.StrokedTextView;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -303,7 +304,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     private SubtitleProcessingTask subsFetchTask;
     public TimedTextObject srt;
-    TextView subtitleText;
+    StrokedTextView subtitleText;
     public Handler subtitleDisplayHandler;
     ImageView subtitle_change_btn;
 
@@ -420,7 +421,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     }
                 });
             }
-        }, 3000, 3000);
+        }, 1000, 1000);
 
 
         if (mAdsManager != null && mIsAdDisplayed) {
@@ -468,6 +469,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         handleOfflineInExoplayer = new HandleOfflineInExoplayer(this);
+        featureHandler = FeatureHandler.getFeaturePreference(MyLibraryPlayer.this);
         // setContentView(layout);
         mSdkFactory = ImaSdkFactory.getInstance();
         mAdsLoader = mSdkFactory.createAdsLoader(this);
@@ -640,7 +642,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
-        subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
+        subtitleText = (StrokedTextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -740,6 +742,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
         }
+
+
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)){
+            SubTitlePath.clear();
+            playerModel.offline_url.clear();
+        }
+
+        if(!featureHandler.getFeatureStatus(FeatureHandler.IS_RESOLUTION,FeatureHandler.DEFAULT_IS_RESOLUTION)){
+            ResolutionUrl.clear();
+        }
+
+
         //=========================End=================================//
 
         if (isDrm) {
@@ -1660,7 +1675,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
                 Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
@@ -1713,7 +1728,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
-
+                        player_start_time = playerPosition ;
                         Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
 
 
@@ -1865,7 +1880,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
@@ -1907,7 +1922,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
-
+                        player_start_time = playerPosition ;
                         Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
@@ -2501,7 +2516,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
                 Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
@@ -2545,6 +2560,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
+                        player_start_time = playerPosition ;
                         Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
@@ -2650,7 +2666,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 // Following code is changed due to NewVideoLog API ;
 
                 httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
-                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
@@ -2693,6 +2709,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         videoLogId = myJson.optString("log_id");
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
+                        player_start_time = playerPosition ;
                         Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
@@ -2942,7 +2959,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         } catch (Exception e) {
         }
+        try {
+            if (SelectedUrl != null)
+                unregisterReceiver(SelectedUrl);
+        } catch (Exception e) {
 
+        }
 
     }
 
@@ -3042,12 +3064,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 
-        if (mAdsManager != null && mIsAdDisplayed) {
+      /*  if (mAdsManager != null && mIsAdDisplayed) {
             mAdsManager.pause();
         } else {
             Util.call_finish_at_onUserLeaveHint = false;
             emVideoView.pause();
-        }
+        }*/
         super.onPause();
     }
 
@@ -4133,7 +4155,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
 
                 if (isDrm) {
-
                     DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
                     Current_Sesion_DataUsedByChrmoeCast = 0;
                 }
@@ -4534,23 +4555,24 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             List tracks = new ArrayList();
 
             Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                if (playerModel.offline_url.size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                    for (int i = 0; i < playerModel.offline_url.size(); i++) {
 
-                    MediaTrack mediaTrack = new MediaTrack.Builder(i,
-                            MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
-                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
-                            .setContentType("text/vtt")
-                            .build();
+                        MediaTrack mediaTrack = new MediaTrack.Builder(i,
+                                MediaTrack.TYPE_TEXT)
+                                .setName(playerModel.offline_language.get(i))
+                                .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                .setContentId(playerModel.offline_url.get(i))
+                                .setLanguage(playerModel.SubTitleLanguage.get(i))
+                                .setContentType("text/vtt")
+                                .build();
 
-                    tracks.add(mediaTrack);
+                        tracks.add(mediaTrack);
+                    }
                 }
             }
-
 
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
@@ -4630,23 +4652,24 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             List tracks = new ArrayList();
 
             Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                if (playerModel.offline_url.size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                    for (int i = 0; i < playerModel.offline_url.size(); i++) {
 
-                    MediaTrack mediaTrack = new MediaTrack.Builder(i,
-                            MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
-                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
-                            .setContentType("text/vtt")
-                            .build();
+                        MediaTrack mediaTrack = new MediaTrack.Builder(i,
+                                MediaTrack.TYPE_TEXT)
+                                .setName(playerModel.offline_language.get(i))
+                                .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                .setContentId(playerModel.offline_url.get(i))
+                                .setLanguage(playerModel.SubTitleLanguage.get(i))
+                                .setContentType("text/vtt")
+                                .build();
 
-                    tracks.add(mediaTrack);
+                        tracks.add(mediaTrack);
+                    }
                 }
             }
-
 
             mediaInfo = new MediaInfo.Builder(playerModel.getVideoUrl().trim())
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)

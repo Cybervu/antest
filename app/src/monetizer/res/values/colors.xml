@@ -10,7 +10,11 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="toolbarTitleColor">#fff</color>
+    <!--added for app background color by bishal-->
+    <color name="background_start_color">#0f1113</color>
+    <color name="background_end_color">#0f1113</color>
     <color name="appBackgroundColor">#0f1113</color>
+    <color name="seasonBackgroundColor">#0f1113</color>
     <color name="cast_crew_textcolor">#fff</color>
     <color name="downloadpopupcolor">#fff</color>
     <color name="appBackgroundColor1">#fff</color>
@@ -100,4 +104,6 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="nav_header_line_color">#000000</color>
+
 </resources>

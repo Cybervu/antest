@@ -105,8 +105,8 @@
     <dimen name="purchasevalue_text_size">60sp</dimen>
     <dimen name="purchasemonth_text_size">18sp</dimen>
 
-    <dimen name="movieimg_width">160dp</dimen>
-    <dimen name="movieimg_height">203dp</dimen>
+    <dimen name="movieimg_width">167dp</dimen>
+    <dimen name="movieimg_height">210dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
 
     <dimen name="video280_width">185dp</dimen>
@@ -163,6 +163,9 @@
     <dimen name="list_singlecard_img_width">140dp</dimen>
     <dimen name="list_singlecard_img_height">200dp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
-
-
+    <dimen name="gridbottom8dp">8dp</dimen>
+    <!---this is for facebook button padding-->
+    <dimen name="facebook_padding">0dp</dimen>
+    <!---this is for videolistfragment   Textview padding-->
+    <dimen name="videolistleftmargin">5dp</dimen>
 </resources>

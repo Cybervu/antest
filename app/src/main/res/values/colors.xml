@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+ <color name="seasonBackgroundColor">#fff</color>
  <color name="appBackgroundColor">#fff</color>
  <color name="background">#fff</color>
  <color name="downloadpopupcolor">#fff</color>
@@ -119,6 +119,7 @@
  <color name="detailsPageTextColor">#fff</color>
  <color name="cast_crew_titleCololr">#32c5d2</color>
  <color name="resumeTitleTextColor">#ffffff</color>
+ <color name="search_close_color">#ffffff</color>
 
 
  //************************END**************************//
@@ -167,4 +168,7 @@
  <!--added for subtitle color by anu-->
  <color name="subtitle_solid_color">#fff</color>
  <color name="subtitle_outline_color">#000000</color>
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#fff</color>
+ <color name="background_end_color">#fff</color>
 </resources>

@@ -385,4 +385,9 @@
     <!--added for subtitle outline by anu-->
     <dimen name="subtitle_text_size">15sp</dimen>
     <item name="stroke_width" format="float" type="dimen">0.45</item>
+    <dimen name="trailer_btn_padding">6dp</dimen>
+    <!--added for Review edittext-->
+    <dimen name="review_edit_min_size">25dp</dimen>
+    <dimen name="review_edit_max_size">100dp</dimen>
+    <dimen name="videolistleftmargin">5dp</dimen>
 </resources>

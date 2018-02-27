@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical"
 
     >
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/manage_device_padding"
         android:visibility="gone">
 
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/manage_device_padding"
         android:visibility="gone">
 

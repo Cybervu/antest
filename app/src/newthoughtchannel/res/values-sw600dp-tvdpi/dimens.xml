@@ -157,4 +157,5 @@
     <dimen name="movie_videotitle_size">17sp</dimen>
     <dimen name="gridbottom8dp">8dp</dimen>
     <dimen name="facebook_padding">0dp</dimen>
+    <dimen name="trailer_btn_padding">2dp</dimen>
 </resources>

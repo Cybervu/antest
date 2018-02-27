@@ -6,10 +6,12 @@
 package com.home.apisdk.apiController;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.AddContentRatingInputModel;
 import com.home.apisdk.apiModel.AddContentRatingOutputModel;
 
@@ -22,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * This Class Allows the users to rate their favorite contents. The more is the rating
@@ -101,7 +104,7 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
     protected Void doInBackground(AddContentRatingInputModel... params) {
 
         try {
-            HttpClient httpclient = new DefaultHttpClient();
+           /* HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddContentRating());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken());
@@ -109,25 +112,17 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
             httppost.addHeader(HeaderConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id());
             httppost.addHeader(HeaderConstants.USER_ID, this.addContentRatingInputModel.getUser_id());
             httppost.addHeader(HeaderConstants.RATING, this.addContentRatingInputModel.getRating());
-            httppost.addHeader(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview());
-
-
-            // Execute HTTP Post Request
-            try {
-                HttpResponse response = httpclient.execute(httppost);
-                responseStr = EntityUtils.toString(response.getEntity());
-
-
-            } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                status = 0;
-                message = "Error";
-
-
-            } catch (IOException e) {
-                status = 0;
-                message = "Error";
-            }
+            httppost.addHeader(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview().replaceAll(" ", "%20"));*/
+            URL url = new URL(APIUrlConstant.getAddContentRating());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.addContentRatingInputModel.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.addContentRatingInputModel.getUser_id())
+                    .appendQueryParameter(HeaderConstants.RATING, this.addContentRatingInputModel.getRating())
+                    .appendQueryParameter(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview());
+            String query = (builder.build().getEncodedQuery()).replaceAll("%40","@");
+            responseStr = Utils.handleHttpAndHttpsRequest(url,query,status,message);
 
             JSONObject myJson = null;
             if (responseStr != null) {

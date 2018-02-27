@@ -169,7 +169,7 @@
                             android:layout_height="@dimen/viewmore_btn_height"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/view_more_button_background"
-                            android:padding="@dimen/payment_spinner_padding"
+                            android:padding="@dimen/trailer_btn_padding"
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"

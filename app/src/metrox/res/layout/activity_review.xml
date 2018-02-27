@@ -20,7 +20,7 @@
         android:textSize="@dimen/review_text_size"
         android:textColor="@color/pageTitleColor"
         android:layout_marginTop="@dimen/ppv_margin"
-        android:text="Click here"/>
+        android:text="@string/addReview"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,7 +69,9 @@
             android:layout_below="@+id/ratingBar"
             android:textColor="@color/textColor"
             android:textColorHint="@color/hint_color"
-            android:textSize="@dimen/review_edittext_size" />
+            android:textSize="@dimen/review_edittext_size"
+            android:minHeight="@dimen/review_edit_min_size"
+            android:maxHeight="@dimen/review_edit_max_size"/>
 
         <Button
             android:id="@+id/submitReviewButton"

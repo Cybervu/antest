@@ -14,12 +14,9 @@
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
     <dimen name="preorderbtn_text_size">13sp</dimen>
-
+    <dimen name="marginleft10dp">10dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
-    <dimen name="movieimg_width">160dp</dimen>
-    <dimen name="movieimg_height">203dp</dimen>
-    <dimen name="view_margin_top">10dp</dimen>
     <dimen name="okbtn_width">150dp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
@@ -100,13 +97,18 @@
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
-    <dimen name="videogrid_height">200dp</dimen>
+    <dimen name="videogrid_height">190dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
     <dimen name="plainrowlayout_width">130dp</dimen>
     <dimen name="purchasevalue_text_size">60sp</dimen>
     <dimen name="purchasemonth_text_size">18sp</dimen>
+
+    <dimen name="movieimg_width">167dp</dimen>
+    <dimen name="movieimg_height">210dp</dimen>
+    <dimen name="view_margin_top">10dp</dimen>
+
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">100dp</dimen>
     <dimen name="listitemlayout_height">438dp</dimen>
@@ -153,19 +155,17 @@
     <dimen name="plainrow_text_size">20sp</dimen>
 
 
-
-
-
     <!--new dimen optimization for layouts-->
-
+    <dimen name="viewmore_btn_width">95dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
     <dimen name="viewmore_text_size">13sp</dimen>
     <dimen name="homescreen_title_text_size">15sp</dimen>
     <dimen name="list_singlecard_img_width">140dp</dimen>
     <dimen name="list_singlecard_img_height">200dp</dimen>
     <dimen name="movie_videotitle_size">18sp</dimen>
-
-
-    <dimen name="toolbar_image_height">58dp</dimen>
-    <dimen name="toolbar_image_width">108dp</dimen>
-
+    <dimen name="gridbottom8dp">8dp</dimen>
+    <!---this is for facebook button padding-->
+    <dimen name="facebook_padding">0dp</dimen>
+    <!---this is for videolistfragment   Textview padding-->
+    <dimen name="videolistleftmargin">5dp</dimen>
 </resources>

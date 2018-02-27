@@ -1,5 +1,69 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="trailer_btn_text_size">14sp</dimen>
+    <dimen name="list_card_height">171dp</dimen>
+    <dimen name="list_card_width">117dp</dimen>
+    <dimen name="list_single_card_small_height">140dp</dimen>
+    <dimen name="videoTitle_textview">15sp</dimen>
+    <dimen name="durationratingLiearLayout_padding">0dp</dimen>
+    <dimen name="sectionTitle_textsize">22sp</dimen>
+    <dimen name="percentage_textview">8sp</dimen>
+    <dimen name="arrowIv_imageview_margin">47dp</dimen>
+    <dimen name="episode_listing_section_textview">21sp</dimen>
+
+    <!---player dimen-->
+    <dimen name="player_relativlayout_height">300dp</dimen>
+    <dimen name="player_margin_bottom">103dp</dimen>
+    <dimen name="player_padding_right">10dp</dimen>
+    <dimen name="current_time_textsize">14sp</dimen>
+    <dimen name="offline_margin_bottom">20dp</dimen>
+    <dimen name="offLine_subtitleText_textsize">16sp</dimen>
+    <dimen name="paddingBottom5dp">5dp</dimen>
+    <dimen name="paddingtop5dp">5dp</dimen>
+    <dimen name="marginLeft15dp">15dp</dimen>
+    <dimen name="videogridRelativelayoutMarginRight">10dp</dimen>
+    <dimen name="marginRight20dp">20dp</dimen>
+    <dimen name="subtitle_change_btn_width">31dp</dimen>
+    <dimen name="subtitle_change_btn_height">26dp</dimen>
+    <dimen name="marginBottom5dp">5dp</dimen>
+    <dimen name="margintop5dp">5dp</dimen>
+    <dimen name="marginleft10dp">10dp</dimen>
+    <dimen name="compress_expand_height">50dp</dimen>
+    <dimen name="compress_expand_width">50dp</dimen>
+    <dimen name="padding15dp">15dp</dimen>
+    <dimen name="marginright5dp">5dp</dimen>
+    <dimen name="margintop8dp">8dp</dimen>
+    <dimen name="marginright20dp">20dp</dimen>
+    <dimen name="marginright15dp">15dp</dimen>
+    <dimen name="marginright10dp">10dp</dimen>
+    <dimen name="genre_textsize">16sp</dimen>
+    <dimen name="padding_right4dp">4dp</dimen>
+    <dimen name="margintop12dp">12dp</dimen>
+
+
+    <!--resume_playing dimen-->
+    <dimen name="padding7dp">7dp</dimen>
+    <dimen name="marginleft8dp">8dp</dimen>
+    <dimen name="marginright8dp">8dp</dimen>
+    <dimen name="view_height">2dp</dimen>
+    <dimen name="button_textsize">13sp</dimen>
+
+
+    <dimen name="episode_card_margin">14dp</dimen>
+    <dimen name="card_radius">4dp</dimen>
+    <dimen name="season_image_height">200dp</dimen>
+    <dimen name="card_title_padding">10dp</dimen>
+    <dimen name="card_title">23sp</dimen>
+    <dimen name="toolbar_logo_width">100dp</dimen>
+    <dimen name="toolbar_logo_height">58dp</dimen>
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">14sp</dimen>
+    <dimen name="homescreen_title_text_size">16sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_drawer_width">260dp</dimen>
@@ -56,6 +120,7 @@
     <dimen name="voucher_code_height">48dp</dimen>
     <dimen name="pre_order_button_margin">6dp</dimen>
     <dimen name="loginImageViewMarging_top">15dp</dimen>
+    <dimen name="facebook_image_margin_right">0dp</dimen>
     <dimen name="ppv_apply_btn_height">44dp</dimen>
     <dimen name="payment_spinner_padding_left">12dp</dimen>
     <dimen name="profile_image_view_margin_top">165dp</dimen>
@@ -70,6 +135,7 @@
     <dimen name="videoGenreTextView_margin">200dp</dimen>
     <dimen name="login_btn_margin_top">16dp</dimen>
     <dimen name="payment_spinner_padding">6dp</dimen>
+    <dimen name="facebook_padding">6dp</dimen>
     <dimen name="payment_margin_textview_top">38dp</dimen>
     <dimen name="login_maring_top">12dp</dimen>
     <dimen name="profile_spinner_margin">15dp</dimen>
@@ -136,7 +202,6 @@
     <dimen name="spinner_width">150dp</dimen>
     <dimen name="spinner_height">38dp</dimen>
     <dimen name="btnmore_width">90dp</dimen>
-    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="btnmore_height">38dp</dimen>
     <dimen name="payment_watch_now_height">45dp</dimen>
     <dimen name="banerimg_height">210dp</dimen>
@@ -233,6 +298,8 @@
     <dimen name="language_text_size">17sp</dimen>
     <dimen name="listcard_width">171dp</dimen>
     <dimen name="listcard_height">93dp</dimen>
+    <dimen name="list_singlecard_img_width">108dp</dimen>
+    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="listview_img_width">18dp</dimen>
     <dimen name="listview_img_height">18dp</dimen>
     <dimen name="logouttext_height">110dp</dimen>
@@ -267,7 +334,7 @@
     <dimen name="movieimg_height">150dp</dimen>
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
-    <dimen name="listitemlayout_height">158dp</dimen>
+    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="itemtitle_text_size">16sp</dimen>
 
     <dimen name="changepas_height">50dp</dimen>
@@ -305,19 +372,17 @@
     <dimen name="close_album_img_width">24dp</dimen>
     <dimen name="close_album_img_height">24dp</dimen>
     <dimen name="spinner_new_height">40dp</dimen>
-
+    <dimen name="downld_popup_width">80dp</dimen>
+    <dimen name="downld_popup_height">34dp</dimen>
     <dimen name="nav_drawer_text_size">18sp</dimen>
-
-
-    <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">90dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
-    <dimen name="viewmore_text_size">14sp</dimen>
-    <dimen name="homescreen_title_text_size">16sp</dimen>
-    <dimen name="list_singlecard_img_width">108dp</dimen>
-    <dimen name="list_singlecard_img_height">154dp</dimen>
-    <dimen name="movie_videotitle_size">14sp</dimen>
 
     <!--new  dimen optimization for menu-->
     <dimen name="slider_menu_width">300dp</dimen>
+    <!--new  dimen optimization for drawer-->
+    <dimen name="drawer_liner_height">200dp</dimen>
+    <dimen name="drawer_image_height">150dp</dimen>
+    <dimen name="margin_right18dp">18dp</dimen>
+
+    <dimen name="gridbottom8dp">1dp</dimen>
 </resources>
+

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#f5e85a</color>
+ <color name="background_end_color">#f5e85a</color>
  <color name="appBackgroundColor">#f5e85a </color>
  <color name="aboutustestcolor">#f5e85a</color>
  <color name="textColor">#000</color>

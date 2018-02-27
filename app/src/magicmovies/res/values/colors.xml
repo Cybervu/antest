@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!--added for app background color by bishal-->
+    <color name="background_start_color">#fff</color>
+    <color name="background_end_color">#fff</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="textColor">#757575</color>
     <color name="videotextColor">#000000</color>
@@ -75,7 +77,7 @@
     <color name="voucher_inactive_button">#60008C</color>
     <color name="movieTitleColor">#fff</color>
     <color name="cast_crew_titleCololr">#60008C</color>
-    <color name="videoTitleTextColor">#000</color>
+    <color name="videoTitleTextColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
     <color name="dividerColor">#264177</color>
@@ -103,4 +105,6 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="nav_header_line_color">#000</color>
+    <color name="nav_text_line_color">#000</color>
 </resources>

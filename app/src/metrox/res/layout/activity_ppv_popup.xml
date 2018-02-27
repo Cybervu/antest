@@ -27,95 +27,110 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/completeSeasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/forgotlayout_margin"
             android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginTop="@dimen/forgotlayout_margin"
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/completeRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
                 android:textSize="@dimen/radiobtn_text_size"
-
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
                 />
 
             <TextView
                 android:id="@+id/completePriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="@dimen/radiobtn_text_size" />
-        </RelativeLayout>
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight=".2"/>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/seasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/forgotlayout_margin"
             android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginTop="@dimen/forgotlayout_margin"
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/seasonRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
                 android:textSize="@dimen/radiobtn_text_size"
-
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
                 />
 
             <TextView
                 android:id="@+id/seasonPriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="@dimen/radiobtn_text_size" />
-        </RelativeLayout>
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight=".2"/>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/episodeRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/forgotlayout_margin"
             android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginTop="@dimen/forgotlayout_margin"
+            android:weightSum="1"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/episodeRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
                 android:textSize="@dimen/radiobtn_text_size"
-
+                android:layout_weight="0.8"
+                android:ellipsize="end"
+                android:singleLine="true"
                 />
 
             <TextView
                 android:id="@+id/episodePriceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="@dimen/radiobtn_text_size" />
-        </RelativeLayout>
+                android:textSize="@dimen/radiobtn_text_size"
+                android:layout_weight=".2"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/payNowButton"

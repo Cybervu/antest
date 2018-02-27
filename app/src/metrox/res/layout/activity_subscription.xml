@@ -12,7 +12,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:fillViewport="true">
 
@@ -58,11 +58,11 @@
                     android:layout_marginTop="@dimen/payment_relative_margin"
                     android:background="@drawable/button_radious"
                     android:padding="@dimen/Login_drawing_padding"
-                    android:text="Activate Plan"
                     android:stateListAnimator="@null"
+                    android:text="Activate Plan"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/activation_text_size"
                     android:visibility="gone" />
 
                 <Button
@@ -72,7 +72,7 @@
                     android:layout_marginBottom="@dimen/ppv_margin"
                     android:layout_marginLeft="@dimen/activationplan_margin"
                     android:layout_marginRight="@dimen/activationplan_margin"
-                    android:layout_marginTop="@dimen/payment_relative_margin"
+                    android:layout_marginTop="@dimen/relative_margin_top"
                     android:background="@drawable/button_radious"
                     android:padding="@dimen/Login_drawing_padding"
                     android:layout_below="@+id/activationplan"

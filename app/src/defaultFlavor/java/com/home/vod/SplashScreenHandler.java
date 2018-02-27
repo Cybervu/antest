@@ -19,7 +19,7 @@ public class SplashScreenHandler {
         this.context=context;
     }
     public void handleSplashscreen(ImageView imageResize) {
-
+        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){

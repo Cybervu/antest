@@ -69,7 +69,9 @@
             android:layout_below="@+id/ratingBar"
             android:textColor="@color/textColor"
             android:textColorHint="@color/hint_color"
-            android:textSize="@dimen/review_edittext_size" />
+            android:textSize="@dimen/review_edittext_size"
+            android:minHeight="@dimen/review_edit_min_size"
+            android:maxHeight="@dimen/review_edit_max_size"/>
 
         <Button
             android:id="@+id/submitReviewButton"
