@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/sliderRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/appBackgroundColor">
+        android:background="@color/transparent">
 
 
         <com.daimajia.slider.library.SliderLayout

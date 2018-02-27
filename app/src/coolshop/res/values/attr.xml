@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ExpandableTextView">
+        <attr name="trimLength" format="integer"/>
+    </declare-styleable>
+  <!--  <declare-styleable name="ThemeableMediaRouteButton">
+        &lt;!&ndash; This drawable is a state list where the "checked" state
+             indicates active media routing.  Checkable indicates connecting
+             and non-checked / non-checkable indicates
+             that media is playing to the local device only. &ndash;&gt;
+        <attr name="routeEnabledDrawable" format="reference" />
+        <attr name="iconColor" format="reference|color" />
+        <attr name="android:minWidth" />
+        <attr name="android:minHeight" />
+    </declare-styleable>-->
+
+    <declare-styleable name="StrokedTextAttrs">
+        <attr name="textStrokeColor" format="color"/>
+        <attr name="textStrokeWidth" format="float"/>
+    </declare-styleable>
+</resources>

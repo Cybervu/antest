@@ -49,7 +49,7 @@
     <color name="subtitleDividerColor">#A9A9A9</color>
     <color name="playerBgColor">#000</color>
     <color name="pageTitleTextColor">#666666</color>
-    <color name="pageTitleColor">#6e6f76</color>
+    <color name="pageTitleColor">#000</color>
     <color name="castNameTextColor">#f2e35d</color>
     <color name="castDescTextColor">#A9A9A9</color>
     <color name="seasonTextColor">#666666</color>
@@ -88,4 +88,7 @@
     <color name="chromecast_color">#000</color>
     <color name="search_close_color">#000</color>
     <color name="resumeTitleTextColor">#fff</color>
+    <!--added for app background color by bishal-->
+    <color name="background_start_color">#fff</color>
+    <color name="background_end_color">#009fda</color>
 </resources>

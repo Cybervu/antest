@@ -226,15 +226,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -309,15 +309,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -422,15 +422,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -597,15 +597,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -897,15 +897,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -948,15 +948,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1098,6 +1098,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-88cgfbfdnmfpqiv8apucqhthc7d3tluj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.cmaxtv",
+            "certificate_hash": "968a70608aa2ac95833c37379ec6647e681da511"
+          }
+        },
+        {
           "client_id": "914358570958-b78rfkdv524e4k843mnupffil84smdhr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -1139,15 +1147,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1322,15 +1330,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1528,15 +1536,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1618,15 +1626,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
+            },
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -1671,6 +1679,37 @@
         "mobilesdk_app_id": "1:914358570958:android:c7d649a59e4c8016",
         "android_client_info": {
           "package_name": "com.release.yesflix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:822fcaf308653403",
+        "android_client_info": {
+          "package_name": "com.release.coolshop"
         }
       },
       "oauth_client": [

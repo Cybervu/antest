@@ -14,6 +14,7 @@ import com.home.vod.util.FontUtls;
 
 import player.utils.Util;
 
+import static com.home.vod.R.id.editProfileNameEditText;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
@@ -83,6 +84,8 @@ public class ProfileHandler {
         try {
             editProfileNameEditText_first.setText(first_name.trim());
             editProfileNameEditText_last.setText(last_name.trim());
+            editProfileNameEditText_first.setSelection(editProfileNameEditText_first.getText().length());
+            editProfileNameEditText_last.setSelection(editProfileNameEditText_last.getText().length());
         } catch (Exception e) {
             e.printStackTrace();
         }

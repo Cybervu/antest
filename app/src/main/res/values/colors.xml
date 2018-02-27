@@ -168,4 +168,7 @@
  <!--added for subtitle color by anu-->
  <color name="subtitle_solid_color">#fff</color>
  <color name="subtitle_outline_color">#000000</color>
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#fff</color>
+ <color name="background_end_color">#fff</color>
 </resources>

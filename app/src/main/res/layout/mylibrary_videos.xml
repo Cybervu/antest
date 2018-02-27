@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <TextView
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 
@@ -89,7 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 
@@ -134,7 +134,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/arrowIv"
             android:layout_marginLeft="@dimen/profile_image_view_margin_end"
-            android:background="@color/appBackgroundColor"
+            android:background="@color/transparent"
             android:gravity="center" />
 
     </RelativeLayout>
