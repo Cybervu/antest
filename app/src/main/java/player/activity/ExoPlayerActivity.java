@@ -871,7 +871,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (isDrm) {
             if (SubTitlePath.size() < 1) {
-                subtitle_change_btn.setVisibility(View.INVISIBLE);
+                subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
             } else {
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
@@ -880,7 +881,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         } else {
             if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
-                subtitle_change_btn.setVisibility(View.INVISIBLE);
+                subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
                 Log.v("MUVI1", "subtitle_image button Invisible called");
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
@@ -2437,8 +2439,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (video_completed == false) {
 
-            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            if (mCastSession != null && mCastSession.isConnected()) {
+            } else {
+                AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+                asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
             return;
         }
         mHandler.removeCallbacks(updateTimeTask);
@@ -2468,9 +2473,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 stoptimertask();
                 timer = null;
             }
-            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-//        return;
+            if (mCastSession != null && mCastSession.isConnected()) {
+            } else {
+                AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+                asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
 
 
             mHandler.removeCallbacks(updateTimeTask);
@@ -2509,8 +2516,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.call_finish_at_onUserLeaveHint) {
 
-            AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
-            asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
+
+            if (mCastSession != null && mCastSession.isConnected()) {
+            } else {
+                AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
+                asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
+            }
+
         }
 
         if (Util.call_finish_at_onUserLeaveHint) {
