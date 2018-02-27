@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <include
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:fillViewport="true">
 
 
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/layout_padding_left"
             android:layout_marginRight="@dimen/layout_padding_right"
-            android:background="@color/appBackgroundColor"
+            android:background="@color/transparent"
             android:orientation="vertical"
             android:padding="@dimen/Login_drawing_padding">
 
@@ -59,7 +59,7 @@
                 android:textColor="@color/editTexColor"
                 android:textColorHint="@color/hintTextColor"
                 android:textSize="16dp" />-->
-            <EditText
+    <!--        <EditText
                 android:id="@+id/editNameStr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +72,31 @@
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/edit_text_size"
-                android:visibility="visible"/>
+                android:visibility="visible"/>-->
+            <EditText
+                android:id="@+id/editNameStr_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="First Name"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTexColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
+            <EditText
+                android:id="@+id/editNameStr_last"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Last Name"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTexColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
 
             <EditText
                 android:id="@+id/editEmailStr"

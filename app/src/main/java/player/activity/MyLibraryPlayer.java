@@ -421,7 +421,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     }
                 });
             }
-        }, 3000, 3000);
+        }, 1000, 1000);
 
 
         if (mAdsManager != null && mIsAdDisplayed) {

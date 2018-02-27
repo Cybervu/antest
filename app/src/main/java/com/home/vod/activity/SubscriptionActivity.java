@@ -101,6 +101,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             toolbar.setNavigationIcon(null);
             toolbar.setTitle(getResources().getString(R.string.app_name));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         }
         else
         {

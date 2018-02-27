@@ -1629,7 +1629,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         List_Of_Resolution_Url.clear();
                         List_Of_Resolution_Format.clear();
                         List_Of_FileSize.clear();
-                        //This is added from Resolutionurl
                         if (ResolutionUrl.size() > 0) {
                             for (int i = 1; i < ResolutionUrl.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));

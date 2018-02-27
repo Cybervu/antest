@@ -11,6 +11,9 @@
     <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="nav_drawer_lineColor">#666</color>
     <color name="colorPrimaryDark">#1e292d</color>
+    <!--added for app background color by bishal-->
+    <color name="background_start_color">#fff</color>
+    <color name="background_end_color">#fff</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="cast_crew_titleCololr">#2acb99</color>
     <color name="no_internet_textColor">#000</color>

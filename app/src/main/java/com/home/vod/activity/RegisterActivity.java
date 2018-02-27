@@ -528,6 +528,7 @@ public class RegisterActivity extends AppCompatActivity implements
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+            mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }

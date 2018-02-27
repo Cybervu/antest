@@ -2,6 +2,9 @@
 
 <resources>
     <color name="appBackgroundColorSpinner">#fff</color>
+    <!--added for app background color by bishal-->
+    <color name="background_start_color">#161616</color>
+    <color name="background_end_color">#161616</color>
     <color name="appBackgroundColor">#161616</color>
     <color name="textColor">#fff</color>
     <color name="videotextColor">#fff</color>

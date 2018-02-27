@@ -19,7 +19,8 @@
     <dimen name="forgot_logo_height">120dp</dimen>
     <dimen name="email_text_size">13sp</dimen>
     <dimen name="pass_text_size">13sp</dimen>
-    <dimen name="forgot_text_size">13sp</dimen>
+    <dimen name="forgot_text_size">14sp</dimen>
+    <dimen name="videotitle_text_size">15sp</dimen>
     <dimen name="submit_text_size">12sp</dimen>
     <dimen name="edit_text_size">13sp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
@@ -89,15 +90,15 @@
     <dimen name="review_edittext_size">16sp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
     <dimen name="review_btn_height">38dp</dimen>
-    <dimen name="review_btn_textsize">14sp</dimen>
+    <dimen name="review_btn_textsize">13sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
     <dimen name="radiobtn_text_size">14sp</dimen>
 
 
     <!--new dimen optimization for layouts-->
-    <dimen name="viewmore_btn_width">90dp</dimen>
-    <dimen name="viewmore_btn_height">45dp</dimen>
+    <dimen name="viewmore_btn_width">85dp</dimen>
+    <dimen name="viewmore_btn_height">38dp</dimen>
     <dimen name="viewmore_text_size">12sp</dimen>
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>

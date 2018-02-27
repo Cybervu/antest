@@ -1459,6 +1459,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+            mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
             LogUtil.showLog("MUVI", "Called");
         } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));

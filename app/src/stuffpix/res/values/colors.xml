@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <resources>
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#111111</color>
+ <color name="background_end_color">#111111</color>
  <color name="appBackgroundColorSpinner">#fff</color>
  <color name="appBackgroundColor">#111111</color>
  <color name="textColor">#FFFFFF</color>

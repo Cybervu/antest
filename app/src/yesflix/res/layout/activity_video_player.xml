@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -300,7 +300,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/bannerImageRelativeLayout"
             android:layout_marginTop="@dimen/ppv_margin"
-            android:background="@color/appBackgroundColor"
+            android:background="@color/transparent"
             android:orientation="vertical"
             android:visibility="visible">
 

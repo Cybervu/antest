@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/main_padding"
         android:visibility="gone">
 
@@ -61,7 +61,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:fillViewport="true"
         android:orientation="vertical">
 
@@ -112,7 +112,7 @@
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
                         android:textSize="16dp" />-->
-                    <EditText
+                   <!-- <EditText
                         android:id="@+id/editProfileNameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -125,7 +125,34 @@
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size"
-                        android:visibility="visible"/>
+                        android:visibility="visible"/>-->
+                    <EditText
+                        android:id="@+id/editProfileNameEditText_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
+                        android:padding="@dimen/login_padding_bottom"
+                        android:hint="First Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="@dimen/edit_text_size" />
+
+                    <EditText
+                        android:id="@+id/editProfileNameEditText_last"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
+                        android:padding="@dimen/login_padding_bottom"
+                        android:hint="Last Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="@dimen/edit_text_size" />
 
                     <EditText
                         android:id="@+id/emailAddressEditText"

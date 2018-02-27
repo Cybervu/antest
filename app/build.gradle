@@ -595,6 +595,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        coolshop {
+            minSdkVersion 21
+            applicationId 'com.release.coolshop'
+            targetSdkVersion 25
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            dimension 'vendor'
+            //buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
+            buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
+            versionCode 1
+            versionName '1.0'
+        }
+        coolshop_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        coolshop_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
     }
 }
 
@@ -700,6 +719,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('yesflix') && (environment.equals('yesflix_staging_') || environment.equals('yesflix_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('coolshop') && (environment.equals('coolshop_staging_') || environment.equals('coolshop_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

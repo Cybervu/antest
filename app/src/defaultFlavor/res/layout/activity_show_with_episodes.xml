@@ -158,7 +158,7 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/preOrderButtonTextColor"
-                            android:textSize="@dimen/review_btn_textsize"
+                            android:textSize="@dimen/btnmore_text_size"
                             android:visibility="gone" />
 
 
@@ -172,7 +172,7 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/review_btn_textsize"
+                            android:textSize="@dimen/btnmore_text_size"
                             android:visibility="gone"
 
                             />
@@ -266,7 +266,7 @@
                         android:maxLines="1"
                         android:text="efgrfudddffgufgyufyudyufgefewewfewfewddddiyf"
                         android:textColor="@color/movieTitleColor"
-                        android:textSize="@dimen/forgot_text_size"
+                        android:textSize="@dimen/btnmore_text_size"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -431,7 +431,7 @@
                     android:stateListAnimator="@null"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/trailerbtn_text_size" />
+                    android:textSize="@dimen/btnmore_text_size" />
 
 
             </RelativeLayout>
