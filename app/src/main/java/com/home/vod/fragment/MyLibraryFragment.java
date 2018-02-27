@@ -798,12 +798,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }

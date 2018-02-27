@@ -257,7 +257,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             userIdStr = "";
         }
 
-        ((ImageView) findViewById(R.id.subtitle_change_btn)).setVisibility(View.INVISIBLE);
+        findViewById(R.id.subtitle_change_btn).setVisibility(View.INVISIBLE);
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
@@ -1169,7 +1169,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     private int millisecondsToString(int milliseconds)  {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -1427,7 +1427,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
                     previous_matching_time = current_matching_time;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                 }
             }catch (Exception e){
 

@@ -199,6 +199,6 @@ public class FeatureHandler {
 
 
     public boolean getFeatureStatus(String key, String defaultValue) {
-        return fetureSharedPref.getString(key, defaultValue).equals("1")?true:false;
+        return fetureSharedPref.getString(key, defaultValue).equals("1");
     }
 }

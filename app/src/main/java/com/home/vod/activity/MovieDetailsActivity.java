@@ -2621,12 +2621,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }
@@ -3622,9 +3617,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public void ShowVoucherPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) MovieDetailsActivity.this.getSystemService(MovieDetailsActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) MovieDetailsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.voucher_popup, null);
+        View convertView = inflater.inflate(R.layout.voucher_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 

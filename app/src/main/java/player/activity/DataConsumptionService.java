@@ -160,7 +160,7 @@ public class DataConsumptionService extends Service {
         {
             try{
             Util.timer.cancel();
-            }catch (Exception e){};
+            }catch (Exception e){}
         }
     }
 

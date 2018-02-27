@@ -246,11 +246,7 @@ public class Util {
 
     public static boolean isValidPhone(String phone) {
 
-        if ((phone.length() >= 10) && (phone.length() <= 15)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (phone.length() >= 10) && (phone.length() <= 15);
     }
 
     public static boolean isConfirmPassword(String password, String confirmPassword) {
@@ -494,11 +490,11 @@ public class Util {
 
                         if (mContext instanceof LoginActivity) {
                             mContext.startActivity(in);
-                            ((LoginActivity) mContext).onBackPressed();
+                            mContext.onBackPressed();
                         }
                         if (mContext instanceof RegisterActivity) {
                             mContext.startActivity(in);
-                            ((RegisterActivity) mContext).onBackPressed();
+                            mContext.onBackPressed();
                         }
 
                     }

@@ -230,7 +230,7 @@ enum ContentTypes2 {
             "video/mp2t");
     String mediaSourceParamsContentType = null;
 
-    private ContentTypes2(String mediaSourceParamsContentType) {
+    ContentTypes2(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
 
@@ -572,11 +572,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         Util.saveLogData("=================================================== Start Of Main ==================================================");
 
-        if (playerModel.getVideoUrl().contains(".mpd")) {
-            isDrm = true;
-        } else {
-            isDrm = false;
-        }
+        isDrm = playerModel.getVideoUrl().contains(".mpd");
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         featureHandler = FeatureHandler.getFeaturePreference(ExoPlayerActivity.this);
 
@@ -1022,7 +1018,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (censor_layout) {
 
-            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
+            findViewById(R.id.durationratingLiearLayout).setVisibility(View.GONE);
         }
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
 
@@ -1051,7 +1047,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     //Will Add Some Data to send
                     Util.call_finish_at_onUserLeaveHint = false;
                     Util.hide_pause = true;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
                     if (emVideoView.isPlaying()) {
@@ -1230,7 +1226,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     Util.hide_pause = false;
                 }
 
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -1400,7 +1396,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                     video_completed = false;
                     if (progressView != null) {
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         center_play_pause.setVisibility(View.GONE);
                         latest_center_play_pause.setVisibility(View.GONE);
                     }
@@ -1434,7 +1430,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             startTimer();
 
                             if (played_length > 0) {
-                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                findViewById(R.id.progress_view).setVisibility(View.GONE);
                                 Util.call_finish_at_onUserLeaveHint = false;
 
                                 Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
@@ -1690,7 +1686,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                                                 public void run() {
 
 
-                                                                    Progress.setProgress((int) 0);
+                                                                    Progress.setProgress(0);
                                                                     //percentg.setText(0+"%");
                                                                     percentg.setVisibility(View.GONE);
                                                                     download.setVisibility(View.VISIBLE);
@@ -2059,7 +2055,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -2284,7 +2280,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 // Added Later By Bibhu
 
                 primary_ll.setVisibility(View.GONE);
@@ -2329,7 +2325,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
 
                 /**ad **/
 
@@ -2342,7 +2338,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 if (Util.checkNetwork(ExoPlayerActivity.this)) {
                                     Util.call_finish_at_onUserLeaveHint = false;
                                     Util.hide_pause = true;
-                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
 
@@ -3086,7 +3082,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         if (Util.checkNetwork(ExoPlayerActivity.this)) {
                             Util.call_finish_at_onUserLeaveHint = false;
                             Util.hide_pause = true;
-                            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                            findViewById(R.id.progress_view).setVisibility(View.GONE);
                             latest_center_play_pause.setVisibility(View.VISIBLE);
 
 
@@ -3154,7 +3150,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             is_paused = true;
                         }
                         change_resolution = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
 
                     }
@@ -4149,7 +4145,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
-                                Progress.setProgress((int) model.getProgress());
+                                Progress.setProgress(model.getProgress());
                                 percentg.setText(model.getProgress() + "%");
 //
                                 if (model.getProgress() == 100) {
@@ -4623,7 +4619,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 stoptimertask();
                 Util.call_finish_at_onUserLeaveHint = false;
                 Util.hide_pause = true;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.VISIBLE);
                 subtitleText.setText("");
                 emVideoView.setEnabled(false);
@@ -5144,9 +5140,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     public void ShowDownloadOptionPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) ExoPlayerActivity.this.getSystemService(ExoPlayerActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) ExoPlayerActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.activity_download_popup, null);
+        View convertView = inflater.inflate(R.layout.activity_download_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 

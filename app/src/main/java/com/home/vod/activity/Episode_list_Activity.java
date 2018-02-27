@@ -394,12 +394,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }
@@ -4077,9 +4072,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(Episode_list_Activity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.voucher_plan_popup, null);
+        View convertView = inflater.inflate(R.layout.voucher_plan_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
@@ -4221,9 +4216,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public void ShowVoucherPopUp(String ContentName) {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(Episode_list_Activity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.voucher_popup, null);
+        View convertView = inflater.inflate(R.layout.voucher_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
