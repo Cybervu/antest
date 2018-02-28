@@ -2234,8 +2234,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (video_completed == false) {
 
-            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            if (mCastSession != null && mCastSession.isConnected()) {
+            } else {
+                AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+                asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
             return;
         }
         mHandler.removeCallbacks(updateTimeTask);
@@ -2264,8 +2267,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             stoptimertask();
             timer = null;
         }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+        if (mCastSession != null && mCastSession.isConnected()) {
+        } else {
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        }
+
+
         return;
 
     }
@@ -2293,9 +2302,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION) && Util.call_finish_at_onUserLeaveHint) {
 
+            if (mCastSession != null && mCastSession.isConnected()) {
+            } else {
+                AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
+                asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
+            }
 
-            AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
-            asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
         }
 
         if (Util.call_finish_at_onUserLeaveHint) {
