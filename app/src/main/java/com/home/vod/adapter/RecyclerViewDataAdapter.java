@@ -122,18 +122,10 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         }*/
             FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
 
-       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
             itemRowHolder.itemTitle.setText(sectionName.trim());
-//        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-            ///Called Handler for allinment change
             listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
             SectionListDataAdapter itemListDataAdapter = null;
-//            if (MainActivity.vertical == 1) {
 
-        /*for(int ii=0;ii<Util.image_orentiation.size();ii++){
-            LogUtil.showLog("MUVI1", "orien==" + Util.image_orentiation.get(ii));
-        }*/
 
 
             if (Util.image_orentiation.get(i) == Constant.IMAGE_PORTAIT_CONST) {
