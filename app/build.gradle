@@ -584,7 +584,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
-            //buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
             versionCode 1
             versionName '1.0'
         }
@@ -602,8 +602,8 @@ android {
             targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
-            //buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
-            buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
+            buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"6042c54e6817527fb245def4916a9c28\""
             versionCode 1
             versionName '1.0'
         }

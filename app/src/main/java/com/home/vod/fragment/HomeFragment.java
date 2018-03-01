@@ -238,17 +238,8 @@ public class HomeFragment extends Fragment implements
 
         if (firstTime == false) {
 
-
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgressBarHandler = new ProgressBarHandler(context);
-                        mProgressBarHandler.show();
-                    }
-                });
-
-            }
+           mProgressBarHandler = new ProgressBarHandler(context);
+            mProgressBarHandler.show();
 
         } else {
 
