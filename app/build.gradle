@@ -602,21 +602,21 @@ android {
             targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
-           // buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
+          //  buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
             versionName '1.0'
         }
         coolshop_staging_ {
             dimension 'environment'
-           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
 
         }
         coolshop_Prod_ {
             dimension 'environment'
-         //   buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
 
         }
     }
