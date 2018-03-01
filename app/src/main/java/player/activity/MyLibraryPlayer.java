@@ -781,7 +781,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View v) {
 
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
+
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -809,7 +814,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View v) {
 
+
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -5094,5 +5104,24 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         }
 
+    }
+
+
+    private boolean changeSubtitle_Resolution() {
+        boolean status = false;
+        if (isDrm) {
+            if (SubTitlePath.size() < 1) {
+                status = false;
+            } else {
+                status = true;
+            }
+        } else {
+            if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
+                status = false;
+            } else {
+                status = true;
+            }
+        }
+        return status;
     }
 }

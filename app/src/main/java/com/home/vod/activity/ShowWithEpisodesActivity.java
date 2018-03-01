@@ -1687,10 +1687,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             togglePlayback();
         }
 
-        if (preferenceManager.getUseridFromPref()!=null){
+       /* if (preferenceManager.getUseridFromPref()!=null){
             Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
             startActivity(intent);
-        }
+        }*/
 
     }
 
@@ -3821,10 +3821,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
         }
         // **************chromecast*********************//
-        if (mCastSession == null) {
-            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
-                    .getCurrentCastSession();
-        }
 
         GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);

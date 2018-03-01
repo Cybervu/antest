@@ -596,6 +596,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			public void onClick(View v) {
 
 				try {
+
+					if (SubTitlePath.size() < 1) {
+						return;
+					}
+
 					Util.call_finish_at_onUserLeaveHint = false;
 					Intent intent = new Intent(MarlinBroadbandExample.this, SubtitleList.class);
 					intent.putExtra("SubTitleName", SubTitleName);
@@ -612,6 +617,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			public void onClick(View v) {
 
 				try {
+
+					if (SubTitlePath.size() < 1) {
+						return;
+					}
+
 					Util.call_finish_at_onUserLeaveHint = false;
 					Intent intent = new Intent(MarlinBroadbandExample.this, SubtitleList.class);
 					intent.putExtra("SubTitleName", SubTitleName);

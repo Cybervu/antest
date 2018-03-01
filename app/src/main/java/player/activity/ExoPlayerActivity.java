@@ -872,7 +872,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (isDrm) {
             if (SubTitlePath.size() < 1) {
                 subtitle_change_btn.setVisibility(View.GONE);
-                cc_layout.setVisibility(View.GONE);
             } else {
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
@@ -882,7 +881,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         } else {
             if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
                 subtitle_change_btn.setVisibility(View.GONE);
-                cc_layout.setVisibility(View.GONE);
                 Log.v("MUVI1", "subtitle_image button Invisible called");
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
@@ -903,7 +901,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View v) {
 
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -931,7 +933,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View v) {
 
+
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -5547,6 +5554,24 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         }
         return size;
+    }
+
+    private boolean changeSubtitle_Resolution() {
+        boolean status = false;
+        if (isDrm) {
+            if (SubTitlePath.size() < 1) {
+                status = false;
+            } else {
+                status = true;
+            }
+        } else {
+            if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
+                status = false;
+            } else {
+                status = true;
+            }
+        }
+        return status;
     }
 }
 

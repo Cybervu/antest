@@ -167,7 +167,8 @@ android {
             versionName '3.1.7'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
-            //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""//Plus nights
+//            buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""//yesFilx
         }
         lumiere_staging_ {
             dimension 'environment'
