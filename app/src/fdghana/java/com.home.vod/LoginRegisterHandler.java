@@ -12,11 +12,11 @@ import com.home.vod.activity.PreLoginActivity;
 public class LoginRegisterHandler {
     Activity activity;
 
-    public LoginRegisterHandler(Activity activity){
-        this.activity=activity;
+    public LoginRegisterHandler(Activity activity) {
+        this.activity = activity;
     }
 
-    public Intent login(){
+    public Intent login() {
         return new Intent(activity, PreLoginActivity.class);
     }
 }

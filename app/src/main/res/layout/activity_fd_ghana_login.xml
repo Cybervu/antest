@@ -71,7 +71,6 @@
                             android:layout_height="@dimen/edittextheight"
                             android:layout_centerHorizontal="true"
                             android:layout_weight="1"
-
                             android:background="@drawable/tab_button_bg"
                             android:textAllCaps="false"
                             android:stateListAnimator="@null"

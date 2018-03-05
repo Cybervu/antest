@@ -748,6 +748,8 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
             Log.v("pratik", "gSign in res=" + result.toString());
 
         }
+        //Kushal
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {

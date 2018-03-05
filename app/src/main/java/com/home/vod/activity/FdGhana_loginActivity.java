@@ -374,10 +374,10 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
 
         String regPhoneStr = editPhone.getText().toString().trim();
         regNameStr = edituserName.getText().toString().trim();
-        String regEmailStrInfo = editEmailStr.getText().toString();
+        String regEmailStrInfo = editEmailStr.getText().toString().trim();
         regEmailStr = regEmailStrInfo.toLowerCase();
-        regPasswordStr = editPasswordStr.getText().toString();
-        String regConfirmEmailStrInfo = editConfirmEmail.getText().toString();
+        regPasswordStr = editPasswordStr.getText().toString().trim();
+        String regConfirmEmailStrInfo = editConfirmEmail.getText().toString().trim();
         regConfirmEmailStr = regConfirmEmailStrInfo.toLowerCase();
 
         if (NetworkStatus.getInstance().isConnected(FdGhana_loginActivity.this)){
