@@ -692,12 +692,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
         if (status==200){
-            if (NetworkStatus.getInstance().isConnected(this)) {
-//                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-//                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+//            if (NetworkStatus.getInstance().isConnected(this)) {
+               GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-                ipAddressStr = getIPAddress(true);
-                if (ipAddressStr.equals("")) {
+              //  ipAddressStr = getIPAddress(true);
+              /*  if (ipAddressStr.equals("")) {
                     noInternetTextView.setText("Could not detect your IP.");
                     noInternetLayout.setVisibility(View.VISIBLE);
                     geoBlockedLayout.setVisibility(View.GONE);
@@ -707,9 +707,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     checkGeoBlockInputModel.setIp(ipAddressStr);
                     CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
                     asynGetCountry.executeOnExecutor(threadPoolExecutor);
-                }
+                }*/
 
-            }
+//            }
         }
         else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
             geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));

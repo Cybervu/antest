@@ -171,4 +171,5 @@
  <!--added for app background color by bishal-->
  <color name="background_start_color">#fff</color>
  <color name="background_end_color">#fff</color>
+ <color name="player_title_color">#111111</color>
 </resources>

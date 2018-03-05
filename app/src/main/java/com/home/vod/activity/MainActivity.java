@@ -1318,7 +1318,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     mIntroductoryOverlay = new IntroductoryOverlay.Builder(
                             MainActivity.this, mediaRouteMenuItem)
                             .setTitleText(getString(R.string.introducing_cast))
-                            .setOverlayColor(R.color.colorPrimary)
+                            .setOverlayColor(R.color.colorPrimaryDark)
                             .setSingleTime()
                             .setOnOverlayDismissedListener(
                                     new IntroductoryOverlay.OnOverlayDismissedListener() {

@@ -6,11 +6,13 @@
 package com.home.apisdk.apiController;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 
@@ -24,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -107,7 +110,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
     protected Void doInBackground(ContentListInput... params) {
 
         try {
-            HttpClient httpclient = new DefaultHttpClient();
+           /* HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
@@ -118,24 +121,21 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
 //            httppost.addHeader("orderby", this.contentListInput.getOrderby());
             httppost.addHeader(HeaderConstants.COUNTRY, this.contentListInput.getCountry());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.contentListInput.getLanguage());
-            httppost.addHeader(HeaderConstants.ORDER_BY, this.contentListInput.getOrderby());
+            httppost.addHeader(HeaderConstants.ORDER_BY, this.contentListInput.getOrderby());*/
 
-            // Execute HTTP Post Request
-            try {
-                HttpResponse response = httpclient.execute(httppost);
-                responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("Muvi", "RES fragment =" + responseStr);
+            URL url = new URL(APIUrlConstant.getGetContentListUrl());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.contentListInput.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.PERMALINK, this.contentListInput.getPermalink())
+                    .appendQueryParameter(HeaderConstants.LIMIT, this.contentListInput.getLimit())
+                    .appendQueryParameter(HeaderConstants.OFFSET, this.contentListInput.getOffset())
+                    .appendQueryParameter("orderby", this.contentListInput.getOrderby())
+                    .appendQueryParameter(HeaderConstants.COUNTRY, this.contentListInput.getCountry())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.contentListInput.getLanguage())
+                    .appendQueryParameter(HeaderConstants.ORDER_BY, this.contentListInput.getOrderby());
+            String query = (builder.build().getEncodedQuery()).replaceAll("%40","@");
+            responseStr = Utils.handleHttpAndHttpsRequest(url,query,status,message);
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                status = 0;
-                totalItems = 0;
-                message = "";
-
-            } catch (IOException e) {
-                status = 0;
-                totalItems = 0;
-                message = "";
-            }
 
             JSONObject myJson = null;
             if (responseStr != null) {

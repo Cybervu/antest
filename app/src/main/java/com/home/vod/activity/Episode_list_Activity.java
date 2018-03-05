@@ -868,10 +868,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             togglePlayback();
         }
 
-        if (preferenceManager.getUseridFromPref()!=null){
+       /* if (preferenceManager.getUseridFromPref()!=null){
             Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
             startActivity(intent);
-        }
+        }*/
 
     }
 
@@ -2743,9 +2743,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             } else {
                 // save RecyclerView state
-                mBundleRecyclerViewState = new Bundle();
+              /*  mBundleRecyclerViewState = new Bundle();
                 Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
-                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);*/
 
 
                 customListAdapter = new EpisodesListViewMoreAdapter(Episode_list_Activity.this, R.layout.episode_list_item, itemData, new EpisodesListViewMoreAdapter.OnItemClickListener() {
@@ -2758,9 +2758,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 episodelist.setAdapter(customListAdapter);
 
 
-                if (mBundleRecyclerViewState != null) {
+                /*if (mBundleRecyclerViewState != null) {
                     episodelist.getLayoutManager().onRestoreInstanceState(listState);
-                }
+                }*/
             }
 
         }
@@ -2773,11 +2773,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // save RecyclerView state
-        mBundleRecyclerViewState = new Bundle();
+      /*  mBundleRecyclerViewState = new Bundle();
         if (mBundleRecyclerViewState != null ) {
             Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
             mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-        }
+        }*/
     }
 
 

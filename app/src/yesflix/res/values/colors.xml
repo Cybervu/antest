@@ -71,7 +71,7 @@
     <color name="unselected_color">#fff</color>
     <color name="leftMenuBgColor">#f2e35d</color>
     <color name="aboutustestcolor">#fff</color>
-    <color name="videotextColor">#666</color>
+    <color name="videotextColor">#fff</color>
     <color name="dialogepopupbackgroundcolor">#1e292d</color>
 
     <!--added for subtitle color by anu-->
@@ -91,4 +91,7 @@
     <!--added for app background color by bishal-->
     <color name="background_start_color">#fff</color>
     <color name="background_end_color">#009fda</color>
+    <color name="contactFormTitle">#000000</color>
+    <color name="nav_drawer_lineColor">#ffffff</color>
+    <color name="player_title_color">#ffffff</color>
 </resources>

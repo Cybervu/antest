@@ -165,7 +165,7 @@
                     android:layout_marginRight="@dimen/terms_text_view_margin_right"
                     android:clickable="true"
                     android:text="By Clicking on Register,I agree "
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/Login_text_color"
                     android:textSize="@dimen/playbtn_text_size" />
 
                 <TextView
@@ -177,7 +177,7 @@
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="terms"
-                    android:textColor="@color/button_background"
+                    android:textColor="@color/Login_text_color"
                     android:textSize="@dimen/applybtn_text_size" />
             </LinearLayout>
 
