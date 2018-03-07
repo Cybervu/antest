@@ -1,5 +1,6 @@
 package com.home.vod.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -90,7 +91,6 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
     public static FragmentDynamic getInstance(int position, String title, String secid, String langid, String stdid) {
         FragmentDynamic fragmentDummy = new FragmentDynamic();
         Bundle args = new Bundle();
@@ -213,7 +213,66 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
             }
             if (getActivity()!=null && movieImageStr.trim() !=null) {
 
+                // Kushal ***
+
                 Picasso.with(getActivity()).load(movieImageStr
+                ).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        videoWidth = bitmap.getWidth();
+                        videoHeight = bitmap.getHeight();
+                    }
+
+                    @Override
+                    public void onBitmapFailed(final Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                    }
+                });
+
+                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
+                    mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
+                } else {
+                    if (videoWidth > videoHeight) {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                    } else {
+                        mGridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                    }
+
+                }
+                if (videoWidth > videoHeight) {
+                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.home_280_card);
+                } else {
+                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.list_single_card);
+                }
+                mGridView.setAdapter(mGridAdapter);
+                mProgressBar.setVisibility(View.GONE);
+                // End ***
+
+                // Kushal Commneted ***
+
+                /*Picasso.with(getActivity()).load(movieImageStr
                 ).into(new Target() {
 
                     @Override
@@ -249,9 +308,9 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
 
                         }
                         if (videoWidth > videoHeight) {
-                            mGridAdapter = new GridViewAdapter1(getActivity(), url, R.layout.home_280_card);
+                            mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.home_280_card);
                         } else {
-                            mGridAdapter = new GridViewAdapter1(getActivity(), url, R.layout.list_single_card);
+                            mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.list_single_card);
                         }
                         //mGridAdapter = new GridViewAdapter1(getActivity(), url);
                         mGridView.setAdapter(mGridAdapter);
@@ -267,13 +326,10 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
                     public void onPrepareLoad(final Drawable placeHolderDrawable) {
 
                     }
-                });
-
+                });*/
+                // End ***
 
             }
-
-
-
         } else {
             Toast.makeText(getActivity(),languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY)+ " "+languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.activity.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -76,8 +77,8 @@ public class GridViewAdapter1 extends BaseAdapter {
         //GridItem item = mGridData.get(position);
         //holder.titleTextView.setText(Html.fromHtml(item.getTitle()));
 
-        //Picasso.with(mContext).load(item.getImage()).into(holder.imageView);
-        imageLoader.DisplayImage(urls.get(position), holder.imageView);
+        Picasso.with(mContext).load(urls.get(position)).into(holder.imageView);
+        //imageLoader.DisplayImage(urls.get(position), holder.imageView);
         holder.titleTextView.setVisibility(View.GONE);
         return vi;
     }

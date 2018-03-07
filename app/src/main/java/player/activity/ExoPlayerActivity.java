@@ -1370,7 +1370,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
                 backCalled();
-               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
+                // Kushal ***
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
+                // END ***
+               /* Toast.makeText(ExoPla yerActivity.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
                 finish();*/

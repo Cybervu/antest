@@ -71,6 +71,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSIO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
@@ -90,6 +91,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.EMAIL_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
@@ -169,6 +171,10 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
     Player playerModel;
 
     Toolbar mActionBarToolbar;
+
+    // Kushal ****
+        Boolean loginPressed=true, registerPresed= false;
+        // End ***
 
 
     @Override
@@ -272,7 +278,10 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                // Kushal ***
+                loginPressed=true;
+                registerPresed = false;
+                // End ***
                 loginTab.setPressed(true);
                 SignUpTab.setPressed(false);
 
@@ -286,6 +295,10 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
         SignUpTab.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                // Kushal ***
+                loginPressed=true;
+                registerPresed = false;
+                //End ***
                 SignUpTab.setPressed(true);
                 loginTab.setPressed(false);
                 loginTabLayout.setVisibility(View.GONE);
@@ -313,8 +326,6 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
             @Override
             public void onClick(View v) {
                 if (loginTab.isPressed() == true) {
-
-
                     loginButtonClicked();
                 } else if (SignUpTab.isPressed() == true) {
                     registerButtonClicked();
@@ -407,7 +418,7 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                         asyncReg = new RegistrationAsynTask(registration_input, this, this);
                         asyncReg.executeOnExecutor(threadPoolExecutor);
                     } else {
-                        Toast.makeText(FdGhana_loginActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
+                        Toast.makeText(FdGhana_loginActivity.this, languagePreference.getTextofLanguage(EMAIL_DO_NOT_MATCH, DEFAULT_EMAIL_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
                     }
                     //if (regPasswordStr.equals(regConfirmPasswordStr)){}
                 } else {
@@ -437,8 +448,8 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                 ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);
                 asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
             }else {
-
-                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE), languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL,DEFAULT_OOPS_INVALID_EMAIL));
+                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE),
+                        languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL,DEFAULT_OOPS_INVALID_EMAIL));
 
             }
 
@@ -447,6 +458,54 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
 
     }
 
+    // Kushal ***
+
+    private void ShowDialog(String Title, String msg) {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FdGhana_loginActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(msg);
+        dlgAlert.setTitle(Title);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (navigation) {
+                            /*Intent in = new Intent(FdGhana_loginActivity.this, LoginActivity.class);
+                            in.putExtra("PlayerModel", playerModel);
+                            in.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                            startActivity(in);
+                            finish();*/
+                            retainSelectedTab();
+                            dialog.cancel();
+                        } else {
+                            retainSelectedTab();
+                            dialog.cancel();
+                        }
+
+                    }
+                });
+        dlgAlert.create().show();
+    }
+
+    private void retainSelectedTab() {
+        if (loginPressed){
+            loginTab.setPressed(true);
+            SignUpTab.setPressed(false);
+
+            loginTabLayout.setVisibility(View.VISIBLE);
+            signUpLayout.setVisibility(View.GONE);
+            forgotTabLayout.setVisibility(View.GONE);
+        }else if(registerPresed){
+            SignUpTab.setPressed(true);
+            loginTab.setPressed(false);
+            loginTabLayout.setVisibility(View.GONE);
+            forgotTabLayout.setVisibility(View.GONE);
+            signUpLayout.setVisibility(View.VISIBLE);
+        }else {
+            Toast.makeText(this, "Nothing", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // End ***
     @Override
     public void onLoginPreExecuteStarted() {
         pDialog = new ProgressBarHandler(FdGhana_loginActivity.this);
@@ -571,6 +630,9 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                // Kushal ***
+                                retainSelectedTab();
+                                // End ***
                                 dialog.cancel();
                             }
                         });
@@ -594,6 +656,9 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // Kushal ***
+                            retainSelectedTab();
+                            // End ***
                             dialog.cancel();
                         }
                     });
@@ -631,6 +696,9 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // Kushal ***
+                            retainSelectedTab();
+                            // End ***
                             dialog.cancel();
                         }
                     });
@@ -648,6 +716,9 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                // Kushal ***
+                                retainSelectedTab();
+                                // End ***
                                 dialog.cancel();
                             }
                         });
@@ -896,7 +967,9 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
         }
     }
 
-    public void ShowDialog(String Title, String msg)
+
+    // Kushal- commented ***
+   /* public void ShowDialog(String Title, String msg)
     {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FdGhana_loginActivity.this, R.style.MyAlertDialogStyle);
         dlgAlert.setMessage(msg);
@@ -907,11 +980,11 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (navigation) {
-                            /*Intent in = new Intent(FdGhana_loginActivity.this, LoginActivity.class);
+                            *//*Intent in = new Intent(FdGhana_loginActivity.this, LoginActivity.class);
                             in.putExtra("PlayerModel", playerModel);
                             in.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                             startActivity(in);
-                            finish();*/
+                            finish();*//*
                             dialog.cancel();
                         } else {
                             dialog.cancel();
@@ -919,5 +992,6 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                     }
                 });
         dlgAlert.create().show();
-    }
+    }*/
+    // end ***
 }

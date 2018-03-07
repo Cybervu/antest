@@ -99,6 +99,7 @@ public class LanguagePreference {
     public static final String OOPS_INVALID_EMAIL = "OOPS_INVALID_EMAIL";
     public static final String VALID_CONFIRM_PASSWORD = "VALID_CONFIRM_PASSWORD";
     public static final String PASSWORDS_DO_NOT_MATCH = "PASSWORDS_DO_NOT_MATCH";
+    public static final String EMAIL_DO_NOT_MATCH = "EMAIL_DO_NOT_MATCH";
     public static final String EMAIL_EXISTS = "EMAIL_EXISTS";
     public static final String EMAIL_DOESNOT_EXISTS = "EMAIL_DOESNOT_EXISTS";
     public static final String PASSWORD_RESET_LINK = "PASSWORD_RESET_LINK";
@@ -346,6 +347,7 @@ public class LanguagePreference {
     public static final String DEFAULT_BUTTON_OK = "Ok";
     public static final String DEFAULT_OOPS_INVALID_EMAIL = "Oops! Invalid email.";
     public static final String DEFAULT_PASSWORDS_DO_NOT_MATCH = "Passwords do not match";
+    public static final String DEFAULT_EMAIL_DO_NOT_MATCH = "Email do not match";
     public static final String DEFAULT_EMAIL_EXISTS = "Email already exists";
     public static final String DEFAULT_EMAIL_DOESNOT_EXISTS = "Email does not exist. Please enter correct email.";
     public static final String DEFAULT_PASSWORD_RESET_LINK = "Password Reset link has been emailed to your registered email ID. Please check your email to reset password.";

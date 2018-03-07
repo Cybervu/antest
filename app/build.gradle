@@ -32,6 +32,9 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7

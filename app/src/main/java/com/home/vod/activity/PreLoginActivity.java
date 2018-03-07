@@ -137,6 +137,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
     private static final int RC_SIGN_IN = 999;
 
     ProgressBarHandler pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,30 +157,30 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         });
         mActionBarToolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
 //        mActionBarToolbar.getBackground().setAlpha(0);
-        btnFbLogin= (Button)findViewById(R.id.loginWithFacebookButton);
+        btnFbLogin = (Button) findViewById(R.id.loginWithFacebookButton);
         btnFbLogin.setText("Login With Facebook");
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference((this));
 
-        loginBtn=(Button)findViewById(R.id.loginBtn);
+        loginBtn = (Button) findViewById(R.id.loginBtn);
 
-        google_sign_in_button=(RelativeLayout)findViewById(R.id.google_sign_in_button);
+        google_sign_in_button = (RelativeLayout) findViewById(R.id.google_sign_in_button);
 
-        if(languagePreference.getTextofLanguage(GOOGLE_STATUS,DEFAULT_GOOGLE_STATUS).equals("1")){
+        if (languagePreference.getTextofLanguage(GOOGLE_STATUS, DEFAULT_GOOGLE_STATUS).equals("1")) {
             google_sign_in_button.setVisibility(View.VISIBLE);
         }
 
-        if(languagePreference.getTextofLanguage(FACEBOOK_STATUS,DEFAULT_FACEBOOK_STATUS).equals("1")){
+        if (languagePreference.getTextofLanguage(FACEBOOK_STATUS, DEFAULT_FACEBOOK_STATUS).equals("1")) {
             btnFbLogin.setVisibility(View.VISIBLE);
         }
 
-        Log.v("pratik","google login statis="+languagePreference.getTextofLanguage(GOOGLE_STATUS,DEFAULT_GOOGLE_STATUS));
-        Log.v("pratik","fb login statis="+languagePreference.getTextofLanguage(FACEBOOK_STATUS,DEFAULT_FACEBOOK_STATUS));
+        Log.v("pratik", "google login statis=" + languagePreference.getTextofLanguage(GOOGLE_STATUS, DEFAULT_GOOGLE_STATUS));
+        Log.v("pratik", "fb login statis=" + languagePreference.getTextofLanguage(FACEBOOK_STATUS, DEFAULT_FACEBOOK_STATUS));
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent logIntent=new Intent(PreLoginActivity.this,FdGhana_loginActivity.class);
+                Intent logIntent = new Intent(PreLoginActivity.this, FdGhana_loginActivity.class);
                 startActivity(logIntent);
                 finish();
             }
@@ -209,17 +210,15 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         });
 
 
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        callbackManager=CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create();
 
-        loginButton= (LoginButton)findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile", "email", "user_friends");
 
         btnFbLogin.setOnClickListener(new View.OnClickListener() {
@@ -270,16 +269,16 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("first_name") + " " + json.getString("last_name");
                                         }
-                                        fName =  json.getString("first_name");
+                                        fName = json.getString("first_name");
                                     } else {
 
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("last_name");
-                                            fName =  json.getString("last_name");
-                                        }else{
+                                            fName = json.getString("last_name");
+                                        } else {
                                             if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
                                                 fbName = json.getString("name");
-                                                fName = json.getString("name").replace(" ","").trim();
+                                                fName = json.getString("name").replace(" ", "").trim();
                                             }
                                         }
 
@@ -318,7 +317,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
 //                                    registerButton.setVisibility(View.GONE);
                                     loginButton.setVisibility(View.GONE);
                                     btnFbLogin.setVisibility(View.GONE);
-                                   handleFbUserDetails(fbUserId,fbEmail,fbName);
+                                    handleFbUserDetails(fbUserId, fbEmail, fbName);
 //
                                 }
 
@@ -639,7 +638,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
                     //go to subscription page
                     if (NetworkStatus.getInstance().isConnected(this)) {
 
-                            setResultAtFinishActivity();
+                        setResultAtFinishActivity();
 
 
                     } else {
@@ -670,7 +669,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         }
     }
 
-    public void setResultAtFinishActivity(){
+    public void setResultAtFinishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
@@ -748,8 +747,9 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
             Log.v("pratik", "gSign in res=" + result.toString());
 
         }
-        //Kushal
+        //Kushal ***
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        // End ***
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -762,7 +762,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
             AuthId = acct.getId();
             AuthImageUrl = String.valueOf(acct.getPhotoUrl());
 
-            Log.v("pratik","name=="+Authname);
+            Log.v("pratik", "name==" + Authname);
 
             GmailLoginInput gmailLoginInput = new GmailLoginInput();
             gmailLoginInput.setEmail(AuthEmail);
@@ -795,7 +795,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
 
         }
 
-        if (status == 200){
+        if (status == 200) {
             preferenceManager.setLogInStatusToPref("1");
             preferenceManager.setUserIdToPref(gmailLoginOutput.getId());
             preferenceManager.setPwdToPref("");
@@ -864,8 +864,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
             } else {
                 Util.showToast(PreLoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
             }
-        }
-        else {
+        } else {
 
             android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(PreLoginActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(LanguagePreference.DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
