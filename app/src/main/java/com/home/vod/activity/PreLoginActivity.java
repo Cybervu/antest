@@ -749,6 +749,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         }
         //Kushal ***
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
         // End ***
     }
 
