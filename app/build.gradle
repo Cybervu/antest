@@ -59,11 +59,11 @@ android {
             versionName "1.5"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
 //            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
-            buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""
 //liveStripe
         }
         defaultFlavor_staging_ {
@@ -603,20 +603,20 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"f93720ab0a5ed2e6c8b4fcac9ffd8b12\""
-          //  buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            //  buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
             versionName '1.0'
         }
         coolshop_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
 
         }
         coolshop_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
 
         }
     }
@@ -686,8 +686,7 @@ android.variantFilter { variant ->
     } else if (vendor.equals('ionsporty') && (environment.equals('ionsporty_staging_') || environment.equals('ionsporty_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-     else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+    } else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     } else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
@@ -705,33 +704,25 @@ android.variantFilter { variant ->
     } else if (vendor.equals('euroman') && (environment.equals('euroman_staging_') || environment.equals('euroman_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('leasy') && (environment.equals('leasy_staging_') || environment.equals('leasy_Prod_'))
+    } else if (vendor.equals('leasy') && (environment.equals('leasy_staging_') || environment.equals('leasy_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('stuffPix') && (environment.equals('stuffPix_staging_') || environment.equals('stuffPix_Prod_'))
+    } else if (vendor.equals('stuffPix') && (environment.equals('stuffPix_staging_') || environment.equals('stuffPix_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('aeonVideo') && (environment.equals('aeonVideo_staging_') || environment.equals('aeonVideo_Prod_'))
+    } else if (vendor.equals('aeonVideo') && (environment.equals('aeonVideo_staging_') || environment.equals('aeonVideo_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-
-    else if (vendor.equals('zee5') && (environment.equals('zee5_staging_') || environment.equals('zee5_Prod_'))
+    } else if (vendor.equals('zee5') && (environment.equals('zee5_staging_') || environment.equals('zee5_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('yesflix') && (environment.equals('yesflix_staging_') || environment.equals('yesflix_Prod_'))
+    } else if (vendor.equals('yesflix') && (environment.equals('yesflix_staging_') || environment.equals('yesflix_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('coolshop') && (environment.equals('coolshop_staging_') || environment.equals('coolshop_Prod_'))
+    } else if (vendor.equals('coolshop') && (environment.equals('coolshop_staging_') || environment.equals('coolshop_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else {
+    } else {
         variant.setIgnore(true)
     }
 }
@@ -759,9 +750,9 @@ dependencies {
     compile('com.spotxchange:spotx-sdk-android:3.1.+') {
         transitive = false
     }
+    // compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
-    // compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'io.card:android-sdk:5.4.0'
@@ -779,6 +770,7 @@ dependencies {
     compile 'com.android.support:palette-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 

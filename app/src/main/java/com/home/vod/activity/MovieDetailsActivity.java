@@ -791,7 +791,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);

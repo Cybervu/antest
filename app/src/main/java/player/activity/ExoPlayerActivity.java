@@ -890,6 +890,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 try {
+                    if(SubTitleName.size()>0)
                     Util.DefaultSubtitle = SubTitleName.get(0);
                 }catch (Exception e){}
 
