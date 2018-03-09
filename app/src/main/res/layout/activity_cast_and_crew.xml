@@ -44,7 +44,7 @@
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
         android:padding="@dimen/main_padding"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/noInternetTextView"

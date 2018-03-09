@@ -872,7 +872,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
                             Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-
                             finish();
 
                         }
