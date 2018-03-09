@@ -7,7 +7,10 @@
       <module fileurl="file://E:/VOD_NEW_CLONE/VOD/NEWVOD.iml" filepath="E:/VOD_NEW_CLONE/VOD/NEWVOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
       <module fileurl="file://E:/VOD_NEW_CLONE/VOD/VOD_FOR_MATAS.iml" filepath="E:/VOD_NEW_CLONE/VOD/VOD_FOR_MATAS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VOD_Final.iml" filepath="$PROJECT_DIR$/VOD_Final.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
