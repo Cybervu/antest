@@ -1600,11 +1600,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                 String[] strValues_chargedPriceTextView = String.valueOf(chargedPrice).split("\\.");
                 if (strValues_chargedPriceTextView[1].length() == 1) {
-                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice + "0");
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f",chargedPrice) + "0");
 
                 }
                 else {
-                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice );
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f",chargedPrice) );
 
                 }
                 creditCardLayout.setVisibility(View.VISIBLE);
@@ -1622,11 +1622,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON,DEFAULT_FREE_FOR_COUPON));
 
                     if (strValues_chargedPriceTextView[1].length() == 1) {
-                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice+"0");
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f",chargedPrice)+"0");
 
                     }
                     else  {
-                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f",chargedPrice));
 
                     }                }
 
