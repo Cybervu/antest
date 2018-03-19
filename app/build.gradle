@@ -528,7 +528,7 @@ android {
             applicationId 'com.release.stuffpix'
             versionCode 2
             targetSdkVersion 25
-            versionName "1.2.1"
+            versionName "2.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
         }

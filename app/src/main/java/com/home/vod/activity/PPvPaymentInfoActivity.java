@@ -1618,6 +1618,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     paymentOptionLinearLayout.setVisibility(View.GONE);
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
+                    saveCardCheckbox.setChecked(false);
 
                     withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON,DEFAULT_FREE_FOR_COUPON));
 

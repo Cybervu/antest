@@ -84,6 +84,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
+import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -150,7 +151,7 @@ import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
 
-import player.service.PopUpService;
+
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -1611,7 +1612,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View v) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ExoPlayerActivity.this)) {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ExoPlayerActivity.this)) {
                     final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     try {
                         Util.call_finish_at_onUserLeaveHint = false;
@@ -4169,10 +4170,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
-                                Progress.setProgress((int) model.getProgress());
-                                percentg.setText(model.getProgress() + "%");
+
+
+                                int number = (int) model.getProgress();
+                                number =  (number < 0) ? -number : number;
+
+                                Progress.setProgress(number);
+                                percentg.setText(number + "%");
 //
-                                if (model.getProgress() == 100) {
+                                if (number == 100) {
 
                                     //writefilepath();
 //                                dbHelper.deleteRecord(audio);
@@ -5334,9 +5340,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         @Override
         protected void onPostExecute(String file_url) {
-            Intent intent = new Intent(ExoPlayerActivity.this, PopUpService.class);
+            Util.call_finish_at_onUserLeaveHint = false;
+            Intent intent = new Intent(ExoPlayerActivity.this, AlertActivity.class);
             intent.putExtra("msg", Dwonload_Complete_Msg);
-            startService(intent);
+            startActivity(intent);
         }
     }
 

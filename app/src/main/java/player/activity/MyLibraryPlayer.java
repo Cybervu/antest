@@ -83,6 +83,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
+import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.SupportActivity1;
@@ -142,7 +143,7 @@ import javax.net.ssl.HttpsURLConnection;
 import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
-import player.service.PopUpService;
+
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -4973,9 +4974,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         @Override
         protected void onPostExecute(String file_url) {
-            Intent intent = new Intent(MyLibraryPlayer.this, PopUpService.class);
+            Util.call_finish_at_onUserLeaveHint = false;
+            Intent intent = new Intent(MyLibraryPlayer.this, AlertActivity.class);
             intent.putExtra("msg", Dwonload_Complete_Msg);
-            startService(intent);
+            startActivity(intent);
         }
     }
 
