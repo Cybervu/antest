@@ -323,7 +323,7 @@
 
     <!--new dimen adde for loginn register tab in fd ghana-->
 
-    <dimen name="edittextheight">40dp</dimen>
+    <dimen name="edittextheight">46dp</dimen>
     <dimen name="loginimagewidth">150dp</dimen>
 
     </resources>

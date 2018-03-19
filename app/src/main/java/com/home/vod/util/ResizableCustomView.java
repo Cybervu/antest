@@ -1,16 +1,22 @@
 package com.home.vod.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
@@ -71,6 +77,7 @@ public class ResizableCustomView {
                         tv.setText(
                                 addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
                                         viewMore), TextView.BufferType.SPANNABLE);
+
                     } else {
 
                         LogUtil.showLog("sanjay:--------","story data maxline ==========="+tv.getLineCount());
@@ -82,20 +89,46 @@ public class ResizableCustomView {
                         tv.setText(
                                 addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
                                         viewMore), TextView.BufferType.SPANNABLE);
+
                     }
                 }
             }
         });
 
     }
+    // Kushal --- Changing color and adding/removing underline of View More.
+    public static  class MySpannable extends ClickableSpan{
+        private boolean isUnderline = false;
+
+        /**
+         * Constructor
+         */
+        public MySpannable(boolean isUnderline) {
+            this.isUnderline = isUnderline;
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+
+            ds.setUnderlineText(isUnderline);
+            ds.setColor(mcontext.getResources().getColor(android.R.color.holo_red_dark));
+
+        }
+        @Override
+        public void onClick(View widget) {
+
+        }
+    }
+    //
 
     private static SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
-                                                                            final int maxLine, final String spanableText, final boolean viewMore) {
+
+                                                                          final int maxLine, final String spanableText, final boolean viewMore) {
         String str = strSpanned.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 
         if (str.contains(spanableText)) {
-            ssb.setSpan(new ClickableSpan() {
+            ssb.setSpan(new MySpannable(false) {
 
                 @Override
                 public void onClick(View widget) {

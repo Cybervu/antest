@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <!-- Permission to use camera - required -->
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -202,7 +201,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.CastVideosDark">
+            android:theme="@style/Theme.CastVideosTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -281,8 +280,10 @@
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
 
-        <activity android:name=".activity.PreLoginActivity" />
-        <activity android:name=".activity.FdGhana_loginActivity"></activity>
+        <activity android:name=".activity.PreLoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FdGhana_loginActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

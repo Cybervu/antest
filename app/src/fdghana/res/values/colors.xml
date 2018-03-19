@@ -149,7 +149,8 @@
     <color name="buttonbg3">#cd7c4b</color>
     <color name="buttonbg1">#913b28</color>
     <color name="buttonbg2">#790000</color>
-    <color name="fb_button_bg">#64b3bf</color>
+    <color name="fb_button_bg">#0457cd</color>
+    <color name="google_button_bg">#fb483d</color>
 
 
     <color name="hint_text_background">#737373</color>

@@ -317,15 +317,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
         };
 
-        mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        try {
+            mCastContext = CastContext.getSharedInstance(this);
+            mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+            setupCastListener();
+            mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         // int startPosition = getInt("startPosition", 0);
         // mVideoView.setVideoURI(Uri.parse(item.getContentId()));
 
-        setupCastListener();
-        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+
 
 
         //**** chromecast*************//*
@@ -457,8 +462,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 // Not implemented here
                 return false;
             case R.id.action_register:
-
-                Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                //Kushal
+                Intent registerIntent = new Intent(MainActivity.this, FdGhana_loginActivity.class);
+                registerIntent.putExtra("type","signup");
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here

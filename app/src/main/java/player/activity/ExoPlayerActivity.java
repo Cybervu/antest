@@ -314,6 +314,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
+    // Kushal
+    LinearLayout backLayout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -1002,6 +1004,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
 
+        // Kushal
+        backLayout= (LinearLayout)findViewById(R.id.back_layout);
+
+
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
 
@@ -1366,6 +1372,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         });
 
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backCalled();
+                // Kushal ***
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
+                // END ***
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1375,10 +1393,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 emVideoView.release();
                 finish();
                 // END ***
-               /* Toast.makeText(ExoPla yerActivity.this, "test", Toast.LENGTH_SHORT).show();
-                mHandler.removeCallbacks(updateTimeTask);
-                emVideoView.release();
-                finish();*/
             }
         });
 

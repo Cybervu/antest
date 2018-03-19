@@ -75,12 +75,11 @@
         android:fillViewport="true">
 
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <RelativeLayout
             android:id="@+id/detailsRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background">
+            android:background="@drawable/transparent">
 
 
             <RelativeLayout
@@ -267,7 +266,7 @@
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:paddingRight="@dimen/videoGenreTextView_padding"
                     android:text=""
-                    android:textColor="@color/movieTitleColor"/>
+                    android:textColor="@color/movieTitleColor" />
 
             </RelativeLayout>
 
@@ -287,8 +286,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/name_user_margin_bottom"
                     android:layout_marginLeft="@dimen/ppv_margin"
-                    android:layout_marginRight="@dimen/ppv_margin"
-                    >
+                    android:layout_marginRight="@dimen/ppv_margin">
 
                     <TextView
                         android:id="@+id/videoStoryTextView"
@@ -309,7 +307,7 @@
                         android:background="@color/transparent"
                         android:text="View More"
                         android:textAllCaps="false"
-                        android:textColor="@color/button_background"
+                        android:textColor="#fc000d"
                         android:textSize="@dimen/preorderbtn_text_size"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -354,6 +352,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ppv_margin"
                     android:focusable="false"
+                    android:layout_marginBottom="@dimen/marginleft10dp"
                     android:visibility="visible" />
 
                 <TextView
@@ -365,6 +364,7 @@
                     android:layout_marginRight="@dimen/textColor_margin"
                     android:clickable="true"
                     android:gravity="center"
+                    android:layout_marginTop="@dimen/marginleft10dp"
                     android:text=""
                     android:textColor="@color/transaction_text_color"
                     android:textSize="@dimen/preorderbtn_text_size"

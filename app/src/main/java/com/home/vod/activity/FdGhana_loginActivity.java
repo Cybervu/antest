@@ -2,6 +2,7 @@ package com.home.vod.activity;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -64,10 +66,12 @@ import player.activity.Player;
 import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
@@ -174,6 +178,7 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
 
     // Kushal ****
         Boolean loginPressed=true, registerPresed= false;
+        String type=null;
         // End ***
 
 
@@ -182,6 +187,15 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fd_ghana_login);
 
+        // kushal *** Hide keyboard on start
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //
+
+        // Kushal ** login or Signup
+        Bundle b= getIntent().getExtras();
+        if (b!=null){
+            type= b.getString("type");
+        }
         loginTabLayout = (LinearLayout) findViewById(R.id.loginTabLayout);
         forgotTabLayout = (LinearLayout) findViewById(R.id.forgotTabLayout);
         signUpLayout = (LinearLayout) findViewById(R.id.signUpLayout);
@@ -197,6 +211,7 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
         edituserName = (EditText) findViewById(R.id.editUserNameStr);
         editPasswordStr = (EditText) findViewById(R.id.editPasswordStr);
         SignUpTab = (Button) findViewById(R.id.signup);
+
         loginButton = (ImageButton) findViewById(R.id.loginButton);
         loginTab = (Button) findViewById(R.id.login);
 
@@ -262,17 +277,35 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
        /* Typeface SignUpTabTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         SignUpTab.setTypeface(SignUpTabTypeface);*/
         FontUtls.loadFont(this,getResources().getString(R.string.fonts),SignUpTab);
-        SignUpTab.setText(Util.getTextofLanguage(FdGhana_loginActivity.this, Util.SIGN_UP_TITLE, Util.DEFAULT_SIGN_UP_TITLE));
+        SignUpTab.setText(Util.getTextofLanguage(FdGhana_loginActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
+        // Kushal -- change signup button text
+      //  SignUpTab.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
 
        /* Typeface loginTabTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         loginTab.setTypeface(loginTabTypeface);*/
         FontUtls.loadFont(this,getResources().getString(R.string.fonts),loginTab);
         loginTab.setText(Util.getTextofLanguage(FdGhana_loginActivity.this, Util.LOGIN, Util.DEFAULT_LOGIN));
 
-        SignUpTab.setPressed(false);
-        loginTab.setPressed(true);
-        loginTabLayout.setVisibility(View.VISIBLE);
-        signUpLayout.setVisibility(View.GONE);
+        // Kushal set login or signup view
+        try {
+            if (type.equalsIgnoreCase("login")) {
+                SignUpTab.setPressed(false);
+                loginTab.setPressed(true);
+                loginTabLayout.setVisibility(View.VISIBLE);
+                signUpLayout.setVisibility(View.GONE);
+            } else if (type.equalsIgnoreCase("signup")) {
+                SignUpTab.setPressed(true);
+                loginTab.setPressed(false);
+                loginTabLayout.setVisibility(View.GONE);
+                signUpLayout.setVisibility(View.VISIBLE);
+            }
+        }catch (Exception e){
+            SignUpTab.setPressed(false);
+            loginTab.setPressed(true);
+            loginTabLayout.setVisibility(View.VISIBLE);
+            signUpLayout.setVisibility(View.GONE);
+        }
+        //
 
         loginTab.setOnTouchListener(new View.OnTouchListener() {
 
@@ -994,4 +1027,18 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
         dlgAlert.create().show();
     }*/
     // end ***
+
+    // kushal *** Hide keyboard on destroy
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+    }
+    //
 }

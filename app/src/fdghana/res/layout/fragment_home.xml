@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@drawable/line"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:id="@+id/lineTextView3"
 
         />
@@ -32,7 +30,7 @@
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100"
-            android:layout_height="230dp"/>
+            android:layout_height="@dimen/listitemlayout_height"/>
 
         <com.daimajia.slider.library.Indicators.PagerIndicator
             android:id="@+id/custom_indicator2"
@@ -61,21 +59,17 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@drawable/line"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:id="@+id/lineTextView1"
         android:layout_below="@+id/sliderRelativeLayout"
         />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lineTextView1"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         app:tabIndicatorHeight="0.3dp"
+        app:tabGravity="center"
         android:foreground="@drawable/menu_overlay"
         app:tabMaxWidth="0dp"/>
 

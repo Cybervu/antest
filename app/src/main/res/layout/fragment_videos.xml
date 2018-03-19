@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/ppv_margin"
-        android:textColor="@color/pageTitleColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/itemtitle_text_size"
+        android:text="wrerrwr"
         android:textStyle="normal" />
 
     <GridView

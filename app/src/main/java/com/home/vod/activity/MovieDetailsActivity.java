@@ -441,8 +441,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 // Not implemented here
                 return false;
             case R.id.action_register:
-
-                Intent registerIntent = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
+                // Kushal
+                Intent registerIntent = new Intent(MovieDetailsActivity.this, FdGhana_loginActivity.class);
+                registerIntent.putExtra("type","signup");
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here
@@ -461,6 +462,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Intent mydownload = new Intent(MovieDetailsActivity.this, MyDownloads.class);
                 startActivity(mydownload);
                 // Not implemented here
+                return false;
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(MovieDetailsActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
                 return false;
             case R.id.menu_item_language:
 
@@ -1928,7 +1935,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
-                if (preferenceManager.getUseridFromPref()!=null){
+                if (preferenceManager.getUseridFromPref() != null) {
                     Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
                 }
@@ -2779,13 +2786,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         ) {
 
                     if (mCastSession != null && mCastSession.isConnected()) {
+                        if (playerModel.getContentTypesId() != 4) {
 
-                        ///Added for resume cast watch
-                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
-                            Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
-                            Intent resumeIntent = new Intent(MovieDetailsActivity.this, ResumePopupActivity.class);
-                            startActivityForResult(resumeIntent, 1001);
-
+                            ///Added for resume cast watch
+                            if ((Util.dataModel.getPlayPos() * 1000) > 0) {
+                                Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
+                                Intent resumeIntent = new Intent(MovieDetailsActivity.this, ResumePopupActivity.class);
+                                startActivityForResult(resumeIntent, 1001);
+                            }
                         } else {
                             Played_Length = 0;
                             watch_status_String = "start";
@@ -3297,13 +3305,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
 
-            String bannerUrl = contentDetailsOutput.getBanner().trim().equals("")?contentDetailsOutput.getPoster().trim():contentDetailsOutput.getBanner().trim();
+            String bannerUrl = contentDetailsOutput.getBanner().trim().equals("") ? contentDetailsOutput.getPoster().trim() : contentDetailsOutput.getBanner().trim();
             Picasso.with(MovieDetailsActivity.this)
                     .load(bannerUrl)
                     .error(R.drawable.logo)
                     .placeholder(R.drawable.logo)
                     .into(moviePoster);
-
 
 
         } else {

@@ -73,6 +73,7 @@ public class ProfileHandler {
 
     public void setNameTxt(String nameString,String last_name,String phoneNumber){
         editProfileNameEditText.setText(nameString.trim());
+        editProfileNameEditText.setSelection(editProfileNameEditText.getText().length());
 
     }
 

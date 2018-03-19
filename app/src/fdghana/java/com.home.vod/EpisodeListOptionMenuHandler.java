@@ -139,7 +139,7 @@ public class EpisodeListOptionMenuHandler {
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                register_menu.setVisible(false);
+                register_menu.setVisible(true);
 
             } else {
                 login_menu.setVisible(false);

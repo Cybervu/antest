@@ -162,7 +162,7 @@ public class ReviewActivity extends AppCompatActivity implements
         clickHereToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent registerActivity = new Intent(ReviewActivity.this, LoginActivity.class);
+                final Intent registerActivity = new Intent(ReviewActivity.this, PreLoginActivity.class);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

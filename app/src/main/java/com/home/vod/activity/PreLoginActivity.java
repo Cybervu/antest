@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -51,6 +52,7 @@ import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -65,14 +67,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
@@ -91,6 +96,9 @@ import static player.utils.Util.DEFAULT_GOOGLE_STATUS;
 import static player.utils.Util.DETAILS_NOT_FOUND_ALERT;
 import static player.utils.Util.FACEBOOK_STATUS;
 import static player.utils.Util.GOOGLE_STATUS;
+import static player.utils.Util.GOOGLE_STATUS;
+import static player.utils.Util.GOOGLE_STATUS;
+import static player.utils.Util.GOOGLE_STATUS;
 
 public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDetailsAsyn.CheckFbUserDetailsListener,
         SocialAuthAsynTask.SocialAuthListener,
@@ -99,7 +107,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         GoogleApiClient.OnConnectionFailedListener,
         AsyncGmailReg.AsyncGmailListener {
 
-    public Button loginBtn;
+    public Button loginBtn,signupBtn;
     public Button btnFbLogin;
     LoginButton loginButton;
 
@@ -137,6 +145,8 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
     private static final int RC_SIGN_IN = 999;
 
     ProgressBarHandler pDialog;
+    // Kushal
+    TextView googleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,15 +167,23 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
         });
         mActionBarToolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
 //        mActionBarToolbar.getBackground().setAlpha(0);
+        // Kushal ***
         btnFbLogin = (Button) findViewById(R.id.loginWithFacebookButton);
+        FontUtls.loadFont(this,getResources().getString(R.string.fonts),btnFbLogin);
+        googleText= (TextView)findViewById(R.id.textView);
+        FontUtls.loadFont(this,getResources().getString(R.string.fonts),googleText);
         btnFbLogin.setText("Login With Facebook");
-
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference((this));
-
         loginBtn = (Button) findViewById(R.id.loginBtn);
-
+        FontUtls.loadFont(this,getResources().getString(R.string.fonts),loginBtn);
+        signupBtn= (Button)findViewById(R.id.signupBtn);
+        signupBtn.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        FontUtls.loadFont(this,getResources().getString(R.string.fonts),signupBtn);
         google_sign_in_button = (RelativeLayout) findViewById(R.id.google_sign_in_button);
+        // End ***
+
+
 
         if (languagePreference.getTextofLanguage(GOOGLE_STATUS, DEFAULT_GOOGLE_STATUS).equals("1")) {
             google_sign_in_button.setVisibility(View.VISIBLE);
@@ -181,6 +199,19 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
             @Override
             public void onClick(View view) {
                 Intent logIntent = new Intent(PreLoginActivity.this, FdGhana_loginActivity.class);
+                logIntent.putExtra("type","login");
+                logIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                startActivity(logIntent);
+                finish();
+            }
+        });
+
+        signupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent logIntent = new Intent(PreLoginActivity.this, FdGhana_loginActivity.class);
+                logIntent.putExtra("type","signup");
+                logIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(logIntent);
                 finish();
             }
@@ -211,6 +242,7 @@ public class PreLoginActivity extends AppCompatActivity implements CheckFbUserDe
 
 
     }
+
 
     @Override
     protected void onResume() {

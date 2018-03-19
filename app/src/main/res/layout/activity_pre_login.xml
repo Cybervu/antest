@@ -2,6 +2,7 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/signinback"
@@ -52,17 +53,32 @@
 
                 />
 
+          <!--  <Button
+                android:id="@+id/google_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittextheight"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/google_button_bg"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:text="Login with Google"
+                android:textAllCaps="false"
+                android:stateListAnimator="@null"
+                android:layout_below="@+id/loginWithFacebookButton"
+                android:visibility="gone"
+
+                />-->
+
             <RelativeLayout
                 android:padding="6dp"
                 android:layout_marginTop="20dp"
                 android:id="@+id/google_sign_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/edittextheight"
                 android:paddingRight="8dp"
                 android:paddingLeft="8dp"
                 android:visibility="gone"
-                android:elevation="2dp"
-                android:background="@drawable/gbg"
+                android:background="@drawable/google_button_bg"
                 android:layout_below="@+id/loginWithFacebookButton"
                 android:layout_centerVertical="true">
 
@@ -71,26 +87,24 @@
                     android:gravity="center"
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="match_parent"
                     android:fontFamily="@string/regular_fonts"
                     android:text="Login with Google"
                     android:layout_gravity="start"
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp"
-
-                    android:textColor="#a49f9f"
+                    android:textColor="@color/white"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true" />
-                <ImageView
+               <!-- <ImageView
                     android:layout_toLeftOf="@+id/textView"
                     android:id="@+id/imageView2"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/google_icon_svg" />
+                    app:srcCompat="@drawable/google_icon_svg" />-->
 
             </RelativeLayout>
-
 
 
             <com.facebook.login.widget.LoginButton
@@ -113,7 +127,25 @@
                 android:background="@drawable/button_radius1"
                 android:textColor="@color/white"
                 android:textSize="18dp"
-                android:text="login"
+                android:text="Login"
+                android:typeface="sans"
+                android:textAllCaps="false"
+                android:visibility="visible"
+                android:stateListAnimator="@null"
+
+                />
+
+            <Button
+
+                android:id="@+id/signupBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittextheight"
+                android:layout_below="@+id/loginBtn"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_radius1"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:text="Sign up"
                 android:textAllCaps="false"
                 android:visibility="visible"
                 android:stateListAnimator="@null"
