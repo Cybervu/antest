@@ -429,8 +429,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Kushal - get string of id
+        String id1= getResources().getResourceName(item.getItemId());
+        Toast.makeText(this, id1, Toast.LENGTH_SHORT).show();
+        //
         switch (item.getItemId()) {
-
             case R.id.action_search:
                 final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
