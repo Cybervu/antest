@@ -571,7 +571,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         handleOfflineInExoplayer = new HandleOfflineInExoplayer(this);
 
-        Util.saveLogData("=================================================== Start Of Main ==================================================");
+        Util.saveLogData("===================================================* Start Of Main *==================================================");
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
