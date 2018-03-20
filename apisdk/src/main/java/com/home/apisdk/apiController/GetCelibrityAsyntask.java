@@ -152,16 +152,14 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel, Void, V
                     try {
                         jsonChildNode = jsonMainNode.getJSONObject(i);
                         CelibrityOutputModel content = new CelibrityOutputModel();
-                        String celebrityName = jsonChildNode.optString("name");
-                        celebrityName = celebrityName.replaceAll("\\s", "");
-                        celebrityName = celebrityName.replaceAll("\t", "");
-                        String celebrityImage = jsonChildNode.optString("celebrity_image");
-                        String celebrityPermalink = jsonChildNode.optString("permalink");
-                        String celebritySummary = jsonChildNode.optString("summary");
+                        String celebrityName = jsonChildNode.optString("name").trim();
+                        String celebrityImage = jsonChildNode.optString("celebrity_image").trim();
+                        String celebrityPermalink = jsonChildNode.optString("permalink").trim();
+                        String celebritySummary = jsonChildNode.optString("summary").trim();
 
 
 
-                        String celebrityCastType = jsonChildNode.optString("cast_type");
+                        String celebrityCastType = jsonChildNode.optString("cast_type").trim();
 
                         celebrityCastType = celebrityCastType.replaceAll("\\[", "");
                         celebrityCastType = celebrityCastType.replaceAll("\\]", "");

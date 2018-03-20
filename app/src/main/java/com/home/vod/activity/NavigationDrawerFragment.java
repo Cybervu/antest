@@ -37,6 +37,7 @@ import com.home.vod.fragment.ContactUsFragment;
 import com.home.vod.fragment.HomeFragment;
 import com.home.vod.fragment.MyLibraryFragment;
 import com.home.vod.fragment.VideosListFragment;
+import com.home.vod.fragment.WatchHistoryFragment;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -61,10 +62,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.WATCH_HISTORY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -98,6 +101,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     ProgressBarHandler progressDialog;
 
     boolean my_libary_added = false;
+    boolean watch_history_added = false;
     MenusOutputModel menusOutputModelLocal,menusOutputModelFromAPI = new MenusOutputModel();
     int status;
     String message;
@@ -322,6 +326,14 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 // isNavigated = 1;
 
                                 fragment = new MyLibraryFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                fragment.setArguments(bundle);
+                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                mDrawerLayout.closeDrawers();
+                            }
+                            else if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))){
+                                fragment = new WatchHistoryFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
                                 fragment.setArguments(bundle);
@@ -596,16 +608,16 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         featureHandler = FeatureHandler.getFeaturePreference(getActivity());
 
 
-        if(!loadHomeFragment){
+//        if(!loadHomeFragment){
             try{
-                boolean my_libary_added1 = false;
+               /* boolean my_libary_added1 = checkMyLibAdded(menusOutputModelLocal);
 
-                for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+               *//* for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
 
                     if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                         my_libary_added1 = true;
                     }
-                }
+                }*//*
 
                 if ((featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null)) {
                     if(my_libary_added1)
@@ -618,10 +630,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     {
                         return;
                     }
-                }
+                }*/
 
-            }catch (Exception e){}
-        }
+                Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
+
+
+            }catch (Exception e){
+                Util.main_menu_list_size = -2;
+            }
+//        }
 
         loggedInStr = preferenceManager.getUseridFromPref();
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
@@ -640,12 +657,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         menusOutputModelLocal.getFooterMenuModel().add(0,footerMenu);
 
        /* Adding Library*/
-        /*if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
-            MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();
-            mainMenuLibrary.setTitle (languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY));
-            menusOutputModelLocal.getMainMenuModel().add(mainMenuLibrary);
 
-        }*/
+
 
         for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
 
@@ -670,6 +683,46 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
             }
         }
+
+
+
+       /* Adding Watch History */
+
+
+        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
+                watch_history_added = true;
+            }
+        }
+
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.WATCH_HISTORY, FeatureHandler.DEFAULT_IS_WATCH_HISTORY) && loggedInStr != null) {
+            if(!watch_history_added)
+            {
+                MenusOutputModel.MainMenu mainMenuWatchHistory = new MenusOutputModel().new MainMenu();
+                mainMenuWatchHistory.setTitle (languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY));
+                if(checkMyLibAdded(menusOutputModelLocal)){
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-1,mainMenuWatchHistory);
+                }else{
+                    menusOutputModelLocal.getMainMenuModel().add(mainMenuWatchHistory);
+                }
+            }
+        }
+        else{
+            if(watch_history_added)
+            {
+                if(checkMyLibAdded(menusOutputModelLocal)){
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-2);
+                }else{
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
+                }
+            }
+        }
+
+       //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -700,9 +753,21 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
         Util.drawer_collapse_expand_imageview.clear();
-        adapter = new ExpandableListAdapter(getActivity (),titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
-        mDrawerListView.setAdapter (adapter);
-        adapter.notifyDataSetChanged();
+
+
+        if(Util.main_menu_list_size == menusOutputModelLocal.getMainMenuModel().size()){
+
+        }else {
+
+
+            Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
+            adapter = new ExpandableListAdapter(getActivity (),titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
+            mDrawerListView.setAdapter (adapter);
+            adapter.notifyDataSetChanged();
+        }
+
+
+
 
 
         if(loadHomeFragment)
@@ -713,5 +778,31 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
         }
 
+    }
+
+    private boolean checkMyLibAdded(MenusOutputModel menusOutputModelLocal){
+        boolean status = false;
+
+        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
+                status = true;
+            }
+        }
+
+        return status;
+    }
+
+    private boolean checkWatchHistoryAdded(MenusOutputModel menusOutputModelLocal){
+        boolean status = false;
+
+        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
+                status = true;
+            }
+        }
+
+        return status;
     }
 }

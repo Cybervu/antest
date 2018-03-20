@@ -791,7 +791,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
@@ -3195,12 +3194,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
             /***play button visibility condition *****/
-
+            if(contentDetailsOutput.getIsConverted()!=1){
+                playButton.setVisibility(View.INVISIBLE);
+            }
             if (contentDetailsOutput.getIsApv() == 1) {
                 playButton.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
-            } else if (contentDetailsOutput.getContentTypesId() == 4) {
+            }
+
+
+
+            else if (contentDetailsOutput.getContentTypesId() == 4) {
                 playButton.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 

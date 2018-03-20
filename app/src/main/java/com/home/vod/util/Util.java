@@ -145,6 +145,7 @@ public class Util {
     public static boolean favorite_clicked = false;
 
     public static int check_for_subscription = 0;
+    public static int main_menu_list_size = -2;
 
     public static String selected_season_id = "0";
     public static String selected_episode_id = "0";
@@ -773,6 +774,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DELETE_BTN, DEFAULT_DELETE_BTN, "delete_btn", json);
         setTranslationLanguageToPref(languagePreference, SEND, DEFAULT_SEND, "btn_send", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_DELETE_MESSAGE, DEFAULT_CONFIRM_DELETE_MESSAGE, "confirm_delete_message", json);
+
+
+        // Will change later
+        setTranslationLanguageToPref(languagePreference, WATCH_HISTORY, DEFAULT_WATCH_HISTORY, "watch_history", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
