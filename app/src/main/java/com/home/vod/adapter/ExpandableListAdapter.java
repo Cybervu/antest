@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.home.apisdk.apiModel.MenusOutputModel;
@@ -30,8 +31,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<MenusOutputModel.FooterMenu> footerMenuModelArrayList;
 
 
-    public ExpandableListAdapter(Context context, ArrayList<String> expandableListTitle,
-                                 HashMap<String, ArrayList<String>> expandableListDetail, ArrayList<MenusOutputModel.MainMenu> mainMenuModelArrayList, ArrayList<MenusOutputModel.FooterMenu> footerMenuModelArrayList) {
+    public ExpandableListAdapter(Context context,
+                                 ArrayList<String> expandableListTitle,
+                                 HashMap<String, ArrayList<String>> expandableListDetail,
+                                 ArrayList<MenusOutputModel.MainMenu> mainMenuModelArrayList,
+                                 ArrayList<MenusOutputModel.FooterMenu> footerMenuModelArrayList) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
@@ -112,10 +116,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //listTitleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, isExpanded ? 0 : android.R.drawable.ic_menu_more, 0);
 
 
-        if(expandableListDetail.get(this.expandableListTitle.get(listPosition)).size()>0){
-            iconimage .setVisibility(View.VISIBLE);
-            Log.v("SUBHA","iconimage visible Position ===== "+ listPosition);
-        }
+            try{
+            if(expandableListDetail.get(this.expandableListTitle.get(listPosition)).size()>0) {
+                iconimage.setVisibility(View.VISIBLE);
+                Log.v("SUBHA", "iconimage visible Position ===== " + listPosition);
+            }
+        }catch (Exception e){
+               // iconimage.setVisibility(View.VISIBLE);
+          //      Toast.makeText(context, ""+e.toString(), Toast.LENGTH_SHORT).show();
+            }
 
          //for expand less and expand the child content
         //***for this we have clear drawer_collapse in splashscreen and create a arraylist for imageview which is declare in Util
