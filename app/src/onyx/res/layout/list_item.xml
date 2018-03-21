@@ -51,7 +51,7 @@
         android:layout_marginTop="@dimen/loginImageViewMarging_top"
         android:paddingLeft="@dimen/login_new_user_padding"
         android:paddingRight="@dimen/login_new_user_padding"
-
+        android:id="@+id/section_title_layout"
         >
 
 

@@ -44,6 +44,7 @@ import com.home.vod.model.SingleItemModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -72,14 +73,15 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * Created by Muvi on 11/24/2016.
  */
-public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
+public class HomeFragment extends Fragment implements
+        GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
-//    int bannerArray[] = {R.drawable.banner1};
+    //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
     GetLoadVideosAsync asynLoadVideos;
-    AsynLOADUI loadui;
+    //    AsynLOADUI loadui;
     View rootView;
     int item_CountOfSections = 0;
     boolean isFirstTime = false;
@@ -95,7 +97,6 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     TextView noDataTextView;
     TextView noInternetTextView;
     LanguagePreference languagePreference;
-    PreferenceManager preferenceManager;
 
     RecyclerView my_recycler_view;
     Context context;
@@ -129,16 +130,18 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     String videoImageStrToHeight;
     int ui_completed = 0;
     int loading_completed = 0;
-
+    PreferenceManager preferenceManager;
+    String authToken;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         rootView = v;
         context = getActivity();
+        preferenceManager=  PreferenceManager.getPreferenceManager(context);
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
-        languagePreference = LanguagePreference.getLanguagePreference(context);
-        preferenceManager = PreferenceManager.getPreferenceManager(context);
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
+        authToken= preferenceManager.getAuthToken();
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
 
@@ -194,17 +197,17 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             url_maps = new ArrayList<String>();
 
-            Log.v("ANU","GetAppHomePageAsync called====");
             HomePageInputModel homePageInputModel = new HomePageInputModel();
-            homePageInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
+
+            homePageInputModel.setAuthToken(preferenceManager.getAuthToken());
+           // homePageInputModel.setAuthToken(authToken);
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
-
-
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
         }
         return v;
-
 
     }
 
@@ -242,23 +245,11 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         if (firstTime == false) {
 
-
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgressBarHandler = new ProgressBarHandler(context);
-                        mProgressBarHandler.show();
-                    }
-                });
-
-            }
+            mProgressBarHandler = new ProgressBarHandler(context);
+            mProgressBarHandler.show();
 
         } else {
-               /* if (counter >= 0 && counter >= menuList.size()-1) {
-                    LogUtil.showLog("MUVI","COUNTER");
-                    loading_completed = true;
-                }*/
+
         }
     }
 
@@ -274,82 +265,148 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         }
         String movieImageStr = "";
+        if (code==200) {
+            if (loadVideoOutputs != null) {
 
-        singleItem = new ArrayList<SingleItemModel>();
+                singleItem = new ArrayList<SingleItemModel>();
 
-        for (int i = 0; i < loadVideoOutputs.size(); i++) {
-            movieImageStr = loadVideoOutputs.get(i).getPoster_url();
-            String movieName = loadVideoOutputs.get(i).getName();
-            String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
-            String movieGenreStr = loadVideoOutputs.get(i).getGenre();
-            String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
-            String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
-            int isConverted = loadVideoOutputs.get(i).getIs_converted();
-            int isPPV = loadVideoOutputs.get(i).getIs_ppv();
-            int isAPV = loadVideoOutputs.get(i).getIs_advance();
-
-
-            singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
-        }
-
-        allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
+                for (int i = 0; i < loadVideoOutputs.size(); i++) {
+                    movieImageStr = loadVideoOutputs.get(i).getPoster_url();
+                    String movieName = loadVideoOutputs.get(i).getName();
+                    String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
+                    String movieGenreStr = loadVideoOutputs.get(i).getGenre();
+                    String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
+                    String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
+                    int isConverted = loadVideoOutputs.get(i).getIs_converted();
+                    int isPPV = loadVideoOutputs.get(i).getIs_ppv();
+                    int isAPV = loadVideoOutputs.get(i).getIs_advance();
 
 
-        if (NetworkStatus.getInstance().isConnected(getActivity())) {
+                    singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                }
 
-            if (getActivity() != null) {
-                new RetrieveFeedTask().execute(movieImageStr);
+                allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
+
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                    if (getActivity() != null) {
+                        new RetrieveFeedTask().execute(movieImageStr);
+                    }
+
+
+                } else {
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                }
             }
 
-
-        } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
         }
+        else {
+            if (counter >= 0 && counter < menuList.size() - 1) {
+                counter++;
+                LoadVideoInput loadVideoInput = new LoadVideoInput();
+               loadVideoInput.setAuthToken(preferenceManager.getAuthToken());
+              //loadVideoInput.setAuthToken(authToken);
 
-
+                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+            }else {
+                footerView.setVisibility(View.GONE);
+            }
+        }
         return;
 
     }
 
+    public void loadUI() {
+        //ui_completed = ui_completed + 1;
 
-    private class AsynLOADPicasso extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Picasso.with(context).load(videoImageStrToHeight).into(new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    videoWidth = bitmap.getWidth();
-                    videoHeight = bitmap.getHeight();
-                    loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-                }
+        LogUtil.showLog("MUVI1", "videoWidth =" + videoWidth + "videoHeight=" + videoHeight);
 
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-                }
+        if (videoWidth > videoHeight) {
 
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Util.image_orentiation.add(0);
 
-                }
-            });
-            return null;
+        } else {
+            Util.image_orentiation.add(1);
         }
 
-        protected void onPostExecute(Void result) {
 
+        if (getView() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
 
-        @Override
-        protected void onPreExecute() {
+        if (firstTime == false) {
 
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+            firstTime = true;
+
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            } else { // it works first time
+                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                //   adapter = new AdapterClass(context,list);
+                my_recycler_view.setAdapter(adapter);
+            }
+
+        } else {
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+
+
+            if (counter >= 0 && counter >= menuList.size() - 1) {
+                footerView.setVisibility(View.GONE);
+            }
+
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = my_recycler_view.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+            if (mBundleRecyclerViewState != null) {
+                my_recycler_view.getLayoutManager().onRestoreInstanceState(listState);
+            }
         }
+
+
+        if (counter >= 0 && counter < menuList.size() - 1) {
+            counter = counter + 1;
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            footerView.setVisibility(View.VISIBLE);
+
+                        }
+                    });
+                }
+
+                // default data
+                LoadVideoInput loadVideoInput = new LoadVideoInput();
+                loadVideoInput.setAuthToken(preferenceManager.getAuthToken());
+               // loadVideoInput.setAuthToken(authToken);
+                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+
     }
 
-    private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
+
+    /*private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             return null;
@@ -358,17 +415,19 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         protected void onPostExecute(Void result) {
             //ui_completed = ui_completed + 1;
 
+            LogUtil.showLog("MUVI1", "videoWidth =" + videoWidth +"videoHeight="+ videoHeight);
+
             if (videoWidth > videoHeight) {
 
-                Util.image_orentiation.add(0);
+                Util.image_orentiation.add(Constant.IMAGE_LANDSCAPE_CONST);
 
             } else {
-                Util.image_orentiation.add(1);
-
+                Util.image_orentiation.add(Constant.IMAGE_PORTAIT_CONST);
             }
 
-            LogUtil.showLog("MUVI", "HHH" + videoWidth + videoHeight);
-            LogUtil.showLog("MUVI", "vertical" + MainActivity.vertical);
+
+
+
 
             if (getView() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -384,7 +443,6 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 firstTime = true;
 
                 if (adapter != null) {
-
                     adapter.notifyDataSetChanged();
                 } else { // it works first time
                     adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
@@ -411,27 +469,9 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 }
             }
 
-      /*      my_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    LogUtil.showLog("MUVI", "onScrollStateChanged");
-                   *//* if (counter >= 0 && counter >= menuList.size()-1) {
-                        adapter.swapItems();
-                    }*//*
-
-                }
 
 
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                       LogUtil.showLog("MUVI","ONSCROLL");
-                  *//*  if (counter >= 0 && counter >= menuList.size()-1) {
-                        adapter.swapItems();
-                    }*//*
 
-                }
-            });*/
             if (counter >= 0 && counter < menuList.size() - 1) {
                 counter = counter + 1;
                 if (NetworkStatus.getInstance().isConnected(getActivity())) {
@@ -445,16 +485,9 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                         });
                     }
 
-
-
-
-                /*    loading_completed = loading_completed + 1;
-                    LogUtil.showLog("MUVI","loading_completed"+loading_completed);
-                    LogUtil.showLog("MUVI","ui_completed"+ui_completed);*/
-
                     // default data
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
+                    loadVideoInput.setAuthToken(authTokenStr);
                     loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
@@ -473,7 +506,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         }
 
-    }
+    }*/
 
 
     @Override
@@ -506,390 +539,36 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
         }
+        if (appHomePageOutput != null) {
 
-        if (status == 200) {
+            if (status == 200) {
 
-            if (singleItem != null && singleItem.size() > 0) {
-                singleItem.clear();
-            }
-
-            if (allSampleData != null && allSampleData.size() > 0) {
-                allSampleData.clear();
-            }
-            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                url_maps.add(model.getImage_path());
-            }
-
-            for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
-                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
-            }
-
-
-            if (NetworkStatus.getInstance().isConnected(getActivity())) {
-
-                my_recycler_view.setLayoutManager(mLayoutManager);
-                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
-                my_recycler_view.setAdapter(adapter);
-                my_recycler_view.setVisibility(View.VISIBLE);
-
-
-                LoadVideoInput loadVideoInput = new LoadVideoInput();
-                loadVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
-                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
-                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
-                // default data
-                    /*asynLoadVideos = new AsynLoadVideos();
-                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
-
-            } else {
-                noInternetLayout.setVisibility(View.VISIBLE);
-            }
-
-        } else {
-//            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
-
-            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                url_maps.add(model.getImage_path());
-            }
-
-            if (firstTime == false) {
-                firstTime = true;
-
-                if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                    for (int j = 0; j < url_maps.size(); j++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.Fit);
-                        // .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
-
-                        mDemoSlider.addSlider(textSliderView);
-                    }
-                } else {
-                    for (int j = 0; j < url_maps.size(); j++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.Fit);
-                        // .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
-
-                        mDemoSlider.addSlider(textSliderView);
-                    }
+                if (singleItem != null && singleItem.size() > 0) {
+                    singleItem.clear();
                 }
-            }
-            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-            mDemoSlider.setDuration(10000);
-            //   mDemoSlider.addOnPageChangeListener(this);
-            mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
 
-            sliderRelativeLayout.setVisibility(View.VISIBLE);
+                if (allSampleData != null && allSampleData.size() > 0) {
+                    allSampleData.clear();
+                }
 
-        }
-        return;
-    }
-
-  /* class AsynLoadMenuItems extends AsyncTask<Void, Void, Void> implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
-
-
-        String responseStr;
-        int statusCode;
-        String title;
-        String studio_id;
-        String language_id;
-        String section_id;
-        JSONObject bannerJson;
-        JSONObject sectionJson;
-
-        private ProgressBarHandler progressBarHandler = null;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.getHomepageUrl());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
-                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-              *//*  httppost.addHeader("limit", "1");
-                httppost.addHeader("offset", String.valueOf(counter));*//*
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    if (singleItem != null && singleItem.size() > 0) {
-                        singleItem.clear();
-                    }
-
-                    if (allSampleData != null && allSampleData.size() > 0) {
-                        allSampleData.clear();
-                    }
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (progressBarHandler != null) {
-                                progressBarHandler.hide();
-                                progressBarHandler = null;
+                if (appHomePageOutput.getHomePageBannerModels() != null) {
+                    for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                        if (model != null) {
+                            if (model.getImage_path() != null) {
+                                url_maps.add(model.getImage_path());
                             }
-
-                            responseStr = "0";
-                            allSampleData = null;
-
                         }
-
-                    });
-
-                } catch (IOException e) {
-                    if (progressBarHandler != null) {
-                        progressBarHandler.hide();
-                        progressBarHandler = null;
                     }
-
-                    responseStr = "0";
-                    allSampleData = null;
-
                 }
+                if (appHomePageOutput.getHomePageSectionModel() != null) {
+                    for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
+                        if (section != null) {
+                            if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
+                                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
 
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    if (myJson.has("BannerSectionList")) {
-                        bannerJson = new JSONObject(myJson.optString("BannerSectionList"));
-                        if (Integer.parseInt(bannerJson.optString("code")) == 200) {
-                            JSONArray jsonBannerImageNode = null;
-                            try {
-                                jsonBannerImageNode = bannerJson.getJSONArray("banners");
-                                int lengthBannerImagesArray = jsonBannerImageNode.length();
-
-                                if (lengthBannerImagesArray > 0) {
-                                    for (int i = 0; i < lengthBannerImagesArray; i++) {
-                                        url_maps.add(jsonBannerImageNode.getJSONObject(i).getString("original"));
-
-                                    }
-                                } else {
-                                    url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
-
-                                }
-
-                            } catch (JSONException e2) {
-                                url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
-                                e2.printStackTrace();
                             }
-                        } else {
-                            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
-
                         }
                     }
-                    if (myJson.has("SectionName")) {
-                        sectionJson = new JSONObject(myJson.optString("SectionName"));
-                        if (Integer.parseInt(sectionJson.optString("code")) == 200) {
-
-                            JSONArray jsonMainNode = sectionJson.getJSONArray("section");
-                            int lengthJsonArr = jsonMainNode.length();
-                            for (int i = 0; i < lengthJsonArr; i++) {
-
-                                JSONObject jsonChildNode;
-                                try {
-                                    jsonChildNode = jsonMainNode.getJSONObject(i);
-
-                                    if ((jsonChildNode.has("studio_id")) && jsonChildNode.getString("studio_id").trim() != null && !jsonChildNode.getString("studio_id").trim().isEmpty() && !jsonChildNode.getString("studio_id").trim().equals("null") && !jsonChildNode.getString("studio_id").trim().matches("")) {
-                                        studio_id = jsonChildNode.getString("studio_id");
-
-                                    }
-                                    if ((jsonChildNode.has("language_id")) && jsonChildNode.getString("language_id").trim() != null && !jsonChildNode.getString("language_id").trim().isEmpty() && !jsonChildNode.getString("language_id").trim().equals("null") && !jsonChildNode.getString("language_id").trim().matches("")) {
-                                        language_id = jsonChildNode.getString("language_id");
-
-                                    }
-                                    if ((jsonChildNode.has("title")) && jsonChildNode.getString("title").trim() != null && !jsonChildNode.getString("title").trim().isEmpty() && !jsonChildNode.getString("title").trim().equals("null") && !jsonChildNode.getString("title").trim().matches("")) {
-                                        title = jsonChildNode.getString("title");
-
-                                    }
-                                    if ((jsonChildNode.has("section_id")) && jsonChildNode.getString("section_id").trim() != null && !jsonChildNode.getString("section_id").trim().isEmpty() && !jsonChildNode.getString("section_id").trim().equals("null") && !jsonChildNode.getString("section_id").trim().matches("")) {
-                                        section_id = jsonChildNode.getString("section_id");
-
-                                    }
-
-                                    menuList.add(new GetMenuItem(title, section_id, studio_id, language_id));
-                                } catch (Exception e) {
-                                    responseStr = "0";
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                            }
-                        } else {
-                            responseStr = "0";
-
-
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                if (progressBarHandler != null) {
-                    progressBarHandler.hide();
-                    progressBarHandler = null;
-                }
-
-                responseStr = "0";
-                allSampleData = null;
-                e.printStackTrace();
-            }
-
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            if (progressBarHandler != null) {
-                progressBarHandler.hide();
-                progressBarHandler = null;
-            }
-
-            if (responseStr == null) {
-                if (progressBarHandler != null) {
-                    progressBarHandler.hide();
-                    progressBarHandler = null;
-                }
-                responseStr = "0";
-            } else if ((responseStr.trim().equals("0"))) {
-
-
-                if (url_maps.size() >= 0 && firstTime == false) {
-                    firstTime = true;
-
-                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                    .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
-
-                            mDemoSlider.addSlider(textSliderView);
-                        }
-                    } else {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                    .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
-
-                            mDemoSlider.addSlider(textSliderView);
-                        }
-                    }
-
-                *//*    for (int i = 0; i < url_maps.size(); i++) {
-
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-
-                        textSliderView
-                                .description("")
-                                .image(R.drawable.slider1)
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(this);
-
-                        //add your extra information
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
-
-                        mDemoSlider.addSlider(textSliderView);*//*
-
-                      *//*  DefaultSliderView textSliderView = new DefaultSliderView(context);
-
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(i))
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(this);
-
-                        //add your extra information
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
-
-                        mDemoSlider.addSlider(textSliderView);*//*
-                } else {
-                    // DefaultSliderView textSliderView = new DefaultSliderView(context);
-                  *//*  textSliderView
-                            .description("")
-                            .image(R.drawable.slider1)
-                            .setScaleType(BaseSliderView.ScaleType.Fit)
-                            .setOnSliderClickListener(this);
-                    //add your extra information
-                    textSliderView.bundle(new Bundle());
-                    textSliderView.getBundle()
-                            .putString("extra", "");
-
-                    mDemoSlider.addSlider(textSliderView);*//*
-
-                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                    .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
-
-                            mDemoSlider.addSlider(textSliderView);
-                        }
-                    } else {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                    .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
-
-                            mDemoSlider.addSlider(textSliderView);
-                        }
-                    }
-
-                }
-                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-                mDemoSlider.setDuration(10000);
-                mDemoSlider.addOnPageChangeListener(this);
-                sliderRelativeLayout.setVisibility(View.VISIBLE);
-            } else {
-                if (mProgressBarHandler != null) {
-                    mProgressBarHandler.hide();
-                    mProgressBarHandler = null;
                 }
 
 
@@ -901,219 +580,73 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     my_recycler_view.setVisibility(View.VISIBLE);
 
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(authTokenStr);
+                    loadVideoInput.setAuthToken(preferenceManager.getAuthToken());
+                   // loadVideoInput.setAuthToken(authToken);
                     loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);
-
                     // default data
-                    *//*asynLoadVideos = new AsynLoadVideos();
-                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*//*
+                    /*asynLoadVideos = new AsynLoadVideos();
+                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
 
                 } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
                 }
-            }
-            return;
-        }
 
-        @Override
-        protected void onPreExecute() {
+            } else {
+//            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
 
-            progressBarHandler = new ProgressBarHandler(getActivity());
-            progressBarHandler.show();
-
-        }
-
-        @Override
-        public void onSliderClick(BaseSliderView slider) {
-
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    }*/
-
-    /*private class AsynLoadImageUrls extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int statusCode;
-        ProgressDialog pDialog;
-        public ProgressDialog internetSpeedDialog = null;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl()+Util.downloadImageUrl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-                                    internetSpeedDialog.dismiss();
-                                }
-                            } catch (IllegalArgumentException ex) {
-                                responseStr = "0";
-                            }
-
-                        }
-
-                    });
-
-                }catch (IOException e) {
-                    try {
-                        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-                            internetSpeedDialog.dismiss();
-                        }
-                    }
-                    catch(IllegalArgumentException ex)
-                    {
-                        responseStr = "0";
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
-                        e.printStackTrace();
-                    }
+                for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                    url_maps.add(model.getImage_path());
                 }
 
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
+                if (firstTime == false) {
+                    firstTime = true;
 
-                }
+                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            // .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-                        if ((myJson.has("image_url")) && myJson.getString("image_url").trim() != null && !myJson.getString("image_url").trim().isEmpty() && !myJson.getString("image_url").trim().equals("null") && !myJson.getString("image_url").trim().matches("")) {
-                            imageUrlStr = myJson.getString("image_url");
+                            mDemoSlider.addSlider(textSliderView);
                         }
-                        else{
+                    } else {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            // .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                            responseStr = "0";
-
+                            mDemoSlider.addSlider(textSliderView);
                         }
                     }
                 }
-                else {
-                    responseStr = "0";
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+                mDemoSlider.setDuration(10000);
+                //   mDemoSlider.addOnPageChangeListener(this);
+                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
 
-                        }
-                    });
-                }
-            } catch (JSONException e1) {
-                try {
-                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-                        internetSpeedDialog.dismiss();
-                    }
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    responseStr = "0";
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    });
-                    e1.printStackTrace();
-                }
-            }
-
-            catch (Exception e)
-            {
-                try {
-                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-                        internetSpeedDialog.dismiss();
-                    }
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    responseStr = "0";
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-                        }
-                    });
-                    e.printStackTrace();
-                }
+                sliderRelativeLayout.setVisibility(View.VISIBLE);
 
             }
-            return null;
-
         }
+        return;
+    }
 
-        protected void onPostExecute(Void result) {
-            try {
-
-            }catch (IllegalArgumentException e){
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       // createDummyData();
-
-                    }
-                });
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (internetSpeedDialog!=null && internetSpeedDialog.isShowing()){
-                pDialog = internetSpeedDialog;
-            }else{
-              *//*  pDialog = new ProgressDialog(MainActivity.this);
-                pDialog.setMessage(getResources().getString(R.string.loading_str));
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(false);
-                pDialog.show();*//*
-                pDialog = new ProgressDialog(context,R.style.MyTheme);
-                pDialog.setCancelable(false);
-                pDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-                pDialog.setIndeterminate(false);
-                pDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
-                pDialog.show();
-            }
-
-        }
-
-
-    }*/
     public void myOnKeyDown() {
         //do whatever you want here
         if (asynLoadMenuItems != null) {
@@ -1128,253 +661,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         System.exit(0);*/
 
     }
-   /* *//***************chromecast**********************//*
 
-    private void showIntroductoryOverlay() {
-
-
-        if (mIntroductoryOverlay != null) {
-            mIntroductoryOverlay.remove();
-        }
-
-
-        if ((mediaRouteMenuItem != null) && mediaRouteMenuItem.isVisible()) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    *//*mIntroductoryOverlay =
-                            new IntroductoryOverlay.Builder(
-                            getActivity(), mediaRouteMenuItem)
-                            .setTitleText(getActivity().getString(R.string.introducing_cast))
-                            .setOverlayColor(R.color.primary)
-                            .setSingleTime()
-                            .setOnOverlayDismissedListener(
-                                    new IntroductoryOverlay.OnOverlayDismissedListener() {
-                                        @Override
-                                        public void onOverlayDismissed() {
-                                            mIntroductoryOverlay = null;
-                                        }
-                                    })
-                            .build();
-
-
-                    mIntroductoryOverlay.show();*//*
-                }
-            });
-        }
-    }
-
-    private void setupCastListener() {
-        mSessionManagerListener = new SessionManagerListener<CastSession>() {
-
-            @Override
-            public void onSessionEnded(CastSession session, int error) {
-                onApplicationDisconnected();
-            }
-
-            @Override
-            public void onSessionResumed(CastSession session, boolean wasSuspended) {
-                onApplicationConnected(session);
-            }
-
-            @Override
-            public void onSessionResumeFailed(CastSession session, int error) {
-                onApplicationDisconnected();
-            }
-
-            @Override
-            public void onSessionStarted(CastSession session, String sessionId) {
-                onApplicationConnected(session);
-            }
-
-            @Override
-            public void onSessionStartFailed(CastSession session, int error) {
-                onApplicationDisconnected();
-            }
-
-            @Override
-            public void onSessionStarting(CastSession session) {
-
-            }
-
-            @Override
-            public void onSessionEnding(CastSession session) {
-
-            }
-
-            @Override
-            public void onSessionResuming(CastSession session, String sessionId) {
-
-            }
-
-            @Override
-            public void onSessionSuspended(CastSession session, int reason) {
-
-            }
-
-            private void onApplicationConnected(CastSession castSession) {
-                mCastSession = castSession;
-
-                if (null != mSelectedMedia) {
-                   *//* if (mCastSession != null && mCastSession.isConnected()) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                            }
-                        });
-
-                    }*//*
-                    if (mPlaybackState == PlaybackState.PLAYING) {
-                        mVideoView.pause();
-                        loadRemoteMedia(mSeekbar.getProgress(), true);
-                        return;
-                    } else {
-
-                        mPlaybackState = PlaybackState.IDLE;
-                        updatePlaybackLocation(PlaybackLocation.REMOTE);
-                    }
-                }
-                //   updatePlayButton(mPlaybackState);
-                //invalidateOptionsMenu();
-            }
-
-            private void onApplicationDisconnected() {
-               *//* if (mCastSession != null && mCastSession.isConnected()) {
-                    watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
-                }*//*
-                //watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
-                updatePlaybackLocation(PlaybackLocation.LOCAL);
-                mPlaybackState = PlaybackState.IDLE;
-                mLocation = PlaybackLocation.LOCAL;
-
-                //invalidateOptionsMenu();
-            }
-        };
-    }
-
-    private void updatePlaybackLocation(PlaybackLocation location) {
-        mLocation = location;
-        if (location == PlaybackLocation.LOCAL) {
-            if (mPlaybackState == PlaybackState.PLAYING
-                    || mPlaybackState == PlaybackState.BUFFERING) {
-                //setCoverArtStatus(null);
-                startControllersTimer();
-            } else {
-                stopControllersTimer();
-                //setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
-            }
-        } else {
-            stopControllersTimer();
-            //setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
-            updateControllersVisibility(false);
-        }
-    }
-
-    private void loadRemoteMedia(int position, boolean autoPlay) {
-        if (mCastSession == null) {
-            return;
-        }
-        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
-        if (remoteMediaClient == null) {
-            return;
-        }
-        remoteMediaClient.addListener(new RemoteMediaClient.Listener() {
-            @Override
-            public void onStatusUpdated() {
-                Intent intent = new Intent(context, ExpandedControlsActivity.class);
-                startActivity(intent);
-                remoteMediaClient.removeListener(this);
-            }
-
-            @Override
-            public void onMetadataUpdated() {
-            }
-
-            @Override
-            public void onQueueStatusUpdated() {
-            }
-
-            @Override
-            public void onPreloadStatusUpdated() {
-            }
-
-            @Override
-            public void onSendingRemoteMediaRequest() {
-            }
-        });
-        remoteMediaClient.load(mSelectedMedia, autoPlay, position);
-    }
-
-   *//* private void setCoverArtStatus(String url) {
-        if (url != null) {
-            mAquery.id(mCoverArt).image(url);
-            mCoverArt.setVisibility(View.VISIBLE);
-            mVideoView.setVisibility(View.INVISIBLE);
-        } else {
-            mCoverArt.setVisibility(View.GONE);
-            mVideoView.setVisibility(View.VISIBLE);
-        }
-    }*//*
-
-    private void stopTrickplayTimer() {
-        //Log.d(TAG, "Stopped TrickPlay Timer");
-        if (mSeekbarTimer != null) {
-            mSeekbarTimer.cancel();
-        }
-    }
-
-
-    private void stopControllersTimer() {
-        if (mControllersTimer != null) {
-            mControllersTimer.cancel();
-        }
-    }
-
-    private void startControllersTimer() {
-        if (mControllersTimer != null) {
-            mControllersTimer.cancel();
-        }
-        if (mLocation == PlaybackLocation.REMOTE) {
-            return;
-        }
-        mControllersTimer = new Timer();
-        mControllersTimer.schedule(new HideControllersTask(), 5000);
-    }
-
-    // should be called from the main thread
-    private void updateControllersVisibility(boolean show) {
-        if (show) {
-            //getSupportActionBar().show();
-            mControllers.setVisibility(View.VISIBLE);
-        } else {
-            if (!Util.isOrientationPortrait(context)) {
-                //getSupportActionBar().hide();
-            }
-            //  mControllers.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private class HideControllersTask extends TimerTask {
-
-        @Override
-        public void run() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    // updateControllersVisibility(false);
-                    mControllersVisible = false;
-                }
-            });
-
-        }
-    }
-
-
-
-    */
 
     /***************chromecast**********************/
 
@@ -1422,14 +709,16 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             try {
 
 
+                LogUtil.showLog("MUVI1", "image url==============" + videoHeight);
+
                 URL url = new URL(urls[0]);
                 Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 videoHeight = bmp.getHeight();
                 videoWidth = bmp.getWidth();
 
 
-                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
-                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+                LogUtil.showLog("MUVI1", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI1", "videoWidth==============" + videoWidth);
 
                 return null;
             } catch (Exception e) {
@@ -1446,9 +735,11 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 phandler.hide();
             }*/
 
-            LogUtil.showLog("MUVI", "HHH");
-            loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
+            LogUtil.showLog("MUVI1", "==HHH");
+//            loadui = new AsynLOADUI();
+//            loadui.executeOnExecutor(threadPoolExecutor);
+
+            loadUI();
         }
 
         @Override

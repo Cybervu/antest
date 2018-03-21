@@ -119,7 +119,9 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         editNameStr.requestFocus();
       /*  InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editNameStr, InputMethodManager.SHOW_FORCED);*/
-        showKeyboard();
+
+      // Kushal - un comment to get keyboard
+       // showKeyboard();
 
 
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;

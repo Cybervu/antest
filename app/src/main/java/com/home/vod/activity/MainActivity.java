@@ -412,7 +412,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
        /* MenuItemCompat.setActionProvider(mediaRouteMenuItem, new MediaRouteActionProvider(new ContextThemeWrapper(this, R.style.Theme_CastVideosDark)));
         mediaRouteMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
         showIntroductoryOverlay();
-
         /************chromecast***********/
 
         return true;

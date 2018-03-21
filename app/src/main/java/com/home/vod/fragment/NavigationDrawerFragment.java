@@ -67,6 +67,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EXIT_APP_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
@@ -88,6 +89,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 
 
 /**
@@ -185,6 +187,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         this.status = status;
         this.message = message;
         if (status == 200) {
+            setMenuItemsInDrawer(true);
+        }else if(status==0){
             setMenuItemsInDrawer(true);
         }
 
@@ -653,14 +657,26 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     public void setMenuItemsInDrawer(boolean loadHomeFragment) {
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         menusOutputModelLocal = new MenusOutputModel();
-        menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
-        menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
+
+        // Kushal -- To avoid crashing of the app if no menu is fetched from the server.
+        try {
+            menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
+            menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         titleArray.clear();
        /* Adding Home Menu*/
         MenusOutputModel.MainMenu mainMenuHome = new MenusOutputModel().new MainMenu();
         mainMenuHome.setTitle(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME));
         menusOutputModelLocal.getMainMenuModel().add(0, mainMenuHome);
+
+        // Kushal-- Addind contact us in footer menu
+        MenusOutputModel.FooterMenu footerMenu=new MenusOutputModel().new FooterMenu();
+        footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US));
+        footerMenu.setPermalink("contactus");
+        menusOutputModelLocal.getFooterMenuModel().add(0,footerMenu);
 
        /* Adding Library*/
         /*if (languagePreference.getTextofLanguage(IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
@@ -707,7 +723,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
 
-        if (menusOutputModelLocal.getFooterMenuModel() != null && menusOutputModelLocal.getFooterMenuModel().size() > 0) {
+      /*  if (menusOutputModelLocal.getFooterMenuModel() != null && menusOutputModelLocal.getFooterMenuModel().size() > 0) {
             for (int j = 0; j < menusOutputModelLocal.getFooterMenuModel().size(); j++) {
                 if (menusOutputModelLocal.getFooterMenuModel().get(j).getPermalink().equalsIgnoreCase("terms-privacy-policy")) {
                     preferenceManager.setPrivacy_policy_url(menusOutputModelLocal.getFooterMenuModel().get(j).getUrl().trim());
@@ -715,7 +731,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     LogUtil.showLog("BIBHU11", "menuListOutputList ::" + menusOutputModelLocal.getFooterMenuModel().get(j).getPermalink());
                 }
             }
-        }
+        }*/
 
 
         for (int k = 0; k < menusOutputModelLocal.getFooterMenuModel().size(); k++) {

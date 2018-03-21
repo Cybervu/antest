@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -23,6 +24,7 @@ import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.Constant;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
@@ -37,11 +39,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
-public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder>{
+public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder> {
     ArrayList<SingleItemModel> singleSectionItems;
     private ArrayList<SectionDataModel> dataList;
     private Context mContext;
-    private  boolean firstTime;
+    private boolean firstTime;
     private ArrayList<String> bannerUrls = new ArrayList<String>();
     String pemalink;
     // String image;
@@ -50,6 +52,8 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     //int counter=0;
     LanguagePreference languagePreference;
     int banner[] = {R.drawable.banner1};
+
+  //  ListItemAllignmentHandler listItemAllignmentHandler;
 
   /*  int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
@@ -65,20 +69,23 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         this.vertical = vertical;
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
+      //  listItemAllignmentHandler = new ListItemAllignmentHandler(mContext);
+
     }
+
     /* public void swapItems(){
          loaded = true;
      }*/
     @Override
     public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         float density = mContext.getResources().getDisplayMetrics().density;
-        LogUtil.showLog("SUBHA","density === "+ density);
-        if(density >= 1.5 && density <= 3.0){
+        LogUtil.showLog("SUBHA", "density === " + density);
+        if (density >= 1.5 && density <= 3.0) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_small, null);
             ItemRowHolder mh = new ItemRowHolder(v);
             return mh;
 
-        }else {
+        } else {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, null);
             ItemRowHolder mh = new ItemRowHolder(v);
             return mh;
@@ -88,96 +95,126 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        LogUtil.showLog("MUVI","position of the item in adapter =============="+i);
+        Log.v("BIBHU12", "position of the item in adapter ==============" + i);
+        Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" + Util.image_orentiation.size());
+        try {
 
-       /* if(i>=counter)
-        {
-            counter = i;*/
-        final String sectionName = dataList.get(i).getHeaderTitle();
-        final String sectionId = dataList.get(i).getHeaderPermalink();
+            // Kushal- To get the banner if no menu is present in the API response
 
-        singleSectionItems = dataList.get(i).getAllItemsInSection();
-        pemalink=dataList.get(i).getHeaderPermalink();
+            if (dataList.size() < 1) {
+                itemRowHolder.section_title_layout.setVisibility(View.GONE);
+                itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+                return;
+            } else{
+                itemRowHolder.section_title_layout.setVisibility(View.VISIBLE);
+                itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
+            }
+
+
+
+
+            final String sectionName = dataList.get(i).getHeaderTitle().trim();
+            final String sectionId = dataList.get(i).getHeaderPermalink();
+
+            singleSectionItems = dataList.get(i).getAllItemsInSection();
+            pemalink = dataList.get(i).getHeaderPermalink();
         /*for (int j = 0; j > bannerUrls.size(); j++) {
             //image = bannerUrls.get(j);
         }*/
-        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),itemRowHolder.itemTitle);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
 
-       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
-        itemRowHolder.itemTitle.setText(sectionName);
-        SectionListDataAdapter itemListDataAdapter = null;
-//            if (MainActivity.vertical == 1) {
+            itemRowHolder.itemTitle.setText(sectionName.trim());
+         //   listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
+            SectionListDataAdapter itemListDataAdapter = null;
 
 
-        try {
+
             if (Util.image_orentiation.get(i) == 1) {
                 float density = mContext.getResources().getDisplayMetrics().density;
                 if (density >= 3.5 && density <= 4.0) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
-                }else  if (density <= 1.5) {
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
+                } else if (density <= 1.5) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
-                }else{
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
+                } else {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
+                    Log.v("BIBHU12", "position of *********** ==============" + i);
                 }
-                //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
 
-            }else{
+            } else {
                 itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
+                Log.v("BIBHU12", "position of *********** ==============" + i);
 
             }
-        }catch (Exception e){e.printStackTrace();}
 
 
-        itemRowHolder.recycler_view_list.setHasFixedSize(true);
-        itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-        itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
+            itemRowHolder.recycler_view_list.setHasFixedSize(true);
+            itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
 
-        itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    Context context = v.getContext();
+                    Intent i = new Intent(context, ViewMoreActivity.class);
+                    i.putExtra("SectionId", sectionId);
+                    i.putExtra("sectionName", sectionName);
+                    context.startActivity(i);
+                }
+            });
 
-                Context context = v.getContext();
-                Intent i = new Intent(context, ViewMoreActivity.class);
-                i.putExtra("SectionId", sectionId);
-                i.putExtra("sectionName", sectionName);
-                context.startActivity(i);
+            if (i == 0) {
+                itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
+            } else {
+                itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
+
             }
-        });
+            LogUtil.showLog("SUBHA", "hggf" + singleSectionItems.size());
+            //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
 
-        if (i == 0){
-            itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
-        }else{
-            itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
+            if (singleSectionItems.size() <= 0) {
+                itemRowHolder.itemTitle.setVisibility(View.GONE);
+                itemRowHolder.btnMore.setVisibility(View.GONE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+            } else if (singleSectionItems.size() == 1) {
+                itemRowHolder.btnMore.setVisibility(View.GONE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+
+            } else {
+                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+                // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
+
+
+            }
+            // }
+        } catch (Exception e) {
+            e.printStackTrace();
+//            itemRowHolder.section_title_layout.setVisibility(View.GONE);
+//            itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+            Log.v("BIBHU12", "recycler view adapter Exception==============" + e.toString());
+
 
         }
-        LogUtil.showLog("SUBHA","hggf"+singleSectionItems.size());
-        //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-
-        if (singleSectionItems.size() <= 0) {
-            itemRowHolder.itemTitle.setVisibility(View.GONE);
-            itemRowHolder.btnMore.setVisibility(View.GONE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-        } else  if (singleSectionItems.size() == 1) {
-            itemRowHolder.btnMore.setVisibility(View.GONE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-
-        }else{
-            itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
-
-
-        }
-        // }
 
 
     }
 
     @Override
+//    public int getItemCount() {
+//        return dataList.size();
+//    }
     public int getItemCount() {
-        return dataList.size();
+        if (Util.image_orentiation.size()< 1&&bannerUrls.size()>=1)
+            return 1;
+        else
+            return Util.image_orentiation.size();
+//        return Util.image_orentiation.size();
+     //   Toast.makeText(mContext, ""+Util.image_orentiation.size(), Toast.LENGTH_SHORT).show();
+     // return 1;
     }
+
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -185,12 +222,13 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
     /**
      * Method to load dynamic urls to slider.
+     *
      * @param mDemoSlider
      * @param view
      * @param onSliderClickListener
      */
-    private void loadDynamicBanners(SliderLayout mDemoSlider,View view,BaseSliderView.OnSliderClickListener onSliderClickListener){
-        if(bannerUrls.size()>=0) {
+    private void loadDynamicBanners(SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
+        if (bannerUrls.size() >= 0) {
             for (int i = 0; i < bannerUrls.size(); i++) {
 
                 DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
@@ -209,11 +247,12 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
     /**
      * Method to load static urls to slider.
+     *
      * @param mDemoSlider
      * @param view
      * @param onSliderClickListener
      */
-    private void loadStaticBanners(SliderLayout mDemoSlider,View view,BaseSliderView.OnSliderClickListener onSliderClickListener){
+    private void loadStaticBanners(SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
         if (((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE)
                 || ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
             for (int j = 0; j < banner.length; j++) {
@@ -229,7 +268,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
                 mDemoSlider.addSlider(textSliderView);
             }
-        }else{
+        } else {
             for (int j = 0; j < banner.length; j++) {
                 DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
                 textSliderView
@@ -247,9 +286,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     }
 
 
-
-
-    public class ItemRowHolder extends RecyclerView.ViewHolder implements  BaseSliderView.OnSliderClickListener,ViewPagerEx.OnPageChangeListener{
+    public class ItemRowHolder extends RecyclerView.ViewHolder implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
         protected TextView itemTitle;
 
@@ -257,40 +294,40 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
         protected Button btnMore;
         private SliderLayout mDemoSlider;
-        private RelativeLayout mDemoSliderLayout;
+        private RelativeLayout mDemoSliderLayout, section_title_layout;
 
         public ItemRowHolder(View view) {
             super(view);
 
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+            this.section_title_layout = (RelativeLayout) view.findViewById(R.id.section_title_layout);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
-            this.btnMore= (Button) view.findViewById(R.id.btnMore);
-            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),this.btnMore);
+            this.btnMore = (Button) view.findViewById(R.id.btnMore);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), this.btnMore);
 
 /*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
             this.btnMore.setTypeface(watchTrailerButtonTypeface);*/
-            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 
+           /* if (!firstTime) {
+                firstTime = true;*/
+            //for dynamic banner
+            loadDynamicBanners(mDemoSlider, view, this);
 
-            if(!firstTime){
-                firstTime = true;
-                //for dynamic banner
-                loadDynamicBanners(mDemoSlider,view,this);
+            // for static banner
+            //loadStaticBanners(mDemoSlider,view,this);
 
-                // for static banner
-                // loadStaticBanners(mDemoSlider,view,this);
-
-            }
+            //}
 
             if (bannerUrls.size() > 1) {
                 mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(10000);
                 mDemoSlider.addOnPageChangeListener(this);
-            }else{
+            } else {
                 mDemoSlider.stopAutoCycle();
                 mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
             }

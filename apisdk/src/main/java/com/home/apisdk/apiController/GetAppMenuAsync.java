@@ -388,8 +388,9 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                         } catch (Exception e) {
                         }
 
+                        // Kushal- to avoid adding data to footer menu
 
-                        footerMenuArrayList = new ArrayList<>();
+                        /*footerMenuArrayList = new ArrayList<>();
                         JSONArray jsonFooterMenu = myJson.optJSONArray("footer_menu");
 
                         try {
@@ -428,7 +429,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
 
                             menusOutputModel.setFooterMenuModel(footerMenuArrayList);
                         } catch (Exception e) {
-                        }
+                        }*/
 
                     }
                     catch (Exception e) {

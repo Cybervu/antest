@@ -186,6 +186,11 @@ public class LanguagePreference {
     public static final String SIGN_OUT_ERROR = "SIGN_OUT_ERROR";
     public static final String BTN_SUBMIT = "BTN_SUBMIT";
 
+    // Kushal -- CONTACT US
+    public static final String CONTACT_US = "Contact Us";
+
+
+
 
 
 
