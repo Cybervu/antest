@@ -4321,7 +4321,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 output.close();
                 input.close();
 
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -4335,46 +4336,52 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String file_url) {
-            FakeSubTitlePath.remove(0);
-            if (FakeSubTitlePath.size() > 0) {
-                Download_SubTitle(FakeSubTitlePath.get(0).trim());
-            } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                playerModel.setSubTitlePath(SubTitlePath);
+            // Kushal -- double click crash
+            try {
+                FakeSubTitlePath.remove(0);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+                if (FakeSubTitlePath.size() > 0) {
+                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                } else {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                    playerModel.setSubTitlePath(SubTitlePath);
 
 
-                final Intent playVideoIntent;
-                if (Util.dataModel.getAdNetworkId() == 3) {
-                    LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
+                    final Intent playVideoIntent;
+                    if (Util.dataModel.getAdNetworkId() == 3) {
+                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 
-                } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
-                    if (Util.dataModel.getPlayPos() <= 0) {
-                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
+                    } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
+                        if (Util.dataModel.getPlayPos() <= 0) {
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
+                        } else {
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+
+                        }
                     } else {
                         playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 
                     }
-                } else {
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
-
-                }
-                /***ad **/
-                //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                    /***ad **/
+                    //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
                 /*playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                playVideoIntent.putExtra("PlayerModel", playerModel);
-                startActivity(playVideoIntent);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
 
+                }
             }
-        }
+
     }
 
     @Override
