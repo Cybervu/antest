@@ -172,4 +172,14 @@
  <color name="background_start_color">#fff</color>
  <color name="background_end_color">#fff</color>
  <color name="player_title_color">#111111</color>
+
+
+
+ <!--Added for voucher-->
+ <color name="voucher_next_button_text_color">#FFFFFF</color>
+ <color name="favorite_selected_color">#b70000</color>
+
+
+
+
 </resources>

@@ -32,7 +32,7 @@
                     <com.devbrackets.android.exomedia.ui.widget.EMVideoView
                         android:id="@+id/emVideoView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="#000000"
                         android:visibility="visible"
                         EMVideoView:useDefaultControls="false">

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/voucher_pop_up_padding">
+    >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,13 +16,11 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/languagePopupFadeColor"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/languagePopupFadeColor"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/voucher_pop_up_padding"
@@ -120,8 +118,6 @@
                 android:textSize="@dimen/login_text_size" />
 
         </LinearLayout>
-
-
     </LinearLayout>
 
     <View
