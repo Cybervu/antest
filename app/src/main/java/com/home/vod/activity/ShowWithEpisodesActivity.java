@@ -891,8 +891,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU", "validateuser pdlog show");
-        if (pDialog != null && !pDialog.isShowing())
-            pDialog.show();
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
+        pDialog.show();
     }
 
     @Override
@@ -906,8 +906,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "validate user pdlog hide");
                 pDialog.hide();
-
-
             }
         } catch (IllegalArgumentException ex) {
 
