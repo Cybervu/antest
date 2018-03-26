@@ -86,6 +86,7 @@ import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
+import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
@@ -571,7 +572,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         handleOfflineInExoplayer = new HandleOfflineInExoplayer(this);
 
-        Util.saveLogData("===================================================* Start Of Main *==================================================");
+        Util.saveLogData("=================================================== Start Of Main ==================================================");
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
@@ -1153,7 +1154,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
             }
         }
-        player_layout.setLayoutParams(params1);
+         player_layout.setLayoutParams(params1);
 
         if (content_types_id == 4) {
             seekBar.setEnabled(false);
@@ -1577,6 +1578,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (playerModel.getVideoUrl().contains(".mpd")) {
                 String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
                 emVideoView.setVideoURI(Uri.parse(url));
+
+                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
+                intent.putExtra("url",url);
+                startActivity(intent);
+                finish();
+
+
 
             } else {
                 emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
