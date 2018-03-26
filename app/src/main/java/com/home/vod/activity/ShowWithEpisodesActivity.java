@@ -583,8 +583,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
                 videoDurationTextView.setVisibility(View.VISIBLE);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), videoDurationTextView);
 
-                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoDurationTextView);
+                }else {
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoDurationTextView);
+
+                }
 
                 videoDurationTextView.setText(videoduration);
                 iconImageRelativeLayout.setVisibility(View.VISIBLE);
@@ -595,7 +600,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), videoReleaseDateTextView);
+                }else {
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
+                }
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
             }
@@ -3598,6 +3607,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
+                        if(NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
@@ -3607,6 +3617,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
                         dialog.dismiss();
+                    }else {
+                        Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
                     }
                 });
 

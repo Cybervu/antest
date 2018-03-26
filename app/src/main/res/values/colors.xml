@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
- <color name="seasonBackgroundColor">#fff</color>
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#fff</color>
+ <color name="background_end_color">#fff</color>
  <color name="appBackgroundColor">#fff</color>
  <color name="background">#fff</color>
  <color name="downloadpopupcolor">#fff</color>
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
+ <color name="cast_description_color">#ffffff</color>
  <color name="videotitleColor">#000000</color>
  <color name="toolbarTitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
@@ -33,6 +36,7 @@
  <color name="cancel_button_text_color">#b70000</color>
  <color name="transparent">@android:color/transparent</color>
  <color name="castCrewTitleTextColor">#669900</color>
+ <color name="FilterTitleTextColor">#669900</color>
  <color name="subtitleListColor">#fff</color>
  <color name="episodeBackgroundColor">#b5b4b4</color>
  <color name="preOrderButtonTextColor">#DDD</color>
@@ -47,6 +51,8 @@
  <color name="resume_playing_TextColor">#000</color>
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_lineColor">#000</color>
+ <!--movie censor test color-->
+ <color name="censor_test_color">#fff</color>
  <color name="nav_text_line_color">#000000</color>
  <color name="nav_drawer_text_Color">#666</color>
  <color name="style_circular_color">#999999</color>
@@ -65,6 +71,7 @@
  <color name="color_card_background">#000</color>
  <color name="edit_text_background">#EDEDED</color>
  <color name="favorite_unselected_color">#a30c0c</color>
+ <color name="favorite_selected_color">#a30c0c</color>
  <color name="edit_color2">#00FFFFFF</color>
  <color name="fb_button_background">#3b5998</color>
  <color name="edit_color">#dadada</color>
@@ -79,7 +86,7 @@
  <color name="unselected_color">#fff</color>
 
  <color name="filter_text_color">#000</color>
- <color name="censorRatingBackground">#b70000</color>
+ <color name="censorRatingBackground">#80000000</color>
 
  <color name="loader_color">#5d6c7e</color>
  <color name="hint_background">#b70000</color>
@@ -108,7 +115,7 @@
  <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
  <color name="cast_crew_textcolor">#000000</color>
- <color name="device_name_color">#757575</color>
+ <color name="device_name_color">#c3c3c3</color>
 
 
  // Following code is added by Bibhuprasad Jena //
@@ -119,9 +126,7 @@
  <color name="detailsPageTextColor">#fff</color>
  <color name="cast_crew_titleCololr">#32c5d2</color>
  <color name="resumeTitleTextColor">#ffffff</color>
- <color name="search_close_color">#ffffff</color>
-
-
+ <color name="chromecast_color">#ffffff</color>
  //************************END**************************//
 
  <color name="teal_100">#FFCDD2</color>
@@ -161,15 +166,8 @@
  <color name="purchaseBackground">#e2e1e1</color>
  <color name="purchaseTextColor">#000</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
- <color name="nav_header_line_color">#32c5d2</color>
- <color name="chromecast_color">#ffffff</color>
- <color name="google_signup_color">#fcfcfc</color>
-
- <!--added for subtitle color by anu-->
- <color name="subtitle_solid_color">#fff</color>
- <color name="subtitle_outline_color">#000000</color>
- <!--added for app background color by bishal-->
- <color name="background_start_color">#fff</color>
- <color name="background_end_color">#fff</color>
+ <color name="nav_header_line_color">#000</color>
  <color name="player_title_color">#111111</color>
+ <color name="google_signup_color">#fcfcfc</color>
+ <color name="search_close_color">#fff</color>
 </resources>

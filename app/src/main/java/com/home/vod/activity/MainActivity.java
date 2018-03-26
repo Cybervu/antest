@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -100,16 +101,20 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
@@ -117,10 +122,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -280,6 +287,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
 
         Util.drawer_collapse_expand_imageview.clear();
@@ -432,6 +440,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         switch (item.getItemId()) {
 
             case R.id.action_search:
+                item.getTitle();
                 final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -514,18 +523,23 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                        LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
-                        LogUtil.showLog("Abhi", authTokenStr);
-                        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
-                        logoutInput.setLogin_history_id(loginHistoryIdStr);
-                        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
-                        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+                        if(NetworkStatus.getInstance().isConnected(MainActivity.this)) {
+                            LogoutInput logoutInput = new LogoutInput();
+                            logoutInput.setAuthToken(authTokenStr);
+                            LogUtil.showLog("Abhi", authTokenStr);
+                            String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                            logoutInput.setLogin_history_id(loginHistoryIdStr);
+                            logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                            asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 
-                        dialog.dismiss();
+
+                            dialog.dismiss();
+                        }else {
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -860,44 +874,44 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
-        if (code > 0) {
-            if (code == 200) {
-                preferenceManager.clearLoginPref();
+            if (code > 0) {
+                if (code == 200) {
+                    preferenceManager.clearLoginPref();
 
-                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
-                    final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                    if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                        final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
-                            finish();
+                                finish();
 
-                        }
-                    });
+                            }
+                        });
+                    } else {
+                        final Intent startIntent = new Intent(MainActivity.this, MainActivity.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                                finish();
+
+                            }
+                        });
+                    }
+
+
                 } else {
-                    final Intent startIntent = new Intent(MainActivity.this, MainActivity.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
-                            finish();
-
-                        }
-                    });
                 }
-
-
-            } else {
-                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
             }
-        }
 
     }
 

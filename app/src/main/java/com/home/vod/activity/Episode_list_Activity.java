@@ -1590,7 +1590,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON).toString() + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
-        mActionBarToolbar.setTitleTextColor(Color.WHITE);
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

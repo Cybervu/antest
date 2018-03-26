@@ -490,6 +490,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
+		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		buttonLayoutParams.setMargins(0, 0, 0, 170);
+		story.setLayoutParams(buttonLayoutParams);
+
 
 
 		download = (ImageView) findViewById(R.id.downloadImageView);
@@ -1048,6 +1052,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 							resume_orientation = true;
 							Intent resumeIntent = new Intent(MarlinBroadbandExample.this, ResumePopupActivity.class);
+							resumeIntent.putExtra("activity","MarlinBroadbandExample");
 							startActivityForResult(resumeIntent, 1001);
 
 						} else {

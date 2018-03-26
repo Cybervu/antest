@@ -58,15 +58,15 @@
                 android:icon="@drawable/register"
                 android:title="Register"/>
 
-            <item
-                android:id="@+id/menu_item_language"
-                android:icon="@drawable/language"
-                android:title="Language"/>
+
             <item
                 android:id="@+id/menu_item_profile"
                 android:icon="@drawable/register"
                 android:title="Profile"/>
-
+            <item
+                android:id="@+id/menu_item_language"
+                android:icon="@drawable/language"
+                android:title="Language"/>
             <item
                 android:id="@+id/menu_item_favorite"
                 android:icon="@drawable/favorite"

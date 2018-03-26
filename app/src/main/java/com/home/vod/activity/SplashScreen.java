@@ -290,6 +290,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 geoBlockedLayout.setVisibility(View.VISIBLE);
             }
             else {
+
                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
                 noInternetLayout.setVisibility(View.VISIBLE);
                 geoBlockedLayout.setVisibility(View.GONE);
@@ -718,9 +719,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             geoBlockedLayout.setVisibility(View.VISIBLE);
         }
         else {
-            noInternetTextView.setText("Oops something went wrong.Please try again later .");
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+            /*noInternetTextView.setText("Oops something went wrong.Please try again later .");
             noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
+            geoBlockedLayout.setVisibility(View.GONE);*/
         }
 
     }

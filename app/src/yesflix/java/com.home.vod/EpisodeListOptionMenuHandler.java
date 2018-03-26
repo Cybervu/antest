@@ -92,6 +92,7 @@ public class EpisodeListOptionMenuHandler {
         login_menu = menu.findItem(R.id.action_login);
         (menu.findItem(R.id.menu_item_language)).setVisible(false);
         profile_menu = menu.findItem(R.id.menu_item_profile);
+        mydownload_menu = menu.findItem(R.id.action_mydownload);
         purchage_menu = menu.findItem(R.id.action_purchage);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         logout_menu = menu.findItem(R.id.action_logout);
@@ -109,6 +110,7 @@ public class EpisodeListOptionMenuHandler {
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
+        mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
@@ -131,16 +133,21 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(false);
+                favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
+
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
+                mydownload_menu.setVisible(true);
+            else
+                mydownload_menu.setVisible(false);
 
         } else if (loggedInStr == null) {
 
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                register_menu.setVisible(true);
+                register_menu.setVisible(false);
 
             } else {
                 login_menu.setVisible(false);
@@ -153,6 +160,7 @@ public class EpisodeListOptionMenuHandler {
             logout_menu = menu.findItem(R.id.action_logout);
             logout_menu.setVisible(false);
             favorite_menu.setVisible(false);
+            mydownload_menu.setVisible(false);
         }
     }
 }

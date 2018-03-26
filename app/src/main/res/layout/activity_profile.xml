@@ -10,10 +10,58 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/app_background"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:fillViewport="true"
         android:orientation="vertical">
 
@@ -37,7 +85,33 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
+                    <!--<EditText
+                        android:id="@+id/editProfileNameEditText_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="10dp"
+                        android:padding="17dp"
+                        android:hint="First Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
+                        android:textSize="16dp" />
 
+                    <EditText
+                        android:id="@+id/editProfileNameEditText_last"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="10dp"
+                        android:padding="17dp"
+                        android:hint="Last Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
+                        android:textSize="16dp" />-->
                     <EditText
                         android:id="@+id/editProfileNameEditText"
                         android:layout_width="match_parent"
@@ -45,12 +119,13 @@
                         android:layout_alignParentTop="true"
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
-
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/login_padding_bottom"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="@dimen/edit_text_size" />
+                        android:textSize="@dimen/edit_text_size"
+                        android:visibility="visible"/>
 
                     <EditText
                         android:id="@+id/emailAddressEditText"
@@ -97,7 +172,7 @@
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
                     <EditText
-                        android:id="@+id/editConfirmPassword"
+                        android:id="@+id/editNewPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/countrySpinner"
@@ -112,10 +187,10 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/editNewPassword"
+                        android:id="@+id/editConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/editOldPassword"
+                        android:layout_below="@+id/editNewPassword"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:drawablePadding="@dimen/Login_drawing_padding"
@@ -130,7 +205,7 @@
                         android:id="@+id/update_profile"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
@@ -144,7 +219,7 @@
                         android:id="@+id/changePasswordButton"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
@@ -158,7 +233,7 @@
                         android:id="@+id/manage_devices"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"

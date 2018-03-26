@@ -178,7 +178,7 @@ public class LanguagePreference {
     public static final String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static final String CONTINUE_BUTTON = "CONTINUE_BUTTON";
 
-
+    public static final String WATCH_HISTORY = "WATCH_HISTORY";
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
     public static final String SIGN_OUT_WARNING = "SIGN_OUT_WARNING";
@@ -289,6 +289,7 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_TRANSACTION_PROCESS = "Error in Transaction Process";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
+    public static final String DEFAULT_WATCH_HISTORY = "Watch History";
 
     public static String DEFAULT_TERMS = "terms";
     public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";

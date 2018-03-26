@@ -66,7 +66,7 @@ public class RegisterUIHandler {
     String fbName = "";
     private Button registerButton;
     private LanguagePreference languagePreference;
-    public  String last_name="";
+   // public  String last_name="";
 
     public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
 

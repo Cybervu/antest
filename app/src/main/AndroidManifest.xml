@@ -61,11 +61,13 @@
         <activity
             android:name=".activity.SearchActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
         <activity
@@ -146,14 +148,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PaymentInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PPvPaymentInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.RegisterActivity"
             android:label=""
@@ -249,7 +252,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SubscriptionActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="player.activity.MyLibraryPlayer"
@@ -286,14 +289,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
 
-        <activity android:name=".activity.FavoriteActivity"
+        <activity
+            android:name=".activity.FavoriteActivity"
             android:label=""
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.ReviewActivity" />
         <activity android:name=".activity.SeasonActivity" />
         <activity android:name=".activity.ProgrammeActivity" />
+
+        <activity
+            android:name=".activity.SupportActivity1"
+            android:label=""
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

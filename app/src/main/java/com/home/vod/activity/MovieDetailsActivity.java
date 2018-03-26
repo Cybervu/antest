@@ -499,7 +499,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
-
+                        if(NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
@@ -510,6 +510,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
                         dialog.dismiss();
+                        }else {
+                            Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -2598,7 +2601,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         languageModel = languageModels;
         ShowLanguagePopup();
     }
-
     @Override
     public void onVideoDetailsPreExecuteStarted() {
         if (pDialog != null && !pDialog.isShowing())
@@ -2612,7 +2614,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
-        try {
+     try {
             if (pDialog != null && pDialog.isShowing())
                 pDialog.hide();
         } catch (IllegalArgumentException ex) {
@@ -3109,10 +3111,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
-           if (preferenceManager.getUseridFromPref()!=null){
+          /* if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
     }
 
     @Override
@@ -3235,8 +3237,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                }else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                }
                 videoGenreTextView.setText(contentDetailsOutput.getGenre());
 
             }
@@ -3246,8 +3253,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
 
                 videoDurationTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                } else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                }
                 videoDurationTextView.setText(contentDetailsOutput.getVideoDuration());
             }
 
@@ -3256,8 +3268,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                }else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                }
+
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
 

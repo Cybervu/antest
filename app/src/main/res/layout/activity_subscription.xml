@@ -4,7 +4,7 @@
     android:id="@+id/activity_subscription"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackgroundColor">
+    android:background="@drawable/app_background">
 
     <include
         android:id="@+id/toolbar"
@@ -37,7 +37,7 @@
                 android:layout_margin="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/ppv_margin"
                 android:gravity="center"
-                android:padding="10dp"
+                android:padding="@dimen/ppv_margin"
                 android:scrollbars="horizontal"
 
                 />
@@ -61,7 +61,7 @@
                     android:stateListAnimator="@null"
                     android:text="Activate Plan"
                     android:textAllCaps="false"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/buttonTextColor"
                     android:textSize="@dimen/activation_text_size"
                     android:visibility="gone" />
 

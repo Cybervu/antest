@@ -127,6 +127,7 @@
     <color name="bar_color">#e0e0e0</color>
     <color name="background">#fff</color>
     <color name="textColor">#555</color>
+    <color name="player_title_color">#555</color>
     <color name="page_title_color">#57ad57</color>
     <color name="toolbarColor">#57ad57</color>
 
@@ -150,11 +151,17 @@
     <color name="editunselected">#999</color>
     <color name="listTitleContentColor">#ffffff</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="durationcolor">#fff</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="navdrawerImageBelowLineColor">#454444</color>
     <color name="border_color">#57ad57</color>
     <color name="videotextColor">#555</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#555</color>
+    <color name="banner_line_color">#57ad57</color>
+    <color name="cast_description_color">#555</color>
     <color name="contactFormTitle">#57ad57</color>
     <color name="videomovieTitleColor">#57ad57</color>
     <color name="videoTitleTextColor">#57ad57</color>

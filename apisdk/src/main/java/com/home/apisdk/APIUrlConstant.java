@@ -44,6 +44,10 @@ public class APIUrlConstant {
     public static String VIDEO_DETAILS_URL = "getVideoDetails";
 
     /**
+     * endpoint to get Watch History Details API
+     */
+    public static String WATCH_HISTORY = "watchHistory";
+    /**
      * endpoint to getMonitization Details API
      */
     public static String GET_MONITIZATION_DETAILS = "GetMonetizationDetails";
@@ -367,7 +371,9 @@ public class APIUrlConstant {
         return BASE_URl + AboutUs;
     }
 
-
+    public static String getWatchHistory() {
+        return BASE_URl + WATCH_HISTORY;
+    }
     public static String getFbUserExistsUrl() {
         return BASE_URl + fbUserExistsUrl;
     }

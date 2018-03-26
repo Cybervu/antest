@@ -35,6 +35,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
+            android:visibility="visible"
             android:background="@drawable/content_list_overlay"
 
             />
@@ -54,6 +55,7 @@
             android:focusableInTouchMode="false"
             android:gravity="left"
             android:maxLines="1"
+            android:visibility="visible"
             android:padding="@dimen/loginImageViewMarging_top_padding"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"

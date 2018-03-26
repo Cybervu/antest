@@ -63,7 +63,11 @@ public class ProfileHandler {
                 inputManager.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
                 first_nameStr = editProfileNameEditText.getText().toString().trim();
-                ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
+                if (first_nameStr.trim().equals(editProfileNameEditText.getText().toString().trim())){
+
+                }else {
+                    ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
+                }
 
             }
 

@@ -99,7 +99,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" + Util.image_orentiation.size());
         try {
 
-
             if (dataList.size() < 1) {
                 itemRowHolder.section_title_layout.setVisibility(View.GONE);
                 itemRowHolder.recycler_view_list.setVisibility(View.GONE);
@@ -196,7 +195,12 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
 
         }
-
+        /*itemRowHolder.recycler_view_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) v.getTag();
+            }
+        });*/
 
     }
 
@@ -353,4 +357,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         }
     }
 
+   /* @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }*/
 }

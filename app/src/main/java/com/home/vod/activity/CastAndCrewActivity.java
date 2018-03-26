@@ -58,7 +58,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
 
     Toolbar mActionBarToolbar;
-    TextView castCrewTitleTextView;
+   //TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
     ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
@@ -90,6 +90,8 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -108,9 +110,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         castAndCrewDetailsIntentHandler = new CastAndCrewDetailsIntentHandler(this);
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
-        castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-        FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
-        castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+       // castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
+       // FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
+       // castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = NetworkStatus.getInstance().isConnected(this);
 

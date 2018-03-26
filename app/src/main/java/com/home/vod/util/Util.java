@@ -128,7 +128,7 @@ public class Util {
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static final String UpdateGoogleid = "UpdateGoogleid";
 
-
+    public static int main_menu_list_size = -2;
     public static PPVModel ppvModel = null;
     public static APVModel apvModel = null;
     public static CurrencyModel currencyModel = null;
@@ -773,7 +773,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DELETE_BTN, DEFAULT_DELETE_BTN, "delete_btn", json);
         setTranslationLanguageToPref(languagePreference, SEND, DEFAULT_SEND, "btn_send", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_DELETE_MESSAGE, DEFAULT_CONFIRM_DELETE_MESSAGE, "confirm_delete_message", json);
-
+        setTranslationLanguageToPref(languagePreference, WATCH_HISTORY, DEFAULT_WATCH_HISTORY, "watch_history", json);
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
     }
