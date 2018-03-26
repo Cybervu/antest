@@ -1579,10 +1579,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
                 emVideoView.setVideoURI(Uri.parse(url));
 
-                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
-                intent.putExtra("url",url);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
+//                intent.putExtra("url",url);
+//                startActivity(intent);
+//                finish();
 
 
 
