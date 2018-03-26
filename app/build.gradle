@@ -21,7 +21,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.home.vod"
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -54,7 +54,7 @@ android {
         defaultFlavor {
             dimension 'vendor'
             applicationId 'com.release.muvisdk'
-            minSdkVersion 15
+            minSdkVersion 18
             targetSdkVersion 23
             versionCode 4
             versionName "1.5"
@@ -81,7 +81,7 @@ android {
         vishwamtv {
             dimension 'vendor'
             applicationId 'com.release.vishwamtv'
-            minSdkVersion 15
+            minSdkVersion 18
             targetSdkVersion 23
             versionCode 1
             versionName "1.0"
@@ -101,7 +101,7 @@ android {
         newthoughtchannel {
             dimension 'vendor'
             applicationId "com.release.newthoughtchannel"
-            minSdkVersion 15
+            minSdkVersion 18
             targetSdkVersion 23
             versionCode 2
             versionName "2.0"
@@ -122,7 +122,7 @@ android {
         /*Structuring aatto flavour with dimension*/
         aatto {
             dimension 'vendor'
-            minSdkVersion 15
+            minSdkVersion 18
             applicationId 'com.release.aatto'
             targetSdkVersion 23
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -163,9 +163,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 18
+            versionCode 19
             targetSdkVersion 25
-            versionName '3.1.7'
+            versionName '3.2.0'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -334,7 +334,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         magicmovies {
-            minSdkVersion 15
+            minSdkVersion 18
             dimension 'vendor'
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -487,7 +487,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         euroman {
-            minSdkVersion 15
+            minSdkVersion 18
             applicationId 'com.release.euroman'
             targetSdkVersion 23
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -738,6 +738,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
