@@ -287,11 +287,6 @@
         <activity android:name=".activity.SeasonActivity" />
         <activity android:name=".activity.ProgrammeActivity" />
 
-        <activity
-            android:name=".activity.SupportActivity1"
-            android:label=""
-            android:screenOrientation="portrait" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />

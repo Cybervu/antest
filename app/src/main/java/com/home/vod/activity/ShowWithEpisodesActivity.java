@@ -171,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
@@ -181,7 +182,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTT
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
@@ -209,10 +212,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 
 
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
@@ -1115,18 +1120,16 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             noDataLayout.setVisibility(View.VISIBLE);
         }
         if (status == 200) {
-
             //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV);
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
-
             favorite_view_episode.setImageResource(R.drawable.favorite_red);
             isFavorite = 1;
 
-            showToast();
-
+        }else {
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
         }
-
+       showToast();
     }
 
     @Override
@@ -1141,7 +1144,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
 
-        ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
+        if (status==200){
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV);
+        }else {
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
+        }
+
         favorite_view_episode.setImageResource(R.drawable.favorite_unselected);
         showToast();
         isFavorite = 0;

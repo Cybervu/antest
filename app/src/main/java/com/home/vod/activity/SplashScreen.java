@@ -719,11 +719,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             geoBlockedLayout.setVisibility(View.VISIBLE);
         }
         else {
-            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-            /*noInternetTextView.setText("Oops something went wrong.Please try again later .");
+
+            noInternetTextView.setText("Oops something went wrong.Please try again later .");
             noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);*/
+            geoBlockedLayout.setVisibility(View.GONE);
         }
 
     }

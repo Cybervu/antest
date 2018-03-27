@@ -115,7 +115,7 @@
             <LinearLayout
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/registerbtn_height"
+                android:layout_height="wrap_content"
                 android:background="@drawable/fbbg"
                 android:clickable="true"
                 android:padding="@dimen/login_linear_padding"

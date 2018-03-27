@@ -19,7 +19,7 @@ public class LoginRegistrationOnContentClickHandler {
     }
 
     public Intent handleClickOnContent(){
-        return new Intent(activity, RegisterActivity.class);
+        return new Intent(activity, LoginActivity.class);
 
 
     }
