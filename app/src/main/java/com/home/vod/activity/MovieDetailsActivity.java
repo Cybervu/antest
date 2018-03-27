@@ -339,7 +339,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
     LinearLayout story_layout;
-    String sucessMsg;
     int isFavorite;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -2256,7 +2255,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     }
 
 
-    public void showToast() {
+    public void showMessageToUser(String message) {
 
         Context context = getApplicationContext();
         // Create layout inflator object to inflate toast.xml file
@@ -2265,7 +2264,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         // Call toast.xml file for toast layout
         View toastRoot = inflater.inflate(R.layout.custom_toast, null);
         TextView customToastMsg = (TextView) toastRoot.findViewById(R.id.toastMsg);
-        customToastMsg.setText(sucessMsg);
+        customToastMsg.setText(message);
         Toast toast = new Toast(context);
 
         // Set layout to toast
@@ -3143,11 +3142,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         favorite_view.setImageResource(R.drawable.favorite_red);
         isFavorite = 1;
         if (status==200){
-            MovieDetailsActivity.this.sucessMsg=languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV);
+
+            String data = languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV);
+            showMessageToUser(languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV));
         }else {
-            MovieDetailsActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
+            showMessageToUser(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING));
         }
-        showToast();
+
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
         }
@@ -3491,12 +3492,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
         favorite_view.setImageResource(R.drawable.favorite_unselected);
+
+
         if (status==200){
-            MovieDetailsActivity.this.sucessMsg = languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV);
+            String data = languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV);
+            showMessageToUser(languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV));
         }else {
-            MovieDetailsActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
+            showMessageToUser(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING));
         }
-        showToast();
+
+
         isFavorite = 0;
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();

@@ -647,6 +647,26 @@ android {
              buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
 
         }
+        amgo {
+            minSdkVersion 21
+            applicationId 'com.release.amgo'
+            targetSdkVersion 25
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            dimension 'vendor'
+            buildConfigField "String", "AUTH_TOKEN", "\"41c57591182975a229fb788b42ddb859\""
+            versionCode 1
+            versionName '1.0'
+        }
+        amgo_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
+        }
+        amgo_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
+        }
     }
 }
 
@@ -752,6 +772,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('icablevision') && (environment.equals('icablevision_staging_') || environment.equals('icablevision_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('amgo') && (environment.equals('amgo_staging_') || environment.equals('amgo_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

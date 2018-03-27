@@ -551,8 +551,8 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
-        setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);
-        setTranslationLanguageToPref(languagePreference, DELETE_FROM_FAV, "", "content_remove_favourite", json);
+        setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, DEFAULT_ADDED_TO_FAV, "added_to_fav", json);
+        setTranslationLanguageToPref(languagePreference, DELETE_FROM_FAV, DEFAULT_DELETE_FROM_FAV, "content_remove_favourite", json);
         setTranslationLanguageToPref(languagePreference, ENTER_EMPTY_FIELD, DEFAULT_ENTER_EMPTY_FIELD, "enter_register_fields_data", json);
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);

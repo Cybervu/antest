@@ -521,7 +521,7 @@ public class RegisterActivity extends AppCompatActivity implements
         /*********fb****/
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
