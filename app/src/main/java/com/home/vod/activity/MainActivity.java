@@ -438,34 +438,28 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.action_search:
-                item.getTitle();
                 final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
                 return false;
             case R.id.action_filter:
-
                 // Not implemented here
                 return false;
             case R.id.action_login:
-
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
                 // Not implemented here
                 return false;
             case R.id.action_register:
-
                 Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here
                 return false;
             case R.id.menu_item_favorite:
-
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
                 favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 //                favoriteIntent.putExtra("LOGID",id);

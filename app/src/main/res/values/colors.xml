@@ -123,11 +123,12 @@
 
  <color name="playerBgColor">#000000</color>
  <color name="videoTitleTextColor">#32c5d2</color>
- <color name="detailsPageTextColor">#fff</color>
+ <color name="detailsPageTextColor">#ffffff</color>
  <color name="cast_crew_titleCololr">#32c5d2</color>
  <color name="resumeTitleTextColor">#ffffff</color>
  <color name="chromecast_color">#ffffff</color>
- //************************END**************************//
+    <color name="search_close_color">#ffffff</color>
+    //************************END**************************//
 
  <color name="teal_100">#FFCDD2</color>
  <color name="teal_500">#F44336</color>
@@ -167,7 +168,21 @@
  <color name="purchaseTextColor">#000</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#000</color>
+ <color name="chromecast_color">#ffffff</color>
+ <color name="google_signup_color">#fcfcfc</color>
+
+ <!--added for subtitle color by anu-->
+ <color name="subtitle_solid_color">#fff</color>
+ <color name="subtitle_outline_color">#000000</color>
+ <!--added for app background color by bishal-->
+ <color name="background_start_color">#fff</color>
+ <color name="background_end_color">#fff</color>
  <color name="player_title_color">#111111</color>
+
+ <!--Added for voucher-->
+ <color name="voucher_next_button_text_color">#FFFFFF</color>
+ <color name="favorite_selected_color">#b70000</color>
+
  <color name="google_signup_color">#fcfcfc</color>
  <color name="search_close_color">#fff</color>
 </resources>

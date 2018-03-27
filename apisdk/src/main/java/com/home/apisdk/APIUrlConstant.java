@@ -167,6 +167,11 @@ public class APIUrlConstant {
      * endpoint to get My Library Details API
      */
     public static String MYLIBRARY_URL = "MyLibrary";
+
+    /**
+     * endpoint to get Watch History Details API
+     */
+    public static String WATCH_HISTORY = "watchHistory";
     /**
      * endpoint to get Register User Payment Details API
      */
@@ -518,6 +523,10 @@ public class APIUrlConstant {
 
     public static String getMylibraryUrl() {
         return BASE_URl + MYLIBRARY_URL;
+    }
+
+    public static String getWatchHistory() {
+        return BASE_URl + WATCH_HISTORY;
     }
 
     public static String getRegisterUserPaymentUrl() {

@@ -259,7 +259,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
                             fragment.setArguments(bundle);
                             getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
-
                             mDrawerLayout.closeDrawers();
                         }
                         else {
@@ -644,8 +643,13 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         loggedInStr = preferenceManager.getUseridFromPref();
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         menusOutputModelLocal = new MenusOutputModel();
-        menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
-        menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
+        // Kushal - Handel crashing of app when no menu item is fetched
+        try {
+            menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
+            menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         titleArray.clear();
        /* Adding Home Menu*/

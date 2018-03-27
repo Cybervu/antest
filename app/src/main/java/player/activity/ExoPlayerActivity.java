@@ -84,7 +84,9 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
+import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
+import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
@@ -150,7 +152,7 @@ import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
 
-import player.service.PopUpService;
+
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -892,6 +894,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 try {
+                    if(SubTitleName.size()>0)
                     Util.DefaultSubtitle = SubTitleName.get(0);
                 }catch (Exception e){}
 
@@ -1153,7 +1156,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
             }
         }
-        player_layout.setLayoutParams(params1);
+         player_layout.setLayoutParams(params1);
 
         if (content_types_id == 4) {
             seekBar.setEnabled(false);
@@ -1579,6 +1582,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
                 emVideoView.setVideoURI(Uri.parse(url));
 
+//                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
+//                intent.putExtra("url",url);
+//                startActivity(intent);
+//                finish();
+
+
+
             } else {
                 emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
 
@@ -1613,7 +1623,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View v) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ExoPlayerActivity.this)) {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ExoPlayerActivity.this)) {
                     final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     try {
                         Util.call_finish_at_onUserLeaveHint = false;
@@ -4176,10 +4186,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
-                                Progress.setProgress((int) model.getProgress());
-                                percentg.setText(model.getProgress() + "%");
+
+
+                                int number = (int) model.getProgress();
+                                number =  (number < 0) ? -number : number;
+
+                                Progress.setProgress(number);
+                                percentg.setText(number + "%");
 //
-                                if (model.getProgress() == 100) {
+                                if (number == 100) {
 
                                     //writefilepath();
 //                                dbHelper.deleteRecord(audio);
@@ -5341,9 +5356,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         @Override
         protected void onPostExecute(String file_url) {
-            Intent intent = new Intent(ExoPlayerActivity.this, PopUpService.class);
+            Util.call_finish_at_onUserLeaveHint = false;
+            Intent intent = new Intent(ExoPlayerActivity.this, AlertActivity.class);
             intent.putExtra("msg", Dwonload_Complete_Msg);
-            startService(intent);
+            startActivity(intent);
         }
     }
 

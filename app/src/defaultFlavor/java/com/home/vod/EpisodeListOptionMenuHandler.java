@@ -91,6 +91,7 @@ public class EpisodeListOptionMenuHandler {
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 
+
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);

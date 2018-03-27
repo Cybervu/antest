@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -415,7 +416,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
-       // sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        //sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
@@ -777,7 +778,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
-                play_video = true;
+                play_video = false;
             } else {
                 play_video = true;
             }

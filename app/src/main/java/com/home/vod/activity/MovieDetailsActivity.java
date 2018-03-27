@@ -610,6 +610,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         if (code == 200) {
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
+
+                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                    isVoucher = 0;
+                }
+
             } else {
                 isVoucher = 0;
             }
@@ -794,7 +799,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
@@ -961,6 +965,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 //playermodel set data
 // *****************set data into playermdel for play in exoplayer************
 
+                isVoucher = 0;
                 playerModel.setStreamUniqueId(movieStreamUniqueId);
                 playerModel.setMovieUniqueId(movieUniqueId);
                 playerModel.setUserId(preferenceManager.getUseridFromPref());
@@ -3197,12 +3202,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
             /***play button visibility condition *****/
-
+            if(contentDetailsOutput.getIsConverted()!=1){
+                playButton.setVisibility(View.INVISIBLE);
+            }
             if (contentDetailsOutput.getIsApv() == 1) {
                 playButton.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
-            } else if (contentDetailsOutput.getContentTypesId() == 4) {
+            }
+
+
+
+            else if (contentDetailsOutput.getContentTypesId() == 4) {
                 playButton.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
@@ -3587,20 +3598,26 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                        // Go to ppv Payment
 
-                        Log.v("MUVI", "unpaid msg");
-                        payment_for_single_part();
-                    } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                        Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                    } else {
-                        // Go to ppv Payment
-                        Log.v("MUVI", "unpaid msg");
-                        payment_for_single_part();
+                    if(isVoucher == 1){
+                        ShowVoucherPopUp();
+                    }else{
+                        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                            // Go to ppv Payment
+
+                            Log.v("MUVI", "unpaid msg");
+                            payment_for_single_part();
+                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                            Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                        } else {
+                            // Go to ppv Payment
+                            Log.v("MUVI", "unpaid msg");
+                            payment_for_single_part();
+                        }
                     }
+
                 }
 
             }
@@ -3783,19 +3800,23 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     public void handleFor428Status(String subscription_Str) {
 
-        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-            // Go to ppv Payment
+        if(isVoucher == 1) {
+            ShowVoucherPopUp();
+        }else{
+            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                // Go to ppv Payment
 
-            Log.v("MUVI", "unpaid msg");
-            payment_for_single_part();
-        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-            Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-        } else {
-            // Go to ppv Payment
-            Log.v("MUVI", "unpaid msg");
-            payment_for_single_part();
+                Log.v("MUVI", "unpaid msg");
+                payment_for_single_part();
+            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            } else {
+                // Go to ppv Payment
+                Log.v("MUVI", "unpaid msg");
+                payment_for_single_part();
+            }
         }
     }
 
