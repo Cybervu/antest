@@ -90,7 +90,7 @@ public class EpisodeListOptionMenuHandler {
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);
-        if ((featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST, FeatureHandler.DEFAULT_CHROMECAST))
+        if ((featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST, FeatureHandler.DEFAULT_CHROMECAST)))
             mediaRouteMenuItem.setVisible(true);
         else
             mediaRouteMenuItem.setVisible(false);
@@ -108,7 +108,7 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(true);
 
 
-            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
@@ -117,7 +117,7 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
 
-            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
                 mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);

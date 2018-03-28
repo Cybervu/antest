@@ -3,6 +3,7 @@
     xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fillViewport="true">
 
     <RelativeLayout
@@ -210,7 +211,10 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:paddingLeft="@dimen/cc_button_padding_left"
+                        android:paddingRight="@dimen/cc_button_padding_right"
+                        android:paddingTop="@dimen/cc_button_padding_top"
+                        android:paddingBottom="@dimen/cc_button_padding_bottom"
                         android:id="@+id/cc_layout"
                         android:layout_gravity="center_vertical|right"
                         android:orientation="horizontal">

@@ -1682,10 +1682,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             togglePlayback();
         }
 
-        if (preferenceManager.getUseridFromPref()!=null){
+       /* if (preferenceManager.getUseridFromPref()!=null){
             Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
             startActivity(intent);
-        }
+        }*/
 
     }
 
@@ -1709,6 +1709,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         if (code == 200) {
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
+
+                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                    isVoucher = 0;
+                }
+
             } else {
                 isVoucher = 0;
             }
@@ -2643,7 +2648,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     public void clickItem(EpisodesListModel item) {
 
         itemToPlay = item;
-
+        isVoucher = 0;
         DataModel dbModel = new DataModel();
         dbModel.setIsFreeContent(isFreeContent);
         dbModel.setIsAPV(isAPV);
@@ -3816,10 +3821,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
         }
         // **************chromecast*********************//
-        if (mCastSession == null) {
-            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
-                    .getCurrentCastSession();
-        }
 
         GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
@@ -5535,15 +5536,21 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                        ShowPpvPopUp();
-                    } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                        Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                    } else {
-                        ShowPpvPopUp();
-                    }
+
+                   if(isVoucher == 1){
+                       GetVoucherPlan();
+                   }else{
+                       if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                           ShowPpvPopUp();
+                       } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                           Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                           startActivity(intent);
+                       } else {
+                           ShowPpvPopUp();
+                       }
+                   }
+    //********************************************************************* //
                 }
 
             }
@@ -5879,15 +5886,21 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     public void handleFor428Status(String subscription_Str) {
 
-        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-            ShowPpvPopUp();
-        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-            Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
+        if (isVoucher == 1) {
+            GetVoucherPlan();
         } else {
-            ShowPpvPopUp();
+            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                ShowPpvPopUp();
+            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            } else {
+                ShowPpvPopUp();
+            }
         }
+
+
 
     }
 

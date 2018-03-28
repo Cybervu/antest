@@ -164,6 +164,7 @@ import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -813,26 +814,9 @@ public class RegisterActivity extends AppCompatActivity implements
         regNameStr = editName.getText().toString().trim();*/
 
 
-        regEmailStr = editEmail.getText().toString();
-        regPasswordStr = editPassword.getText().toString();
-        regConfirmPasswordStr = editConfirmPassword.getText().toString();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        regEmailStr = editEmail.getText().toString().trim();
+        regPasswordStr = editPassword.getText().toString().trim();
+        regConfirmPasswordStr = editConfirmPassword.getText().toString().trim();
 
 
 
@@ -852,7 +836,7 @@ public class RegisterActivity extends AppCompatActivity implements
             }
             boolean isValidEmail = Util.isValidMail(regEmailStr);
             if(!isValidEmail){
-                //msg
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 return;
             }
 

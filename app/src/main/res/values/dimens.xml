@@ -390,4 +390,11 @@
     <dimen name="review_edit_min_size">25dp</dimen>
     <dimen name="review_edit_max_size">100dp</dimen>
     <dimen name="videolistleftmargin">5dp</dimen>
+
+
+
+    <dimen name="cc_button_padding_left">10dp</dimen>
+    <dimen name="cc_button_padding_right">32dp</dimen>
+    <dimen name="cc_button_padding_top">10dp</dimen>
+    <dimen name="cc_button_padding_bottom">10dp</dimen>
 </resources>

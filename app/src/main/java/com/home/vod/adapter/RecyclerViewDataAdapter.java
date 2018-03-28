@@ -69,7 +69,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         this.vertical = vertical;
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        listItemAllignmentHandler=new ListItemAllignmentHandler(mContext);
+        listItemAllignmentHandler = new ListItemAllignmentHandler(mContext);
 
     }
 
@@ -96,8 +96,22 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
         Log.v("BIBHU12", "position of the item in adapter ==============" + i);
-        Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" +Util.image_orentiation.size());
+        Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" + Util.image_orentiation.size());
         try {
+
+
+            if (dataList.size() < 1) {
+                itemRowHolder.section_title_layout.setVisibility(View.GONE);
+                itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+                return;
+            } else{
+                itemRowHolder.section_title_layout.setVisibility(View.VISIBLE);
+                itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
+            }
+
+
+
+
             final String sectionName = dataList.get(i).getHeaderTitle().trim();
             final String sectionId = dataList.get(i).getHeaderPermalink();
 
@@ -108,18 +122,10 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         }*/
             FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
 
-       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
             itemRowHolder.itemTitle.setText(sectionName.trim());
-//        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-            ///Called Handler for allinment change
             listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
             SectionListDataAdapter itemListDataAdapter = null;
-//            if (MainActivity.vertical == 1) {
 
-        /*for(int ii=0;ii<Util.image_orentiation.size();ii++){
-            LogUtil.showLog("MUVI1", "orien==" + Util.image_orentiation.get(ii));
-        }*/
 
 
             if (Util.image_orentiation.get(i) == Constant.IMAGE_PORTAIT_CONST) {
@@ -182,8 +188,10 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
             }
             // }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
+//            itemRowHolder.section_title_layout.setVisibility(View.GONE);
+//            itemRowHolder.recycler_view_list.setVisibility(View.GONE);
             Log.v("BIBHU12", "recycler view adapter Exception==============" + e.toString());
 
 
@@ -197,7 +205,11 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 //        return dataList.size();
 //    }
     public int getItemCount() {
-        return Util.image_orentiation.size();
+        if (Util.image_orentiation.size()< 1&&bannerUrls.size()>=1)
+            return 1;
+        else
+            return Util.image_orentiation.size();
+//        return Util.image_orentiation.size();
     }
 
     @Override
@@ -279,12 +291,13 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
         protected Button btnMore;
         private SliderLayout mDemoSlider;
-        private RelativeLayout mDemoSliderLayout;
+        private RelativeLayout mDemoSliderLayout, section_title_layout;
 
         public ItemRowHolder(View view) {
             super(view);
 
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+            this.section_title_layout = (RelativeLayout) view.findViewById(R.id.section_title_layout);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
             this.btnMore = (Button) view.findViewById(R.id.btnMore);
             FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), this.btnMore);
@@ -296,15 +309,15 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 
-            if (!firstTime) {
-                firstTime = true;
+           /* if (!firstTime) {
+                firstTime = true;*/
                 //for dynamic banner
                 loadDynamicBanners(mDemoSlider, view, this);
 
                 // for static banner
                 //loadStaticBanners(mDemoSlider,view,this);
 
-            }
+            //}
 
             if (bannerUrls.size() > 1) {
                 mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);

@@ -208,6 +208,7 @@ public class LanguagePreference {
     public static final String ENTER_REGISTER_FIELDS_DATA = "ENTER_REGISTER_FIELDS_DATA";
 
     public static final String MY_LIBRARY = "MY_LIBRARY";
+    public static final String WATCH_HISTORY = "WATCH_HISTORY";
     public static final String ABOUT_US = "ABOUT_US";
     public static final String FILL_FORM_BELOW = "FILL_FORM_BELOW";
     public static final String MESSAGE = "MESSAGE";
@@ -321,6 +322,7 @@ public class LanguagePreference {
     public static final String DEFAULT_MESSAGE = "Message";
 
     public static final String DEFAULT_MY_LIBRARY = "My Library";
+    public static final String DEFAULT_WATCH_HISTORY = "Watch History";
     public static final String DEFAULT_SELECTED_LANGUAGE_CODE = "en";
     public static final String DEFAULT_HOME = "Home";
     public static final String DEFAULT_ENTER_REGISTER_FIELDS_DATA = "Fill the empty field(s)";

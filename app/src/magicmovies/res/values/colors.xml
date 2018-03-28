@@ -29,7 +29,6 @@
     <color name="edit_text_background">#EDEDED</color>
     <color name="ic_radio_button_default">#5c6873</color>
     <color name="favorite_color">#878282</color>
-    <color name="favorite_unselected_color">#a30c0c</color>
     <color name="sign_up_text_color">#60008C</color>
     <color name="edit_color">#dadada</color>
     <color name="hint_color">#999</color>
@@ -107,4 +106,7 @@
     <color name="subtitle_outline_color">#000000</color>
     <color name="nav_header_line_color">#000</color>
     <color name="nav_text_line_color">#000</color>
+
+    <color name="favorite_unselected_color">#60008C</color>
+    <color name="favorite_selected_color">#60008C</color>
 </resources>

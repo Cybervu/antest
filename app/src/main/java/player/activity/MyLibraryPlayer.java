@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -82,7 +83,10 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
+import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
+import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
@@ -139,7 +143,7 @@ import javax.net.ssl.HttpsURLConnection;
 import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
-import player.service.PopUpService;
+
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -185,6 +189,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     String adDetails[];
     int playerStartPosition = 0;
     boolean censor_layout = true;
+    boolean stopOrientationLiastener = false;
 
     // MyLibraryPlayer.this is added for the new video log API;
 
@@ -380,7 +385,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         super.onResume();
 
-
+        stopOrientationLiastener = false;
         CheckAvailabilityOfChromecast = new Timer();
         CheckAvailabilityOfChromecast.schedule(new TimerTask() {
             @Override
@@ -712,9 +717,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             if (playerModel.getResolutionUrl() != null) {
                 ResolutionUrl = playerModel.getResolutionUrl();
+
             } else {
                 ResolutionUrl.clear();
             }
+
+            Log.v("BIBHU1", "ResolutionUrl = " + ResolutionUrl.size());
 
             if (ResolutionUrl.size() < 1) {
                 Log.v("SUBHA", "resolution image Invisible called");
@@ -759,6 +767,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             } else {
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
+                subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("BIBHU1", "subtitle_image button visible called");
             }
         } else {
@@ -768,7 +777,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image);
+                subtitle_change_btn.setVisibility(View.VISIBLE);
                 Log.v("BIBHU1", "subtitle_image button visible called");
+
+                try {
+                    if(SubTitleName.size()>0)
+                        Util.DefaultSubtitle = SubTitleName.get(0);
+                }catch (Exception e){}
             }
         }
 
@@ -777,7 +792,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View v) {
 
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
+
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -805,7 +825,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onClick(View v) {
 
+
+
                 try {
+                    if(!changeSubtitle_Resolution()){
+                        return;
+                    }
                     Util.call_finish_at_onUserLeaveHint = false;
 
                     if (isDrm) {
@@ -1146,10 +1171,21 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         End_Timer();
                     } else {
                         primary_ll.setVisibility(View.VISIBLE);
-                        if (SubTitlePath.size() > 0) {
-                            subtitle_change_btn.setVisibility(View.VISIBLE);
-                        }
+
+
                         mediaRouteButton.setVisibility(View.VISIBLE);
+
+
+                        if (isDrm) {
+                            if (SubTitlePath.size() > 0) {
+                                subtitle_change_btn.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
+                                subtitle_change_btn.setVisibility(View.VISIBLE);
+                            }
+                        }
+
 
 
                         last_ll.setVisibility(View.VISIBLE);
@@ -2922,6 +2958,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
                         } catch (Exception e) {
+
+                            String data1 = e.toString();
                         }
 
                     }
@@ -2973,6 +3011,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         } catch (Exception e) {
 
         }
+
+        Intent intent  = new Intent(MyLibraryPlayer.this, SupportActivity1.class);
+        startActivity(intent);
+        finish();
+
 
     }
 
@@ -3068,6 +3111,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     @Override
     protected void onPause() {
+
+        stopOrientationLiastener = true;
 
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
@@ -4925,9 +4970,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         @Override
         protected void onPostExecute(String file_url) {
-            Intent intent = new Intent(MyLibraryPlayer.this, PopUpService.class);
+            Util.call_finish_at_onUserLeaveHint = false;
+            Intent intent = new Intent(MyLibraryPlayer.this, AlertActivity.class);
             intent.putExtra("msg", Dwonload_Complete_Msg);
-            startService(intent);
+            startActivity(intent);
         }
     }
 
@@ -5090,5 +5136,24 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         }
 
+    }
+
+
+    private boolean changeSubtitle_Resolution() {
+        boolean status = false;
+        if (isDrm) {
+            if (SubTitlePath.size() < 1) {
+                status = false;
+            } else {
+                status = true;
+            }
+        } else {
+            if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
+                status = false;
+            } else {
+                status = true;
+            }
+        }
+        return status;
     }
 }

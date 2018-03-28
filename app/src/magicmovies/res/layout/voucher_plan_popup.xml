@@ -98,7 +98,7 @@
             android:stateListAnimator="@null"
             android:text="Next"
             android:textAllCaps="false"
-            android:textColor="@color/pageTitleColor"
+            android:textColor="@color/voucher_next_button_text_color"
             android:textSize="@dimen/cast_name_text" />
 
         <View

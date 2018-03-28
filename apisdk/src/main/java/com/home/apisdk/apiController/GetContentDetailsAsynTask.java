@@ -194,6 +194,22 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         movieTypeStr = movieTypeStr.replaceAll("\\]", "");
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
+                        movieTypeStr = movieTypeStr.trim();
+                        movieTypeStr = movieTypeStr.replaceAll(" ","");
+
+                        if(movieTypeStr.contains(",")){
+                            String data[] = movieTypeStr.split(",");
+                            movieTypeStr = "";
+                            for(int i=0;i<data.length;i++){
+                                movieTypeStr = movieTypeStr+data[i]+", ";
+                            }
+                            movieTypeStr =movieTypeStr.trim();
+                            if (movieTypeStr.charAt(movieTypeStr.length()-1)==','){
+                                movieTypeStr = movieTypeStr.substring(0, movieTypeStr.length() - 1);
+                                movieTypeStr =movieTypeStr.trim();
+                            }
+                        }
+
                         contentDetailsOutput.setGenre(movieTypeStr);
 
                     } else {

@@ -39,6 +39,7 @@ public class FeatureHandler {
     public static final String IS_SEARCH = "isSearch";
     public static final String IS_DEVICEMANGEMENT = "isDeviceMangenment";
     public static final String IS_APPNOTIFICATION = "isAppNotification";
+    public static final String WATCH_HISTORY = "watch_history";
 
 
 
@@ -64,6 +65,7 @@ public class FeatureHandler {
     public static final String DEFAULT_IS_SEARCH = "1";
     public static final String DEFAULT_IS_DEVICEMANGEMENT = "1";
     public static final String DEFAULT_IS_APPNOTIFICATION = "1";
+    public static final String DEFAULT_IS_WATCH_HISTORY = "0";
 
     public FeatureHandler(Context context) {
         fetureSharedPref = context.getSharedPreferences(PrefName,Context.MODE_PRIVATE);
@@ -97,6 +99,7 @@ public class FeatureHandler {
             setFeatureFlag( IS_APPNOTIFICATION ,DEFAULT_IS_APPNOTIFICATION);
 
 
+
             /**
              * Feature status which are coming from CMS .
              */
@@ -113,6 +116,13 @@ public class FeatureHandler {
                     setFeatureFlag( IS_MYLIBRARY , (myJson1.optString("isMylibrary")));
                 }else{
                     setFeatureFlag( IS_MYLIBRARY ,DEFAULT_IS_MYLIBRARY);
+                }
+
+
+                if(myJson1.has("watch_history") && myJson1.optString("watch_history").trim() != null && !myJson1.optString("watch_history").trim().isEmpty() && !myJson1.optString("watch_history").trim().equals("null") && !myJson1.optString("watch_history").trim().matches("")) {
+                    setFeatureFlag( WATCH_HISTORY , (myJson1.optString("watch_history")));
+                }else{
+                    setFeatureFlag( WATCH_HISTORY ,DEFAULT_IS_WATCH_HISTORY);
                 }
 
                 if(myJson1.has("signup_step") && myJson1.optString("signup_step").trim() != null && !myJson1.optString("signup_step").trim().isEmpty() && !myJson1.optString("signup_step").trim().equals("null") && !myJson1.optString("signup_step").trim().matches("")) {

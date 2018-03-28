@@ -145,6 +145,7 @@ public class Util {
     public static boolean favorite_clicked = false;
 
     public static int check_for_subscription = 0;
+    public static int main_menu_list_size = -2;
 
     public static String selected_season_id = "0";
     public static String selected_episode_id = "0";
@@ -769,6 +770,12 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DELETE_BTN, DEFAULT_DELETE_BTN, "delete_btn", json);
         setTranslationLanguageToPref(languagePreference, SEND, DEFAULT_SEND, "btn_send", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_DELETE_MESSAGE, DEFAULT_CONFIRM_DELETE_MESSAGE, "confirm_delete_message", json);
+
+        setTranslationLanguageToPref(languagePreference, WATCH_HISTORY, DEFAULT_WATCH_HISTORY, "watch_history", json);
+        setTranslationLanguageToPref(languagePreference, SELECT_PURCHASE_TYPE, DEFAULT_SELECT_PURCHASE_TYPE, "select_purchase_type", json);
+        setTranslationLanguageToPref(languagePreference, COMPLETE_SEASON, DEFAULT_COMPLETE_SEASON, "complete_season", json);
+        setTranslationLanguageToPref(languagePreference, NEXT, DEFAULT_NEXT, "btn_next", json);
+        setTranslationLanguageToPref(languagePreference, VOUCHER_SUCCESS, DEFAULT_VOUCHER_SUCCESS, "voucher_applied_success", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

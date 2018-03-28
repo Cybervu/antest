@@ -116,7 +116,7 @@
 
  <color name="playerBgColor">#000000</color>
  <color name="videoTitleTextColor">#32c5d2</color>
- <color name="detailsPageTextColor">#fff</color>
+ <color name="detailsPageTextColor">#ffffff</color>
  <color name="cast_crew_titleCololr">#32c5d2</color>
  <color name="resumeTitleTextColor">#ffffff</color>
  <color name="search_close_color">#ffffff</color>
@@ -172,4 +172,14 @@
  <color name="background_start_color">#fff</color>
  <color name="background_end_color">#fff</color>
  <color name="player_title_color">#111111</color>
+
+
+
+ <!--Added for voucher-->
+ <color name="voucher_next_button_text_color">#FFFFFF</color>
+ <color name="favorite_selected_color">#b70000</color>
+
+
+
+
 </resources>

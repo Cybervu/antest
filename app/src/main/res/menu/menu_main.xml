@@ -52,6 +52,8 @@
             <item
                 android:id="@+id/action_login"
                 android:icon="@drawable/login"
+                android:menuCategory="system"
+                android:titleCondensed="@string/app_id"
                 android:title="Login"/>
             <item
                 android:id="@+id/action_register"

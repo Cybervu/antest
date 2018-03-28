@@ -863,10 +863,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             togglePlayback();
         }
 
-        if (preferenceManager.getUseridFromPref()!=null){
+       /* if (preferenceManager.getUseridFromPref()!=null){
             Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
             startActivity(intent);
-        }
+        }*/
 
     }
 
@@ -1313,6 +1313,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         if (code == 200) {
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
+
+                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                    isVoucher = 0;
+                }
+
             } else {
                 isVoucher = 0;
             }
@@ -1811,6 +1816,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public void clickItem(EpisodesListModel item) {
 
         try {
+
+            isVoucher = 0;
             Util.check_for_subscription = 1;
 
             itemToPlay = item;
@@ -2738,9 +2745,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             } else {
                 // save RecyclerView state
-                mBundleRecyclerViewState = new Bundle();
+              /*  mBundleRecyclerViewState = new Bundle();
                 Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
-                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);*/
 
 
                 customListAdapter = new EpisodesListViewMoreAdapter(Episode_list_Activity.this, R.layout.episode_list_item, itemData, new EpisodesListViewMoreAdapter.OnItemClickListener() {
@@ -2753,9 +2760,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 episodelist.setAdapter(customListAdapter);
 
 
-                if (mBundleRecyclerViewState != null) {
+                /*if (mBundleRecyclerViewState != null) {
                     episodelist.getLayoutManager().onRestoreInstanceState(listState);
-                }
+                }*/
             }
 
         }
@@ -2768,11 +2775,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // save RecyclerView state
-        mBundleRecyclerViewState = new Bundle();
+      /*  mBundleRecyclerViewState = new Bundle();
         if (mBundleRecyclerViewState != null ) {
             Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
             mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-        }
+        }*/
     }
 
 
@@ -4006,15 +4013,21 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                        ShowPpvPopUp();
-                    } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                        Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                    } else {
-                        ShowPpvPopUp();
-                    }
+
+                   if(isVoucher ==1){
+                       GetVoucherPlan();
+                   }else{
+                       if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                           ShowPpvPopUp();
+                       } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                           Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                           intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                           startActivity(intent);
+                       } else {
+                           ShowPpvPopUp();
+                       }
+                   }
+
                 }
 
             }
@@ -4340,16 +4353,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     public void callValidateUserAPI() {
         Log.v("MUVI", "validate user details");
-       /* ValidateUserInput validateUserInput = new ValidateUserInput();
-        validateUserInput.setAuthToken(authTokenStr);
-        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-        validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-        validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-        validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-        validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -4363,16 +4367,20 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }
 
     public void handleFor428Status(String subscription_Str) {
-        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-            ShowPpvPopUp();
-        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-        } else {
-            ShowPpvPopUp();
-        }
 
+        if(isVoucher == 1){
+            GetVoucherPlan();
+        }else {
+            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                ShowPpvPopUp();
+            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            } else {
+                ShowPpvPopUp();
+            }
+        }
     }
 
     public void handleFor428StatusVoucher(String subscription_Str) {

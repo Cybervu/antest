@@ -672,7 +672,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         });
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id != 0) {
 
-
                         final Intent detailsIntent = new Intent(context, Episode_list_Activity.class);
                         Util.goToLibraryplayer = true;
 
@@ -1003,7 +1002,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }
 
                             List tracks = new ArrayList();
-                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                                 for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1079,7 +1078,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             List tracks = new ArrayList();
-                            if(!featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                                 for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1138,7 +1137,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             if (FakeSubTitlePath.size() > 0) {
                                 // This Portion Will Be changed Later.
 
-                                File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                                File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/", " ");
                                 if (dir.isDirectory()) {
                                     String[] children = dir.list();
                                     for (int i = 0; i < children.length; i++) {
@@ -3038,7 +3037,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-
+                playerModel.setSubTitlePath(SubTitlePath);
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
@@ -3062,8 +3061,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 // Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                playVideoIntent.putExtra("PlayerModel", playerModel);
                 context.startActivity(playVideoIntent);
             }
         }
