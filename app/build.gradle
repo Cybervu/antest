@@ -105,7 +105,7 @@ android {
         newthoughtchannel {
             dimension 'vendor'
             applicationId "com.release.newthoughtchannel"
-            minSdkVersion 15
+            minSdkVersion 21
             targetSdkVersion 23
             versionCode 2
             versionName "2.0"
@@ -126,7 +126,7 @@ android {
         /*Structuring aatto flavour with dimension*/
         aatto {
             dimension 'vendor'
-            minSdkVersion 15
+            minSdkVersion 21
             applicationId 'com.release.aatto'
             targetSdkVersion 23
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -338,7 +338,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         magicmovies {
-            minSdkVersion 15
+            minSdkVersion 21
             dimension 'vendor'
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -491,7 +491,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         euroman {
-            minSdkVersion 15
+            minSdkVersion 21
             applicationId 'com.release.euroman'
             targetSdkVersion 23
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
