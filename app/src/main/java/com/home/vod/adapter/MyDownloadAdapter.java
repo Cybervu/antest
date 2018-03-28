@@ -18,7 +18,6 @@ import com.home.vod.R;
 import com.home.vod.activity.MyDownloads;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-
 import com.home.vod.util.LogUtil;
 import com.squareup.picasso.Picasso;
 
@@ -35,12 +34,10 @@ import static com.home.vod.preferences.LanguagePreference.CONFIRM_DELETE_MESSAGE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_DELETE_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_BTN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DELETE;
 import static com.home.vod.preferences.LanguagePreference.DELETE_BTN;
-import static com.home.vod.preferences.LanguagePreference.WANT_TO_DELETE;
 
 /**
- * Created by Muvi on 1/16/2017.
+ * Created by Abhishek on 1/16/2017.
  */
 public class MyDownloadAdapter extends BaseAdapter {
     MyDownloads activity;
@@ -158,21 +155,21 @@ public class MyDownloadAdapter extends BaseAdapter {
                                     file.delete();
                                 }
                                 SQLiteDatabase DB = activity.openOrCreateDatabase(DBHelper.DATABASE_NAME, activity.MODE_PRIVATE, null);
-                                Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID = '"+downloadModel.get(position).getUniqueId()+"'", null);
+                                Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM "+ DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID = '"+downloadModel.get(position).getUniqueId()+"'", null);
                                 int count = cursor.getCount();
 
                                 if(count>0)
                                 {
-                                    String Query = "DELETE FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID  = '"+downloadModel.get(position).getUniqueId()+"'";
+                                    String Query = "DELETE FROM "+ DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID  = '"+downloadModel.get(position).getUniqueId()+"'";
                                     DB.execSQL(Query);
                                 }
 
-                                Cursor cursor1 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+downloadModel.get(position).getUniqueId()+"'", null);
+                                Cursor cursor1 = DB.rawQuery("SELECT * FROM "+ DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+downloadModel.get(position).getUniqueId()+"'", null);
                                 int count1 = cursor.getCount();
 
                                 if(count1>0)
                                 {
-                                    String Query = "DELETE FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId  = '"+downloadModel.get(position).getUniqueId()+"'";
+                                    String Query = "DELETE FROM "+ DBHelper.RESUME_WATCH+" WHERE UniqueId  = '"+downloadModel.get(position).getUniqueId()+"'";
                                     DB.execSQL(Query);
                                     Log.v("BIBHU11","Resume watch record deleted");
                                 }

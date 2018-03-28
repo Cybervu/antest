@@ -1,58 +1,14 @@
 package com.home.vod.fragment;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.home.apisdk.apiController.ContactUsAsynTask;
-import com.home.apisdk.apiModel.ContactUsInputModel;
-import com.home.apisdk.apiModel.ContactUsOutputModel;
-import com.home.vod.R;
-import com.home.vod.activity.MainActivity;
-import com.home.vod.network.NetworkStatus;
-import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.FontUtls;
-import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
-
-import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
-import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
-import static com.home.vod.util.Constant.authTokenStr;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.ContactUsListener {
+public class OldContactUsFragment{
+
+} /*extends Fragment implements ContactUsAsynTask.ContactUsListener {
     Context context;
     String regEmailStr, regNameStr,regMessageStr;
     EditText editEmailStr, editNameStr,editMessageStr;
@@ -76,8 +32,8 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       /* getActionBar().setTitle(getArguments().getString(""));
-        setHasOptionsMenu(true);*/
+       *//* getActionBar().setTitle(getArguments().getString(""));
+        setHasOptionsMenu(true);*//*
 
 
 
@@ -113,40 +69,40 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
 
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        /*TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);*/
-      /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);*/
-       // categoryTitle.setText(getArguments().getString("title"));
+        TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+      *//*  Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);*//*
+        categoryTitle.setText(getArguments().getString("title"));
 
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),contactFormTitle);
 
-     /*   Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        contactFormTitle.setTypeface(contactFormTitleTypeface)*/;
+     *//*   Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        contactFormTitle.setTypeface(contactFormTitleTypeface)*//*;
         contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
         FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editEmailStr);
 
-       /* Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editEmailStr.setTypeface(editEmailStrTypeface);*/
+       *//* Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editEmailStr.setTypeface(editEmailStrTypeface);*//*
         editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
         editNameStr=(EditText) v.findViewById(R.id.contact_name) ;
         FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editNameStr);
 
-        /*Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editNameStr.setTypeface(editNameStrTypeface);*/
+        *//*Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editNameStr.setTypeface(editNameStrTypeface);*//*
         editNameStr.setHint(languagePreference.getTextofLanguage( NAME_HINT, DEFAULT_NAME_HINT));
 
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
         FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editMessageStr);
 
-        /*Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editMessageStr.setTypeface(editMessageStrTypeface);*/
+        *//*Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editMessageStr.setTypeface(editMessageStrTypeface);*//*
         editMessageStr.setHint(languagePreference.getTextofLanguage( MESSAGE, DEFAULT_MESSAGE));
-        /*******enter key of keyboard *************/
+        */ /*******enter key of keyboard *************//*
 
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -164,9 +120,9 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
         editMessageStr.setFilters(new InputFilter[]{filter});
         submit = (Button) v.findViewById(R.id.submit_cont);
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),submit);
-/*
+*//*
         Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        submit.setTypeface(submitTypeface);*/
+        submit.setTypeface(submitTypeface);*//*
         submit.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -469,5 +425,5 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
 //        editEmailStr.setError(null);
 //
 //    }
-//}
-}
+//}*/
+

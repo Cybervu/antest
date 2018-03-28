@@ -4,26 +4,23 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.apisdk.apiController.ContactUsAsynTask;
-import com.home.apisdk.apiModel.ContactUsInputModel;
-import com.home.apisdk.apiModel.ContactUsOutputModel;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.ContactUsModel;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
@@ -31,23 +28,13 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
+import java.util.HashMap;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
@@ -56,7 +43,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
@@ -67,18 +53,17 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactUsFragment extends Fragment implements ContactUsAsynTask.ContactUsListener{
+public class ContactUsFragment extends Fragment implements APICallManager.ApiInterafce {
     ProgressBarHandler pDialog;
     Context context;
-    String regEmailStr, regNameStr,regMessageStr;
-    EditText editEmailStr, editNameStr,editMessageStr;
+    String regEmailStr, regNameStr, regMessageStr;
+    EditText editEmailStr, editNameStr, editMessageStr;
     TextView contactFormTitle;
     Button submit;
-    String sucessMsg,statusmsg;
+    String sucessMsg, statusmsg;
     String contEmail;
     boolean validate = true;
     LanguagePreference languagePreference;
-
 
 
     public ContactUsFragment() {
@@ -92,45 +77,44 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         // Inflate the layout for this fragment
        /* getActionBar().setTitle(getArguments().getString(""));
         setHasOptionsMenu(true);*/
-        getActivity().getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
+        TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);
+        categoryTitle.setText(getArguments().getString("title"));
 
-     //   TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
-        /*categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText(getArguments().getString("title"));*/
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
-        Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
         contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         //Log.v("SUBHA","ontact = "+ languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
-        editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        editEmailStr = (EditText) v.findViewById(R.id.contact_email);
+        Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         editEmailStr.setTypeface(editEmailStrTypeface);
         editEmailStr.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
-        editNameStr=(EditText) v.findViewById(R.id.contact_name) ;
-        Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        editNameStr = (EditText) v.findViewById(R.id.contact_name);
+        Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         editNameStr.setTypeface(editNameStrTypeface);
         editNameStr.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editNameStr.requestFocus();
       /*  InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editNameStr, InputMethodManager.SHOW_FORCED);*/
-        //showKeyboard();
+        showKeyboard();
 
-        editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
-        Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+
+        editMessageStr = (EditText) v.findViewById(R.id.contact_msg);
+        Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         editMessageStr.setTypeface(editMessageStrTypeface);
         editMessageStr.setHint(languagePreference.getTextofLanguage(ENTER_YOUR_MESSAGE, DEFAULT_ENTER_YOUR_MESSAGE));
 
         submit = (Button) v.findViewById(R.id.submit_cont);
-        Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
         submit.setTypeface(submitTypeface);
         submit.setText(languagePreference.getTextofLanguage(BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
 
@@ -144,37 +128,6 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             }
         });
 
-     /*   editNameStr.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
-        editMessageStr.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
-        editEmailStr.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
-*/
         /*editNameStr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -304,10 +257,10 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
                         final Intent startIntent = new Intent(getActivity(), MainActivity.class);
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                getActivity().startActivity(startIntent);
-                                getActivity().finish();
+                        startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        getActivity().startActivity(startIntent);
+                        getActivity().finish();
 
 
                     }
@@ -355,30 +308,41 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regMessageStr.matches(""))) {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
-                    if (validate){
-                        ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
+                    if (validate) {
+
+                        final HashMap parameters = new HashMap<>();
+
+                        parameters.put("authToken",authTokenStr);
+                        parameters.put("email",String.valueOf(regEmailStr));
+                        parameters.put("name",String.valueOf(regNameStr));
+                        parameters.put("message",String.valueOf(regMessageStr));
+                        parameters.put("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.CONTACT_US_URL, parameters, APIUrlConstant.CONTACT_US_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+
+                        /*ContactUsInputModel contactUsInputModel = new ContactUsInputModel();
                         contactUsInputModel.setAuthToken(authTokenStr);
                         contactUsInputModel.setEmail(String.valueOf(regEmailStr));
                         contactUsInputModel.setName(String.valueOf(regNameStr));
                         contactUsInputModel.setMessage(String.valueOf(regMessageStr));
-                        contactUsInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                        ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
-                        asynContactUs.execute();
+                        contactUsInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this, context);
+                        asynContactUs.execute();*/
 
-                    }else {
-                        validate=true;
-                        return ;
+                    } else {
+                        validate = true;
+                        return;
                     }
 
                 } else {
                     Toast.makeText(context, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA,DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
 
             }
         } else {
-            Toast.makeText(context, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
 
        /* if (regNameStr.equals("")){
@@ -406,8 +370,6 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         }*/
 
 
-
-
 //
 //        boolean isNetwork = Util.checkNetwork(getActivity());
 //        if (isNetwork) {
@@ -432,7 +394,6 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
     }
 
 
-
     public void showKeyboard() {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         View v = getActivity().getCurrentFocus();
@@ -446,41 +407,8 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         }
     }*/
 
-/*
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(getView() == null){
-            return;
-        }
 
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
-                    final Intent startIntent = new Intent(getActivity(), MainActivity.class);
-                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    getActivity().startActivity(startIntent);
-                    getActivity().finish();
-                    // handle back button's click listener
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-*/
-
-    @Override
+   /* @Override
     public void onContactUsPreExecuteStarted() {
         pDialog = new ProgressBarHandler(context);
         pDialog.show();
@@ -507,5 +435,38 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         editNameStr.setError(null);
         editEmailStr.setError(null);
 
+    }*/
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+        pDialog = new ProgressBarHandler(context);
+        pDialog.show();
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.CONTACT_US_URL_REQUEST_ID == requestID) ;
+        contact_us(object, requestID, response);
+    }
+
+    public void contact_us(Object object, int requestID, String response) {
+
+        ContactUsModel contactUsModel = (ContactUsModel) object;
+        Toast.makeText(getActivity(), contactUsModel.getSuccessMsg(), Toast.LENGTH_SHORT).show();
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        editMessageStr.setText("");
+        editNameStr.setText("");
+        editEmailStr.setText("");
+        editMessageStr.setError(null);
+        editNameStr.setError(null);
+        editEmailStr.setError(null);
     }
 }

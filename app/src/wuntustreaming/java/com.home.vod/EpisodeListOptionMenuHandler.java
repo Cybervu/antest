@@ -13,10 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LogoutInput;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.activity.LoginActivity;

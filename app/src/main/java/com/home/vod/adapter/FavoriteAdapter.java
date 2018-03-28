@@ -4,7 +4,6 @@ package com.home.vod.adapter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 
 public class FavoriteAdapter extends ArrayAdapter<GridItem> {
     private int layoutResourceId;

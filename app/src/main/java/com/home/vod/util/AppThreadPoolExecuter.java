@@ -1,7 +1,5 @@
 package com.home.vod.util;
 
-import com.home.apisdk.APIUrlConstant;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -13,18 +12,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,17 +30,15 @@ import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.home.apisdk.apiModel.APVModel;
-import com.home.apisdk.apiModel.CurrencyModel;
-import com.home.apisdk.apiModel.PPVModel;
+import com.home.api.apiModel.AdvPricing;
+import com.home.api.apiModel.Currency;
+import com.home.api.apiModel.PpvPricing;
 import com.home.vod.BuildConfig;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.RegisterActivity;
-import com.home.vod.activity.ShowWithEpisodesActivity;
-import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
@@ -57,18 +47,12 @@ import com.home.vod.preferences.LanguagePreference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -76,46 +60,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.home.vod.preferences.LanguagePreference.*;
-import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.APP_ON;
-import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
-import static com.home.vod.preferences.LanguagePreference.CARD_WILL_CHARGE;
-import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
-import static com.home.vod.preferences.LanguagePreference.LOGIN_STATUS_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_SUCCESS_ALERT;
-import static com.home.vod.preferences.LanguagePreference.SEARCH_HINT;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ALERT;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.SLOW_ISSUE_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.SORT_BY;
-import static com.home.vod.preferences.LanguagePreference.STORY_TITLE;
-import static com.home.vod.preferences.LanguagePreference.TERMS;
-import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
-import static com.home.vod.preferences.LanguagePreference.TRANSACTION;
-import static com.home.vod.preferences.LanguagePreference.TRANSACTION_DATE;
-import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS;
-import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
-import static com.home.vod.preferences.LanguagePreference.UNPAID;
-import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
-import static com.home.vod.preferences.LanguagePreference.VIDEO_ISSUE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
-import static com.home.vod.preferences.LanguagePreference.WATCH;
-import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.YES;
 
 /**
  * Created by User on 24-07-2015.
@@ -127,11 +71,12 @@ public class Util {
     public static boolean itemclicked = false;
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static final String UpdateGoogleid = "UpdateGoogleid";
+    public static final String RATING = "rating";
 
-    public static int main_menu_list_size = -2;
-    public static PPVModel ppvModel = null;
-    public static APVModel apvModel = null;
-    public static CurrencyModel currencyModel = null;
+
+    public static PpvPricing ppvModel = null;
+    public static AdvPricing apvModel = null;
+    public static Currency currencyModel = null;
     public static DataModel dataModel = null;
     public static ArrayList<LanguageModel> languageModel = null;
 
@@ -145,6 +90,7 @@ public class Util {
     public static boolean favorite_clicked = false;
 
     public static int check_for_subscription = 0;
+    public static int main_menu_list_size = -2;
 
     public static String selected_season_id = "0";
     public static String selected_episode_id = "0";
@@ -160,7 +106,7 @@ public class Util {
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
-    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+    public static String pdf_url= BuildConfig.SERVICE_BASE_PATH;
     public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
     public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
 
@@ -552,7 +498,6 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
         setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);
-        setTranslationLanguageToPref(languagePreference, DELETE_FROM_FAV, "", "content_remove_favourite", json);
         setTranslationLanguageToPref(languagePreference, ENTER_EMPTY_FIELD, DEFAULT_ENTER_EMPTY_FIELD, "enter_register_fields_data", json);
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);
@@ -775,11 +720,9 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SEND, DEFAULT_SEND, "btn_send", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_DELETE_MESSAGE, DEFAULT_CONFIRM_DELETE_MESSAGE, "confirm_delete_message", json);
 
+
+        // Will change later
         setTranslationLanguageToPref(languagePreference, WATCH_HISTORY, DEFAULT_WATCH_HISTORY, "watch_history", json);
-        setTranslationLanguageToPref(languagePreference, SELECT_PURCHASE_TYPE, DEFAULT_SELECT_PURCHASE_TYPE, "select_purchase_type", json);
-        setTranslationLanguageToPref(languagePreference, COMPLETE_SEASON, DEFAULT_COMPLETE_SEASON, "complete_season", json);
-        setTranslationLanguageToPref(languagePreference, NEXT, DEFAULT_NEXT, "btn_next", json);
-        setTranslationLanguageToPref(languagePreference, VOUCHER_SUCCESS, DEFAULT_VOUCHER_SUCCESS, "voucher_applied_success", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

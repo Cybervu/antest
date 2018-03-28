@@ -3,9 +3,7 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -26,14 +24,10 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.home.apisdk.apiController.GetAppHomePageAsync;
-import com.home.apisdk.apiController.GetLoadVideosAsync;
-import com.home.apisdk.apiModel.AppHomePageOutput;
-import com.home.apisdk.apiModel.HomePageBannerModel;
-import com.home.apisdk.apiModel.HomePageInputModel;
-import com.home.apisdk.apiModel.HomePageSectionModel;
-import com.home.apisdk.apiModel.LoadVideoInput;
-import com.home.apisdk.apiModel.LoadVideoOutput;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.GetAppFeauturedContentModel;
+import com.home.api.apiModel.GetAppHomePageModel;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
@@ -46,11 +40,10 @@ import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -71,14 +64,12 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * Created by Muvi on 11/24/2016.
  */
-public class HomeFragment extends Fragment implements
-        GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
+public class HomeFragment extends Fragment implements APICallManager.ApiInterafce {
 
     //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
-    GetLoadVideosAsync asynLoadVideos;
     //    AsynLOADUI loadui;
     View rootView;
     int item_CountOfSections = 0;
@@ -107,7 +98,6 @@ public class HomeFragment extends Fragment implements
     ArrayList<SingleItemModel> singleItem;
 
     //AsynLoadImageUrls as = null;
-    GetAppHomePageAsync asynLoadMenuItems = null;
     /* int bannerArray[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
      int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
     int corePoolSize = 60;
@@ -139,7 +129,7 @@ public class HomeFragment extends Fragment implements
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+
 
 
  /*       *//***************chromecast**********************//*
@@ -192,11 +182,19 @@ public class HomeFragment extends Fragment implements
 
             url_maps = new ArrayList<String>();
 
-            HomePageInputModel homePageInputModel = new HomePageInputModel();
+            final HashMap parameters = new HashMap<>();
+            parameters.put("authToken", authTokenStr);
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.HOMEPAGE_URL, parameters, APIUrlConstant.HOMEPAGE_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+
+            /*HomePageInputModel homePageInputModel = new HomePageInputModel();
             homePageInputModel.setAuthToken(authTokenStr);
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
-            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);*/
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
         }
@@ -233,6 +231,8 @@ public class HomeFragment extends Fragment implements
     }*/
 
 
+
+/*
     @Override
     public void onLoadVideosAsyncPreExecuteStarted() {
 
@@ -309,7 +309,7 @@ public class HomeFragment extends Fragment implements
          }
         return;
 
-    }
+    }*/
 
     public void loadUI() {
         //ui_completed = ui_completed + 1;
@@ -380,12 +380,21 @@ public class HomeFragment extends Fragment implements
                 }
 
                 // default data
-                LoadVideoInput loadVideoInput = new LoadVideoInput();
+
+                final HashMap parameters = new HashMap<>();
+                parameters.put("authToken", authTokenStr);
+                parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                parameters.put("section_id", menuList.get(counter).getSectionId());
+
+                final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_FEATURE_CONTENT_URL, parameters, APIUrlConstant.GET_FEATURE_CONTENT_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                apiCallManager.startApiProcessing();
+
+               /* LoadVideoInput loadVideoInput = new LoadVideoInput();
                 loadVideoInput.setAuthToken(authTokenStr);
                 loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                 asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
-                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
             } else {
                 noInternetLayout.setVisibility(View.VISIBLE);
@@ -516,7 +525,7 @@ public class HomeFragment extends Fragment implements
         }*/
     }
 
-    @Override
+    /*@Override
     public void onHomePagePreExecuteStarted() {
         mProgressBarHandler = new ProgressBarHandler(getActivity());
         mProgressBarHandler.show();
@@ -576,8 +585,8 @@ public class HomeFragment extends Fragment implements
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);
                     // default data
-                    /*asynLoadVideos = new AsynLoadVideos();
-                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
+                    *//*asynLoadVideos = new AsynLoadVideos();
+                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*//*
 
                 } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
@@ -634,17 +643,17 @@ public class HomeFragment extends Fragment implements
             }
         }
         return;
-    }
+    }*/
 
     public void myOnKeyDown() {
         //do whatever you want here
-        if (asynLoadMenuItems != null) {
+        /*if (asynLoadMenuItems != null) {
             asynLoadMenuItems.cancel(true);
         }
 
         if (asynLoadVideos != null) {
             asynLoadVideos.cancel(true);
-        }
+        }*/
        /* ActivityCompat.finishAffinity(getActivity());
         getActivity().finish();
         System.exit(0);*/
@@ -687,6 +696,229 @@ public class HomeFragment extends Fragment implements
         }
 
         return false;
+    }
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+
+        if (APIUrlConstant.GET_FEATURE_CONTENT_URL_REQUEST_ID == requestID) {
+            load_video(object, requestID, response);
+            LogUtil.showLog("Abhi.....Feature Content Call", response);
+        } else if (APIUrlConstant.HOMEPAGE_URL_REQUEST_ID == requestID) {
+            app_home_page(object, requestID, response);
+            LogUtil.showLog("Abhi.....Home Page URL Call", response);
+        }
+    }
+
+    public void load_video(Object object, int requestID, String response) {
+
+        GetAppFeauturedContentModel getAppFeauturedContentModel = (GetAppFeauturedContentModel) object;
+
+
+        if (getAppFeauturedContentModel != null) {
+
+            String movieImageStr = "";
+            String movieName = "";
+            String videoTypeIdStr = "";
+            ArrayList<String> movieGenreStr = null;
+            String moviePermalinkStr = "";
+            String isEpisodeStr = "";
+            int isConverted = 0;
+            int isPPV = 0;
+            int isAPV = 0;
+
+            singleItem = new ArrayList<SingleItemModel>();
+
+            if (getAppFeauturedContentModel.getSection().size() > 0) {
+
+
+                for (int i = 0; i < getAppFeauturedContentModel.getSection().size(); i++) {
+                    movieImageStr = getAppFeauturedContentModel.getSection().get(i).getPosterUrl();
+                    movieName = getAppFeauturedContentModel.getSection().get(i).getName();
+                    videoTypeIdStr = getAppFeauturedContentModel.getSection().get(i).getContentTypesId();
+                    movieGenreStr = getAppFeauturedContentModel.getSection().get(i).getGenre();
+                    moviePermalinkStr = getAppFeauturedContentModel.getSection().get(i).getPermalink();
+                    isEpisodeStr = getAppFeauturedContentModel.getSection().get(i).getIsEpisode();
+                    isConverted = getAppFeauturedContentModel.getSection().get(i).getIsConverted();
+                    isPPV = getAppFeauturedContentModel.getSection().get(i).getIs_ppv();
+                    isAPV = getAppFeauturedContentModel.getSection().get(i).getIs_advance();
+
+
+                    singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                }
+            }
+
+            allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
+
+
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                if (getActivity() != null) {
+                    new RetrieveFeedTask().execute(movieImageStr);
+                }
+
+
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        return;
+
+    }
+
+    public void app_home_page(Object object, int requestID, String response) {
+
+
+        GetAppHomePageModel getAppHomePageModel = (GetAppHomePageModel) object;
+
+        if (mProgressBarHandler != null) {
+            mProgressBarHandler.hide();
+            mProgressBarHandler = null;
+        }
+
+        if (getAppHomePageModel != null) {
+
+            if (getAppHomePageModel.getCode() == 200) {
+
+                if (singleItem != null && singleItem.size() > 0) {
+                    singleItem.clear();
+                }
+
+                if (allSampleData != null && allSampleData.size() > 0) {
+                    allSampleData.clear();
+                }
+
+                if (getAppHomePageModel.getBannerSectionList() != null) {
+
+                    for (int i = 0; i < getAppHomePageModel.getBannerSectionList().size(); i++) {
+                        if (getAppHomePageModel.getBannerSectionList().get(i) != null) {
+                            url_maps.add(getAppHomePageModel.getBannerSectionList().get(i).getImagePath());
+
+                        }
+                    }
+                    /*for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                        if (model != null) {
+                            if (model.getImage_path() != null) {
+                                url_maps.add(model.getImage_path());
+                            }
+                        }
+                    }*/
+                }
+                if (getAppHomePageModel.getSectionName() != null) {
+
+                    for (int i = 0; i < getAppHomePageModel.getSectionName().size(); i++) {
+                        String title = "", section_id = "", studio_id, language_id = "";
+
+                        title = getAppHomePageModel.getSectionName().get(i).getTitle();
+                        section_id = getAppHomePageModel.getSectionName().get(i).getSectionId();
+                        studio_id = getAppHomePageModel.getSectionName().get(i).getStudioId();
+                        language_id = getAppHomePageModel.getSectionName().get(i).getLanguageId();
+
+                        menuList.add(new GetMenuItem(title, section_id, studio_id, language_id));
+
+                    }
+                }
+                    /*for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
+                        if (section != null) {
+                            if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
+                                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
+
+                            }
+                        }
+                    }*/
+            }
+
+
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                my_recycler_view.setLayoutManager(mLayoutManager);
+                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                my_recycler_view.setAdapter(adapter);
+                my_recycler_view.setVisibility(View.VISIBLE);
+
+                final HashMap parameters = new HashMap<>();
+                parameters.put("authToken", authTokenStr);
+                parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                parameters.put("section_id", menuList.get(counter).getSectionId());
+
+                final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_FEATURE_CONTENT_URL, parameters, APIUrlConstant.GET_FEATURE_CONTENT_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                apiCallManager.startApiProcessing();
+
+                // default data
+                    /*asynLoadVideos = new AsynLoadVideos();
+                    asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
+
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+//            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
+
+            try {
+                if (getAppHomePageModel.getBannerSectionList().size() > 0) {
+                    for (int i = 0; i < getAppHomePageModel.getBannerSectionList().size(); i++) {
+                        url_maps.add(getAppHomePageModel.getBannerSectionList().get(i).getImagePath());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            /*for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                url_maps.add(model.getImage_path());
+            }*/
+
+            if (firstTime == false) {
+                firstTime = true;
+
+                if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                    for (int j = 0; j < url_maps.size(); j++) {
+                        DefaultSliderView textSliderView = new DefaultSliderView(context);
+                        textSliderView
+                                .description("")
+                                .image(url_maps.get(j))
+                                .setScaleType(BaseSliderView.ScaleType.Fit);
+                        // .setOnSliderClickListener(this);
+                        textSliderView.bundle(new Bundle());
+                        textSliderView.getBundle()
+                                .putString("extra", "");
+
+                        mDemoSlider.addSlider(textSliderView);
+                    }
+                } else {
+                    for (int j = 0; j < url_maps.size(); j++) {
+                        DefaultSliderView textSliderView = new DefaultSliderView(context);
+                        textSliderView
+                                .description("")
+                                .image(url_maps.get(j))
+                                .setScaleType(BaseSliderView.ScaleType.Fit);
+                        // .setOnSliderClickListener(this);
+                        textSliderView.bundle(new Bundle());
+                        textSliderView.getBundle()
+                                .putString("extra", "");
+
+                        mDemoSlider.addSlider(textSliderView);
+                    }
+                }
+            }
+            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+            mDemoSlider.setDuration(10000);
+            //   mDemoSlider.addOnPageChangeListener(this);
+            mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
+
+            sliderRelativeLayout.setVisibility(View.VISIBLE);
+
+        }
+
+        return;
     }
 
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {

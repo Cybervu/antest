@@ -1,5 +1,6 @@
 package com.home.vod.adapter;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.home.vod.R;
 import com.home.vod.model.GetCastCrewItem;
@@ -34,7 +34,7 @@ public class CastCrewAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return position;
+        return null;
     }
 
     @Override

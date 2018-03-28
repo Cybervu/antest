@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -36,37 +35,21 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Video_Details_Output;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.GetVideoDetailsModel;
+import com.home.api.apiModel.IPAddressModel;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
-import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,8 +61,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import player.activity.ResumePopupActivity;
 import player.model.ContactModel1;
 import player.utils.DBHelper;
@@ -88,24 +69,21 @@ import player.utils.Util;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOADED_ACCESS_EXPIRED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DOWNLOADED_VIDEOS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_DOWNLOADED_VIDEOS;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static java.lang.Thread.sleep;
 
-public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTask.IpAddressListener, VideoDetailsAsynctask.VideoDetailsListener {
+public class MyDownloads extends AppCompatActivity implements APICallManager.ApiInterafce {
 
 
     String download_id_from_watch_access_table = "";
@@ -143,7 +121,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     String SubtitleLanguage = "";
     String SubtitleCode = "";
     String seek_status = "";
-    String gen="",story="";
+    String gen = "", story = "";
     String resume_time = "0";
 
     LanguagePreference languagePreference;
@@ -233,8 +211,6 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     int Position = 0;
     public static ProgressBarHandler progressBarHandler;
 
-    VideoDetailsAsynctask asynLoadVideoUrls;
-    GetIpAddressAsynTask asynGetIpAddress;
     MediaInfo mediaInfo;
     /*chromecast-------------------------------------*/
 
@@ -292,10 +268,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,10 +280,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             }
         });
 
-        if(com.home.vod.util.Util.hideBcakIcon){
+        if (com.home.vod.util.Util.hideBcakIcon) {
             mActionBarToolbar.setNavigationIcon(null);
 //            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            com.home.vod.util.Util.hideBcakIcon  = false;
+            com.home.vod.util.Util.hideBcakIcon = false;
         }
 
 
@@ -330,19 +306,13 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
         download = dbHelper.getContactt(emailIdStr, 1);
-        if (NetworkStatus.getInstance().isConnected(MyDownloads.this)){
-            if (download.size() > 0) {
-                adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
-                list.setAdapter(adapter);
-            } else {
-                nodata.setVisibility(View.VISIBLE);
-                noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
-            }
-        }else {
+        if (download.size() > 0) {
+            adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
+            list.setAdapter(adapter);
+        } else {
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+            noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
         }
-
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -352,8 +322,11 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 SubtitleUrl = "";
 
                 if (Util.checkNetwork(MyDownloads.this)) {
-                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(MyDownloads.this, MyDownloads.this);
-                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+                    final HashMap parameters = new HashMap<>();
+                    final APICallManager apiCallManager1 = new APICallManager(MyDownloads.this, APIUrlConstant.IP_ADDRESS_URL, parameters, APIUrlConstant.IP_ADDRESS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager1.startApiProcessing();
+                    /*GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(MyDownloads.this, MyDownloads.this);
+                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);*/
 
                 } else {
                     MoveToOfflinePlayer();
@@ -776,10 +749,129 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         }
     }*/
     @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.IP_ADDRESS_URL_REQUEST_ID == requestID) {
+            ip_address(object, requestID, response);
+        }
+    }
+
+    public void ip_address(Object object, int requestID, String response) {
+
+        IPAddressModel ipAddressModel = (IPAddressModel) object;
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+        }
+
+        if (!ipAddressStr.equals("")) {
+
+            this.ipAddressStr = ipAddressModel.getIp();
+
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("content_uniq_id", download.get(Position).getMuviid());
+            parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+            parameters.put("user_id", preferenceManager.getUseridFromPref());
+            parameters.put("stream_uniq_id", download.get(Position).getStreamId());
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+            /*GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+            getVideoDetailsInput.setAuthToken(authTokenStr);
+            getVideoDetailsInput.setContent_uniq_id(download.get(Position).getMuviid());
+            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+            getVideoDetailsInput.setStream_uniq_id(download.get(Position).getStreamId());
+            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyDownloads.this, MyDownloads.this);
+            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+        }
+
+    }
+
+    public void video_details(Object object, int requestID, String response) {
+
+        GetVideoDetailsModel getVideoDetailsModel = (GetVideoDetailsModel) object;
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+        }
+
+        if (getVideoDetailsModel.getCode() == 200) {
+
+            MpdVideoUrl = getVideoDetailsModel.getVideoUrl();
+            licenseUrl = getVideoDetailsModel.getLicenseUrl();
+
+
+            Played_Length = Util.isDouble(getVideoDetailsModel.getPlayedLength());
+            Played_Length = Played_Length * 1000;
+
+            upadateResumeWatchTable("" + Played_Length);
+
+
+            Chromecast_Subtitle_Url.clear();
+            Chromecast_Subtitle_Language_Name.clear();
+            Chromecast_Subtitle_Code.clear();
+
+            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+                if (getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath().size() > 0) {
+
+                    SubtitleUrl = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath().get(0);
+                    SubtitleLanguage = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName().get(0);
+                    SubtitleCode = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code().get(0);
+                }
+
+                Chromecast_Subtitle_Url = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
+                Chromecast_Subtitle_Language_Name = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
+                Chromecast_Subtitle_Code = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+
+            }
+            if (mCastSession != null && mCastSession.isConnected()) {
+
+                if (!CheckAccessPeriodOfDownloadContent()) {
+                    return;
+                }
+
+                if ((Played_Length) > 0) {
+                    Intent resumeIntent = new Intent(MyDownloads.this, ResumePopupActivity.class);
+                    startActivityForResult(resumeIntent, 1001);
+                } else {
+                    Played_Length = 0;
+                    watch_status = "start";
+                    PlayThroughChromeCast();
+                }
+
+            } else {
+                MoveToOfflinePlayer();
+            }
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+    }
+
+   /* @Override
     public void onIPAddressPreExecuteStarted() {
 
         progressBarHandler = new ProgressBarHandler(MyDownloads.this);
         progressBarHandler.show();
+
     }
 
     @Override
@@ -803,180 +895,9 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyDownloads.this, MyDownloads.this);
             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
         }
-    }
-
-
-   /* private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int statusCode;
-
-        // This is added because of change in simultaneous login feature
-        String message;
-        boolean play_video = true;
-
-        // ================================== End ====================================//
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadVideoUrl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("content_uniq_id", download.get(Position).getMuviid());
-                httppost.addHeader("stream_uniq_id", download.get(Position).getStreamId());
-                httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
-                httppost.addHeader("lang_code", Util.getTextofLanguage(MyDownloads.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                Log.v("SUBHA", "authToken = " + Util.authTokenStr.trim());
-                Log.v("SUBHA", "content_uniq_id = " + download.get(Position).getMuviid());
-                Log.v("SUBHA", "stream_uniq_id = " + download.get(Position).getStreamId());
-                Log.v("SUBHA", "user_id = " + preferenceManager.getUseridFromPref());
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (Exception e) {
-                    responseStr = "0";
-                }
-
-                Log.v("SUBHA", "response = " + responseStr);
-                JSONObject myJson = null;
-                JSONArray SubtitleJosnArray = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    SubtitleJosnArray = myJson.optJSONArray("subTitle");
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    message = myJson.optString("msg");
-                    // ================================== End ====================================//
-                }
-
-                if (statusCode >= 0) {
-                    if (statusCode == 200) {
-                        if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() &&
-                                !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
-                            MpdVideoUrl = myJson.getString("videoUrl").trim();
-
-                            if (MpdVideoUrl.equals(""))
-                                responseStr = "0";
-
-                            if ((myJson.has("licenseUrl")) && myJson.getString("licenseUrl").trim() != null && !myJson.getString("licenseUrl").trim().isEmpty() && !myJson.getString("licenseUrl").trim().equals("null") && !myJson.getString("licenseUrl").trim().matches("")) {
-                                licenseUrl = myJson.optString("licenseUrl");
-                            }
-
-                            SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-
-                            String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
-                            DB.execSQL(Qry1);
-
-                            if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
-                                Played_Length = Util.isDouble(myJson.getString("played_length"));
-                                Played_Length = Played_Length * 1000;
-                            }
-
-                        } else {
-                            responseStr = "0";
-                        }
-
-                        if (SubtitleJosnArray != null) {
-                            if (SubtitleJosnArray.length() > 0) {
-
-                                Chromecast_Subtitle_Url.clear();
-                                Chromecast_Subtitle_Language_Name.clear();
-                                Chromecast_Subtitle_Code.clear();
-
-
-                                for (int i = 0; i < SubtitleJosnArray.length(); i++) {
-                                    SubtitleUrl = SubtitleJosnArray.getJSONObject(0).optString("url").trim();
-                                    SubtitleLanguage = SubtitleJosnArray.getJSONObject(0).optString("language").trim();
-                                    SubtitleCode = SubtitleJosnArray.getJSONObject(0).optString("code").trim();
-
-                                    Log.v("BIBHU", "Sutitle name = " + SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-                                    Log.v("BIBHU", "Sutitle path = " + SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-                                    Log.v("BIBHU", "Sutitle code = " + SubtitleJosnArray.getJSONObject(i).optString("code").trim());
-
-                                    Chromecast_Subtitle_Url.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-                                    Chromecast_Subtitle_Language_Name.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-                                    Chromecast_Subtitle_Code.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
-
-                                }
-                            }
-                        }
-                        // ================================== End ====================================//
-                    }
-
-                } else {
-                    responseStr = "0";
-                }
-            } catch (Exception e1) {
-                Log.v("BIBHU", "Exception e =" + e1.toString());
-                responseStr = "0";
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
-            }
-
-            // ================================== End ====================================//
-            if (responseStr == null) {
-                responseStr = "0";
-            }
-
-            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MyDownloads.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MyDownloads.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            } else {
-
-                if (mCastSession != null && mCastSession.isConnected()) {
-
-                    if (!CheckAccessPeriodOfDownloadContent()) {
-                        return;
-                    }
-
-                    if ((Played_Length) > 0) {
-                        Intent resumeIntent = new Intent(MyDownloads.this, ResumePopupActivity.class);
-                        startActivityForResult(resumeIntent, 1001);
-                    } else {
-                        Played_Length = 0;
-                        watch_status = "start";
-
-                        PlayThroughChromeCast();
-                    }
-
-                } else {
-                    MoveToOfflinePlayer();
-                }
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(MyDownloads.this);
-            pDialog.show();
-        }
     }*/
 
-    @Override
+    /*@Override
     public void onVideoDetailsPreExecuteStarted() {
 
         progressBarHandler = new ProgressBarHandler(MyDownloads.this);
@@ -999,7 +920,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             Played_Length = Util.isDouble(_video_details_output.getPlayed_length());
             Played_Length = Played_Length * 1000;
 
-            upadateResumeWatchTable(""+Played_Length);
+            upadateResumeWatchTable("" + Played_Length);
 
 
             Chromecast_Subtitle_Url.clear();
@@ -1050,14 +971,14 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                     });
             dlgAlert.create().show();
         }
-    }
+    }*/
 
 
     public void MoveToOfflinePlayer() {
         SubTitleName.clear();
         SubTitlePath.clear();
 
-        HashMap<String,String> subtitle_map = new HashMap<>();
+        HashMap<String, String> subtitle_map = new HashMap<>();
 
 
         SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
@@ -1068,17 +989,17 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             if (cursor.moveToFirst()) {
                 do {
 
-                    subtitle_map.put(cursor.getString(0).trim(),cursor.getString(1).trim());
+                    subtitle_map.put(cursor.getString(0).trim(), cursor.getString(1).trim());
                     Log.v("BIBHU3", "SubTitleName============" + cursor.getString(0).trim());
                     Log.v("BIBHU3", "SubTitlePath============" + cursor.getString(1).trim());
 
                 } while (cursor.moveToNext());
             }
 
-            if(subtitle_map.size()>0){
+            if (subtitle_map.size() > 0) {
                 Iterator it = subtitle_map.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
+                    Map.Entry pair = (Map.Entry) it.next();
                     SubTitleName.add(pair.getKey().toString().trim());
                     SubTitlePath.add(pair.getValue().toString().trim());
                     it.remove();
@@ -1127,7 +1048,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 final String filename = pathh.substring(pathh.lastIndexOf("/") + 1);
 
 
-                try{
+                try {
                     String genre_story = download.get(Position).getGenere().trim();
                     if (genre_story.equals("@@@")) {
                         gen = "";
@@ -1143,7 +1064,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                             story = data[1];
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     gen = "";
                     story = "";
                 }
@@ -1264,14 +1185,14 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 return true;
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED, DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
 
             }
         } else {
 
 
-            if(access_period == -1){
+            if (access_period == -1) {
                 String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
                         " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
                 DB.execSQL(Qry);
@@ -1287,12 +1208,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                     return true;
                 } else {
                     // Show Restriction Meassge
-                    ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
+                    ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED, DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                     return false;
                 }
             } else {
                 // Show Restriction Message
-                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED,DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
+                ShowRestrictionMsg(languagePreference.getTextofLanguage(DOWNLOADED_ACCESS_EXPIRED, DEFAULT_DOWNLOADED_ACCESS_EXPIRED));
                 return false;
             }
         }
@@ -1505,14 +1426,14 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
     @Override
     protected void onStop() {
-        try {
-            if (asynGetIpAddress != null)
+        /*try {*/
+           /* if (asynGetIpAddress != null)
                 asynGetIpAddress.cancel(true);
             if (asynLoadVideoUrls != null)
                 asynLoadVideoUrls.cancel(true);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         super.onStop();
     }
 
@@ -1522,7 +1443,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             public void run() {
 
                 SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "' , PlayedDuration = '"+playedLength+"'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
+                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "' , PlayedDuration = '" + playedLength + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
                 DB.execSQL(Qry1);
             }
         }).start();

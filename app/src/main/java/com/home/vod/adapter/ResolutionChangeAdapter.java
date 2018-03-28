@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
@@ -16,7 +15,7 @@ import com.home.vod.util.Util;
 import java.util.ArrayList;
 
 /**
- * Created by MUVI on 3/10/2017.
+ * Created by Abhishek on 3/10/2017.
  */
 
 

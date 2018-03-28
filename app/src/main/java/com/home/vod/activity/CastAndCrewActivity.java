@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -16,9 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.GetCelibrityAsyntask;
-import com.home.apisdk.apiModel.CelibrityInputModel;
-import com.home.apisdk.apiModel.CelibrityOutputModel;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.GetCelebrityModel;
 import com.home.vod.CastAndCrewDetailsIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;
@@ -28,9 +27,9 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -54,11 +53,11 @@ import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrityListener {
+public class CastAndCrewActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
 
 
     Toolbar mActionBarToolbar;
-   //TextView castCrewTitleTextView;
+    TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
     ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
@@ -90,8 +89,6 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -110,9 +107,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         castAndCrewDetailsIntentHandler = new CastAndCrewDetailsIntentHandler(this);
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
-       // castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-       // FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
-       // castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+        castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
+        FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
+        castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = NetworkStatus.getInstance().isConnected(this);
 
@@ -152,215 +149,14 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         noDataLayout.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
 
-        CelibrityInputModel celibrityInputModel = new CelibrityInputModel();
-        celibrityInputModel.setAuthToken(authTokenStr);
-        celibrityInputModel.setMovie_id(getIntent().getStringExtra("cast_movie_id"));
-        celibrityInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel, this, this);
-        asynGetCsatDetails.executeOnExecutor(threadPoolExecutor);
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("movie_id", getIntent().getStringExtra("cast_movie_id"));
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_CELIBRITY_URL, parameters, APIUrlConstant.GET_CELIBRITY_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager.startApiProcessing();
 
     }
-
-    @Override
-    public void onGetCelibrityPreExecuteStarted() {
-
-        pDialog = new ProgressBarHandler(CastAndCrewActivity.this);
-        pDialog.show();
-
-    }
-
-    @Override
-    public void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status, String msg) {
-        try {
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
-                pDialog = null;
-            }
-
-        } catch (IllegalArgumentException ex) {
-        }
-        if (status == 200) {
-            //castCrewItems = new ArrayList<GetCastCrewItem>();
-            for (int i = 0; i < celibrityOutputModel.size(); i++) {
-                GetCastCrewItem movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(), celibrityOutputModel.get(i).getCast_type()
-                        , celibrityOutputModel.get(i).getCelebrity_image()
-                        , celibrityOutputModel.get(i).getPermalink(), celibrityOutputModel.get(i).getSummary());
-
-                castCrewItems.add(movie);
-            }
-
-            noDataLayout.setVisibility(View.GONE);
-            noInternetLayout.setVisibility(View.GONE);
-            primary_layout.setVisibility(View.VISIBLE);
-            // Set the grid adapter here.
-            castCrewAdapter.notifyDataSetChanged();
-        } else if (status == 448) {
-            ShowDialog(msg);
-        } else if (status == 0) {
-            primary_layout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
-            noInternetLayout.setVisibility(View.GONE);
-        }
-
-    }
-    //Asyntask for getDetails of the csat and crew members.
-
-   /* private class AsynGetCsatDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr = "";
-        int status;
-        String msg;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-
-
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.CsatAndCrew.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
-                httppost.addHeader("movie_id",getIntent().getStringExtra("cast_movie_id"));
-                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-               *//* httppost.addHeader("authToken", "1836d3f6a8d75407a162bcc5eece68c7");
-                httppost.addHeader("movie_id","acb089ace5126fe0e1e6054edd86dc6d");*//*
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (Exception e){
-
-                }
-
-                JSONObject myJson =null;
-                JSONArray jsonArray =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    msg = myJson.optString("msg");
-
-
-                }
-
-                if (status == 200) {
-                    jsonArray = myJson.getJSONArray("celibrity");
-                    for (int i=0 ;i<jsonArray.length();i++)
-                    {
-                        String celebrityName = jsonArray.getJSONObject(i).optString("name");
-                        String celebrityImage = jsonArray.getJSONObject(i).optString("celebrity_image");
-                        String celebrityCastName = jsonArray.getJSONObject(i).optString("cast_type");
-                        celebrityCastName = celebrityCastName.replaceAll("\\[", "");
-                        celebrityCastName = celebrityCastName.replaceAll("\\]","");
-                        celebrityCastName = celebrityCastName.replaceAll(","," , ");
-                        celebrityCastName = celebrityCastName.replaceAll("\"", "");
-
-
-                        if(celebrityImage.equals("") || celebrityImage==null)
-                        {
-                            celebrityImage = "";
-                        }
-                        else
-                        {
-                            if(!celebrityImage.contains("http"))
-                            {
-                                celebrityImage ="";
-                            }
-                        }
-
-                        GetCastCrewItem   movie = new GetCastCrewItem(celebrityName,celebrityCastName,celebrityImage);
-                        castCrewItems.add(movie);
-                    }
-
-                }else{
-
-                    if(status == 448)
-                    {
-
-                        // show dialog
-                        responseStr = "1";
-                    }
-                    else
-                    {
-                        responseStr = "0";
-                    }
-                }
-
-            } catch (final JSONException e1) {
-                responseStr = "0";
-            }
-            catch (Exception e)
-            {
-
-                if(status == 448)
-                    responseStr = "1";
-                else
-                    responseStr = "0";
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try{
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-
-            }
-            catch(IllegalArgumentException ex)
-            {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        primary_layout.setVisibility(View.GONE);
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetLayout.setVisibility(View.GONE);
-
-
-                    }
-
-                });
-                responseStr = "0";
-            }
-            if(responseStr == null) {
-                responseStr = "0";
-            }
-
-            if((responseStr.trim().equals("0"))){
-                primary_layout.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetLayout.setVisibility(View.GONE);
-            }else{
-                if( responseStr.equals("1")) {
-                    ShowDialog(msg);
-                }
-                else {
-                    noDataLayout.setVisibility(View.GONE);
-                    noInternetLayout.setVisibility(View.GONE);
-                    primary_layout.setVisibility(View.VISIBLE);
-                    // Set the grid adapter here.
-                    castCrewAdapter.notifyDataSetChanged();
-                }
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            pDialog = new ProgressBarHandler(CastAndCrewActivity.this);
-            pDialog.show();
-
-
-        }
-    }*/
 
     public void ShowDialog(String msg) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastAndCrewActivity.this, R.style.MyAlertDialogStyle);
@@ -376,6 +172,57 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
                     }
                 });
         dlgAlert.create().show();
+    }
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+        pDialog = new ProgressBarHandler(CastAndCrewActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.GET_CELIBRITY_URL_REQUEST_ID == requestID) {
+            celebrity(object, requestID, response);
+        }
+    }
+
+    public void celebrity(Object object, int requestID, String response) {
+        GetCelebrityModel getCelebrityModel = (GetCelebrityModel) object;
+
+        if (getCelebrityModel != null) {
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+
+            } catch (IllegalArgumentException ex) {
+            }
+            if (getCelebrityModel.getCode() == 200) {
+                //castCrewItems = new ArrayList<GetCastCrewItem>();
+                for (int i = 0; i < getCelebrityModel.getCelibrity().size(); i++) {
+                    GetCastCrewItem movie = new GetCastCrewItem(getCelebrityModel.getCelibrity().get(i).getName(), getCelebrityModel.getCelibrity().get(i).getCastType()
+                            , getCelebrityModel.getCelibrity().get(i).getCelebrityImage()
+                            , getCelebrityModel.getCelibrity().get(i).getPermalink(), getCelebrityModel.getCelibrity().get(i).getSummary());
+
+                    castCrewItems.add(movie);
+                }
+
+                noDataLayout.setVisibility(View.GONE);
+                noInternetLayout.setVisibility(View.GONE);
+                primary_layout.setVisibility(View.VISIBLE);
+                // Set the grid adapter here.
+                castCrewAdapter.notifyDataSetChanged();
+            } else if (getCelebrityModel.getCode() == 448) {
+                ShowDialog(getCelebrityModel.getMsg());
+            } else if (getCelebrityModel.getCode() == 0) {
+                primary_layout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetLayout.setVisibility(View.GONE);
+            }
+        }
+
     }
 
    /* @Override

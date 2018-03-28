@@ -34,10 +34,9 @@ import java.util.ArrayList;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+
 
 public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder> {
     ArrayList<SingleItemModel> singleSectionItems;
@@ -98,6 +97,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         Log.v("BIBHU12", "position of the item in adapter ==============" + i);
         Log.v("BIBHU12", "section adapter size of Util.image_orentiation.get(i) ======***========" + Util.image_orentiation.size());
         try {
+
 
             if (dataList.size() < 1) {
                 itemRowHolder.section_title_layout.setVisibility(View.GONE);
@@ -195,12 +195,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
 
         }
-        /*itemRowHolder.recycler_view_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = (int) v.getTag();
-            }
-        });*/
+
 
     }
 
@@ -357,8 +352,4 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         }
     }
 
-   /* @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
-    }*/
 }

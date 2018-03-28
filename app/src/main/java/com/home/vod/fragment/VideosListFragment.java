@@ -1,6 +1,5 @@
 package com.home.vod.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +40,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
@@ -55,21 +52,15 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.GetContentListAsynTask;
-import com.home.apisdk.apiController.LoadFilterVideoAsync;
-import com.home.apisdk.apiModel.ContentListInput;
-import com.home.apisdk.apiModel.ContentListOutput;
-import com.home.apisdk.apiModel.LoadFilterVideoInput;
-import com.home.apisdk.apiModel.LoadFilterVideoOutput;
-import com.home.vod.R;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.GetContentListModel;
 import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.R;
 import com.home.vod.VideolistFragmentHandler;
 import com.home.vod.activity.FilterActivity;
-import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
-import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -78,25 +69,13 @@ import com.home.vod.model.ListItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -113,13 +92,11 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
@@ -149,13 +126,12 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentListListener,
-        LoadFilterVideoAsync.LoadFilterVideoListner {
+public class VideosListFragment extends Fragment implements APICallManager.ApiInterafce {
 
     public static boolean clearClicked = false;
 
 
-    @Override
+ /*   @Override
     public void onGetContentListPreExecuteStarted() {
         if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
             videoPDialog = MainActivity.internetSpeedDialog;
@@ -166,10 +142,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             if (listSize == 0) {
                 // hide loader for first time
 
-                  /*  if (videoPDialog!=null && videoPDialog.isShowing()){
+                  *//*  if (videoPDialog!=null && videoPDialog.isShowing()){
                     }else {
                         videoPDialog.show();
-                    }*/
+                    }*//*
                 videoPDialog.show();
 
                 footerView.setVisibility(View.GONE);
@@ -248,7 +224,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                     new RetrieveFeedTask().execute(videoImageStrToHeight);
 
-                /*    Picasso.with(getActivity()).load(videoImageStrToHeight
+                *//*    Picasso.with(getActivity()).load(videoImageStrToHeight
                     ).into(new Target() {
 
                         @Override
@@ -266,10 +242,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                         @Override
                         public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                                *//*AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
+                                *//**//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//**//*
                         }
-                    });*/
+                    });*//*
                 } else {
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);
@@ -299,9 +275,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
             }
         }
-    }
+    }*/
 
-    @Override
+
+    /*@Override
     public void onLoadFilterVideoPreExecuteStarted() {
         if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
             videoPDialog = MainActivity.internetSpeedDialog;
@@ -312,10 +289,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             if (listSize == 0) {
                 // hide loader for first time
 
-                  /*  if (videoPDialog!=null && videoPDialog.isShowing()){
+                  *//*  if (videoPDialog!=null && videoPDialog.isShowing()){
                     }else {
                         videoPDialog.show();
-                    }*/
+                    }*//*
                 videoPDialog.show();
 
                 footerView.setVisibility(View.GONE);
@@ -355,6 +332,142 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 isAPV = loadFilterVideoOutputArrayList.get(i).getIsAPV();
                 isPPV = loadFilterVideoOutputArrayList.get(i).getIsPPV();
                 isEpisodeStr = loadFilterVideoOutputArrayList.get(i).getIsEpisodeStr();
+                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+            }
+
+            if (itemData.size() <= 0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+
+            } else {
+                footerView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                if (filterMenuItem != null) {
+
+              */     /* filterMenuItem.setVisible(true);
+                }
+
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+                videoImageStrToHeight = movieImageStr;
+
+                if (firstTime == true) {
+
+
+                    new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                   *//* Picasso.with(getActivity()).load(videoImageStrToHeight
+                    ).into(new Target() {
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            videoWidth = bitmap.getWidth();
+                            videoHeight = bitmap.getHeight();
+                            loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                                *//**//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//**//*
+                        }
+                    });*//*
+                } else {
+                    loadUI = new AsynLOADUI();
+                    loadUI.executeOnExecutor(threadPoolExecutor);
+                }
+
+
+            }
+        } else {
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+
+        }
+
+
+    }
+*/
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.GET_CONTENT_LIST_URL_REQUEST_ID == requestID) {
+
+            get_content_list(object, requestID, response);
+
+        } else if (APIUrlConstant.LOAD_FILTER_VIDEO_REQUEST_ID == requestID) {
+
+            load_filter_video(object, requestID, response);
+
+        }
+    }
+
+    public void load_filter_video(Object object, int requestID, String response) {
+
+        GetContentListModel getContentListModel = (GetContentListModel) object;
+
+        ArrayList<String> movieGenreStr = null;
+        String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        int isAPV = 0;
+        int isPPV = 0;
+        int isConverted = 0;
+        if (getContentListModel.getStatus() == 200) {
+            itemsInServer = Integer.parseInt(getContentListModel.getItemCount());
+            for (int i = 0; i < getContentListModel.getMovieList().size(); i++) {
+                movieGenreStr = getContentListModel.getMovieList().get(i).getGenre();
+                movieName = getContentListModel.getMovieList().get(i).getName();
+                movieImageStr = getContentListModel.getMovieList().get(i).getPosterUrl();
+                moviePermalinkStr = getContentListModel.getMovieList().get(i).getPermalink();
+                videoTypeIdStr = getContentListModel.getMovieList().get(i).getContentTypesId();
+                isConverted = getContentListModel.getMovieList().get(i).getIsConverted();
+                isAPV = Integer.parseInt(getContentListModel.getMovieList().get(i).getIs_advance());
+                isPPV = Integer.parseInt(getContentListModel.getMovieList().get(i).getIs_ppv());
+                isEpisodeStr = getContentListModel.getMovieList().get(i).getIsEpisode();
                 itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
             }
 
@@ -443,6 +556,124 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             gridView.setVisibility(View.GONE);
             footerView.setVisibility(View.GONE);
 
+        }
+    }
+
+
+    public void get_content_list(Object object, int requestID, String response) {
+
+        GetContentListModel getContentListModel = (GetContentListModel) object;
+
+        ArrayList<String> movieGenreStr = null;
+        String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        int isAPV = 0;
+        int isPPV = 0;
+        int isConverted = 0;
+        if (getContentListModel.getStatus() == 200) {
+            itemsInServer = Integer.parseInt(getContentListModel.getItemCount());
+            for (int i = 0; i < getContentListModel.getMovieList().size(); i++) {
+                movieGenreStr = getContentListModel.getMovieList().get(i).getGenre();
+                movieName = getContentListModel.getMovieList().get(i).getName();
+                movieImageStr = getContentListModel.getMovieList().get(i).getPosterUrl();
+                moviePermalinkStr = getContentListModel.getMovieList().get(i).getPermalink();
+                videoTypeIdStr = getContentListModel.getMovieList().get(i).getContentTypesId();
+                isConverted = getContentListModel.getMovieList().get(i).getIsConverted();
+                isAPV = Integer.parseInt(getContentListModel.getMovieList().get(i).getIs_advance());
+                isPPV = Integer.parseInt(getContentListModel.getMovieList().get(i).getIs_ppv());
+                isEpisodeStr = getContentListModel.getMovieList().get(i).getIsEpisode();
+                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+            }
+
+            if (itemData.size() <= 0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+
+            } else {
+                footerView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                if (filterMenuItem != null) {
+
+                    filterMenuItem.setVisible(true);
+                }
+
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+                videoImageStrToHeight = movieImageStr;
+
+                if (firstTime == true) {
+
+                    new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                /*    Picasso.with(getActivity()).load(videoImageStrToHeight
+                    ).into(new Target() {
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            videoWidth = bitmap.getWidth();
+                            videoHeight = bitmap.getHeight();
+                            loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                                *//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
+                        }
+                    });*/
+                } else {
+                    loadUI = new AsynLOADUI();
+                    loadUI.executeOnExecutor(threadPoolExecutor);
+                }
+
+
+            }
+        } else {
+            if (getContentListModel.getStatus() == 0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+            }
         }
 
 
@@ -549,8 +780,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     // AsynLoadVideos asynLoadVideos;
     String strtext;
     String countryCodeStr;
-    GetContentListAsynTask getContentListAsynTask;
-    LoadFilterVideoAsync loadFilterVideoAsync;
 
     ArrayList<String> url_maps;
     private ProgressBarHandler videoPDialog;
@@ -660,9 +889,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         //for search for each activity
         setHasOptionsMenu(true);
         filterOrderByStr = "";
-        /*MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setTitle(getArguments().getString("title"));*/
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
@@ -683,11 +909,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-       // TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-       // categoryTitle.setTypeface(castDescriptionTypeface);
+        categoryTitle.setTypeface(castDescriptionTypeface);
         //FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);
-     //f,   categoryTitle.setText(getArguments().getString("title"));
+        categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -739,7 +965,22 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             footerView.setVisibility(View.GONE);
         } else {
 
-            ContentListInput contentListInput = new ContentListInput();
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("permalink", strtext.trim());
+            parameters.put("limit", String.valueOf(limit));
+            parameters.put("offset", String.valueOf(offset));
+            parameters.put("orderby", "");
+            if (countryCodeStr != null) {
+                parameters.put("country", countryCodeStr);
+            } else {
+                parameters.put("country", "IN");
+            }
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.GET_CONTENT_LIST_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+            /*ContentListInput contentListInput = new ContentListInput();
             contentListInput.setAuthToken(authTokenStr);
             contentListInput.setPermalink(strtext.trim());
             contentListInput.setLimit(String.valueOf(limit));
@@ -752,7 +993,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             }
             contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
-            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
+            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);*/
 
         }
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -814,7 +1055,24 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
-                                LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
+                                final HashMap parameters = new HashMap<>();
+
+                                parameters.put("authToken", authTokenStr);
+                                parameters.put("permalink", strtext.trim());
+                                parameters.put("limit", String.valueOf(limit));
+                                parameters.put("offset", String.valueOf(offset));
+                                parameters.put("orderby", filterOrderByStr);
+                                if (countryCodeStr != null) {
+                                    parameters.put("country", countryCodeStr);
+                                } else {
+                                    parameters.put("country", "IN");
+                                }
+                                parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                                final APICallManager apiCallManager = new APICallManager(VideosListFragment.this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.LOAD_FILTER_VIDEO_REQUEST_ID, APIUrlConstant.BASE_URl);
+                                apiCallManager.startApiProcessing();
+
+                               /* LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                                 loadFilterVideoInput.setGenreArray(genreArray);
                                 loadFilterVideoInput.setAuthToken(authTokenStr);
                                 loadFilterVideoInput.setPermalink(strtext.trim());
@@ -828,7 +1086,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 }
                                 loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                 loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
-                                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
+                                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);*/
 
 
                             } else {
@@ -837,7 +1095,23 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 /*
                                 asynLoadVideos = new AsynLoadVideos();
                                 asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
-                                ContentListInput contentListInput = new ContentListInput();
+                                final HashMap parameters = new HashMap<>();
+
+                                parameters.put("authToken", authTokenStr);
+                                parameters.put("permalink", strtext.trim());
+                                parameters.put("limit", String.valueOf(limit));
+                                parameters.put("offset", String.valueOf(offset));
+                                parameters.put("orderby", "");
+                                if (countryCodeStr != null) {
+                                    parameters.put("country", countryCodeStr);
+                                } else {
+                                    parameters.put("country", "IN");
+                                }
+                                parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                final APICallManager apiCallManager = new APICallManager(VideosListFragment.this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.GET_CONTENT_LIST_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                                apiCallManager.startApiProcessing();
+
+                               /* ContentListInput contentListInput = new ContentListInput();
                                 contentListInput.setAuthToken(authTokenStr);
                                 contentListInput.setPermalink(strtext.trim());
                                 contentListInput.setLimit(String.valueOf(limit));
@@ -850,7 +1124,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 }
                                 contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                 getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
-                                getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
+                                getContentListAsynTask.executeOnExecutor(threadPoolExecutor);*/
                             }
 
                             scrolling = false;
@@ -874,7 +1148,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 itemToPlay = item;
                 String posterUrl = item.getImage();
                 String movieName = item.getTitle();
-                String movieGenre = item.getMovieGenre();
+                ArrayList<String> movieGenre = item.getMovieGenre();
                 String moviePermalink = item.getPermalink();
                 String movieTypeId = item.getVideoTypeId();
                 videoUrlStr = item.getVideoUrl();
@@ -966,15 +1240,32 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             videoPDialog.hide();
                             videoPDialog = null;
                         }
-                        if (getContentListAsynTask != null) {
+                       /* if (getContentListAsynTask != null) {
                             getContentListAsynTask.cancel(true);
-                        }
+                        }*/
                         if (loadUI != null) {
                             loadUI.cancel(true);
                         }
                         /*AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
-                        LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
+
+                        final HashMap parameters = new HashMap<>();
+
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("permalink", strtext.trim());
+                        parameters.put("limit", String.valueOf(limit));
+                        parameters.put("offset", String.valueOf(offset));
+                        parameters.put("orderby", filterOrderByStr);
+                        if (countryCodeStr != null) {
+                            parameters.put("country", countryCodeStr);
+                        } else {
+                            parameters.put("country", "IN");
+                        }
+                        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                        final APICallManager apiCallManager = new APICallManager(VideosListFragment.this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.LOAD_FILTER_VIDEO_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+                       /* LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                         loadFilterVideoInput.setGenreArray(genreArray);
                         loadFilterVideoInput.setAuthToken(authTokenStr);
                         loadFilterVideoInput.setPermalink(strtext.trim());
@@ -988,7 +1279,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         }
                         loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
-                        loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
+                        loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);*/
 
                     }
                 }
@@ -1528,17 +1819,33 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     videoPDialog.hide();
                     videoPDialog = null;
                 }
-                if (getContentListAsynTask != null) {
+               /* if (getContentListAsynTask != null) {
                     getContentListAsynTask.cancel(true);
-                }
+                }*/
                 if (loadUI != null) {
                     loadUI.cancel(true);
                 }
                /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
+                final HashMap parameters = new HashMap<>();
 
-                LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
+                parameters.put("authToken", authTokenStr);
+                parameters.put("permalink", strtext.trim());
+                parameters.put("limit", String.valueOf(limit));
+                parameters.put("offset", String.valueOf(offset));
+                parameters.put("orderby", filterOrderByStr);
+                if (countryCodeStr != null) {
+                    parameters.put("country", countryCodeStr);
+                } else {
+                    parameters.put("country", "IN");
+                }
+                parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                final APICallManager apiCallManager = new APICallManager(VideosListFragment.this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.LOAD_FILTER_VIDEO_REQUEST_ID, APIUrlConstant.BASE_URl);
+                apiCallManager.startApiProcessing();
+
+               /* LoadFilterVideoInput loadFilterVideoInput = new LoadFilterVideoInput();
                 loadFilterVideoInput.setGenreArray(genreArray);
                 loadFilterVideoInput.setAuthToken(authTokenStr);
                 loadFilterVideoInput.setPermalink(strtext.trim());
@@ -1552,7 +1859,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 }
                 loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 loadFilterVideoAsync = new LoadFilterVideoAsync(loadFilterVideoInput, VideosListFragment.this, context);
-                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
+                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);*/
 
             }
         }
@@ -1579,7 +1886,23 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 itemData.clear();
             }
 
-            ContentListInput contentListInput = new ContentListInput();
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("permalink", strtext.trim());
+            parameters.put("limit", String.valueOf(limit));
+            parameters.put("offset", String.valueOf(offset));
+            parameters.put("orderby", "");
+            if (countryCodeStr != null) {
+                parameters.put("country", countryCodeStr);
+            } else {
+                parameters.put("country", "IN");
+            }
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            final APICallManager apiCallManager = new APICallManager(VideosListFragment.this, APIUrlConstant.GET_CONTENT_LIST_URL, parameters, APIUrlConstant.GET_CONTENT_LIST_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+
+           /* ContentListInput contentListInput = new ContentListInput();
             contentListInput.setAuthToken(authTokenStr);
             contentListInput.setPermalink(strtext.trim());
             contentListInput.setLimit(String.valueOf(limit));
@@ -1592,7 +1915,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             }
             contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             getContentListAsynTask = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
-            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
+            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);*/
         }
 
 

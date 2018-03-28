@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 
 public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
     private Context context;
@@ -87,7 +87,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
       try {
 
         GridItem item = data.get(position);
-        holder.title.setText(item.getTitle().replaceAll("[^a-zA-Z0-9]", ""));
+        holder.title.setText(item.getTitle());
         String imageId = item.getImage();
 
 
@@ -97,7 +97,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         }else {
 
             Picasso.with(context)
-                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.logo)
+                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.no_image)
                     .into(holder.videoImageview);
 
 

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.LanguagePreference;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+
 
 public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAdapter.ViewHolder> {
     public Context mContext;

@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
-import com.home.apisdk.APIUrlConstant;
+import com.home.api.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -41,7 +41,6 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
-
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -1765,7 +1764,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             overridePendingTransition(0, 0);
             //startTimer();
             return;
-
 
         }
 

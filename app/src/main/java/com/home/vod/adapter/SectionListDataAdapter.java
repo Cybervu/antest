@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
@@ -23,7 +22,6 @@ import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,6 +32,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 

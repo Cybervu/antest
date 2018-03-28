@@ -18,7 +18,7 @@ repositories {
 android {
     flavorDimensions 'environment', 'vendor'
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.home.vod"
         minSdkVersion 18
@@ -105,7 +105,7 @@ android {
         newthoughtchannel {
             dimension 'vendor'
             applicationId "com.release.newthoughtchannel"
-            minSdkVersion 15
+            minSdkVersion 18
             targetSdkVersion 23
             versionCode 2
             versionName "2.0"
@@ -126,7 +126,7 @@ android {
         /*Structuring aatto flavour with dimension*/
         aatto {
             dimension 'vendor'
-            minSdkVersion 15
+            minSdkVersion 18
             applicationId 'com.release.aatto'
             targetSdkVersion 23
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -338,7 +338,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         magicmovies {
-            minSdkVersion 15
+            minSdkVersion 18
             dimension 'vendor'
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -414,7 +414,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         avin {
-            minSdkVersion 16
+            minSdkVersion 18
             dimension 'vendor'
             applicationId 'com.epizod.avin'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -453,7 +453,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         cote_ouest {
-            minSdkVersion 16
+            minSdkVersion 18
             dimension 'vendor'
             applicationId 'com.release.coteouest'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -491,7 +491,7 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         euroman {
-            minSdkVersion 15
+            minSdkVersion 18
             applicationId 'com.release.euroman'
             targetSdkVersion 23
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -778,7 +778,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-    compile project(':apisdk')
+    compile project(':muvisdk')
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile('com.spotxchange:spotx-sdk-android:3.1.+') {

@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,17 +10,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.ListItem;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 
 /**
- * Created by Muvi on 9/6/2016.
+ * Created by Abhishek on 9/6/2016.
  */
 public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.MyViewHolder> {
 

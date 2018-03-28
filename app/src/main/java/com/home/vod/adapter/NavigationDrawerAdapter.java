@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.util.FontUtls;
@@ -20,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by  Sujit on 2-01-2017.
+ * Created by  Abhishek on 2-01-2017.
  */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.MyViewHolder> {
     List<NavDrawerItem> data = Collections.emptyList();

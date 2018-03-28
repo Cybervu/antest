@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.SensorOrientationChangeNotifier;
-import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
@@ -76,7 +75,6 @@ import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
              }
          });
      }
-
      @Override
      protected void onResume() {
          super.onResume();

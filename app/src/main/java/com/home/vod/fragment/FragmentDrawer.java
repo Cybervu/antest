@@ -10,13 +10,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import com.home.vod.R;
 import com.home.vod.adapter.NavigationDrawerAdapter;
@@ -30,7 +28,6 @@ import com.home.vod.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 
@@ -247,7 +244,6 @@ public class FragmentDrawer extends Fragment {
 
         }
     }
-
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
     }

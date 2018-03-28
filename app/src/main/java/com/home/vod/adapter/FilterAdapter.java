@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.FilterListModel;
 import com.home.vod.preferences.PreferenceManager;
@@ -20,7 +18,7 @@ import com.home.vod.util.FontUtls;
 import java.util.ArrayList;
 
 /**
- * Created by Muvi on 9/6/2016.
+ * Created by Abhishek on 9/6/2016.
  */
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHolder> {
 
@@ -97,7 +95,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
             holder.selectButton.setVisibility(View.GONE);
 
             holder.listviewLay1.setClickable(false);
-            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.FilterTitleTextColor));
+            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.castCrewTitleTextColor));
             holder.filterTextName.setTextSize(18);
 
           //  holder.filterTextName.setTypeface(holder.filterTextName.getTypeface(), Typeface.BOLD);
@@ -111,7 +109,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
        else if (position == (genreTempArr.length - 5)){
             holder.selectButton.setVisibility(View.GONE);
             holder.listviewLay1.setClickable(false);
-            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.FilterTitleTextColor));
+            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.castCrewTitleTextColor));
             holder.filterTextName.setTextSize(18);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
 

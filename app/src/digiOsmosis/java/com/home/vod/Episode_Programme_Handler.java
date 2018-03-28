@@ -3,8 +3,6 @@ package com.home.vod;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.home.vod.activity.ProgrammeActivity;
-
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 
 /**

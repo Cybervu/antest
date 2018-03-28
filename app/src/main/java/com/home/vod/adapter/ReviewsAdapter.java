@@ -10,10 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
+import com.home.api.apiModel.ViewContentRatingModel;
 import com.home.vod.R;
-import com.home.vod.model.ReviewsItem;
 import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
@@ -23,9 +21,9 @@ import java.util.ArrayList;
  */
 public class ReviewsAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<ViewContentRatingOutputModel.Rating> reviewsItems ;
+    private ArrayList<ViewContentRatingModel.Rating> reviewsItems ;
 
-    public ReviewsAdapter(Context mContext, ArrayList<ViewContentRatingOutputModel.Rating> reviewsItems) {
+    public ReviewsAdapter(Context mContext, ArrayList<ViewContentRatingModel.Rating> reviewsItems) {
         this.mContext = mContext;
         this.reviewsItems = reviewsItems;
     }
@@ -78,18 +76,9 @@ public class ReviewsAdapter extends BaseAdapter {
         Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
         userReviewTextView.setTypeface(castDescriptionTypeface);*/
 
-        try {
-            userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
-            if (reviewsItems.get(position).getReview()!=null){
-                userReviewTextView.setText(Html.fromHtml(reviewsItems.get(position).getReview()));
-            }else {
-                userReviewTextView.setText("");
-            }
-
-            rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+        userNameTextView.setText(reviewsItems.get(position).getDisplayName());
+        userReviewTextView.setText(Html.fromHtml(reviewsItems.get(position).getReview()));
+        rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
         rating.setFocusable(false);
 
         rating.setOnTouchListener(new View.OnTouchListener() {

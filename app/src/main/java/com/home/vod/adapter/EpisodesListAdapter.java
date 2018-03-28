@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,13 @@ import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 
 public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

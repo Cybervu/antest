@@ -12,7 +12,7 @@ import com.home.vod.model.CardModel;
 
 
 /**
- * Created by Muvi on 10/12/2016.
+ * Created by Abhishek on 10/12/2016.
  */
 public class CardSpinnerAdapter extends BaseAdapter {
     // Your sent context

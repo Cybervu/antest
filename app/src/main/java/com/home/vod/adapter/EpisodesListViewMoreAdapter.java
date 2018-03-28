@@ -15,13 +15,13 @@ import com.home.vod.R;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 
 public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

@@ -1,6 +1,5 @@
 package com.home.vod.activity;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,10 +16,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.Html;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -35,17 +28,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.home.apisdk.apiController.SearchDataAsynTask;
-import com.home.apisdk.apiModel.Search_Data_input;
-import com.home.apisdk.apiModel.Search_Data_otput;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.SearchDataModel;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
@@ -54,14 +44,11 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.SearchProgressHandler;
 import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -75,24 +62,20 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
@@ -107,7 +90,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
  * Created by user on 28-06-2015.
  */
 
-public class SearchActivity extends AppCompatActivity implements SearchDataAsynTask.SearchDataListener {
+public class SearchActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
     ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
     int previousTotal = 0;
@@ -116,9 +99,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     private int mLastFirstVisibleItem;
     int scrolledPosition = 0;
     boolean scrolling;
-    Toast toast;
-    //    ProgressBarHandler searchProgressBarHandler;
-    SearchProgressHandler searchProgressBarHandler;
 
     String videoImageStrToHeight;
     int videoHeight = 185;
@@ -126,7 +106,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     // SharedPreferences pref;
     GridItem itemToPlay;
     LanguagePreference languagePreference;
-    SearchDataAsynTask searchDataAsynTask;
 
     private static int firstVisibleInListview;
 
@@ -219,7 +198,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             }
         });
         preferenceManager = PreferenceManager.getPreferenceManager(this);
-        searchProgressBarHandler = new SearchProgressHandler(SearchActivity.this);
 
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
@@ -242,6 +220,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
 
+        //MUVIlaxmi
 
         //Detect Network Connection
 
@@ -333,7 +312,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-           /*     if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
 
@@ -359,23 +338,14 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                     scrolling = true;
 
-                }*/
+                }
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
-                int daat = gridView.getLastVisiblePosition();
-
-                if((gridView.getLastVisiblePosition() == totalItemCount-1)  && (itemsInServer > totalItemCount) && !scrolling  && itemsInServer>limit){
-                    scrolling = true;
-                    offset += 1;
-                    getSearchData();
-                    Log.v("SUBHASEARCH","onscroll ==== ");
-                }
-
-                /*if (scrolling == true && mIsScrollingUp == false) {
+                if (scrolling == true && mIsScrollingUp == false) {
 
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
@@ -390,6 +360,22 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
                             // default data
+
+                            final HashMap parameters = new HashMap<>();
+
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("limit", String.valueOf(limit));
+                            parameters.put("offset", String.valueOf(offset));
+                            parameters.put("q", searchTextStr.trim());
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
+                                parameters.put("country", countryCodeStr);
+                            } else {
+                                parameters.put("country", "IN");
+                            }
+                            final APICallManager apiCallManager1 = new APICallManager(SearchActivity.this, APIUrlConstant.SEARCH_DATA_URL, parameters, APIUrlConstant.SEARCH_DATA_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager1.startApiProcessing();
+                            /*
                             Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
@@ -403,7 +389,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             }
                             search_data_input.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
 
                             scrolling = false;
@@ -412,13 +398,63 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                     }
 
-                }*/
+                }
 
             }
         });
 
-    }
 
+
+
+       /* AsynLoadVideos asyncViewFavorite = new AsynLoadVideos();
+        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);*/
+    /*    gridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = mLayoutManager.getItemCount();
+                int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+
+                if (isLoading) {
+                    if (totalItemCount > previousTotal) {
+                        isLoading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!isLoading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem)) {
+                    // End has been reached
+                    listSize = itemData.size();
+                    if (mLayoutManager.findLastVisibleItemPosition() >= itemsInServer - 1) {
+                        footerView.setVisibility(View.GONE);
+                        return;
+
+                    }
+                    offset += 1;
+                    boolean isNetwork = Util.checkNetwork(SearchActivity.this);
+                    if (isNetwork == true) {
+
+
+                        // searched data
+                        AsynLoadSearchVideos asyncViewFavorite = new AsynLoadSearchVideos();
+                        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+
+                    }
+                    //isLoading = true;
+                }
+            }
+        });
+*/
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -438,25 +474,32 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         super.onBackPressed();
     }
 
-    @Override
+   /* @Override
     public void onSearchDataPreexecute() {
+        {
+            if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
+                pDialog = MainActivity.internetSpeedDialog;
+            } else {
+                pDialog = new ProgressBarHandler(SearchActivity.this);
 
-        if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
-        } else {
-            searchProgressBarHandler = new SearchProgressHandler(SearchActivity.this);
-        }
-        searchProgressBarHandler.show();
-        if (listSize == 0) {
-            footerView.setVisibility(View.GONE);
-        } else {
-            footerView.setVisibility(View.VISIBLE);
+                if (listSize == 0) {
+
+                    pDialog.show();
+                    footerView.setVisibility(View.GONE);
+                } else {
+                    pDialog.hide();
+                    footerView.setVisibility(View.VISIBLE);
+                }
+            }
+
+
         }
     }
 
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
-        itemsInServer=totalItems;
+        itemsInServer = totalItems;
         String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
         String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -473,10 +516,11 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         String movieThirdPartyUrl = "";
 
         try {
-            if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
-                searchProgressBarHandler.hide();
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
@@ -491,7 +535,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     gridView.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.GONE);
-
 
 
                     for (int i = 0; i < contentListOutputArray.size(); i++) {
@@ -511,11 +554,11 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                     videoImageStrToHeight = videoImageStr;
 
-                    if (firstTime == true){
+                    if (firstTime == true) {
 
                         new RetrieveFeedTask().execute(videoImageStrToHeight);
 
-                        /*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
+                        *//*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
                         ).error(R.drawable.no_image).into(new Target() {
 
                             @Override
@@ -540,9 +583,9 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             public void onPrepareLoad(final Drawable placeHolderDrawable) {
 
                             }
-                        });*/
+                        });*//*
 
-                    }else {
+                    } else {
                         AsynLOADUI loadUI = new AsynLOADUI();
                         loadUI.executeOnExecutor(threadPoolExecutor);
                     }
@@ -573,8 +616,326 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         }
 
-    }
+    }*/
+    //load searched videos
+//    private class AsynLoadSearchVideos extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr;
+//        int status;
+//        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoName = "";
+//        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String isEpisodeStr = "";
+//        String movieUniqueIdStr = "";
+//        String movieStreamUniqueIdStr = "";
+//        int isConverted = 0;
+//        int isAPV = 0;
+//        int isPPV = 0;
+//        String movieThirdPartyUrl = "";
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.searchUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("limit", String.valueOf(limit));
+//                httppost.addHeader("offset", String.valueOf(offset));
+//                httppost.addHeader("q", searchTextStr.trim());
+//                //httppost.addHeader("deviceType", "roku");
+//
+//                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+//                if (countryPref != null) {
+//                    String countryCodeStr = countryPref.getString("countryCode", null);
+//                    httppost.addHeader("country", countryCodeStr);
+//                }else{
+//                    httppost.addHeader("country", "IN");
+//
+//                }                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (itemData != null) {
+//                                noDataLayout.setVisibility(View.GONE);
+//                                noInternetConnectionLayout.setVisibility(View.GONE);
+//                                gridView.setVisibility(View.VISIBLE);
+//                                footerView.setVisibility(View.GONE);
+//
+//                            } else {
+//                                noDataLayout.setVisibility(View.GONE);
+//                                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+//                                gridView.setVisibility(View.VISIBLE);
+//                                footerView.setVisibility(View.GONE);
+//                            }
+//
+//                            Toast.makeText(SearchActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            noDataLayout.setVisibility(View.VISIBLE);
+//                            noInternetConnectionLayout.setVisibility(View.GONE);
+//                            gridView.setVisibility(View.GONE);
+//                            footerView.setVisibility(View.GONE);
+//                        }
+//                    });
+//                    e.printStackTrace();
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    String items = myJson.optString("item_count");
+//                    itemsInServer = Integer.parseInt(items);
+//                }
+//
+//                if (status > 0) {
+//                    if (status == 200) {
+//                        JSONArray jsonMainNode = myJson.getJSONArray("search");
+//                        int lengthJsonArr = jsonMainNode.length();
+//                        for (int i = 0; i < lengthJsonArr; i++) {
+//                            JSONObject jsonChildNode;
+//                            try {
+//                                jsonChildNode = jsonMainNode.getJSONObject(i);
+//                                if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
+//                                    movieThirdPartyUrl = jsonChildNode.getString("thirdparty_url");
+//
+//                                }
+//                                if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
+//                                    videoGenreStr = jsonChildNode.getString("genre");
+//
+//                                }
+//                                if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
+//                                    videoName = jsonChildNode.getString("episode_title");
+//
+//                                } else {
+//                                    if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
+//                                        videoName = jsonChildNode.getString("name");
+//
+//                                    }
+//                                }
+//                                if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
+//                                    videoImageStr = jsonChildNode.getString("poster_url");
+//                                    //videoImageStr = videoImageStr.replace("episode", "original");
+//
+//                                }
+//                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
+//                                    videoPermalinkStr = jsonChildNode.getString("permalink");
+//
+//                                }
+//                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
+//                                    videoTypeStr = jsonChildNode.getString("display_name");
+//
+//                                }
+//                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
+//                                    videoTypeIdStr = jsonChildNode.getString("content_types_id");
+//
+//                                }
+//                                //videoTypeIdStr = "1";
+//
+//                                if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
+//                                    videoUrlStr = jsonChildNode.getString("embeddedUrl");
+//
+//                                }
+//                                if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
+//                                    isEpisodeStr = jsonChildNode.getString("is_episode");
+//
+//                                }
+//                                if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
+//                                    movieUniqueIdStr = jsonChildNode.getString("muvi_uniq_id");
+//
+//                                }
+//                                if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.getString("movie_stream_uniq_id").trim() != null && !jsonChildNode.getString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_uniq_id").trim().matches("")) {
+//                                    movieStreamUniqueIdStr = jsonChildNode.getString("movie_stream_uniq_id");
+//
+//                                }
+//                                if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
+//                                    isConverted = Integer.parseInt(jsonChildNode.getString("is_converted"));
+//
+//                                }
+//                                if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
+//                                    isAPV = Integer.parseInt(jsonChildNode.getString("is_advance"));
+//
+//                                }
+//                                if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
+//                                    isPPV = Integer.parseInt(jsonChildNode.getString("is_ppv"));
+//
+//                                }
+//
+//                                itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
+//
+//                            } catch (Exception e) {
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        noDataLayout.setVisibility(View.VISIBLE);
+//                                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                                        gridView.setVisibility(View.GONE);
+//                                        footerView.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    } else {
+//                        responseStr = "0";
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                noDataLayout.setVisibility(View.VISIBLE);
+//                                noInternetConnectionLayout.setVisibility(View.GONE);
+//                                gridView.setVisibility(View.GONE);
+//                                footerView.setVisibility(View.GONE);
+//                            }
+//                        });
+//                    }
+//                }
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//
+//            if (responseStr == null) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//                responseStr = "0";
+//            }
+//            if ((responseStr.trim().equals("0"))) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//            } else {
+//                if (itemData.size() <= 0) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            noDataLayout.setVisibility(View.VISIBLE);
+//                            noInternetConnectionLayout.setVisibility(View.GONE);
+//                            gridView.setVisibility(View.GONE);
+//                            footerView.setVisibility(View.GONE);
+//                        }
+//                    });
+//
+//                } else {
+//
+//                    gridView.setVisibility(View.VISIBLE);
+//                    noInternetConnectionLayout.setVisibility(View.GONE);
+//                    noDataLayout.setVisibility(View.GONE);
+//                    videoWidth = 312;
+//                    videoHeight = 560;
+//
+//                    AsynLOADUI loadui = new AsynLOADUI();
+//                    loadui.executeOnExecutor(threadPoolExecutor);
+//
+//                }
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
+//                pDialog = MainActivity.internetSpeedDialog;
+//            } else {
+//                pDialog = new ProgressBarHandler(SearchActivity.this);
+//
+//                if (listSize == 0) {
+//
+//                    pDialog.show();
+//                    footerView.setVisibility(View.GONE);
+//                } else {
+//                    pDialog.hide();
+//                    footerView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//
+//        }
+//
+//
+//    }
 
+
+    /* @Override
+     public boolean onCreateOptionsMenu(Menu menu) {
+         MenuInflater inflater = getMenuInflater();
+         inflater.inflate(R.menu.menu_search, menu);
+
+         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+         searchView.setIconifiedByDefault(false);
+         searchView.setQueryHint(getString(R.string.search_hint_str));
+
+
+         return true;
+     }*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -585,9 +946,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-      //  searchView.setMinimumWidth(15000);
-        //searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setImeOptions(0);
+
+
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setIconifiedByDefault(false);
@@ -607,83 +967,28 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         theTextArea.setBackgroundResource(R.drawable.edit);
         theTextArea.setHint(languagePreference.getTextofLanguage(TEXT_SEARCH_PLACEHOLDER, DEFAULT_TEXT_SEARCH_PLACEHOLDER));
         theTextArea.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+       /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+            theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search_large, 0, 0, 0);
+            v.setImageResource(R.drawable.ic_action_search_xlarge);
 
+        }
+        else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+            theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search, 0, 0, 0);
+            v.setImageResource(R.drawable.ic_action_search_large);
+
+        }
+        else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+            theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search, 0, 0, 0);
+            v.setImageResource(R.drawable.ic_action_search_large);
+
+        }
+        else {
+            theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search_xlarge, 0, 0, 0);
+            v.setImageResource(R.drawable.ic_action_search_xlarge);
+
+        }*/
         theTextArea.setHintTextColor(getResources().getColor(R.color.search_hint_color));//or any color that you want
         theTextArea.setTextColor(getResources().getColor(R.color.search_text_color));
-
-        try {
-            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-            mCursorDrawableRes.setAccessible(true);
-            mCursorDrawableRes.set(theTextArea, R.drawable.cursor); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
-        } catch (Exception e) {
-        }
-
-
-
-        theTextArea.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(theTextArea.getText().toString().trim().length()>=1){
-
-                    if(searchDataAsynTask!=null){
-                        searchDataAsynTask.cancel(true);
-                    }
-
-                    searchTextStr = theTextArea.getText().toString().trim();
-                    getSearchData();
-                    Log.v("MUVI","theTextArea.addTextChangedListener ==== ");
-
-                    if(toast != null){
-                        toast.cancel();
-                    }
-                }
-                else{
-                    try {
-                        if (searchDataAsynTask != null) {
-                            searchDataAsynTask.cancel(true);
-                        }
-
-                        if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
-                            searchProgressBarHandler.hide();
-                        }
-                        if(toast != null){
-                            toast.cancel();
-                        }
-
-                    } catch (IllegalArgumentException ex) {
-
-                    }
-
-                    // Show message.
-                 //   ShowToast(SearchActivity.this,"Please enter one letters for search .");
-                }
-                resetData();
-                noDataLayout.setVisibility(View.GONE);
-//                titleLayout.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        theTextArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                stopCallingSearch = true;
-            }
-        });
-
-
-/*
 
         theTextArea.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -727,22 +1032,37 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             gridView.setVisibility(View.GONE);
 
                         } else {
-                            Search_Data_input search_data_input = new Search_Data_input();
+
+                            final HashMap parameters = new HashMap<>();
+
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("limit", String.valueOf(limit));
+                            parameters.put("offset", String.valueOf(offset));
+                            parameters.put("q", searchTextStr.trim());
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
+                                parameters.put("country", countryCodeStr);
+                            } else {
+                                parameters.put("country", "IN");
+                            }
+                            final APICallManager apiCallManager = new APICallManager(SearchActivity.this, APIUrlConstant.SEARCH_DATA_URL, parameters, APIUrlConstant.SEARCH_DATA_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager.startApiProcessing();
+
+                            /*Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
-                            Log.v("pratik","q===="+searchTextStr.trim());
+                            Log.v("pratik", "q====" + searchTextStr.trim());
                             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
                             if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
                             } else {
                                 search_data_input.setCountry("IN");
                             }
-
                             search_data_input.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
                         }
                     }
@@ -751,7 +1071,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                 return false;
             }
-        });*/
+        });
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -779,6 +1099,140 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             }
         });
         return true;
+    }
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.SEARCH_DATA_URL_REQUEST_ID == requestID) {
+            search_result(object, requestID, response);
+        }
+    }
+
+    public void search_result(Object object, int requestID, String response) {
+
+        SearchDataModel searchDataModel = (SearchDataModel) object;
+
+        itemsInServer = searchDataModel.getItemCount();
+        ArrayList<String> videoGenreStr = null;
+        String videoName = "";
+        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        String movieUniqueIdStr = "";
+        String movieStreamUniqueIdStr = "";
+        int isConverted = 0;
+        int isAPV = 0;
+        int isPPV = 0;
+        String movieThirdPartyUrl = "";
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        if (searchDataModel.getCode() > 0) {
+            if (searchDataModel.getCode() == 200) {
+                gridView.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+
+                if (searchDataModel.getSearch().size() > 0) {
+
+                    gridView.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    noDataLayout.setVisibility(View.GONE);
+
+
+                    for (int i = 0; i < searchDataModel.getSearch().size(); i++) {
+
+
+                        videoImageStr = searchDataModel.getSearch().get(i).getPoster();
+                        videoName = searchDataModel.getSearch().get(i).getTitle();
+                        videoTypeIdStr = searchDataModel.getSearch().get(i).getContentTypeId();
+                        videoGenreStr = searchDataModel.getSearch().get(i).getGenres();
+                        videoPermalinkStr = searchDataModel.getSearch().get(i).getPermalink();
+                        isEpisodeStr = searchDataModel.getSearch().get(i).getIsEpisode();
+                        isConverted = searchDataModel.getSearch().get(i).getIsConverted();
+                        isPPV = searchDataModel.getSearch().get(i).getIs_ppv();
+                        isAPV = searchDataModel.getSearch().get(i).getIs_advance();
+                        itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                    }
+
+                    videoImageStrToHeight = videoImageStr;
+
+                    if (firstTime == true) {
+
+                        new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                        /*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
+                        ).error(R.drawable.no_image).into(new Target() {
+
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                videoWidth = bitmap.getWidth();
+                                videoHeight = bitmap.getHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(final Drawable errorDrawable) {
+                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                                videoWidth = errorDrawable.getIntrinsicWidth();
+                                videoHeight = errorDrawable.getIntrinsicHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                            }
+                        });*/
+
+                    } else {
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+                    }
+
+                } else {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+
+            } else {
+
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+            }
+        } else {
+
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+
+        }
     }
 
 
@@ -978,11 +1432,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     public void resetData() {
         if (itemData != null && itemData.size() > 0) {
             itemData.clear();
-            try {
-                customGridAdapter.notifyDataSetChanged();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         firstTime = true;
 
@@ -1042,33 +1491,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             phandler.show();*/
 
         }
-    }
-
-    /*
-        This method is responsible for getting searching data form server .
-     */
-
-    public void getSearchData(){
-        Search_Data_input search_data_input = new Search_Data_input();
-        search_data_input.setAuthToken(authTokenStr);
-        search_data_input.setLimit(String.valueOf(limit));
-        search_data_input.setOffset(String.valueOf(offset));
-        search_data_input.setQ(searchTextStr.trim());
-        String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-        if (countryCodeStr != null) {
-            search_data_input.setCountry(countryCodeStr);
-        } else {
-            search_data_input.setCountry("IN");
-        }
-        searchDataAsynTask = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
-        searchDataAsynTask.executeOnExecutor(threadPoolExecutor);
-    }
-
-
-    public void ShowToast(Context context, String info) {
-        toast = Toast.makeText(context, Html.fromHtml("<font color='"+getResources().getColor(R.color.hint_background)+"' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
     }
 
 }

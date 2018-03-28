@@ -1,7 +1,6 @@
 package com.home.vod.activity;
 
 
-
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -11,19 +10,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.home.apisdk.apiController.LoadRegisteredDevicesAsync;
-import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
-import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.ManageDeviceModel;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -40,7 +38,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.YOUR_DEVICE;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ManageDevices extends AppCompatActivity implements LoadRegisteredDevicesAsync.LoadRegisteredDevicesListener {
+public class ManageDevices extends AppCompatActivity implements APICallManager.ApiInterafce {
     String userId = "";
     String emailId = "";
     TextView name_of_user;
@@ -71,13 +69,12 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         device_list = (ListView) findViewById(R.id.device_list);
         manage_device_text = (TextView) findViewById(R.id.manage_device_text);
 
-        manage_device_text.setText("  " + languagePreference.getTextofLanguage( YOUR_DEVICE, DEFAULT_YOUR_DEVICE));
-        FontUtls.loadFont(ManageDevices.this, getResources().getString(R.string.regular_fonts),manage_device_text);
+        manage_device_text.setText("  " + languagePreference.getTextofLanguage(YOUR_DEVICE, DEFAULT_YOUR_DEVICE));
+        FontUtls.loadFont(ManageDevices.this, getResources().getString(R.string.regular_fonts), manage_device_text);
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MANAGE_DEVICE, DEFAULT_MANAGE_DEVICE));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,16 +84,25 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
 
         userId = preferenceManager.getUseridFromPref();
         emailId = preferenceManager.getEmailIdFromPref();
-        LoadRegisteredDevicesInput loadRegisteredDevicesInput=new LoadRegisteredDevicesInput();
+
+        final HashMap parameters = new HashMap<>();
+
+        parameters.put("authToken", authTokenStr);
+        parameters.put("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        parameters.put("user_id", userId);
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.MANAGE_DEVICE, parameters, APIUrlConstant.MANAGE_DEVICE_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager.startApiProcessing();
+        /*LoadRegisteredDevicesInput loadRegisteredDevicesInput = new LoadRegisteredDevicesInput();
         loadRegisteredDevicesInput.setAuthToken(authTokenStr.trim());
-        loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
+        loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         loadRegisteredDevicesInput.setUser_id(userId);
         loadRegisteredDevicesInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         LoadRegisteredDevicesAsync asynLoadRegisteredDevices = new LoadRegisteredDevicesAsync(loadRegisteredDevicesInput, this, this);
-        asynLoadRegisteredDevices.executeOnExecutor(threadPoolExecutor);
+        asynLoadRegisteredDevices.executeOnExecutor(threadPoolExecutor);*/
     }
 
-    @Override
+   /* @Override
     public void onLoadRegisteredDevicesPreExecuteStarted() {
         pDialog = new ProgressBarHandler(ManageDevices.this);
         pDialog.show();
@@ -113,11 +119,11 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         }
         if (status == 200) {
             // Start parsing Here
-            for (int i=0;i<loadRegisteredDevicesOutputs.size();i++){
+            for (int i = 0; i < loadRegisteredDevicesOutputs.size(); i++) {
 
-                String devicename=loadRegisteredDevicesOutputs.get(i).getDevice();
-                String deviceinfo=loadRegisteredDevicesOutputs.get(i).getDevice_info();
-                String flag=loadRegisteredDevicesOutputs.get(i).getFlag();
+                String devicename = loadRegisteredDevicesOutputs.get(i).getDevice();
+                String deviceinfo = loadRegisteredDevicesOutputs.get(i).getDevice_info();
+                String flag = loadRegisteredDevicesOutputs.get(i).getFlag();
 
                 DeviceName.add(devicename);
                 DeviceInfo.add(deviceinfo);
@@ -129,10 +135,10 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
 
         } else {
             // Show The Error Message Here
-            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_DEVICE_AVAILABE,DEFAULT_NO_DEVICE_AVAILABE), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_DEVICE_AVAILABE, DEFAULT_NO_DEVICE_AVAILABE), Toast.LENGTH_LONG).show();
             finish();
         }
-    }
+    }*/
 //    private class AsynLoadRegisteredDevices extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;
 //        String responseStr="0";
@@ -249,5 +255,52 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.MANAGE_DEVICE_REQUEST_ID == requestID) {
+            load_register_device(object, requestID, response);
+        }
+    }
+
+    public void load_register_device(Object object, int requestID, String response) {
+
+        ManageDeviceModel manageDeviceModel = (ManageDeviceModel) object;
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+        if (manageDeviceModel.getCode() == 200) {
+            // Start parsing Here
+            for (int i = 0; i < manageDeviceModel.getDeviceList().size(); i++) {
+
+                String devicename = manageDeviceModel.getDeviceList().get(i).getDevice();
+                String deviceinfo = manageDeviceModel.getDeviceList().get(i).getDeviceInfo();
+                String flag = manageDeviceModel.getDeviceList().get(i).getFlag();
+
+                DeviceName.add(devicename);
+                DeviceInfo.add(deviceinfo);
+                DeviceFalg.add(flag);
+            }
+
+            DeviceListAdapter adapter = new DeviceListAdapter(ManageDevices.this, DeviceName, DeviceInfo, DeviceFalg);
+            device_list.setAdapter(adapter);
+
+        } else {
+            // Show The Error Message Here
+            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_DEVICE_AVAILABE, DEFAULT_NO_DEVICE_AVAILABE), Toast.LENGTH_LONG).show();
+            finish();
+        }
+
     }
 }

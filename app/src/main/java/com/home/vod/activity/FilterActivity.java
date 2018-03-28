@@ -1,14 +1,12 @@
 package com.home.vod.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,13 +15,11 @@ import android.widget.Button;
 import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
 import com.home.vod.adapter.FilterAdapter;
-
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.FilterListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
-
 
 import java.util.ArrayList;
 
@@ -78,8 +74,6 @@ public class FilterActivity extends AppCompatActivity {
             filterOrderByStr = VideosListFragment.filterOrderByStr;
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(languagePreference.getTextofLanguage(FILTER_BY,DEFAULT_FILTER_BY));
-        toolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
        // toolbar.setTitle(R.string.app_name);
@@ -130,6 +124,7 @@ public class FilterActivity extends AppCompatActivity {
                 mdata.set(i, new FilterListModel(languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A), genreValuesTempArr[i]));
             }
         }
+
 
 
 
@@ -292,7 +287,6 @@ public class FilterActivity extends AppCompatActivity {
 
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
         }
     }
 

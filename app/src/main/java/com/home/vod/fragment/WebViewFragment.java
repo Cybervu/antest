@@ -26,7 +26,6 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -255,7 +254,6 @@ public class WebViewFragment extends Fragment {
 
         });*/
         webView.loadUrl(url);
-
     }
     public void onBackPressed1() {
         if(mRedirectedCount>0){

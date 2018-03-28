@@ -23,8 +23,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
-import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;

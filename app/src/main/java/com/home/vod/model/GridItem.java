@@ -1,6 +1,8 @@
 package com.home.vod.model;
 
 
+import java.util.ArrayList;
+
 public class GridItem {
 	private String title;
 	private String videoType;
@@ -109,16 +111,16 @@ public class GridItem {
 		this.videoTypeId = videoTypeId;
 	}
 
-	public String getMovieGenre() {
+	public ArrayList<String> getMovieGenre() {
 		return movieGenre;
 	}
 
-	public void setMovieGenre(String movieGenre) {
+	public void setMovieGenre(ArrayList<String> movieGenre) {
 		this.movieGenre = movieGenre;
 	}
 
 	private String videoTypeId;
-	private String movieGenre;
+	private ArrayList<String> movieGenre;
 	public String getVideoType() {
 
 		return videoType;
@@ -136,7 +138,7 @@ public class GridItem {
 //		this.title = title;
 //		this.rating = rating;
 //	}
-public GridItem(String imageId, String title, String videoType, String videoTypeId, String movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV) {
+public GridItem(String imageId, String title, String videoType, String videoTypeId, ArrayList<String> movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV) {
 	super();
 	this.imageId = imageId;
 	this.title = title;

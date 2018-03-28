@@ -25,12 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.apisdk.apiController.GetUserProfileAsynctask;
-import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
-import com.home.apisdk.apiModel.Get_UserProfile_Input;
-import com.home.apisdk.apiModel.Get_UserProfile_Output;
-import com.home.apisdk.apiModel.Update_UserProfile_Input;
-import com.home.apisdk.apiModel.Update_UserProfile_Output;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.GetProfileDetailsModel;
+import com.home.api.apiModel.UpdateUserProfileModel;
 import com.home.vod.ProfileHandler;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
@@ -45,6 +43,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -59,39 +58,27 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHANGE_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ProfileActivity extends AppCompatActivity implements
-        UpadteUserProfileAsynctask.Update_UserProfileListener, GetUserProfileAsynctask.Get_UserProfileListener {
+public class ProfileActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
     SharedPreferences loginPref;
 
     ImageView bannerImageView;
@@ -142,11 +129,10 @@ public class ProfileActivity extends AppCompatActivity implements
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        profileHandler=new ProfileHandler(this);
+        profileHandler = new ProfileHandler(this);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
-        emailAddressEditText.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         changePassword = (Button) findViewById(R.id.changePasswordButton);
         update_profile = (Button) findViewById(R.id.update_profile);
         manage_devices = (Button) findViewById(R.id.manage_devices);
@@ -190,8 +176,6 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,14 +302,23 @@ public class ProfileActivity extends AppCompatActivity implements
 
         if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
 
-            Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("user_id", preferenceManager.getUseridFromPref());
+            parameters.put("email", preferenceManager.getEmailIdFromPref());
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_PROFILE_DETAILS_URL, parameters, APIUrlConstant.GET_PROFILE_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+            /*Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
             get_userProfile_input.setAuthToken(authTokenStr);
             get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
             get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
             get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
             GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+            asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);*/
         } else {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
         }
@@ -352,7 +345,6 @@ public class ProfileActivity extends AppCompatActivity implements
 
             }
         });
-
 
 
         update_profile.setOnClickListener(new View.OnClickListener() {
@@ -383,7 +375,23 @@ public class ProfileActivity extends AppCompatActivity implements
 
     public void UpdateProfile(String first_name, String last_name, String phone_No) {
 
-        Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("user_id", preferenceManager.getUseridFromPref().trim());
+        parameters.put("name", first_name);
+        parameters.put("mobile_number", phone_No);
+        parameters.put("custom_last_name", last_name);
+        String confirmPasswordStr = editNewPassword.getText().toString().trim();
+        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
+            parameters.put("password", confirmPasswordStr.trim());
+        }
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        parameters.put("custom_country", Selected_Country_Id);
+        parameters.put("custom_languages", Selected_Language_Id);
+        final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.UPDATE_PROFILE_URL, parameters, APIUrlConstant.UPDATE_PROFILE_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager1.startApiProcessing();
+
+        /*Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
         update_userProfile_input.setName(first_name);
@@ -397,10 +405,10 @@ public class ProfileActivity extends AppCompatActivity implements
         update_userProfile_input.setCustom_country(Selected_Country_Id);
         update_userProfile_input.setCustom_languages(Selected_Language_Id);
         UpadteUserProfileAsynctask asyncLoadVideos = new UpadteUserProfileAsynctask(update_userProfile_input, this, this);
-        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
     }
 
-    @Override
+  /*  @Override
     public void onUpdateUserProfilePreExecuteStarted() {
         pDialog = new ProgressBarHandler(ProfileActivity.this);
         pDialog.show();
@@ -480,7 +488,7 @@ public class ProfileActivity extends AppCompatActivity implements
         }
 
 
-    }
+    }*/
 
 //
 //    private class AsynUpdateProfile extends AsyncTask<Void, Void, Void> {
@@ -699,7 +707,7 @@ public class ProfileActivity extends AppCompatActivity implements
 //    }
     //Getting Profile Details from The Api
 
-    @Override
+    /*@Override
     public void onGet_UserProfilePreExecuteStarted() {
 
         pDialog = new ProgressBarHandler(ProfileActivity.this);
@@ -813,8 +821,7 @@ public class ProfileActivity extends AppCompatActivity implements
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
         }
-    }
-
+    }*/
 
 
     @Override
@@ -851,5 +858,204 @@ public class ProfileActivity extends AppCompatActivity implements
 
     public boolean passwordMatchValidation() {
         return editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim());
+    }
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.GET_PROFILE_DETAILS_URL_REQUEST_ID == requestID) {
+            get_User_Profile(object, requestID, response);
+        } else if (APIUrlConstant.UPDATE_PROFILE_URL_REQUEST_ID == requestID) {
+            update_profile(object, requestID, response);
+        }
+    }
+
+    public void update_profile(Object object, int requestID, String response) {
+
+        UpdateUserProfileModel updateUserProfileModel = (UpdateUserProfileModel) object;
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        if (updateUserProfileModel.getCode() > 0) {
+            if (updateUserProfileModel.getCode() == 200) {
+
+
+                changePassword.setVisibility(View.VISIBLE);
+                editConfirmPassword.setText("");
+                editNewPassword.setText("");
+                editConfirmPassword.setVisibility(View.GONE);
+                editNewPassword.setVisibility(View.GONE);
+
+                String confirmPasswordStr = editNewPassword.getText().toString().trim();
+                name_of_user.setText(profileHandler.first_nameStr);
+
+                if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
+                        !confirmPasswordStr.isEmpty() &&
+                        !confirmPasswordStr.equalsIgnoreCase("null") &&
+                        !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) &&
+                        !confirmPasswordStr.matches("")) {
+                    preferenceManager.setPwdToPref(confirmPasswordStr);
+                }
+                if (updateUserProfileModel != null) {
+
+                    String displayNameStr = updateUserProfileModel.getName();
+                    preferenceManager.setDispNameToPref(displayNameStr);
+                    String displayPhoneNumber = updateUserProfileModel.getMobileNumber();
+                    preferenceManager.setDispPhoneToPref(displayPhoneNumber);
+                }
+                Util.showToast(ProfileActivity.this, languagePreference.getTextofLanguage(PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED));
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                if (name_of_user != null) {
+                    name_of_user.clearFocus();
+                    name_of_user.setCursorVisible(false);
+                }
+
+                if (editConfirmPassword != null) {
+                    editConfirmPassword.clearFocus();
+
+                }
+                if (editNewPassword != null) {
+                    editNewPassword.clearFocus();
+                }
+            } else {
+
+            }
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(UPDATE_PROFILE_ALERT, DEFAULT_UPDATE_PROFILE_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            editConfirmPassword.setText("");
+                            editNewPassword.setText("");
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+    }
+
+    public void get_User_Profile(Object object, int requestID, String response) {
+
+        GetProfileDetailsModel profileDetailsModel = (GetProfileDetailsModel) object;
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        if (profileDetailsModel.getCode() == 200) {
+
+            if (profileDetailsModel != null) {
+
+
+                if (Selected_Country_Id.equals("0")) {
+                    country_spinner.setSelection(224);
+                    Selected_Country_Id = Country_Code_List.get(224);
+                    LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
+                } else {
+                    for (int i = 0; i < Country_Code_List.size(); i++) {
+                        if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
+                            country_spinner.setSelection(i);
+                            Selected_Country_Id = Country_Code_List.get(i);
+
+                            LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
+                        }
+                    }
+                }
+                Country_arrayAdapter.notifyDataSetChanged();
+
+
+                for (int i = 0; i < Language_Code_List.size(); i++) {
+                    if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
+                        language_spinner.setSelection(i);
+                        Selected_Language_Id = Language_Code_List.get(i);
+
+                        LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
+                    }
+                }
+                Language_arrayAdapter.notifyDataSetChanged();
+
+
+                profileHandler.setNameTxt(profileDetailsModel.getDisplayName(), profileDetailsModel.getCustom_last_name(), profileDetailsModel.getMobileNumber());
+                name_of_user.setText(profileDetailsModel.getDisplayName());
+                emailAddressEditText.setText(profileDetailsModel.getEmail());
+                if (profileDetailsModel.getProfileImage().matches(NO_DATA)) {
+                    bannerImageView.setAlpha(0.8f);
+                    bannerImageView.setImageResource(R.drawable.logo);
+                } else {
+                    Picasso.with(ProfileActivity.this)
+                            .load(profileDetailsModel.getProfileImage())
+                            .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
+
+                        @Override
+                        public void onSuccess() {
+
+                            Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
+                            Palette palette = Palette.generate(bitmapFromPalette);
+                        }
+
+                        @Override
+                        public void onError() {
+                            // reset your views to default colors, etc.
+                            bannerImageView.setAlpha(0.8f);
+                            bannerImageView.setImageResource(R.drawable.no_image);
+                        }
+
+                    });
+                    if (profileDetailsModel.getProfileImage() != null && profileDetailsModel.getProfileImage().length() > 0) {
+                        int pos = profileDetailsModel.getProfileImage().lastIndexOf("/");
+                        String x = profileDetailsModel.getProfileImage().substring(pos + 1, profileDetailsModel.getProfileImage().length());
+
+                        if (x.equalsIgnoreCase("no-user.png")) {
+                            bannerImageView.setImageResource(R.drawable.no_image);
+                            bannerImageView.setAlpha(0.8f);
+                            //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+
+                        } else {
+                            Picasso.with(ProfileActivity.this)
+                                    .load(profileDetailsModel.getProfileImage())
+                                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
+
+                                @Override
+                                public void onSuccess() {
+                                    bannerImageView.setAlpha(0.3f);
+
+                                }
+
+                                @Override
+                                public void onError() {
+                                    bannerImageView.setImageResource(R.drawable.no_image);
+                                    bannerImageView.setAlpha(0.8f);
+                                    //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+                                }
+
+                            });
+                        }
+                    }
+                }
+            }
+        } else {
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+        }
     }
 }

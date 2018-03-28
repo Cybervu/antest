@@ -1,5 +1,7 @@
 package com.home.vod.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Muvi on 12/15/2016.
  */
@@ -94,16 +96,16 @@ public class SingleItemModel {
         this.videoTypeId = videoTypeId;
     }
 
-    public String getMovieGenre() {
+    public ArrayList<String> getMovieGenre() {
         return movieGenre;
     }
 
-    public void setMovieGenre(String movieGenre) {
+    public void setMovieGenre(ArrayList<String> movieGenre) {
         this.movieGenre = movieGenre;
     }
 
     private String videoTypeId;
-    private String movieGenre;
+    private ArrayList<String> movieGenre;
     public String getVideoType() {
 
         return videoType;
@@ -112,7 +114,7 @@ public class SingleItemModel {
     public void setVideoType(String videoType) {
         this.videoType = videoType;
     }
-    public SingleItemModel(String imageId, String title, String videoType, String videoTypeId, String movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV) {
+    public SingleItemModel(String imageId, String title, String videoType, String videoTypeId, ArrayList<String> movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV) {
         super();
         this.imageId = imageId;
         this.title = title;

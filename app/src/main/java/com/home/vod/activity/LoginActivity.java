@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -42,7 +41,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -61,35 +59,20 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.apiController.AsyncGmailReg;
-import com.home.apisdk.apiController.CheckDeviceAsyncTask;
-import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetSimultaneousLogoutAsync;
-import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LoginAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.SocialAuthAsynTask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiModel.CheckDeviceInput;
-import com.home.apisdk.apiModel.CheckDeviceOutput;
-import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.GmailLoginInput;
-import com.home.apisdk.apiModel.GmailLoginOutput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.Login_input;
-import com.home.apisdk.apiModel.Login_output;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.SimultaneousLogoutInput;
-import com.home.apisdk.apiModel.SocialAuthInputModel;
-import com.home.apisdk.apiModel.SocialAuthOutputModel;
-import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.CheckDeviceModel;
+import com.home.api.apiModel.CheckFbUserDetailsModel;
+import com.home.api.apiModel.GetVideoDetailsModel;
+import com.home.api.apiModel.IPAddressModel;
+import com.home.api.apiModel.LoginModel;
+import com.home.api.apiModel.LogoutModel;
+import com.home.api.apiModel.SimultaneousLogoutModel;
+import com.home.api.apiModel.SocialAuthDetailsModel;
+import com.home.api.apiModel.ValidateUserModel;
 import com.home.vod.BuildConfig;
-import com.home.vod.CheckSubscriptionHandler;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
-
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
@@ -112,6 +95,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -125,24 +109,18 @@ import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_HERE_TITLE;
@@ -161,7 +139,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
@@ -183,15 +160,8 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener, GoogleApiClient.OnConnectionFailedListener,
-        GetValidateUserAsynTask.GetValidateUserListener,
-        VideoDetailsAsynctask.VideoDetailsListener,
-        LogoutAsynctask.LogoutListener, CheckDeviceAsyncTask.CheckDeviceListener,
-        GetSimultaneousLogoutAsync.SimultaneousLogoutAsyncListener,
-        CheckFbUserDetailsAsyn.CheckFbUserDetailsListener, SocialAuthAsynTask.SocialAuthListener
-        , AsyncGmailReg.AsyncGmailListener, GetIpAddressAsynTask.IpAddressListener {
-
-
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
+        APICallManager.ApiInterafce {
 
 
     /***************************************************************************/
@@ -241,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     String deviceRestrictionMessage = "";
     /////////////////////end//////////////////
 
-    @Override
+   /* @Override
     public void onLoginPreExecuteStarted() {
         pDialog = new ProgressBarHandler(LoginActivity.this);
         pDialog.show();
@@ -301,14 +271,18 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
 
-                        if(Util.favorite_clicked) {
+                        if (Util.favorite_clicked) {
                             finish();
                             return;
                         }
 
 
                         if (getIntent().getStringExtra("from") != null) {
-                            /** review **/
+                            */
+
+    /**
+     * review
+     **//*
                             onBackPressed();
                         } else {
                             if (Util.check_for_subscription == 1) {
@@ -324,19 +298,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                             } else {
                                 if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
-                                    if (CheckSubscriptionHandler.isSubscriptionAllowed) {
-                                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(intent);
-                                        finish();
-                                        overridePendingTransition(0, 0);
-                                    }else {
-                                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(in);
-                                        finish();
-                                    }
+                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
                                 } else {
                                     Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                     in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -407,9 +373,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             dlgAlert.create().show();
         }
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onGetValidateUserPreExecuteStarted() {
 
         pDialog = new ProgressBarHandler(LoginActivity.this);
@@ -507,34 +473,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     payment_for_single_part();
                 }
             } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
-                if (CheckSubscriptionHandler.isSubscriptionAllowed) {
-                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(0, 0);
-                }else if (Util.dataModel.getIsConverted() == 0) {
-                    Util.showNoDataAlert(LoginActivity.this);
-                }else {
-                    if (NetworkStatus.getInstance().isConnected(this)) {
-
-                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
-                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                        getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                    } else {
-                        Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        onBackPressed();
-                    }
-                }
+                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(LoginActivity.this);
-               /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
+               *//* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
@@ -546,7 +492,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 onBackPressed();
                             }
                         });
-                dlgAlert.create().show();*/
+                dlgAlert.create().show();*//*
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
@@ -566,15 +512,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             }
         }
     }
-
-
+*/
     @Override
     protected void onStop() {
         super.onStop();
         // finish();
     }
 
-    @Override
+    /*@Override
     public void onVideoDetailsPreExecuteStarted() {
 
         SubTitleName.clear();
@@ -591,8 +536,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
-     /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
-        then set thirdpartyurl true here and assign the url to videourl*/
+     *//*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
+        then set thirdpartyurl true here and assign the url to videourl*//*
         boolean play_video = true;
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
@@ -648,10 +593,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             }
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
-                /**@bishal
-                 * for drm player below condition added
-                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
-                 */
+                */
+
+    /**
+     * @bishal for drm player below condition added
+     * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+     *//*
 
                 if (_video_details_output.getStudio_approved_url() != null &&
                         !_video_details_output.getStudio_approved_url().isEmpty() &&
@@ -743,6 +690,1546 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
                 Util.showNoDataAlert(LoginActivity.this);
+               *//* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();*//*
+            } else {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                }
+
+
+                // condition for checking if the response has third party url or not.
+                if (_video_details_output.getThirdparty_url() == null ||
+                        _video_details_output.getThirdparty_url().matches("")
+                        ) {
+                    if (mCastSession != null && mCastSession.isConnected()) {
+                        ///Added for resume cast watch
+                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
+                            Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
+                          *//*  Intent resumeIntent = new Intent(LoginActivity.this, ResumePopupActivity.class);
+                            startActivityForResult(resumeIntent, 1001);*//*
+                            Intent resumeLogin = new Intent();
+
+                            MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+                            movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
+                            movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+                            movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+                            String mediaContentType = "videos/mp4";
+
+                            if (playerModel.getVideoUrl().contains(".mpd")) {
+                                mediaContentType = "application/dash+xml";
+                                JSONObject jsonObj = null;
+                                try {
+                                    jsonObj = new JSONObject();
+                                    jsonObj.put("description", playerModel.getVideoTitle());
+                                    jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
+
+                                    //  This Code Is Added For Video Log By Bibhu..
+
+                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                                    jsonObj.put("ip_address", ipAddressStr.trim());
+                                    jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                                    jsonObj.put("episode_id", playerModel.getEpisode_id());
+                                    jsonObj.put("watch_status", watch_status_String);
+                                    jsonObj.put("device_type", "2");
+                                    jsonObj.put("log_id", "0");
+                                    jsonObj.put("active_track_index", "0");
+
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
+                                        jsonObj.put("restrict_stream_id", "0");
+                                        jsonObj.put("is_streaming_restriction", "1");
+                                        Log.v("BIBHU4", "restrict_stream_id============1");
+                                    } else {
+                                        jsonObj.put("restrict_stream_id", "0");
+                                        jsonObj.put("is_streaming_restriction", "0");
+                                        Log.v("BIBHU4", "restrict_stream_id============0");
+                                    }
+
+                                    jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                                    jsonObj.put("is_log", "1");
+
+                                    //=====================End===================//
+
+                                    // This code is changed according to new Video log //
+
+                                    jsonObj.put("played_length", "0");
+                                    jsonObj.put("log_temp_id", "0");
+                                    jsonObj.put("resume_time", "0");
+                                    jsonObj.put("seek_status", seek_status);
+                                    // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                                    jsonObj.put("resolution", "BEST");
+                                    jsonObj.put("start_time", "0");
+                                    jsonObj.put("end_time", "0");
+                                    jsonObj.put("log_unique_id", "0");
+                                    jsonObj.put("location", "0");
+                                    jsonObj.put("bandwidth_log_id", "0");
+                                    jsonObj.put("video_type", "mped_dash");
+                                    jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                                    //====================End=====================//
+
+                                } catch (JSONException e) {
+                                }
+                                List tracks = new ArrayList();
+                                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(SubTitleName.get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(FakeSubTitlePath.get(0))
+                                            .setLanguage(SubTitleLanguage.get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
+
+                                mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                                        .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                        .setContentType(mediaContentType)
+                                        .setMetadata(movieMetadata)
+                                        .setCustomData(jsonObj)
+                                        .setMediaTracks(tracks)
+                                        .build();
+                                Util.mSendingMedia = mediaInfo;
+
+
+                            } else {
+                                JSONObject jsonObj = null;
+                                try {
+                                    jsonObj = new JSONObject();
+                                    jsonObj.put("description", playerModel.getVideoTitle());
+
+                                    //  This Code Is Added For Video Log By Bibhu..
+
+                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                                    jsonObj.put("ip_address", ipAddressStr.trim());
+                                    jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                                    jsonObj.put("episode_id", playerModel.getEpisode_id());
+                                    jsonObj.put("watch_status", watch_status_String);
+                                    jsonObj.put("device_type", "2");
+                                    jsonObj.put("log_id", "0");
+                                    jsonObj.put("active_track_index", "0");
+                                    jsonObj.put("seek_status", seek_status);
+
+                                    jsonObj.put("played_length", "0");
+                                    jsonObj.put("log_temp_id", "0");
+                                    jsonObj.put("resume_time", "0");
+
+
+                                    if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
+                                        jsonObj.put("restrict_stream_id", "0");
+                                        jsonObj.put("is_streaming_restriction", "1");
+                                        Log.v("BIBHU4", "restrict_stream_id============1");
+                                    } else {
+                                        jsonObj.put("restrict_stream_id", "0");
+                                        jsonObj.put("is_streaming_restriction", "0");
+                                        Log.v("BIBHU4", "restrict_stream_id============0");
+                                    }
+
+                                    jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                                    jsonObj.put("is_log", "1");
+
+                                    //=====================End===================//
+
+
+                                    // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                                    jsonObj.put("resolution", "BEST");
+                                    jsonObj.put("start_time", "0");
+                                    jsonObj.put("end_time", "0");
+                                    jsonObj.put("log_unique_id", "0");
+                                    jsonObj.put("location", "0");
+                                    jsonObj.put("video_type", "");
+                                    jsonObj.put("totalBandwidth", "0");
+
+                                    //====================End=====================//
+
+                                } catch (JSONException e) {
+                                }
+
+                                List tracks = new ArrayList();
+                                for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                                    MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                            MediaTrack.TYPE_TEXT)
+                                            .setName(SubTitleName.get(0))
+                                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                            .setContentId(FakeSubTitlePath.get(0))
+                                            .setLanguage(SubTitleLanguage.get(0))
+                                            .setContentType("text/vtt")
+                                            .build();
+                                    tracks.add(englishSubtitle);
+                                }
+
+                                mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
+                                        .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                        .setContentType(mediaContentType)
+                                        .setMetadata(movieMetadata)
+                                        .setStreamDuration(15 * 1000)
+                                        .setCustomData(jsonObj)
+                                        .setMediaTracks(tracks)
+                                        .build();
+                                Util.mSendingMedia = mediaInfo;
+
+                            }
+                            resumeLogin.putExtra("yes", "2002");
+                            setResult(RESULT_OK, resumeLogin);
+                            finish();
+
+                        } else {
+                            Played_Length = 0;
+                            watch_status_String = "start";
+
+                            PlayThroughChromeCast();
+                        }
+
+                    } else {
+
+                        playerModel.setThirdPartyPlayer(false);
+                        final Intent playVideoIntent;
+                        if (Util.goToLibraryplayer) {
+                            playVideoIntent = new Intent(LoginActivity.this, MyLibraryPlayer.class);
+                        } else {
+                            if (Util.dataModel.getAdNetworkId() == 3) {
+                                LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
+
+                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+
+                            } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
+                                if (Util.dataModel.getPlayPos() <= 0) {
+                                    playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
+                                } else {
+                                    playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+
+                                }
+                            } else {
+                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+
+                            }
+                            // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        }
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (FakeSubTitlePath.size() > 0) {
+                                    // This Portion Will Be changed Later.
+
+                                    File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                                    if (dir.isDirectory()) {
+                                        String[] children = dir.list();
+                                        for (int i = 0; i < children.length; i++) {
+                                            new File(dir, children[i]).delete();
+                                        }
+                                    }
+
+                                    progressBarHandler = new ProgressBarHandler(LoginActivity.this);
+                                    progressBarHandler.show();
+                                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                                } else {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                *//*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*//*
+                                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                                    startActivity(playVideoIntent);
+                                    finish();
+                                }
+
+                            }
+                        });
+                    }
+                } else {
+                    final Intent playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                *//*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*//*
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
+
+                    //below part  checked at exoplayer thats why no need of checking here
+
+                   *//* playerModel.setThirdPartyPlayer(true);
+                    if (playerModel.getVideoUrl().contains("://www.youtube") ||
+                            playerModel.getVideoUrl().contains("://www.youtu.be")) {
+                        if (playerModel.getVideoUrl().contains("live_stream?channel")) {
+                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    playVideoIntent.putExtra("PlayerModel",playerModel);
+                                    startActivity(playVideoIntent);
+
+                                }
+                            });
+                        } else {
+
+                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, YouTubeAPIActivity.class);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    playVideoIntent.putExtra("PlayerModel",playerModel);
+                                    startActivity(playVideoIntent);
+
+
+                                }
+                            });
+
+                        }
+                    } else {
+                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                playVideoIntent.putExtra("PlayerModel",playerModel);
+                                startActivity(playVideoIntent);
+
+                            }
+                        });
+                    }*//*
+                }
+            }
+
+        } else {
+
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+                playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+            }
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+            *//*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();*//*
+            Util.showNoDataAlert(LoginActivity.this);
+        }
+
+
+    }*/
+    private void PlayThroughChromeCast() {
+        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
+        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+        String mediaContentType = "videos/mp4";
+        if (playerModel.getVideoUrl().contains(".mpd")) {
+            mediaContentType = "application/dash+xml";
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", playerModel.getVideoTitle());
+                jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                jsonObj.put("ip_address", ipAddressStr.trim());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                jsonObj.put("episode_id", playerModel.getEpisode_id());
+                jsonObj.put("watch_status", watch_status_String);
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", "0");
+                jsonObj.put("active_track_index", "0");
+
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "1");
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
+                }
+
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                //=====================End===================//
+
+                // This code is changed according to new Video log //
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time", "0");
+                jsonObj.put("seek_status", seek_status);
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time", "0");
+                jsonObj.put("end_time", "0");
+                jsonObj.put("log_unique_id", "0");
+                jsonObj.put("location", "0");
+                jsonObj.put("bandwidth_log_id", "0");
+                jsonObj.put("video_type", "mped_dash");
+                jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                //====================End=====================//
+
+            } catch (JSONException e) {
+            }
+            List tracks = new ArrayList();
+            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                        MediaTrack.TYPE_TEXT)
+                        .setName(SubTitleName.get(0))
+                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                        .setContentId(FakeSubTitlePath.get(0))
+                        .setLanguage(SubTitleLanguage.get(0))
+                        .setContentType("text/vtt")
+                        .build();
+                tracks.add(englishSubtitle);
+            }
+
+            mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+
+            togglePlayback();
+        } else {
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", playerModel.getVideoTitle());
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                jsonObj.put("ip_address", ipAddressStr.trim());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                jsonObj.put("episode_id", playerModel.getEpisode_id());
+                jsonObj.put("watch_status", watch_status_String);
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", "0");
+                jsonObj.put("active_track_index", "0");
+                jsonObj.put("seek_status", seek_status);
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time", "0");
+
+
+                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "1");
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
+                }
+
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                //=====================End===================//
+
+
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time", "0");
+                jsonObj.put("end_time", "0");
+                jsonObj.put("log_unique_id", "0");
+                jsonObj.put("location", "0");
+                jsonObj.put("video_type", "");
+                jsonObj.put("totalBandwidth", "0");
+
+                //====================End=====================//
+
+            } catch (JSONException e) {
+            }
+
+            List tracks = new ArrayList();
+            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                        MediaTrack.TYPE_TEXT)
+                        .setName(SubTitleName.get(0))
+                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                        .setContentId(FakeSubTitlePath.get(0))
+                        .setLanguage(SubTitleLanguage.get(0))
+                        .setContentType("text/vtt")
+                        .build();
+                tracks.add(englishSubtitle);
+            }
+
+            mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setStreamDuration(15 * 1000)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+
+            togglePlayback();
+
+        }
+    }
+
+   /* @Override
+    public void onLogoutPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(LoginActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (status == null) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code == 0) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code > 0) {
+            if (code == 200) {
+                preferenceManager.clearLoginPref();
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(deviceRestrictionMessage);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+
+            } else {
+                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+        }
+    }*/
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+/*
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+        this.ipAddressStr = ipAddressStr;
+        return;
+    }*/
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.VALIDATE_USER_FOR_CONTENT_URL_REQUEST_ID == requestID) {
+            validate_user(object, requestID, response);
+        } else if (APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID == requestID) {
+            video_details(object, requestID, response);
+        } else if (APIUrlConstant.LOGOUT_URL_REQUEST_ID == requestID) {
+            logout_details(object, requestID, response);
+        } else if (APIUrlConstant.CHECK_DEVICE_REQUEST_ID == requestID) {
+            check_device(object, requestID, response);
+        } else if (APIUrlConstant.IP_ADDRESS_URL_REQUEST_ID == requestID) {
+            ip_address(object, requestID, response);
+        } else if (APIUrlConstant.LOGIN_URL_REQUEST_ID == requestID) {
+            login_details(object, requestID, response);
+        } else if (APIUrlConstant.LOGOUT_ALL_REQUEST_ID == requestID) {
+            simultaneous_logout(object, requestID, response);
+        } else if (APIUrlConstant.FB_USER_EXISTS_URL_REQUEST_ID == requestID) {
+            check_fb_user_details(object, requestID, response);
+        } else if (APIUrlConstant.SOCIALAUTH_URL_REQUEST_ID == requestID) {
+            social_auth_details(object, requestID, response);
+        } else if (APIUrlConstant.GMAIL_REG_URL_REQUEST_ID == requestID) {
+            gmail_reg(object, requestID, response);
+        }
+    }
+
+    public void gmail_reg(Object object, int requestID, String response) {
+
+        SocialAuthDetailsModel authDetailsModel = (SocialAuthDetailsModel) object;
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+            // status = 0;
+
+        }
+
+
+        if (authDetailsModel.getCode() == 200) {
+
+            preferenceManager.setLogInStatusToPref("1");
+            preferenceManager.setUserIdToPref(authDetailsModel.getId());
+            preferenceManager.setPwdToPref("");
+            preferenceManager.setEmailIdToPref(authDetailsModel.getEmail());
+            preferenceManager.setDispNameToPref(authDetailsModel.getDisplay_name());
+            preferenceManager.setLoginProfImgoPref(authDetailsModel.getProfile_image());
+            preferenceManager.setIsSubscribedToPref(authDetailsModel.getIsSubscribed());
+            preferenceManager.setLoginHistIdPref(authDetailsModel.getLogin_history_id());
+
+            /*Date todayDate = new Date();
+            String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+            editor.putString("date", todayStr.trim());
+            editor.commit();*/
+
+
+            if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
+
+                //load video urls according to resolution
+                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
+
+                    Log.v("BIBHU", "isRestrictDevice called");
+                    // Call For Check Api.
+
+                    final HashMap parameters = new HashMap<>();
+                    if (preferenceManager != null) {
+                        String userIdStr = preferenceManager.getUseridFromPref();
+                        parameters.put("user_id", userIdStr);
+                    }
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("google_id", languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                    parameters.put("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                    parameters.put("device_type", "1");
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    parameters.put("device_info", deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+
+                    final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.CHECK_DEVICE, parameters, APIUrlConstant.CHECK_DEVICE_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager.startApiProcessing();
+
+                    /*CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
+                    checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
+                    checkDeviceInput.setDevice_type("1");
+                    checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                    CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
+                    asynCheckDevice.executeOnExecutor(threadPoolExecutor);*/
+                } else {
+
+                    if (Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
+                    if (getIntent().getStringExtra("from") != null) {
+                        //** review **//*
+                        onBackPressed();
+                    } else {
+                        if (Util.check_for_subscription == 1) {
+                            //go to subscription page
+                            if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
+                                setResultAtFinishActivity();
+
+                            } else {
+                                Util.showToast(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                                // Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            }
+
+                        } else {
+                            if (PlanId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
+                                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                               /* if (RegisterActivity.fa != null) {
+                                    RegisterActivity.fa.finish();
+                                }
+                                if (ForgotPasswordActivity.forgotA != null) {
+                                    ForgotPasswordActivity.forgotA.finish();
+                                }*/
+                                onBackPressed();
+                            } else {
+
+                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(in);
+                                onBackPressed();
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                Util.showToast(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+            }
+
+
+        } else {
+
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+
+
+        }
+    }
+
+    public void social_auth_details(Object object, int requestID, String response) {
+
+        SocialAuthDetailsModel socialAuthDetailsModel = (SocialAuthDetailsModel) object;
+
+        if (socialAuthDetailsModel == null) {
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+                //status = 0;
+
+            }
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+        if (socialAuthDetailsModel.getCode() > 0) {
+
+            //    SharedPreferences.Editor editor = pref.edit();
+
+            if (socialAuthDetailsModel.getCode() == 200) {
+                String displayNameStr = socialAuthDetailsModel.getDisplay_name();
+                String emailFromApiStr = socialAuthDetailsModel.getEmail();
+                String profileImageStr = socialAuthDetailsModel.getProfile_image();
+                String isSubscribedStr = socialAuthDetailsModel.getIsSubscribed();
+                String loginHistoryIdStr = socialAuthDetailsModel.getLogin_history_id();
+
+                preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setUserIdToPref(socialAuthDetailsModel.getId());
+                preferenceManager.setPwdToPref("");
+                preferenceManager.setEmailIdToPref(emailFromApiStr);
+                preferenceManager.setDispNameToPref(displayNameStr);
+                preferenceManager.setLoginProfImgoPref(profileImageStr);
+                preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+
+
+                if (NetworkStatus.getInstance().isConnected(this)) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+
+                    if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
+
+                        LogUtil.showLog("MUVI", "isRestrictDevice called");
+                        // Call For Check Api.
+
+                        final HashMap parameters = new HashMap<>();
+                        if (preferenceManager != null) {
+                            String userIdStr = preferenceManager.getUseridFromPref();
+                            parameters.put("user_id", userIdStr);
+                        }
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("google_id", languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                        parameters.put("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        parameters.put("device_type", "1");
+                        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        parameters.put("device_info", deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+
+                        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.CHECK_DEVICE, parameters, APIUrlConstant.CHECK_DEVICE_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+
+                        /*CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
+                        if (preferenceManager != null) {
+                            String userIdStr = preferenceManager.getUseridFromPref();
+                            checkDeviceInput.setUser_id(userIdStr.trim());
+                        }
+                        checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        checkDeviceInput.setAuthToken(authTokenStr);
+                        checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
+                        checkDeviceInput.setDevice_type("1");
+                        checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                        CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
+                        asynCheckDevice.executeOnExecutor(threadPoolExecutor);*/
+                    } else {
+
+
+                        if (Util.check_for_subscription == 1) {
+                            //go to subscription page
+                            if (NetworkStatus.getInstance().isConnected(this)) {
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+
+                                    final HashMap parameters = new HashMap<>();
+                                    parameters.put("authToken", authTokenStr);
+                                    parameters.put("user_id", preferenceManager.getUseridFromPref());
+                                    parameters.put("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+                                    parameters.put("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+                                    parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+                                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                                    apiCallManager1.startApiProcessing();
+
+                                    /*GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+                                } else {
+
+                                    setResultAtFinishActivity();
+
+
+                                }
+                            } else {
+                                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            }
+
+                        } else {
+
+
+                            if (Util.favorite_clicked) {
+                                finish();
+                                return;
+                            }
+
+                            if (getIntent().getStringExtra("from") != null) {
+                                /** review **/
+                                onBackPressed();
+                            } else {
+                                if (Util.check_for_subscription == 1) {
+                                    //go to subscription page
+                                    if (NetworkStatus.getInstance().isConnected(this)) {
+
+                                        setResultAtFinishActivity();
+
+
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                    }
+
+                                } else {
+                                    if (PlanId.equals("1") && socialAuthDetailsModel.getIsSubscribed().equals("0")) {
+                                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(intent);
+                                        finish();
+                                        overridePendingTransition(0, 0);
+                                    } else {
+                                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(in);
+                                        finish();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                } else {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+
+
+            } else {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    // status = 0;
+
+                }
+                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_PASSWORD_INVALID, DEFAULT_EMAIL_PASSWORD_INVALID));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+            }
+        } else {
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+            }
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+    }
+
+    public void check_fb_user_details(Object object, int requestID, String response) {
+
+        CheckFbUserDetailsModel checkFbUserDetailsModel = (CheckFbUserDetailsModel) object;
+
+        if (checkFbUserDetailsModel.getCode() == 0) {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+        if (checkFbUserDetailsModel.getCode() == 200) {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("name", fbName.trim());
+            parameters.put("email", fbEmail.trim());
+            parameters.put("password", "");
+            parameters.put("fb_userid", fbUserId.trim());
+            parameters.put("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            parameters.put("device_type", "1");
+            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.SOCIALAUTH_URL, parameters, APIUrlConstant.SOCIALAUTH_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+            /*SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
+            socialAuthInputModel.setAuthToken(authTokenStr);
+            socialAuthInputModel.setName(fbName.trim());
+            socialAuthInputModel.setEmail(fbEmail.trim());
+            socialAuthInputModel.setPassword("");
+            socialAuthInputModel.setFb_userid(fbUserId.trim());
+            socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            socialAuthInputModel.setDevice_type("1");
+            socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
+            asynFbRegDetails.executeOnExecutor(threadPoolExecutor);*/
+
+
+        } else {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+    }
+
+    public void simultaneous_logout(Object object, int requestID, String response) {
+
+        SimultaneousLogoutModel simultaneousLogoutModel = (SimultaneousLogoutModel) object;
+
+        if (progressDialog1 != null && progressDialog1.isShowing()) {
+            progressDialog1.hide();
+            progressDialog1 = null;
+        }
+        if (simultaneousLogoutModel.getCode() == 200) {
+            // Allow the user to activity_login
+            if (logout_alert.isShowing()) {
+                logout_alert.dismiss();
+            }
+
+            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE), Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void login_details(Object object, int requestID, String response) {
+
+        LoginModel loginModel = (LoginModel) object;
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        if (loginModel.getCode() > 0) {
+
+            // SharedPreferences.Editor editor = pref.edit();
+
+            if (loginModel.getCode() == 200) {
+                //playerModel.setEmailId(login_output.getEmail());
+
+                preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setUserIdToPref(loginModel.getId());
+                preferenceManager.setPwdToPref("");
+                preferenceManager.setEmailIdToPref(loginModel.getEmail());
+                preferenceManager.setDispNameToPref(loginModel.getDisplayName());
+                preferenceManager.setLoginProfImgoPref(loginModel.getProfileImage());
+                preferenceManager.setIsSubscribedToPref(loginModel.getIsSubscribed());
+                preferenceManager.setLoginHistIdPref(loginModel.getLoginHistoryId());
+
+
+                if (NetworkStatus.getInstance().isConnected(this)) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+                    if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
+
+                        LogUtil.showLog("MUVI", "isRestrictDevice called");
+                        // Call For Check Api.
+
+                        final HashMap parameters = new HashMap<>();
+                        if (preferenceManager != null) {
+                            String userIdStr = preferenceManager.getUseridFromPref();
+                            parameters.put("user_id", userIdStr);
+                        }
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("google_id", languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                        parameters.put("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        parameters.put("device_type", "1");
+                        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        parameters.put("device_info", deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+
+                        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.CHECK_DEVICE, parameters, APIUrlConstant.CHECK_DEVICE_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+                        /*CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
+                        if (preferenceManager != null) {
+                            String userIdStr = preferenceManager.getUseridFromPref();
+                            checkDeviceInput.setUser_id(userIdStr.trim());
+                        }
+                        checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                        checkDeviceInput.setAuthToken(authTokenStr);
+                        checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
+                        checkDeviceInput.setDevice_type("1");
+                        checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                        CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
+                        asynCheckDevice.executeOnExecutor(threadPoolExecutor);*/
+                    } else {
+
+                        if (Util.favorite_clicked) {
+                            finish();
+                            return;
+                        }
+
+
+                        if (getIntent().getStringExtra("from") != null) {
+                            /** review **/
+                            onBackPressed();
+                        } else {
+                            if (Util.check_for_subscription == 1) {
+                                //go to subscription page
+                                if (NetworkStatus.getInstance().isConnected(this)) {
+
+                                    setResultAtFinishActivity();
+
+
+                                } else {
+                                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                if (PlanId.equals("1") && loginModel.getIsSubscribed().equals("0")) {
+                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
+                                } else {
+                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                    finish();
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            } else if (loginModel.getCode() == 300) {
+                // Show Popup For the Simultaneous Logout
+
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+
+                }
+                show_logout_popup(loginModel.getMsg());
+            } else {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    //  status = 0;
+                }
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_PASSWORD_INVALID, DEFAULT_EMAIL_PASSWORD_INVALID));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+            }
+        } else {
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+    }
+
+    public void ip_address(Object object, int requestID, String response) {
+        IPAddressModel ipAddressModel = (IPAddressModel) object;
+
+        this.ipAddressStr = ipAddressModel.getIp();
+        return;
+    }
+
+    public void check_device(Object object, int requestID, String response) {
+
+        CheckDeviceModel checkDeviceModel = (CheckDeviceModel) object;
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+        deviceRestrictionMessage = checkDeviceModel.getMsg();
+
+        if (checkDeviceModel.getCode() > 0) {
+            if (checkDeviceModel.getCode() == 200) {
+
+                // Allow The User To Login
+                if (Util.check_for_subscription == 1) {
+                    //go to subscription page
+                    if (NetworkStatus.getInstance().isConnected(this)) {
+                        if (Util.dataModel.getIsFreeContent() == 1) {
+
+                            final HashMap parameters = new HashMap<>();
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("user_id", preferenceManager.getUseridFromPref());
+                            parameters.put("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+                            parameters.put("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+                            parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+                            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager1.startApiProcessing();
+
+
+                            /*GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+                        } else {
+                            setResultAtFinishActivity();
+
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+
+                    if (Util.favorite_clicked) {
+                        finish();
+                        return;
+                    }
+
+                    if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
+                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    } else {
+                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(in);
+                        finish();
+                    }
+                }
+            } else {
+                // Call For Logout
+                LogOut();
+            }
+        } else {
+            // Call For Logout
+            LogOut();
+        }
+    }
+
+    public void logout_details(Object object, int requestID, String response) {
+
+        LogoutModel logoutModel = (LogoutModel) object;
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (logoutModel.getStatus() == null) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (logoutModel.getCode() == 0) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (logoutModel.getCode() > 0) {
+            if (logoutModel.getCode() == 200) {
+                preferenceManager.clearLoginPref();
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(deviceRestrictionMessage);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+
+            } else {
+                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+        }
+    }
+
+    public void video_details(Object object, int requestID, String response) {
+
+        GetVideoDetailsModel videoDetailsModel = (GetVideoDetailsModel) object;
+        boolean play_video = true;
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
+
+            if (videoDetailsModel.getStreamingRestriction().trim().equals("0")) {
+
+                play_video = false;
+            } else {
+                play_video = true;
+            }
+        } else {
+            play_video = true;
+        }
+        if (!play_video) {
+
+            try {
+                if (pDialog.isShowing())
+                    pDialog.hide();
+            } catch (IllegalArgumentException ex) {
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(videoDetailsModel.getMsg());
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+
+            return;
+        }
+
+
+        if (videoDetailsModel.getCode() == 200) {
+            if (videoDetailsModel.getIsOffline() != null
+                    && !videoDetailsModel.getIsOffline().trim().isEmpty() &&
+                    !videoDetailsModel.getIsOffline().trim().equals("null") &&
+                    !videoDetailsModel.getIsOffline().trim().matches("")) {
+                playerModel.setIsOffline(videoDetailsModel.getIsOffline());
+            }
+            if (videoDetailsModel.getDownloadStatus() != null
+                    && !videoDetailsModel.getDownloadStatus().trim().isEmpty() &&
+                    !videoDetailsModel.getDownloadStatus().trim().equals("null") &&
+                    !videoDetailsModel.getDownloadStatus().trim().matches("")
+                    ) {
+                playerModel.setDownloadStatus(videoDetailsModel.getDownloadStatus());
+            }
+            if (videoDetailsModel.getThirdpartyUrl() == null || videoDetailsModel.getThirdpartyUrl().matches("")) {
+
+                /**@bishal
+                 * for drm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+
+                if (videoDetailsModel.getStudioApprovedUrl() != null &&
+                        !videoDetailsModel.getStudioApprovedUrl().isEmpty() &&
+                        !videoDetailsModel.getStudioApprovedUrl().equals("null") &&
+                        !videoDetailsModel.getStudioApprovedUrl().matches("")) {
+                    LogUtil.showLog("BISHAL", "if called means  studioapproved");
+                    playerModel.setVideoUrl(videoDetailsModel.getStudioApprovedUrl());
+                    LogUtil.showLog("BS", "studipapprovedurl====" + playerModel.getVideoUrl());
+
+
+                    if (videoDetailsModel.getLicenseUrl().trim() != null && !videoDetailsModel.getLicenseUrl().trim().isEmpty() && !videoDetailsModel.getLicenseUrl().trim().equals("null") && !videoDetailsModel.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(videoDetailsModel.getLicenseUrl());
+                    }
+                    if (videoDetailsModel.getVideoUrl().trim() != null && !videoDetailsModel.getVideoUrl().isEmpty() && !videoDetailsModel.getVideoUrl().equals("null") && !videoDetailsModel.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(videoDetailsModel.getVideoUrl());
+
+                    } else {
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                    }
+                } else {
+                    if (videoDetailsModel.getVideoUrl() != null || !videoDetailsModel.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(videoDetailsModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
+                }
+            } else {
+                if (videoDetailsModel.getThirdpartyUrl() != null || !videoDetailsModel.getThirdpartyUrl().matches("")) {
+                    playerModel.setVideoUrl(videoDetailsModel.getThirdpartyUrl());
+                    playerModel.setThirdPartyPlayer(true);
+
+                } else {
+                    //  dataModel.setVideoUrl(translatedLanuage.getNoData());
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                }
+            }
+
+            Util.dataModel.setVideoResolution(videoDetailsModel.getVideoResolution());
+
+            playerModel.setVideoResolution(videoDetailsModel.getVideoResolution());
+            if (videoDetailsModel.getPlayedLength() != null && !videoDetailsModel.getPlayedLength().equals(""))
+                playerModel.setPlayPos((Util.isDouble(videoDetailsModel.getPlayedLength())));
+
+            for (int i = 0; i < videoDetailsModel.getSubTitle().size(); i++) {
+                SubTitleName = videoDetailsModel.getSubTitle().get(i).getSubTitleName();
+                SubTitleLanguage = videoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+            }
+            //dependency for datamodel
+            Util.dataModel.setVideoUrl(videoDetailsModel.getVideoUrl());
+            Util.dataModel.setVideoResolution(videoDetailsModel.getVideoResolution());
+            Util.dataModel.setThirdPartyUrl(videoDetailsModel.getThirdpartyUrl());
+            for (int i = 0; i < videoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                Util.dataModel.setAdNetworkId(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                Util.dataModel.setChannel_id(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+            }
+            Util.dataModel.setPreRoll(videoDetailsModel.getAdDetails().getAdsTime().getStart());
+            Util.dataModel.setPostRoll(videoDetailsModel.getAdDetails().getAdsTime().getEnd());
+            Util.dataModel.setMidRoll(videoDetailsModel.getAdDetails().getAdsTime().getMid());
+            Util.dataModel.setAdDetails(videoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+            Util.dataModel.setPlayPos(Util.isDouble(videoDetailsModel.getPlayedLength()));
+
+            //player model set
+            //player model set
+            playerModel.setAdDetails(videoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+            playerModel.setMidRoll(videoDetailsModel.getAdDetails().getAdsTime().getMid());
+            playerModel.setPostRoll(videoDetailsModel.getAdDetails().getAdsTime().getEnd());
+            for (int i = 0; i < videoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                Util.dataModel.setAdNetworkId(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                Util.dataModel.setChannel_id(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+            }
+            for (int i = 0; i < videoDetailsModel.getSubTitle().size(); i++) {
+                playerModel.setSubTitleName(videoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                playerModel.setSubTitleLanguage(videoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+                playerModel.setFakeSubTitlePath(videoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                FakeSubTitlePath = videoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
+                playerModel.setOfflineUrl(videoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                playerModel.setOfflineLanguage(videoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+            for (int i = 0; i < videoDetailsModel.getVideoDetails().size(); i++) {
+                playerModel.setResolutionFormat(videoDetailsModel.getVideoDetails().get(i).getResolution());
+                playerModel.setResolutionUrl(videoDetailsModel.getVideoDetails().get(i).getUrl());
+            }
+            playerModel.setVideoResolution(videoDetailsModel.getVideoResolution());
+            playerModel.setPlayPos(Util.isDouble(videoDetailsModel.getPlayedLength()));
+
+            if (playerModel.getVideoUrl() == null ||
+                    playerModel.getVideoUrl().matches("")) {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                }
+                Util.showNoDataAlert(LoginActivity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
@@ -767,8 +2254,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
                 // condition for checking if the response has third party url or not.
-                if (_video_details_output.getThirdparty_url() == null ||
-                        _video_details_output.getThirdparty_url().matches("")
+                if (videoDetailsModel.getThirdpartyUrl() == null ||
+                        videoDetailsModel.getThirdpartyUrl().matches("")
                         ) {
                     if (mCastSession != null && mCastSession.isConnected()) {
                         ///Added for resume cast watch
@@ -1093,216 +2580,75 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             dlgAlert.create().show();*/
             Util.showNoDataAlert(LoginActivity.this);
         }
-
-
     }
 
-    private void PlayThroughChromeCast() {
-        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+    public void validate_user(Object object, int requestID, String response) {
 
-        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
-        movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
-        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
-        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+        ValidateUserModel validateUserModel = (ValidateUserModel) object;
 
+        String validUserStr = validateUserModel.getStatus();
+        String subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
-        String mediaContentType = "videos/mp4";
-        if (playerModel.getVideoUrl().contains(".mpd")) {
-            mediaContentType = "application/dash+xml";
-            JSONObject jsonObj = null;
-            try {
-                jsonObj = new JSONObject();
-                jsonObj.put("description", playerModel.getVideoTitle());
-                jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
-
-                //  This Code Is Added For Video Log By Bibhu..
-
-                jsonObj.put("authToken", authTokenStr);
-                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-                jsonObj.put("ip_address", ipAddressStr.trim());
-                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-                jsonObj.put("episode_id", playerModel.getEpisode_id());
-                jsonObj.put("watch_status", watch_status_String);
-                jsonObj.put("device_type", "2");
-                jsonObj.put("log_id", "0");
-                jsonObj.put("active_track_index", "0");
-
-                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
-                    jsonObj.put("restrict_stream_id", "0");
-                    jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
-                } else {
-                    jsonObj.put("restrict_stream_id", "0");
-                    jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
-                }
-
-                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
-                jsonObj.put("is_log", "1");
-
-                //=====================End===================//
-
-                // This code is changed according to new Video log //
-
-                jsonObj.put("played_length", "0");
-                jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
-                jsonObj.put("seek_status", seek_status);
-                // This  Code Is Added For Drm BufferLog By Bibhu ...
-
-                jsonObj.put("resolution", "BEST");
-                jsonObj.put("start_time", "0");
-                jsonObj.put("end_time", "0");
-                jsonObj.put("log_unique_id", "0");
-                jsonObj.put("location", "0");
-                jsonObj.put("bandwidth_log_id", "0");
-                jsonObj.put("video_type", "mped_dash");
-                jsonObj.put("drm_bandwidth_by_sender", "0");
-
-                //====================End=====================//
-
-            } catch (JSONException e) {
-            }
-            List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
-            }
-
-            mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                    .setContentType(mediaContentType)
-                    .setMetadata(movieMetadata)
-                    .setCustomData(jsonObj)
-                    .setMediaTracks(tracks)
-                    .build();
-            mSelectedMedia = mediaInfo;
-
-
-            togglePlayback();
-        } else {
-            JSONObject jsonObj = null;
-            try {
-                jsonObj = new JSONObject();
-                jsonObj.put("description", playerModel.getVideoTitle());
-
-                //  This Code Is Added For Video Log By Bibhu..
-
-                jsonObj.put("authToken", authTokenStr);
-                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-                jsonObj.put("ip_address", ipAddressStr.trim());
-                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-                jsonObj.put("episode_id", playerModel.getEpisode_id());
-                jsonObj.put("watch_status", watch_status_String);
-                jsonObj.put("device_type", "2");
-                jsonObj.put("log_id", "0");
-                jsonObj.put("active_track_index", "0");
-                jsonObj.put("seek_status", seek_status);
-
-                jsonObj.put("played_length", "0");
-                jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
-
-
-                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
-                    jsonObj.put("restrict_stream_id", "0");
-                    jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
-                } else {
-                    jsonObj.put("restrict_stream_id", "0");
-                    jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
-                }
-
-                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
-                jsonObj.put("is_log", "1");
-
-                //=====================End===================//
-
-
-                // This  Code Is Added For Drm BufferLog By Bibhu ...
-
-                jsonObj.put("resolution", "BEST");
-                jsonObj.put("start_time", "0");
-                jsonObj.put("end_time", "0");
-                jsonObj.put("log_unique_id", "0");
-                jsonObj.put("location", "0");
-                jsonObj.put("video_type", "");
-                jsonObj.put("totalBandwidth", "0");
-
-                //====================End=====================//
-
-            } catch (JSONException e) {
-            }
-
-            List tracks = new ArrayList();
-            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
-                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
-                        MediaTrack.TYPE_TEXT)
-                        .setName(SubTitleName.get(0))
-                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                        .setContentId(FakeSubTitlePath.get(0))
-                        .setLanguage(SubTitleLanguage.get(0))
-                        .setContentType("text/vtt")
-                        .build();
-                tracks.add(englishSubtitle);
-            }
-
-            mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                    .setContentType(mediaContentType)
-                    .setMetadata(movieMetadata)
-                    .setStreamDuration(15 * 1000)
-                    .setCustomData(jsonObj)
-                    .setMediaTracks(tracks)
-                    .build();
-            mSelectedMedia = mediaInfo;
-
-
-            togglePlayback();
-
-        }
-    }
-
-    @Override
-    public void onLogoutPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(LoginActivity.this);
-        pDialog.show();
-    }
-
-    @Override
-    public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
                 pDialog = null;
-
             }
         } catch (IllegalArgumentException ex) {
-            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
+            //status = 0;
         }
-        if (status == null) {
-            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
+        if (validateUserModel == null) {
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+            dlgAlert.create().show();
+        } else if (validateUserModel.getCode() <= 0) {
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+            dlgAlert.create().show();
         }
-        if (code == 0) {
-            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
-        }
-        if (code > 0) {
-            if (code == 200) {
-                preferenceManager.clearLoginPref();
+        if (validateUserModel.getCode() > 0) {
+            if (validateUserModel.getCode() == 427) {
 
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(deviceRestrictionMessage);
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
+                if (validateUserModel.getMsg() != null && validateUserModel.getMsg().equalsIgnoreCase("")) {
+                    dlgAlert.setMessage(validateUserModel.getMsg());
+                } else {
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+
+                }
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
@@ -1310,31 +2656,71 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                onBackPressed();
                             }
                         });
                 dlgAlert.create().show();
+            } else if (validateUserModel.getCode() == 429 || validateUserModel.getCode() == 430) {
 
+                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr, validateUserModel.getMsg(), subscription_Str);
+
+            } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                if (Util.dataModel.getContentTypesId() == 3) {
+                    // Show Popup
+                    ShowPpvPopUp();
+                } else {
+                    // Go to ppv Payment
+                    payment_for_single_part();
+                }
+            } else if (PlanId.equals("1") && validateUserModel.getMember_subscribed().equals("0")) {
+                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            } else if (Util.dataModel.getIsConverted() == 0) {
+                Util.showNoDataAlert(LoginActivity.this);
+               /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                onBackPressed();
+                            }
+                        });
+                dlgAlert.create().show();*/
             } else {
-                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                if (NetworkStatus.getInstance().isConnected(this)) {
 
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("user_id", preferenceManager.getUseridFromPref());
+                    parameters.put("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+                    parameters.put("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+                    parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager1.startApiProcessing();
+
+                    /*GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+                } else {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                }
             }
         }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onIPAddressPreExecuteStarted() {
-
-    }
-
-    @Override
-    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
-        this.ipAddressStr = ipAddressStr;
-        return;
     }
 
 
@@ -1426,13 +2812,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private LinearLayout btnLogin;
     private ProgressBarHandler progressDialog;
     private CallbackManager callbackManager;
-    CheckFbUserDetailsAsyn asynCheckFbUserDetails;
-    GetValidateUserAsynTask asynValidateUserDetails;
-    SocialAuthAsynTask asynFbRegDetails;
 
     /*********fb****/
     //AsynLogInDetails asyncReg;
-    VideoDetailsAsynctask asynLoadVideoUrls;
     EditText editEmailStr, editPasswordStr;
     TextView forgotPassword, loginNewUser, signUpTextView;
     Button loginButton;
@@ -1467,7 +2849,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
 
         setContentView(R.layout.activity_login);
         loginA = this;
@@ -1480,8 +2861,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN,DEFAULT_LOGIN));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         //playerModel = new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
@@ -1551,14 +2930,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         //signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-
-
 
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -1619,7 +2996,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         /***************************************************************************/
 
-        gmailTest=(TextView) findViewById(R.id.textView);
+        gmailTest = (TextView) findViewById(R.id.textView);
         googleSignView = (RelativeLayout) findViewById(R.id.sign_in_button);
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
@@ -1630,28 +3007,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
 
-        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK, FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             btnLogin.setVisibility(View.GONE);
         }
 
-        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.GOOGLE, FeatureHandler.DEFAULT_GOOGLE)) {
             googleSignView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             googleSignView.setVisibility(View.GONE);
         }
-
 
 
         /***************************************************************************/
 
 
-       // loginHandler = new LoginHandler(this);
+        // loginHandler = new LoginHandler(this);
         callSignin(languagePreference);
         callFblogin(callbackManager, loginButton, languagePreference);
-
-
 
 
         // Configure Google Sign In
@@ -1778,8 +3152,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     protected void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this);
-        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+        final HashMap parameters = new HashMap<>();
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.IP_ADDRESS_URL, parameters, APIUrlConstant.IP_ADDRESS_URL_REQUEST_ID, "https://api.ipify.org/");
+        apiCallManager.startApiProcessing();
+      /*  GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);*/
         /***************chromecast**********************/
         if (mCastSession == null) {
             mCastSession = CastContext.getSharedInstance(this).getSessionManager()
@@ -1808,7 +3185,19 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (isValidEmail == true) {
 
                     LogUtil.showLog("MUVI", "activity_login valid");
-                    Login_input login_input = new Login_input();
+
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("email", regEmailStr);
+                    parameters.put("password", regPasswordStr);
+                    parameters.put("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                    parameters.put("google_id", languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                    parameters.put("device_type", "1");
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                    final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.LOGIN_URL, parameters, APIUrlConstant.LOGIN_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager.startApiProcessing();
+                    /*Login_input login_input = new Login_input();
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
                     login_input.setPassword(regPasswordStr);
@@ -1817,17 +3206,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     login_input.setDevice_type("1");
                     login_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     LoginAsynTask asyncReg = new LoginAsynTask(login_input, this, this);
-                    asyncReg.executeOnExecutor(threadPoolExecutor);
+                    asyncReg.executeOnExecutor(threadPoolExecutor);*/
                 } else {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
-                if(regEmailStr.equals("")) {
+                if (regEmailStr.equals("")) {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
-                }else if(regPasswordStr.equals("")) {
+                } else if (regPasswordStr.equals("")) {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
                 }
-                }
+            }
         } else {
             Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
@@ -2854,7 +4243,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onBackPressed() {
-        if (asynValidateUserDetails != null) {
+        /*if (asynValidateUserDetails != null) {
             asynValidateUserDetails.cancel(true);
         }
 
@@ -2866,7 +4255,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
         if (asynLoadVideoUrls != null) {
             asynLoadVideoUrls.cancel(true);
-        }
+        }*/
 //        if (asyncReg!=null){
 //            asyncReg.cancel(true);
 //        }
@@ -3750,8 +5139,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }
 
 
-
-    @Override
+  /*  @Override
     public void onCheckFbUserDetailsAsynPreExecuteStarted() {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -3821,9 +5209,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             dlgAlert.create().show();
         }
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onSocialAuthPreExecuteStarted() {
 
         pDialog = new ProgressBarHandler(LoginActivity.this);
@@ -3932,13 +5320,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         } else {
 
 
-                            if(Util.favorite_clicked) {
+                            if (Util.favorite_clicked) {
                                 finish();
                                 return;
                             }
 
                             if (getIntent().getStringExtra("from") != null) {
-                                /** review **/
+                                */
+
+    /**
+     * review
+     **//*
                                 onBackPressed();
                             } else {
                                 if (Util.check_for_subscription == 1) {
@@ -3954,21 +5346,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                                 } else {
                                     if (PlanId.equals("1") && socialAuthOutputModel.getIsSubscribed().equals("0")) {
-
-                                        if (CheckSubscriptionHandler.isSubscriptionAllowed){
-                                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            startActivity(intent);
-                                            finish();
-                                            overridePendingTransition(0, 0);
-                                        }else {
-                                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(in);
-                                            finish();
-                                        }
-
+                                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(intent);
+                                        finish();
+                                        overridePendingTransition(0, 0);
                                     } else {
                                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4033,7 +5415,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             dlgAlert.create().show();
         }
 
-    }
+    }*/
 
 //    private class AsynFbRegDetails extends AsyncTask<Void, Void, Void> {
 //        // ProgressDialog pDialog;
@@ -4259,7 +5641,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
     // Added For  FCM
-
     public void show_logout_popup(String msg) {
         {
 
@@ -4297,12 +5678,19 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
 
                         // Call Api For Simultaneous Logout
-                        SimultaneousLogoutInput simultaneousLogoutInput = new SimultaneousLogoutInput();
+
+                        final HashMap parameters = new HashMap<>();
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("email_id", regEmailStr);
+                        parameters.put("device_type", "1");
+                        final APICallManager apiCallManager = new APICallManager(LoginActivity.this, APIUrlConstant.LOGOUT_ALL, parameters, APIUrlConstant.LOGOUT_ALL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+                        /*SimultaneousLogoutInput simultaneousLogoutInput = new SimultaneousLogoutInput();
                         simultaneousLogoutInput.setAuthToken(authTokenStr);
                         simultaneousLogoutInput.setDevice_type("1");
                         simultaneousLogoutInput.setEmail_id(regEmailStr);
                         GetSimultaneousLogoutAsync asynSimultaneousLogout = new GetSimultaneousLogoutAsync(simultaneousLogoutInput, LoginActivity.this, LoginActivity.this);
-                        asynSimultaneousLogout.executeOnExecutor(threadPoolExecutor);
+                        asynSimultaneousLogout.executeOnExecutor(threadPoolExecutor);*/
                     } else {
                         Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
@@ -4323,7 +5711,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     }
 
-    @Override
+  /*  @Override
     public void onSimultaneousLogoutPreExecuteStarted() {
         progressDialog1 = new ProgressDialog(LoginActivity.this, R.style.MyTheme);
         progressDialog1.setCancelable(false);
@@ -4350,7 +5738,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         } else {
             Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     // This API is called for simultaneous logout
 //    private class AsynSimultaneousLogout extends AsyncTask<Void, Void, Void> {
@@ -4431,7 +5819,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void ShowPpvPopUp() {
 
         try {
-            if (Util.currencyModel.getCurrencySymbol() == null) {
+            if (Util.currencyModel.getSymbol() == null) {
                 Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
             }
@@ -4458,21 +5846,21 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (Util.dataModel.getIsAPV() == 1) {
-            if (Util.apvModel.getIsEpisode() == 1) {
+            if (Util.apvModel.getIs_episode() == 1) {
                 episodeRadioButton.setVisibility(View.VISIBLE);
                 episodePriceTextView.setVisibility(View.VISIBLE);
             } else {
                 episodeRadioButton.setVisibility(View.GONE);
                 episodePriceTextView.setVisibility(View.GONE);
             }
-            if (Util.apvModel.getIsSeason() == 1) {
+            if (Util.apvModel.getIs_season() == 1) {
                 seasonRadioButton.setVisibility(View.VISIBLE);
                 seasonPriceTextView.setVisibility(View.VISIBLE);
             } else {
                 seasonRadioButton.setVisibility(View.GONE);
                 seasonPriceTextView.setVisibility(View.GONE);
             }
-            if (Util.apvModel.getIsShow() == 1) {
+            if (Util.apvModel.getIs_show() == 1) {
                 completeRadioButton.setVisibility(View.VISIBLE);
                 completePriceTextView.setVisibility(View.VISIBLE);
             } else {
@@ -4514,24 +5902,24 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         if (subscriptionStr.trim().equals("1")) {
             if (Util.dataModel.getIsAPV() == 1) {
 
-                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeSubscribedStr());
-                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonSubscribedStr());
-                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowSubscribedStr());
+                episodePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getEpisode_subscribed());
+                seasonPriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getSeason_subscribed());
+                completePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getShow_subscribed());
             } else {
-                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeSubscribedStr());
-                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonSubscribedStr());
-                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowSubscribedStr());
+                episodePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getEpisodeSubscribed());
+                seasonPriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getSeasonSubscribed());
+                completePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getShowSubscribed());
             }
         } else {
             if (Util.dataModel.getIsAPV() == 1) {
 
-                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeUnsubscribedStr());
-                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonUnsubscribedStr());
-                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowUnsubscribedStr());
+                episodePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getEpisode_unsubscribed());
+                seasonPriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getSeason_unsubscribed());
+                completePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.apvModel.getShow_unsubscribed());
             } else {
-                episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeUnsubscribedStr());
-                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonUnsubscribedStr());
-                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowUnsubscribedStr());
+                episodePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getEpisodeUnsubscribed());
+                seasonPriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getSeasonUnsubscribed());
+                completePriceTextView.setText(Util.currencyModel.getSymbol() + " " + Util.ppvModel.getShowUnsubscribed());
             }
         }
 
@@ -4542,12 +5930,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (completeRadioButton.isChecked() == true) {
             if (Util.dataModel.getIsAPV() == 1) {
-                priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
-                priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
+                priceForUnsubscribedStr = Util.apvModel.getShow_unsubscribed();
+                priceFosubscribedStr = Util.apvModel.getShow_subscribed();
 
             } else {
-                priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
-                priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
+                priceForUnsubscribedStr = Util.ppvModel.getShowUnsubscribed();
+                priceFosubscribedStr = Util.ppvModel.getShowSubscribed();
             }
         }
 
@@ -4582,12 +5970,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             seasonRadioButton.setChecked(false);
 
             if (Util.dataModel.getIsAPV() == 1) {
-                priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
-                priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
+                priceForUnsubscribedStr = Util.apvModel.getShow_unsubscribed();
+                priceFosubscribedStr = Util.apvModel.getShow_subscribed();
 
             } else {
-                priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
-                priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
+                priceForUnsubscribedStr = Util.ppvModel.getShowUnsubscribed();
+                priceFosubscribedStr = Util.ppvModel.getShowSubscribed();
             }
 
 
@@ -4599,12 +5987,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 episodeRadioButton.setChecked(false);
 
                 if (Util.dataModel.getIsAPV() == 1) {
-                    priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
-                    priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
+                    priceForUnsubscribedStr = Util.apvModel.getSeason_unsubscribed();
+                    priceFosubscribedStr = Util.apvModel.getSeason_subscribed();
 
                 } else {
-                    priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
-                    priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
+                    priceForUnsubscribedStr = Util.ppvModel.getSeasonUnsubscribed();
+                    priceFosubscribedStr = Util.ppvModel.getSeasonSubscribed();
                 }
 
 
@@ -4614,12 +6002,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 episodeRadioButton.setChecked(true);
 
                 if (Util.dataModel.getIsAPV() == 1) {
-                    priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
-                    priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
+                    priceForUnsubscribedStr = Util.apvModel.getEpisode_unsubscribed();
+                    priceFosubscribedStr = Util.apvModel.getEpisode_subscribed();
 
                 } else {
-                    priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
-                    priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
+                    priceForUnsubscribedStr = Util.ppvModel.getEpisodeUnsubscribed();
+                    priceFosubscribedStr = Util.ppvModel.getEpisodeSubscribed();
                 }
 
             }
@@ -4634,12 +6022,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 episodeRadioButton.setChecked(false);
                 seasonRadioButton.setChecked(false);
                 if (Util.dataModel.getIsAPV() == 1) {
-                    priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
-                    priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
+                    priceForUnsubscribedStr = Util.apvModel.getShow_unsubscribed();
+                    priceFosubscribedStr = Util.apvModel.getShow_subscribed();
 
                 } else {
-                    priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
-                    priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
+                    priceForUnsubscribedStr = Util.ppvModel.getShowUnsubscribed();
+                    priceFosubscribedStr = Util.ppvModel.getShowSubscribed();
                 }
 
             }
@@ -4654,12 +6042,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 seasonRadioButton.setChecked(false);
 
                 if (Util.dataModel.getIsAPV() == 1) {
-                    priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
-                    priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
+                    priceForUnsubscribedStr = Util.apvModel.getEpisode_unsubscribed();
+                    priceFosubscribedStr = Util.apvModel.getEpisode_subscribed();
 
                 } else {
-                    priceForUnsubscribedStr = Util.ppvModel.getPpvEpisodeUnsubscribedStr();
-                    priceFosubscribedStr = Util.ppvModel.getPpvEpisodeSubscribedStr();
+                    priceForUnsubscribedStr = Util.ppvModel.getEpisodeUnsubscribed();
+                    priceFosubscribedStr = Util.ppvModel.getEpisodeSubscribed();
                 }
 
             }
@@ -4670,12 +6058,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 episodeRadioButton.setChecked(false);
                 completeRadioButton.setChecked(false);
                 if (Util.dataModel.getIsAPV() == 1) {
-                    priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
-                    priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
+                    priceForUnsubscribedStr = Util.apvModel.getSeason_unsubscribed();
+                    priceFosubscribedStr = Util.apvModel.getSeason_subscribed();
 
                 } else {
-                    priceForUnsubscribedStr = Util.ppvModel.getPpvSeasonUnsubscribedStr();
-                    priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
+                    priceForUnsubscribedStr = Util.ppvModel.getSeasonUnsubscribed();
+                    priceFosubscribedStr = Util.ppvModel.getSeasonSubscribed();
                 }
 
 
@@ -4706,9 +6094,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 showPaymentIntent.putExtra("movieThirdPartyUrl", Util.dataModel.getThirdPartyUrl());
                 showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
                 showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
-                showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
-                showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
-                showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
+                showPaymentIntent.putExtra("currencyId", Util.currencyModel.getId());
+                showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCode());
+                showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getSymbol());
                 showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
                 showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
@@ -4733,7 +6121,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void payment_for_single_part() {
 
         try {
-            if (Util.currencyModel.getCurrencySymbol() == null) {
+            if (Util.currencyModel.getSymbol() == null) {
                 Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
             }
@@ -4744,12 +6132,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (Util.dataModel.getIsAPV() == 1) {
-            priceForUnsubscribedStr = Util.apvModel.getAPVPriceForUnsubscribedStr();
-            priceFosubscribedStr = Util.apvModel.getAPVPriceForsubscribedStr();
+            priceForUnsubscribedStr = Util.apvModel.getPrice_for_unsubscribed();
+            priceFosubscribedStr = Util.apvModel.getPrice_for_subscribed();
 
         } else {
-            priceForUnsubscribedStr = Util.ppvModel.getPPVPriceForUnsubscribedStr();
-            priceFosubscribedStr = Util.ppvModel.getPPVPriceForsubscribedStr();
+            priceForUnsubscribedStr = Util.ppvModel.getPriceForUnsubscribed();
+            priceFosubscribedStr = Util.ppvModel.getPriceForSubscribed();
         }
 
 
@@ -4766,9 +6154,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         showPaymentIntent.putExtra("movieThirdPartyUrl", Util.dataModel.getThirdPartyUrl());
         showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
         showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
-        showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
-        showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
-        showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
+        showPaymentIntent.putExtra("currencyId", Util.currencyModel.getId());
+        showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCode());
+        showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getSymbol());
         showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle());
         showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
         showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
@@ -4788,7 +6176,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     // Following Code Has Been Added For The Device Management
 
-    @Override
+/*    @Override
     public void onCheckDevicePreExecuteStarted() {
         pDialog = new ProgressBarHandler(LoginActivity.this);
         pDialog.show();
@@ -4839,19 +6227,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     }
 
                     if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
-                        if (CheckSubscriptionHandler.isSubscriptionAllowed) {
-                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(0, 0);
-                        }else {
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(in);
-                            finish();
-                        }
+                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
                     } else {
                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4869,7 +6249,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             LogOut();
         }
 
-    }
+    }*/
 
 
 //    private class AsynCheckDevice extends AsyncTask<Void, Void, Void> {
@@ -5019,12 +6399,20 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void LogOut() {
         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         LogUtil.showLog("MUVI3", "logout Called");
-        LogoutInput logoutInput = new LogoutInput();
+
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        parameters.put("login_history_id", loginHistoryIdStr);
+
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.LOGOUT_URL, parameters, APIUrlConstant.LOGOUT_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager.startApiProcessing();
+       /* LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
         logoutInput.setLogin_history_id(loginHistoryIdStr);
         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
-        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);*/
     }
 
 //    private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
@@ -5188,7 +6576,18 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             AuthId = acct.getId();
             AuthImageUrl = String.valueOf(acct.getPhotoUrl());
 
-            GmailLoginInput gmailLoginInput = new GmailLoginInput();
+            final HashMap parameters = new HashMap<>();
+
+            parameters.put("authToken", authTokenStr);
+            parameters.put("email", AuthEmail);
+            parameters.put("name", Authname);
+            parameters.put("gplus_userid", AuthId);
+            parameters.put("profile_image", AuthImageUrl);
+            parameters.put("password", "");
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.SOCIALAUTH_URL, parameters, APIUrlConstant.GMAIL_REG_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+
+           /* GmailLoginInput gmailLoginInput = new GmailLoginInput();
             gmailLoginInput.setEmail(AuthEmail);
             gmailLoginInput.setName(Authname);
             gmailLoginInput.setGmail_userid(AuthId);
@@ -5196,7 +6595,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             gmailLoginInput.setPassword("");
             gmailLoginInput.setAuthToken(authTokenStr);
             AsyncGmailReg asyncGmailReg = new AsyncGmailReg(gmailLoginInput, this, this);
-            asyncGmailReg.executeOnExecutor(threadPoolExecutor);
+            asyncGmailReg.executeOnExecutor(threadPoolExecutor);*/
         }
     }
     // [END handleSignInResult]
@@ -5443,7 +6842,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }*/
 
     /////////////////////////end/////////////////////////
-    @Override
+    /*@Override
     public void onGmailRegPreExecuteStarted() {
         pDialog = new ProgressBarHandler(LoginActivity.this);
         pDialog.show();
@@ -5477,16 +6876,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             preferenceManager.setIsSubscribedToPref(Integer.toString(gmailLoginOutput.getIsSubscribed()));
             preferenceManager.setLoginHistIdPref(gmailLoginOutput.getLogin_history_id());
 
-            /*Date todayDate = new Date();
+            *//*Date todayDate = new Date();
             String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
             editor.putString("date", todayStr.trim());
-            editor.commit();*/
+            editor.commit();*//*
 
 
             if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
 
                 //load video urls according to resolution
-                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))){
+                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
 
                     Log.v("BIBHU", "isRestrictDevice called");
                     // Call For Check Api.
@@ -5508,7 +6907,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     }
 
                     if (getIntent().getStringExtra("from") != null) {
-                        //** review **//*
+                        /*/
+
+    /**
+     * review
+     **//**//*
                         onBackPressed();
                     } else {
                         if (Util.check_for_subscription == 1) {
@@ -5523,24 +6926,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         } else {
                             if (PlanId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
-                                if (CheckSubscriptionHandler.isSubscriptionAllowed) {
-                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(intent);
-                               /* if (RegisterActivity.fa != null) {
+                                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                               *//* if (RegisterActivity.fa != null) {
                                     RegisterActivity.fa.finish();
                                 }
                                 if (ForgotPasswordActivity.forgotA != null) {
                                     ForgotPasswordActivity.forgotA.finish();
-                                }*/
-                                    onBackPressed();
-                                }else {
-                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(in);
-                                    onBackPressed();
-                                }
+                                }*//*
+                                onBackPressed();
                             } else {
 
                                 Intent in = new Intent(LoginActivity.this, MainActivity.class);
@@ -5576,19 +6971,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         }
 
-    }
-
-
+    }*/
     public void handleFbUserDetails(String fbUserId, String fbEmail, String fbName) {
         this.fbUserId = fbUserId;
         this.fbEmail = fbEmail;
         this.fbName = fbName;
-        CheckFbUserDetailsInput checkFbUserDetailsInput = new CheckFbUserDetailsInput();
+
+        final HashMap parameters = new HashMap<>();
+
+        parameters.put("authToken", authTokenStr);
+        parameters.put("fb_userid", fbUserId.trim());
+
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.FB_USER_EXISTS_URL, parameters, APIUrlConstant.FB_USER_EXISTS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager.startApiProcessing();
+        /*CheckFbUserDetailsInput checkFbUserDetailsInput = new CheckFbUserDetailsInput();
         checkFbUserDetailsInput.setAuthToken(authTokenStr);
         checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
         asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput, LoginActivity.this, LoginActivity.this);
         asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
-
+*/
     }
 
     public void handleActionForValidateUserPayment(String validUserStr, String message, String Subscription_Str) {
@@ -5597,7 +6998,18 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
-                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("user_id", preferenceManager.getUseridFromPref());
+                    parameters.put("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+                    parameters.put("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+                    parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager1.startApiProcessing();
+
+                   /* GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -5605,7 +7017,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                 } else {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     onBackPressed();
@@ -5622,21 +7034,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             payment_for_single_part();
                         }
                     } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
-                        if (CheckSubscriptionHandler.isSubscriptionAllowed) {
-                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(0, 0);
-                        }else {
-                            if (Util.dataModel.getContentTypesId() == 3) {
-                                // Show Popup
-                                ShowPpvPopUp();
-                            } else {
-                                // Go to ppv Payment
-                                payment_for_single_part();
-                            }
-                        }
+                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
                     } else {
                         if (Util.dataModel.getContentTypesId() == 3) {
                             // Show Popup
@@ -5661,7 +7063,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
                     Log.v("MUVI", "VV VV VV");
 
-                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("user_id", preferenceManager.getUseridFromPref());
+                    parameters.put("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+                    parameters.put("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+                    parameters.put("internet_speed", MainActivity.internetSpeed.trim());
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    final APICallManager apiCallManager1 = new APICallManager(this, APIUrlConstant.VIDEO_DETAILS_URL, parameters, APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager1.startApiProcessing();
+
+                    /*GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -5669,7 +7081,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                 } else {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
@@ -5683,35 +7095,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     }
 
-    public void setResultAtFinishActivity(){
+    public void setResultAtFinishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // *********************************************************************************************************//
 
 
-
-
-    public void callSignin(LanguagePreference languagePreference){
+    public void callSignin(LanguagePreference languagePreference) {
         gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN));
         googleSignView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -5720,11 +7114,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             }
         });
     }
-    public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){
 
-        this.registerButton=registerButton;
-        this.languagePreference=languagePreference;
-        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK));
+    public void callFblogin(final CallbackManager callbackManager, Button registerButton, LanguagePreference languagePreference) {
+
+        this.registerButton = registerButton;
+        this.languagePreference = languagePreference;
+        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5773,16 +7168,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("first_name") + " " + json.getString("last_name");
                                         }
-                                        fName =  json.getString("first_name");
+                                        fName = json.getString("first_name");
                                     } else {
 
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("last_name");
-                                            fName =  json.getString("last_name");
-                                        }else{
+                                            fName = json.getString("last_name");
+                                        } else {
                                             if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
                                                 fbName = json.getString("name");
-                                                fName = json.getString("name").replace(" ","").trim();
+                                                fName = json.getString("name").replace(" ", "").trim();
                                             }
                                         }
 
@@ -5803,7 +7198,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     registerButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
-                                    handleFbUserDetails(fbUserId,fbEmail,fbName);
+                                    handleFbUserDetails(fbUserId, fbEmail, fbName);
                                 }
 
                             } catch (JSONException e) {
@@ -5841,8 +7236,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     };
 
-    public void sendBroadCast()
-    {
+    public void sendBroadCast() {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         sendBroadcast(Sintent);
     }

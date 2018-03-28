@@ -15,13 +15,13 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 
 public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.MyViewHolder> {
     private Context context;

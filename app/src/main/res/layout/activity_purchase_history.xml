@@ -16,7 +16,7 @@
         android:visibility="visible"
         android:orientation="vertical">
 
-        <!--<TextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/purchaseHistoryTitleTextView"
@@ -24,8 +24,9 @@
             android:textSize="@dimen/purchase_text_size"
             android:layout_margin="@dimen/my_download_margin"
             android:padding="@dimen/login_new_user_padding"
+            android:visibility="gone"
             android:textColor="@color/pageTitleColor"
-            />-->
+            />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/purchase_history_recyclerview"

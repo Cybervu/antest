@@ -18,7 +18,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,19 +28,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
-import com.home.apisdk.apiController.GetInvoicePdfAsynTask;
-import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
-import com.home.apisdk.apiController.TransactionDetailsAsynctask;
-import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
-import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
-import com.home.apisdk.apiModel.GetInvoicePdfInputModel;
-import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
-import com.home.apisdk.apiModel.TransactionInputModel;
-import com.home.apisdk.apiModel.TransactionOutputModel;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.DeleteInvoicePDFModel;
+import com.home.api.apiModel.GetInvoicePDFModel;
+import com.home.api.apiModel.TransactionDetailsModel;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -49,15 +40,13 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import java.io.BufferedInputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -75,7 +64,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVOICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ORDER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANASCTION_DETAIL;
@@ -90,7 +78,6 @@ import static com.home.vod.preferences.LanguagePreference.INVOICE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_PDF;
-import static com.home.vod.preferences.LanguagePreference.ORDER;
 import static com.home.vod.preferences.LanguagePreference.PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
@@ -101,9 +88,7 @@ import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
-public class TransactionDetailsActivity extends AppCompatActivity implements
-        DeleteInvoicePdfAsynTask.DeleteInvoicePdfListener,
-        GetInvoicePdfAsynTask.GetInvoicePdfListener,TransactionDetailsAsynctask.TransactionListener{
+public class TransactionDetailsActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
     Toolbar mActionBarToolbar;
     TextView transactionTitleTextView;
     LinearLayout transactionDateLayout, transactionOrderLayout, transactionAmountLayout, transactionInvoiceLayout,
@@ -135,7 +120,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
     String TransactionDate, OredrId, Amount, Invoice, TransactionStatus, PlanName;
 
-    String download_Url="";
+    String download_Url = "";
     boolean deletion_success = false;
     AlertDialog msgAlert;
     private String Currency_symbol;
@@ -168,8 +153,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
         no_internet_text = (TextView) findViewById(R.id.no_internet_text);
 
-        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA,DEFAULT_NO_INTERNET_NO_DATA));
-        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN,DEFAULT_TRY_AGAIN));
+        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
+        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN));
 
 
         transactionDateLayout = (LinearLayout) findViewById(R.id.transactionDateLayout);
@@ -180,44 +165,44 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         transactionPLanNameLayout = (LinearLayout) findViewById(R.id.transactionPLanNameLayout);
 
         transactionDateTitleTextView = (TextView) findViewById(R.id.transactionDateTitleTextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionDateTitleTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionDateTitleTextView);
 
         transactionDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DATE, DEFAULT_TRANSACTION_DATE) + " :");
 
         transactionOrderTitletextView = (TextView) findViewById(R.id.transactionOrderTitletextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionOrderTitletextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionOrderTitletextView);
         transactionOrderTitletextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID, DEFAULT_TRANSACTION_ORDER_ID) + " :");
 
         transactionAmountTitletextView = (TextView) findViewById(R.id.transactionAmountTitletextView);
 
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionAmountTitletextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionAmountTitletextView);
 
         transactionAmountTitletextView.setText(languagePreference.getTextofLanguage(AMOUNT, DEFAULT_AMOUNT) + " :");
 
 
         transactionInvoiceTitletextView = (TextView) findViewById(R.id.transactionInvoiceTitletextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionInvoiceTitletextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionInvoiceTitletextView);
 
         transactionInvoiceTitletextView.setText(languagePreference.getTextofLanguage(INVOICE, DEFAULT_INVOICE) + " :");
 
         transactionStatusTitletextView = (TextView) findViewById(R.id.transactionStatusTitletextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionStatusTitletextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionStatusTitletextView);
 
 
         transactionStatusTitletextView.setText(languagePreference.getTextofLanguage(TRANSACTION_STATUS, DEFAULT_TRANSACTION_STATUS) + " :");
 
         transactionPlanNameTitleTextView = (TextView) findViewById(R.id.transactionPlanNameTitleTextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionPlanNameTitleTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionPlanNameTitleTextView);
 
         transactionPlanNameTitleTextView.setText(languagePreference.getTextofLanguage(PLAN_NAME, DEFAULT_PLAN_NAME) + " :");
 
         transactionTitleTextView = (TextView) findViewById(R.id.transactionTitleTextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionTitleTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionTitleTextView);
 
         transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANASCTION_DETAIL, DEFAULT_TRANASCTION_DETAIL));
 
         transactionDownloadButton = (Button) findViewById(R.id.transactionDownloadButton);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionDownloadButton);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts), transactionDownloadButton);
 
         transactionDownloadButton.setText(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE));
 
@@ -228,12 +213,12 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         transactionStatustextView = (TextView) findViewById(R.id.transactionStatustextView);
         transactionPlanNameTextView = (TextView) findViewById(R.id.transactionPlanNameTextView);
 
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionDateTextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionOrdertextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionAmounttextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionInvoicetextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionStatustextView);
-        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionPlanNameTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionDateTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionOrdertextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionAmounttextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionInvoicetextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionStatustextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts), transactionPlanNameTextView);
 
 
         id = getIntent().getStringExtra("id");
@@ -294,7 +279,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     public void DownloadTransactionDetails() {
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        downloadFileFromURL=new DownloadFileFromURL();
+        downloadFileFromURL = new DownloadFileFromURL();
         downloadFileFromURL.execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
         LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
@@ -323,7 +308,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         super.onDestroy();
         try {
             unregisterReceiver(InternetStatus);
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
         //LocalBroadcastManager.getInstance(this).unregisterReceiver(InternetStatus);
     }
@@ -334,7 +319,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         //unregisterReceiver(InternetStatus);
     }
 
-    @Override
+   /* @Override
     public void onDeleteInvoicePdfPreExecuteStarted() {
         Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
         Ph.show();
@@ -356,32 +341,93 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             // Do whatever u want to do
             finish();
         }
+    }*/
+
+
+    /* @Override
+     public void onTransactionPreExecuteStarted() {
+         Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
+         Ph.show();
+     }
+
+     @Override
+     public void onTransactionPostExecuteCompleted(TransactionOutputModel transactionOutputModel, int status, String message) {
+
+         if (Ph.isShowing() && Ph != null)
+             Ph.hide();
+
+         if (status == 200) {
+             primary_layout.setVisibility(View.VISIBLE);
+             noInternet.setVisibility(View.GONE);
+
+             transactionDateTextView.setText(transactionOutputModel.getTransaction_date());
+             transactionOrdertextView.setText(transactionOutputModel.getOrder_number());
+             transactionAmounttextView.setText(transactionOutputModel.getAmount());
+             transactionInvoicetextView.setText(transactionOutputModel.getInvoice_id());
+             transactionStatustextView.setText(transactionOutputModel.getTransaction_status());
+             transactionPlanNameTextView.setText(transactionOutputModel.getPlan_name());
+
+
+           *//*  GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
+            getInvoicePdfInputModel.setAuthToken(authTokenStr);
+            getInvoicePdfInputModel.setUser_id(user_id);
+            getInvoicePdfInputModel.setId(id);
+            getInvoicePdfInputModel.setDevice_type("app");
+            getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, this, this);
+            downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);*//*
+        } else {
+            primary_layout.setVisibility(View.GONE);
+            noInternet.setVisibility(View.VISIBLE);
+        }
+    }
+*/
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
     }
 
-
-
     @Override
-    public void onTransactionPreExecuteStarted() {
-        Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
-        Ph.show();
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.DELETE_INVOICE_PDF_URL_REQUEST_ID == requestID) {
+            delete_invoice_pdf(object, requestID, response);
+        } else if (APIUrlConstant.TRANSACTION_URL_REQUEST_ID == requestID) {
+            transaction_details(object, requestID, response);
+        } else if (APIUrlConstant.GET_INVOICE_PDF_URL_REQUEST_ID == requestID) {
+            get_invoice_pdf(object, requestID, response);
+        }
     }
 
-    @Override
-    public void onTransactionPostExecuteCompleted(TransactionOutputModel transactionOutputModel, int status, String message) {
+    public void get_invoice_pdf(Object object, int requestID, String response) {
 
-        if (Ph.isShowing() && Ph!=null)
+        GetInvoicePDFModel getInvoicePDFModel = (GetInvoicePDFModel) object;
+
+        if (Ph.isShowing())
             Ph.hide();
 
-        if (status == 200) {
+        if (!getInvoicePDFModel.getSection().equals("")) {
+            download_Url = getInvoicePDFModel.getSection();
+            DownloadTransactionDetails();
+        } else
+            Util.showToast(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF));
+    }
+
+    public void transaction_details(Object object, int requestID, String response) {
+
+        TransactionDetailsModel transactionDetailsModel = (TransactionDetailsModel) object;
+        if (Ph.isShowing() && Ph != null)
+            Ph.hide();
+
+        if (transactionDetailsModel.getCode() == 200) {
             primary_layout.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
 
-            transactionDateTextView.setText(transactionOutputModel.getTransaction_date());
-            transactionOrdertextView.setText(transactionOutputModel.getOrder_number());
-            transactionAmounttextView.setText(transactionOutputModel.getAmount());
-            transactionInvoicetextView.setText(transactionOutputModel.getInvoice_id());
-            transactionStatustextView.setText(transactionOutputModel.getTransaction_status());
-            transactionPlanNameTextView.setText(transactionOutputModel.getPlan_name());
+            transactionDateTextView.setText(transactionDetailsModel.getSection().getTransactionDate());
+            transactionOrdertextView.setText(transactionDetailsModel.getSection().getOrderNumber());
+            transactionAmounttextView.setText(transactionDetailsModel.getSection().getAmount());
+            transactionInvoicetextView.setText(transactionDetailsModel.getSection().getInvoiceId());
+            transactionStatustextView.setText(transactionDetailsModel.getSection().getTransactionStatus());
+            transactionPlanNameTextView.setText(transactionDetailsModel.getSection().getPlanName());
 
 
           /*  GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
@@ -397,6 +443,26 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             noInternet.setVisibility(View.VISIBLE);
         }
     }
+
+    public void delete_invoice_pdf(Object object, int requestID, String response) {
+        DeleteInvoicePDFModel deleteInvoicePDFModel = (DeleteInvoicePDFModel) object;
+
+        try {
+            if (Ph.isShowing())
+                Ph.hide();
+        } catch (IllegalArgumentException ex) {
+
+            deletion_success = false;
+        }
+        if (deleteInvoicePDFModel.getCode() == null)
+            deletion_success = false;
+
+        if (deletion_success) {
+            // Do whatever u want to do
+            finish();
+        }
+    }
+
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         /**
@@ -406,10 +472,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            try{
+            try {
 //                pDialog.cancel();
                 showDialog(progress_bar_type);
-            }catch (Exception e){showDialog(progress_bar_type);
+            } catch (Exception e) {
+                showDialog(progress_bar_type);
             }
         }
 
@@ -438,7 +505,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 urlConnection.connect();
 
                 // set the path where we want to save the file
-                File SDCardRoot =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File SDCardRoot = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                 // create a new file, to save the downloaded file
                 file = new File(SDCardRoot, Download_Url);
 
@@ -471,13 +538,10 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                     public void run() {
                         pDialog.dismiss(); // if you want close it..
 
-                        showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED,DEFAULT_DOWNLOAD_COMPLETED), 1);
+                        showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED), 1);
                     }
                 });
-            }
-
-
-           catch (Exception e) {
+            } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -519,7 +583,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
             try {
                 downloadFileFromURL.cancel(true);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             LogUtil.showLog("MUVI", "Download Completed");
@@ -631,13 +695,22 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     public void GetTransactionDetails() {
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
-        TransactionInputModel transactionInputModel=new TransactionInputModel();
+
+        final HashMap parameters = new HashMap<>();
+
+        parameters.put("authToken", authTokenStr);
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        parameters.put("user_id", user_id);
+        parameters.put("id", id);
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.TRANSACTION_URL, parameters, APIUrlConstant.TRANSACTION_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager.startApiProcessing();
+       /* TransactionInputModel transactionInputModel = new TransactionInputModel();
         transactionInputModel.setAuthToken(authTokenStr);
         transactionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         transactionInputModel.setUser_id(user_id);
         transactionInputModel.setId(id);
-        TransactionDetailsAsynctask asynGetTransactionDetails = new TransactionDetailsAsynctask(transactionInputModel,this,this);
-        asynGetTransactionDetails.executeOnExecutor(threadPoolExecutor);
+        TransactionDetailsAsynctask asynGetTransactionDetails = new TransactionDetailsAsynctask(transactionInputModel, this, this);
+        asynGetTransactionDetails.executeOnExecutor(threadPoolExecutor);*/
     }
 
 
@@ -812,7 +885,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
 
     //Asyntask to get Transaction Details.
-    @Override
+   /* @Override
     public void onGetInvoicePdfPreExecuteStarted() {
 
         Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
@@ -829,9 +902,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             download_Url = getInvoicePdfOutputModel.getSection();
             DownloadTransactionDetails();
         } else
-            Util.showToast(getApplicationContext(),languagePreference.getTextofLanguage(NO_PDF,DEFAULT_NO_PDF));
+            Util.showToast(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF));
 
-    }
+    }*/
 //    private class DownloadDocumentDetails extends AsyncTask<Void, Void, Void> {
 //
 //        String responseStr = "";
@@ -943,12 +1016,20 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
                         if (deletevalue == 1) {
                             /*Delete download url from server */
-                            DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
+
+                            final HashMap parameters = new HashMap<>();
+
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("filepath", download_Url);
+                            parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            final APICallManager apiCallManager1 = new APICallManager(TransactionDetailsActivity.this, APIUrlConstant.DELETE_INVOICE_PDF_URL, parameters, APIUrlConstant.DELETE_INVOICE_PDF_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager1.startApiProcessing();
+                            /*DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
                             deleteInvoicePdfInputModel.setAuthToken(authTokenStr);
                             deleteInvoicePdfInputModel.setFilepath(download_Url);
                             deleteInvoicePdfInputModel.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             DeleteInvoicePdfAsynTask deletepdf = new DeleteInvoicePdfAsynTask(deleteInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
-                            deletepdf.executeOnExecutor(threadPoolExecutor);
+                            deletepdf.executeOnExecutor(threadPoolExecutor);*/
                         }
                     }
                 });
@@ -990,14 +1071,24 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         }
     }
 
-    public void getPdfDetail(){
-        GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
+    public void getPdfDetail() {
+
+        final HashMap parameters = new HashMap<>();
+
+        parameters.put("authToken", authTokenStr);
+        parameters.put("user_id", user_id);
+        parameters.put("id", id);
+        parameters.put("device_type", "app");
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        final APICallManager apiCallManager2 = new APICallManager(this, APIUrlConstant.GET_INVOICE_PDF_URL, parameters, APIUrlConstant.GET_INVOICE_PDF_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager2.startApiProcessing();
+        /*GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
         getInvoicePdfInputModel.setAuthToken(authTokenStr);
         getInvoicePdfInputModel.setUser_id(user_id);
         getInvoicePdfInputModel.setId(id);
         getInvoicePdfInputModel.setDevice_type("app");
         getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
-        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
+        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);*/
     }
 }

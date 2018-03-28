@@ -1,9 +1,7 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.PlanModel;
 import com.home.vod.util.LogUtil;
@@ -20,7 +17,7 @@ import com.home.vod.util.LogUtil;
 import java.util.ArrayList;
 
 /**
- * Created by Muvi on 9/6/2016.
+ * Created by Abhishek on 9/6/2016.
  */
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> {
 

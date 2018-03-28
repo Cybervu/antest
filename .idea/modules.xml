@@ -3,9 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/VOD_Retro.iml" filepath="$PROJECT_DIR$/.idea/VOD_Retro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VOD_Retro.iml" filepath="$PROJECT_DIR$/VOD_Retro.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muvisdk/muvisdk.iml" filepath="$PROJECT_DIR$/muvisdk/muvisdk.iml" />
     </modules>
   </component>
 </project>

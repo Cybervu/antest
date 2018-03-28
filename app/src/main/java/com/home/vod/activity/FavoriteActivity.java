@@ -3,11 +3,9 @@ package com.home.vod.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -18,13 +16,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,23 +35,16 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
-
-import com.home.apisdk.apiController.DeleteFavAsync;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.ViewFavouriteAsynTask;
-import com.home.apisdk.apiModel.DeleteFavInputModel;
-import com.home.apisdk.apiModel.DeleteFavOutputModel;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.ViewFavouriteInputModel;
-import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+import com.home.api.apiModel.DeleteFavModel;
+import com.home.api.apiModel.GetLanguageListModel;
+import com.home.api.apiModel.LogoutModel;
+import com.home.api.apiModel.TranslateLanguageModel;
+import com.home.api.apiModel.ViewFavModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
@@ -71,13 +60,12 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -85,24 +73,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -114,8 +96,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -130,9 +110,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
 
-public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener, ViewFavouriteAsynTask.ViewFavouriteListener,
-        LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
-        , DeleteFavAsync.DeleteFavListener {
+public class FavoriteActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
 
     public static ProgressBarHandler progressBarHandler;
     String email, id;
@@ -161,7 +139,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
 
-   // private TextView sectionTitle;
+    private TextView sectionTitle;
     //Register Dialog
     ////////
     String movieUniqueId, FavMoviePoster = "";
@@ -220,7 +198,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     String sectionName;
     String sectionId;
     // UI
-    ViewFavouriteAsynTask asyncViewFavorite;
+
     private GridView gridView;
     // private JazzyGridView gridView;
     RelativeLayout footerView;
@@ -241,10 +219,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setTitle("");
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,16 +236,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         loggedInStr = preferenceManager.getUseridFromPref();
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
-         isLogin = preferenceManager.getLoginFeatureFromPref();
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
-       // sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-      //  FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
-        /*if (getIntent().getStringExtra("sectionName") != null) {
-            mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
+        sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+        FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
+        if (getIntent().getStringExtra("sectionName") != null) {
+            sectionName = getIntent().getStringExtra("sectionName");
+            sectionTitle.setText(sectionName);
         } else {
-            mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
+            sectionTitle.setText("");
 
-        }*/
+        }
+
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
@@ -348,7 +327,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 itemToPlay = item;
                 String posterUrl = item.getImage();
                 String movieName = item.getTitle();
-                String movieGenre = item.getMovieGenre();
+                ArrayList<String> movieGenre = item.getMovieGenre();
                 String moviePermalink = item.getPermalink();
 
 
@@ -455,13 +434,19 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                             // default data
 
-                            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+                            final HashMap parameters = new HashMap<>();
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("user_id", preferenceManager.getUseridFromPref());
+                            final APICallManager apiCallManager7 = new APICallManager(FavoriteActivity.this, APIUrlConstant.VIEW_FAVOURITE, parameters, APIUrlConstant.VIEW_FAVOURITE_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager7.startApiProcessing();
+
+                           /* ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
                             viewFavouriteInputModel.setAuthToken(authTokenStr);
                             viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
                             asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
                             asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
+*/
 
                             scrolling = false;
 
@@ -501,12 +486,17 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         if (NetworkStatus.getInstance().isConnected(this)) {
 
-            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+            final HashMap parameters = new HashMap<>();
+            parameters.put("authToken", authTokenStr);
+            parameters.put("user_id", preferenceManager.getUseridFromPref());
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.VIEW_FAVOURITE, parameters, APIUrlConstant.VIEW_FAVOURITE_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager.startApiProcessing();
+           /* ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
             viewFavouriteInputModel.setAuthToken(authTokenStr);
             viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
             asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
-            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);*/
         } else {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
@@ -522,16 +512,16 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     @Override
     public void onBackPressed() {
-        if (asyncViewFavorite != null) {
+        /*if (asyncViewFavorite != null) {
             asyncViewFavorite.cancel(true);
         }
-
+*/
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
     }
 
-    @Override
+    /*@Override
     public void onGetLanguageListPreExecuteStarted() {
 
         progressBarHandler = new ProgressBarHandler(FavoriteActivity.this);
@@ -567,10 +557,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         languageModel = languageModels;
         ShowLanguagePopup();
-    }
+    }*/
 
 
-    @Override
+/*    @Override
     public void onLogoutPreExecuteStarted() {
         pDialog = new ProgressBarHandler(FavoriteActivity.this);
         pDialog.show();
@@ -622,9 +612,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             }
         }
 
-    }
+    }*/
 
-    @Override
+ /*   @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
         progressBarHandler = new ProgressBarHandler(FavoriteActivity.this);
         progressBarHandler.show();
@@ -665,7 +655,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             }
         }
     }
-
+*/
+/*
 
     @Override
     public void onViewFavouritePreExecuteStarted() {
@@ -698,6 +689,177 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
             movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
             itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
+            LogUtil.showLog("MUVI", "item data ==" + itemData);
+
+        }
+        if (itemData.size() <= 0) {
+
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        } else {
+            footerView.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            videoImageStrToHeight = movieImageStr;
+            if (firstTime == true) {
+
+                new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+               */
+/* Picasso.with(this).load(videoImageStrToHeight
+                ).error(R.drawable.no_image).into(new Target() {
+
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        videoWidth = bitmap.getWidth();
+                        videoHeight = bitmap.getHeight();
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+                    }
+
+                    //
+                    @Override
+                    public void onBitmapFailed(final Drawable errorDrawable) {
+                        LogUtil.showLog("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                        videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                        videoWidth = errorDrawable.getIntrinsicWidth();
+                        videoHeight = errorDrawable.getIntrinsicHeight();
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                    }
+                });*//*
+
+
+            } else {
+                AsynLOADUI loadUI = new AsynLOADUI();
+                loadUI.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+    }
+*/
+
+    /*@Override
+    public void onDeleteFavPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(FavoriteActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
+
+        if (pDialog.isShowing() && pDialog != null) {
+            pDialog.hide();
+        }
+        if (status == 200) {
+
+            FavoriteActivity.this.sucessMsg = sucessMsg;
+            showToast();
+
+            LogUtil.showLog("ANU", "REMOVED");
+            if (itemData != null && itemData.size() > 0)
+                itemData.remove(index);
+            gridView.invalidateViews();
+            customGridAdapter.notifyDataSetChanged();
+            gridView.setAdapter(customGridAdapter);
+
+            Intent Sintent = new Intent("ITEM_STATUS");
+            Sintent.putExtra("movie_uniq_id", movieUniqueId);
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(Sintent);
+        }
+    }*/
+
+    @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+        if (APIUrlConstant.GET_LANGUAGE_LIST_URL_REQUEST_ID == requestID) {
+            language_list(object, requestID, response);
+        } else if (APIUrlConstant.LOGOUT_URL_REQUEST_ID == requestID) {
+            logout(object, requestID, response);
+        } else if (APIUrlConstant.LANGUAGE_TRANSLATION_REQUEST_ID == requestID) {
+            translate_language(object, requestID, response);
+        } else if (APIUrlConstant.VIEW_FAVOURITE_REQUEST_ID == requestID) {
+            view_favorite(object, requestID, response);
+        }
+    }
+
+    public void delete_favorite(Object object, int requestID, String response) {
+
+        DeleteFavModel deleteFavModel = (DeleteFavModel) object;
+
+        if (pDialog.isShowing() && pDialog != null) {
+            pDialog.hide();
+        }
+        if (deleteFavModel.getCode() == 200) {
+
+            FavoriteActivity.this.sucessMsg = sucessMsg;
+            showToast();
+
+            LogUtil.showLog("ANU", "REMOVED");
+            if (itemData != null && itemData.size() > 0)
+                itemData.remove(index);
+            gridView.invalidateViews();
+            customGridAdapter.notifyDataSetChanged();
+            gridView.setAdapter(customGridAdapter);
+
+            Intent Sintent = new Intent("ITEM_STATUS");
+            Sintent.putExtra("movie_uniq_id", movieUniqueId);
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(Sintent);
+        }
+    }
+
+    public void view_favorite(Object object, int requestID, String response) {
+
+        ViewFavModel viewFavModel = (ViewFavModel) object;
+
+        LogUtil.showLog("MUVI", "item data ==" + itemData);
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        String movieImageStr = "";
+
+        for (int i = 0; i < viewFavModel.getMovieList().size(); i++) {
+
+            String movieName = viewFavModel.getMovieList().get(i).getTitle();
+            String contentTypesId = viewFavModel.getMovieList().get(i).getContentTypesId();
+            movieImageStr = viewFavModel.getMovieList().get(i).getPoster();
+            String moviePermalinkStr = viewFavModel.getMovieList().get(i).getPermalink();
+            isEpisodeStr = viewFavModel.getMovieList().get(i).getIsEpisode();
+            movieUniqueId = viewFavModel.getMovieList().get(i).getMovieId();
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, null, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
             LogUtil.showLog("MUVI", "item data ==" + itemData);
 
         }
@@ -765,35 +927,121 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
     }
 
-    @Override
-    public void onDeleteFavPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(FavoriteActivity.this);
-        pDialog.show();
+    public void translate_language(Object object, int requestID, String response) {
+
+        TranslateLanguageModel translateLanguageModel = (TranslateLanguageModel) object;
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+
+        if (response == null) {
+        } else {
+            if (translateLanguageModel.getCode() > 0 && translateLanguageModel.getCode() == 200) {
+
+                try {
+
+                    Util.parseLanguage(languagePreference, response, Default_Language);
+                    //Call For Language PopUp Dialog
+
+                    languageCustomAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Call For Other Methods.
+
+
+            } else {
+            }
+        }
     }
 
-    @Override
-    public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
+    public void logout(Object object, int requestID, String response) {
 
-        if (pDialog.isShowing() && pDialog != null) {
-            pDialog.hide();
+        LogoutModel logoutModel = (LogoutModel) object;
+
+        if (logoutModel.getStatus() == null) {
+            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
         }
-        if (status == 200) {
+        if (logoutModel.getCode() == 0) {
+            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
-            FavoriteActivity.this.sucessMsg = sucessMsg;
-            showToast();
-
-            LogUtil.showLog("ANU", "REMOVED");
-            if (itemData != null && itemData.size() > 0)
-                itemData.remove(index);
-            gridView.invalidateViews();
-            customGridAdapter.notifyDataSetChanged();
-            gridView.setAdapter(customGridAdapter);
-
-            Intent Sintent = new Intent("ITEM_STATUS");
-            Sintent.putExtra("movie_uniq_id", movieUniqueId);
-
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(Sintent);
         }
+        if (logoutModel.getCode() > 0) {
+            if (logoutModel.getCode() == 200) {
+                preferenceManager.clearLoginPref();
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                    final Intent startIntent = new Intent(FavoriteActivity.this, SplashScreen.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                    });
+                } else {
+                    final Intent startIntent = new Intent(FavoriteActivity.this, MainActivity.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                    });
+                }
+
+            } else {
+                Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+        }
+
+    }
+
+    public void language_list(Object object, int requestID, String response) {
+
+        GetLanguageListModel getLanguageListModel = (GetLanguageListModel) object;
+        if (progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < getLanguageListModel.getLangList().size(); i++) {
+            String language_id = getLanguageListModel.getLangList().get(i).getCode();
+            String language_name = getLanguageListModel.getLangList().get(i).getLanguage();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
+        }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
 
@@ -926,16 +1174,16 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
         MenuItem favorite_menu;
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         favorite_menu.setVisible(false);
         return true;
-    }*/
+    }
     /*chromecast-------------------------------------*/
 
 
@@ -1028,7 +1276,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     }
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
@@ -1073,13 +1321,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     ShowLanguagePopup();
 
                 } else {
-                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    final APICallManager apiCallManager8 = new APICallManager(this, APIUrlConstant.GET_LANGUAGE_LIST_URL, parameters, APIUrlConstant.GET_LANGUAGE_LIST_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager8.startApiProcessing();
+                    /*LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setAuthToken(authTokenStr);
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
-                    asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+                    asynGetLanguageList.executeOnExecutor(threadPoolExecutor);*/
                 }
                 return false;
-          *//*  case R.id.menu_item_favorite:
+          /*  case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
@@ -1087,7 +1340,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
                 // Not implemented here
-                return false;*//*
+                return false;*/
             case R.id.menu_item_profile:
 
                 Intent profileIntent = new Intent(FavoriteActivity.this, ProfileActivity.class);
@@ -1114,12 +1367,20 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                        LogoutInput logoutInput = new LogoutInput();
+                        final HashMap parameters = new HashMap<>();
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        parameters.put("login_history_id", preferenceManager.getLoginHistIdFromPref());
+                        final APICallManager apiCallManager4 = new APICallManager(FavoriteActivity.this, APIUrlConstant.LOGOUT_URL, parameters, APIUrlConstant.LOGOUT_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager4.startApiProcessing();
+
+
+                        /*LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, FavoriteActivity.this, FavoriteActivity.this);
-                        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+                        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);*/
 
 
                         dialog.dismiss();
@@ -1146,7 +1407,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
 
         return false;
-    }*/
+    }
 
 
     public void ShowLanguagePopup() {
@@ -1239,13 +1500,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                 if (!Previous_Selected_Language.equals(Default_Language)) {
 
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("lang_code", Default_Language);
+                    final APICallManager apiCallManager1 = new APICallManager(FavoriteActivity.this, APIUrlConstant.LANGUAGE_TRANSLATION, parameters, APIUrlConstant.LANGUAGE_TRANSLATION_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager1.startApiProcessing();
 
-                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+                   /* LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setAuthToken(authTokenStr);
                     languageListInputModel.setLangCode(Default_Language);
 
                     GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel, FavoriteActivity.this, FavoriteActivity.this);
-                    getTranslateLanguageAsync.executeOnExecutor(threadPoolExecutor);
+                    getTranslateLanguageAsync.executeOnExecutor(threadPoolExecutor);*/
 
                 }
 
@@ -1320,7 +1586,17 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         index = pos;
         movieUniqueId = gridItem.getMovieUniqueId();
 
-        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("movie_uniq_id", movieUniqueId);
+        parameters.put("content_type", isEpisodeStr);
+        parameters.put("user_id", preferenceManager.getUseridFromPref());
+        final APICallManager apiCallManager3 = new APICallManager(this, APIUrlConstant.DELETE_FAV_LIST, parameters, APIUrlConstant.DELETE_FAV_LIST_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager3.startApiProcessing();
+
+
+
+       /* DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
         deleteFavInputModel.setAuthTokenStr(authTokenStr);
         deleteFavInputModel.setIsEpisode(isEpisodeStr);
         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
@@ -1328,7 +1604,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, FavoriteActivity.this, FavoriteActivity.this);
         deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
+*/
 
     }
 

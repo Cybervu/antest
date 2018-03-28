@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.home.vod.activity.ProgrammeActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 /**

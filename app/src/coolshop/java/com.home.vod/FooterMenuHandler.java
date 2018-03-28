@@ -2,7 +2,7 @@ package com.home.vod;
 
 import android.app.Activity;
 
-import com.home.apisdk.apiModel.MenusOutputModel;
+import com.home.api.apiModel.MenusOutputModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.util.LogUtil;
 

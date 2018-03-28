@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
 import com.home.vod.model.PurchaseHistoryModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 

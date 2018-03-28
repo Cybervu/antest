@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,7 +34,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.framework.CastContext;
@@ -43,36 +41,20 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
-import com.home.apisdk.apiController.GetCardListForPPVAsynTask;
-import com.home.apisdk.apiController.GetMonetizationDetailsAsynctask;
-import com.home.apisdk.apiController.GetPPVPaymentAsync;
-import com.home.apisdk.apiController.GetVoucherPlanAsynTask;
-import com.home.apisdk.apiController.ValidateCouponCodeAsynTask;
-import com.home.apisdk.apiController.ValidateVoucherAsynTask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiController.VoucherSubscriptionAsyntask;
-import com.home.apisdk.apiController.WithouPaymentSubscriptionRegDetailsAsync;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
-import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
-import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
-import com.home.apisdk.apiModel.GetMonetizationDetailsInputModel;
-import com.home.apisdk.apiModel.GetMonetizationDetailsOutputModel;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
-import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
-import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
-import com.home.apisdk.apiModel.ValidateCouponCodeInputModel;
-import com.home.apisdk.apiModel.ValidateCouponCodeOutputModel;
-import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
-import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
-import com.home.apisdk.apiModel.WithouPaymentSubscriptionRegDetailsInput;
+
+
+import com.home.api.APIUrlConstant;
+import com.home.api.apiController.APICallManager;
+
+import com.home.api.apiModel.AuthUserPaymentInfoModel;
+import com.home.api.apiModel.GetCardListModel;
+import com.home.api.apiModel.GetMonetizationDetailsModel;
+import com.home.api.apiModel.GetVideoDetailsModel;
+import com.home.api.apiModel.ValidateCouponCodeModel;
+import com.home.api.apiModel.ValidateVoucherModel;
+import com.home.api.apiModel.VoucherPlanModel;
+import com.home.api.apiModel.VoucherSubscriptionModel;
+import com.home.api.apiModel.WithoutPaymentSubscriptionModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -85,28 +67,16 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -116,42 +86,37 @@ import java.util.concurrent.TimeUnit;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
 
-import static com.home.apisdk.apiModel.CommonConstants.VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+
+import static com.home.api.apiModel.CommonConstants.VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.BTN_NEXT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_PAY_NOW;
 import static com.home.vod.preferences.LanguagePreference.CARD_WILL_CHARGE;
-import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.COUPON_CANCELLED;
 import static com.home.vod.preferences.LanguagePreference.COUPON_CODE_HINT;
 import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_CVV_HINT;
 import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_DETAILS;
 import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_NUMBER_HINT;
-import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.CVV_ALERT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_PAY_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CARD_WILL_CHARGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_COUPON_CANCELLED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_COUPON_CODE_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_CVV_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_DETAILS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NUMBER_HINT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CVV_ALERT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DISCOUNT_ON_COUPON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_PAYMENT_VALIDATION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FREE_FOR_COUPON;
@@ -169,10 +134,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_USE_NEW_CARD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DISCOUNT_ON_COUPON;
-import static com.home.vod.preferences.LanguagePreference.ERROR_IN_PAYMENT_VALIDATION;
-import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FREE_FOR_COUPON;
@@ -191,17 +153,7 @@ import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PPvPaymentInfoActivity extends ActionBarActivity implements
-        VideoDetailsAsynctask.VideoDetailsListener,
-        ValidateCouponCodeAsynTask.ValidateCouponCodeLIstener,
-        AuthUserPaymentInfoAsyntask.AuthUserPaymentInfoListener,
-        WithouPaymentSubscriptionRegDetailsAsync.WithouPaymentSubscriptionRegDetailsListener,
-        GetPPVPaymentAsync.GetPPVPaymentListener,
-        GetCardListForPPVAsynTask.GetCardListForPPVListener,
-        GetMonetizationDetailsAsynctask.GetMonetizationDetailsListener,
-        GetVoucherPlanAsynTask.GetVoucherPlanListener,
-        ValidateVoucherAsynTask.ValidateVoucherListener,
-        VoucherSubscriptionAsyntask.VoucherSubscriptionListener {
+public class PPvPaymentInfoActivity extends ActionBarActivity implements APICallManager.ApiInterafce {
 
 
     String filename = "";
@@ -210,7 +162,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     CardModel[] cardSavedArray;
     boolean watch_status = false;
     String loggedInIdStr;
-   // ProgressDialog pDialog;
+    // ProgressDialog pDialog;
     String existing_card_id = "";
     String isCheckedToSavetheCard = "1";
     private boolean isCastConnected = false;
@@ -622,7 +574,21 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts), nextButton);
         saveCardCheckbox.setText(languagePreference.getTextofLanguage("  " + SAVE_THIS_CARD, "  " + DEFAULT_SAVE_THIS_CARD));
 
-        GetMonetizationDetailsInputModel getMonetizationDetailsInputModel = new GetMonetizationDetailsInputModel();
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("user_id", preferenceManager.getUseridFromPref());
+        parameters.put("movie_id", Util.dataModel.getMovieUniqueId());
+        parameters.put("stream_id", Util.dataModel.getStreamUniqueId());
+
+        if (Util.dataModel.getContentTypesId() == 3) {
+            parameters.put("purchase_type", "episode");
+        } else {
+            parameters.put("purchase_type", "show");
+        }
+        final APICallManager apiCallManager12 = new APICallManager(this, APIUrlConstant.GET_MONETIZATION_DETAILS_URL, parameters, APIUrlConstant.GET_MONETIZATION_DETAILS_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager12.startApiProcessing();
+
+       /* GetMonetizationDetailsInputModel getMonetizationDetailsInputModel = new GetMonetizationDetailsInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
         getMonetizationDetailsInputModel.setAuthToken(authTokenStr);
         getMonetizationDetailsInputModel.setStream_id(Util.dataModel.getStreamUniqueId());
@@ -635,7 +601,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
 
         final GetMonetizationDetailsAsynctask asynGetMoniTization = new GetMonetizationDetailsAsynctask(getMonetizationDetailsInputModel, this, this);
-        asynGetMoniTization.executeOnExecutor(threadPoolExecutor);
+        asynGetMoniTization.executeOnExecutor(threadPoolExecutor);*/
 
         voucherRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -686,27 +652,51 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 if (watch_status) {
 
                     // Calling Voucher Subscription Api
-                    VoucherSubscriptionInputModel voucherSubscriptionInputModel = new VoucherSubscriptionInputModel();
-                    voucherSubscriptionInputModel.setAuthToken(authTokenStr);
-                    voucherSubscriptionInputModel.setUser_id(preferenceManager.getUseridFromPref());
-                    voucherSubscriptionInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
-                    voucherSubscriptionInputModel.setStream_id(Util.dataModel.getStreamUniqueId().trim());
-                    voucherSubscriptionInputModel.setVoucher_code(VoucherCode);
-                    voucherSubscriptionInputModel.setIs_preorder("" + Util.dataModel.getIsAPV());
-                    voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    if (Util.dataModel.getContentTypesId() == 3) {
-                        voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
-                        if (selectedPurchaseType == 1)
-                            voucherSubscriptionInputModel.setPurchase_type("show");
-                        if (selectedPurchaseType == 2)
-                            voucherSubscriptionInputModel.setPurchase_type("season");
-                        if (selectedPurchaseType == 3)
-                            voucherSubscriptionInputModel.setPurchase_type("episode");
-                    } else
-                        voucherSubscriptionInputModel.setPurchase_type("show");
 
-                    VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                    asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);
+                    final HashMap parameters = new HashMap<>();
+                    parameters.put("authToken", authTokenStr);
+                    parameters.put("user_id", preferenceManager.getUseridFromPref());
+                    parameters.put("movie_id", Util.dataModel.getMovieUniqueId().trim());
+                    parameters.put("stream_id", Util.dataModel.getStreamUniqueId().trim());
+                    parameters.put("voucher_code", VoucherCode);
+
+                    parameters.put("is_preorder", "" + Util.dataModel.getIsAPV());
+                    parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    if (Util.dataModel.getContentTypesId() == 3) {
+                        parameters.put("season", Util.dataModel.getSeason_id());
+                        if (selectedPurchaseType == 1)
+                            parameters.put("purchase_type", "show");
+                        if (selectedPurchaseType == 2)
+                            parameters.put("purchase_type", "season");
+                        if (selectedPurchaseType == 3)
+                            parameters.put("purchase_type", "episode");
+                    } else
+                        parameters.put("purchase_type", "show");
+
+                    final APICallManager apiCallManager13 = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.VOUCHER_SUBSCRIPTION_URL, parameters, APIUrlConstant.VOUCHER_SUBSCRIPTION_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager13.startApiProcessing();
+
+                /*VoucherSubscriptionInputModel voucherSubscriptionInputModel = new VoucherSubscriptionInputModel();
+                voucherSubscriptionInputModel.setAuthToken(authTokenStr);
+                voucherSubscriptionInputModel.setUser_id(preferenceManager.getUseridFromPref());
+                voucherSubscriptionInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
+                voucherSubscriptionInputModel.setStream_id(Util.dataModel.getStreamUniqueId().trim());
+                voucherSubscriptionInputModel.setVoucher_code(VoucherCode);
+                voucherSubscriptionInputModel.setIs_preorder("" + Util.dataModel.getIsAPV());
+                voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                if (Util.dataModel.getContentTypesId() == 3) {
+                    voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
+                    if (selectedPurchaseType == 1)
+                        voucherSubscriptionInputModel.setPurchase_type("show");
+                    if (selectedPurchaseType == 2)
+                        voucherSubscriptionInputModel.setPurchase_type("season");
+                    if (selectedPurchaseType == 3)
+                        voucherSubscriptionInputModel.setPurchase_type("episode");
+                } else
+                    voucherSubscriptionInputModel.setPurchase_type("show");
+
+                VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
+                asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);*/
 
 
                 }
@@ -715,11 +705,19 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
-        for (int i = 0; i < 21; i++) {
+        for (
+                int i = 0;
+                i < 21; i++)
+
+        {
             yearArray.add(year + i);
 
         }
-        for (int i = 1; i < 13; i++) {
+        for (
+                int i = 1;
+                i < 13; i++)
+
+        {
             monthsIdArray.add(i);
         }
 
@@ -729,13 +727,17 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
 
         int mn = c.get(Calendar.MONTH);
-        if (Util.containsIgnoreCase(monthsIdArray, mn + 1)) {
+        if (Util.containsIgnoreCase(monthsIdArray, mn + 1))
+
+        {
             // true
             int mnIndex = monthsIdArray.indexOf(mn + 1);
 
             cardExpiryMonthSpinner.setSelection(mnIndex);
             expiryMonthStr = monthsIdArray.get(mnIndex);
-        } else {
+        } else
+
+        {
             cardExpiryMonthSpinner.setSelection(0);
             expiryMonthStr = monthsIdArray.get(0);
         }
@@ -769,64 +771,66 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         saveCardCheckbox.setChecked(true);
 
-        creditCardSaveSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        creditCardSaveSpinner.setOnItemSelectedListener(new
 
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                creditCardSaveSpinner.setSelection(position);
-                if (position == 0) {
+                                                                OnItemSelectedListener() {
 
-                    nameOnCardEditText.setVisibility(View.VISIBLE);
-                    cardNumberEditText.setVisibility(View.VISIBLE);
-                    cardNumberEditText.setVisibility(View.VISIBLE);
-                    cardExpiryDetailsLayout.setVisibility(View.VISIBLE);
-                    saveCardCheckbox.setVisibility(View.VISIBLE);
-                    isCheckedToSavetheCard = "1";
-                    saveCardCheckbox.setChecked(true);
-                } else {
-                    //withoutCreditCardLayout.setVisibility(View.GONE);
-                    nameOnCardEditText.setVisibility(View.GONE);
-                    cardNumberEditText.setVisibility(View.GONE);
-                    cardNumberEditText.setVisibility(View.GONE);
-                    cardExpiryDetailsLayout.setVisibility(View.GONE);
-                    saveCardCheckbox.setVisibility(View.GONE);
-                    isCheckedToSavetheCard = "0";
-                    saveCardCheckbox.setChecked(false);
+                                                                    @Override
+                                                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                        creditCardSaveSpinner.setSelection(position);
+                                                                        if (position == 0) {
+
+                                                                            nameOnCardEditText.setVisibility(View.VISIBLE);
+                                                                            cardNumberEditText.setVisibility(View.VISIBLE);
+                                                                            cardNumberEditText.setVisibility(View.VISIBLE);
+                                                                            cardExpiryDetailsLayout.setVisibility(View.VISIBLE);
+                                                                            saveCardCheckbox.setVisibility(View.VISIBLE);
+                                                                            isCheckedToSavetheCard = "1";
+                                                                            saveCardCheckbox.setChecked(true);
+                                                                        } else {
+                                                                            //withoutCreditCardLayout.setVisibility(View.GONE);
+                                                                            nameOnCardEditText.setVisibility(View.GONE);
+                                                                            cardNumberEditText.setVisibility(View.GONE);
+                                                                            cardNumberEditText.setVisibility(View.GONE);
+                                                                            cardExpiryDetailsLayout.setVisibility(View.GONE);
+                                                                            saveCardCheckbox.setVisibility(View.GONE);
+                                                                            isCheckedToSavetheCard = "0";
+                                                                            saveCardCheckbox.setChecked(false);
 
 
-                }
-            }
+                                                                        }
+                                                                    }
 
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-                creditCardSaveSpinner.setSelection(0);
+                                                                    public void onNothingSelected(AdapterView<?> arg0) {
+                                                                        // TODO Auto-generated method stub
+                                                                        creditCardSaveSpinner.setSelection(0);
 
-                if (creditCardSaveSpinner.getSelectedItemPosition() == 0) {
+                                                                        if (creditCardSaveSpinner.getSelectedItemPosition() == 0) {
 
-                    nameOnCardEditText.setVisibility(View.VISIBLE);
-                    cardNumberEditText.setVisibility(View.VISIBLE);
-                    cardNumberEditText.setVisibility(View.VISIBLE);
-                    cardExpiryDetailsLayout.setVisibility(View.VISIBLE);
-                    saveCardCheckbox.setVisibility(View.VISIBLE);
-                    isCheckedToSavetheCard = "1";
-                    saveCardCheckbox.setChecked(true);
+                                                                            nameOnCardEditText.setVisibility(View.VISIBLE);
+                                                                            cardNumberEditText.setVisibility(View.VISIBLE);
+                                                                            cardNumberEditText.setVisibility(View.VISIBLE);
+                                                                            cardExpiryDetailsLayout.setVisibility(View.VISIBLE);
+                                                                            saveCardCheckbox.setVisibility(View.VISIBLE);
+                                                                            isCheckedToSavetheCard = "1";
+                                                                            saveCardCheckbox.setChecked(true);
 
-                    //withoutCreditCardLayout.setVisibility(View.VISIBLE);
-                    //creditCardLayout.setVisibility(View.GONE);
-                    //chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
-                } else {
-                    //withoutCreditCardLayout.setVisibility(View.GONE);
-                    nameOnCardEditText.setVisibility(View.GONE);
-                    cardNumberEditText.setVisibility(View.GONE);
-                    cardNumberEditText.setVisibility(View.GONE);
-                    cardExpiryDetailsLayout.setVisibility(View.GONE);
-                    saveCardCheckbox.setVisibility(View.GONE);
-                    isCheckedToSavetheCard = "0";
-                    saveCardCheckbox.setChecked(false);
-                }
+                                                                            //withoutCreditCardLayout.setVisibility(View.VISIBLE);
+                                                                            //creditCardLayout.setVisibility(View.GONE);
+                                                                            //chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
+                                                                        } else {
+                                                                            //withoutCreditCardLayout.setVisibility(View.GONE);
+                                                                            nameOnCardEditText.setVisibility(View.GONE);
+                                                                            cardNumberEditText.setVisibility(View.GONE);
+                                                                            cardNumberEditText.setVisibility(View.GONE);
+                                                                            cardExpiryDetailsLayout.setVisibility(View.GONE);
+                                                                            saveCardCheckbox.setVisibility(View.GONE);
+                                                                            isCheckedToSavetheCard = "0";
+                                                                            saveCardCheckbox.setChecked(false);
+                                                                        }
 
-            }
-        });
+                                                                    }
+                                                                });
 
 
         cardExpiryMonthSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -881,8 +885,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice + "0");
 
-        }
-        else {
+        } else {
             selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice);
 
         }
@@ -891,8 +894,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice + "0");
 
-        }
-        else {
+        } else {
             chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
 
         }
@@ -944,13 +946,22 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                         dlgAlert.create().show();
 
                     } else {
-                        ValidateCouponCodeInputModel validateCouponCodeInputModel = new ValidateCouponCodeInputModel();
+
+                        final HashMap parameters = new HashMap<>();
+
+                        parameters.put("authToken", authTokenStr);
+                        parameters.put("couponCode", couponCodeStr);
+                        parameters.put("user_id", preferenceManager.getUseridFromPref());
+                        parameters.put("currencyId", currencyIdStr.trim());
+                        final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.VALIDATE_COUPON_CODE_URL, parameters, APIUrlConstant.VALIDATE_COUPON_CODE_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+                        /*ValidateCouponCodeInputModel validateCouponCodeInputModel = new ValidateCouponCodeInputModel();
                         validateCouponCodeInputModel.setAuthToken(authTokenStr);
                         validateCouponCodeInputModel.setCouponCode(couponCodeStr);
                         validateCouponCodeInputModel.setUser_id(preferenceManager.getUseridFromPref());
                         validateCouponCodeInputModel.setCurrencyId(currencyIdStr.trim());
                         ValidateCouponCodeAsynTask asyncReg = new ValidateCouponCodeAsynTask(validateCouponCodeInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                        asyncReg.executeOnExecutor(threadPoolExecutor);
+                        asyncReg.executeOnExecutor(threadPoolExecutor);*/
                     }
 
                 }
@@ -987,7 +998,46 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                         } else {
                             existing_card_id = "";
                         }
-                        WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
+
+                        final HashMap parameters = new HashMap<>();
+
+                        String userIdStr = preferenceManager.getUseridFromPref();
+                        String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+
+                        parameters.put("authToken", authTokenStr);
+                        if (isAPV == 1) {
+                            parameters.put("is_advance", "1");
+                        }
+                        parameters.put("card_name", "");
+                        parameters.put("exp_month", "");
+                        parameters.put("cardNumber", "");
+                        parameters.put("exp_year", "");
+                        parameters.put("email", emailIdSubStr.trim());
+                        parameters.put("movie_id", muviUniqueIdStr.trim());
+                        parameters.put("user_id", userIdStr.trim());
+                        if (isCouponCodeAdded == true) {
+                            parameters.put("coupon_code", validCouponCode);
+                        } else {
+                            parameters.put("coupon_code", "");
+                        }
+                        parameters.put("card_last_fourdigit", "");
+                        parameters.put("card_type", "");
+                        parameters.put("profile_id", "");
+                        parameters.put("token", "");
+                        parameters.put("cvv", "");
+                        parameters.put("country", preferenceManager.getCountryCodeFromPref());
+                        parameters.put("season_id", Util.selected_season_id);
+                        parameters.put("episode_id", Util.selected_episode_id);
+                        parameters.put("currencyId", currencyIdStr.trim());
+                        parameters.put("is_save_this_card", isCheckedToSavetheCard.trim());
+                        if (existing_card_id != null && !existing_card_id.matches("") && !existing_card_id.equalsIgnoreCase("")) {
+                            parameters.put("existing_card_id", existing_card_id);
+                        } else {
+                            parameters.put("existing_card_id", "");
+                        }
+                        final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.ADD_SUBSCRIPTION_URL, parameters, APIUrlConstant.ADD_SUBSCRIPTION_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                        apiCallManager.startApiProcessing();
+                       /* WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
                         String userIdStr = preferenceManager.getUseridFromPref();
                         String emailIdSubStr = preferenceManager.getEmailIdFromPref();
                         withouPaymentSubscriptionRegDetailsInput.setAuthToken(authTokenStr);
@@ -1022,7 +1072,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                             withouPaymentSubscriptionRegDetailsInput.setExisting_card_id("");
                         }
                         WithouPaymentSubscriptionRegDetailsAsync asynWithouPaymentSubscriptionRegDetails = new WithouPaymentSubscriptionRegDetailsAsync(withouPaymentSubscriptionRegDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                        asynWithouPaymentSubscriptionRegDetails.executeOnExecutor(threadPoolExecutor);
+                        asynWithouPaymentSubscriptionRegDetails.executeOnExecutor(threadPoolExecutor);*/
                     }
 
                 } else {
@@ -1063,7 +1113,22 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                             dlgAlert.create().show();
 
                         } else {
-                            AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
+
+                            final HashMap parameters = new HashMap<>();
+
+                            parameters.put("authToken", authTokenStr);
+                            parameters.put("nameOnCard", nameOnCardStr);
+                            parameters.put("expiryMonth", String.valueOf(expiryMonthStr).trim());
+                            parameters.put("expiryYear", String.valueOf(expiryYearStr).trim());
+                            parameters.put("cardNumber", cardNumberStr);
+                            parameters.put("cvv", securityCodeStr);
+                            parameters.put("email", preferenceManager.getEmailIdFromPref());
+                            parameters.put("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
+
+                            final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL, parameters, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            apiCallManager.startApiProcessing();
+
+                           /* AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
                             authUserPaymentInfoInputModel.setAuthToken(authTokenStr);
                             authUserPaymentInfoInputModel.setEmail(preferenceManager.getEmailIdFromPref());
                             authUserPaymentInfoInputModel.setExpiryMonth(String.valueOf(expiryMonthStr).trim());
@@ -1072,7 +1137,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                             authUserPaymentInfoInputModel.setCvv(securityCodeEditText.getText().toString().trim());
                             authUserPaymentInfoInputModel.setName_on_card(nameOnCardEditText.getText().toString().trim());
                             AuthUserPaymentInfoAsyntask asyncReg = new AuthUserPaymentInfoAsyntask(authUserPaymentInfoInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                            asyncReg.executeOnExecutor(threadPoolExecutor);
+                            asyncReg.executeOnExecutor(threadPoolExecutor);*/
 
 
                         }
@@ -1101,7 +1166,46 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                 } else {
 
-                    WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
+                    final HashMap parameters = new HashMap<>();
+
+                    String userIdStr = preferenceManager.getUseridFromPref();
+                    String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+
+                    parameters.put("authToken", authTokenStr);
+                    if (isAPV == 1) {
+                        parameters.put("is_advance", "1");
+                    }
+                    parameters.put("card_name", "");
+                    parameters.put("exp_month", "");
+                    parameters.put("cardNumber", "");
+                    parameters.put("exp_year", "");
+                    parameters.put("email", emailIdSubStr.trim());
+                    parameters.put("movie_id", muviUniqueIdStr.trim());
+                    parameters.put("user_id", userIdStr.trim());
+                    if (isCouponCodeAdded == true) {
+                        parameters.put("coupon_code", validCouponCode);
+                    } else {
+                        parameters.put("coupon_code", "");
+                    }
+                    parameters.put("card_last_fourdigit", "");
+                    parameters.put("card_type", "");
+                    parameters.put("profile_id", "");
+                    parameters.put("token", "");
+                    parameters.put("cvv", "");
+                    parameters.put("country", preferenceManager.getCountryCodeFromPref());
+                    parameters.put("season_id", Util.selected_season_id);
+                    parameters.put("episode_id", Util.selected_episode_id);
+                    parameters.put("currencyId", currencyIdStr.trim());
+                    parameters.put("is_save_this_card", isCheckedToSavetheCard.trim());
+                    if (existing_card_id != null && !existing_card_id.matches("") && !existing_card_id.equalsIgnoreCase("")) {
+                        parameters.put("existing_card_id", existing_card_id);
+                    } else {
+                        parameters.put("existing_card_id", "");
+                    }
+                    final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.ADD_SUBSCRIPTION_URL, parameters, APIUrlConstant.ADD_SUBSCRIPTION_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                    apiCallManager.startApiProcessing();
+
+                    /*WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
                     String userIdStr = preferenceManager.getUseridFromPref();
                     String emailIdSubStr = preferenceManager.getEmailIdFromPref();
                     withouPaymentSubscriptionRegDetailsInput.setAuthToken(authTokenStr);
@@ -1136,7 +1240,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                         withouPaymentSubscriptionRegDetailsInput.setExisting_card_id("");
                     }
                     WithouPaymentSubscriptionRegDetailsAsync asynWithouPaymentSubscriptionRegDetails = new WithouPaymentSubscriptionRegDetailsAsync(withouPaymentSubscriptionRegDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                    asynWithouPaymentSubscriptionRegDetails.executeOnExecutor(threadPoolExecutor);
+                    asynWithouPaymentSubscriptionRegDetails.executeOnExecutor(threadPoolExecutor);*/
                 }
             }
 
@@ -1148,12 +1252,21 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
         } else {
-            GetCardListForPPVInputModel getCardListForPPVInputModel = new GetCardListForPPVInputModel();
+
+            final HashMap parameters2 = new HashMap<>();
+            String userIdStr = preferenceManager.getUseridFromPref();
+            parameters2.put("authToken", authTokenStr);
+            parameters2.put("user_id", userIdStr);
+            final APICallManager apiCallManager2 = new APICallManager(this, APIUrlConstant.GET_CARD_LIST_FOR_PPV_URL, parameters, APIUrlConstant.GET_CARD_LIST_FOR_PPV_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            apiCallManager2.startApiProcessing();
+
+
+           /* GetCardListForPPVInputModel getCardListForPPVInputModel = new GetCardListForPPVInputModel();
             String userIdStr = preferenceManager.getUseridFromPref();
             getCardListForPPVInputModel.setUser_id(userIdStr.trim());
             getCardListForPPVInputModel.setAuthToken(authTokenStr);
             GetCardListForPPVAsynTask asynLoadCardList = new GetCardListForPPVAsynTask(getCardListForPPVInputModel, this, this);
-            asynLoadCardList.executeOnExecutor(threadPoolExecutor);
+            asynLoadCardList.executeOnExecutor(threadPoolExecutor);*/
         }
         saveCardCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -1311,6 +1424,801 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     };
 
     @Override
+    public void onTaskPreExecute(int requestID) {
+
+    }
+
+    @Override
+    public void onTaskPostExecute(Object object, int requestID, String response) {
+
+        if (APIUrlConstant.VIDEO_DETAILS_URL_REQUEST_ID == requestID) {
+            video_details(object, requestID, response);
+        } else if (APIUrlConstant.GET_CARD_LIST_FOR_PPV_URL_REQUEST_ID == requestID) {
+            get_card_list(object, requestID, response);
+        } else if (APIUrlConstant.VALIDATE_COUPON_CODE_URL_REQUEST_ID == requestID) {
+            validate_coupon_code(object, requestID, response);
+        } else if (APIUrlConstant.GET_MONETIZATION_DETAILS_URL_REQUEST_ID == requestID) {
+            get_monetization_details(object, requestID, response);
+        } else if (APIUrlConstant.GET_VOUCHER_PLAN_URL_REQUEST_ID == requestID) {
+            get_voucher_plan(object, requestID, response);
+        } else if (APIUrlConstant.VALIDATE_VOUCHER_URL_REQUEST_ID == requestID) {
+            validate_voucher(object, requestID, response);
+        } else if (APIUrlConstant.VOUCHER_SUBSCRIPTION_URL_REQUEST_ID == requestID) {
+            voucher_subscription(object, requestID, response);
+        } else if (APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL_REQUEST_ID == requestID) {
+            auth_user_payment(object, requestID, response);
+        } else if (APIUrlConstant.ADD_SUBSCRIPTION_URL_REQUEST_ID == requestID) {
+            without_payment_subscription_reg(object, requestID, response);
+        } else if (APIUrlConstant.PPV_PAYEMNT_REQUEST_ID == requestID) {
+            get_ppv_payment(object, requestID, response);
+        }
+    }
+
+    public void get_ppv_payment(Object object, int requestID, String response) {
+
+        WithoutPaymentSubscriptionModel withoutPaymentSubscriptionModel = (WithoutPaymentSubscriptionModel) object;
+
+        if (withoutPaymentSubscriptionModel.getCode() == 0) {
+            try {
+                if (videoPDialog.isShowing())
+                    videoPDialog.hide();
+            } catch (IllegalArgumentException ex) {
+                //   status = 0;
+            }
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+        if (withoutPaymentSubscriptionModel.getCode() > 0) {
+
+            if (withoutPaymentSubscriptionModel.getCode() == 200) {
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (!NetworkStatus.getInstance().isConnected(PPvPaymentInfoActivity.this)) {
+                            try {
+                                if (videoPDialog.isShowing())
+                                    videoPDialog.hide();
+                            } catch (IllegalArgumentException ex) {
+                            }
+                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+                            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                            dlgAlert.setCancelable(false);
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+
+                                        }
+                                    });
+                            dlgAlert.create().show();
+
+                        } else {
+                            try {
+                                if (videoPDialog.isShowing())
+                                    videoPDialog.hide();
+                            } catch (IllegalArgumentException ex) {
+                            }
+                            if (isAPV == 1) {
+                                Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(PURCHASE_SUCCESS_ALERT, DEFAULT_PURCHASE_SUCCESS_ALERT), Toast.LENGTH_LONG).show();
+                                onBackPressed();
+                            } else {
+                                setResultAtFinishActivity();
+                            }
+                        }
+
+                    }
+                });
+
+
+            } else {
+                try {
+                    if (videoPDialog.isShowing())
+                        videoPDialog.hide();
+                } catch (IllegalArgumentException ex) {
+                    //status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();
+            }
+        }
+    }
+
+    public void without_payment_subscription_reg(Object object, int requestID, String response) {
+
+        WithoutPaymentSubscriptionModel withoutPaymentSubscriptionModel = (WithoutPaymentSubscriptionModel) object;
+
+
+        if (withoutPaymentSubscriptionModel.getCode() == 0) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+        if (withoutPaymentSubscriptionModel.getCode() > 0) {
+
+            if (withoutPaymentSubscriptionModel.getCode() == 200) {
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (!NetworkStatus.getInstance().isConnected(PPvPaymentInfoActivity.this)) {
+                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+                            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                            dlgAlert.setCancelable(false);
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+
+                                        }
+                                    });
+                            dlgAlert.create().show();
+
+                        } else {
+                            if (isAPV == 1) {
+                                Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(PURCHASE_SUCCESS_ALERT, DEFAULT_PURCHASE_SUCCESS_ALERT), Toast.LENGTH_LONG).show();
+                                finish();
+                                overridePendingTransition(0, 0);
+                            } else {
+                                setResultAtFinishActivity();
+                            }
+                               /* final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayVideoActivity.class);
+                                playVideoIntent.putExtra("activity", "generic");
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        playVideoIntent.putExtra("url", videoUrlStr.trim());
+                                        startActivity(playVideoIntent);
+                                        finish();
+                                    }
+                                });*/
+                        }
+                    }
+                });
+
+
+            } else {
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();
+            }
+        }
+    }
+
+
+    public void auth_user_payment(Object object, int requestID, String response) {
+
+        AuthUserPaymentInfoModel authuserpayment = (AuthUserPaymentInfoModel) object;
+
+        if (authuserpayment.getIsSuccess() == 0) {
+            try {
+                if (videoPDialog.isShowing())
+                    videoPDialog.hide();
+            } catch (IllegalArgumentException ex) {
+                //status = 0;
+            }
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+
+            if (authuserpayment.getMessage().equals(null) || authuserpayment.getMessage().equals("") || authuserpayment.getMessage() == null) {
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
+            } else {
+                dlgAlert.setMessage(authuserpayment.getMessage());
+            }
+
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+        } else if (authuserpayment.getIsSuccess() == 1) {
+
+            if (!NetworkStatus.getInstance().isConnected(PPvPaymentInfoActivity.this)) {
+                try {
+                    if (videoPDialog.isShowing())
+                        videoPDialog.hide();
+                } catch (IllegalArgumentException ex) {
+                    //   status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();
+
+            } else {
+
+                final HashMap parameters = new HashMap<>();
+
+                parameters.put("authToken", authTokenStr);
+                parameters.put("card_name", nameOnCardEditText.getText().toString().trim());
+                parameters.put("exp_month", String.valueOf(expiryMonthStr).trim());
+                parameters.put("cardNumber", cardNumberEditText.getText().toString().trim());
+                parameters.put("exp_year", String.valueOf(expiryYearStr).trim());
+                String userIdStr = preferenceManager.getUseridFromPref();
+                String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+                parameters.put("email", emailIdSubStr.trim());
+                parameters.put("user_id", userIdStr.trim());
+                if (isCouponCodeAdded == true) {
+                    parameters.put("couponCode", validCouponCode);
+                } else {
+                    parameters.put("couponCode", "");
+                }
+                parameters.put("card_type", authuserpayment.getCard().getCardType());
+                parameters.put("card_last_fourdigit", authuserpayment.getCard().getCardLastFourdigit());
+                parameters.put("profile_id", authuserpayment.getCard().getProfileId());
+                parameters.put("token", authuserpayment.getCard().getToken());
+                parameters.put("cvv", securityCodeEditText.getText().toString().trim());
+                parameters.put("country", preferenceManager.getCountryCodeFromPref());
+                parameters.put("episode_id", Util.selected_episode_id);
+                parameters.put("season_id", Util.selected_season_id);
+                parameters.put("currencyId", currencyIdStr.trim());
+                parameters.put("movie_id", muviUniqueIdStr.trim());
+                if (isAPV == 1) {
+                    parameters.put("is_advance", "1");
+                }
+                parameters.put("is_save_this_card", isCheckedToSavetheCard.trim());
+
+                final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.ADD_SUBSCRIPTION_URL, parameters, APIUrlConstant.PPV_PAYEMNT_REQUEST_ID, APIUrlConstant.BASE_URl);
+                apiCallManager.startApiProcessing();
+
+              /*  RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
+                registerUserPaymentInputModel.setAuthToken(authTokenStr);
+                registerUserPaymentInputModel.setCard_name(nameOnCardEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
+                registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setExp_year(String.valueOf(expiryYearStr).trim());
+                String userIdStr = preferenceManager.getUseridFromPref();
+                String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+                registerUserPaymentInputModel.setEmail(emailIdSubStr);
+                registerUserPaymentInputModel.setMovie_id(muviUniqueIdStr.trim());
+                registerUserPaymentInputModel.setUser_id(userIdStr);
+                if (isCouponCodeAdded == true) {
+                    registerUserPaymentInputModel.setCouponCode(validCouponCode);
+                } else {
+                    registerUserPaymentInputModel.setCouponCode("");
+                }
+                registerUserPaymentInputModel.setCard_type(authUserPaymentInfoOutputModel.getCard_type());
+                registerUserPaymentInputModel.setCard_last_fourdigit(authUserPaymentInfoOutputModel.getCard_last_fourdigit());
+                registerUserPaymentInputModel.setProfile_id(authUserPaymentInfoOutputModel.getProfile_id());
+                registerUserPaymentInputModel.setToken(authUserPaymentInfoOutputModel.getToken());
+                registerUserPaymentInputModel.setCvv(securityCodeEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setCountry(preferenceManager.getCountryCodeFromPref());
+                registerUserPaymentInputModel.setSeason_id(Util.selected_season_id);
+                registerUserPaymentInputModel.setEpisode_id(Util.selected_episode_id);
+                if (isAPV == 1) {
+                    registerUserPaymentInputModel.setIs_advance("1");
+                }
+                registerUserPaymentInputModel.setCurrency_id(currencyIdStr.trim());
+                registerUserPaymentInputModel.setIs_save_this_card(isCheckedToSavetheCard.trim());
+                GetPPVPaymentAsync asyncSubsrInfo = new GetPPVPaymentAsync(registerUserPaymentInputModel, this, this);
+                asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);*/
+            }
+        }
+    }
+
+    public void voucher_subscription(Object object, int requestID, String response) {
+
+        VoucherSubscriptionModel voucherSubscriptionModel = (VoucherSubscriptionModel) object;
+
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            //status = 0;
+        }
+
+        if (voucherSubscriptionModel.getCode() == 200) {
+            setResultAtFinishActivity();
+
+        } else {
+            Toast.makeText(getApplicationContext(), voucherSubscriptionModel.getMsg(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void validate_voucher(Object object, int requestID, String response) {
+
+        ValidateVoucherModel validateVoucherModel = (ValidateVoucherModel) object;
+
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            //    status = 0;
+        }
+
+        if (validateVoucherModel.getCode() == 200) {
+
+
+            voucher_success.setVisibility(View.VISIBLE);
+            watch_now.setBackgroundResource(R.drawable.button_radious);
+            watch_now.setTextColor(Color.parseColor("#ffffff"));
+            watch_status = true;
+
+            apply.setEnabled(false);
+            apply.setBackgroundResource(R.drawable.voucher_inactive_button);
+            apply.setTextColor(Color.parseColor("#7f7f7f"));
+
+        } else {
+            Toast.makeText(getApplicationContext(), validateVoucherModel.getMsg(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void get_voucher_plan(Object object, int requestID, String response) {
+
+        VoucherPlanModel voucherPlanModel = (VoucherPlanModel) object;
+
+
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            //   status = 0;
+        }
+        if (voucherPlanModel.getCode() == 200) {
+
+            if (selectedPurchaseType == Integer.parseInt(voucherPlanModel.getIsShow()) || selectedPurchaseType == Integer.parseInt(voucherPlanModel.getIsSeason()) || selectedPurchaseType == Integer.parseInt(voucherPlanModel.getIsEpisode()))
+
+            {
+                creditCardLayout.setVisibility(View.VISIBLE);
+                voucherRadioButton.setChecked(false);
+                paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                payWithCreditCardRadioButton.setChecked(true);
+                voucherLinearLayout.setVisibility(View.GONE);
+            } else {
+                creditCardLayout.setVisibility(View.VISIBLE);
+                voucherRadioButton.setChecked(false);
+                paymentOptionLinearLayout.setVisibility(View.GONE);
+                payWithCreditCardRadioButton.setChecked(true);
+                voucherLinearLayout.setVisibility(View.GONE);
+            }
+
+        } else {
+            creditCardLayout.setVisibility(View.VISIBLE);
+            voucherRadioButton.setChecked(false);
+            paymentOptionLinearLayout.setVisibility(View.GONE);
+            payWithCreditCardRadioButton.setChecked(true);
+            voucherLinearLayout.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void get_monetization_details(Object object, int requestID, String response) {
+
+        GetMonetizationDetailsModel getMonetizationDetailsModel = (GetMonetizationDetailsModel) object;
+
+        if (getMonetizationDetailsModel.getCode() == 200) {
+            if (getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher() == 1) {
+
+                if (contentTypesId == 3) {
+                    GetVoucherPlan();
+                } else {
+                    creditCardLayout.setVisibility(View.VISIBLE);
+                    voucherRadioButton.setChecked(false);
+                    paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                    payWithCreditCardRadioButton.setChecked(true);
+                    voucherLinearLayout.setVisibility(View.GONE);
+                }
+                Log.v("SUBHA", "monetizations voucher 1");
+
+            } else {
+                Log.v("SUBHA", "monetizations voucher 0");
+                creditCardLayout.setVisibility(View.VISIBLE);
+                paymentOptionLinearLayout.setVisibility(View.GONE);
+                voucherLinearLayout.setVisibility(View.GONE);
+            }
+
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+    }
+
+    public void validate_coupon_code(Object object, int requestID, String response) {
+
+        ValidateCouponCodeModel validateCouponCodeModel = (ValidateCouponCodeModel) object;
+
+        try {
+            if (videoPDialog.isShowing())
+                videoPDialog.hide();
+        } catch (IllegalArgumentException ex) {
+            isCouponCodeAdded = false;
+            validCouponCode = "";
+        }
+
+        if (validateCouponCodeModel.getCode() >= 0) {
+            if (validateCouponCodeModel.getCode() == 432) {
+
+                if (validateCouponCodeModel.getDiscountType().equalsIgnoreCase("%")) {
+
+                    chargedPrice = planPrice - planPrice * (Float.parseFloat(validateCouponCodeModel.getDiscount().trim()) / 100);
+
+                    if (chargedPrice < 0.0f) {
+                        chargedPrice = 0.0f;
+                    }
+                } else {
+
+                    chargedPrice = planPrice - Float.parseFloat(validateCouponCodeModel.getDiscount().trim());
+
+                    if (chargedPrice < 0.0f) {
+                        chargedPrice = 0.0f;
+                    }
+                }
+
+
+                String[] strValues_chargedPriceTextView = String.valueOf(chargedPrice).split("\\.");
+                if (strValues_chargedPriceTextView[1].length() == 1) {
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
+
+                } else {
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice));
+
+                }
+                creditCardLayout.setVisibility(View.VISIBLE);
+                paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+
+                isCouponCodeAdded = true;
+                validCouponCode = couponCodeEditText.getText().toString().trim();
+                Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
+                if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
+                    creditCardLayout.setVisibility(View.GONE);
+                    paymentOptionLinearLayout.setVisibility(View.GONE);
+                    //paywithCreditCardButton.setVisibility(View.GONE);
+                    withoutCreditCardLayout.setVisibility(View.VISIBLE);
+
+                    withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON, DEFAULT_FREE_FOR_COUPON));
+
+                    if (strValues_chargedPriceTextView[1].length() == 1) {
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
+
+                    } else {
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice));
+
+                    }
+                }
+
+
+            } else {
+                isCouponCodeAdded = false;
+                validCouponCode = "";
+                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + planPrice);
+                //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
+                isCouponCodeAdded = false;
+                validCouponCode = "";
+                couponCodeEditText.setText("");
+
+                if (validateCouponCodeModel.getMsg().trim() != null && !validateCouponCodeModel.getMsg().trim().isEmpty() && !validateCouponCodeModel.getMsg().trim().equals("null") && !validateCouponCodeModel.getMsg().trim().matches("")) {
+                    Toast.makeText(PPvPaymentInfoActivity.this, validateCouponCodeModel.getMsg(), Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(INVALID_COUPON, DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+
+                }
+            }
+        } else {
+            isCouponCodeAdded = false;
+            validCouponCode = "";
+            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + planPrice);
+            //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
+            isCouponCodeAdded = false;
+            validCouponCode = "";
+            couponCodeEditText.setText("");
+
+            if (validateCouponCodeModel.getMsg().trim() != null && !validateCouponCodeModel.getMsg().trim().isEmpty() && !validateCouponCodeModel.getMsg().trim().equals("null") && !validateCouponCodeModel.getMsg().trim().matches("")) {
+                Toast.makeText(PPvPaymentInfoActivity.this, validateCouponCodeModel.getMsg(), Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(INVALID_COUPON, DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+
+            }
+        }
+    }
+
+    public void get_card_list(Object object, int requestID, String response) {
+
+        GetCardListModel getCardListModel = (GetCardListModel) object;
+
+        try {
+            if (videoPDialog.isShowing())
+                videoPDialog.hide();
+        } catch (IllegalArgumentException ex) {
+
+            creditCardSaveSpinner.setVisibility(View.GONE);
+
+        }
+        if (getCardListModel.getCode() == 200) {
+            ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
+
+            if (getCardListModel.getCards() != null) {
+
+                for (int i = 0; i < getCardListModel.getCards().size(); i++) {
+
+                    String card_id = getCardListModel.getCards().get(i).getCard_id();
+                    String last_four_digit = getCardListModel.getCards().get(i).getCard_last_fourdigit();
+
+                    savedCards.add(new CardModel(card_id, last_four_digit));
+                }
+            }
+            /*for (GetCardListForPPVOutputModel model : getCardListForPPVOutputModelArray) {
+                savedCards.add(new CardModel(model.getCard_id(), model.getCard_last_fourdigit()));
+            }*/
+            if (savedCards.size() <= 0) {
+
+                creditCardSaveSpinner.setVisibility(View.GONE);
+
+            } else {
+
+                savedCards.add(0, new CardModel("0", languagePreference.getTextofLanguage(USE_NEW_CARD, DEFAULT_USE_NEW_CARD)));
+                cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
+                creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
+                //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
+
+                creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
+                creditCardSaveSpinner.setSelection(0);
+            }
+
+        } else {
+            creditCardSaveSpinner.setVisibility(View.GONE);
+        }
+    }
+
+    public void video_details(Object object, int requestID, String response) {
+
+        GetVideoDetailsModel getVideoDetailsModel = (GetVideoDetailsModel) object;
+
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+
+        if (getVideoDetailsModel.getCode() == 200) {
+            playerModel.setIsOffline(getVideoDetailsModel.getIsOffline());
+            playerModel.setDownloadStatus(getVideoDetailsModel.getDownloadStatus());
+            if (getVideoDetailsModel.getThirdpartyUrl() == null || getVideoDetailsModel.getThirdpartyUrl().matches("")) {
+
+
+                /**@bishal
+                 * for nondrm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+                LogUtil.showLog("BKS", "studipapprovedurlbefore if entery====" + getVideoDetailsModel.getStudioApprovedUrl());
+                if (getVideoDetailsModel.getStudioApprovedUrl() != null &&
+                        !getVideoDetailsModel.getStudioApprovedUrl().isEmpty() &&
+                        !getVideoDetailsModel.getStudioApprovedUrl().equals("null") &&
+                        !getVideoDetailsModel.getStudioApprovedUrl().matches("") && playerModel != null) {
+                    LogUtil.showLog("BKS", "if called means  studioapproved");
+
+                    playerModel.setVideoUrl(getVideoDetailsModel.getStudioApprovedUrl());
+                    LogUtil.showLog("BKS", "studipapprovedurl====" + playerModel.getVideoUrl());
+
+
+                    if (getVideoDetailsModel.getLicenseUrl().trim() != null && !getVideoDetailsModel.getLicenseUrl().trim().isEmpty() && !getVideoDetailsModel.getLicenseUrl().trim().equals("null") && !getVideoDetailsModel.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(getVideoDetailsModel.getLicenseUrl());
+                    }
+                    if (getVideoDetailsModel.getVideoUrl().trim() != null && !getVideoDetailsModel.getVideoUrl().isEmpty() && !getVideoDetailsModel.getVideoUrl().equals("null") && !getVideoDetailsModel.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(getVideoDetailsModel.getVideoUrl());
+
+                    } else {
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                    }
+                } else {
+                    if (getVideoDetailsModel.getVideoUrl() != null || !getVideoDetailsModel.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(getVideoDetailsModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
+                }
+            } else {
+                if (getVideoDetailsModel.getThirdpartyUrl() != null || !getVideoDetailsModel.getThirdpartyUrl().matches("")) {
+                    playerModel.setVideoUrl(getVideoDetailsModel.getThirdpartyUrl());
+                    playerModel.setThirdPartyPlayer(true);
+
+                } else {
+                    //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                }
+            }
+
+            Util.dataModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
+
+            playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
+            if (getVideoDetailsModel.getPlayedLength() != null && !getVideoDetailsModel.getPlayedLength().equals(""))
+                playerModel.setPlayPos((Util.isDouble(getVideoDetailsModel.getPlayedLength())));
+
+
+            //dependency for datamodel
+
+
+            Util.dataModel.setVideoUrl(playerModel.getVideoUrl());
+            Util.dataModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
+            Util.dataModel.setThirdPartyUrl(getVideoDetailsModel.getThirdpartyUrl());
+            for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+            }
+            Util.dataModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
+            Util.dataModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
+            Util.dataModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
+            Util.dataModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+            Util.dataModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));
+
+            //player model set
+
+            playerModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+            playerModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
+            playerModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
+            for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+            }
+            playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
+
+
+            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+                playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+                playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                FakeSubTitlePath = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
+                playerModel.setOfflineUrl(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                playerModel.setOfflineLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+            }
+            playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
+
+
+            if (playerModel.getVideoUrl() == null ||
+                    playerModel.getVideoUrl().matches("")) {
+                Util.showNoDataAlert(PPvPaymentInfoActivity.this);
+
+                /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();*/
+            } else {
+
+                // condition for checking if the response has third party url or not.
+                if (getVideoDetailsModel.getThirdpartyUrl() == null ||
+                        getVideoDetailsModel.getThirdpartyUrl().matches("")
+                        ) {
+
+
+                    playerModel.setThirdPartyPlayer(false);
+
+                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+
+                    if (FakeSubTitlePath.size() > 0) {
+                        // This Portion Will Be changed Later.
+
+                        File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                        if (dir.isDirectory()) {
+                            String[] children = dir.list();
+                            for (int i = 0; i < children.length; i++) {
+                                new File(dir, children[i]).delete();
+                            }
+                        }
+
+                        Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                    } else {
+                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                        playVideoIntent.putExtra("PlayerModel", playerModel);
+                        startActivity(playVideoIntent);
+                        finish();
+                    }
+
+
+                } else {
+                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
+                    finish();
+
+                }
+            }
+
+        } else {
+
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+            Util.showNoDataAlert(PPvPaymentInfoActivity.this);
+
+        }
+    }
+
+
+    /*@Override
     public void onVideoDetailsPreExecuteStarted() {
 
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
@@ -1324,8 +2232,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
-     /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
-        then set thirdpartyurl true here and assign the url to videourl*/
+     *//*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
+        then set thirdpartyurl true here and assign the url to videourl*//*
         try {
             if (videoPDialog != null && videoPDialog.isShowing()) {
                 videoPDialog.hide();
@@ -1339,10 +2247,12 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
 
-                /**@bishal
-                 * for nondrm player below condition added
-                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
-                 */
+                */
+
+    /**
+     * @bishal for nondrm player below condition added
+     * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+     *//*
                 LogUtil.showLog("BKS", "studipapprovedurlbefore if entery====" + _video_details_output.getStudio_approved_url());
                 if (_video_details_output.getStudio_approved_url() != null &&
                         !_video_details_output.getStudio_approved_url().isEmpty() &&
@@ -1425,7 +2335,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     playerModel.getVideoUrl().matches("")) {
                 Util.showNoDataAlert(PPvPaymentInfoActivity.this);
 
-                /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
+                *//*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
@@ -1436,7 +2346,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                 dialog.cancel();
                             }
                         });
-                dlgAlert.create().show();*/
+                dlgAlert.create().show();*//*
             } else {
 
                 // condition for checking if the response has third party url or not.
@@ -1463,10 +2373,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                         Download_SubTitle(FakeSubTitlePath.get(0).trim());
                     } else {
                         playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                *//*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*//*
                         playVideoIntent.putExtra("PlayerModel", playerModel);
                         startActivity(playVideoIntent);
                         finish();
@@ -1476,10 +2386,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 } else {
                     final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                *//*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*//*
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
                     finish();
@@ -1495,11 +2405,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
 
 
-    }
-
-
-
-    @Override
+    }*/
+    /*@Override
     public void onGetCardListForPPVPreExecuteStarted() {
 
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
@@ -1518,10 +2425,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             creditCardSaveSpinner.setVisibility(View.GONE);
 
         }
-        if(status==200)
-        {
+        if (status == 200) {
             ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
-            for (GetCardListForPPVOutputModel model:getCardListForPPVOutputModelArray) {
+            for (GetCardListForPPVOutputModel model : getCardListForPPVOutputModelArray) {
                 savedCards.add(new CardModel(model.getCard_id(), model.getCard_last_fourdigit()));
             }
             if (savedCards.size() <= 0) {
@@ -1539,17 +2445,12 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 creditCardSaveSpinner.setSelection(0);
             }
 
-        }
-        else{
+        } else {
             creditCardSaveSpinner.setVisibility(View.GONE);
         }
 
 
-    }
-
-
-
-
+    }*/
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -1561,7 +2462,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @Override
+   /* @Override
     public void onValidateCouponCodePreExecuteStarted() {
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
         videoPDialog.show();
@@ -1600,11 +2501,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                 String[] strValues_chargedPriceTextView = String.valueOf(chargedPrice).split("\\.");
                 if (strValues_chargedPriceTextView[1].length() == 1) {
-                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f",chargedPrice) + "0");
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
 
-                }
-                else {
-                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f",chargedPrice) );
+                } else {
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice));
 
                 }
                 creditCardLayout.setVisibility(View.VISIBLE);
@@ -1618,18 +2518,17 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     paymentOptionLinearLayout.setVisibility(View.GONE);
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
-                    saveCardCheckbox.setChecked(false);
 
-                    withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON,DEFAULT_FREE_FOR_COUPON));
+                    withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON, DEFAULT_FREE_FOR_COUPON));
 
                     if (strValues_chargedPriceTextView[1].length() == 1) {
-                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f",chargedPrice)+"0");
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
+
+                    } else {
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice));
 
                     }
-                    else  {
-                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f",chargedPrice));
-
-                    }                }
+                }
 
 
             } else {
@@ -1667,8 +2566,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             }
         }
     }
-
-    @Override
+*/
+  /*  @Override
     public void onGetMonetizationDetailsPreExecuteStarted() {
 
     }
@@ -1714,11 +2613,21 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             dlgAlert.create().show();
         }
     }
-
+*/
 
     public void GetVoucherPlan() {
 
-        GetVoucherPlanInputModel getVoucherPlanInputModel = new GetVoucherPlanInputModel();
+        final HashMap parameters = new HashMap<>();
+        loggedInIdStr = preferenceManager.getUseridFromPref();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("user_id,", loggedInIdStr);
+        parameters.put("movie_id", Util.dataModel.getMovieUniqueId().trim());
+        parameters.put("stream_id", Util.dataModel.getStreamUniqueId());
+        parameters.put("season", Util.dataModel.getSeason_id());
+        final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.GET_VOUCHER_PLAN_URL, parameters, APIUrlConstant.GET_VOUCHER_PLAN_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+
+        apiCallManager.startApiProcessing();
+       /* GetVoucherPlanInputModel getVoucherPlanInputModel = new GetVoucherPlanInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
         getVoucherPlanInputModel.setAuthToken(authTokenStr);
         getVoucherPlanInputModel.setUser_id(loggedInIdStr.trim());
@@ -1726,10 +2635,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         getVoucherPlanInputModel.setSeason(Util.dataModel.getSeason_id());
         getVoucherPlanInputModel.setStream_id(Util.dataModel.getStreamUniqueId());
         GetVoucherPlanAsynTask getVoucherPlan = new GetVoucherPlanAsynTask(getVoucherPlanInputModel, this, this);
-        getVoucherPlan.executeOnExecutor(threadPoolExecutor);
+        getVoucherPlan.executeOnExecutor(threadPoolExecutor);*/
     }
 
-    @Override
+   /* @Override
     public void onGetVoucherPlanPreExecuteStarted() {
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
         videoPDialog.show();
@@ -1770,12 +2679,31 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             payWithCreditCardRadioButton.setChecked(true);
             voucherLinearLayout.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     public void ValidateVoucher_And_VoucherSubscription() {
 
         // Calling Validate Voucher Api
-        ValidateVoucherInputModel validateVoucherInputModel = new ValidateVoucherInputModel();
+
+        final HashMap parameters = new HashMap<>();
+        parameters.put("authToken", authTokenStr);
+        parameters.put("user_id", preferenceManager.getUseridFromPref());
+        parameters.put("voucher_code", VoucherCode);
+
+        parameters.put("movie_id", Util.dataModel.getMovieUniqueId().trim());
+        parameters.put("stream_id", Util.dataModel.getStreamUniqueId().trim());
+
+        if (Util.dataModel.getContentTypesId() == 3) {
+            parameters.put("season", Util.dataModel.getSeason_id());
+            parameters.put("purchase_type", "episode");
+        } else {
+            parameters.put("purchase_type", "show");
+        }
+        parameters.put("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        final APICallManager apiCallManager14 = new APICallManager(this, APIUrlConstant.VALIDATE_VOUCHER_URL, parameters, APIUrlConstant.VALIDATE_VOUCHER_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+        apiCallManager14.startApiProcessing();
+
+       /* ValidateVoucherInputModel validateVoucherInputModel = new ValidateVoucherInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
         validateVoucherInputModel.setAuthToken(authTokenStr);
         validateVoucherInputModel.setUser_id(loggedInIdStr.trim());
@@ -1788,14 +2716,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
         validateVoucherInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
         validateVoucherInputModel.setStream_id(Util.dataModel.getStreamUniqueId().trim());
-        validateVoucherInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+        validateVoucherInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
         validateVoucherInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         ValidateVoucherAsynTask asynValidateVoucher = new ValidateVoucherAsynTask(validateVoucherInputModel, this, this);
-        asynValidateVoucher.executeOnExecutor(threadPoolExecutor);
+        asynValidateVoucher.executeOnExecutor(threadPoolExecutor);*/
     }
 
-    @Override
+   /* @Override
     public void onValidateVoucherPreExecuteStarted() {
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
         videoPDialog.show();
@@ -1826,9 +2754,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         } else {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public void onVoucherSubscriptionPreExecuteStarted() {
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
         videoPDialog.show();
@@ -1850,12 +2778,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         } else {
             Toast.makeText(getApplicationContext(), voucherSubscriptionOutputModel.getMsg(), Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
 
-
-
-    @Override
+    /*@Override
     public void onAuthUserPaymentInfoPreExecuteStarted() {
 
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
@@ -1876,7 +2802,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
 
             if (message.equals(null) || message.equals("") || message == null) {
-                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS,DEFAULT_ERROR_TRANSACTION_PROCESS));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
             } else {
                 dlgAlert.setMessage(message);
             }
@@ -1949,7 +2875,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
             }
         }
-    }
+    }*/
 
 //    private class AsynPaymentInfoDetails extends AsyncTask<Void, Void, Void> {
 //        //ProgressDialog pDialog;
@@ -2172,7 +3098,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 //    }
 
 
-    @Override
+   /* @Override
     public void onGetWithouPaymentSubscriptionRegDetailsPreExecuteStarted() {
         videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
         videoPDialog.show();
@@ -2226,7 +3152,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                             } else {
                                 setResultAtFinishActivity();
                             }
-                               /* final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayVideoActivity.class);
+                               *//* final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayVideoActivity.class);
                                 playVideoIntent.putExtra("activity", "generic");
                                 runOnUiThread(new Runnable() {
                                     public void run() {
@@ -2235,7 +3161,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                         startActivity(playVideoIntent);
                                         finish();
                                     }
-                                });*/
+                                });*//*
                         }
                     }
                 });
@@ -2258,7 +3184,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             }
         }
     }
-
+*/
 //    private class AsynWithouPaymentSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
 //        ProgressDialog pDialog;
 //        int status;
@@ -2535,7 +3461,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 //
 //    }
 
-    @Override
+   /* @Override
     public void onGetPPVPaymentPreExecuteStarted() {
 
     }
@@ -2631,7 +3557,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 dlgAlert.create().show();
             }
         }
-    }
+    }*/
 
 //    private class AsyncPPVPayment extends AsyncTask<Void, Void, Void> {
 //        // ProgressDialog pDialog;
@@ -3099,6 +4025,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 finish();
             }
         }
+
     }
 
     private void setupCastListener() {
@@ -3391,7 +4318,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         super.onBackPressed();
 
     }*/
-    public void setResultAtFinishActivity(){
+    public void setResultAtFinishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();

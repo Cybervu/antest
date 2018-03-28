@@ -1,22 +1,18 @@
 [
     {
-        "merged": "D:\\Workspace\\VOD\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
-        "source": "C:\\Users\\MUVI\\.android\\build-cache\\3b07155c81f7e5152955253224074a625f2d2bb2\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+        "merged": "D:\\VODMarch2018\\VOD_Retro\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\MUVI\\.android\\build-cache\\8c9e81495e7e063a76ca2d913c7aea5280893460\\output\\res\\layout-v21\\notification_action.xml"
     },
     {
-        "merged": "D:\\Workspace\\VOD\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
-        "source": "C:\\Users\\MUVI\\.android\\build-cache\\3b07155c81f7e5152955253224074a625f2d2bb2\\output\\res\\layout-v21\\notification_action.xml"
+        "merged": "D:\\VODMarch2018\\VOD_Retro\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\MUVI\\.android\\build-cache\\8c9e81495e7e063a76ca2d913c7aea5280893460\\output\\res\\layout-v21\\notification_template_custom_big.xml"
     },
     {
-        "merged": "D:\\Workspace\\VOD\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
-        "source": "C:\\Users\\MUVI\\.android\\build-cache\\3b07155c81f7e5152955253224074a625f2d2bb2\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+        "merged": "D:\\VODMarch2018\\VOD_Retro\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\MUVI\\.android\\build-cache\\8c9e81495e7e063a76ca2d913c7aea5280893460\\output\\res\\layout-v21\\notification_action_tombstone.xml"
     },
     {
-        "merged": "D:\\Workspace\\VOD\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\exomedia_default_controls_leanback.xml",
-        "source": "C:\\Users\\MUVI\\.android\\build-cache\\9e7abf2031403e176abddedce9743ae24c0090fb\\output\\res\\layout-v21\\exomedia_default_controls_leanback.xml"
-    },
-    {
-        "merged": "D:\\Workspace\\VOD\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
-        "source": "C:\\Users\\MUVI\\.android\\build-cache\\3b07155c81f7e5152955253224074a625f2d2bb2\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+        "merged": "D:\\VODMarch2018\\VOD_Retro\\muvisdk\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\MUVI\\.android\\build-cache\\8c9e81495e7e063a76ca2d913c7aea5280893460\\output\\res\\layout-v21\\notification_template_icon_group.xml"
     }
 ]

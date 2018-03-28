@@ -11,10 +11,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.home.apisdk.apiModel.MenusOutputModel;
+import com.home.api.apiModel.MenusOutputModel;
 import com.home.vod.R;
-import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
@@ -137,15 +135,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         if(add_to_array)
         {
-            Util.drawer_collapse_expand_imageview.add(listPosition+","+Util.image_compressed);
+            Util.drawer_collapse_expand_imageview.add(listPosition+","+ Util.image_compressed);
         }
 
-/*
-
-            String expand_collapse_image_info1[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
-            Log.v("SUBHA1","inside adapter===Data=========="+expand_collapse_image_info1[0]+","+expand_collapse_image_info1[1]);
-
-*/
 
         try {
             String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
@@ -162,7 +154,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
                 Log.v("SUBHA1","image collapsed ="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
