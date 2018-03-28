@@ -1,9 +1,11 @@
 package com.home.vod.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
@@ -70,7 +73,7 @@ public class ResizableCustomView {
 
                         String text = null;
                         try {
-                            text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                            text = (tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1)).toString().trim() + "..." + expandText;
                         } catch (StringIndexOutOfBoundsException e) {
                             e.printStackTrace();
                         }
@@ -84,6 +87,12 @@ public class ResizableCustomView {
                         LogUtil.showLog("sanjay:--------","story data maxline ==========="+tv.getLineCount());
                         int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                         String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                        try {
+                            if (text.contains("..."))
+                                text=text.replace("..."," ");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         tv.setText(text);
                         LogUtil.showLog("sanjay:--------","story data maxline ===========text"+text);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
@@ -103,7 +112,7 @@ public class ResizableCustomView {
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 
         if (str.contains(spanableText)) {
-            ssb.setSpan(new ClickableSpan() {
+            ssb.setSpan(new MySpannable(false) {
 
                 @Override
                 public void onClick(View widget) {
@@ -126,5 +135,26 @@ public class ResizableCustomView {
         }
         return ssb;
 
+    }
+    public static  class MySpannable extends ClickableSpan{
+        private boolean isUnderline = false;
+
+        /**
+         * Constructor
+         */
+        public MySpannable(boolean isUnderline) {
+            this.isUnderline = isUnderline;
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            ds.setUnderlineText(isUnderline);
+            ds.setColor(mcontext.getResources().getColor(R.color.button_background));
+
+        }
+        @Override
+        public void onClick(View widget) {
+
+        }
     }
 }

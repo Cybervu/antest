@@ -7,6 +7,7 @@
     <color name="textColor">#000</color>
 
     <color name="videotextColor">#000000</color>
+    <color name="cast_description_color">#000</color>
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#b70000</color>
     <color name="buttonTextColor">#fff</color>
@@ -22,9 +23,13 @@
     <color name="aboutustestcolor">#fff</color>
     <color name="alreadyHaveALoginButtonTextColor">#b70000</color>
     <color name="border_color">#b70000</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#000000</color>
+    <color name="banner_line_color">#b70000</color>
     <color name="cancel_button_text_color">#b70000</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#b70000</color>
+    <color name="FilterTitleTextColor">#b70000</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
     <color name="preOrderButtonTextColor">#DDD</color>
@@ -59,6 +64,8 @@
     <color name="noInternetColor">#5c6873</color>
     <color name="editTextColor">#5c6873</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
     <color name="dividerColor">#629de0</color>

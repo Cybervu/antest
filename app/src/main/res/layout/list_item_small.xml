@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/appBackgroundColor"
+    android:background="@color/transparent"
     android:orientation="vertical"
     >
 
@@ -11,13 +11,13 @@
         android:id="@+id/sliderRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/appBackgroundColor">
+        android:background="@color/transparent">
 
 
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sliderLayout_height"
+            android:layout_height="@dimen/listitemlayout_height"
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100" />
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/pop_up_view_height"
             android:layout_below="@+id/sliderLayout"
-            android:background="@color/border_color" />
+            android:background="@color/banner_line_color" />
 
     </RelativeLayout>
 
@@ -74,8 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/loginImageViewMarging_top"
         android:padding="@dimen/loginImageViewMarging_top_padding"
-        android:id="@+id/section_title_layout">
-
+        android:id="@+id/section_title_layout"
+        >
 
         <TextView
             android:id="@+id/itemTitle"
@@ -89,21 +89,23 @@
             android:text="Sample title"
             android:textAllCaps="true"
             android:textColor="@color/videotextColor"
-            android:textSize="@dimen/email_text_size" />
+            android:textSize="@dimen/email_text_size"
+            android:layout_marginLeft="5dp"
+            />
 
         <Button
             android:id="@+id/btnMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/viewmore_btn_width"
+            android:layout_height="@dimen/viewmore_btn_height"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/view_more_button_background"
             android:minHeight="@dimen/btnMore_min_height"
-            android:padding="@dimen/Login_drawing_padding"
+            android:padding="@dimen/paddingBottom5dp"
             android:stateListAnimator="@null"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="@dimen/email_text_size" />
+            android:textSize="@dimen/viewmore_text_size" />
 
 
     </RelativeLayout>

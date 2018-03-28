@@ -140,9 +140,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             Util.drawer_collapse_expand_imageview.add(listPosition+","+Util.image_compressed);
         }
 
+/*
 
+            String expand_collapse_image_info1[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
+            Log.v("SUBHA1","inside adapter===Data=========="+expand_collapse_image_info1[0]+","+expand_collapse_image_info1[1]);
 
-        try{
+*/
+
+        try {
             String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
             if(listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 1)
             {
@@ -157,8 +162,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
                 Log.v("SUBHA1","image collapsed ="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
             }
-        }catch (Exception e){
-
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
 
 

@@ -111,6 +111,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
@@ -129,6 +130,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -162,7 +164,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
 
-    private TextView sectionTitle;
+  //  private TextView sectionTitle;
     //Register Dialog
 
 
@@ -230,6 +232,8 @@ public class ViewMoreActivity extends AppCompatActivity implements
         featureHandler = FeatureHandler.getFeaturePreference(ViewMoreActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -242,18 +246,25 @@ public class ViewMoreActivity extends AppCompatActivity implements
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
+        if (getIntent().getStringExtra("sectionName") != null) {
+            sectionName = getIntent().getStringExtra("sectionName");
+        } else {
+            sectionName="";
+        }
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
-        sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
-        if (getIntent().getStringExtra("sectionName") != null) {
-            sectionName = getIntent().getStringExtra("sectionName");
-            sectionTitle.setText(sectionName);
+      //  sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+       // FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
+      /*  if (getIntent().getStringExtra("sectionName") != null) {
+           // mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
+            mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
+            *//*sectionName = getIntent().getStringExtra("sectionName");
+            sectionTitle.setText(sectionName);*//*
         } else {
-            sectionTitle.setText("");
-
+            mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
         }
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
 
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
@@ -1738,6 +1749,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
+                        if(NetworkStatus.getInstance().isConnected(ViewMoreActivity.this)) {
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
@@ -1747,6 +1759,9 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
 
                         dialog.dismiss();
+                        }else {
+                            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 

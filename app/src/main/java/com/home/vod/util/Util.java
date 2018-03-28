@@ -128,7 +128,7 @@ public class Util {
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static final String UpdateGoogleid = "UpdateGoogleid";
 
-
+    public static int main_menu_list_size = -2;
     public static PPVModel ppvModel = null;
     public static APVModel apvModel = null;
     public static CurrencyModel currencyModel = null;
@@ -145,7 +145,6 @@ public class Util {
     public static boolean favorite_clicked = false;
 
     public static int check_for_subscription = 0;
-    public static int main_menu_list_size = -2;
 
     public static String selected_season_id = "0";
     public static String selected_episode_id = "0";
@@ -549,6 +548,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
         setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);
+        setTranslationLanguageToPref(languagePreference, DELETE_FROM_FAV, "", "content_remove_favourite", json);
         setTranslationLanguageToPref(languagePreference, ENTER_EMPTY_FIELD, DEFAULT_ENTER_EMPTY_FIELD, "enter_register_fields_data", json);
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);

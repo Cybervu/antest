@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="teal_100">#FFCDD2</color>
     <color name="teal_500">#F44336</color>
     <color name="disableTextColor">#50757575</color>
     <color name="loader_color">#2acb99</color>
     <color name="textColor">#2acb99</color>
+    <color name="player_title_color">#2acb99</color>
     <color name="OsTextColor">#757575</color>
     <color name="colorPrimary">#1e292d</color>
     <color name="border_color">#000</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#666666</color>
+    <color name="banner_line_color">#000</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="nav_drawer_lineColor">#666</color>
     <color name="colorPrimaryDark">#1e292d</color>
@@ -25,6 +30,7 @@
     <color name="editTexColor">#666</color>
     <color name="button_background">#2acb99</color>
     <color name="castCrewTitleTextColor">#2acb99</color>
+    <color name="FilterTitleTextColor">#2acb99</color>
     <color name="buttonTextColor">#fff</color>
     <color name="buttonBackgroundColor">#2acb99</color>
     <color name="loginTextColor">#2acb99</color>
@@ -75,5 +81,13 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="forgotPasswordTextViewColor">#2acb99</color>
+    <color name="sign_up_text_color">#2acb99</color>
+    <color name="loginTextViewColor">#2acb99</color>
+    <color name="casttextColor">#2acb99</color>
+    <color name="videotextColor">#666666</color>
+    <color name="cast_description_color">#666666</color>
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#1e292d</color>
 
 </resources>

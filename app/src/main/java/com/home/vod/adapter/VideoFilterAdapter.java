@@ -87,7 +87,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
       try {
 
         GridItem item = data.get(position);
-        holder.title.setText(item.getTitle());
+        holder.title.setText(item.getTitle().replaceAll("[^a-zA-Z0-9]", ""));
         String imageId = item.getImage();
 
 
@@ -97,7 +97,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         }else {
 
             Picasso.with(context)
-                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.no_image)
+                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.logo)
                     .into(holder.videoImageview);
 
 

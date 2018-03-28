@@ -78,9 +78,18 @@ public class ReviewsAdapter extends BaseAdapter {
         Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
         userReviewTextView.setTypeface(castDescriptionTypeface);*/
 
-        userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
-        userReviewTextView.setText(Html.fromHtml(reviewsItems.get(position).getReview()));
-        rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
+        try {
+            userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
+            if (reviewsItems.get(position).getReview()!=null){
+                userReviewTextView.setText(Html.fromHtml(reviewsItems.get(position).getReview()));
+            }else {
+                userReviewTextView.setText("");
+            }
+
+            rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         rating.setFocusable(false);
 
         rating.setOnTouchListener(new View.OnTouchListener() {

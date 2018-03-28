@@ -107,6 +107,7 @@ public class DeleteFavAsync extends AsyncTask<DeleteFavInputModel, Void, Void> {
             httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.deleteFavInputModel.getMovieUniqueId());
             httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.deleteFavInputModel.getIsEpisode());
             httppost.addHeader(HeaderConstants.USER_ID, this.deleteFavInputModel.getLoggedInStr());
+            httppost.addHeader("lang_code",this.deleteFavInputModel.getLanguage());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

@@ -277,7 +277,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);*/
 
-                                 String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
+                                String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                                 browserIntent.setData(Uri.parse(externalLink));
                                 getActivity().startActivity(browserIntent);
@@ -609,7 +609,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
 //        if(!loadHomeFragment){
-            try{
+        try{
                /* boolean my_libary_added1 = checkMyLibAdded(menusOutputModelLocal);
 
                *//* for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
@@ -632,12 +632,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     }
                 }*/
 
-                Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
+            Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
 
 
-            }catch (Exception e){
-                Util.main_menu_list_size = -2;
-            }
+        }catch (Exception e){
+            Util.main_menu_list_size = -2;
+        }
 //        }
 
         loggedInStr = preferenceManager.getUseridFromPref();
@@ -726,7 +726,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             }
         }
 
-       //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -753,7 +753,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             titleArray.add(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name());
             ArrayList<String> childArray = new ArrayList<>();
 
-                expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name(), childArray);
+            expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name(), childArray);
 
         }
 

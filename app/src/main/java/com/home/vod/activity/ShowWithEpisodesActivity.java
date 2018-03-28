@@ -171,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
@@ -181,7 +182,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTT
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
@@ -209,10 +212,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 
 
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
@@ -583,8 +588,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
                 videoDurationTextView.setVisibility(View.VISIBLE);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), videoDurationTextView);
 
-                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoDurationTextView);
+                }else {
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoDurationTextView);
+
+                }
 
                 videoDurationTextView.setText(videoduration);
                 iconImageRelativeLayout.setVisibility(View.VISIBLE);
@@ -595,7 +605,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), videoReleaseDateTextView);
+                }else {
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
+                }
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
             }
@@ -891,8 +905,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU", "validateuser pdlog show");
-        if (pDialog != null && !pDialog.isShowing())
-            pDialog.show();
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
+        pDialog.show();
     }
 
     @Override
@@ -906,8 +920,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "validate user pdlog hide");
                 pDialog.hide();
-
-
             }
         } catch (IllegalArgumentException ex) {
 
@@ -1108,18 +1120,16 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             noDataLayout.setVisibility(View.VISIBLE);
         }
         if (status == 200) {
-
             //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV);
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
-
             favorite_view_episode.setImageResource(R.drawable.favorite_red);
             isFavorite = 1;
 
-            showToast();
-
+        }else {
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
         }
-
+       showToast();
     }
 
     @Override
@@ -1134,7 +1144,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
 
-        ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
+        if (status==200){
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV);
+        }else {
+            ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
+        }
+
         favorite_view_episode.setImageResource(R.drawable.favorite_unselected);
         showToast();
         isFavorite = 0;
@@ -3598,6 +3613,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
+                        if(NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
@@ -3607,6 +3623,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
                         dialog.dismiss();
+                    }else {
+                        Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
                     }
                 });
 
@@ -4316,7 +4335,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 output.close();
                 input.close();
 
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -4330,46 +4350,52 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String file_url) {
-            FakeSubTitlePath.remove(0);
-            if (FakeSubTitlePath.size() > 0) {
-                Download_SubTitle(FakeSubTitlePath.get(0).trim());
-            } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                playerModel.setSubTitlePath(SubTitlePath);
+            // Kushal -- double click crash
+            try {
+                FakeSubTitlePath.remove(0);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+                if (FakeSubTitlePath.size() > 0) {
+                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                } else {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                    playerModel.setSubTitlePath(SubTitlePath);
 
 
-                final Intent playVideoIntent;
-                if (Util.dataModel.getAdNetworkId() == 3) {
-                    LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
+                    final Intent playVideoIntent;
+                    if (Util.dataModel.getAdNetworkId() == 3) {
+                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 
-                } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
-                    if (Util.dataModel.getPlayPos() <= 0) {
-                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
+                    } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
+                        if (Util.dataModel.getPlayPos() <= 0) {
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
+                        } else {
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+
+                        }
                     } else {
                         playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 
                     }
-                } else {
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
-
-                }
-                /***ad **/
-                //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                    /***ad **/
+                    //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
                 /*playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                playVideoIntent.putExtra("PlayerModel", playerModel);
-                startActivity(playVideoIntent);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
 
+                }
             }
-        }
+
     }
 
     @Override

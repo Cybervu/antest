@@ -1375,6 +1375,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             Util.call_finish_at_onUserLeaveHint = false;
 
                             Intent resumeIntent = new Intent(MyLibraryPlayer.this, ResumePopupActivity.class);
+                            resumeIntent.putExtra("activity","MyLibraryPlayer");
                             startActivityForResult(resumeIntent, 1001);
                         } else {
 
@@ -2853,7 +2854,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (resultCode == RESULT_OK) {
             if (requestCode == 1001) {
-
                 Util.call_finish_at_onUserLeaveHint = true;
 
 

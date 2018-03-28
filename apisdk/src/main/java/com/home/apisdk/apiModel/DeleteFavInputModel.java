@@ -8,6 +8,24 @@ package com.home.apisdk.apiModel;
 
 public class DeleteFavInputModel {
     String authTokenStr, movieUniqueId, isEpisode, loggedInStr;
+    String language;
+
+    /**
+     * This Method is use to get the Language
+     *
+     * @return language
+     */
+    public String getLanguage() {
+        return language;
+    }
+    /**
+     * This Method is use to set the Language
+     *
+     * @param language For Setting the Auth Token
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     /**
      * This Method is use to Get the Auth Token

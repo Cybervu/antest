@@ -11,7 +11,8 @@
     android:background="@color/colorPrimary"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    local:contentInsetStartWithNavigation="0dp">
+    android:contentInsetStartWithNavigation="0dp"
+    >
 
 
     <ImageView

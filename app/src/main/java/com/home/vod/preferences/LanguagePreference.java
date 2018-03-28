@@ -181,6 +181,7 @@ public class LanguagePreference {
 
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
+    public static final String DELETE_FROM_FAV = "ADDED_TO_FAV";
     public static final String SIGN_OUT_WARNING = "SIGN_OUT_WARNING";
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
@@ -290,6 +291,7 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_TRANSACTION_PROCESS = "Error in Transaction Process";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
+
 
     public static String DEFAULT_TERMS = "terms";
     public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
@@ -402,6 +404,8 @@ public class LanguagePreference {
     public static final String DEFAULT_FAILURE = "Failure !";
     public static final String DEFAULT_NO_RECORD = "No record found!!!";
     public static final String DEFAULT_SIGN_OUT_WARNING = "Are you sure you want to sign out ?";
+    public static final String DEFAULT_ADDED_TO_FAV = "ADDED_TO_FAV";
+    public static final String DEFAULT_DELETE_FROM_FAV = "Content Remove From Fav";
     public static final String DEFAULT_SEARCH_ALERT = "Enter some text to search ...";
     public static final String DEFAULT_TEXT_EMIAL = "Enter your Email Address";
     public static final String DEFAULT_TEXT_PASSWORD = "Enter your Password";
