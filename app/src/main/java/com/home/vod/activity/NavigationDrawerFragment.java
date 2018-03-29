@@ -60,11 +60,13 @@ import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_HISTORY;
@@ -102,6 +104,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     boolean my_libary_added = false;
     boolean watch_history_added = false;
+    boolean my_favourite_added = false;
     MenusOutputModel menusOutputModelLocal,menusOutputModelFromAPI = new MenusOutputModel();
     int status;
     String message;
@@ -728,8 +731,35 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/* *//* Adding Favourite*//*
 
 
+
+        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
+                my_favourite_added = true;
+            }
+        }
+
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE) && loggedInStr != null) {
+            if(!my_favourite_added)
+            {
+                MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();
+                mainMenuLibrary.setTitle (languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                menusOutputModelLocal.getMainMenuModel().add(mainMenuLibrary);
+            }
+        }
+        else{
+            if(my_favourite_added)
+            {
+                menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
+            }
+        }*/
+
+////////////////
 
 
         if (menusOutputModelLocal.getMainMenuModel() != null && menusOutputModelLocal.getMainMenuModel().size() > 0) {
