@@ -73,6 +73,8 @@ public class ProfileHandler {
 
     public void setNameTxt(String nameString,String phoneNumber){
         editProfileNameEditText.setText(nameString.trim());
+        // Kushal - Cursor at last
+        editProfileNameEditText.setSelection(editProfileNameEditText.getText().length());
 
     }
 

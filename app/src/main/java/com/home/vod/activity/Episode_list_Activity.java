@@ -288,7 +288,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     LanguagePreference languagePreference;
     private String ipAddressStr = "";
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
-
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     // Menuitems //
     MenuItem action_searchmenu;
 
@@ -934,7 +934,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(Episode_list_Activity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
@@ -1314,6 +1314,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
+        // Kushal
+        Util.check_for_subscription = 0;
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         monetizationHandler=new MonetizationHandler(this);
@@ -1474,7 +1476,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+      //  mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3487,6 +3489,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
@@ -3577,6 +3584,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         }
         else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+            callValidateUserAPI();
+        }else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
             callValidateUserAPI();
         }
     }
@@ -3734,7 +3743,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                         Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
+                        startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                     } else {
                         ShowPpvPopUp();
                     }
@@ -3806,7 +3815,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
             Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
+            startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
         } else {
             ShowPpvPopUp();
         }

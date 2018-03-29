@@ -93,6 +93,11 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         subcription= (RecyclerView) findViewById(R.id.recyclerViewSubscription);
         activation_plan= (Button) findViewById(R.id.activationplan);
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
+        // Kushal
+       /* if (Util.check_for_subscription==1){
+            skipButton.setVisibility(View.GONE);
+        }*/
+        //
         subscriptionTitleTextView = (TextView) findViewById(R.id.subscriptionTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(SubscriptionActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -151,8 +156,14 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 intentpayment.putExtra("currencySymbol",movieList.get(selected_subscription_plan).getPlanCurrencySymbolstr());
                 intentpayment.putExtra("price",movieList.get(selected_subscription_plan).getPurchaseValueStr());
                 intentpayment.putExtra("selected_plan_id",movieList.get(selected_subscription_plan).getPlanIdStr());
+                if (Util.check_for_subscription==1){
+                    intentpayment.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                }
                 startActivity(intentpayment);
-                finish();
+                if (!(languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
+                        .trim()).equals("1") || Util.check_for_subscription==1){
+                    finish();
+                }
             }
         });
 
@@ -302,7 +313,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 subcription.setAdapter(mAdapter);
 
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
-                        .trim()).equals("1")) {
+                        .trim()).equals("1") && Util.check_for_subscription==0) {
                     skipButton.setVisibility(View.VISIBLE);
 
                 }

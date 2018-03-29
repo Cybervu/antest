@@ -242,11 +242,16 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         };
 
         editEmail= (EditText) findViewById(R.id.editEmail);
+        //
+
         editEmail.setFilters(new InputFilter[]{filter});
         FontUtls.loadFont(Login.this, getResources().getString(R.string.light_fonts), editEmail);
         editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
         editPassword= (EditText) findViewById(R.id.editPassword);
+        // to make login easier
+        //makeEasyLogin();
+
         editPassword.setFilters(new InputFilter[]{filter});
         FontUtls.loadFont(Login.this, getResources().getString(R.string.light_fonts), editPassword);
         editPassword.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
@@ -334,6 +339,11 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
             }
         });
 
+    }
+
+    private void makeEasyLogin() {
+        editEmail.setText("dev-ios@muvi.com");
+        editPassword.setText("mobile1234");
     }
 
 

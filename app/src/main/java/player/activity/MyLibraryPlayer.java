@@ -552,7 +552,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         mAquery = new AQuery(MyLibraryPlayer.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(MyLibraryPlayer.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(MyLibraryPlayer.this, savedInstanceState);
+      //  mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(MyLibraryPlayer.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(MyLibraryPlayer.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -4369,6 +4369,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
 

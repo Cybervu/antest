@@ -1468,6 +1468,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });
 
         editEmailStr = (EditText) findViewById(R.id.editEmailStr);
+
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editEmailStr);
 
         editEmailStr.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
@@ -1708,7 +1709,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3646,6 +3647,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

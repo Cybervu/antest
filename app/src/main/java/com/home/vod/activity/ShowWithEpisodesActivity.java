@@ -281,7 +281,7 @@ MonetizationHandler monetizationHandler;
 
     // Menuitems //
     MenuItem action_searchmenu;
-
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
         LogUtil.showLog("PINTU", "translate pdlog show");
@@ -975,7 +975,7 @@ MonetizationHandler monetizationHandler;
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(ShowWithEpisodesActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this);
@@ -1806,6 +1806,8 @@ MonetizationHandler monetizationHandler;
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         setContentView(R.layout.activity_show_with_episodes);
+        // Kushal
+        Util.check_for_subscription = 0;
 //        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
 
@@ -2375,7 +2377,7 @@ MonetizationHandler monetizationHandler;
         //setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -2559,6 +2561,7 @@ MonetizationHandler monetizationHandler;
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        Util.check_for_subscription = 1;
         if (isLogin == 1) {
             if (loggedInStr != null) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
@@ -4118,6 +4121,11 @@ MonetizationHandler monetizationHandler;
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override
@@ -5321,6 +5329,8 @@ MonetizationHandler monetizationHandler;
         }
         else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
             callValidateUserAPI();
+        }else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            callValidateUserAPI();
         }
 
     }
@@ -5378,7 +5388,7 @@ MonetizationHandler monetizationHandler;
                     } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                         Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
+                        startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                     } else {
                         ShowPpvPopUp();
                     }
@@ -5445,7 +5455,7 @@ MonetizationHandler monetizationHandler;
         } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
             Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
+            startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
         } else {
             ShowPpvPopUp();
         }

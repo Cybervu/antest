@@ -407,6 +407,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     boolean change_resolution = false;
     boolean is_paused = false;
 
+    // Kushal-- back button layout
+    LinearLayout backLayout;
+
+
 
     @Override
     protected void onResume() {
@@ -592,7 +596,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mAquery = new AQuery(ExoPlayerActivity.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+        // Kushal up supprted file
+    //    mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -949,6 +954,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
+        // Kushal
+        backLayout= findViewById(R.id.back_layout);
 
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
@@ -1318,6 +1325,25 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
                 backCalled();
+                // Kushal -- to handel back press
+                mHandler.removeCallbacks(updateTimeTask);
+               emVideoView.release();
+               finish();
+               /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();*/
+            }
+        });
+
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backCalled();
+                // Kushal -- to handel back press
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.release();
+                finish();
                /* Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
                 mHandler.removeCallbacks(updateTimeTask);
                 emVideoView.release();
@@ -4653,6 +4679,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
 

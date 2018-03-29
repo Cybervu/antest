@@ -152,14 +152,22 @@
                     android:paddingBottom="@dimen/paddingBottom5dp"
                     android:paddingTop="@dimen/paddingtop5dp"
                     android:visibility="gone">
-
-                    <ImageButton
-                        android:id="@+id/back"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/marginLeft15dp"
-                        android:background="@drawable/ic_back" />
+                        android:gravity="center"
+                        android:padding="@dimen/padding15dp"
+                        android:id="@+id/back_layout"
+                        android:orientation="vertical">
+                        <ImageButton
+                            android:id="@+id/back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ic_back" />
+                    </LinearLayout>
+
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
