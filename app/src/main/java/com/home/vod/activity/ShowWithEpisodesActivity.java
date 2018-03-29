@@ -328,6 +328,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     String filename = "";
     static File mediaStorageDir;
+    String PURCHASE_TYPE = "show";
 
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
@@ -1561,7 +1562,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
 
                 jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
-                jsonObj.put("is_log", "1");
+//                jsonObj.put("is_log", "1");
+                jsonObj.put("is_log", "0");
 
                 //=====================End===================//
 
@@ -4391,7 +4393,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                    playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
 
@@ -5631,7 +5633,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         monitizationDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
         monitizationDetailsInput.setMovie_id(movieUniqueId);
         monitizationDetailsInput.setStream_id(movieStreamUniqueId);
-        monitizationDetailsInput.setPurchase_type("show");
+        monitizationDetailsInput.setPurchase_type("episode");
         getMonitizationDetailsAsync = new GetMonitizationDetailsAsync(monitizationDetailsInput, this, this);
         getMonitizationDetailsAsync.executeOnExecutor(threadPoolExecutor);
     }
@@ -5736,6 +5738,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                     // Calling Voucher Subscription Api
 
+
+
                     VoucherSubscriptionInputModel voucherSubscriptionInputModel = new VoucherSubscriptionInputModel();
                     voucherSubscriptionInputModel.setAuthToken(authTokenStr);
                     voucherSubscriptionInputModel.setUser_id(preferenceManager.getUseridFromPref());
@@ -5745,9 +5749,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
                     voucherSubscriptionInputModel.setIs_preorder("" + Util.dataModel.getIsAPV());
                     voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    voucherSubscriptionInputModel.setPurchase_type("show");
+                    voucherSubscriptionInputModel.setPurchase_type(PurchageType);
                     VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                     asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);
+
+
 
                 }
             }
@@ -5771,6 +5777,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     }
 
     public void ShowVoucherPurchaseTypePopUp(String isShow, String isSeason, String isEpisode) {
+
+
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);

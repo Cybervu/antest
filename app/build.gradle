@@ -355,7 +355,7 @@ android {
         }
         magicmovies_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://nynina.muvi.com/rest/\""
         }
         ubereatsvod {
             minSdkVersion 21
