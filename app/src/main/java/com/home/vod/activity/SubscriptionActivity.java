@@ -123,7 +123,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),skipButton);
 
         skipButton.setText(languagePreference.getTextofLanguage(SKIP_BUTTON_TITLE,DEFAULT_SKIP_BUTTON_TITLE));
-      
+
         mLayoutManager = new LinearLayoutManager(SubscriptionActivity.this, LinearLayoutManager.VERTICAL, false);
         if(NetworkStatus.getInstance().isConnected(this)) {
             SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
