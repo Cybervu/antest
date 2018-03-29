@@ -28,11 +28,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.DeleteInvoicePDFModel;
-import com.home.api.apiModel.GetInvoicePDFModel;
-import com.home.api.apiModel.TransactionDetailsModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.DeleteInvoicePDFModel;
+import com.home.api.api.apiModel.GetInvoicePDFModel;
+import com.home.api.api.apiModel.TransactionDetailsModel;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;

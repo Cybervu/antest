@@ -31,11 +31,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.AuthUserPaymentInfoModel;
-import com.home.api.apiModel.GetVideoDetailsModel;
-import com.home.api.apiModel.RegisterUserPayment;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.AuthUserPaymentInfoModel;
+import com.home.api.api.apiModel.GetVideoDetailsModel;
+import com.home.api.api.apiModel.RegisterUserPayment;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;

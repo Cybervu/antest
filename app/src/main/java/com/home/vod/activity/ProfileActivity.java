@@ -25,10 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.GetProfileDetailsModel;
-import com.home.api.apiModel.UpdateUserProfileModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.GetProfileDetailsModel;
+import com.home.api.api.apiModel.UpdateUserProfileModel;
 import com.home.vod.ProfileHandler;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;

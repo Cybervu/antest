@@ -10,9 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.ManageDeviceModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.ManageDeviceModel;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.LanguagePreference;

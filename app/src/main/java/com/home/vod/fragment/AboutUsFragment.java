@@ -21,9 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.GetStaticPagedetailsModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.GetStaticPagedetailsModel;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;

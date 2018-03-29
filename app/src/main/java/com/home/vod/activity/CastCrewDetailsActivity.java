@@ -20,9 +20,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.GetCastDetailsModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.GetCastDetailsModel;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
 import com.home.vod.model.GridItem;

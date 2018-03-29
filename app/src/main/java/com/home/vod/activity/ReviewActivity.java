@@ -18,10 +18,10 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.AddContentRatingModel;
-import com.home.api.apiModel.ViewContentRatingModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.AddContentRatingModel;
+import com.home.api.api.apiModel.ViewContentRatingModel;
 import com.home.vod.R;
 import com.home.vod.adapter.ReviewsAdapter;
 import com.home.vod.model.ReviewsItem;

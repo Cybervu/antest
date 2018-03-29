@@ -3,7 +3,7 @@ package com.home.vod;
 import android.app.Application;
 
 
-import com.home.api.APIUrlConstant;
+import com.home.api.api.APIUrlConstant;
 import com.home.vod.util.LogUtil;
 
 /**

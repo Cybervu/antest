@@ -15,9 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.GetCelebrityModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.GetCelebrityModel;
 import com.home.vod.CastAndCrewDetailsIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;

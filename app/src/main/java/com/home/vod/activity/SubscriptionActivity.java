@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
-import com.home.api.apiModel.GetStudioPlanListsModel;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
+import com.home.api.api.apiModel.GetStudioPlanListsModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PlanAdapter;
 import com.home.vod.fragment.VideosListFragment;

@@ -43,18 +43,18 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 
 
-import com.home.api.APIUrlConstant;
-import com.home.api.apiController.APICallManager;
+import com.home.api.api.APIUrlConstant;
+import com.home.api.api.apiController.APICallManager;
 
-import com.home.api.apiModel.AuthUserPaymentInfoModel;
-import com.home.api.apiModel.GetCardListModel;
-import com.home.api.apiModel.GetMonetizationDetailsModel;
-import com.home.api.apiModel.GetVideoDetailsModel;
-import com.home.api.apiModel.ValidateCouponCodeModel;
-import com.home.api.apiModel.ValidateVoucherModel;
-import com.home.api.apiModel.VoucherPlanModel;
-import com.home.api.apiModel.VoucherSubscriptionModel;
-import com.home.api.apiModel.WithoutPaymentSubscriptionModel;
+import com.home.api.api.apiModel.AuthUserPaymentInfoModel;
+import com.home.api.api.apiModel.GetCardListModel;
+import com.home.api.api.apiModel.GetMonetizationDetailsModel;
+import com.home.api.api.apiModel.GetVideoDetailsModel;
+import com.home.api.api.apiModel.ValidateCouponCodeModel;
+import com.home.api.api.apiModel.ValidateVoucherModel;
+import com.home.api.api.apiModel.VoucherPlanModel;
+import com.home.api.api.apiModel.VoucherSubscriptionModel;
+import com.home.api.api.apiModel.WithoutPaymentSubscriptionModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -91,7 +91,7 @@ import player.activity.ExoPlayerActivity;
 import player.activity.Player;
 
 
-import static com.home.api.apiModel.CommonConstants.VOUCHER_CODE;
+import static com.home.api.api.apiModel.CommonConstants.VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.BTN_NEXT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
