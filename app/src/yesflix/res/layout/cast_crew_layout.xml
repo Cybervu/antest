@@ -13,7 +13,7 @@
         android:layout_marginLeft="@dimen/ppv_margin"
         android:layout_marginRight="@dimen/ppv_margin"
         android:layout_marginTop="@dimen/my_download_margin"
-        android:background="@color/episodeBackgroundColor"
+        android:background="@color/transparent"
         android:layout_marginBottom="@dimen/my_download_margin"
         android:orientation="horizontal"
         >
@@ -24,7 +24,8 @@
             android:layout_height="@dimen/cast_height_icon"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/castTitleLinearLayout"
@@ -52,7 +53,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textColor="@color/videotextColor"
+                android:textColor="@color/cast_description_color"
                 android:textSize="@dimen/cast_description_text" />
 
         </LinearLayout>

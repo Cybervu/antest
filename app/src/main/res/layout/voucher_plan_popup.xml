@@ -98,12 +98,12 @@
             android:stateListAnimator="@null"
             android:text="Next"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/pageTitleColor"
             android:textSize="@dimen/cast_name_text" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/pop_up_view_height"
-            android:background="@color/buttonbg" />
+            android:background="@color/border_color" />
     </LinearLayout>
 </LinearLayout>

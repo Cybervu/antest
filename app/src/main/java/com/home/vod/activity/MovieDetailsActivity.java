@@ -154,7 +154,9 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
@@ -166,6 +168,7 @@ import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
@@ -177,7 +180,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
@@ -205,7 +210,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
@@ -332,7 +339,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
     LinearLayout story_layout;
-    String sucessMsg;
     int isFavorite;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -365,6 +371,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     FeatureHandler featureHandler;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     public static final int PAYMENT_REQUESTCODE = 8889;
 
 
@@ -499,7 +506,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
-
+                        if(NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
@@ -510,6 +517,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
                         dialog.dismiss();
+                        }else {
+                            Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -795,7 +805,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+           /* @author :Bishal
+            * every time check_for_subscription is 0 in page but when we click the play button then its value chenge to 1
+            */
+        Util.check_for_subscription=0;
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
@@ -920,6 +933,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
+                        deleteFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                         DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         deleteFavAsync.executeOnExecutor(threadPoolExecutor);
@@ -932,6 +946,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);
+                        addToFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
 
                         asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
@@ -1013,13 +1029,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 SubTitlePath.clear();
                 ResolutionUrl.clear();
                 ResolutionFormat.clear();
-
+                Util.check_for_subscription = 1;
                 if (preferenceManager.getLoginFeatureFromPref() == 1) {
                     if (preferenceManager != null) {
                         String loggedInStr = preferenceManager.getUseridFromPref();
 
                         if (loggedInStr == null) {
-                            Util.check_for_subscription = 1;
+
                             Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
                             registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             registerActivity.putExtra("PlayerModel", playerModel);
@@ -2243,7 +2259,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     }
 
 
-    public void showToast() {
+    public void showMessageToUser(String message) {
 
         Context context = getApplicationContext();
         // Create layout inflator object to inflate toast.xml file
@@ -2252,7 +2268,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         // Call toast.xml file for toast layout
         View toastRoot = inflater.inflate(R.layout.custom_toast, null);
         TextView customToastMsg = (TextView) toastRoot.findViewById(R.id.toastMsg);
-        customToastMsg.setText(sucessMsg);
+        customToastMsg.setText(message);
         Toast toast = new Toast(context);
 
         // Set layout to toast
@@ -2318,6 +2334,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         } else if (requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK) {
             getVideoInfo();
+        }
+
+        else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
         }
 
 
@@ -2532,7 +2552,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                 /* @author :Bishal
+                 * send activity result when goes to Subscriptionactivity
+                 */
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(MovieDetailsActivity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
@@ -2603,7 +2626,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         languageModel = languageModels;
         ShowLanguagePopup();
     }
-
     @Override
     public void onVideoDetailsPreExecuteStarted() {
         if (pDialog != null && !pDialog.isShowing())
@@ -2617,7 +2639,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
-        try {
+     try {
             if (pDialog != null && pDialog.isShowing())
                 pDialog.hide();
         } catch (IllegalArgumentException ex) {
@@ -2626,12 +2648,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }
@@ -3114,10 +3131,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
-           if (preferenceManager.getUseridFromPref()!=null){
+          /* if (preferenceManager.getUseridFromPref()!=null){
                     Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                     startActivity(intent);
-                }
+                }*/
     }
 
     @Override
@@ -3130,8 +3147,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public void onAddToFavPostExecuteCompleted(AddToFavOutputModel addToFavOutputModel, int status, String sucessMsg) {
         favorite_view.setImageResource(R.drawable.favorite_red);
         isFavorite = 1;
-        MovieDetailsActivity.this.sucessMsg = sucessMsg;
-        showToast();
+        if (status==200){
+
+            String data = languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV);
+            showMessageToUser(languagePreference.getTextofLanguage(ADDED_TO_FAV,DEFAULT_ADDED_TO_FAV));
+        }else {
+            showMessageToUser(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING));
+        }
+
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
         }
@@ -3246,8 +3269,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                }else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                }
                 videoGenreTextView.setText(contentDetailsOutput.getGenre());
 
             }
@@ -3257,8 +3285,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
 
                 videoDurationTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                } else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                }
                 videoDurationTextView.setText(contentDetailsOutput.getVideoDuration());
             }
 
@@ -3267,8 +3300,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                if(getResources().getString(R.string.app_name).equals("Yesflix")){
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                    videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                }else {
+                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                    videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                }
+
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
 
@@ -3459,8 +3498,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
         favorite_view.setImageResource(R.drawable.favorite_unselected);
-        MovieDetailsActivity.this.sucessMsg = sucessMsg;
-        showToast();
+
+
+        if (status==200){
+            String data = languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV);
+            showMessageToUser(languagePreference.getTextofLanguage(DELETE_FROM_FAV,DEFAULT_DELETE_FROM_FAV));
+        }else {
+            showMessageToUser(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING));
+        }
+
+
         isFavorite = 0;
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
@@ -3592,7 +3639,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                             Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
+                            startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                         } else {
                             // Go to ppv Payment
                             Log.v("MUVI", "unpaid msg");
@@ -3639,9 +3686,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public void ShowVoucherPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) MovieDetailsActivity.this.getSystemService(MovieDetailsActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) MovieDetailsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.voucher_popup, null);
+        View convertView = inflater.inflate(R.layout.voucher_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
@@ -3793,7 +3840,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else {
                 // Go to ppv Payment
                 Log.v("MUVI", "unpaid msg");

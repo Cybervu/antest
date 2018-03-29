@@ -153,9 +153,9 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel, Void, V
                         jsonChildNode = jsonMainNode.getJSONObject(i);
                         CelibrityOutputModel content = new CelibrityOutputModel();
                         String celebrityName = jsonChildNode.optString("name").trim();
-                        String celebrityImage = jsonChildNode.optString("celebrity_image").trim();
-                        String celebrityPermalink = jsonChildNode.optString("permalink").trim();
-                        String celebritySummary = jsonChildNode.optString("summary").trim();
+                        String celebrityImage = jsonChildNode.optString("celebrity_image");
+                        String celebrityPermalink = jsonChildNode.optString("permalink");
+                        String celebritySummary = jsonChildNode.optString("summary");
 
 
 

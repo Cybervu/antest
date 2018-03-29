@@ -42,6 +42,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
@@ -51,6 +52,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
@@ -87,9 +89,12 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_forgot_password);
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(FORGOT_PASSWORD,DEFAULT_FORGOT_PASSWORD));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 

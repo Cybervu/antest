@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--added for app background color by bishal-->
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="background_start_color">#000</color>
     <color name="background_end_color">#000</color>
     <color name="appBackgroundColor">#000</color>
     <color name="textColor">#fff</color>
+    <color name="player_title_color">#fff</color>
     <color name="videotextColor">#ffffff</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#ffffff</color>
+    <color name="banner_line_color">#4da30c</color>
+    <color name="cast_description_color">#fff</color>
     <color name="loginTextViewColor">#4da30c</color>
     <color name="buttonTextColor">#fff</color>
     <color name="forgotPasswordTextViewColor">#4da30c</color>
@@ -19,6 +25,7 @@
     <color name="cancel_button_text_color">#4da30c</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#4da30c</color>
+    <color name="FilterTitleTextColor">#4da30c</color>
     <color name="castCrewBackgroundColor">#757575</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#242424</color>
@@ -52,6 +59,8 @@
     <color name="noInternetColor">#fff</color>
     <color name="editTextColor">#fff</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="videomovieTitleColor">#fff</color>
     <color name="resumePopupColor">#fff</color>
     <color name="dividerColor">#4da30c</color>
@@ -86,4 +95,7 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="device_name_color">#fff</color>
+
+
 </resources>

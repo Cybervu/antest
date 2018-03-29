@@ -92,9 +92,11 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
@@ -159,7 +161,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
 
-    private TextView sectionTitle;
+   // private TextView sectionTitle;
     //Register Dialog
     ////////
     String movieUniqueId, FavMoviePoster = "";
@@ -239,9 +241,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setTitle("");
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,18 +259,16 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         loggedInStr = preferenceManager.getUseridFromPref();
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
-        isLogin = preferenceManager.getLoginFeatureFromPref();
+         isLogin = preferenceManager.getLoginFeatureFromPref();
 
-        sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
-        if (getIntent().getStringExtra("sectionName") != null) {
-            sectionName = getIntent().getStringExtra("sectionName");
-            sectionTitle.setText(sectionName);
+       // sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+      //  FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
+        /*if (getIntent().getStringExtra("sectionName") != null) {
+            mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
         } else {
-            sectionTitle.setText("");
+            mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
 
-        }
-
+        }*/
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
@@ -925,7 +926,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
@@ -934,7 +935,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         favorite_menu.setVisible(false);
         return true;
-    }
+    }*/
     /*chromecast-------------------------------------*/
 
 
@@ -1027,7 +1028,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
@@ -1078,7 +1079,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
-          /*  case R.id.menu_item_favorite:
+          *//*  case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
 //                favoriteIntent.putExtra("EMAIL",email);
@@ -1086,7 +1087,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
                 // Not implemented here
-                return false;*/
+                return false;*//*
             case R.id.menu_item_profile:
 
                 Intent profileIntent = new Intent(FavoriteActivity.this, ProfileActivity.class);
@@ -1145,7 +1146,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
 
         return false;
-    }
+    }*/
 
 
     public void ShowLanguagePopup() {

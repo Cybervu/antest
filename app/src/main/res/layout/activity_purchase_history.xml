@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <include
@@ -16,7 +16,7 @@
         android:visibility="visible"
         android:orientation="vertical">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/purchaseHistoryTitleTextView"
@@ -25,7 +25,7 @@
             android:layout_margin="@dimen/my_download_margin"
             android:padding="@dimen/login_new_user_padding"
             android:textColor="@color/pageTitleColor"
-            />
+            />-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/purchase_history_recyclerview"
@@ -38,7 +38,7 @@
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:visibility="gone"
         android:padding="@dimen/manage_device_padding">
 
@@ -70,10 +70,10 @@
         android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:padding="@dimen/manage_device_padding">
 
         <TextView
             android:layout_width="match_parent"
@@ -84,7 +84,7 @@
             android:singleLine="false"
             android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 

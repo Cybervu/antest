@@ -36,15 +36,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
@@ -90,20 +94,21 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
         no_internet_text = (TextView) findViewById(R.id.no_internet_text);
         recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
-        purchaseHistoryTitleTextView = (TextView) findViewById(R.id.purchaseHistoryTitleTextView);
+       // purchaseHistoryTitleTextView = (TextView) findViewById(R.id.purchaseHistoryTitleTextView);
 
         no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN));
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         user_id = preferenceManager.getUseridFromPref();
-        FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts), purchaseHistoryTitleTextView);
+       // FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts), purchaseHistoryTitleTextView);
 
-        purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY
-        ));
+      //  purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
 
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {

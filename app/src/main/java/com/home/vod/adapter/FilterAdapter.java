@@ -97,7 +97,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
             holder.selectButton.setVisibility(View.GONE);
 
             holder.listviewLay1.setClickable(false);
-            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.castCrewTitleTextColor));
+            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.FilterTitleTextColor));
             holder.filterTextName.setTextSize(18);
 
           //  holder.filterTextName.setTypeface(holder.filterTextName.getTypeface(), Typeface.BOLD);
@@ -111,7 +111,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
        else if (position == (genreTempArr.length - 5)){
             holder.selectButton.setVisibility(View.GONE);
             holder.listviewLay1.setClickable(false);
-            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.castCrewTitleTextColor));
+            holder.filterTextName.setTextColor(context.getResources().getColor(R.color.FilterTitleTextColor));
             holder.filterTextName.setTextSize(18);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
 

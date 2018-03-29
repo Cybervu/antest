@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -157,7 +158,7 @@ public class MyDownloadAdapter extends BaseAdapter {
                                 if (file != null && file.exists()) {
                                     file.delete();
                                 }
-                                SQLiteDatabase DB = activity.openOrCreateDatabase(DBHelper.DATABASE_NAME, activity.MODE_PRIVATE, null);
+                                SQLiteDatabase DB = activity.openOrCreateDatabase(DBHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
                                 Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID = '"+downloadModel.get(position).getUniqueId()+"'", null);
                                 int count = cursor.getCount();
 

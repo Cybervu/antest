@@ -209,7 +209,6 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                                 movieTypeStr =movieTypeStr.trim();
                             }
                         }
-
                         contentDetailsOutput.setGenre(movieTypeStr);
 
                     } else {

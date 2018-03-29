@@ -174,6 +174,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
     }
 
+
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
 
@@ -359,6 +360,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         return (YouTubePlayerView) findViewById(R.id.youtubeplayerfragment);
     }
 */
+
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
@@ -374,9 +376,9 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
             String vId =
             getYoutubeId();//this method is for get only youtube id from the whole url
             //YPlayer.cueVideo(videoUrlStr);
-
             YPlayer.loadVideo(vId);
         }
+
 
     }
 
@@ -449,5 +451,4 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
         }
     }
-
 }

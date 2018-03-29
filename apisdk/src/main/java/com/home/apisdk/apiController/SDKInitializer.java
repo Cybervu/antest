@@ -114,9 +114,9 @@ public class SDKInitializer {
 
 
     public interface SDKInitializerListner {
-        public void onPreExexuteListner();
+        void onPreExexuteListner();
 
-        public void onPostExecuteListner(int status);
+        void onPostExecuteListner(int status);
     }
 
 

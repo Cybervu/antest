@@ -105,6 +105,7 @@ public class AddToFavAsync extends AsyncTask<AddToFavInputModel, Void, Void> {
             httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.addToFavInputModel.getMovie_uniq_id());
             httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.addToFavInputModel.getIsEpisodeStr());
             httppost.addHeader(HeaderConstants.USER_ID, this.addToFavInputModel.getLoggedInStr());
+            //httppost.addHeader("lang_code", this.addToFavInputModel.getLanguage());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
