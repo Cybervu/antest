@@ -319,6 +319,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     int isRatingThere = 1;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     public static final int PAYMENT_REQUESTCODE = 8889;
 
 
@@ -1062,7 +1063,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(ShowWithEpisodesActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this);
@@ -2062,7 +2063,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Util.check_for_subscription=0;
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         setContentView(R.layout.activity_show_with_episodes);
@@ -2732,6 +2733,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        Util.check_for_subscription = 1;
         if (isLogin == 1) {
             if (loggedInStr != null) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
@@ -5468,6 +5470,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } else if (requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK) {
             getVideoInfo();
         }
+        else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            new CheckVoucherOrPpvPaymentHandler(ShowWithEpisodesActivity.this).handleVoucherPaymentOrPpvPayment();
+        }
 
     }
 
@@ -5576,7 +5581,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                            Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                           startActivity(intent);
+                           startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                        } else {
                            ShowPpvPopUp();
                        }
@@ -5925,7 +5930,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else {
                 ShowPpvPopUp();
             }

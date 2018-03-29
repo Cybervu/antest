@@ -5,8 +5,8 @@
     <color name="background_start_color">#5c6873</color>
     <color name="background_end_color">#5c6873</color>
     <color name="appBackgroundColor">#fff</color>
-    <color name="textColor">#757575</color>
-    <color name="player_title_color">#757575</color>
+    <color name="textColor">#8f8f8f</color>
+    <color name="player_title_color">#8f8f8f</color>
     <color name="videotextColor">#8f8f8f</color>
     <!--added by bishal in detaills layout story color id-->
     <color name="videostorytextcolor">#8f8f8f</color>
@@ -33,7 +33,7 @@
     <color name="login_new_user_text_color">#6e6f76</color>
     <color name="card_backgroud_drawable">#303030</color>
     <color name="edit_text_background">#EDEDED</color>
-    <color name="ic_radio_button_default">#5c6873</color>
+    <color name="ic_radio_button_default">#8f8f8f</color>
     <color name="favorite_color">#878282</color>
     <color name="sign_up_text_color">#d23232</color>
     <color name="edit_color">#dadada</color>

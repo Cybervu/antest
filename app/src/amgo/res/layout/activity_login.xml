@@ -78,7 +78,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/forgotPasswordTextViewColor"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:maxLines="4"
                     android:layout_weight="0.4"
                     android:textSize="@dimen/forgot_text_size" />

@@ -642,7 +642,6 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("pratik", "reg to log chrome con");
                     Intent castLoginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                     castLoginIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     castLoginIntent.putExtra("PlayerModel", playerModel);

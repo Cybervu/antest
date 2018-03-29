@@ -2,11 +2,15 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.support.v7.app.MediaRouteButton;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.Util;
+
+import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 
 /**
  * Created by Android on 12/19/2017.
@@ -21,7 +25,7 @@ public class SplashScreenHandler {
     public void handleSplashscreen(ImageView imageResize) {
 
         if ( Util.isTablet(context)){
-            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }else {
             try {
                 handlePhoneSplashUI(imageResize);
@@ -33,7 +37,7 @@ public class SplashScreenHandler {
     }
 
     public void handlePhoneSplashUI(ImageView imageResize){
-        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
 
         Display display = context.getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();

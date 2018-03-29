@@ -108,9 +108,6 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
             toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
-
-
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +123,12 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),skipButton);
 
         skipButton.setText(languagePreference.getTextofLanguage(SKIP_BUTTON_TITLE,DEFAULT_SKIP_BUTTON_TITLE));
-
+         /* @author :Bishal
+         * if we click content and then Subscription Activity called then we have to hide the skip button here
+           */
+        if (Util.check_for_subscription==1){
+            skipButton.setVisibility(View.GONE);
+        }
 
         mLayoutManager = new LinearLayoutManager(SubscriptionActivity.this, LinearLayoutManager.VERTICAL, false);
         if(NetworkStatus.getInstance().isConnected(this)) {
@@ -151,12 +153,17 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 intentpayment.putExtra("currencySymbol",movieList.get(selected_subscription_plan).getPlanCurrencySymbolstr());
                 intentpayment.putExtra("price",movieList.get(selected_subscription_plan).getPurchaseValueStr());
                 intentpayment.putExtra("selected_plan_id",movieList.get(selected_subscription_plan).getPlanIdStr());
-
+                /* @author :Bishal
+                * when we click the content there we set Util.check_for_subscription as 1 so we forward this result to next activity
+                 */
+                if (Util.check_for_subscription==1){
+                    intentpayment.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                }
                 startActivity(intentpayment);
-                if (!featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP)){
+                if (!featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP) || Util.check_for_subscription==1){
                     finish();
                 }
-               // finish();
+                // finish();
             }
         });
 
@@ -305,7 +312,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 mAdapter = new PlanAdapter(SubscriptionActivity.this,movieList);
                 subcription.setAdapter(mAdapter);
 
-                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP,FeatureHandler.DEFAULT_SIGNUP_STEP)) && Util.check_for_subscription==0) {
                     skipButton.setVisibility(View.VISIBLE);
 
                 }

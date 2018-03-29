@@ -1041,25 +1041,12 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     startActivity(intent);
                     finish();
                 } else {
-                    if (NetworkStatus.getInstance().isConnected(this)) {
-
-                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
-                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PaymentInfoActivity.this, PaymentInfoActivity.this);
-                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                    } else {
-                        Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        finish();
-                        Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
+                    /* @author :Bishal
+                    * added for back called if user comes from content click and do payment then it back to privious page an play video
+                     */
+                Intent intent=new Intent();
+                setResult(RESULT_OK,intent);
+                finish();
                 }
 
             } else {

@@ -398,7 +398,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
-
+        Util.check_for_subscription=0;
         context = getActivity();
         featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);

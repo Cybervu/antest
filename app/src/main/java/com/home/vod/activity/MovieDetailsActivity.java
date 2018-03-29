@@ -371,6 +371,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     FeatureHandler featureHandler;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     public static final int PAYMENT_REQUESTCODE = 8889;
 
 
@@ -804,7 +805,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+           /* @author :Bishal
+            * every time check_for_subscription is 0 in page but when we click the play button then its value chenge to 1
+            */
+        Util.check_for_subscription=0;
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
@@ -1025,13 +1029,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 SubTitlePath.clear();
                 ResolutionUrl.clear();
                 ResolutionFormat.clear();
-
+                Util.check_for_subscription = 1;
                 if (preferenceManager.getLoginFeatureFromPref() == 1) {
                     if (preferenceManager != null) {
                         String loggedInStr = preferenceManager.getUseridFromPref();
 
                         if (loggedInStr == null) {
-                            Util.check_for_subscription = 1;
+
                             Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
                             registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             registerActivity.putExtra("PlayerModel", playerModel);
@@ -2332,6 +2336,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             getVideoInfo();
         }
 
+        else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
+        }
+
 
     }
 
@@ -2544,7 +2552,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                 /* @author :Bishal
+                 * send activity result when goes to Subscriptionactivity
+                 */
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(MovieDetailsActivity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
@@ -3633,7 +3644,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                             Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
+                            startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                         } else {
                             // Go to ppv Payment
                             Log.v("MUVI", "unpaid msg");
@@ -3834,7 +3845,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else {
                 // Go to ppv Payment
                 Log.v("MUVI", "unpaid msg");

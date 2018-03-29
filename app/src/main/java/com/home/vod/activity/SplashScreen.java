@@ -667,7 +667,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     overridePendingTransition(0, 0);
                 }
             } else {
-                mIntent = new Intent(SplashScreen.this, RegisterActivity.class);
+                mIntent = new Intent(SplashScreen.this, LoginActivity.class);
                 mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 overridePendingTransition(0, 0);
                 startActivity(mIntent);
