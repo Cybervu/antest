@@ -141,7 +141,7 @@ public class LoginHandler {
                                     loginButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
-                                    ((LoginActivity)context).handleFbUserDetails(fbUserId,fbEmail,fbName);
+                                    context.handleFbUserDetails(fbUserId,fbEmail,fbName);
                                 }
 
                             } catch (JSONException e) {

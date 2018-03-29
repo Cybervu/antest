@@ -138,7 +138,7 @@ enum ContentTypes {
 			"video/mp2t");
 	String mediaSourceParamsContentType = null;
 
-	private ContentTypes(String mediaSourceParamsContentType) {
+	ContentTypes(String mediaSourceParamsContentType) {
 		this.mediaSourceParamsContentType = mediaSourceParamsContentType;
 	}
 
@@ -680,7 +680,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					//Will Add Some Data to send
 					Util.call_finish_at_onUserLeaveHint = false;
 					Util.hide_pause = true;
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+					findViewById(R.id.progress_view).setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.VISIBLE);
 
 					if (emVideoView.isPlaying()) {
@@ -890,7 +890,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				if (Util.hide_pause) {
 					Util.hide_pause = false;
 				}
-				if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+				if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
 					primary_ll.setVisibility(View.VISIBLE);
 					center_play_pause.setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.GONE);
@@ -1024,7 +1024,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				video_prepared = true;
 				video_completed = false;
 				if (progressView != null) {
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+					findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 					center_play_pause.setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.GONE);
 				}
@@ -1047,7 +1047,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 							Log.v("BIBHU3", " called============");
 
-							((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+							findViewById(R.id.progress_view).setVisibility(View.GONE);
 							Util.call_finish_at_onUserLeaveHint = false;
 
 							resume_orientation = true;
@@ -1412,7 +1412,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 			if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-				((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+				findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 
 				primary_ll.setVisibility(View.GONE);
 				last_ll.setVisibility(View.GONE);
@@ -1458,7 +1458,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				}
 
 				previous_matching_time = current_matching_time;
-				((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+				findViewById(R.id.progress_view).setVisibility(View.GONE);
 			}
 
 		}
@@ -2408,7 +2408,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					//Will Add Some Data to send
 					Util.call_finish_at_onUserLeaveHint = false;
 					Util.hide_pause = true;
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+					findViewById(R.id.progress_view).setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.VISIBLE);
 					subtitleText.setText("");
 					emVideoView.setEnabled(false);
@@ -2999,7 +2999,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		private int millisecondsToString(int milliseconds) {
 			// int seconds = (int) (milliseconds / 1000) % 60 ;
-			int seconds = (int) (milliseconds / 1000);
+			int seconds = milliseconds / 1000;
 
 			return seconds;
 		}

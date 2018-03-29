@@ -104,7 +104,7 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
 
             /*Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            holder.filterTextName.setTypeface(filterTextNameTypeface)*/;
+            holder.filterTextName.setTypeface(filterTextNameTypeface)*/
         }
        else if (position == (genreTempArr.length - 5)){
             holder.selectButton.setVisibility(View.GONE);
