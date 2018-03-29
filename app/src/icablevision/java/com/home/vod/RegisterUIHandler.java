@@ -125,7 +125,7 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.cmaxtv.com/condiciones-de-uso"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://icablevision.com/terms-privacy-policy"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }

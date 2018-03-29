@@ -521,7 +521,7 @@ public class RegisterActivity extends AppCompatActivity implements
         /*********fb****/
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
@@ -642,7 +642,6 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("pratik", "reg to log chrome con");
                     Intent castLoginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                     castLoginIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     castLoginIntent.putExtra("PlayerModel", playerModel);

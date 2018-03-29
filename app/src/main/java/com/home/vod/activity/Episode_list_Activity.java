@@ -256,6 +256,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     public static final int PAYMENT_REQUESTCODE = 8889;
     // ProgressBarHandler loadEpisodedetailspDialog;
     SharedPreferences pref;
@@ -1024,7 +1025,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(Episode_list_Activity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
@@ -1555,7 +1556,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.episode_listing);
-
+        Util.check_for_subscription=0;
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(Episode_list_Activity.this);
@@ -3813,6 +3814,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             // callValidateUserAPI();
         } else if (requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK) {
             getVideoInfo();
+        } else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            new CheckVoucherOrPpvPaymentHandler(Episode_list_Activity.this).handleVoucherPaymentOrPpvPayment();
+            // callValidateUserAPI();
         }
     }
 
@@ -4022,7 +4026,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                           startActivity(intent);
+                           startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
                        } else {
                            ShowPpvPopUp();
                        }
@@ -4376,7 +4380,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else {
                 ShowPpvPopUp();
             }

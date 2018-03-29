@@ -378,7 +378,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.watch_history, container, false);
-
+        Util.check_for_subscription=0;
         context = getActivity();
         featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
