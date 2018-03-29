@@ -93,7 +93,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.vod.BuildConfig;
-import com.home.vod.CheckVoucherOrPpvPaymentHandler;
+import com.home.vod                                                                                                                                                                                                              .CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
@@ -4315,7 +4315,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
                     voucherSubscriptionInputModel.setIs_preorder("" + Util.dataModel.getIsAPV());
                     voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    voucherSubscriptionInputModel.setPurchase_type("show");
+                    voucherSubscriptionInputModel.setPurchase_type(PurchageType);
                     VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, Episode_list_Activity.this, Episode_list_Activity.this);
                     asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);
 
