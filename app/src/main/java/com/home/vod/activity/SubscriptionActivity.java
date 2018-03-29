@@ -123,13 +123,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),skipButton);
 
         skipButton.setText(languagePreference.getTextofLanguage(SKIP_BUTTON_TITLE,DEFAULT_SKIP_BUTTON_TITLE));
-         /* @author :Bishal
-         * if we click content and then Subscription Activity called then we have to hide the skip button here
-           */
-        if (Util.check_for_subscription==1){
-            skipButton.setVisibility(View.GONE);
-        }
-
+      
         mLayoutManager = new LinearLayoutManager(SubscriptionActivity.this, LinearLayoutManager.VERTICAL, false);
         if(NetworkStatus.getInstance().isConnected(this)) {
             SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
