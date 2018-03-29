@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FINAL_VOD.iml" filepath="$PROJECT_DIR$/FINAL_VOD.iml" />
-      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/FINAL_VOD.iml" filepath="E:/VOD_NEW_CLONE/VOD/FINAL_VOD.iml" />
-      <module fileurl="file://F:/Vod26_feb_newgitcode/VOD/FINAL_VOD.iml" filepath="F:/Vod26_feb_newgitcode/VOD/FINAL_VOD.iml" />
-      <module fileurl="file://D:/Workspace/FINAL_VOD/VOD.iml" filepath="D:/Workspace/FINAL_VOD/VOD.iml" />
-      <module fileurl="file://D:/Workspace/FINAL_VOD/VOD_Final.iml" filepath="D:/Workspace/FINAL_VOD/VOD_Final.iml" />
-      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/VOD_Final.iml" filepath="E:/VOD_NEW_CLONE/VOD/VOD_Final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MediaLib/MediaLib.iml" filepath="$PROJECT_DIR$/MediaLib/MediaLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/VOD.iml" filepath="$PROJECT_DIR$/.idea/VOD.iml" />
+      <module fileurl="file://D:/Workspace/VOD/VOD.iml" filepath="D:/Workspace/VOD/VOD.iml" />
+      <module fileurl="file://F:/Vod26_feb_newgitcode/VOD/.idea/VOD_Latest.iml" filepath="F:/Vod26_feb_newgitcode/VOD/.idea/VOD_Latest.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:/Workspace/VOD/library/library.iml" filepath="D:/Workspace/VOD/library/library.iml" />
     </modules>
   </component>
 </project>
