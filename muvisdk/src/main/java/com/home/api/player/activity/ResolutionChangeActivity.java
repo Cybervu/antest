@@ -15,8 +15,8 @@ import com.home.vod.R;
 
 import java.util.ArrayList;
 
-import player.adapter.ResolutionChangeAdapter;
-import player.utils.Util;
+import com.home.api.player.adapter.ResolutionChangeAdapter;
+import com.home.api.player.utils.Util;
 
 public class ResolutionChangeActivity extends Activity {
 

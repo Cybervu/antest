@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 
@@ -27,8 +28,8 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import player.utils.DBHelper;
-import player.utils.Util;
+import com.home.api.player.utils.DBHelper;
+import com.home.api.player.utils.Util;
 
 public class DataConsumptionService extends Service {
 

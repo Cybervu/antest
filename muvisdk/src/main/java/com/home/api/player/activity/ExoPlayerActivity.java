@@ -138,16 +138,16 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import player.adapter.DownloadOptionAdapter;
-import player.model.ContactModel1;
-import player.model.SubtitleModel;
-import player.subtitle_support.Caption;
-import player.subtitle_support.FormatSRT;
-import player.subtitle_support.FormatSRT_WithoutCaption;
-import player.subtitle_support.TimedTextObject;
-import player.utils.DBHelper;
-import player.utils.SensorOrientationChangeNotifier;
-import player.utils.Util;
+import com.home.api.player.adapter.DownloadOptionAdapter;
+import com.home.api.player.model.ContactModel1;
+import com.home.api.player.model.SubtitleModel;
+import com.home.api.player.subtitle_support.Caption;
+import com.home.api.player.subtitle_support.FormatSRT;
+import com.home.api.player.subtitle_support.FormatSRT_WithoutCaption;
+import com.home.api.player.subtitle_support.TimedTextObject;
+import com.home.api.player.utils.DBHelper;
+import com.home.api.player.utils.SensorOrientationChangeNotifier;
+import com.home.api.player.utils.Util;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;

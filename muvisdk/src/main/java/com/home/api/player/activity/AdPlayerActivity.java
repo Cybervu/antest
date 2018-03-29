@@ -11,8 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.home.vod.R;
-import com.home.vod.util.LogUtil;
+
 import com.spotxchange.v3.SpotX;
 import com.spotxchange.v3.SpotXAd;
 import com.spotxchange.v3.SpotXAdGroup;

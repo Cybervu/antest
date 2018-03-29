@@ -10,11 +10,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.home.vod.R;
 
 import java.util.ArrayList;
 
-import player.utils.Util;
+import com.home.api.player.utils.Util;
 
 public class Subtitle_Resolution extends Activity {
 

@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import player.utils.SensorOrientationChangeNotifier;
+import com.home.api.player.utils.SensorOrientationChangeNotifier;
 
 //import com.example.muvi.playermodel.Player;
 

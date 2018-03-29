@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-import player.model.ContactModel1;
-import player.model.SubtitleModel;
+import com.home.api.player.model.ContactModel1;
+import com.home.api.player.model.SubtitleModel;
 
 /**
  * Created by Nikunj on 27-08-2015.

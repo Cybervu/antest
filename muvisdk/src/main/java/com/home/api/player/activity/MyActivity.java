@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +29,7 @@ import com.google.ads.interactivemedia.v3.api.AdsRequest;
 import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
 import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
 import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
-import com.home.vod.R;
-import com.home.vod.util.LogUtil;
+
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,7 +37,7 @@ import java.util.TimerTask;
 /**
  * Main Activity.
  */
-public class MyActivity extends ActionBarActivity {
+public class MyActivity extends AppCompatActivity {
 
 
     @Override

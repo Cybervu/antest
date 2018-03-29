@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 
-import com.home.vod.BuildConfig;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,8 +23,9 @@ import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import player.model.DataModel;
-import player.model.LanguageModel;
+import com.home.api.player.model.DataModel;
+import com.home.api.player.model.LanguageModel;
+
 
 /**
  * Created by User on 24-07-2015.

@@ -13,7 +13,7 @@ import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
-import player.utils.Util;
+import com.home.api.player.utils.Util;
 
 /**
  * Created by MUVI on 3/10/2017.

@@ -16,8 +16,8 @@ import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.LogUtil;
 
-import player.utils.SensorOrientationChangeNotifier;
-import player.utils.Util;
+import com.home.api.player.utils.SensorOrientationChangeNotifier;
+import com.home.api.player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;

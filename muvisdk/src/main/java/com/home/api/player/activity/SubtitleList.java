@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import player.adapter.SubtitleAdapter;
-import player.utils.Util;
+import com.home.api.player.adapter.SubtitleAdapter;
+import com.home.api.player.utils.Util;
 
 public class SubtitleList extends Activity{
 
