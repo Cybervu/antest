@@ -108,7 +108,7 @@ public class FormatASS implements TimedTextFileFormat {
 						//the first line should define the format
 						if(!line.startsWith("Format:")){
 							//if not, we scan for the format.
-							tto.warnings+="Format: (format definition) expected at line "+line+" for the styles section\n\n";
+							tto.warnings+="Format: (format definition) expected at line "+line+" for the styles.xml section\n\n";
 							while (!line.startsWith("Format:")){
 								lineCounter++;
 								line=br.readLine().trim();
@@ -183,7 +183,7 @@ public class FormatASS implements TimedTextFileFormat {
 					lineCounter++;
 				}
 			}
-			// parsed styles that are not used should be eliminated
+			// parsed styles.xml that are not used should be eliminated
 			tto.cleanUnusedStyles();
 
 		}  catch (NullPointerException e){
@@ -206,7 +206,7 @@ public class FormatASS implements TimedTextFileFormat {
 
 		//we will write the lines in an ArrayList
 		int index = 0;
-		//the minimum size of the file is the number of captions and styles + lines for sections and formats and the script info, so we'll take some extra space.
+		//the minimum size of the file is the number of captions and styles.xml + lines for sections and formats and the script info, so we'll take some extra space.
 		ArrayList<String> file = new ArrayList<String>(30+tto.styling.size()+tto.captions.size());
 
 	//header is placed
@@ -248,7 +248,7 @@ public class FormatASS implements TimedTextFileFormat {
 		if (tto.useASSInsteadOfSSA)
 			file.add(index++,"Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding");
 		else file.add(index++,"Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding");
-		//Next we iterate over the styles
+		//Next we iterate over the styles.xml
 		Iterator<Style> itrS = tto.styling.values().iterator();
 		while(itrS.hasNext()){
 			String styleLine = "Style: ";

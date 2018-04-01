@@ -78,16 +78,16 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.vod.HandleOfflineInExoplayer;
-import com.home.vod.R;
-import com.home.vod.activity.AlertActivity;
-import com.home.vod.activity.CastAndCrewActivity;
-import com.home.vod.activity.SupportActivity1;
-import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.FeatureHandler;
-import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.ResizableCustomView;
-import com.home.vod.util.StrokedTextView;
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.apisdk.R;
+import com.home.api.player.HandleOfflineInExoplayer;
+import com.home.api.player.activity.AlertActivity;
+import com.home.api.player.activity.CastAndCrewActivity;
+import com.home.api.player.activity.SupportActivity;
+import com.home.api.player.util.FeatureHandler;
+import com.home.api.player.util.ProgressBarHandler;
+import com.home.api.player.util.ResizableCustomView;
+import com.home.api.player.util.StrokedTextView;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -150,14 +150,14 @@ import com.home.api.player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.SAVE;
-import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.SAVE;
+import static com.home.api.player.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
+import static com.home.api.player.preferences.LanguagePreference.VIEW_MORE;
 
 
 enum ContentTypes3 {
@@ -580,7 +580,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         mAquery = new AQuery(MyLibraryPlayer.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(MyLibraryPlayer.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(MyLibraryPlayer.this, savedInstanceState);
+        //mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(MyLibraryPlayer.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(MyLibraryPlayer.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -3009,7 +3009,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         }
 
-        Intent intent  = new Intent(MyLibraryPlayer.this, SupportActivity1.class);
+        Intent intent  = new Intent(MyLibraryPlayer.this, SupportActivity.class);
         startActivity(intent);
         finish();
 
@@ -4503,6 +4503,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
 

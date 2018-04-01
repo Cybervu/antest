@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 
-import com.home.vod.R;
+
+import com.home.apisdk.R;
 
 import java.util.ArrayList;
 

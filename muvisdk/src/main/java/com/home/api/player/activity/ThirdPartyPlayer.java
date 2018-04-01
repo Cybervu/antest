@@ -7,16 +7,17 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.home.vod.R;
-import com.home.vod.util.LogUtil;
-import com.home.vod.util.ProgressBarHandler;
+
+import com.home.api.player.util.LogUtil;
+import com.home.api.player.util.ProgressBarHandler;
+import com.home.apisdk.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -42,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class  ThirdPartyPlayer extends ActionBarActivity {
+public class  ThirdPartyPlayer extends AppCompatActivity {
     WebView mWebView;
     Player playerModel;
    // Toolbar mActionBarToolbar;

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.home.api.player.utils.Util;
+import com.home.apisdk.R;
 
 public class Subtitle_Resolution extends Activity {
 

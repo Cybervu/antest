@@ -10,7 +10,7 @@ public class GetCastCrewItem {
     String desc;
     String castImage;
 
-    public GetCastCrewItem(String title, String desc, String castImage) {
+    public GetCastCrewItem(String name, String castType, String title, String desc, String castImage) {
         this.title = title;
         this.desc = desc;
         this.castImage = castImage;

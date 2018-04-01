@@ -39,7 +39,23 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     // Kushal
 
-    compile 'com.spotxchange:spotx-sdk-android:3.1.+'
+    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
+        transitive = false
+    }
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
+    compile 'com.devbrackets.android:exomedia:3.0.1'
+    compile 'com.google.android.gms:play-services-cast-framework:12.0.1'
+    compile 'com.googlecode.android-query:android-query:0.25.9'
+    compile 'com.android.support:recyclerview-v7:27.1.0'
+    testCompile 'junit:junit:4.12'
+    compile files('libs/wasabi.jar')
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+
+    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4'
+
+    // compile files('libs/YouTubeAndroidPlayerApi.jar')
+
     testCompile 'junit:junit:4.12'
     compile project(path: ':app' , configuration: 'default')
 }

@@ -46,7 +46,7 @@ public class FormatSTL implements TimedTextFileFormat {
 
 		try {
 			//we read the file
-			//but first we create the possible styles
+			//but first we create the possible styles.xml
 			createSTLStyles(tto);
 
 			int bytesRead;

@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.home.vod.R;
+import com.home.apisdk.R;
 
 import java.util.ArrayList;
 

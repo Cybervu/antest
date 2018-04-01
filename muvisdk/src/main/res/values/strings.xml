@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">ApiSdk</string>
+    <string name="fonts">fonts/ROBOTO-LIGHT.TTF</string>
+    <string name="fonts_regular">fonts/ROBOTO-REGULAR.TTF</string>
+    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
+    <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
+
+    // Kushal
+    <string name="resolution_list_string">720p</string>
+    <string name="percent">0%</string>
+    <string name="any_text">wwwww</string>
+    <string name="skip">Skip</string>
+    <string name="Hello">HELLO</string>
+    <string name="quality_360">Quality 360</string>
+    <string name="sub_title">Sub Title</string>
+    <string name="wdeded">wdeded</string>
+    <string name="save_offline_video">Save Offline Video</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

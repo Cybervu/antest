@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.home.vod.R;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -24,6 +23,7 @@ import java.util.TimerTask;
 
 import com.home.api.player.adapter.SubtitleAdapter;
 import com.home.api.player.utils.Util;
+import com.home.apisdk.R;
 
 public class SubtitleList extends Activity{
 

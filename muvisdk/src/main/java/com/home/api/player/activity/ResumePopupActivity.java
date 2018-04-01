@@ -12,19 +12,19 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.home.vod.R;
-import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.LogUtil;
 
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.api.player.util.LogUtil;
 import com.home.api.player.utils.SensorOrientationChangeNotifier;
 import com.home.api.player.utils.Util;
+import com.home.apisdk.R;
 
-import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.RESUME;
-import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
+import static com.home.api.player.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_RESUME;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_RESUME_MESSAGE;
+import static com.home.api.player.preferences.LanguagePreference.RESUME;
+import static com.home.api.player.preferences.LanguagePreference.RESUME_MESSAGE;
 
 
 public class ResumePopupActivity extends Activity implements SensorOrientationChangeNotifier.Listener {

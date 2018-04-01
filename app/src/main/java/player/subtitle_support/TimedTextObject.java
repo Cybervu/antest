@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 /**
  * These objects can (should) only be created through the implementations of parseFile() in the {@link TimedTextFileFormat} interface
- * They are an object representation of a subtitle file and contain all the captions and associated styles.
+ * They are an object representation of a subtitle file and contain all the captions and associated styles.xml.
  * <br><br>
  * Copyright (c) 2012 J. David Requejo <br>
  * j[dot]david[dot]requejo[at] Gmail
@@ -44,7 +44,7 @@ public class TimedTextObject {
 	public String fileName = "";
 	public String language = "";
 
-	//list of styles (id, reference)
+	//list of styles.xml (id, reference)
 	public Hashtable<String, Style> styling;
 
 	//list of layouts (id, reference)
@@ -134,12 +134,12 @@ public class TimedTextObject {
 
 	/**
 	 * This method simply checks the style list and eliminate any style not referenced by any caption
-	 * This might come useful when default styles get created and cover too much.
+	 * This might come useful when default styles.xml get created and cover too much.
 	 * It require a unique iteration through all captions.
 	 *
 	 */
 	protected void cleanUnusedStyles(){
-		//here all used styles will be stored
+		//here all used styles.xml will be stored
 		Hashtable<String, Style> usedStyles = new Hashtable<String, Style>();
 		//we iterate over the captions
 		Iterator<Caption> itrC = captions.values().iterator();
@@ -154,7 +154,7 @@ public class TimedTextObject {
 	    			usedStyles.put(iD, current.style);
 	    	}
 		}
-		//we saved the used styles
+		//we saved the used styles.xml
 		this.styling = usedStyles;
 	}
 

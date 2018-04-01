@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
+
 import android.util.Log;
 
 
@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.home.api.player.preferences.PreferenceManager;
+import com.home.api.player.util.LogUtil;
 import com.home.api.player.utils.DBHelper;
 import com.home.api.player.utils.Util;
 

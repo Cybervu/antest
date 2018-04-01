@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 
+import com.home.apisdk.R;
 import com.spotxchange.v3.SpotX;
 import com.spotxchange.v3.SpotXAd;
 import com.spotxchange.v3.SpotXAdGroup;
@@ -41,7 +42,7 @@ public class AdPlayerActivity extends AppCompatActivity implements AdLoader.Call
     private void loadAd() {
 
 
-        LogUtil.showLog("Abhishek", "CHANNEL" + playerModel.getChannel_id());
+       // LogUtil.showLog("Abhishek", "CHANNEL" + playerModel.getChannel_id());
 
           if (!playerModel.getChannel_id().equalsIgnoreCase("")) {
             AdLoader loader = new AdLoader(playerModel.getChannel_id(), 1, 10 /*seconds*/, this);

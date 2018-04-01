@@ -8,12 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.home.vod.R;
-import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
+import com.home.api.player.util.FontUtls;
 import com.home.api.player.utils.Util;
+import com.home.apisdk.R;
 
 /**
  * Created by MUVI on 3/10/2017.

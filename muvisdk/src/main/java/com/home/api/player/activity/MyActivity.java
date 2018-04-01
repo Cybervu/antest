@@ -29,6 +29,8 @@ import com.google.ads.interactivemedia.v3.api.AdsRequest;
 import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
 import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
 import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
+import com.home.api.player.util.LogUtil;
+import com.home.apisdk.R;
 
 
 import java.util.Timer;

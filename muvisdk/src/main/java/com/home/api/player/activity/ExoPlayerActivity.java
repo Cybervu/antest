@@ -28,6 +28,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
@@ -79,15 +80,16 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.vod.HandleOfflineInExoplayer;
-import com.home.vod.R;
-import com.home.vod.activity.AlertActivity;
-import com.home.vod.activity.CastAndCrewActivity;
-import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FeatureHandler;
-import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.ResizableCustomView;
+import com.home.api.player.HandleOfflineInExoplayer;
+
+import com.home.api.player.activity.AlertActivity;
+import com.home.api.player.activity.CastAndCrewActivity;
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.api.player.preferences.PreferenceManager;
+import com.home.api.player.util.FeatureHandler;
+import com.home.api.player.util.ProgressBarHandler;
+import com.home.api.player.util.ResizableCustomView;
+import com.home.apisdk.R;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -152,49 +154,49 @@ import com.home.api.player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCEL;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_DOWNLOAD_CANCEL;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCEL;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELED;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
-import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.NO;
-import static com.home.vod.preferences.LanguagePreference.NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.SAVE;
-import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.WANT_DOWNLOAD_CANCEL;
-import static com.home.vod.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.YES;
+import static com.home.api.player.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.api.player.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCEL;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELED;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SAVE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_WANT_DOWNLOAD_CANCEL;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_WANT_TO_DOWNLOAD;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.api.player.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.api.player.preferences.LanguagePreference.DOWNLOAD_CANCEL;
+import static com.home.api.player.preferences.LanguagePreference.DOWNLOAD_CANCELED;
+import static com.home.api.player.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
+import static com.home.api.player.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
+import static com.home.api.player.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
+import static com.home.api.player.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.api.player.preferences.LanguagePreference.NO;
+import static com.home.api.player.preferences.LanguagePreference.NO_DATA;
+import static com.home.api.player.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.api.player.preferences.LanguagePreference.SAVE;
+import static com.home.api.player.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
+import static com.home.api.player.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.api.player.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.api.player.preferences.LanguagePreference.SORRY;
+import static com.home.api.player.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.WANT_DOWNLOAD_CANCEL;
+import static com.home.api.player.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
+import static com.home.api.player.preferences.LanguagePreference.YES;
 
 
 enum ContentTypes2 {
@@ -672,7 +674,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mAquery = new AQuery(ExoPlayerActivity.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+      //  mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -1013,7 +1015,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         {
 //            story.setText(playerModel.getVideoStory());
-            story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
+            story.setText(com.home.api.player.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
             story.setVisibility(View.VISIBLE);
             ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
         } else {
@@ -1591,6 +1593,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         /*****Offline*****/
 
         download.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
 
@@ -3496,7 +3499,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     private void showSystemUI() {
 //        story.setText(playerModel.getVideoStory());
-        story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
+        story.setText(com.home.api.player.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
         ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
         View decorView = getWindow().getDecorView();
@@ -4846,6 +4849,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
 

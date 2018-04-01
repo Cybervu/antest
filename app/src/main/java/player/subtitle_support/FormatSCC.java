@@ -479,7 +479,7 @@ public class FormatSCC implements TimedTextFileFormat {
 				newC.start.mseconds += 1000 / 29.97;
 			}
 
-			// we add the coded caption text along with any styles to the
+			// we add the coded caption text along with any styles.xml to the
 			// off-screen buffer
 			line += codeText(newC);
 			// lastly we display the caption
@@ -504,7 +504,7 @@ public class FormatSCC implements TimedTextFileFormat {
 	/* PRIVATEMETHODS */
 
 	/**
-	 * INCOMPLETE METHOD: does not tab to correct position or applies styles
+	 * INCOMPLETE METHOD: does not tab to correct position or applies styles.xml
 	 */
 	private String codeText(Caption newC) {
 		String toReturn = "";

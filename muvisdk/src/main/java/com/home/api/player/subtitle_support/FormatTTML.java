@@ -62,14 +62,14 @@ public class FormatTTML implements TimedTextFileFormat {
 			node = doc.getElementsByTagName("ttm:desc").item(0);
 			if (node != null) tto.description = node.getTextContent();
 			
-			//we recover the styles
+			//we recover the styles.xml
 			NodeList styleN = doc.getElementsByTagName("style");
 			//we recover the timed text elements
 			NodeList captionsN = doc.getElementsByTagName("p");
 			//regions of the layout could also be recovered this way
 			
 			tto.warnings += "Styling attributes are only recognized inside a style definition, to be referenced later in the captions.\n\n";
-			//we parse the styles
+			//we parse the styles.xml
 			for (int i = 0; i < styleN.getLength(); i++) {
 				Style style = new Style(Style.defaultID());
 				node = styleN.item(i);
@@ -255,7 +255,7 @@ public class FormatTTML implements TimedTextFileFormat {
 
 		//we will write the lines in an ArrayList 
 		int index = 0;
-		//the minimum size of the file is the number of captions and styles + lines for sections and formats and the metadata, so we'll take some extra space.
+		//the minimum size of the file is the number of captions and styles.xml + lines for sections and formats and the metadata, so we'll take some extra space.
 		ArrayList<String> file = new ArrayList<String>(30+tto.styling.size()+tto.captions.size());
 
 		//identification line is placed
@@ -289,7 +289,7 @@ public class FormatTTML implements TimedTextFileFormat {
 		file.add(index++,"\t\t<styling>");
 
 		String line;
-		//Next we iterate over the styles
+		//Next we iterate over the styles.xml
 		Iterator<Style> itrS = tto.styling.values().iterator();
 		while(itrS.hasNext()){
 			Style style = itrS.next();

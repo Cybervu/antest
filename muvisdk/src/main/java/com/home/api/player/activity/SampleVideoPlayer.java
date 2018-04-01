@@ -12,7 +12,8 @@ import android.util.AttributeSet;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.home.vod.util.LogUtil;
+
+import com.home.api.player.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="resumeTitleTextColor">#ffffff</color>
+    <color name="colorPrimary">#629de0</color>
+    <color name="chromecast_color">#ffffff</color>
+    <color name="appBackgroundColor1">#000</color>
+    <color name="downloadresolutionTextColor">#fff</color>
+    <color name="playerBgColor">#000000</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="subtitle_solid_color">#fff</color>
+    <color name="subtitle_outline_color">#000000</color>
+    <color name="player_title_color">#111111</color>
+    <color name="border_color">#b70000</color>
+    <color name="nav_drawer_lineColor">#000</color>
+    <color name="cast_crew_titleCololr">#32c5d2</color>
+    <color name="background_start_color">#fff</color>
+    <color name="background_end_color">#fff</color>
+    <color name="loader_color">#5d6c7e</color>
+    <color name="edit_color">#dadada</color>
+    <color name="button_background">#930f18</color>
+    <color name="resumeCancelButtonTextColor">#000000</color>
+    <color name="buttonTextColor">#fff</color>
+    <color name="resumePopupColor">#fff</color>
+    <color name="nav_lineColor">#000</color>
+    <color name="cancel_button_background">#DDD</color>
+    <color name="editTextColor">#5c6873</color>
+    <color name="alertPopupColor">#fff</color>
+    <color name="noInternetColor">#5c6873</color>
+    <color name="cast_crew_textcolor">#000000</color>
+    <color name="appBackgroundColor">#fff</color>
+    <color name="cast_description_color">#ffffff</color>
+    <color name="casttextColor">#580661</color>
+    <color name="videotextColor">#ffffff</color>
+</resources>

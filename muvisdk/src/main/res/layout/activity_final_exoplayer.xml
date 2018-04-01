@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -74,8 +75,9 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginBottom="@dimen/player_margin_bottom"
                             android:orientation="vertical"
-                            android:paddingRight="@dimen/player_padding_right"
-                            android:visibility="visible">
+                            android:paddingEnd="@dimen/player_padding_right"
+                            android:visibility="visible"
+                            tools:ignore="RtlHardcoded">
 
                             <TextView
                                 android:id="@+id/emailAddressTextView"
@@ -111,13 +113,14 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="38dp"
-                            android:text="wwwwwwwwww"
+                            android:text="@string/any_text"
                             android:textColor="#ffffff"
                             android:textSize="@dimen/current_time_textsize"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:ignore="RtlHardcoded" />
 
 
-                        <com.home.vod.util.StrokedTextView
+                        <com.home.api.player.util.StrokedTextView
                             android:id="@+id/offLine_subtitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -178,7 +181,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:gravity="right"
@@ -188,14 +191,14 @@
                             android:id="@+id/media_route_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/marginRight20dp" />
+                            android:layout_marginEnd="@dimen/marginRight20dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/cc_button_padding_left"
-                        android:paddingRight="@dimen/cc_button_padding_right"
+                        android:paddingStart="@dimen/cc_button_padding_left"
+                        android:paddingEnd="@dimen/cc_button_padding_right"
                         android:paddingTop="@dimen/cc_button_padding_top"
                         android:paddingBottom="@dimen/cc_button_padding_bottom"
                         android:id="@+id/cc_layout"
@@ -207,7 +210,7 @@
                             android:id="@+id/subtitle_change_btn"
                             android:layout_width="@dimen/subtitle_change_btn_width"
                             android:layout_height="@dimen/subtitle_change_btn_height"
-                            android:layout_marginRight="@dimen/marginRight20dp"
+                            android:layout_marginEnd="@dimen/marginRight20dp"
                             android:background="@drawable/cc_button_radious"
                             android:src="@drawable/subtitle_image" />
 
@@ -224,7 +227,8 @@
                     android:background="#00000000"
                     android:orientation="vertical"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:ignore="RtlHardcoded">
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -236,12 +240,10 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:layout_marginStart="@dimen/marginleft10dp"
                             android:id="@+id/center_play_pause"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
                             android:background="#00000000"
                             android:src="@drawable/ic_media_pause"
                             android:visibility="visible" />
@@ -261,7 +263,7 @@
                             android:id="@+id/total_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="@dimen/marginright10dp"
                             android:gravity="center"
                             android:text=""
                             android:textColor="#ffffff"
@@ -272,7 +274,7 @@
                             android:layout_width="@dimen/compress_expand_height"
                             android:layout_height="@dimen/compress_expand_width"
                             android:padding="@dimen/padding15dp"
-                            android:layout_marginRight="@dimen/marginright5dp"
+                            android:layout_marginEnd="@dimen/marginright5dp"
                             android:src="@drawable/ic_media_fullscreen_stretch"
                             android:gravity="center"
                             android:visibility="visible" />
@@ -287,7 +289,6 @@
                 android:id="@+id/new_detailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/bannerImageRelativeLayout"
                 android:background="@color/transparent"
                 android:orientation="vertical"
                 android:visibility="visible">
@@ -302,8 +303,7 @@
                         android:id="@+id/videoTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/relativeOverlayLayout"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginStart="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -316,7 +316,6 @@
                         android:id="@+id/downloadRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textlinearlayout"
 
                         android:visibility="gone">
 
@@ -324,8 +323,8 @@
                             android:id="@+id/downloadImageView"
                             android:layout_width="@dimen/downloadimg_width"
                             android:layout_height="@dimen/downloadimg_height"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/marginRight20dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/marginRight20dp"
                             android:layout_marginTop="@dimen/margintop8dp"
                             android:src="@drawable/download_black"
                             android:visibility="visible" />
@@ -335,8 +334,8 @@
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="@dimen/progressbar_width"
                             android:layout_height="@dimen/progressbar_height"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/marginright15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/marginright15dp"
                             android:indeterminate="false"
                             android:max="100"
                             android:progress="0"
@@ -352,10 +351,11 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/marginright10dp"
                             android:gravity="center"
-                            android:text="0%"
+                            android:text="@string/percent"
                             android:textColor="@color/border_color"
                             android:textSize="@dimen/percentage_text_size"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:ignore="RtlHardcoded" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -364,10 +364,9 @@
                     android:id="@+id/GenreTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/videoTitle"
                     android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
+                    android:layout_marginStart="@dimen/marginleft10dp"
+                    android:layout_marginEnd="@dimen/marginright10dp"
                     android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
@@ -378,11 +377,6 @@
                     android:id="@+id/durationratingLiearLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/bannerImageView"
-                    android:layout_alignLeft="@+id/bannerImageView"
-                    android:layout_alignRight="@+id/bannerImageView"
-                    android:layout_alignStart="@+id/bannerImageView"
-                    android:layout_below="@+id/videoGenreTextView"
                     android:orientation="horizontal"
                     android:paddingBottom="0dp">
 
@@ -391,8 +385,7 @@
                         android:id="@+id/videoDurationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginStart="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
@@ -402,12 +395,11 @@
                         android:id="@+id/videoCensorRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginStart="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:background="@drawable/button_bg_orange"
-                        android:paddingLeft="1dp"
-                        android:paddingRight="@dimen/padding_right4dp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="@dimen/padding_right4dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
                         android:textSize="@dimen/genre_textsize" />
@@ -416,8 +408,7 @@
                         android:id="@+id/videoCensorRatingTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
@@ -428,8 +419,7 @@
                         android:id="@+id/videoReleaseDateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginStart="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
@@ -441,10 +431,9 @@
                     android:id="@+id/story"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/videoTitle"
                     android:layout_marginBottom="@dimen/marginleft10dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
+                    android:layout_marginStart="@dimen/marginleft10dp"
+                    android:layout_marginEnd="@dimen/marginright10dp"
                     android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
@@ -454,8 +443,7 @@
                     android:id="@+id/videoCastCrewTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:layout_marginStart="@dimen/marginleft10dp"
                     android:layout_marginTop="@dimen/margintop12dp"
                     android:textColor="@color/cast_crew_titleCololr"
                     android:textSize="@dimen/genre_textsize"

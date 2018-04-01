@@ -6,12 +6,6 @@ import android.support.v7.widget.ActionBarOverlayLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.home.vod.R;
-import com.home.vod.util.LogUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -38,7 +32,13 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.home.api.player.util.LogUtil;
 import com.home.api.player.utils.SensorOrientationChangeNotifier;
+import com.home.apisdk.R;
 
 //import com.example.muvi.playermodel.Player;
 
