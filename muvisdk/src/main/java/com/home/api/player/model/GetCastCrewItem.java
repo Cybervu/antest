@@ -9,11 +9,32 @@ public class GetCastCrewItem {
     String title;
     String desc;
     String castImage;
+    String castPermalink;
+    String celebritySummary;
 
-    public GetCastCrewItem(String name, String castType, String title, String desc, String castImage) {
+    public String getCastPermalink() {
+        return castPermalink;
+    }
+
+    public void setCastPermalink(String castPermalink) {
+        this.castPermalink = castPermalink;
+    }
+
+    public String getCelebritySummary() {
+        return celebritySummary;
+    }
+
+    public void setCelebritySummary(String celebritySummary) {
+        this.celebritySummary = celebritySummary;
+    }
+
+    public GetCastCrewItem(String title, String desc, String castImage,String castPermalink,String celebritySummary) {
         this.title = title;
         this.desc = desc;
         this.castImage = castImage;
+        this.castPermalink = castPermalink;
+        this.celebritySummary = celebritySummary;
+
     }
 
     public String getCastImage() {

@@ -81,9 +81,7 @@ import com.google.android.gms.common.images.WebImage;
 import com.home.api.player.preferences.LanguagePreference;
 import com.home.apisdk.R;
 import com.home.api.player.HandleOfflineInExoplayer;
-import com.home.api.player.activity.AlertActivity;
-import com.home.api.player.activity.CastAndCrewActivity;
-import com.home.api.player.activity.SupportActivity;
+
 import com.home.api.player.util.FeatureHandler;
 import com.home.api.player.util.ProgressBarHandler;
 import com.home.api.player.util.ResizableCustomView;

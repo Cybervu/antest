@@ -31,4 +31,5 @@
     <color name="cast_description_color">#ffffff</color>
     <color name="casttextColor">#580661</color>
     <color name="videotextColor">#ffffff</color>
+    <color name="contentTitleColor">#fff</color>
 </resources>

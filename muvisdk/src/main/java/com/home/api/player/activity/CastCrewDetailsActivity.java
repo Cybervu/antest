@@ -132,7 +132,8 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements APICal
         filmography.setText(languagePreference.getTextofLanguage(FILMOGRAPHY, DEFAULT_FILMOGRAPHY));
         filmography.setVisibility(View.GONE);
 
-        filmographyRecyclerView.addOnItemTouchListener(new MovieDetailsActivity.RecyclerTouchListener1(CastCrewDetailsActivity.this, filmographyRecyclerView, new MovieDetailsActivity.ClickListener1() {
+        // Kushal-
+/*        filmographyRecyclerView.addOnItemTouchListener(new MovieDetailsActivity.RecyclerTouchListener1(CastCrewDetailsActivity.this, filmographyRecyclerView, new MovieDetailsActivity.ClickListener1() {
             @Override
             public void onClick(View view, int position) {
 
@@ -186,7 +187,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements APICal
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        }));*/
 
 
         //Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));

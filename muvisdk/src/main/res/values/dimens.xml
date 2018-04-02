@@ -71,6 +71,15 @@
     <dimen name="cast_details_height">200dp</dimen>
     <dimen name="cast_textsize">17sp</dimen>
     <dimen name="border_line_height">1dp</dimen>
+    <dimen name="movieimg_width">108dp</dimen>
+    <dimen name="movieimg_height">150dp</dimen>
+    <dimen name="loginImageViewMarging_top_padding">2dp</dimen>
+    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="close_album_img_width">24dp</dimen>
+    <dimen name="close_album_img_height">24dp</dimen>
+    <dimen name="video280_width">170dp</dimen>
+    <dimen name="video280_height">95dp</dimen>
+    <dimen name="gridbottom8dp">1dp</dimen>
     // Kushal
     <dimen name="text_size">15sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
