@@ -875,6 +875,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (isDrm) {
             if (SubTitlePath.size() < 1) {
                 subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
             } else {
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
@@ -884,6 +885,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         } else {
             if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
                 subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
                 Log.v("MUVI1", "subtitle_image button Invisible called");
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
