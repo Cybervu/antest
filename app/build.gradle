@@ -59,7 +59,7 @@ android {
             minSdkVersion 21
             targetSdkVersion 23
             versionCode 4
-            versionName "1.6"
+            versionName "1.7"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
@@ -347,7 +347,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '1.0'
+            versionName '2.0'
         }
         magicmovies_staging_ {
             dimension 'environment'

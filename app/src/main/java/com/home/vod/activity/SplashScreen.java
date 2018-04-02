@@ -339,7 +339,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message ,String response) {
 
-
         try{
 
             featureHandler.setDefaultFeaturePref(response);

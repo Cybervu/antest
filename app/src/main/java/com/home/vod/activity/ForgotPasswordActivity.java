@@ -97,15 +97,17 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
-
+/*
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         }
         else
         {
-            mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        }
+        }*/
+
+        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+
 
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
