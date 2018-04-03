@@ -109,11 +109,15 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyLibraryPlayer;
-import player.activity.Player;
+/*
+import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.MyLibraryPlayer;
+import playerOld.activity.Player;*/
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.MyLibraryPlayer;
+import com.home.api.player.activity.Player;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -729,7 +733,7 @@ public class WatchHistoryFragment extends Fragment implements APICallManager.Api
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3929,6 +3933,11 @@ public class WatchHistoryFragment extends Fragment implements APICallManager.Api
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

@@ -14,6 +14,21 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true" >
+        <activity android:name="com.home.api.player.activity.AdPlayerActivity" />
+        <activity android:name="com.home.api.player.activity.CastAndCrewActivity" />
+        <activity android:name="com.home.api.player.activity.CastCrewDetailsActivity" />
+        <activity android:name="com.home.api.player.activity.ExoPlayerActivity" />
+        <activity android:name="com.home.api.player.activity.MyActivity" />
+        <activity android:name="com.home.api.player.activity.MyLibraryPlayer" />
+        <activity android:name="com.home.api.player.activity.ResolutionChangeActivity" />
+        <activity android:name="com.home.api.player.activity.ResumePopupActivity" />
+        <activity android:name="com.home.api.player.activity.Subtitle_Resolution" />
+        <activity android:name="com.home.api.player.activity.SubtitleList" />
+        <activity android:name="com.home.api.player.activity.SupportActivity" />
+        <activity android:name="com.home.api.player.activity.ThirdPartyPlayer" />
+        <activity android:name="com.home.api.player.activity.YouTubeAPIActivity" />
+
+        <service android:name="com.home.api.player.activity.DataConsumptionService" />
     </application>
 
 </manifest>

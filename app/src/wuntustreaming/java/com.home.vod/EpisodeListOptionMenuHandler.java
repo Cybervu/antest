@@ -51,12 +51,12 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+import static playerOld.utils.Util.DEFAULT_HAS_FAVORITE;
+import static playerOld.utils.Util.DEFAULT_IS_CHROMECAST;
+import static playerOld.utils.Util.DEFAULT_IS_OFFLINE;
+import static playerOld.utils.Util.HAS_FAVORITE;
+import static playerOld.utils.Util.IS_CHROMECAST;
+import static playerOld.utils.Util.IS_OFFLINE;
 
 
 /**

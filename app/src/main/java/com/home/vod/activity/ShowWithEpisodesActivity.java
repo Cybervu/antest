@@ -130,12 +130,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+/*import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.Player;
+import playerOld.activity.ResumePopupActivity;
+import playerOld.activity.ThirdPartyPlayer;
+import playerOld.activity.YouTubeAPIActivity;*/
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.Player;
+import com.home.api.player.activity.ResumePopupActivity;
+import com.home.api.player.activity.ThirdPartyPlayer;
+import com.home.api.player.activity.YouTubeAPIActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
@@ -1961,8 +1967,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
         }
 
         if (getMonetizationDetails.getCode() == 200) {
-            if (getMonetizationDetails.getItems().getMonetizationPlans().getVoucher() != null) {
-                isVoucher = getMonetizationDetails.getItems().getMonetizationPlans().getVoucher();
+            if (getMonetizationDetails.getMonetizationPlans().getVoucher() != null) {
+                isVoucher = getMonetizationDetails.getMonetizationPlans().getVoucher();
             } else {
                 isVoucher = 0;
             }
@@ -2761,9 +2767,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
                 }
 
                 _permalink = getContentDetailsList.getMovie().getPermalink();
-                Util.currencyModel = getContentDetailsList.getMovie().getCurrency();
-                Util.apvModel = getContentDetailsList.getMovie().getAdv_pricing();
-                Util.ppvModel = getContentDetailsList.getMovie().getPpvPricing();
+                Util.currencyModel = getContentDetailsList.getCurrency();
+                Util.apvModel = getContentDetailsList.getAdv_pricing();
+                Util.ppvModel = getContentDetailsList.getPpvPricing();
 
                 /***favorite *****/
 
@@ -2799,8 +2805,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
 
                     watchTrailerButton.setVisibility(View.VISIBLE);
                 }
-
-                if (movieTypeStr != null && movieTypeStr.matches("") || movieTypeStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+                if (movieTypeStr== null){
+                    movieTypeStr= " ";
+                }
+               else if (movieTypeStr != null && movieTypeStr.matches("") || movieTypeStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     videoGenreTextView.setVisibility(View.GONE);
 
                 } else {
@@ -3810,7 +3818,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
         //setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -5594,6 +5602,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {

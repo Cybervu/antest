@@ -5,7 +5,7 @@
     >
 
     <fragment
-        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+        android:name="com.google.android.youtube.playerOld.YouTubePlayerFragment"
         android:id="@+id/youtubeplayerfragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

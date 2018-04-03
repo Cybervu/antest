@@ -32,4 +32,7 @@
     <color name="casttextColor">#580661</color>
     <color name="videotextColor">#ffffff</color>
     <color name="contentTitleColor">#fff</color>
+    <color name="style_circular_color">#999999</color>
+    <color name="style_circular_color_2">#ff0400</color>
+    <color name="totalTimeTxtColor">#ffffff</color>
 </resources>

@@ -1,5 +1,7 @@
 package com.home.api.api.apiModel;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,39 +18,47 @@ public class GetContentDetailsList {
     @SerializedName("code")
     @Expose
     private Integer code = 0;
+
     @SerializedName("msg")
     @Expose
     private String msg = "";
+
     @SerializedName("movie")
     @Expose
     private Movie movie;
+
     @SerializedName("comments")
     @Expose
     private ArrayList<String> comments = null;
+
     @SerializedName("rating")
     @Expose
     private String rating;
+
     @SerializedName("review")
     @Expose
     private String review;
+
     @SerializedName("epDetails")
     @Expose
     private EpDetails epDetails;
+
     @SerializedName("seasons")
     @Expose
     private ArrayList<String> seasons = null;
 
-    public String getItem_count() {
-        return item_count;
-    }
-
-    public void setItem_count(String item_count) {
-        this.item_count = item_count;
-    }
 
     @SerializedName("item_count")
     @Expose
     private String item_count;
+    public String getItem_count() {
+        return item_count;
+    }
+    public void setItem_count(String item_count) {
+        this.item_count = item_count;
+    }
+
+
 
     /**
      * This method is used for getting the code
@@ -199,140 +209,216 @@ public class GetContentDetailsList {
         this.seasons = seasons;
     }
 
+
+    @SerializedName("ppv_pricing")
+    @Expose
+    private PpvPricing ppvPricing=null;
+    public PpvPricing getPpvPricing() {
+        return ppvPricing;
+    }
+    public void setPpvPricing(PpvPricing ppvPricing) {
+        this.ppvPricing = ppvPricing;
+    }
+
+
+    @SerializedName("adv_pricing")
+    @Expose
+    private AdvPricing adv_pricing=null;
+    public AdvPricing getAdv_pricing() {
+        return adv_pricing;
+    }
+    public void setAdv_pricing(AdvPricing adv_pricing) {
+        this.adv_pricing = adv_pricing;
+    }
+
+
+    @SerializedName("currency")
+    @Expose
+    private Currency currency=null;
+    public Currency getCurrency() { return currency; }
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+
     public class Movie {
 
         @SerializedName("id")
         @Expose
         private String id = "";
+
         @SerializedName("name")
         @Expose
         private String name = "";
+
         @SerializedName("content_types_id")
         @Expose
         private String contentTypesId = "";
+
         @SerializedName("movie_stream_id")
         @Expose
         private String movieStreamId = "";
+
         @SerializedName("content_publish_date")
         @Expose
         private String contentPublishDate = "";
+
         @SerializedName("full_movie")
         @Expose
         private String fullMovie = "";
+
         @SerializedName("is_converted")
         @Expose
         private String isConverted = "";
+
         @SerializedName("video_resolution")
         @Expose
         private String videoResolution = "";
+
         @SerializedName("movie_stream_uniq_id")
         @Expose
         private String movieStreamUniqId = "";
+
         @SerializedName("muvi_uniq_id")
         @Expose
         private String muviUniqId = "";
+
         @SerializedName("ppv_plan_id")
         @Expose
         private String ppvPlanId = "";
+
         @SerializedName("permalink")
         @Expose
         private String permalink = "";
+
         @SerializedName("content_type_id")
         @Expose
         private String contentTypeId = "";
+
         @SerializedName("genre")
         @Expose
+        @Nullable
         private String genre = "";
+
         @SerializedName("release_date")
         @Expose
         private String releaseDate = "";
+
         @SerializedName("censor_rating")
         @Expose
         private String censorRating = "";
+
         @SerializedName("story")
         @Expose
         private String story = "";
+
         @SerializedName("rolltype")
         @Expose
         private String rolltype = "";
+
         @SerializedName("roll_after")
         @Expose
         private String rollAfter = "";
+
         @SerializedName("video_duration")
         @Expose
         private String videoDuration = "";
+
         @SerializedName("thirdparty_url")
         @Expose
         private String thirdpartyUrl = "";
+
         @SerializedName("is_episode")
         @Expose
         private String isEpisode = "";
+
         @SerializedName("custom1")
         @Expose
         private String custom1 = "";
+
         @SerializedName("custom2")
         @Expose
         private String custom2 = "";
+
         @SerializedName("custom3")
         @Expose
         private String custom3 = "";
+
         @SerializedName("custom4")
         @Expose
         private String custom4 = "";
+
         @SerializedName("custom5")
         @Expose
         private String custom5 = "";
+
         @SerializedName("custom6")
         @Expose
         private String custom6 = "";
+
         @SerializedName("custom7")
         @Expose
         private String custom7 = "";
+
         @SerializedName("custom8")
         @Expose
         private String custom8 = "";
+
         @SerializedName("custom9")
         @Expose
         private String custom9 = "";
+
         @SerializedName("custom10")
         @Expose
         private String custom10 = "";
+
         @SerializedName("content_language")
         @Expose
         private String contentLanguage = "";
+
         @SerializedName("is_downloadable")
         @Expose
         private String isDownloadable = "";
+
         @SerializedName("custom_metadata_form_id")
         @Expose
         private String customMetadataFormId = "";
+
         @SerializedName("isFreeContent")
         @Expose
         private Integer isFreeContent = 0;
+
         @SerializedName("is_ppv")
         @Expose
         private Integer isPpv = 0;
+
         @SerializedName("is_advance")
         @Expose
         private Integer isAdvance = 0;
+
         @SerializedName("actor")
         @Expose
         private String actor = "";
+
         @SerializedName("director")
         @Expose
         private String director = "";
+
         @SerializedName("cast_detail")
         @Expose
         private ArrayList<CastDetail> castDetail = null;
         @SerializedName("embeddedUrl")
         @Expose
         private String embeddedUrl = "";
+
         @SerializedName("viewStatus")
         @Expose
         private ViewStatus viewStatus;
+
         @SerializedName("movieUrlForTv")
         @Expose
         private String movieUrlForTv = "";
+
         @SerializedName("movieUrl")
         @Expose
         private String movieUrl = "";
@@ -342,74 +428,42 @@ public class GetContentDetailsList {
         @SerializedName("banner")
         @Expose
         private String banner = "";
+
         @SerializedName("poster")
         @Expose
         private String poster = "";
+
         @SerializedName("adDetails")
         @Expose
         private ArrayList<String> adDetails = null;
+
         @SerializedName("trailerThirdpartyUrl")
         @Expose
         private String trailerThirdpartyUrl = "";
+
         @SerializedName("trailerUrl")
         @Expose
         private String trailerUrl = "";
+
         @SerializedName("embedTrailerUrl")
         @Expose
         private String embedTrailerUrl = "";
+
         /*@SerializedName("custom_meta_data")
         @Expose
         private ArrayList<String> customMetaData = null;*/
 
-        @SerializedName("ppv_pricing")
+        @SerializedName("is_favorite")
         @Expose
-        private PpvPricing ppvPricing=null;
-
-        public AdvPricing getAdv_pricing() {
-            return adv_pricing;
-        }
-
-        public void setAdv_pricing(AdvPricing adv_pricing) {
-            this.adv_pricing = adv_pricing;
-        }
-
-
-
-        @SerializedName("adv_pricing")
-        @Expose
-        private AdvPricing adv_pricing=null;
-
-        public PpvPricing getPpvPricing() {
-            return ppvPricing;
-        }
-
-        public void setPpvPricing(PpvPricing ppvPricing) {
-            this.ppvPricing = ppvPricing;
-        }
-
-        public Currency getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(Currency currency) {
-            this.currency = currency;
-        }
-
-        @SerializedName("currency")
-        @Expose
-        private Currency currency=null;
-
+        private String is_favorite;
         public String getIs_favorite() {
             return is_favorite;
         }
-
         public void setIs_favorite(String is_favorite) {
             this.is_favorite = is_favorite;
         }
 
-        @SerializedName("is_favorite")
-        @Expose
-        private String is_favorite;
+
 
         /**
          * This method is used to get the id

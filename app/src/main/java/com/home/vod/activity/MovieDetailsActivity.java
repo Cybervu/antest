@@ -116,12 +116,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+/*import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.Player;
+import playerOld.activity.ResumePopupActivity;
+import playerOld.activity.ThirdPartyPlayer;
+import playerOld.activity.YouTubeAPIActivity;*/
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.Player;
+import com.home.api.player.activity.ResumePopupActivity;
+import com.home.api.player.activity.ThirdPartyPlayer;
+import com.home.api.player.activity.YouTubeAPIActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
@@ -783,8 +789,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
         }
 
         if (getMonetizationDetailsModel.getCode() == 200) {
-            if (getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher() != null) {
-                isVoucher = getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher();
+            if (getMonetizationDetailsModel.getMonetizationPlans().getVoucher() != null) {
+                isVoucher = getMonetizationDetailsModel.getMonetizationPlans().getVoucher();
             } else {
                 isVoucher = 0;
             }
@@ -1028,9 +1034,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
             movieIdStr = getContentDetailsList.getMovie().getId();
             posterImageId = getContentDetailsList.getMovie().getPoster();
             contentTypesId = Integer.parseInt(getContentDetailsList.getMovie().getContentTypesId());
-            Util.currencyModel = getContentDetailsList.getMovie().getCurrency();
-            Util.apvModel = getContentDetailsList.getMovie().getAdv_pricing();
-            Util.ppvModel = getContentDetailsList.getMovie().getPpvPricing();
+            Util.currencyModel = getContentDetailsList.getCurrency();
+            Util.apvModel = getContentDetailsList.getAdv_pricing();
+            Util.ppvModel = getContentDetailsList.getPpvPricing();
 
             Log.v("MUVI", "rattting === " + rating);
             Log.v("MUVI", "reviewwww === " + reviews);
@@ -1088,8 +1094,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
                 watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
                 watchTrailerButton.setVisibility(View.VISIBLE);
             }
-
-            if (getContentDetailsList.getMovie().getGenre() != null && getContentDetailsList.getMovie().getGenre().matches("") || getContentDetailsList.getMovie().getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+            String genreAPI;
+            try {
+                genreAPI = getContentDetailsList.getMovie().getGenre();
+            }catch (Exception e){
+                e.printStackTrace();
+                genreAPI=" ";
+            }
+            if (genreAPI == null) {
+                genreAPI = " ";
+            }
+            else if (genreAPI != null && getContentDetailsList.getMovie().getGenre().matches("") || getContentDetailsList.getMovie().getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 videoGenreTextView.setVisibility(View.GONE);
 
             } else {
@@ -2664,7 +2679,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3334,6 +3349,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {

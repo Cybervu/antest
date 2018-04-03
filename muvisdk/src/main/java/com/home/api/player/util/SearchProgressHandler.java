@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.home.vod.R;
+import com.home.apisdk.R;
 
 /**
  * Created by User on 10-02-2017.

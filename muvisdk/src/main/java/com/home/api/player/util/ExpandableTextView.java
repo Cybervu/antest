@@ -9,11 +9,12 @@ import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.home.vod.R;
-import com.home.vod.preferences.LanguagePreference;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.apisdk.R;
+
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.VIEW_MORE;
 
 
 /**

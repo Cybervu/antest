@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
-import com.home.vod.R;
+import com.home.apisdk.R;
 
 
 /**

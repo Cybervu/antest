@@ -313,6 +313,12 @@ public class QueueDataProvider {
         @Override
         public void onSendingRemoteMediaRequest() {
         }
+
+        @Override
+        public void onAdBreakStatusUpdated() {
+
+        }
+
         private void updateMediaQueue() {
             RemoteMediaClient remoteMediaClient = getRemoteMediaClient();
             MediaStatus mediaStatus;

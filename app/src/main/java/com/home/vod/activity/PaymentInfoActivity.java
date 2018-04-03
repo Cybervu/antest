@@ -11,8 +11,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -65,9 +66,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
+/*
+import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.Player;
+*/
+
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_PAY_NOW;
@@ -100,7 +107,7 @@ import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED
 import static com.home.vod.util.Constant.authTokenStr;
 
 
-public class PaymentInfoActivity extends ActionBarActivity implements APICallManager.ApiInterafce {
+public class PaymentInfoActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
     CardModel[] cardSavedArray;
 
     String filename = "";

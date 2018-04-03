@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
-import com.home.vod.R;
+import com.home.apisdk.R;
 
 
 public class StrokedTextView extends AppCompatButton {

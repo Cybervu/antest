@@ -11,8 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -86,9 +87,12 @@ import java.util.concurrent.TimeUnit;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
+/*import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.Player;*/
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.Player;
 
 
 import static com.home.api.api.apiModel.CommonConstants.VOUCHER_CODE;
@@ -153,7 +157,7 @@ import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PPvPaymentInfoActivity extends ActionBarActivity implements APICallManager.ApiInterafce {
+public class PPvPaymentInfoActivity extends AppCompatActivity implements APICallManager.ApiInterafce {
 
 
     String filename = "";
@@ -1123,7 +1127,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
                             parameters.put("cardNumber", cardNumberStr);
                             parameters.put("cvv", securityCodeStr);
                             parameters.put("email", preferenceManager.getEmailIdFromPref());
-                            parameters.put("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
+//                            parameters.put("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
 
                             final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL, parameters, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
                             apiCallManager.startApiProcessing();
@@ -1290,7 +1294,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //   mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -1529,6 +1533,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
                         videoPDialog.hide();
                 } catch (IllegalArgumentException ex) {
                     //status = 0;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    videoPDialog.show();
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_TRANSACTION_PROCESS, DEFAULT_ERROR_TRANSACTION_PROCESS));
@@ -1848,7 +1855,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
         GetMonetizationDetailsModel getMonetizationDetailsModel = (GetMonetizationDetailsModel) object;
 
         if (getMonetizationDetailsModel.getCode() == 200) {
-            if (getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher() == 1) {
+            if (getMonetizationDetailsModel.getMonetizationPlans().getVoucher() == 1) {
 
                 if (contentTypesId == 3) {
                     GetVoucherPlan();
@@ -1996,6 +2003,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
 
             creditCardSaveSpinner.setVisibility(View.GONE);
 
+        } catch (Exception e) {
+            creditCardSaveSpinner.setVisibility(View.GONE);
         }
         if (getCardListModel.getCode() == 200) {
             ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
@@ -4275,6 +4284,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements APICall
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {

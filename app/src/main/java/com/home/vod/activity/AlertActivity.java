@@ -8,8 +8,8 @@ import android.os.Bundle;
 
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
-
-import player.utils.Util;
+//import player.utils.Util;
+import com.home.api.player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;

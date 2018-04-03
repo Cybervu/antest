@@ -4,7 +4,7 @@
     <string name="fonts_regular">fonts/ROBOTO-REGULAR.TTF</string>
     <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
     <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
-
+    <string name="media_route_menu_title">Play on&#8230;</string>
     // Kushal
     <string name="resolution_list_string">720p</string>
     <string name="percent">0%</string>
@@ -17,4 +17,5 @@
     <string name="save_offline_video">Save Offline Video</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="play_now">Play Now</string>
 </resources>

@@ -11,13 +11,14 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
-import com.home.vod.R;
-import com.home.vod.preferences.LanguagePreference;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_LESS;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.apisdk.R;
+
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
+import static com.home.api.player.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.api.player.preferences.LanguagePreference.VIEW_LESS;
+import static com.home.api.player.preferences.LanguagePreference.VIEW_MORE;
 
 /**
  * Created by user on 5/2/2016.

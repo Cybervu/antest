@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import player.utils.DBHelper;
+
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -80,8 +80,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.util.Constant.authTokenStr;
-import static player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
-import static player.utils.Util.VIEW_MORE;
+/*import static playerOld.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
+import static playerOld.utils.Util.VIEW_MORE;
+import playerOld.utils.DBHelper;*/
+import static com.home.api.player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.api.player.utils.Util.VIEW_MORE;
+import com.home.api.player.utils.DBHelper;
 
 
 /*enum ContentTypes1 {

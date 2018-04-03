@@ -1,11 +1,8 @@
 package com.home.vod;
 
 import android.app.Activity;
-
 import com.home.vod.activity.Episode_list_Activity;
-import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MovieDetailsActivity;
-import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 /**

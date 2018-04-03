@@ -28,10 +28,10 @@ import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+import static playerOld.utils.Util.DEFAULT_IS_CHROMECAST;
+import static playerOld.utils.Util.DEFAULT_IS_OFFLINE;
+import static playerOld.utils.Util.IS_CHROMECAST;
+import static playerOld.utils.Util.IS_OFFLINE;
 
 
 /**

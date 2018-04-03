@@ -12,13 +12,27 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "AUTH_TOKEN", "\"4298851905443517c9f161e6b0471969\""
+        buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,12 +65,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4'
-
     // compile files('libs/YouTubeAndroidPlayerApi.jar')
-
-    testCompile 'junit:junit:4.12'
     compile project(path: ':app' , configuration: 'default')
 }
 

@@ -80,6 +80,10 @@
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="gridbottom8dp">1dp</dimen>
+    <dimen name="btnMore_min_height">36dp</dimen>
+    <item name="stroke_width" format="float" type="dimen">0.45</item>
+    <dimen name="videogrid_land_width">190dp</dimen>
+    <dimen name="videogrid_land_height">106dp</dimen>
     // Kushal
     <dimen name="text_size">15sp</dimen>
     <dimen name="text_size_16">16sp</dimen>

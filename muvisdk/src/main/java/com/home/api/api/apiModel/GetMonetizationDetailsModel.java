@@ -14,16 +14,19 @@ public class GetMonetizationDetailsModel {
     @SerializedName("msg")
     @Expose
     private String msg = "";
+
     @SerializedName("code")
     @Expose
     private Integer code = 0;
+
     @SerializedName("status")
     @Expose
     private String status = "";
-    @SerializedName("items")
+
+   /* @SerializedName("items")
     @Expose
     private Items items;
-
+*/
     /**
      * This method is used to get the message
      *
@@ -86,69 +89,71 @@ public class GetMonetizationDetailsModel {
      *
      * @return items
      */
-
+/*
     public Items getItems() {
         return items;
     }
 
-    /**
+    *//**
      * This method is used to set the items
      *
      * @param items For setting the items
-     */
+     *//*
 
     public void setItems(Items items) {
         this.items = items;
+    }*/
+
+
+    @SerializedName("monetizations")
+    @Expose
+    private Monetizations monetizations;
+    @SerializedName("monetization_plans")
+    @Expose
+    private MonetizationPlans monetizationPlans;
+
+    /**
+     * This method is used to get the monitization
+     *
+     * @return monetizations
+     */
+    public Monetizations getMonetizations() {
+        return monetizations;
     }
 
-    public class Items {
-
-        @SerializedName("monetizations")
-        @Expose
-        private Monetizations monetizations;
-        @SerializedName("monetization_plans")
-        @Expose
-        private MonetizationPlans monetizationPlans;
-
-        /**
-         * This method is used to get the monitization
-         *
-         * @return monetizations
-         */
-        public Monetizations getMonetizations() {
-            return monetizations;
-        }
-
-        /**
-         * This method is used to set the monitization
-         *
-         * @param monetizations For setting the monitization
-         */
-        public void setMonetizations(Monetizations monetizations) {
-            this.monetizations = monetizations;
-        }
-
-        /**
-         * This method is used to get the monitization plans
-         *
-         * @return monetizationPlans
-         */
-        public MonetizationPlans getMonetizationPlans() {
-            return monetizationPlans;
-        }
-
-        /**
-         * This method is used to set the monitization plans
-         *
-         * @param monetizationPlans For setting the monitization plan
-         */
-
-        public void setMonetizationPlans(MonetizationPlans monetizationPlans) {
-            this.monetizationPlans = monetizationPlans;
-        }
-
+    /**
+     * This method is used to set the monitization
+     *
+     * @param monetizations For setting the monitization
+     */
+    public void setMonetizations(Monetizations monetizations) {
+        this.monetizations = monetizations;
     }
 
+    /**
+     * This method is used to get the monitization plans
+     *
+     * @return monetizationPlans
+     */
+    public MonetizationPlans getMonetizationPlans() {
+        return monetizationPlans;
+    }
+
+    /**
+     * This method is used to set the monitization plans
+     *
+     * @param monetizationPlans For setting the monitization plan
+     */
+
+    public void setMonetizationPlans(MonetizationPlans monetizationPlans) {
+        this.monetizationPlans = monetizationPlans;
+    }
+   /* public class Items {
+
+
+
+    }
+*/
     public class MonetizationPlans {
 
         @SerializedName("ppv")

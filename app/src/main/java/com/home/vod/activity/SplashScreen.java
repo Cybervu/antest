@@ -46,8 +46,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
 
-import player.model.ContactModel1;
-import player.utils.DBHelper;
+import com.home.api.player.model.ContactModel1;
+import com.home.api.player.utils.DBHelper;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
@@ -79,8 +79,10 @@ import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.RATING;
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+/*import static playerOld.utils.Util.IS_CHROMECAST;
+import static playerOld.utils.Util.IS_OFFLINE;*/
+import static com.home.api.player.utils.Util.IS_CHROMECAST;
+import static com.home.api.player.utils.Util.IS_OFFLINE;
 
 public class SplashScreen extends Activity implements APICallManager.ApiInterafce {
 

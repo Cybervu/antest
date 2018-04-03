@@ -109,12 +109,19 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+/*
+import playerOld.activity.AdPlayerActivity;
+import playerOld.activity.ExoPlayerActivity;
+import playerOld.activity.MyLibraryPlayer;
+import playerOld.activity.Player;
+import playerOld.activity.ResumePopupActivity;*/
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyLibraryPlayer;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
+
+import com.home.api.player.activity.AdPlayerActivity;
+import com.home.api.player.activity.ExoPlayerActivity;
+import com.home.api.player.activity.MyLibraryPlayer;
+import com.home.api.player.activity.Player;
+import com.home.api.player.activity.ResumePopupActivity;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -516,8 +523,8 @@ public class Episode_list_Activity extends AppCompatActivity implements APICallM
 
         }
         if (getMonetizationDetailsModel.getCode() == 200) {
-            if (getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher() != null) {
-                isVoucher = getMonetizationDetailsModel.getItems().getMonetizationPlans().getVoucher();
+            if (getMonetizationDetailsModel.getMonetizationPlans().getVoucher() != null) {
+                isVoucher = getMonetizationDetailsModel.getMonetizationPlans().getVoucher();
             } else {
                 isVoucher = 0;
             }
@@ -2546,7 +2553,7 @@ public class Episode_list_Activity extends AppCompatActivity implements APICallM
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -4599,6 +4606,11 @@ public class Episode_list_Activity extends AppCompatActivity implements APICallM
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

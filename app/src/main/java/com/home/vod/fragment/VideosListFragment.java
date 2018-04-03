@@ -900,7 +900,7 @@ public class VideosListFragment extends Fragment implements APICallManager.ApiIn
             }
         };
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
 
 
         // int startPosition = getInt("startPosition", 0);
@@ -2734,6 +2734,11 @@ public class VideosListFragment extends Fragment implements APICallManager.ApiIn
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

@@ -41,11 +41,32 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+/*
+import playerOld.subtitle_support.Caption;
+import playerOld.subtitle_support.FormatSRT;
+import playerOld.subtitle_support.FormatSRT_WithoutCaption;
+import playerOld.subtitle_support.TimedTextObject;
+import player.activity.ResumePopupActivity;
+import player.activity.SubtitleList;
+import player.utils.DBHelper;
+import static authTokenStr;
+import com.home.vod.util.Util;
+*/
 
-import player.subtitle_support.Caption;
-import player.subtitle_support.FormatSRT;
-import player.subtitle_support.FormatSRT_WithoutCaption;
-import player.subtitle_support.TimedTextObject;
+import static com.home.api.player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.api.player.utils.Util.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.api.player.utils.Util.NO_INTERNET_CONNECTION;
+import static com.home.api.player.utils.Util.SELECTED_LANGUAGE_CODE;
+import static com.home.api.player.utils.Util.authTokenStr;
+import com.home.api.player.subtitle_support.Caption;
+import com.home.api.player.subtitle_support.FormatSRT;
+import com.home.api.player.subtitle_support.FormatSRT_WithoutCaption;
+import com.home.api.player.subtitle_support.TimedTextObject;
+import com.home.api.player.activity.ResumePopupActivity;
+import com.home.api.player.activity.SubtitleList;
+import com.home.api.player.utils.DBHelper;
+import com.home.api.player.util.Util;
+
 
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.Cast;
@@ -69,7 +90,6 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.SensorOrientationChangeNotifier;
-import com.home.vod.util.Util;
 
 
 import org.json.JSONObject;
@@ -100,15 +120,14 @@ import com.intertrust.wasabi.media.PlaylistProxyListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import javax.net.ssl.HttpsURLConnection;
 
-import player.activity.ResumePopupActivity;
-import player.activity.SubtitleList;
-import player.utils.DBHelper;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-
-
+import static com.home.api.player.utils.Util.checkNetwork;
+import static com.home.api.player.utils.Util.getTextofLanguage;
+import static com.home.api.player.utils.Util.rootUrl;
+import static com.home.api.player.utils.Util.videoLogUrl;
 
 
 import org.apache.http.HttpResponse;
@@ -122,7 +141,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import static player.utils.Util.authTokenStr;
+
 
 
 enum ContentTypes {
@@ -503,7 +522,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		setupCastListener();
 
 		mCastContext = CastContext.getSharedInstance(this);
-		mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+		//mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 		mCastSession = CastContext.getSharedInstance(this).getSessionManager().getCurrentCastSession();
 		mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -703,7 +722,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 					startActivity(detailsIntent);
 				} else {
-					Toast.makeText(getApplicationContext(), player.utils.Util.getTextofLanguage(MarlinBroadbandExample.this, player.utils.Util.NO_INTERNET_CONNECTION, player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getTextofLanguage(MarlinBroadbandExample.this, NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -1391,7 +1410,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 
 
-			if (player.utils.Util.checkNetwork(MarlinBroadbandExample.this)) {
+			if (checkNetwork(MarlinBroadbandExample.this)) {
 				if (emVideoView.getCurrentPosition() > 0 && ((millisecondsToString(emVideoView.getCurrentPosition())) % 60) == 0) {
 
 					watchStatus = "halfplay";
@@ -1440,7 +1459,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 						Log.v("BIBHU1", "Update called UniqueId=" + UniqueId);
 
 						//==========================End============================//
-						if (player.utils.Util.checkNetwork(MarlinBroadbandExample.this)) {
+						if (checkNetwork(MarlinBroadbandExample.this)) {
 							asyncVideoLogDetails = new AsyncVideoLogDetails();
 							watchStatus = "complete";
 							asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
@@ -2143,7 +2162,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					httppost.addHeader("stream_uniq_id", streamId);
 					httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
 					httppost.addHeader("user_id",userIdStr);
-					httppost.addHeader("lang_code", player.utils.Util.getTextofLanguage(MarlinBroadbandExample.this, player.utils.Util.SELECTED_LANGUAGE_CODE, player.utils.Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+					httppost.addHeader("lang_code", getTextofLanguage(MarlinBroadbandExample.this, SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
 					Log.v("SUBHA", "authToken = " + authTokenStr.trim());
@@ -2605,6 +2624,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				@Override
 				public void onSendingRemoteMediaRequest() {
 				}
+
+				@Override
+				public void onAdBreakStatusUpdated() {
+					
+				}
 			});
 
 			remoteMediaClient.load(mSelectedMedia, autoPlay, position);
@@ -2652,7 +2676,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 						Log.v("BIBHU4", "restrict_stream_id============0");
 					}
 
-					jsonObj.put("domain_name", player.utils.Util.rootUrl().trim().substring(0, player.utils.Util.rootUrl().trim().length() - 6));
+					jsonObj.put("domain_name", rootUrl().trim().substring(0, rootUrl().trim().length() - 6));
 					jsonObj.put("is_log", "1");
 
 					// This code is changed according to new Video log //
@@ -2744,7 +2768,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 						Log.v("BIBHU4", "restrict_stream_id============0");
 					}
 
-					jsonObj.put("domain_name", player.utils.Util.rootUrl().trim().substring(0, player.utils.Util.rootUrl().trim().length() - 6));
+					jsonObj.put("domain_name", rootUrl().trim().substring(0, rootUrl().trim().length() - 6));
 					jsonObj.put("is_log", "1");
 
 					// This code is changed according to new Video log //
@@ -3011,12 +3035,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		@Override
 		protected Void doInBackground(Void... params) {
 
-			String urlRouteList = player.utils.Util.rootUrl().trim() + player.utils.Util.videoLogUrl.trim();
+			String urlRouteList = rootUrl().trim() + videoLogUrl.trim();
 			try {
 				HttpClient httpclient = new DefaultHttpClient();
 				HttpPost httppost = new HttpPost(urlRouteList);
 				httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-				httppost.addHeader("authToken", player.utils.Util.authTokenStr.trim());
+				httppost.addHeader("authToken", authTokenStr.trim());
 				httppost.addHeader("user_id", userIdStr.trim());
 				httppost.addHeader("ip_address", ipAddressStr.trim());
 				httppost.addHeader("movie_id", movieId.trim());
@@ -3025,7 +3049,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				httppost.addHeader("device_type", "2");
 				httppost.addHeader("log_id", videoLogId);
 
-				Log.v("BIBHU6", "authToken=" + player.utils.Util.authTokenStr.trim());
+				Log.v("BIBHU6", "authToken=" + authTokenStr.trim());
 				Log.v("BIBHU6", "user_id=" + userIdStr.trim());
 				Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
 				Log.v("BIBHU6", "movie_id=" + movieId.trim());

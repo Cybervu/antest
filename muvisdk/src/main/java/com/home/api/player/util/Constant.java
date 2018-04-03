@@ -1,7 +1,7 @@
 package com.home.api.player.util;
 
 
-import com.home.vod.BuildConfig;
+import com.home.apisdk.BuildConfig;
 
 /**
  * Created by MUVI on 1/18/2017.

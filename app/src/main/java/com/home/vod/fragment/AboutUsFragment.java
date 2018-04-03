@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -73,7 +74,8 @@ public class AboutUsFragment extends Fragment implements APICallManager.ApiInter
         final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
-        isNetwork = player.utils.Util.checkNetwork(context);
+        //isNetwork = playerOld.utils.Util.checkNetwork(context);
+        isNetwork = com.home.api.player.utils.Util.checkNetwork(context);
 
         noInternet = (RelativeLayout) view.findViewById(R.id.noInternet);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -204,7 +206,7 @@ public class AboutUsFragment extends Fragment implements APICallManager.ApiInter
     }*/
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     @Override

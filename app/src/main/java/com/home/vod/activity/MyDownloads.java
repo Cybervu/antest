@@ -61,10 +61,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.ResumePopupActivity;
-import player.model.ContactModel1;
-import player.utils.DBHelper;
-import player.utils.Util;
+/*import playerOld.activity.ResumePopupActivity;
+import playerOld.model.ContactModel1;
+import playerOld.utils.DBHelper;
+import playerOld.utils.Util;*/
+import com.home.api.player.activity.ResumePopupActivity;
+import com.home.api.player.model.ContactModel1;
+import com.home.api.player.utils.DBHelper;
+import com.home.api.player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -233,7 +237,7 @@ public class MyDownloads extends AppCompatActivity implements APICallManager.Api
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -655,6 +659,11 @@ public class MyDownloads extends AppCompatActivity implements APICallManager.Api
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {

@@ -2,26 +2,20 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.home.vod.activity.ProfileActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 
-import player.utils.Util;
-
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
-import static com.home.vod.preferences.LanguagePreference.LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
 

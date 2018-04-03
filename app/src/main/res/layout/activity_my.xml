@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="player.activity.MyActivity"
+    tools:context="playerOld.activity.MyActivity"
     tools:ignore="MergeRootFrame">
 
     <fragment
-        android:name="player.activity.MyActivity$VideoFragment"
+        android:name="playerOld.activity.MyActivity$VideoFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

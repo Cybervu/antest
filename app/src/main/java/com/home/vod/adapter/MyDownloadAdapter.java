@@ -24,9 +24,11 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import player.model.ContactModel1;
-import player.utils.DBHelper;
+/*
+import playerOld.model.ContactModel1;
+import playerOld.utils.DBHelper;*/
+import com.home.api.player.model.ContactModel1;
+import com.home.api.player.utils.DBHelper;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;

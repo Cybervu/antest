@@ -12,18 +12,23 @@ public class Currency {
         @SerializedName("id")
         @Expose
         private String id="";
+
         @SerializedName("country_code")
         @Expose
         private String countryCode="";
+
         @SerializedName("code")
         @Expose
         private String code="";
+
         @SerializedName("title")
         @Expose
         private String title="";
+
         @SerializedName("symbol")
         @Expose
         private String symbol="$";
+
         @SerializedName("iso_num")
         @Expose
         private String isoNum="";

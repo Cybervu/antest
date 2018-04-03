@@ -33,16 +33,17 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.api.api.apiModel.AdvPricing;
 import com.home.api.api.apiModel.Currency;
 import com.home.api.api.apiModel.PpvPricing;
-import com.home.vod.BuildConfig;
-import com.home.vod.QueueDataProvider;
-import com.home.vod.R;
-import com.home.vod.activity.LoginActivity;
-import com.home.vod.activity.MainActivity;
-import com.home.vod.activity.RegisterActivity;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
-import com.home.vod.model.DataModel;
-import com.home.vod.model.LanguageModel;
-import com.home.vod.preferences.LanguagePreference;
+import com.home.api.player.QueueDataProvider;
+/*
+import com.home.api.player.activity.LoginActivity;
+import com.home.api.player.activity.MainActivity;
+import com.home.api.player.activity.RegisterActivity;*/
+import com.home.api.player.expandedcontrols.ExpandedControlsActivity;
+import com.home.api.player.model.DataModel;
+import com.home.api.player.model.LanguageModel;
+import com.home.api.player.preferences.LanguagePreference;
+import com.home.apisdk.BuildConfig;
+import com.home.apisdk.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +60,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.api.player.preferences.LanguagePreference.*;
 
 /**
  * Created by User on 24-07-2015.
@@ -425,7 +426,9 @@ public class Util {
                         dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 
                     }*/
-        dlgAlert.setMessage(showMsg);
+
+                  // Kushal--
+      /*  dlgAlert.setMessage(showMsg);
 
         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -449,7 +452,7 @@ public class Util {
 
                     }
                 });
-        dlgAlert.create().show();
+        dlgAlert.create().show();*/
     }
 
 

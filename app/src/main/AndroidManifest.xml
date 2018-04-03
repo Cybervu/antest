@@ -63,7 +63,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name="player.activity.ExoPlayerActivity"
+            android:name="playerOld.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
@@ -77,24 +77,24 @@
             android:name=".activity.MyDownloads"
             android:screenOrientation="portrait" />
         <activity
-            android:name="player.activity.ThirdPartyPlayer"
+            android:name="playerOld.activity.ThirdPartyPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="player.activity.YouTubeAPIActivity"
+            android:name="playerOld.activity.YouTubeAPIActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
 
         <service
-            android:name="player.activity.DataConsumptionService"
+            android:name="playerOld.activity.DataConsumptionService"
             android:enabled="true"
             android:exported="true" />
 
 
         <activity
-            android:name="player.activity.Subtitle_Resolution"
+            android:name="playerOld.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="sensor"
@@ -107,15 +107,15 @@
             android:screenOrientation="sensor"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="player.activity.SubtitleList"
+            android:name="playerOld.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="player.activity.ResolutionChangeActivity"
+            android:name="playerOld.activity.ResolutionChangeActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="player.activity.ResumePopupActivity"
+            android:name="playerOld.activity.ResumePopupActivity"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="portrait"
@@ -247,17 +247,17 @@
             android:name=".activity.SubscriptionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="player.activity.MyLibraryPlayer"
+            android:name="playerOld.activity.MyLibraryPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="player.activity.AdPlayerActivity"
+            android:name="playerOld.activity.AdPlayerActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name="player.activity.MyActivity"
+            android:name="playerOld.activity.MyActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
