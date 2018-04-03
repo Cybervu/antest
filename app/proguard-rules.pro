@@ -29,6 +29,9 @@
 -optimizations   code/simplification/arithmetic,!code/simplification/cast,!field/*,!method/inlining/*
 -optimizationpasses 5
 -allowaccessmodification
+-keep class com.home.vod.CastOptionsProvider { *; }
+-keep class android.support.** { *; }
+-keep class com.google.** { *; }
 
 
 -dontusemixedcaseclassnames
