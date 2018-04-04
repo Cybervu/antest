@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.TrafficStats;
@@ -132,12 +133,15 @@ import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -275,6 +279,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int playerStartPosition = 0;
     boolean censor_layout = true;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
+    Timer MovableTimer;
 
 
     // ExoPlayerActivity.this is added for the new video log API;
@@ -645,12 +650,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         /********* Offline********/
 
 
-      /*  if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-            userIdStr = playerModel.getUserId();
-        }
-        if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-            emailIdStr = playerModel.getEmailId();
-        }*/
 
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
@@ -1744,6 +1743,103 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         );
 
         /*****Offline*****/
+
+
+         /*
+            This timer is only responsible to active movable timer .
+         */
+
+        if(playerModel.getWaterMark()){
+            MovableTimer = new Timer();
+            MovableTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+                                if (playerModel.getUseIpStatus())
+                                    ipAddressTextView.setVisibility(View.VISIBLE);
+                                else
+                                    ipAddressTextView.setVisibility(View.GONE);
+                                ipAddressTextView.setText(ipAddressStr);
+
+                                if (playerModel.getUseEmailStatus())
+                                    emailAddressTextView.setVisibility(View.VISIBLE);
+                                else
+                                    emailAddressTextView.setVisibility(View.GONE);
+                                emailAddressTextView.setText(emailIdStr);
+
+                                if (playerModel.getUseDateStatus())
+                                    dateTextView.setVisibility(View.VISIBLE);
+                                else
+                                    dateTextView.setVisibility(View.GONE);
+                                dateTextView.setText("" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                            } catch (Exception e) {
+                                Log.v("BIBHU11", "Exception =" + e.toString());
+                            }
+                        }
+                    });
+                    MoveWaterMark();
+                }
+            }, 2000, 2000);
+        }
+
+        //*************************************************** END ***********************************************************//
+
+
+
+
+
+    }
+
+    // This is added for the movable water mark //
+
+    public void MoveWaterMark() {
+
+        Rect rectf = new Rect();
+        emVideoView.getLocalVisibleRect(rectf);
+        int mainLayout_width = rectf.width() - 50;
+        int mainLayout_height = rectf.height() - 120;
+
+        // Child layout Lyout details
+
+        Rect rectf1 = new Rect();
+        linearLayout1.getLocalVisibleRect(rectf1);
+        int childLayout_width = rectf1.width();
+        int childLayout_height = rectf1.height();
+
+        boolean show = true;
+
+        while (show) {
+
+            Random r = new Random();
+            try {
+                final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
+
+
+                final int min = 10;
+                final int max = mainLayout_height;
+                final int yUp = new Random().nextInt((max - min) + 1) + min;
+
+
+                if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
+                    show = false;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        linearLayout1.setX(xLeft);
+                        linearLayout1.setY(yUp);
+                    }
+                });
+            }catch (Exception e){}
+
+        }
     }
 
 
@@ -3280,6 +3376,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (MovableTimer != null)
+            MovableTimer.cancel();
 
         try{
 

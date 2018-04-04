@@ -60,7 +60,7 @@ android {
             minSdkVersion 21
             targetSdkVersion 23
             versionCode 4
-            versionName "1.6"
+            versionName "1.7"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
@@ -168,9 +168,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 19
+            versionCode 20
             targetSdkVersion 25
-            versionName '3.2.0'
+            versionName '3.3.0'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -348,15 +348,16 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '1.0'
+            versionName '3.0'
         }
         magicmovies_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://nynina.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         ubereatsvod {
             minSdkVersion 21

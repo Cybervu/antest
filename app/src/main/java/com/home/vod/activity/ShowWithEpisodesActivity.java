@@ -356,20 +356,26 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         if (status > 0 && status == 200) {
 
             try {
-
                 Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
 
                 languageCustomAdapter.notifyDataSetChanged();
 
-                Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
+               /* Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                final Intent detailsIntent = new Intent(ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.class);
+                detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(detailsIntent);
+                finish();
+
+                preferenceManager.setLanguageChangeStatus("1");
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             // Call For Other Methods.
-
 
         } else {
         }
@@ -433,7 +439,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
                 Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
             }
         }
 
@@ -1414,22 +1419,31 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                else
+                    playerModel.useEmail(false);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                else
+                    playerModel.useIp(false);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+                else
+                    playerModel.useDate(false);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
+
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
 
                 Util.showNoDataAlert(ShowWithEpisodesActivity.this);
-               /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();*/
+
             } else {
 
 

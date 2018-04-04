@@ -2764,6 +2764,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
 
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                else
+                    playerModel.useEmail(false);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                else
+                    playerModel.useIp(false);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+                else
+                    playerModel.useDate(false);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
+
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
                 Util.showNoDataAlert(MovieDetailsActivity.this);
@@ -3521,8 +3540,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
-
-
         }
 
         if (jsonResponse == null) {
@@ -3536,9 +3553,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     languageCustomAdapter.notifyDataSetChanged();
 
-                    Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
+                   /* Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
+                    startActivity(intent);*/
+
+                    final Intent detailsIntent = new Intent(MovieDetailsActivity.this, MovieDetailsActivity.class);
+                    detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(detailsIntent);
+                    finish();
+
+                    preferenceManager.setLanguageChangeStatus("1");
+
 
 
                 } catch (JSONException e) {
