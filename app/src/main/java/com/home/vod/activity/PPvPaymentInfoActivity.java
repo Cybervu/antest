@@ -1129,7 +1129,12 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements APICall
                             parameters.put("email", preferenceManager.getEmailIdFromPref());
 //                            parameters.put("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
 
-                            final APICallManager apiCallManager = new APICallManager(PPvPaymentInfoActivity.this, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL, parameters, APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+                            final APICallManager apiCallManager = new APICallManager(
+                                    PPvPaymentInfoActivity.this,
+                                    APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL,
+                                    parameters,
+                                    APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL_REQUEST_ID,
+                                    APIUrlConstant.BASE_URl);
                             apiCallManager.startApiProcessing();
 
                            /* AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
@@ -1287,7 +1292,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements APICall
                                                     }
         );
 
-          /*chromecast-------------------------------------*/
+        /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
@@ -1693,7 +1698,6 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements APICall
             } else {
 
                 final HashMap parameters = new HashMap<>();
-
                 parameters.put("authToken", authTokenStr);
                 parameters.put("card_name", nameOnCardEditText.getText().toString().trim());
                 parameters.put("exp_month", String.valueOf(expiryMonthStr).trim());

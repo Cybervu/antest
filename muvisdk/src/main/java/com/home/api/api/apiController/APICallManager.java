@@ -3,6 +3,7 @@ package com.home.api.api.apiController;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.home.api.api.APIUrlConstant;
 import com.home.api.api.apiModel.AddContentRatingModel;
@@ -81,6 +82,7 @@ public class APICallManager {
 
     private Gson gson;
 
+
     /**
      * Interface used to allow to run some code when get responses.
      */
@@ -107,7 +109,7 @@ public class APICallManager {
     private static String BASE_URL = "";
     private String apiName = "";
     private int requestID = 0;
-    private String customBaseUrl = "";
+    private String customBaseUrl = " ";
     private HashMap<String, String> apiParameter;
     private ApiInterafce listener;
 
@@ -177,10 +179,18 @@ public class APICallManager {
         dyResponseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                gson = new Gson();
+              //  gson = new Gson();
+                gson= new GsonBuilder()
+                        .serializeNulls()
+                        .excludeFieldsWithoutExposeAnnotation()
+                        .create();
+
+
+
                 String responsedata = null;
                 try {
-                    responsedata = response.body().string();
+                   // responsedata = gson.toJson(response.body().string());
+                    responsedata=response.body().string();
                     Log.v("Abhishek responsedata", responsedata);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -194,6 +204,7 @@ public class APICallManager {
                             return;
 
                         case APIUrlConstant.ADD_TO_FAV_LIST:
+                            gson.serializeNulls();
                             AddToFavModel addToFavModel = gson.fromJson(responsedata, AddToFavModel.class);
                             listener.onTaskPostExecute(addToFavModel, requestID, responsedata);
                             return;
@@ -250,6 +261,7 @@ public class APICallManager {
                             listener.onTaskPostExecute(getCastDetailsModel, requestID, responsedata);
                             return;
                         case APIUrlConstant.CONTENT_DETAILS_URL:
+                            gson.serializeNulls();
                             GetContentDetailsList getContentDetailsList = gson.fromJson(responsedata, GetContentDetailsList.class);
                             listener.onTaskPostExecute(getContentDetailsList, requestID, responsedata);
                             return;

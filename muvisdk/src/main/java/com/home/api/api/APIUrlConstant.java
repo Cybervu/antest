@@ -9,9 +9,9 @@ package com.home.api.api;
 public class APIUrlConstant {
 
 
-    public static String BASE_URl = "https://sonydadc.muvi.com/rest/";
+   // public static String BASE_URl = "https://sonydadac.muvi.com/rest/";
 
-    //public static String BASE_URl = "https://www.muvi.com/rest/";
+    public static String BASE_URl = "https://www.muvi.com/rest/";
 
     /**
      * endpoint to initialize SDK API

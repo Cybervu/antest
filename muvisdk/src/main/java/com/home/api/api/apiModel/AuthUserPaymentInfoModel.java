@@ -13,11 +13,15 @@ public class AuthUserPaymentInfoModel {
 
     @SerializedName("isSuccess")
     @Expose
-    private Integer isSuccess = 0;
+    private int isSuccess = 0;
+
     @SerializedName("card")
     @Expose
     private Card card;
 
+    @SerializedName("Message")
+    @Expose
+    private String Message;
     public String getMessage() {
         return Message;
     }
@@ -26,9 +30,7 @@ public class AuthUserPaymentInfoModel {
         Message = message;
     }
 
-    @SerializedName("Message")
-    @Expose
-    private String Message;
+
 
     /**
      * This method is used to get the success message
