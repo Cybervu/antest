@@ -1350,7 +1350,7 @@ public class MyLibraryFragment extends Fragment implements APICallManager.ApiInt
 
 
             for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
-                SubTitleName = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
+                SubTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
             }
 
 
@@ -1377,7 +1377,36 @@ public class MyLibraryFragment extends Fragment implements APICallManager.ApiInt
                 Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
                 Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
             }
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+
+            //Kushal
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName1= new ArrayList<>();
+            ArrayList<String> subTitleCode1= new ArrayList<>();
+
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName1.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode1.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+            playerModel.setSubTitleName(subTitleName1);
+            playerModel.setSubTitleLanguage(subTitleCode1);
+            playerModel.setFakeSubTitlePath(fakeSubtitlePath);
+            FakeSubTitlePath = fakeSubtitlePath;
+            playerModel.setOfflineUrl(fakeSubtitlePath);
+            playerModel.setOfflineLanguage(subTitleName1);
+            //   playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+            ArrayList<String> Resolution= new ArrayList<>();
+            ArrayList<String> Url= new ArrayList<>();
+
+            for (int i=0; i<getVideoDetailsModel.getVideoDetails().size();i++){
+                Resolution.add(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
+                Url.add(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
+            }
+            playerModel.setResolutionFormat(Resolution);
+            playerModel.setResolutionUrl(Url);
+
+          /*  for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
                 playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
                 playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
                 playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
@@ -1388,7 +1417,7 @@ public class MyLibraryFragment extends Fragment implements APICallManager.ApiInt
             for (int i = 0; i < getVideoDetailsModel.getVideoDetails().size(); i++) {
                 playerModel.setResolutionFormat(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
                 playerModel.setResolutionUrl(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
-            }
+            }*/
             playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
             playerModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));
 

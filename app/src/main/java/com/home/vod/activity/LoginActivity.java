@@ -2181,10 +2181,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             if (videoDetailsModel.getPlayedLength() != null && !videoDetailsModel.getPlayedLength().equals(""))
                 playerModel.setPlayPos((Util.isDouble(videoDetailsModel.getPlayedLength())));
 
+            ArrayList<String> subTitleName, subTitleCode;
+            subTitleName= new ArrayList<>();
+            subTitleCode= new ArrayList<>();
             for (int i = 0; i < videoDetailsModel.getSubTitle().size(); i++) {
-                SubTitleName = videoDetailsModel.getSubTitle().get(i).getSubTitleName();
-                SubTitleLanguage = videoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+               subTitleName.add(videoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode.add(videoDetailsModel.getSubTitle().get(i).getSubtitle_code());
             }
+                SubTitleName = subTitleName;
+                SubTitleLanguage = subTitleCode;
             //dependency for datamodel
             Util.dataModel.setVideoUrl(videoDetailsModel.getVideoUrl());
             Util.dataModel.setVideoResolution(videoDetailsModel.getVideoResolution());
@@ -2208,7 +2213,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Util.dataModel.setAdNetworkId(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
                 Util.dataModel.setChannel_id(videoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
             }
-            for (int i = 0; i < videoDetailsModel.getSubTitle().size(); i++) {
+
+            //Kushal
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName1= new ArrayList<>();
+            ArrayList<String> subTitleCode1= new ArrayList<>();
+
+            for (int i=0; i<videoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( videoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName1.add(videoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode1.add(videoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+                playerModel.setSubTitleName(subTitleName1);
+                playerModel.setSubTitleLanguage(subTitleCode1);
+                playerModel.setFakeSubTitlePath(fakeSubtitlePath);
+                FakeSubTitlePath = fakeSubtitlePath;
+                playerModel.setOfflineUrl(fakeSubtitlePath);
+                playerModel.setOfflineLanguage(subTitleName1);
+            //   playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+            ArrayList<String> Resolution= new ArrayList<>();
+            ArrayList<String> Url= new ArrayList<>();
+
+            for (int i=0; i<videoDetailsModel.getVideoDetails().size();i++){
+                Resolution.add(videoDetailsModel.getVideoDetails().get(i).getResolution());
+                Url.add(videoDetailsModel.getVideoDetails().get(i).getUrl());
+            }
+                playerModel.setResolutionFormat(Resolution);
+                playerModel.setResolutionUrl(Url);
+         /*   for (int i = 0; i < videoDetailsModel.getSubTitle().size(); i++) {
                 playerModel.setSubTitleName(videoDetailsModel.getSubTitle().get(i).getSubTitleName());
                 playerModel.setSubTitleLanguage(videoDetailsModel.getSubTitle().get(i).getSubtitle_code());
                 playerModel.setFakeSubTitlePath(videoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
@@ -2219,7 +2252,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             for (int i = 0; i < videoDetailsModel.getVideoDetails().size(); i++) {
                 playerModel.setResolutionFormat(videoDetailsModel.getVideoDetails().get(i).getResolution());
                 playerModel.setResolutionUrl(videoDetailsModel.getVideoDetails().get(i).getUrl());
-            }
+            }*/
             playerModel.setVideoResolution(videoDetailsModel.getVideoResolution());
             playerModel.setPlayPos(Util.isDouble(videoDetailsModel.getPlayedLength()));
 

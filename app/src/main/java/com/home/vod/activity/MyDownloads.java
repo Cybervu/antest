@@ -828,17 +828,28 @@ public class MyDownloads extends AppCompatActivity implements APICallManager.Api
             Chromecast_Subtitle_Language_Name.clear();
             Chromecast_Subtitle_Code.clear();
 
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
-                if (getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath().size() > 0) {
+            //Kushal
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName= new ArrayList<>();
+            ArrayList<String> subTitleCode= new ArrayList<>();
 
-                    SubtitleUrl = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath().get(0);
-                    SubtitleLanguage = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName().get(0);
-                    SubtitleCode = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code().get(0);
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+
+            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+                if (fakeSubtitlePath.size() > 0) {
+
+                    SubtitleUrl = fakeSubtitlePath.get(i);
+                    SubtitleLanguage = subTitleName.get(i);
+                    SubtitleCode =subTitleCode.get(i);
                 }
 
-                Chromecast_Subtitle_Url = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
-                Chromecast_Subtitle_Language_Name = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
-                Chromecast_Subtitle_Code = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+                Chromecast_Subtitle_Url = fakeSubtitlePath;
+                Chromecast_Subtitle_Language_Name = subTitleName;
+                Chromecast_Subtitle_Code = subTitleCode;
 
             }
             if (mCastSession != null && mCastSession.isConnected()) {

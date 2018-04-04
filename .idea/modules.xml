@@ -3,9 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/VOD_CLONE.iml" filepath="$PROJECT_DIR$/VOD_CLONE.iml" />
-      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/VOD_CLONE.iml" filepath="E:/VOD_NEW_CLONE/VOD/VOD_CLONE.iml" />
-      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/VOD_Retro.iml" filepath="E:/VOD_NEW_CLONE/VOD/VOD_Retro.iml" />
+      <module fileurl="file://E:\VOD_NEW_CLONE\VOD\VOD_CLONE.iml" filepath="E:\VOD_NEW_CLONE\VOD\VOD_CLONE.iml" />
+      <module fileurl="file://E:\VOD_NEW_CLONE\VOD\VOD_Retro.iml" filepath="E:\VOD_NEW_CLONE\VOD\VOD_Retro.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/muvisdk/muvisdk.iml" filepath="$PROJECT_DIR$/muvisdk/muvisdk.iml" />
     </modules>

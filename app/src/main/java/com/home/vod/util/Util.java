@@ -145,8 +145,13 @@ public class Util {
 
 
     public static int isDouble(String str) {
-        Double d = Double.parseDouble(str);
-        int i = d.intValue();
+        int i=0;
+        try {
+            Double d = Double.parseDouble(str);
+            i = d.intValue();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return i;
     }
 

@@ -1701,7 +1701,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements APICall
                 parameters.put("authToken", authTokenStr);
                 parameters.put("card_name", nameOnCardEditText.getText().toString().trim());
                 parameters.put("exp_month", String.valueOf(expiryMonthStr).trim());
-                parameters.put("cardNumber", cardNumberEditText.getText().toString().trim());
+                parameters.put("card_number", cardNumberEditText.getText().toString().trim());
                 parameters.put("exp_year", String.valueOf(expiryYearStr).trim());
                 String userIdStr = preferenceManager.getUseridFromPref();
                 String emailIdSubStr = preferenceManager.getEmailIdFromPref();
@@ -2144,15 +2144,32 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements APICall
             }
             playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
 
+            // Kushal
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName= new ArrayList<>();
+            ArrayList<String> subTitleCode= new ArrayList<>();
 
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+
+                playerModel.setSubTitleName(subTitleName);
+                playerModel.setSubTitleLanguage(subTitleCode);
+                playerModel.setFakeSubTitlePath(fakeSubtitlePath);
+                FakeSubTitlePath = fakeSubtitlePath;
+                playerModel.setOfflineUrl(fakeSubtitlePath);
+                playerModel.setOfflineLanguage(subTitleName);
+
+           /* for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
                 playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
                 playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
                 playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
                 FakeSubTitlePath = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
                 playerModel.setOfflineUrl(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
                 playerModel.setOfflineLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
-            }
+            }*/
             playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
 
 

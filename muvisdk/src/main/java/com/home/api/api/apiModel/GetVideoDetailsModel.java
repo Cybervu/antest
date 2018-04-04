@@ -16,69 +16,91 @@ public class GetVideoDetailsModel {
     @SerializedName("is_watermark")
     @Expose
     private IsWatermark isWatermark;
+
     @SerializedName("videoResolution")
     @Expose
     private String videoResolution = "";
+
     @SerializedName("videoDetails")
     @Expose
     private ArrayList<VideoDetail> videoDetails = null;
+
     @SerializedName("newvideoUrl")
     @Expose
     private String newvideoUrl = "";
+
     @SerializedName("is_offline")
     @Expose
     private String isOffline = "";
+
     @SerializedName("studio_approved_url")
     @Expose
     private String studioApprovedUrl = "";
+
     @SerializedName("licenseUrl")
     @Expose
     private String licenseUrl = "";
+
     @SerializedName("code")
     @Expose
     private Integer code = 0;
+
     @SerializedName("status")
     @Expose
     private String status = "";
+
     @SerializedName("msg")
     @Expose
     private String msg = "";
+
     @SerializedName("videoUrl")
     @Expose
     private String videoUrl = "";
+
     @SerializedName("thirdparty_url")
     @Expose
     private String thirdpartyUrl = "";
+
     @SerializedName("emed_url")
     @Expose
     private String emedUrl = "";
+
     @SerializedName("trailerUrl")
     @Expose
     private String trailerUrl = "";
+
     @SerializedName("trailerThirdpartyUrl")
     @Expose
     private String trailerThirdpartyUrl = "";
+
     @SerializedName("embedTrailerUrl")
     @Expose
     private String embedTrailerUrl = "";
+
     @SerializedName("played_length")
     @Expose
     private String playedLength = "";
+
     @SerializedName("subTitle")
     @Expose
     private ArrayList<Subtitle> subTitle = null;
+
     @SerializedName("streaming_restriction")
     @Expose
     private String streamingRestriction = "";
+
     @SerializedName("no_streaming_device")
     @Expose
     private Integer noStreamingDevice = 0;
+
     @SerializedName("no_of_views")
     @Expose
     private String noOfViews = "";
+
     @SerializedName("download_status")
     @Expose
     private String downloadStatus = "";
+
     @SerializedName("adDetails")
     @Expose
     private AdDetails adDetails;
@@ -579,21 +601,20 @@ public class GetVideoDetailsModel {
 
     public class VideoDetail {
 
-        /*@SerializedName("resolution")
+        @SerializedName("resolution")
         @Expose
-        private ArrayList<String> resolution = null;*/
-        private ArrayList<String> resolution;
+        private String resolution;
+
         @SerializedName("url")
         @Expose
-        private ArrayList<String> url = null;
+        private String url = null;
 
         /**
          * This method is used to get the resolution
          *
          * @return resolution
          */
-        public ArrayList getResolution() {
-            resolution.add("ewffkjbw");
+        public String getResolution() {
             return resolution;
         }
 
@@ -602,7 +623,7 @@ public class GetVideoDetailsModel {
          *
          * @param resolution For setting the resolution
          */
-        public void setResolution(ArrayList resolution) {
+        public void setResolution(String resolution) {
             this.resolution = resolution;
         }
 
@@ -611,7 +632,7 @@ public class GetVideoDetailsModel {
          *
          * @return url
          */
-        public ArrayList getUrl() {
+        public String getUrl() {
             return url;
         }
 
@@ -620,7 +641,7 @@ public class GetVideoDetailsModel {
          *
          * @param url For setting the url
          */
-        public void setUrl(ArrayList url) {
+        public void setUrl(String url) {
             this.url = url;
         }
 
@@ -629,33 +650,37 @@ public class GetVideoDetailsModel {
     public class Subtitle {
         @SerializedName("language")
         @Expose
-        private ArrayList<String> SubTitleName = new ArrayList<>();
+        private String SubTitleName;
 
         @SerializedName("url")
         @Expose
-        private ArrayList<String> FakeSubTitlePath = new ArrayList<>();
+        private String FakeSubTitlePath;
 
-        public ArrayList<String> getSubTitleName() {
+        @SerializedName("code")
+        @Expose
+        private String subtitle_code;
+
+        public String getSubTitleName() {
             return SubTitleName;
         }
 
-        public void setSubTitleName(ArrayList<String> subTitleName) {
+        public void setSubTitleName(String subTitleName) {
             SubTitleName = subTitleName;
         }
 
-        public ArrayList<String> getFakeSubTitlePath() {
+        public String getFakeSubTitlePath() {
             return FakeSubTitlePath;
         }
 
-        public void setFakeSubTitlePath(ArrayList<String> fakeSubTitlePath) {
+        public void setFakeSubTitlePath(String fakeSubTitlePath) {
             FakeSubTitlePath = fakeSubTitlePath;
         }
 
-        public ArrayList<String> getSubtitle_code() {
+        public String getSubtitle_code() {
             return subtitle_code;
         }
 
-        public void setSubtitle_code(ArrayList<String> subtitle_code) {
+        public void setSubtitle_code(String subtitle_code) {
             this.subtitle_code = subtitle_code;
         }
 
@@ -675,9 +700,7 @@ public class GetVideoDetailsModel {
             this.offline_language = offline_language;
         }*/
 
-        @SerializedName("code")
-        @Expose
-        private ArrayList<String> subtitle_code = new ArrayList<>();
+
         /*@SerializedName("url")
         @Expose
         private ArrayList<String> offline_url = new ArrayList<>();*/
@@ -691,12 +714,15 @@ public class GetVideoDetailsModel {
         @SerializedName("mid")
         @Expose
         private Integer mid=0;
+
         @SerializedName("start")
         @Expose
         private Integer start=0;
+
         @SerializedName("end")
         @Expose
         private Integer end=0;
+
         @SerializedName("midroll_values")
         @Expose
         private String midrollValues="";
@@ -740,6 +766,7 @@ public class GetVideoDetailsModel {
         @SerializedName("adNetwork")
         @Expose
         private ArrayList<AdNetwork> adNetwork = null;
+
         @SerializedName("adsTime")
         @Expose
         private AdsTime adsTime=null;
@@ -767,6 +794,7 @@ public class GetVideoDetailsModel {
         @SerializedName("channel_id")
         @Expose
         private String channelId="";
+        
         @SerializedName("ad_network_id")
         @Expose
         private Integer adNetworkId=0;

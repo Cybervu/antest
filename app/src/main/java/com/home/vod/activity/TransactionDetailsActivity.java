@@ -415,8 +415,13 @@ public class TransactionDetailsActivity extends AppCompatActivity implements API
     public void transaction_details(Object object, int requestID, String response) {
 
         TransactionDetailsModel transactionDetailsModel = (TransactionDetailsModel) object;
-        if (Ph.isShowing() && Ph != null)
+        try {
+            if (Ph.isShowing() && Ph != null)
+                Ph.hide();
+        }catch(Exception e){
+            e.printStackTrace();
             Ph.hide();
+        }
 
         if (transactionDetailsModel.getCode() == 200) {
             primary_layout.setVisibility(View.VISIBLE);

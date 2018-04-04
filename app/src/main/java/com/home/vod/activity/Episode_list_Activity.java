@@ -98,6 +98,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -1024,9 +1025,10 @@ public class Episode_list_Activity extends AppCompatActivity implements APICallM
             if (getVideoDetailsModel.getPlayedLength() != null && !getVideoDetailsModel.getPlayedLength().equals(""))
                 playerModel.setPlayPos((Util.isDouble(getVideoDetailsModel.getPlayedLength())));
 
+            // Kushal
             for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
-                SubTitleName = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
-                SubTitleLanguage = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+                SubTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                SubTitleLanguage.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
             }
             //dependency for datamodel
             Util.dataModel.setVideoUrl(getVideoDetailsModel.getVideoUrl());
@@ -1052,19 +1054,37 @@ public class Episode_list_Activity extends AppCompatActivity implements APICallM
             }
             playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
 
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
-                playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
-                playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
-                playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
-                FakeSubTitlePath = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
-                playerModel.setOfflineUrl(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
-                playerModel.setOfflineLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+
+            // Kushal
+            ArrayList<String> subTitleName, subTitleCode, fakeSubTitlePath;
+            subTitleName= new ArrayList<>();
+            subTitleCode= new ArrayList<>();
+            fakeSubTitlePath= new ArrayList<>();
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                subTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                fakeSubTitlePath.add(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleCode.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
             }
+
+                playerModel.setSubTitleName(subTitleName);
+                playerModel.setSubTitleLanguage(subTitleCode);
+                playerModel.setFakeSubTitlePath(fakeSubTitlePath);
+                FakeSubTitlePath = fakeSubTitlePath;
+                playerModel.setOfflineUrl(fakeSubTitlePath);
+                playerModel.setOfflineLanguage(subTitleName);
             //playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+            // Kushal
+            ArrayList<String> Resolution, Url;
+            Resolution= new ArrayList<>();
+            Url= new ArrayList<>();
+
             for (int i = 0; i < getVideoDetailsModel.getVideoDetails().size(); i++) {
-                playerModel.setResolutionFormat(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
-                playerModel.setResolutionUrl(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
+                Resolution.add(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
+               Url.add(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
             }
+                playerModel.setResolutionFormat(Resolution);
+                playerModel.setResolutionUrl(Url);
             playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
 
             // playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());

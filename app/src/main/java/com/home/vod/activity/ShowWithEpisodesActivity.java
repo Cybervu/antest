@@ -2102,10 +2102,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
 
 
             //dependency for datamodel
+            //Kushal
+
+            //   playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+
 
             for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
-                SubTitleName = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
-                SubTitleLanguage = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code();
+                SubTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                SubTitleLanguage.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
             }
 
             Util.dataModel.setVideoUrl(getVideoDetailsModel.getVideoUrl());
@@ -2131,20 +2136,46 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements APICa
                 Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
             }
             playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName= new ArrayList<>();
+            ArrayList<String> subTitleCode= new ArrayList<>();
 
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
+            playerModel.setSubTitleName(subTitleName);
+            playerModel.setSubTitleLanguage(subTitleCode);
+            playerModel.setFakeSubTitlePath(fakeSubtitlePath);
+            FakeSubTitlePath = fakeSubtitlePath;
+            playerModel.setOfflineUrl(fakeSubtitlePath);
+            playerModel.setOfflineLanguage(subTitleName);
+
+            ArrayList<String> Resolution= new ArrayList<>();
+            ArrayList<String> Url= new ArrayList<>();
+
+            for (int i=0; i<getVideoDetailsModel.getVideoDetails().size();i++){
+                Resolution.add(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
+                Url.add(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
+            }
+
+            playerModel.setResolutionFormat(Resolution);
+            playerModel.setResolutionUrl(Url);
+
+          /*  for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
                 playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
                 playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
                 playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
                 FakeSubTitlePath = getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath();
                 playerModel.setOfflineUrl(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
                 playerModel.setOfflineLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
-            }
+            }*/
             //playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
-            for (int i = 0; i < getVideoDetailsModel.getVideoDetails().size(); i++) {
+           /* for (int i = 0; i < getVideoDetailsModel.getVideoDetails().size(); i++) {
                 playerModel.setResolutionFormat(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
                 playerModel.setResolutionUrl(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
-            }
+            }*/
             playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
 
             playerModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));

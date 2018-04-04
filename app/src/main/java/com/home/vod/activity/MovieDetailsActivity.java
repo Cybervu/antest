@@ -1341,36 +1341,47 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
             if (getVideoDetailsModel.getPlayedLength() != null && !getVideoDetailsModel.getPlayedLength().equals(""))
                 playerModel.setPlayPos((Util.isDouble(getVideoDetailsModel.getPlayedLength())));
 
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+         /*   for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
                 SubTitleName = getVideoDetailsModel.getSubTitle().get(i).getSubTitleName();
                 SubTitleLanguage = getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code();
-            }
+            }*/
 
+         // Kushal
+            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+                SubTitleName.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                SubTitleLanguage.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
+            }
             //dependency for datamodel
             Util.dataModel.setVideoUrl(getVideoDetailsModel.getVideoUrl());
             Util.dataModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
             Util.dataModel.setThirdPartyUrl(getVideoDetailsModel.getThirdpartyUrl());
-            for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
-                Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
-                Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+            try {
+                for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                    Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                    Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+                }
+                Util.dataModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
+                Util.dataModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
+                Util.dataModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
+                Util.dataModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+                Util.dataModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));
+                //player model set
+                playerModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
+                playerModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
+                playerModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
+                playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
+                for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
+                    Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
+                    Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            Util.dataModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
-            Util.dataModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
-            Util.dataModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
-            Util.dataModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
-            Util.dataModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));
 
 
-            //player model set
-            playerModel.setAdDetails(getVideoDetailsModel.getAdDetails().getAdsTime().getMidrollValues());
-            playerModel.setMidRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getMid());
-            playerModel.setPostRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getEnd());
-            playerModel.setPreRoll(getVideoDetailsModel.getAdDetails().getAdsTime().getStart());
-            for (int i = 0; i < getVideoDetailsModel.getAdDetails().getAdNetwork().size(); i++) {
-                Util.dataModel.setAdNetworkId(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getAdNetworkId());
-                Util.dataModel.setChannel_id(getVideoDetailsModel.getAdDetails().getAdNetwork().get(i).getChannelId());
-            }
-            for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
+
+
+           /* for (int i = 0; i < getVideoDetailsModel.getSubTitle().size(); i++) {
                 playerModel.setSubTitleName(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
                 playerModel.setSubTitleLanguage(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
                 playerModel.setFakeSubTitlePath(getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
@@ -1381,7 +1392,36 @@ public class MovieDetailsActivity extends AppCompatActivity implements APICallMa
             for (int i = 0; i < getVideoDetailsModel.getVideoDetails().size(); i++) {
                 playerModel.setResolutionFormat(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
                 playerModel.setResolutionUrl(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
+            }*/
+
+            //Kushal
+            ArrayList<String> fakeSubtitlePath= new ArrayList<>();
+            ArrayList<String> subTitleName1= new ArrayList<>();
+            ArrayList<String> subTitleCode1= new ArrayList<>();
+
+            for (int i=0; i<getVideoDetailsModel.getSubTitle().size();i++){
+                fakeSubtitlePath.add( getVideoDetailsModel.getSubTitle().get(i).getFakeSubTitlePath());
+                subTitleName1.add(getVideoDetailsModel.getSubTitle().get(i).getSubTitleName());
+                subTitleCode1.add(getVideoDetailsModel.getSubTitle().get(i).getSubtitle_code());
             }
+            playerModel.setSubTitleName(subTitleName1);
+            playerModel.setSubTitleLanguage(subTitleCode1);
+            playerModel.setFakeSubTitlePath(fakeSubtitlePath);
+            FakeSubTitlePath = fakeSubtitlePath;
+            playerModel.setOfflineUrl(fakeSubtitlePath);
+            playerModel.setOfflineLanguage(subTitleName1);
+            //   playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+            ArrayList<String> Resolution= new ArrayList<>();
+            ArrayList<String> Url= new ArrayList<>();
+
+            for (int i=0; i<getVideoDetailsModel.getVideoDetails().size();i++){
+                Resolution.add(getVideoDetailsModel.getVideoDetails().get(i).getResolution());
+                Url.add(getVideoDetailsModel.getVideoDetails().get(i).getUrl());
+            }
+            playerModel.setResolutionFormat(Resolution);
+            playerModel.setResolutionUrl(Url);
+
             playerModel.setVideoResolution(getVideoDetailsModel.getVideoResolution());
             playerModel.setPlayPos(Util.isDouble(getVideoDetailsModel.getPlayedLength()));
 
