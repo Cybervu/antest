@@ -685,8 +685,8 @@ android {
             versionCode 1
             versionName '1.0'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-           // buildConfigField "String", "AUTH_TOKEN", "\"3cc3927bb6667f7aeb7435678dbf2644\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"3cc3927bb6667f7aeb7435678dbf2644\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             dimension 'vendor'
         }
         nollyfiesta_staging_ {
