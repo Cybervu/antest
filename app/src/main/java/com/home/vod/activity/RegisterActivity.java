@@ -5708,7 +5708,8 @@ public class RegisterActivity extends AppCompatActivity implements APICallManage
             parameters.put("gplus_userid", AuthId);
             parameters.put("profile_image", AuthImageUrl);
             parameters.put("password", "");
-            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.SOCIALAUTH_URL, parameters, APIUrlConstant.GMAIL_REG_URL_REQUEST_ID, APIUrlConstant.BASE_URl);
+            final APICallManager apiCallManager = new APICallManager(this, APIUrlConstant.SOCIALAUTH_URL, parameters, APIUrlConstant.GMAIL_REG_URL_REQUEST_ID, BuildConfig.SERVICE_BASE_PATH);
+
             apiCallManager.startApiProcessing();
 
 

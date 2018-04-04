@@ -7,4 +7,41 @@
         <!-- Used for the background -->
         <item name="android:background">@color/alertPopupColor</item>
     </style>
+
+     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+     </style>
+     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.NoActionBar">
+         <item name="android:windowNoTitle">true</item>
+         <item name="colorControlNormal">@color/hint_color</item>
+         <item name="colorControlActivated">@color/hint_background</item>
+
+         <!--
+         <item name="windowActionBar">false</item>
+ -->
+         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
+         <item name="colorPrimary">@color/colorPrimary</item>
+         <!--
+         status bar color
+ -->
+         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+         <item name="colorAccent">@color/colorAccent</item>
+         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+         <item name="android:windowBackground">@color/windowBackground</item>
+         <item name="android:windowDisablePreview">true</item>
+
+         <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+             <item name="android:windowNoTitle">true</item>
+             <item name="android:windowBackground">@color/transparent</item>
+             <item name="android:colorBackgroundCacheHint">@null</item>
+             <item name="android:windowIsTranslucent">true</item>
+             <item name="android:windowAnimationStyle">@android:style/Animation</item>
+             <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+             <item name="colorAccent">@color/colorAccent</item>
+             <item name="android:textColorPrimary">@color/textColorPrimary</item>
+         </style>
+
+         <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
+             <item name="android:textCursorDrawable">@drawable/cursor</item>
+         </style>
+     </style>
     </resources>
