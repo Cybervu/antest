@@ -37,7 +37,7 @@
     <color name="favorite_color">#878282</color>
     <color name="sign_up_text_color">#d23232</color>
     <color name="edit_color">#dadada</color>
-    <color name="hint_color">#999</color>
+    <color name="hint_color">#999999</color>
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#757575</color>
     <color name="alreadyHaveALoginButtonTextColor">#d23232</color>
