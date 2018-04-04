@@ -171,6 +171,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onIPAddressPostExecuteCompleted(message, statusCode, ipAddressStr);
+//        listener.onIPAddressPostExecuteCompleted(message, statusCode, ipAddressStr);
+        listener.onIPAddressPostExecuteCompleted(responseStr, statusCode, ipAddressStr);
     }
 }

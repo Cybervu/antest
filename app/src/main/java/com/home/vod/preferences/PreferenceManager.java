@@ -29,6 +29,7 @@ public class PreferenceManager {
     public  final String PREFS_LOGIN_PROFILE_IMAGE_KEY = "loginProfImg";
     public  final String PREFS_LOGIN_HISTORYID_KEY = "loginHistId";
     public  final String PREFS_LOGIN_DATE = "date";
+    public  final String PREFS_LANGUAGE_CHANGED = "language_changed";
 
 
     private PreferenceManager(Context mContext){
@@ -43,7 +44,14 @@ public class PreferenceManager {
         return preferenceManager;
     }
 
+    public String getLanguageChangeStatus() {
+        return mSharedPreferences.getString(PREFS_LANGUAGE_CHANGED, "0");
+    }
 
+    public void setLanguageChangeStatus(String languageChangeStatus) {
+        mEditor.putString(PREFS_LANGUAGE_CHANGED,languageChangeStatus);
+        mEditor.commit();
+    }
 
 
     public String getUseridFromPref() {

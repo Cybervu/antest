@@ -136,6 +136,34 @@ public class Player implements Serializable{
     int adNetworkId = 1;
     String channel_id;
 
+    boolean isEmail = false;
+    boolean isDate = false;
+    boolean isIp = false;
+
+    public void useEmail(boolean isEmail){
+        this.isEmail = isEmail;
+    }
+
+    public void useIp(boolean isIp){
+        this.isIp = isIp;
+    }
+
+    public void useDate(boolean isDate){
+        this.isDate = isDate;
+    }
+
+    public boolean getUseIpStatus(){
+        return isIp;
+    }
+
+    public boolean getUseEmailStatus(){
+        return isEmail;
+    }
+
+    public boolean getUseDateStatus(){
+        return isDate;
+    }
+
 
     public String getChannel_id() {
         return channel_id;
@@ -372,7 +400,7 @@ public class Player implements Serializable{
         this.authTokenStr = authTokenStr;
     }
 
-    public boolean isWaterMark() {
+    public boolean getWaterMark() {
         return waterMark;
     }
 

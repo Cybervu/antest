@@ -93,7 +93,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.vod.BuildConfig;
-import com.home.vod.CheckVoucherOrPpvPaymentHandler;
+import com.home.vod                                                                                                                                                                                                              .CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
@@ -512,6 +512,24 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                else
+                    playerModel.useEmail(false);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                else
+                    playerModel.useIp(false);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+                else
+                    playerModel.useDate(false);
+            }else{
+                playerModel.setWaterMark(false);
+            }
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
@@ -4314,7 +4332,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
                     voucherSubscriptionInputModel.setIs_preorder("" + Util.dataModel.getIsAPV());
                     voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    voucherSubscriptionInputModel.setPurchase_type("show");
+                    voucherSubscriptionInputModel.setPurchase_type(PurchageType);
                     VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, Episode_list_Activity.this, Episode_list_Activity.this);
                     asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);
 
