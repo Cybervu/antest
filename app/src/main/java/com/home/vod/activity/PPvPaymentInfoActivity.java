@@ -1073,8 +1073,6 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                             authUserPaymentInfoInputModel.setName_on_card(nameOnCardEditText.getText().toString().trim());
                             AuthUserPaymentInfoAsyntask asyncReg = new AuthUserPaymentInfoAsyntask(authUserPaymentInfoInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
                             asyncReg.executeOnExecutor(threadPoolExecutor);
-
-
                         }
 
                     }

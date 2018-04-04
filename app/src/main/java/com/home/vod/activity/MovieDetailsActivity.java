@@ -3540,8 +3540,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
-
-
         }
 
         if (jsonResponse == null) {
@@ -3555,9 +3553,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     languageCustomAdapter.notifyDataSetChanged();
 
-                    Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
+                   /* Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
+                    startActivity(intent);*/
+
+                    final Intent detailsIntent = new Intent(MovieDetailsActivity.this, MovieDetailsActivity.class);
+                    detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(detailsIntent);
+                    finish();
+
+                    preferenceManager.setLanguageChangeStatus("1");
+
 
 
                 } catch (JSONException e) {

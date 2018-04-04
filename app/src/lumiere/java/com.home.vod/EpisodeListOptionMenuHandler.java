@@ -88,7 +88,8 @@ public class EpisodeListOptionMenuHandler {
         filter_menu = menu.findItem(R.id.action_filter);
         filter_menu.setVisible(false);
         login_menu = menu.findItem(R.id.action_login);
-        (menu.findItem(R.id.menu_item_language)).setVisible(false);
+        menu_language = menu.findItem(R.id.menu_item_language);
+       // (menu.findItem(R.id.menu_item_language)).setVisible(false);
         profile_menu = menu.findItem(R.id.menu_item_profile);
         purchage_menu = menu.findItem(R.id.action_purchage);
         logout_menu = menu.findItem(R.id.action_logout);
@@ -117,6 +118,15 @@ public class EpisodeListOptionMenuHandler {
         else
             mediaRouteMenuItem.setVisible(false);
 
+
+        /**
+         * Multiple language feature has been activated for Lumiere.
+         */
+
+        if (preferenceManager.getLanguageListFromPref().equals("1"))
+            menu_language.setVisible(false);
+        else
+            menu_language.setVisible(true);
 
         if (loggedInStr != null) {
 

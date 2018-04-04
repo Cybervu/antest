@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
@@ -117,6 +118,21 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     DBHelper dbHelper;
 
     SplashScreenHandler splashScreenHandler;
+
+
+    /**
+     * Splashreen Modified.
+     */
+
+    int geoBlockEnable = 0;
+    int geoBlockCalled = 0;
+    int planListCalled = 0;
+    int isRegistrationEnableCalled = 0;
+    int languageListCalled = 0;
+    int languageTranslationCalled = 0;
+    int genreListCalled = 0;
+    int userProfileCalled = 0;
+    int ipAddressCalled = 0;
 
 
     private void _init() {
@@ -249,6 +265,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Log.v("MUVI11","ipAddressStr====="+ipAddressStr);
         Log.v("MUVI11","getIPAddress====="+getIPAddress(true));
 
+//        Toast.makeText(getApplicationContext(),"response of ipaddress = "+message,Toast.LENGTH_LONG).show();
 
         if (ipAddressStr.equals("")) {
             noInternetTextView.setText("Could not detect your IP.");
@@ -692,28 +709,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
         if (status==200){
-//            if (NetworkStatus.getInstance().isConnected(this)) {
-               GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-              //  ipAddressStr = getIPAddress(true);
-              /*  if (ipAddressStr.equals("")) {
-                    noInternetTextView.setText("Could not detect your IP.");
-                    noInternetLayout.setVisibility(View.VISIBLE);
-                    geoBlockedLayout.setVisibility(View.GONE);
-                } else {
-                    CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-                    checkGeoBlockInputModel.setAuthToken(authTokenStr);
-                    checkGeoBlockInputModel.setIp(ipAddressStr);
-                    CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
-                    asynGetCountry.executeOnExecutor(threadPoolExecutor);
-                }*/
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-//            }
         }
         else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
             geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
-//            geoTextView.setText("Thanks for visiting Plusnights. The trial has now ended, but keep your eyes peeled for more information coming later this year. Thanks, and we hope you enjoyed your film!");
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
         }

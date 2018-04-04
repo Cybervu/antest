@@ -360,9 +360,17 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                 languageCustomAdapter.notifyDataSetChanged();
 
-                Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
+               /* Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                final Intent detailsIntent = new Intent(ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.class);
+                detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(detailsIntent);
+                finish();
+
+                preferenceManager.setLanguageChangeStatus("1");
 
             } catch (JSONException e) {
                 e.printStackTrace();
