@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AMGO</string>
+    <string name="app_name">NollyfiestaTv</string>
     <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
     <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
 
@@ -17,7 +17,7 @@
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->
-    <string name="app_id">E91A8680</string>
+    <string name="app_id">EB4BAB20</string>
     <!--<string name="app_id">49A4D3B2></string>-->
     <!--<string name="app_id">00591A79</string>-->
     <string name="action_settings">Settings</string>
