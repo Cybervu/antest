@@ -44,9 +44,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import android.widget.Toast;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_POST_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.CLICK_HERE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_POST_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;

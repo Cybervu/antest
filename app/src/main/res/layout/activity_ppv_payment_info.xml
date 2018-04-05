@@ -139,9 +139,9 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="@dimen/payment_spinner_padding"
-                            android:layout_marginTop="@dimen/linear_text_margin"
-                            android:text=""
-                            android:textColor="@color/alreadyHaveALoginButtonTextColor"
+                            android:layout_marginTop="@dimen/my_download_margin"
+                            android:text="/"
+                            android:textColor="@color/hint_background"
                             android:textSize="@dimen/yearline_text_size"
                             android:textStyle="normal" />
                         <!--<RelativeLayout

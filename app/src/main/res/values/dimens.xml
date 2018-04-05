@@ -119,9 +119,6 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="voucher_code_height">48dp</dimen>
     <dimen name="pre_order_button_margin">6dp</dimen>
-
-
-
     <dimen name="loginImageViewMarging_top">15dp</dimen>
     <dimen name="ppv_apply_btn_height">44dp</dimen>
     <dimen name="payment_spinner_padding_left">12dp</dimen>
@@ -402,6 +399,36 @@
     <dimen name="cc_button_padding_right">32dp</dimen>
     <dimen name="cc_button_padding_top">10dp</dimen>
     <dimen name="cc_button_padding_bottom">10dp</dimen>
+
+    <!--Vector Image Dimens Author@Abhishek-->
+    <dimen name="ic_search_width_height">36dp</dimen>
+    <dimen name="ic_back_width_height">10dp</dimen>
+    <dimen name="optionmanu_height_width">36dp</dimen>
+    <dimen name="ic_play_height_width">100dp</dimen>
+    <dimen name="savecard_tick_height_width">35dp</dimen>
+    <dimen name="pause_height_width">90dp</dimen>
+    <dimen name="full_screen_half_screen_dimen">60dp</dimen>
+    <dimen name="close_height_width">128dp</dimen>
+    <dimen name="action_download_height_width">20dp</dimen>
+    <dimen name="cc_icon_height_width">512dp</dimen>
+    <dimen name="centre_ic_media_height_width">100dp</dimen>
+    <dimen name="delete_height_width">64dp</dimen>
+    <dimen name="download_black_height_width">60dp</dimen>
+    <dimen name="fb_height_width">30dp</dimen>
+    <dimen name="filter_height_width">36dp</dimen>
+    <dimen name="ic_media_pause_play_height_width">35dp</dimen>
+    <dimen name="login_height_width">20dp</dimen>
+    <dimen name="logout_height_width">20dp</dimen>
+    <dimen name="mark_height_width">256dp</dimen>
+    <dimen name="offline_height_width">100dp</dimen>
+    <dimen name="purchase_history_height_width">20dp</dimen>
+    <dimen name="resolution_icon_height_width">130dp</dimen>
+    <dimen name="saved_card_height_width">25dp</dimen>
+    <dimen name="search_height_width">25dp</dimen>
+    <dimen name="selected_radio_height_width">50dp</dimen>
+    <dimen name="select_resolution_height_width">64dp</dimen>
+    <dimen name="star_height_width">48dp</dimen>
+    <dimen name="subtitle_height_width">100dp</dimen>
 
 
     <dimen name="vertical_spacing">6dp</dimen>

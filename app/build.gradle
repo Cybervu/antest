@@ -73,8 +73,8 @@ android {
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-           // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
-           buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
@@ -660,7 +660,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         pickbox {
             minSdkVersion 21
             applicationId 'hr.aviion.Pickbox'
@@ -678,6 +677,25 @@ android {
         pickbox_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://pb.muvi.com/rest/\""
+        }
+        nollyfiesta {
+            minSdkVersion 21
+            applicationId 'com.release.nollyfiesta'
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"3cc3927bb6667f7aeb7435678dbf2644\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            dimension 'vendor'
+        }
+        nollyfiesta_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        nollyfiesta_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
     }
 }
@@ -792,6 +810,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('pickbox') && (environment.equals('pickbox_staging_') || environment.equals('pickbox_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('nollyfiesta') && (environment.equals('nollyfiesta_staging_') || environment.equals('nollyfiesta_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

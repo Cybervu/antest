@@ -1426,6 +1426,37 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:7616fadd62df865f",
+        "android_client_info": {
+          "package_name": "com.release.nollyfiesta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:914358570958:android:805b0d137d6c6d90",
         "android_client_info": {
           "package_name": "com.release.ondemand"
@@ -1887,6 +1918,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-dqoogl0r69998eov8nj5uk7rbsrmbmpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hr.aviion.Pickbox",
+            "certificate_hash": "469da53330a7e37aebbdd5f7527df580ffd5838c"
+          }
+        },
+        {
           "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -1901,8 +1940,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.release.digiosmosis"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2
