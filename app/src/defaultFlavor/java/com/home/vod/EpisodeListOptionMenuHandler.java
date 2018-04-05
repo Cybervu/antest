@@ -46,13 +46,13 @@ public class EpisodeListOptionMenuHandler {
 
     Activity activity;
     FeatureHandler featureHandler;
-    ArrayList<Boolean> visibility= new ArrayList<>();
+    boolean[] visibility;
     private int LOGIN_INDEX=0;
-    private int REGISTER_INDEX=0;
-    private int LANGUAGE_INDEX=0;
-    private int PROFILE_INDEX=0;
-    private int PURCHASE_INDEX=0;
-    private int LOGOUT_INDEX=0;
+    private int REGISTER_INDEX=1;
+    private int LANGUAGE_INDEX=2;
+    private int PROFILE_INDEX=3;
+    private int PURCHASE_INDEX=4;
+    private int LOGOUT_INDEX=5;
 
     public EpisodeListOptionMenuHandler(Activity activity) {
         this.activity = activity;
@@ -60,7 +60,7 @@ public class EpisodeListOptionMenuHandler {
     }
 
 
-    public ArrayList<Boolean> createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference, FeatureHandler featureHandler) {
+    public boolean[] createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference, FeatureHandler featureHandler) {
 
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -97,13 +97,12 @@ public class EpisodeListOptionMenuHandler {
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
         mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-        purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 
-        for (int i=0; i<6;i++)
-            visibility.add(false);
 
         submenu.setVisible(true);
+        // Kushal
+        visibility= new boolean[6];
 
         action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);
@@ -114,12 +113,13 @@ public class EpisodeListOptionMenuHandler {
 
         if (preferenceManager.getLanguageListFromPref().equals("1")) {
             menu_language.setVisible(false);
-            visibility.set(LANGUAGE_INDEX,false);
+            visibility[LANGUAGE_INDEX]=false;
         }
         else {
             menu_language.setVisible(true);
-            visibility.set(LANGUAGE_INDEX,true);
+            visibility[LANGUAGE_INDEX]=true;
         }
+
 
 
         if (loggedInStr != null) {
@@ -127,9 +127,9 @@ public class EpisodeListOptionMenuHandler {
             login_menu.setVisible(false);
             register_menu.setVisible(false);
             profile_menu.setVisible(true);
-            visibility.set(LOGIN_INDEX,false);
-            visibility.set(REGISTER_INDEX,false);
-            visibility.set(PROFILE_INDEX,true);
+            visibility[LOGIN_INDEX]=false;
+            visibility[REGISTER_INDEX]=false;
+            visibility[PROFILE_INDEX]=true;
 
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
@@ -138,10 +138,10 @@ public class EpisodeListOptionMenuHandler {
                 favorite_menu.setVisible(false);
 
             purchage_menu.setVisible(true);
-            visibility.set(PURCHASE_INDEX,true);
+            visibility[PURCHASE_INDEX]=true;
 
             logout_menu.setVisible(true);
-            visibility.set(LOGIN_INDEX,true);
+            visibility[LOGOUT_INDEX]=true;
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
                 mydownload_menu.setVisible(true);
@@ -154,15 +154,15 @@ public class EpisodeListOptionMenuHandler {
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                visibility.set(LOGIN_INDEX,true);
                 register_menu.setVisible(true);
-                visibility.set(REGISTER_INDEX,true);
+                visibility[LOGIN_INDEX]=true;
+                visibility[REGISTER_INDEX]=true;
 
             } else {
                 login_menu.setVisible(false);
                 register_menu.setVisible(false);
-                visibility.set(LOGIN_INDEX,false);
-                visibility.set(REGISTER_INDEX,false);
+                visibility[LOGIN_INDEX]=false;
+                visibility[REGISTER_INDEX]=false;
 
             }
 
@@ -173,11 +173,20 @@ public class EpisodeListOptionMenuHandler {
             mydownload_menu.setVisible(false);
             favorite_menu.setVisible(false);
 
-            visibility.set(PROFILE_INDEX,false);
-            visibility.set(PURCHASE_INDEX,false);
-            visibility.set(LOGOUT_INDEX,false);
+            visibility[PROFILE_INDEX]=false;
+            visibility[PURCHASE_INDEX]=false;
+            visibility[LOGOUT_INDEX]=false;
 
         }
+        // Kushal- no popup
+        login_menu.setVisible(false);
+        register_menu.setVisible(false);
+        profile_menu.setVisible(false);
+        purchage_menu.setVisible(false);
+        logout_menu.setVisible(false);
+        mydownload_menu.setVisible(false);
+        favorite_menu.setVisible(false);
+        menu_language.setVisible(false);
         return visibility;
     }
 }

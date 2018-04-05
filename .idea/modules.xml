@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://E:\VOD_NEW_CLONE\VOD\FINAL_VOD.iml" filepath="E:\VOD_NEW_CLONE\VOD\FINAL_VOD.iml" />
+      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/FINAL_VOD.iml" filepath="E:/VOD_NEW_CLONE/VOD/FINAL_VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
-      <module fileurl="file://D:\Workspace\FINAL_VOD\VOD.iml" filepath="D:\Workspace\FINAL_VOD\VOD.iml" />
-      <module fileurl="file://E:\VOD_NEW_CLONE\VOD\VOD_Final.iml" filepath="E:\VOD_NEW_CLONE\VOD\VOD_Final.iml" />
-      <module fileurl="file://D:\Workspace\FINAL_VOD\VOD_Final.iml" filepath="D:\Workspace\FINAL_VOD\VOD_Final.iml" />
+      <module fileurl="file://D:/Workspace/FINAL_VOD/VOD.iml" filepath="D:/Workspace/FINAL_VOD/VOD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VOD_CLONE.iml" filepath="$PROJECT_DIR$/VOD_CLONE.iml" />
+      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/VOD_Final.iml" filepath="E:/VOD_NEW_CLONE/VOD/VOD_Final.iml" />
+      <module fileurl="file://D:/Workspace/FINAL_VOD/VOD_Final.iml" filepath="D:/Workspace/FINAL_VOD/VOD_Final.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
-      <module fileurl="file://E:\VOD_NEW_CLONE\VOD\apisdk\apisdk.iml" filepath="E:\VOD_NEW_CLONE\VOD\apisdk\apisdk.iml" />
+      <module fileurl="file://E:/VOD_NEW_CLONE/VOD/apisdk/apisdk.iml" filepath="E:/VOD_NEW_CLONE/VOD/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
