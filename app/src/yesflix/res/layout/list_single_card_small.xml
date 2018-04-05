@@ -30,6 +30,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:visibility="gone"
             android:adjustViewBounds="true"
             android:background="@drawable/content_list_vertical_overlay"
 
@@ -47,6 +48,7 @@
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"
+            android:visibility="gone"
             android:focusableInTouchMode="false"
             android:gravity="left"
             android:maxLines="1"

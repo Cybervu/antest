@@ -139,7 +139,7 @@
                     android:layout_alignLeft="@+id/bannerImageView"
                     android:layout_alignRight="@+id/bannerImageView"
                     android:layout_alignStart="@+id/bannerImageView"
-                    android:layout_marginBottom="@dimen/ppv_margin"
+                    android:layout_marginBottom="@dimen/name_user_margin_bottom"
                     android:gravity="right"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/Login_drawing_padding"

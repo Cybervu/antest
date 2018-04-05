@@ -287,11 +287,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                 }
                 if (myJson.has("is_watermark")) {
                     JSONObject mainJson = myJson.getJSONObject("is_watermark");
-                    _video_details_output.setWatermark_status(mainJson.optInt("status")==1?true:false);
+                    _video_details_output.setWatermark_status(mainJson.optInt("status") == 1);
                     if (_video_details_output.isWatermark_status()) {
-                        _video_details_output.setWatermark_email(mainJson.optString("email").equals("1")?true:false);
-                        _video_details_output.setWatermark_date(mainJson.optString("date").equals("1")?true:false);
-                        _video_details_output.setWatermark_ip(mainJson.optString("ip").equals("1")?true:false);
+                        _video_details_output.setWatermark_email(mainJson.optString("email").equals("1"));
+                        _video_details_output.setWatermark_date(mainJson.optString("date").equals("1"));
+                        _video_details_output.setWatermark_ip(mainJson.optString("ip").equals("1"));
                     }
                 }
             }

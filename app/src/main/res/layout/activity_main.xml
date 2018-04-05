@@ -4,7 +4,6 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
     tools:context="com.home.vod.activity.MainActivity" >
 
     <LinearLayout
@@ -24,11 +23,11 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
         </LinearLayout>
-
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            />
 
 
     </LinearLayout>

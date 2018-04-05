@@ -8,11 +8,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,15 +92,17 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         // Inflate the layout for this fragment
        /* getActionBar().setTitle(getArguments().getString(""));
         setHasOptionsMenu(true);*/
+        getActivity().getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText(getArguments().getString("title"));
 
+     //   TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
+        /*categoryTitle.setTypeface(castDescriptionTypeface);
+        categoryTitle.setText(getArguments().getString("title"));*/
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
@@ -118,8 +122,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         editNameStr.requestFocus();
       /*  InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editNameStr, InputMethodManager.SHOW_FORCED);*/
-        showKeyboard();
-
+        //showKeyboard();
 
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
         Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
@@ -141,6 +144,37 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             }
         });
 
+     /*   editNameStr.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                v.setFocusable(true);
+                v.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
+        editMessageStr.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                v.setFocusable(true);
+                v.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
+        editEmailStr.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                v.setFocusable(true);
+                v.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
+*/
         /*editNameStr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -306,7 +340,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     public void SubmmitClicked() {
@@ -412,6 +446,39 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         }
     }*/
 
+/*
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getView() == null){
+            return;
+        }
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                    final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    getActivity().startActivity(startIntent);
+                    getActivity().finish();
+                    // handle back button's click listener
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+*/
 
     @Override
     public void onContactUsPreExecuteStarted() {

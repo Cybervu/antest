@@ -65,9 +65,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
@@ -78,9 +80,11 @@ import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
 import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
@@ -142,6 +146,7 @@ public class ProfileActivity extends AppCompatActivity implements
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
+        emailAddressEditText.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         changePassword = (Button) findViewById(R.id.changePasswordButton);
         update_profile = (Button) findViewById(R.id.update_profile);
         manage_devices = (Button) findViewById(R.id.manage_devices);
@@ -185,6 +190,8 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

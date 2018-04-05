@@ -370,7 +370,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -943,6 +943,11 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

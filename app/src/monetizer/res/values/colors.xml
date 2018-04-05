@@ -70,15 +70,22 @@
     <color name="unselected_color">#fff</color>
     <color name="leftMenuBgColor">#1e292d</color>
 
-   <!-- new Color    resources-->
+    <!-- new Color    resources-->
     <color name="contactFormTitle">#fff</color>
     <color name="alreadyHaveALoginButtonTextColor">#580661</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="videotextColor">#fff</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#fff</color>
+    <color name="banner_line_color">#580661</color>
+    <color name="cast_description_color">#fff</color>
     <color name="casttextColor">#580661</color>
     <color name="resumepopupcolor">#fff</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="castCrewTitleTextColor">#580661 </color>
+    <color name="FilterTitleTextColor">#580661</color>
     <color name="spinnerDropDownListColor">#fff</color>
     <color name="castCrewTitleTextColor1">#fff </color>
     <color name="border_color">#580661</color>
@@ -90,6 +97,7 @@
     <color name="terms_text_color">#676D70</color>
     <color name="loginTextViewColor">#580661</color>
     <color name="textColor">#676D70</color>
+    <color name="player_title_color">#676D70</color>
     <color name="filterTextColor">#fff</color>
     <color name="resume_playing_TextColor">#fff</color>
     <color name="censorRatingBackground">#580661 </color>
@@ -105,5 +113,8 @@
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
     <color name="nav_header_line_color">#000000</color>
+
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#fff</color>
 
 </resources>

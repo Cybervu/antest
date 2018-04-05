@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.TrafficStats;
@@ -132,12 +133,15 @@ import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -275,6 +279,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int playerStartPosition = 0;
     boolean censor_layout = true;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
+    Timer MovableTimer;
 
 
     // ExoPlayerActivity.this is added for the new video log API;
@@ -311,6 +316,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int lenghtOfFile;
     int lengthfile;
     float file_size;
+    boolean activateSensor = false;
     /***** offline *****/
 
     Timer timer;
@@ -476,18 +482,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onResume() {
         super.onResume();
-
-        try{
+      /*  try{
 
             a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
             drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
             a.recycle();
             DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
+//            DrawableCompat.setTint(drawable, getResources().getColor(R.color.spinner_card_color));
 
             CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
             mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
-        }catch (Exception e){}
+
+        }catch (Exception e){}*/
+
 
         AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
@@ -573,7 +581,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         handleOfflineInExoplayer = new HandleOfflineInExoplayer(this);
 
         Util.saveLogData("=================================================== Start Of Main ==================================================");
-
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
         } else {
@@ -643,12 +650,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         /********* Offline********/
 
 
-      /*  if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-            userIdStr = playerModel.getUserId();
-        }
-        if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-            emailIdStr = playerModel.getEmailId();
-        }*/
 
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
@@ -699,7 +700,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mAquery = new AQuery(ExoPlayerActivity.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -874,6 +875,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (isDrm) {
             if (SubTitlePath.size() < 1) {
                 subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
             } else {
                 subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
                 subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
@@ -883,6 +885,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         } else {
             if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
                 subtitle_change_btn.setVisibility(View.GONE);
+                cc_layout.setVisibility(View.GONE);
                 Log.v("MUVI1", "subtitle_image button Invisible called");
             } else {
                 subtitle_change_btn.setBackgroundResource(0);
@@ -1450,6 +1453,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 Util.call_finish_at_onUserLeaveHint = false;
 
                                 Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
+                                resumeIntent.putExtra("activity","ExoPlayerActivity");
                                 startActivityForResult(resumeIntent, 1001);
                             } else {
 
@@ -1578,11 +1582,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (playerModel.getVideoUrl().contains(".mpd")) {
                 String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
                 emVideoView.setVideoURI(Uri.parse(url));
+//                emVideoView.setVideoPath(Environment.getExternalStorageDirectory()+"/Android/hello.mp4");
 
-                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
-                intent.putExtra("url",url);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(ExoPlayerActivity.this, SupportActivity1.class);
+//                intent.putExtra("url",url);
+//                startActivity(intent);
+//                finish();
 
 
 
@@ -1738,6 +1743,103 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         );
 
         /*****Offline*****/
+
+
+         /*
+            This timer is only responsible to active movable timer .
+         */
+
+        if(playerModel.getWaterMark()){
+            MovableTimer = new Timer();
+            MovableTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+                                if (playerModel.getUseIpStatus())
+                                    ipAddressTextView.setVisibility(View.VISIBLE);
+                                else
+                                    ipAddressTextView.setVisibility(View.GONE);
+                                ipAddressTextView.setText(ipAddressStr);
+
+                                if (playerModel.getUseEmailStatus())
+                                    emailAddressTextView.setVisibility(View.VISIBLE);
+                                else
+                                    emailAddressTextView.setVisibility(View.GONE);
+                                emailAddressTextView.setText(emailIdStr);
+
+                                if (playerModel.getUseDateStatus())
+                                    dateTextView.setVisibility(View.VISIBLE);
+                                else
+                                    dateTextView.setVisibility(View.GONE);
+                                dateTextView.setText("" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                            } catch (Exception e) {
+                                Log.v("BIBHU11", "Exception =" + e.toString());
+                            }
+                        }
+                    });
+                    MoveWaterMark();
+                }
+            }, 2000, 2000);
+        }
+
+        //*************************************************** END ***********************************************************//
+
+
+
+
+
+    }
+
+    // This is added for the movable water mark //
+
+    public void MoveWaterMark() {
+
+        Rect rectf = new Rect();
+        emVideoView.getLocalVisibleRect(rectf);
+        int mainLayout_width = rectf.width() - 50;
+        int mainLayout_height = rectf.height() - 120;
+
+        // Child layout Lyout details
+
+        Rect rectf1 = new Rect();
+        linearLayout1.getLocalVisibleRect(rectf1);
+        int childLayout_width = rectf1.width();
+        int childLayout_height = rectf1.height();
+
+        boolean show = true;
+
+        while (show) {
+
+            Random r = new Random();
+            try {
+                final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
+
+
+                final int min = 10;
+                final int max = mainLayout_height;
+                final int yUp = new Random().nextInt((max - min) + 1) + min;
+
+
+                if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
+                    show = false;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        linearLayout1.setX(xLeft);
+                        linearLayout1.setY(yUp);
+                    }
+                });
+            }catch (Exception e){}
+
+        }
     }
 
 
@@ -1798,17 +1900,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Log.v("MUVI", "playerPosition======***************8======" + playerPosition);
 
 
-                Log.v("MUVI", "played_length============" + (playerPosition - player_start_time));
-                Log.v("MUVI", "log_temp_id============" + log_temp_id);
-                Log.v("MUVI", "resume_time============" + (playerPosition));
-                Log.v("MUVI", "playerPosition============" + playerPosition);
-                Log.v("MUVI", "log_id============" + videoLogId);
+                Log.v("MUVI123", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI123", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI123", "resume_time============" + (playerPosition));
+                Log.v("MUVI123", "playerPosition============" + playerPosition);
+                Log.v("MUVI123", "log_id============" + videoLogId);
 
-                Log.v("MUVI", "user_id============" + userIdStr.trim());
-                Log.v("MUVI", "movieId.trim()============" + movieId.trim());
-                Log.v("MUVI", "episodeId.trim()============" + episodeId.trim());
-                Log.v("MUVI", "watchStatus============" + watchStatus);
-                Log.v("MUVI", "restrict_stream_id============" + restrict_stream_id);
+                Log.v("MUVI123", "user_id============" + userIdStr.trim());
+                Log.v("MUVI123", "movieId.trim()============" + movieId.trim());
+                Log.v("MUVI123", "episodeId.trim()============" + episodeId.trim());
+                Log.v("MUVI123", "watchStatus============" + watchStatus);
+                Log.v("MUVI123", "restrict_stream_id============" + restrict_stream_id);
 
 
                 //===============End=============================//
@@ -1819,7 +1921,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("MUVI", "responseStr of videolog============" + responseStr);
+                    Log.v("MUVI123", "responseStr of asyncvideolog============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -2012,7 +2114,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("MUVI", "responseStr of responseStr============" + responseStr);
+                    Log.v("MUVI123", "responseStr of responseStr============" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -2763,10 +2865,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("log_temp_id", "0");
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
-                Log.v("MUVI11", "log_temp_id============" + log_temp_id);
-                Log.v("MUVI11", "resume_time============" + (playerPosition));
-                Log.v("MUVI11", "log_id============" + videoLogId);
+                Log.v("MUVI123", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI123", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI123", "resume_time============" + (playerPosition));
+                Log.v("MUVI123", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -2892,8 +2994,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (current_matching_time >= emVideoView.getDuration()) {
-                            watchSt = "complete";
+                        try {
+                            if (current_matching_time >= emVideoView.getDuration()) {
+                                watchSt = "complete";
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
                     }
@@ -2919,10 +3025,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("MUVI11", "played_length============" + (playerPosition - player_start_time));
-                Log.v("MUVI11", "log_temp_id============" + log_temp_id);
-                Log.v("MUVI11", "resume_time============" + (playerPosition));
-                Log.v("MUVI11", "log_id============" + videoLogId);
+                Log.v("MUVI123", "played_length============" + (playerPosition - player_start_time));
+                Log.v("MUVI123", "log_temp_id============" + log_temp_id);
+                Log.v("MUVI123", "resume_time============" + (playerPosition));
+                Log.v("MUVI123", "log_id============" + videoLogId);
 
 
                 httppost.addHeader("device_type", "2");
@@ -3271,6 +3377,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     public void onDestroy() {
         super.onDestroy();
 
+        if (MovableTimer != null)
+            MovableTimer.cancel();
+
         try{
 
             a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
@@ -3411,7 +3520,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onPause() {
 
-        try{
+      /*  try{
 
             a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
             drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
@@ -3421,7 +3530,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
             mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
-        }catch (Exception e){}
+
+        }catch (Exception e){}*/
 
 
         if (CheckAvailabilityOfChromecast != null)
@@ -3692,9 +3802,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
 
 
-                Log.v("MUVI", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
-                Log.v("MUVI", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
-                Log.v("MUVI", "Response of the bufferlog DataUsedByChrmoeCast======#############=" + DataUsedByChrmoeCast);
+                Log.v("MUVI123", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
+                Log.v("MUVI123", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
+                Log.v("MUVI123", "Response of the bufferlog DataUsedByChrmoeCast======#############=" + DataUsedByChrmoeCast);
 
 
                 // Execute HTTP Post Request
@@ -3702,7 +3812,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("MUVI", "Response of the bufferlog =" + responseStr);
+                    Log.v("MUVI123", "Response of the bufferlog =" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -4273,7 +4383,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
-        contactModel1.setGenere(playerModel.getVideoGenre().trim()+"@@@"+playerModel.getVideoStory());
+        contactModel1.setGenere(playerModel.getVideoGenre().trim()+"@@@"+playerModel.getVideoStory().replace("...",""));
         contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
         contactModel1.setDuration(playerModel.getVideoDuration().trim());
         contactModel1.setStreamId(playerModel.getStreamUniqueId().trim());
@@ -4868,6 +4978,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
 
 
@@ -4885,7 +5000,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
-        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory().replace("...",""));
         movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
         movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
         movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));

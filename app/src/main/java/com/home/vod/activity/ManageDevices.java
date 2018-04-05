@@ -77,6 +77,7 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MANAGE_DEVICE, DEFAULT_MANAGE_DEVICE));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

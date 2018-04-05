@@ -10,8 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,11 +60,13 @@ import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_HISTORY;
@@ -102,6 +104,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     boolean my_libary_added = false;
     boolean watch_history_added = false;
+    boolean my_favourite_added = false;
     MenusOutputModel menusOutputModelLocal,menusOutputModelFromAPI = new MenusOutputModel();
     int status;
     String message;
@@ -277,7 +280,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);*/
 
-                                 String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
+                                String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                                 browserIntent.setData(Uri.parse(externalLink));
                                 getActivity().startActivity(browserIntent);
@@ -589,13 +592,13 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     private ActionBar getActionBar () {
-        return ((ActionBarActivity) getActivity ()).getSupportActionBar ();
+        return ((AppCompatActivity) getActivity ()).getSupportActionBar ();
     }
 
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */
@@ -609,7 +612,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
 //        if(!loadHomeFragment){
-            try{
+        try{
                /* boolean my_libary_added1 = checkMyLibAdded(menusOutputModelLocal);
 
                *//* for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
@@ -632,12 +635,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     }
                 }*/
 
-                Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
+            Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
 
 
-            }catch (Exception e){
-                Util.main_menu_list_size = -2;
-            }
+        }catch (Exception e){
+            Util.main_menu_list_size = -2;
+        }
 //        }
 
         loggedInStr = preferenceManager.getUseridFromPref();
@@ -726,10 +729,37 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             }
         }
 
-       //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* *//* Adding Favourite*//*
 
 
 
+        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
+                my_favourite_added = true;
+            }
+        }
+
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE) && loggedInStr != null) {
+            if(!my_favourite_added)
+            {
+                MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();
+                mainMenuLibrary.setTitle (languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                menusOutputModelLocal.getMainMenuModel().add(mainMenuLibrary);
+            }
+        }
+        else{
+            if(my_favourite_added)
+            {
+                menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
+            }
+        }*/
+
+////////////////
 
 
         if (menusOutputModelLocal.getMainMenuModel() != null && menusOutputModelLocal.getMainMenuModel().size() > 0) {
@@ -753,7 +783,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             titleArray.add(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name());
             ArrayList<String> childArray = new ArrayList<>();
 
-                expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name(), childArray);
+            expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name(), childArray);
 
         }
 

@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <TextView
+      <!--  <TextView
             android:id="@+id/castCrewTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,12 +26,13 @@
             android:padding="@dimen/Login_drawing_padding"
             android:textColor="@color/cast_crew_textcolor"
             android:textSize="@dimen/itemtitle_text_size"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
 
         <GridView
             android:id="@+id/cast_crew_crid"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
             android:numColumns="2">
 
         </GridView>
@@ -42,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/main_padding"
         android:visibility="visible">
 

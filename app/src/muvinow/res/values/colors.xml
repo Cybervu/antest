@@ -2,12 +2,18 @@
 
 <resources>
     <!--added for app background color by bishal-->
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="background_start_color">#111111</color>
     <color name="background_end_color">#111111</color>
     <color name="appBackgroundColorSpinner">#fff</color>
     <color name="appBackgroundColor">#111111</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="player_title_color">#fff</color>
     <color name="videotextColor">#FFFFFF</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#FFFFFF</color>
+    <color name="banner_line_color">#EB0609</color>
+    <color name="cast_description_color">#fff</color>
     <color name="videotitleColor">#EB0609  </color>
     <color name="savecardtextcolor">#fff</color>
     <color name="loginTextViewColor">#EB0609  </color>
@@ -27,6 +33,7 @@
     <color name="cancel_button_text_color">#EB0609  </color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#EB0609  </color>
+    <color name="FilterTitleTextColor">#EB0609</color>
     <color name="cast_crew_titleCololr">#EB0609  </color>
     <color name="subtitleListColor">#FFFFFF</color>
     <color name="borderColor">#EB0609  </color>
@@ -69,6 +76,8 @@
     <color name="noInternetColor">#FFFFFF</color>
     <color name="editTextColor">#FFFFFF</color>
     <color name="movieTitleColor">#FFFFFF</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="videomovieTitleColor">#FFFFFF</color>
     <color name="resumePopupColor">#FFFFFF</color>
     <color name="dividerColor">#EB0609  </color>
@@ -96,4 +105,7 @@
     <color name="purchaseTextColor">#000</color>
     <color name="buttonbg">#eb0609</color>
     <color name="chromecast_color">#ffffff</color>
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#111111</color>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.home.vod.fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,6 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toolbar;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
@@ -658,6 +660,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         //for search for each activity
         setHasOptionsMenu(true);
         filterOrderByStr = "";
+        /*MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setTitle(getArguments().getString("title"));*/
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
@@ -669,7 +674,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             }
         };
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
 
 
         // int startPosition = getInt("startPosition", 0);
@@ -678,11 +683,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+       // TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
+       // categoryTitle.setTypeface(castDescriptionTypeface);
         //FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);
-        categoryTitle.setText(getArguments().getString("title"));
+     //f,   categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -2406,6 +2411,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

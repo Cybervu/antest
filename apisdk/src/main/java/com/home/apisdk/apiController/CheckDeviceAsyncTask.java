@@ -6,10 +6,12 @@
 package com.home.apisdk.apiController;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.CheckDeviceInput;
 import com.home.apisdk.apiModel.CheckDeviceOutput;
 
@@ -24,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * This Class checks all the information about the device on which the application is running.
@@ -124,7 +127,17 @@ public class CheckDeviceAsyncTask extends AsyncTask<Void, Void, Void> {
                 code = 0;
                 e.printStackTrace();
             }
-
+         /*   URL url=new URL(APIUrlConstant.getCheckDevice());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.checkDeviceInput.getUser_id())
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.checkDeviceInput.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.DEVICE, this.checkDeviceInput.getDevice())
+                    .appendQueryParameter(HeaderConstants.GOOGLE_ID, this.checkDeviceInput.getGoogle_id())
+                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.checkDeviceInput.getDevice_type())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.checkDeviceInput.getLang_code())
+                    .appendQueryParameter(HeaderConstants.DEVICE_INFO, this.checkDeviceInput.getDevice_info());
+            String query = (builder.build().getEncodedQuery());
+            responseStr = Utils.handleHttpAndHttpsRequest(url,query,code,message);*/
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 code = Integer.parseInt(myJson.optString("code"));

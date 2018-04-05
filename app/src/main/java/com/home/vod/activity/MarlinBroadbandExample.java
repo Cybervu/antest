@@ -26,7 +26,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
-import android.support.v7.app.NotificationCompat;
+
 import android.support.v7.media.MediaRouter;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
@@ -138,7 +138,7 @@ enum ContentTypes {
 			"video/mp2t");
 	String mediaSourceParamsContentType = null;
 
-	private ContentTypes(String mediaSourceParamsContentType) {
+	ContentTypes(String mediaSourceParamsContentType) {
 		this.mediaSourceParamsContentType = mediaSourceParamsContentType;
 	}
 
@@ -490,6 +490,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
+		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		buttonLayoutParams.setMargins(0, 0, 0, 170);
+		story.setLayoutParams(buttonLayoutParams);
+
 
 
 		download = (ImageView) findViewById(R.id.downloadImageView);
@@ -506,7 +510,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		setupCastListener();
 
 		mCastContext = CastContext.getSharedInstance(this);
-		mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+		//mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 		mCastSession = CastContext.getSharedInstance(this).getSessionManager().getCurrentCastSession();
 		mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -676,7 +680,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					//Will Add Some Data to send
 					Util.call_finish_at_onUserLeaveHint = false;
 					Util.hide_pause = true;
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+					findViewById(R.id.progress_view).setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.VISIBLE);
 
 					if (emVideoView.isPlaying()) {
@@ -886,7 +890,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				if (Util.hide_pause) {
 					Util.hide_pause = false;
 				}
-				if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+				if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
 					primary_ll.setVisibility(View.VISIBLE);
 					center_play_pause.setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.GONE);
@@ -1020,7 +1024,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				video_prepared = true;
 				video_completed = false;
 				if (progressView != null) {
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+					findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 					center_play_pause.setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.GONE);
 				}
@@ -1043,11 +1047,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 							Log.v("BIBHU3", " called============");
 
-							((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+							findViewById(R.id.progress_view).setVisibility(View.GONE);
 							Util.call_finish_at_onUserLeaveHint = false;
 
 							resume_orientation = true;
 							Intent resumeIntent = new Intent(MarlinBroadbandExample.this, ResumePopupActivity.class);
+							resumeIntent.putExtra("activity","MarlinBroadbandExample");
 							startActivityForResult(resumeIntent, 1001);
 
 						} else {
@@ -1407,7 +1412,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 			if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-				((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+				findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 
 				primary_ll.setVisibility(View.GONE);
 				last_ll.setVisibility(View.GONE);
@@ -1453,7 +1458,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				}
 
 				previous_matching_time = current_matching_time;
-				((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+				findViewById(R.id.progress_view).setVisibility(View.GONE);
 			}
 
 		}
@@ -2403,7 +2408,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					//Will Add Some Data to send
 					Util.call_finish_at_onUserLeaveHint = false;
 					Util.hide_pause = true;
-					((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+					findViewById(R.id.progress_view).setVisibility(View.GONE);
 					latest_center_play_pause.setVisibility(View.VISIBLE);
 					subtitleText.setText("");
 					emVideoView.setEnabled(false);
@@ -2606,6 +2611,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 				@Override
 				public void onSendingRemoteMediaRequest() {
+				}
+
+				@Override
+				public void onAdBreakStatusUpdated() {
+
 				}
 			});
 
@@ -2994,7 +3004,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		private int millisecondsToString(int milliseconds) {
 			// int seconds = (int) (milliseconds / 1000) % 60 ;
-			int seconds = (int) (milliseconds / 1000);
+			int seconds = milliseconds / 1000;
 
 			return seconds;
 		}

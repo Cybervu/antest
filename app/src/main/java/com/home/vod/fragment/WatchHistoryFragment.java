@@ -378,7 +378,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.watch_history, container, false);
-
+        Util.check_for_subscription=0;
         context = getActivity();
         featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
@@ -416,7 +416,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
-        sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        //sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
@@ -437,16 +437,16 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
-            sectionTitle.setText(titleListName);
+           // sectionTitle.setText(titleListName);
         } else {
-            sectionTitle.setText("");
+            //sectionTitle.setText("");
 
         }
-        Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(sectionTitleTypeface);
+        /*Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+        sectionTitle.setTypeface(sectionTitleTypeface);*/
 
         gridView.setAdapter(customGridAdapter);
 
@@ -685,7 +685,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -2309,17 +2309,17 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_nexus_videos_grid_layout_land, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_videos_280_grid_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_nexus_videos_grid_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_videos_grid_layout, itemData);
 
                     }
                     // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
@@ -2336,17 +2336,17 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_nexus_videos_grid_layout_land, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_videos_grid_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_nexus_videos_grid_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(context, R.layout.watch_history_videos_grid_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
@@ -2721,6 +2721,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
           /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }*/
+            videoHeight =500;
+            videoWidth = 300;
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);
@@ -2960,6 +2962,16 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                 break;
 
             case IDLE:
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                    loadRemoteMedia(0, true);
+
+
+                    // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
+                } else {
+                }
+
                 switch (mLocation) {
                     case LOCAL:
                         //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
@@ -3023,6 +3035,11 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);

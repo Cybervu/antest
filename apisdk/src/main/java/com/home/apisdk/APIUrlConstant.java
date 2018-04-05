@@ -372,7 +372,6 @@ public class APIUrlConstant {
         return BASE_URl + AboutUs;
     }
 
-
     public static String getFbUserExistsUrl() {
         return BASE_URl + fbUserExistsUrl;
     }

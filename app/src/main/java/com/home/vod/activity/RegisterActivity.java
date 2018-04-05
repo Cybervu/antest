@@ -50,9 +50,12 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.home.apisdk.apiController.AsyncGmailReg;
 import com.home.apisdk.apiController.CheckDeviceAsyncTask;
 import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
@@ -77,6 +80,7 @@ import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
+import com.home.vod.CheckSubscriptionHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
 import com.home.vod.RegisterUIHandler;
@@ -165,6 +169,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -314,14 +319,25 @@ public class RegisterActivity extends AppCompatActivity implements
 
                         } else {
                             if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
-                                Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                if (LoginActivity.loginA != null) {
-                                    LoginActivity.loginA.finish();
-                                }
+                                if (CheckSubscriptionHandler.isSubscriptionAllowed) {
+                                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    if (LoginActivity.loginA != null) {
+                                        LoginActivity.loginA.finish();
+                                    }
 
-                                onBackPressed();
+                                    onBackPressed();
+                                }else {
+                                    Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                    if (LoginActivity.loginA != null) {
+                                        LoginActivity.loginA.finish();
+                                    }
+                                    onBackPressed();
+                                }
                             } else {
 
                                 Intent in = new Intent(RegisterActivity.this, MainActivity.class);
@@ -505,7 +521,7 @@ public class RegisterActivity extends AppCompatActivity implements
         /*********fb****/
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
@@ -519,21 +535,21 @@ public class RegisterActivity extends AppCompatActivity implements
         deviceName = myDevice.getName();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         //playerModel=new Player();
 
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+
         if (playerModel != null)
 
             playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             mActionBarToolbar.setNavigationIcon(null);
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
-
 
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -626,7 +642,6 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("pratik", "reg to log chrome con");
                     Intent castLoginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                     castLoginIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     castLoginIntent.putExtra("PlayerModel", playerModel);
@@ -698,7 +713,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
@@ -710,16 +725,28 @@ public class RegisterActivity extends AppCompatActivity implements
 /*
             /*chromecast-------------------------------------*/
 
-        mAquery = new AQuery(this);
+        GoogleApiAvailability googAvail = GoogleApiAvailability.getInstance();
 
-        // setupControlsCallbacks();
-        setupCastListener();
-        mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
-        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+        int status = googAvail.isGooglePlayServicesAvailable(this);
+        Log.i(TAG, "onCreate: Status= " + googAvail.getErrorString(status));
+
 
         boolean shouldStartPlayback = false;
         int startPosition = 0;
+        try {
+            mAquery = new AQuery(this);
+
+            // setupControlsCallbacks();
+            setupCastListener();
+            mCastContext = CastContext.getSharedInstance(this);
+           // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+            mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+
+            shouldStartPlayback = false;
+            startPosition = 0;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
 
          /*   MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
@@ -850,6 +877,10 @@ public class RegisterActivity extends AppCompatActivity implements
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD), Toast.LENGTH_LONG).show();
                 return;
             }
+            if (!regPasswordStr.trim().equals(regConfirmPasswordStr.trim())){
+                Toast.makeText(RegisterActivity.this,languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH,DEFAULT_PASSWORDS_DO_NOT_MATCH),Toast.LENGTH_LONG).show();
+                return;
+            }
 
 
 
@@ -871,63 +902,9 @@ public class RegisterActivity extends AppCompatActivity implements
             asyncReg.executeOnExecutor(threadPoolExecutor);
 
 
-/*
-            // if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
-            if ((!regEmailStr.matches("")) && (!regPasswordStr.matches(""))) {
-                boolean isValidEmail = Util.isValidMail(regEmailStr);
-                if (isValidEmail) {
-                    if (regPasswordStr.equals(regConfirmPasswordStr)) {
-
-
-                        Registration_input registration_input = new Registration_input();
-                        registration_input.setAuthToken(authTokenStr);
-                        registration_input.setName(first_name);
-                        registration_input.setCustom_last_name(last_name);
-                        registration_input.setEmail(regEmailStr);
-                        registration_input.setPhone(phone);
-                        registration_input.setPassword(regPasswordStr);
-                        registration_input.setCustom_country(registerUIHandler.selected_Country_Id);
-                        registration_input.setCustom_languages(registerUIHandler.selected_Language_Id);
-                        registration_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                        registration_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-                        registration_input.setDevice_type("1");
-                        registration_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                        asyncReg = new RegistrationAsynTask(registration_input, this, this);
-                        asyncReg.executeOnExecutor(threadPoolExecutor);
-                    } else {
-                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
-                }
-            } else {
-                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
-
-            }
-            */
-
-
-
         } else {
             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 
@@ -1042,13 +1019,24 @@ public class RegisterActivity extends AppCompatActivity implements
                         } else {
 
                             if (planId.equals("1") && isSubscribedStr.equals("0")) {
-                                Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                if (LoginActivity.loginA != null) {
-                                    LoginActivity.loginA.finish();
+                                if (CheckSubscriptionHandler.isSubscriptionAllowed) {
+                                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    if (LoginActivity.loginA != null) {
+                                        LoginActivity.loginA.finish();
+                                    }
+                                    finish();
+                                }else {
+                                    Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                    if (LoginActivity.loginA != null) {
+                                        LoginActivity.loginA.finish();
+                                    }
+                                    finish();
                                 }
-                                finish();
                             } else {
                                 Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1089,12 +1077,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }
@@ -1872,15 +1855,34 @@ public class RegisterActivity extends AppCompatActivity implements
                         payment_for_single_part();
                     }
                 } else if (planId.equals("1") && Subscription_Str.equals("0")) {
-                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    if (LoginActivity.loginA != null) {
-                        LoginActivity.loginA.finish();
-                    }
-                    finish();
-                    overridePendingTransition(0, 0);
+                    if (CheckSubscriptionHandler.isSubscriptionAllowed) {
+                        Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        if (LoginActivity.loginA != null) {
+                            LoginActivity.loginA.finish();
+                        }
+                        finish();
+                        overridePendingTransition(0, 0);
+                    }else if (Util.dataModel.getIsConverted() == 0){
+                        Util.showNoDataAlert(RegisterActivity.this);
+                    }else {
+                        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            onBackPressed();
+                        }
+                    }
                 } else if (Util.dataModel.getIsConverted() == 0) {
                     Util.showNoDataAlert(RegisterActivity.this);
                   /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
@@ -3522,6 +3524,11 @@ public class RegisterActivity extends AppCompatActivity implements
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override
@@ -3630,14 +3637,26 @@ public class RegisterActivity extends AppCompatActivity implements
 
                     } else {
                         if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
-                            Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            if (LoginActivity.loginA != null) {
-                                LoginActivity.loginA.finish();
+                            if (CheckSubscriptionHandler.isSubscriptionAllowed){
+                                Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                if (LoginActivity.loginA != null) {
+                                    LoginActivity.loginA.finish();
+                                }
+
+                                onBackPressed();
+                            }else {
+                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(in);
+                                if (LoginActivity.loginA != null) {
+                                    LoginActivity.loginA.finish();
+                                }
+                                onBackPressed();
                             }
 
-                            onBackPressed();
                         } else {
 
                             Intent in = new Intent(RegisterActivity.this, MainActivity.class);
@@ -3940,13 +3959,24 @@ public class RegisterActivity extends AppCompatActivity implements
                     }
 
                     if (planId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
-                        Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        if (LoginActivity.loginA != null) {
-                            LoginActivity.loginA.finish();
+                        if (CheckSubscriptionHandler.isSubscriptionAllowed) {
+                            Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            finish();
+                        }else {
+                            Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            finish();
                         }
-                        finish();
                     } else {
                         Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4381,13 +4411,23 @@ public class RegisterActivity extends AppCompatActivity implements
                             payment_for_single_part();
                         }
                     } else if (planId.equals("1") && Subscription_Str.equals("0")) {
-                        Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        if (LoginActivity.loginA != null) {
-                            LoginActivity.loginA.finish();
+                        if (CheckSubscriptionHandler.isSubscriptionAllowed) {
+                            Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            finish();
+                        }else {
+                            if (Util.dataModel.getContentTypesId() == 3) {
+                                // Show Popup
+                                ShowPpvPopUp();
+                            } else {
+                                // Go to ppv Payment
+                                payment_for_single_part();
+                            }
                         }
-                        finish();
                     } else {
                         if (Util.dataModel.getContentTypesId() == 3) {
                             // Show Popup

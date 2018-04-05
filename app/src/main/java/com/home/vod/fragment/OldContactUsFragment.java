@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -113,17 +114,17 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
 
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+        /*TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);*/
       /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);*/
-        categoryTitle.setText(getArguments().getString("title"));
+       // categoryTitle.setText(getArguments().getString("title"));
 
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),contactFormTitle);
 
      /*   Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        contactFormTitle.setTypeface(contactFormTitleTypeface)*/;
+        contactFormTitle.setTypeface(contactFormTitleTypeface)*/
         contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
@@ -263,7 +264,7 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
     }
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     public void SubmmitClicked() {

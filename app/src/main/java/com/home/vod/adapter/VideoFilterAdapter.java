@@ -97,7 +97,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         }else {
 
             Picasso.with(context)
-                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.no_image)
+                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.logo)
                     .into(holder.videoImageview);
 
 

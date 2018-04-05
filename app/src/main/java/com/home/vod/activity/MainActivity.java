@@ -16,8 +16,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +34,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,16 +105,20 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
@@ -117,10 +126,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -131,7 +142,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
@@ -275,11 +286,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
 
+    // Kushal
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language,R.id.profile,R.id.purchase,R.id.logout};
+    PopupWindow changeSortPopUp;
+    LinearLayout linearLayout[];
+    ArrayList<Boolean> visibility;
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
 
         Util.drawer_collapse_expand_imageview.clear();
@@ -313,7 +332,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         };
 
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        // Kushal- Not supported in new gradle build
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 
 
         // int startPosition = getInt("startPosition", 0);
@@ -413,8 +433,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        visibility= new ArrayList<>();
+        visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 /************chromecast***********/
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
 
@@ -509,18 +529,23 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                        LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
-                        LogUtil.showLog("Abhi", authTokenStr);
-                        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
-                        logoutInput.setLogin_history_id(loginHistoryIdStr);
-                        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
-                        asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+                        if(NetworkStatus.getInstance().isConnected(MainActivity.this)) {
+                            LogoutInput logoutInput = new LogoutInput();
+                            logoutInput.setAuthToken(authTokenStr);
+                            LogUtil.showLog("Abhi", authTokenStr);
+                            String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                            logoutInput.setLogin_history_id(loginHistoryIdStr);
+                            logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                            asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 
-                        dialog.dismiss();
+
+                            dialog.dismiss();
+                        }else {
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -555,6 +580,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 startActivity(registerIntent);*/
                 // Not implemented here
                 return false;
+                // Kushal
+            case R.id.submenu:
+                showPopupMenu(findViewById(R.id.submenu));
             default:
                 break;
         }
@@ -562,10 +590,71 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         return false;
     }
 
+    private void showPopupMenu(View viewById) {
+        CardView viewGroup = findViewById(R.id.option_menu_layout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+        View layout = layoutInflater.inflate(R.layout.option_menu_popup_layout, viewGroup);
+        initLayouts(layout);
+
+        // Creating the PopupWindow
+        changeSortPopUp = new PopupWindow(this);
+        changeSortPopUp.setContentView(layout);
+        changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setFocusable(true);
+        changeSortPopUp.setElevation(50);
+        // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+        int OFFSET_X = 0;
+        int OFFSET_Y = getSupportActionBar().getHeight();
+
+        // Clear the default translucent background
+        changeSortPopUp.setBackgroundDrawable(getDrawable(R.drawable.white));
+        changeSortPopUp.showAsDropDown(viewById, OFFSET_X + 20, -OFFSET_Y + 20);
+
+        for (int i=0; i<option_menu_id.length; i++){
+            if (!visibility.get(i))
+                linearLayout[i].setVisibility(View.VISIBLE);
+            else
+                linearLayout[i].setVisibility(View.GONE);
+        }
+        for (int i=0; i<option_menu_id.length;i++){
+            final int finalI = i;
+            linearLayout[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   // peformWork(linearLayout[finalI].getId());
+
+                }
+            });
+        }
+    }
+
+    private void initLayouts(View layout) {
+        linearLayout= new LinearLayout[option_menu_id.length];
+        for (int i=0; i<option_menu_id.length;i++){
+            linearLayout[i]= layout.findViewById(option_menu_id[i]);
+        }
+    }
+
+    private void showPopupMenu() {
+    }
+
     //*************chromecast*****************//*
     @Override
     public void onResume() {
         super.onResume();
+
+
+        if(preferenceManager.getLanguageChangeStatus().equals("1")){
+
+            Intent mIntent = new Intent(MainActivity.this, MainActivity.class);
+            mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(mIntent);
+            finish();
+            preferenceManager.setLanguageChangeStatus("0");
+        }
+
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
@@ -855,43 +944,44 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
-        if (code > 0) {
-            if (code == 200) {
-                preferenceManager.clearLoginPref();
+            if (code > 0) {
+                if (code == 200) {
+                    preferenceManager.clearLoginPref();
 
-                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
-                    final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-                            finish();
+                    if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                        final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
-                        }
-                    });
+                                finish();
+
+                            }
+                        });
+                    } else {
+                        final Intent startIntent = new Intent(MainActivity.this, MainActivity.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                                finish();
+
+                            }
+                        });
+                    }
+
+
                 } else {
-                    final Intent startIntent = new Intent(MainActivity.this, MainActivity.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
-                            finish();
-
-                        }
-                    });
                 }
-
-
-            } else {
-                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
             }
-        }
 
     }
 
@@ -1088,9 +1178,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             try {
 
                 Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
-
                 languageCustomAdapter.notifyDataSetChanged();
-
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
@@ -1458,6 +1546,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
