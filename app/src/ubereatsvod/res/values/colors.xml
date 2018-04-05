@@ -169,6 +169,7 @@
     <color name="cast_crew_textcolor">#57ad57</color>
     <color name="sign_up_text_color">#57ad57</color>
     <color name="button_background">#57ad57</color>
+    <color name="view_more_less">#57ad57</color>
     <color name="alreadyHaveALoginButtonTextColor">#57ad57</color>
     <color name="forgotPasswordTextViewColor">#57ad57</color>
     <color name="loginTextViewColor">#57ad57</color>

@@ -29,6 +29,7 @@
     <color name="hintTextColor">#999</color>
     <color name="editTexColor">#666</color>
     <color name="button_background">#2acb99</color>
+    <color name="view_more_less">#2acb99</color>
     <color name="castCrewTitleTextColor">#2acb99</color>
     <color name="FilterTitleTextColor">#2acb99</color>
     <color name="buttonTextColor">#fff</color>

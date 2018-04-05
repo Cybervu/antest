@@ -2237,9 +2237,15 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
         CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
         /***************chromecast**********************/
-        MenuItem item;
+        MenuItem item,item1,item2,item3;
         item = menu.findItem(R.id.action_filter);
+        item1 = menu.findItem(R.id.submenu);
+        item2 = menu.findItem(R.id.action_search);
+        item3 = menu.findItem(R.id.media_route_menu_item);
         item.setVisible(false);
+        item1.setVisible(false);
+        item2.setVisible(false);
+        item3.setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -2721,8 +2727,11 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
           /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }*/
-            videoHeight =500;
-            videoWidth = 300;
+
+          if((getApplicationContext().getPackageName()).equals("com.release.yesflix")){
+              videoHeight =500;
+              videoWidth = 300;
+          }
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);

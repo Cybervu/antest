@@ -103,6 +103,7 @@
     <color name="censorRatingBackground">#580661 </color>
     <color name="nav_lineColor">#580661 </color>
     <color name="button_background">#580661 </color>
+    <color name="view_more_less">#580661 </color>
     <color name="aboutustestcolor">#0f1113</color>
     <color name="editTextColor">#fff</color>
     <color name="resumeTextColor">#0000</color>

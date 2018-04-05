@@ -61,6 +61,7 @@
     <color name="nav_lineColor">#000</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#0e6296</color>
+    <color name="view_more_less">#0e6296</color>
     <color name="button_background_plan_textview">#0e6296</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
