@@ -429,5 +429,9 @@
     <dimen name="select_resolution_height_width">64dp</dimen>
     <dimen name="star_height_width">48dp</dimen>
     <dimen name="subtitle_height_width">100dp</dimen>
+
+
+    <dimen name="vertical_spacing">6dp</dimen>
+    <dimen name="horizontal_spacing">6dp</dimen>
 </resources>
 

@@ -2301,19 +2301,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         super.onDetach();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
-/***************chromecast**********************/
 
-        CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
-        /***************chromecast**********************/
-        MenuItem item;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
 
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
@@ -2599,7 +2587,25 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         itemsInServer = 0;
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+/***************chromecast**********************/
 
+        CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
+        /***************chromecast**********************/
+        MenuItem item,item1,item2,item3;
+        item = menu.findItem(R.id.action_filter);
+        item1 = menu.findItem(R.id.submenu);
+        item2 = menu.findItem(R.id.action_search);
+        item3 = menu.findItem(R.id.media_route_menu_item);
+        item.setVisible(false);
+        item1.setVisible(false);
+        item2.setVisible(false);
+        item3.setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

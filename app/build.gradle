@@ -590,9 +590,9 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
-//            buildConfigField "String", "AUTH_TOKEN", "\"f3bdcc7e5e521dd4ae2ae6795093c906\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
-            versionName '1.3.0'
+            versionName '3.0.0'
         }
         yesflix_staging_ {
             dimension 'environment'

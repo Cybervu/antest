@@ -129,18 +129,26 @@ public class EpisodeListOptionMenuHandler {
             login_menu.setVisible(false);
             register_menu.setVisible(false);
             profile_menu.setVisible(true);
-
-
             logout_menu.setVisible(true);
+
+
+            /**
+             * This has been modified.
+             */
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
+
+
+
+
+
 
         } else if (loggedInStr == null) {
 

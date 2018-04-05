@@ -52,6 +52,7 @@
     <color name="dividerColor">#C81E6E</color>
     <color name="borderColor">#C81E6E</color>
     <color name="button_background">#C81E6E </color>
+    <color name="view_more_less">#C81E6E </color>
     <color name="videoTitleTextColor">#C81E6E</color>
     <color name="detailsPageTextColor">#fff</color>
     <color name="subtitleListBgColor">#fff</color>

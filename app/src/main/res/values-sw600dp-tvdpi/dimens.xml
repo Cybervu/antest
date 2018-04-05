@@ -162,4 +162,7 @@
     <dimen name="trailer_btn_padding">2dp</dimen>
     <!---this is for videolistfragment   Textview padding-->
     <dimen name="videolistleftmargin">7dp</dimen>
+
+
+
 </resources>
