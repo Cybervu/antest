@@ -2721,8 +2721,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
           /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }*/
-            videoHeight =500;
-            videoWidth = 300;
+
 
             AsynLOADUI loadUI = new AsynLOADUI();
             loadUI.executeOnExecutor(threadPoolExecutor);

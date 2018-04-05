@@ -1816,7 +1816,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
                     String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
                     movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
-                    movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
+                    movieUniqueId = myLibraryOutputModelArray.get(i).getMuvi_uniq_id();
                     int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
                     int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
                     int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
