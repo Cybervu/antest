@@ -2,6 +2,7 @@ package com.home.api.player.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -43,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class  ThirdPartyPlayer extends AppCompatActivity {
+public class  ThirdPartyPlayer extends Activity {
     WebView mWebView;
     Player playerModel;
    // Toolbar mActionBarToolbar;

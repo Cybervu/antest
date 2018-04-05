@@ -4,7 +4,9 @@ package com.home.api.player.activity;
  * Created by MUVI on 9/6/2017.
  */
 
+import android.app.Activity;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +21,7 @@ import com.spotxchange.v3.SpotXAdGroup;
 import com.spotxchange.v3.view.InterstitialPresentationController;
 
 
-public class AdPlayerActivity extends AppCompatActivity implements AdLoader.Callback {
+public class AdPlayerActivity extends Activity implements AdLoader.Callback {
     private static final String TAG = AdPlayerActivity.class.getSimpleName();
 
     private ProgressBar _progressBar;

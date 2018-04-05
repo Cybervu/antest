@@ -6,21 +6,60 @@
     <application android:allowBackup="true" android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <activity android:name="com.home.api.player.activity.AdPlayerActivity" />
-        <activity android:name="com.home.api.player.activity.CastAndCrewActivity" />
-        <activity android:name="com.home.api.player.activity.CastCrewDetailsActivity" />
-        <activity android:name="com.home.api.player.activity.ExoPlayerActivity" />
-        <activity android:name="com.home.api.player.activity.MyActivity" />
-        <activity android:name="com.home.api.player.activity.MyLibraryPlayer" />
-        <activity android:name="com.home.api.player.activity.ResolutionChangeActivity" />
-        <activity android:name="com.home.api.player.activity.ResumePopupActivity" />
-        <activity android:name="com.home.api.player.activity.Subtitle_Resolution" />
-        <activity android:name="com.home.api.player.activity.SubtitleList" />
-        <activity android:name="com.home.api.player.activity.SupportActivity" />
-        <activity android:name="com.home.api.player.activity.ThirdPartyPlayer" />
-        <activity android:name="com.home.api.player.activity.YouTubeAPIActivity" />
+        <activity android:name="com.home.api.player.activity.AdPlayerActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.home.api.player.activity.CastAndCrewActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.home.api.player.activity.CastCrewDetailsActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme"/>
+        <activity android:name="com.home.api.player.activity.ExoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.home.api.player.activity.MyActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.home.api.player.activity.MyLibraryPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.home.api.player.activity.ResolutionChangeActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name="com.home.api.player.activity.ResumePopupActivity"
+            android:configChanges="screenSize|orientation"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity android:name="com.home.api.player.activity.Subtitle_Resolution"
+            android:configChanges="screenSize|orientation"
+            android:label=""
+            android:screenOrientation="sensor"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name="com.home.api.player.activity.SubtitleList"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name="com.home.api.player.activity.SupportActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.home.api.player.activity.ThirdPartyPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.home.api.player.activity.YouTubeAPIActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:windowSoftInputMode="stateHidden"/>
 
-        <service android:name="com.home.api.player.activity.DataConsumptionService" />
+        <service android:name="com.home.api.player.activity.DataConsumptionService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -35,4 +35,11 @@
     <color name="style_circular_color">#999999</color>
     <color name="style_circular_color_2">#ff0400</color>
     <color name="totalTimeTxtColor">#ffffff</color>
+    <color name="hint_color">#737373</color>
+    <color name="hint_background">#b70000</color>
+    <color name="colorPrimaryDark">#4573A8</color>
+    <color name="colorAccent">#3b5998</color>
+    <color name="textColorPrimary">#3b5998</color>
+    <color name="windowBackground">#fff</color>
+
 </resources>

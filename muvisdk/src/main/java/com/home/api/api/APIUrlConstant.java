@@ -12,6 +12,7 @@ public class APIUrlConstant {
    // public static String BASE_URl = "https://sonydadac.muvi.com/rest/";
 
     public static String BASE_URl = "https://www.muvi.com/rest/";
+  //  public static String BASE_URl =VodApplication;
 
     /**
      * endpoint to initialize SDK API

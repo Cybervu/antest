@@ -2,6 +2,7 @@ package com.home.api.player.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -173,7 +174,7 @@ enum ContentTypes3 {
     }
 }
 
-public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
+public class MyLibraryPlayer extends Activity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
 
     PlaylistProxy playerProxy;
     int played_length = 0;

@@ -4,6 +4,7 @@ package com.home.api.player.activity;
  * Created by MUVI on 9/6/2017.
  */
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ import java.util.TimerTask;
 /**
  * Main Activity.
  */
-public class MyActivity extends AppCompatActivity {
+public class MyActivity extends Activity {
 
 
     @Override
