@@ -734,7 +734,7 @@ public class RegisterActivity extends AppCompatActivity implements
             // setupControlsCallbacks();
             setupCastListener();
             mCastContext = CastContext.getSharedInstance(this);
-            mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+           // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
             mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
             shouldStartPlayback = false;
@@ -3519,6 +3519,11 @@ public class RegisterActivity extends AppCompatActivity implements
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            /*@Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override

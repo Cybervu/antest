@@ -14,6 +14,8 @@ import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,9 +51,11 @@ import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
 import com.home.vod.R;
@@ -114,6 +120,16 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
         LogoutAsynctask.LogoutListener,
@@ -259,6 +275,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
 
+    // Kushal
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language,R.id.profile,R.id.purchase,R.id.logout};
+    PopupWindow changeSortPopUp;
+    LinearLayout linearLayout[];
+    boolean[] visibility;
+    String[] lang;
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -399,7 +423,34 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
 
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        // Kushal
+        /*
+        Set translation key to array
+         */
+        String[] translateKey={LOGIN,
+                BTN_REGISTER,
+                LANGUAGE_POPUP_LANGUAGE,
+                PROFILE,
+                PURCHASE_HISTORY,
+                LOGOUT};
+        /*
+        Set transalation value to array
+         */
+        String[] translateValue={
+                DEFAULT_LOGIN,
+                DEFAULT_BTN_REGISTER,
+                DEFAULT_LANGUAGE_POPUP_LANGUAGE,
+                DEFAULT_PROFILE,
+                DEFAULT_PURCHASE_HISTORY,
+                DEFAULT_LOGOUT};
+        /*
+        Set the lang array with the langugePreference of key and value array
+         */
+        lang= new String[translateKey.length];
+        for(int i=0 ;i<lang.length;i++)
+            lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
+
+        visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 /************chromecast***********/
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
 
@@ -545,11 +596,182 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(registerIntent);*/
                 // Not implemented here
                 return false;
+            case R.id.submenu:
+                /*
+                Show to popup menu
+                 */
+                showPopupMenu(findViewById(R.id.submenu));
+                return false;
             default:
                 break;
         }
 
         return false;
+    }
+
+    private void showPopupMenu(View viewById) {
+        CardView viewGroup = (CardView)findViewById(R.id.option_menu_layout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+        View layout = layoutInflater.inflate(R.layout.option_menu_popup_layout, viewGroup);
+        initLayouts(layout);
+
+        // Creating the PopupWindow
+        changeSortPopUp = new PopupWindow(this);
+        changeSortPopUp.setContentView(layout);
+        changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setFocusable(true);
+        changeSortPopUp.setElevation(50);
+        // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+        int OFFSET_X = 0;
+        int OFFSET_Y = getSupportActionBar().getHeight();
+
+        // Clear the default translucent background
+        changeSortPopUp.setBackgroundDrawable(getDrawable(R.drawable.white));
+        changeSortPopUp.showAsDropDown(viewById, OFFSET_X + 20, -OFFSET_Y + 20);
+
+        for (int i=0; i<option_menu_id.length; i++){
+            if (visibility[i])
+                linearLayout[i].setVisibility(View.VISIBLE);
+            else
+                linearLayout[i].setVisibility(View.GONE);
+        }
+        for (int i=0; i<option_menu_id.length;i++){
+            final int finalI = i;
+            linearLayout[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    performWork(linearLayout[finalI].getId(),changeSortPopUp);
+
+                }
+            });
+        }
+    }
+
+    private void performWork(int id, PopupWindow changeSortPopUp) {
+        switch (id){
+            case R.id.login:
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(loginIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.register:
+                Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(registerIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.language:
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                if (languageModel != null && languageModel.size() > 0) {
+                    ShowLanguagePopup();
+                } else {
+                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(authTokenStr);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
+                    asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+                }
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.profile:
+                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                profileIntent.putExtra("EMAIL", email);
+                profileIntent.putExtra("LOGID", id);
+                startActivity(profileIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.purchase:
+                Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
+                startActivity(purchaseintent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.logout:
+                logoutPopup();
+                changeSortPopUp.dismiss();
+                break;
+            default:
+                break;
+
+
+        }
+    }
+
+    private void logoutPopup() {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                // dialog.cancel();
+                if(NetworkStatus.getInstance().isConnected(MainActivity.this)) {
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+           /* dlgAlert.setNegativeButton(getResources().getString(R.string.no_str),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setNegativeButton(getResources().getString(R.string.no_str),
+                            new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });*/
+        dlgAlert.create().show();
+    }
+
+    private void initLayouts(View layout) {
+        linearLayout= new LinearLayout[option_menu_id.length];
+        for (int i=0; i<option_menu_id.length;i++){
+            linearLayout[i]= (LinearLayout)layout.findViewById(option_menu_id[i]);
+            setLanguageToTextViews(linearLayout[i],i);
+
+        }
+    }
+
+    private void setLanguageToTextViews(LinearLayout linearLayout, int i) {
+        int count= linearLayout.getChildCount();
+        for (int j=0;j<count;j++){
+            View vw= linearLayout.getChildAt(j);
+            if(vw instanceof TextView){
+                ((TextView) vw).setText(lang[i]);
+            }
+        }
     }
 
     //*************chromecast*****************//*
@@ -891,8 +1113,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 } else {
                     Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
                 }
             }
+
     }
 
 
@@ -1457,6 +1681,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
