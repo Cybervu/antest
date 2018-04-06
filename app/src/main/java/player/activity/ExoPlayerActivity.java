@@ -700,7 +700,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mAquery = new AQuery(ExoPlayerActivity.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -4978,6 +4978,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
 
 

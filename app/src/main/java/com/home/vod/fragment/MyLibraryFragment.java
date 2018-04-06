@@ -707,7 +707,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3674,6 +3674,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }

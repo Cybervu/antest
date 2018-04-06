@@ -686,7 +686,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -2176,6 +2176,11 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
