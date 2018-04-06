@@ -115,6 +115,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
@@ -131,6 +132,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -140,6 +142,7 @@ import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -443,13 +446,31 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
         // Kushal
-        lang= new String[6];
-        lang[0]= languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN);
-        lang[1]= languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER);
-        lang[2]="Langugae";
-        lang[3]= languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE);
-        lang[4]= languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY);
-        lang[5]= languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT);
+        /*
+        Set translation key to array
+         */
+        String[] translateKey={LOGIN,
+                BTN_REGISTER,
+                LANGUAGE_POPUP_LANGUAGE,
+                PROFILE,
+                PURCHASE_HISTORY,
+                LOGOUT};
+        /*
+        Set transalation value to array
+         */
+        String[] translateValue={
+                DEFAULT_LOGIN,
+                DEFAULT_BTN_REGISTER,
+                DEFAULT_LANGUAGE_POPUP_LANGUAGE,
+                DEFAULT_PROFILE,
+                DEFAULT_PURCHASE_HISTORY,
+                DEFAULT_LOGOUT};
+        /*
+        Set the lang array with the langugePreference of key and value array
+         */
+        lang= new String[translateKey.length];
+        for(int i=0 ;i<lang.length;i++)
+            lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
 
         visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
 /************chromecast***********/
@@ -599,6 +620,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 return false;
                 // Kushal
             case R.id.submenu:
+                /*
+                Show to popup menu
+                 */
                 showPopupMenu(findViewById(R.id.submenu));
             default:
                 break;
@@ -640,14 +664,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             linearLayout[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    peformWork(linearLayout[finalI].getId(),changeSortPopUp);
+                    performWork(linearLayout[finalI].getId(),changeSortPopUp);
 
                 }
             });
         }
     }
 
-    private void peformWork(int id, PopupWindow changeSortPopUp) {
+    private void performWork(int id, PopupWindow changeSortPopUp) {
         switch (id){
             case R.id.login:
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -773,9 +797,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 ((TextView) vw).setText(lang[i]);
             }
         }
-    }
-
-    private void showPopupMenu() {
     }
 
     //*************chromecast*****************//*
