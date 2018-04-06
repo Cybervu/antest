@@ -11,8 +11,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -111,7 +111,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 
-public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetailsListener,
+public class PaymentInfoActivity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetailsListener,
         AuthUserPaymentInfoAsyntask.AuthUserPaymentInfoListener,
         RegisterUserPaymentAsyntask.RegisterUserPaymentListener {
     CardModel[] cardSavedArray;
