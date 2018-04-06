@@ -43,7 +43,8 @@
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000000</color>
  <color name="nav_drawer_text_Color">#000000</color>
- <color name="button_background">#eda3b0 </color>
+ <color name="button_background">#eda3b0</color>
+ <color name="view_more_less">#eda3b0</color>
  <color name="cancel_button_background">#DDD</color>
  <color name="pre_order_button_background">#fff</color>
  <color name="color_card_background">#000</color>

@@ -181,7 +181,7 @@ public class LanguagePreference {
 
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
-    public static final String DELETE_FROM_FAV = "ADDED_TO_FAV";
+    public static final String DELETE_FROM_FAV = "DELETE_TO_FAV";
     public static final String SIGN_OUT_WARNING = "SIGN_OUT_WARNING";
     public static final String SEARCH_ALERT = "SEARCH_ALERT";
     public static final String TEXT_EMIAL = "TEXT_EMIAL";

@@ -107,6 +107,7 @@ public class EpisodeListOptionMenuHandler {
                 R.id.media_route_menu_item);
         /***************chromecast**********************/
 
+        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
@@ -129,18 +130,26 @@ public class EpisodeListOptionMenuHandler {
             login_menu.setVisible(false);
             register_menu.setVisible(false);
             profile_menu.setVisible(true);
-
-
             logout_menu.setVisible(true);
+
+
+            /**
+             * This has been modified.
+             */
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
+
+
+
+
+
 
         } else if (loggedInStr == null) {
 

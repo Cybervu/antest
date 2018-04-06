@@ -58,6 +58,7 @@
  <color name="style_circular_color">#999999</color>
  <color name="style_circular_color_2">#ff0400</color>
  <color name="button_background">#930f18</color>
+ <color name="view_more_less">#930f18</color>
  <color name="iv_check_box_default_color">#5c6873</color>
  <color name="voucher_inactive_button">#c3c3c3</color>
  <color name="layout_background_color">#fdf3f3</color>

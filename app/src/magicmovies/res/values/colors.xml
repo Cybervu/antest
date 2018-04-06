@@ -35,7 +35,6 @@
     <color name="edit_text_background">#EDEDED</color>
     <color name="ic_radio_button_default">#5c6873</color>
     <color name="favorite_color">#878282</color>
-    <color name="favorite_unselected_color">#a30c0c</color>
     <color name="sign_up_text_color">#60008C</color>
     <color name="edit_color">#dadada</color>
     <color name="hint_color">#999</color>
@@ -63,6 +62,7 @@
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#60008C</color>
+    <color name="view_more_less">#60008C</color>
     <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>

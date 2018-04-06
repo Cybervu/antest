@@ -17,13 +17,13 @@ import com.home.vod.preferences.LanguagePreference;
 
 public class LoginHandler {
     LoginActivity context;
-    private RelativeLayout GoogleSignView;
+    private RelativeLayout googleSignView;
     private Button loginButton;
     private LinearLayout btnLogin;
     private LanguagePreference languagePreference;
     public LoginHandler(LoginActivity context){
         this.context=context;
-       // GoogleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
 

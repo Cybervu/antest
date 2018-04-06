@@ -87,7 +87,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
       try {
 
         GridItem item = data.get(position);
-        holder.title.setText(item.getTitle().replaceAll("[^a-zA-Z0-9]", ""));
+        holder.title.setText(item.getTitle());
         String imageId = item.getImage();
 
 

@@ -47,7 +47,8 @@
     <color name="resumeCancelButtonBackgroundColor">#DDD</color>
     <color name="dividerColor">#f2e35d</color>
     <color name="borderColor">#f2e35d</color>
-    <color name="button_background">#f2e35d </color>
+    <color name="button_background">#f2e35d</color>
+    <color name="view_more_less">#0ca3db</color>
     <color name="videoTitleTextColor">#f2e35d</color>
     <color name="detailsPageTextColor">#fff</color>
     <color name="subtitleListBgColor">#fff</color>

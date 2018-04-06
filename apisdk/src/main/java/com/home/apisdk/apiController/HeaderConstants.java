@@ -43,7 +43,10 @@ public class HeaderConstants {
     /**
      * Constant for Card Number Header used in API Call
      */
-    public static final String CARD_NUMBER = "cardNumber";
+    public static final String CARD_NUMBER = "card_number";
+
+
+    public static final String AUTH_USER_CARD_NUMBER = "cardNumber";
     /**
      * Constant for CVV Header used in API Call
      */
