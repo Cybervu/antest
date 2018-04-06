@@ -925,18 +925,59 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
 
     }
-
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        id = preferenceManager.getUseridFromPref();
-        email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
-        MenuItem favorite_menu;
-        favorite_menu = menu.findItem(R.id.menu_item_favorite);
-        favorite_menu.setVisible(false);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem item, item1, item2, item3, item4, item5, item6, item7, item8;
+        item = menu.findItem(R.id.action_filter);
+        item.setVisible(false);
+
+
+
+        (menu.findItem(R.id.menu_item_language)).setVisible(false);
+
+        item1 = menu.findItem(R.id.menu_item_profile);
+        item1.setVisible(true);
+        item2 = menu.findItem(R.id.action_purchage);
+        item2.setVisible(false);
+        item3 = menu.findItem(R.id.action_logout);
+        item3.setVisible(false);
+        item4 = menu.findItem(R.id.action_login);
+        item4.setVisible(false);
+        item5 = menu.findItem(R.id.action_register);
+        item5.setVisible(false);
+        item6 = menu.findItem(R.id.action_mydownload);
+        item6.setVisible(false);
+        item7 = menu.findItem(R.id.action_search);
+        item7.setVisible(true);
+        item8 = menu.findItem(R.id.submenu);
+        item8.setVisible(false);
+        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+
+        menu.findItem(R.id.media_route_menu_item).setVisible(false);
         return true;
-    }*/
-    /*chromecast-------------------------------------*/
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                final Intent searchIntent = new Intent(FavoriteActivity.this, SearchActivity.class);
+                searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(searchIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_filter:
+                // Not implemented here
+                return false;
+
+            default:
+                break;
+        }
+        return false;
+    }
+
 
 
     public enum PlaybackLocation {
