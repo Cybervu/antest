@@ -2019,10 +2019,10 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
 
           try{
-              if((getApplicationContext().getPackageName()).equals("com.release.yesflix")){
+             // if((getApplicationContext().getPackageName()).equals("com.release.yesflix")){
                   videoHeight =500;
                   videoWidth = 300;
-              }
+            //  }
           }catch (Exception e){}
 
 
