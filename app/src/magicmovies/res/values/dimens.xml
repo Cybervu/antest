@@ -430,10 +430,10 @@
     <dimen name="star_height_width">48dp</dimen>
     <dimen name="subtitle_height_width">100dp</dimen>
 
-
     <dimen name="vertical_spacing">6dp</dimen>
     <dimen name="horizontal_spacing">6dp</dimen>
-    <dimen name="padding_left">10dp</dimen>
-    <dimen name="padding_right">0dp</dimen>
+
+    <dimen name="padding_left">8dp</dimen>
+    <dimen name="padding_right">8dp</dimen>
 </resources>
 

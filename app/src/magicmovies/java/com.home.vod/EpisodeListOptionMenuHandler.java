@@ -14,6 +14,7 @@ import com.home.vod.util.FeatureHandler;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -21,6 +22,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
@@ -77,6 +79,7 @@ public class EpisodeListOptionMenuHandler {
                 R.id.media_route_menu_item);
         /***************chromecast**********************/
 
+        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
@@ -108,7 +111,7 @@ public class EpisodeListOptionMenuHandler {
 
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
@@ -117,7 +120,7 @@ public class EpisodeListOptionMenuHandler {
             logout_menu.setVisible(true);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
 

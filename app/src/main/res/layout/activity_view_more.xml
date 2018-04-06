@@ -34,6 +34,8 @@
         android:horizontalSpacing="@dimen/horizontal_spacing"
         android:verticalSpacing="@dimen/vertical_spacing"
 
+
+
         />
     <!--<com.twotoasters.jazzylistview.JazzyGridView
         android:id="@+id/imagesGridView"
