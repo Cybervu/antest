@@ -40,8 +40,9 @@ public class FeatureHandler {
     public static final String IS_DEVICEMANGEMENT = "isDeviceMangenment";
     public static final String IS_APPNOTIFICATION = "isAppNotification";
     public static final String WATCH_HISTORY = "watch_history";
+    public static final String IS_LOGIN_REGISTRATION_REQUIRE = "is_login_registration_require";
 
-
+    public static final String DEFAULT_IS_LOGIN_REGISTRATION_REQUIRE = "1";
     public static final String DEFAULT_IS_WATCH_HISTORY = "0";
     public static final String DEFAULT_IS_MYLIBRARY = "0";
     public static final String DEFAULT_IS_RATING = "0";

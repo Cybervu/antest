@@ -168,6 +168,7 @@ public class Util {
     public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
     public static int image_compressed = 3;
     public static boolean hideBcakIcon = false;
+    public static boolean login_registration_require = false;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =

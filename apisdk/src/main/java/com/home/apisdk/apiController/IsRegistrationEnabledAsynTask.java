@@ -236,8 +236,14 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
                     e.printStackTrace();
                 }
 
-
-            } else {
+         /*@BISHAL
+        *Added to handle 455 status when need login is 0 the 455 status come
+         */
+            }else if (status==455){
+                status = Integer.parseInt(myJson.optString("code"));
+                message = myJson.optString("status");
+            }
+            else {
 
                 responseStr = "0";
                 status = 0;

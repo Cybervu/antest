@@ -303,8 +303,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             }
             else if(status == 454){
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
+               /* noInternetLayout.setVisibility(View.GONE);
+                geoBlockedLayout.setVisibility(View.VISIBLE);*/
+                preferenceManager.setCountryCodeToPref("en");
+                SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
+                planListInput.setAuthToken(authTokenStr);
+                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
+                asynGetPlanid.executeOnExecutor(threadPoolExecutor);
             }
             else {
 
@@ -361,31 +367,41 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             featureHandler.setDefaultFeaturePref(response);
 
         }catch (Exception e){}
-        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
-
-
-        languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
-        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
-
-        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, "" + isRegistrationEnabledOutputModel.getIsRestrictDevice());
-        languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
-        languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
-
-        languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
-        languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
-        languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
-
-
-        preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
-
-
-        /**
-         * Override feature properties.
+         /*@BISHAL
          */
+        if (status==200){
+            //Util.login_registration_require=true;
+            languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
-        splashScreenHandler.changeFeatureProperties(featureHandler);
+
+            languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
+            languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
+
+            languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, "" + isRegistrationEnabledOutputModel.getIsRestrictDevice());
+            languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
+            languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
+
+            languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
+            languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
+            languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
 
 
+            preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE,"1");
+
+
+            /**
+             * Override feature properties.
+             */
+
+            splashScreenHandler.changeFeatureProperties(featureHandler);
+            /*@BISHAL
+            *Handle 455 status
+         */
+        }else if (status==455){
+            //Util.login_registration_require=false;
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE,"0");
+        }
 
 
         LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
