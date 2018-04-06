@@ -1,6 +1,8 @@
 package com.home.vod;
 
 import android.app.Activity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,20 +14,28 @@ import com.home.vod.util.FeatureHandler;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 
 /**
@@ -74,8 +84,8 @@ public class EpisodeListOptionMenuHandler {
         register_menu = menu.findItem(R.id.action_register);
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
-        action_searchmenu = menu.findItem(R.id.search);
-        submenu = menu.findItem(R.id.option);
+        action_searchmenu = menu.findItem(R.id.action_search);
+        submenu = menu.findItem(R.id.submenu);
 
         /***************chromecast**********************/
 
