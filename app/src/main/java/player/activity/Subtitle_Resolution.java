@@ -92,6 +92,7 @@ public class Subtitle_Resolution extends Activity {
                 intent.putExtra("ResolutionUrl",ResolutionUrl);
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
             }
         });
@@ -105,6 +106,7 @@ public class Subtitle_Resolution extends Activity {
                 intent.putExtra("SubTitlePath",SubTitlePath);
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
             }
         });
@@ -116,6 +118,7 @@ public class Subtitle_Resolution extends Activity {
                 playerIntent.putExtra("position", "nothing");
                 playerIntent.putExtra("type", "subtitle_resolution");
                 setResult(RESULT_OK, playerIntent);
+                overridePendingTransition(0, 0);
                 finish();
                 return false;
             }
@@ -129,6 +132,7 @@ public class Subtitle_Resolution extends Activity {
         playerIntent.putExtra("position", "nothing");
         playerIntent.putExtra("type", "subtitle_resolution");
         setResult(RESULT_OK, playerIntent);
+        overridePendingTransition(0, 0);
         finish();
     }
 }
