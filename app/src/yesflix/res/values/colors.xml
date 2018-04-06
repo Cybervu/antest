@@ -23,7 +23,8 @@
     <color name="textColor">#3a4d53</color>
     <color name="player_title_color">#3a4d53</color>
 
-    <color name="no_internet_textColor">#000</color>
+    <color name="no_internet_textColor">#3a4d53</color>
+    <color name="noInternetColor">#3a4d53</color>
     <color name="toolbarTitleColor">#000</color>
     <color name="unSelectedHintColor">#000</color>
     <color name="selectedHintColor">#f2e35d</color>
