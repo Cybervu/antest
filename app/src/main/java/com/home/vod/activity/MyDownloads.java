@@ -421,6 +421,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         unregisterReceiver(UpadateDownloadList);
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -428,9 +429,13 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         MenuItem item, item1, item2, item3, item4, item5, item6, item7, item8;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        /***************chromecast**********************/
+        */
+/***************chromecast**********************//*
 
-        /***************chromecast**********************/
+
+        */
+/***************chromecast**********************//*
+
 
         (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
@@ -467,6 +472,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         }
         return false;
     }
+*/
 
     private BroadcastReceiver UpadateDownloadList = new BroadcastReceiver() {
         @Override

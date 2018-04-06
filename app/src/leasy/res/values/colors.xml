@@ -46,6 +46,7 @@
  <color name="nav_drawer_lineColor">#000000</color>
  <color name="nav_drawer_text_Color">#000000</color>
  <color name="button_background">#ffd20a</color>
+ <color name="view_more_less">#ffd20a</color>
  <color name="genre_text_color">#ffd20a</color>
  <color name="cancel_button_background">#DDD</color>
  <color name="pre_order_button_background">#fff</color>
