@@ -397,7 +397,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setReenterTransition(true);
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
     }
 
