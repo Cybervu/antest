@@ -3016,7 +3016,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         startActivity(intent);
         finish();
 
-
     }
 
     // Added Later By Bibhu For Subtitle Feature.

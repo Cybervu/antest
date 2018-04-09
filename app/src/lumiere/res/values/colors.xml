@@ -66,7 +66,7 @@
     <color name="ccbuttonbg">#2acb99</color>
     <color name="progressbarEndColor">#2acb99</color>
     <color name="progressbarstartColor">#000</color>
-    <color name="resumePopupColor">#000</color>
+    <color name="resumePopupColor">#95A9A9A9</color>
     <color name="termsTextColor">#2acb99</color>
     <color name="colorAccent">#2acb99</color>
     <color name="textColorPrimary">#3b5998</color>
