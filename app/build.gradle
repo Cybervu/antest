@@ -623,6 +623,35 @@ android {
     }
 }
 
+// To fetch the google json file of every flavour
+/*gradle.taskGraph.beforeTask { Task task ->
+    if (task.name ==~ /process.*GoogleServices/) {
+        android.applicationVariants.all { variant ->
+            if (task.name ==~ /(?i)process${variant.name}GoogleServices/) {
+                copy {
+                    from '/src/${variant.flavorName}'
+                    include 'google-services.json'
+                    into '.'
+                }
+            }
+        }
+    }
+}*/
+
+/*
+
+
+
+
+task switchToDebug(type: Copy) {
+    def buildType = 'debug'
+    description = 'Switches to DEBUG google-services.json'
+    from "${srcDir}/${buildType}"
+    include "$googleServicesJson"
+    into "$appModuleRootFolder"
+}
+*/
+
 
 android.variantFilter { variant ->
 
