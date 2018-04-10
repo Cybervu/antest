@@ -114,7 +114,7 @@ public class EpisodeListOptionMenuHandler {
 
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
@@ -123,7 +123,7 @@ public class EpisodeListOptionMenuHandler {
             logout_menu.setVisible(true);
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
 

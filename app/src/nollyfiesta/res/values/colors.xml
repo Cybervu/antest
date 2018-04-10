@@ -19,7 +19,8 @@
     <color name="borderColor">#5BA723</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
-    <color name="aboutustestcolor">#fff</color>
+    <color name="aboutustestcolor">#000000</color>
+    <color name="aboutustextcolor">#FFFFFF</color>
     <color name="lollipop_spiner_color">#e2e1e1</color>
     <color name="lollipop_spiner_color2">#7a7a7a</color>
     <color name="spinner_card_color">#FF0000</color>
