@@ -52,37 +52,54 @@
             <item
                 android:id="@+id/action_login"
                 android:icon="@drawable/login"
+                android:menuCategory="system"
+                android:titleCondensed="@string/app_id"
+                android:contentDescription="action_login"
                 android:title="Login"/>
             <item
                 android:id="@+id/action_register"
                 android:icon="@drawable/register"
-                android:title="Register"/>
+                android:title="Register"
+                android:titleCondensed="action_register"
+                android:contentDescription="action_register"/>
 
             <item
                 android:id="@+id/menu_item_language"
                 android:icon="@drawable/language"
-                android:title="Language"/>
+                android:title="Language"
+                android:titleCondensed="menu_item_language"
+                android:contentDescription="menu_item_language"/>
             <item
                 android:id="@+id/menu_item_profile"
                 android:icon="@drawable/register"
-                android:title="Profile"/>
+                android:title="Profile"
+                android:titleCondensed="menu_item_profile"
+                android:contentDescription="menu_item_profile"/>
 
             <item
                 android:id="@+id/menu_item_favorite"
                 android:icon="@drawable/favorite"
-                android:title="My favorites"/>
+                android:title="My favorites"
+                android:contentDescription="menu_item_favorite"
+                android:titleCondensed="menu_item_favorite"/>
             <item
                 android:id="@+id/action_purchage"
                 android:icon="@drawable/purchase_history"
-                android:title="Purchase History"/>
+                android:title="Purchase History"
+                android:titleCondensed="action_purchage"
+                android:contentDescription="action_purchase"/>
             <item
                 android:id="@+id/action_mydownload"
                 android:icon="@drawable/action_download"
-                android:title="My Download"/>
+                android:title="My Download"
+                android:titleCondensed="action_mydownload"
+                android:contentDescription="action_mydownload"/>
             <item
                 android:id="@+id/action_logout"
                 android:icon="@drawable/logout"
-                android:title="Logout"/>
+                android:title="Logout"
+                android:titleCondensed="action_logout"
+                android:contentDescription="action_logout"/>
 
         </menu>
     </item>

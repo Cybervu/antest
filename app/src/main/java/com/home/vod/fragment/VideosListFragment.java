@@ -2007,6 +2007,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
        // item.setVisible(true);*/
         videosListFragment.handleMenuFilter(menu);
 
+
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/
 
@@ -2221,6 +2222,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         itemsInServer = 0;
 
     }
+
 
 
     @Override

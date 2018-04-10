@@ -90,9 +90,14 @@ public class EpisodeListOptionMenuHandler {
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
         mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-        purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
         notification_menu.setTitle(languagePreference.getTextofLanguage(NOTIFICATION, DEFAULT_NOTIFICATION));
+
+
+        filter_menu.setVisible(false);
+        mediaRouteMenuItem.setVisible(false);
+        action_searchmenu.setVisible(false);
+        submenu.setVisible(false);
 
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
@@ -149,7 +154,6 @@ public class EpisodeListOptionMenuHandler {
 
             profile_menu.setVisible(false);
             purchage_menu.setVisible(false);
-            logout_menu = menu.findItem(R.id.action_logout);
             logout_menu.setVisible(false);
             mydownload_menu.setVisible(false);
             favorite_menu.setVisible(false);

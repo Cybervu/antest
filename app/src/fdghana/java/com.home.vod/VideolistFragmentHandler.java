@@ -11,16 +11,14 @@ import android.view.MenuItem;
 public class VideolistFragmentHandler {
     private Activity context;
 
-    public VideolistFragmentHandler(Activity context){
-        this.context=context;
+    public VideolistFragmentHandler(Activity context) {
+        this.context = context;
 
     }
 
-    public void handleMenuFilter(Menu menu){
-
+    public void handleMenuFilter(Menu menu) {
         MenuItem item;
-        item= menu.findItem(R.id.action_filter);
-         item.setVisible(true);
-
+        item = menu.findItem(R.id.action_filter);
+        item.setVisible(true);
     }
 }

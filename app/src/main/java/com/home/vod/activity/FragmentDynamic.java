@@ -77,7 +77,7 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
     int  videoWidth = 256;
     Bundle bundle;
     private ArrayList<GridItem> mGridData;
-    private ArrayList<String> url;
+    private ArrayList<String> url, urlTitle;
     private GridView mGridView;
     private ProgressBar mProgressBar;
     Context context;
@@ -112,6 +112,7 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
         languagePreference=LanguagePreference.getLanguagePreference(getActivity());
         mGridData = new ArrayList<>();
         url = new ArrayList<>();
+        urlTitle= new ArrayList<>();
         context = getActivity();
 
         bundle = getArguments();
@@ -210,6 +211,7 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
                 int isAPV = loadVideoOutputs.get(i).getIs_advance();
                 mGridData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
                 url.add(movieImageStr);
+                urlTitle.add(movieName);
             }
             if (getActivity()!=null && movieImageStr.trim() !=null) {
 
@@ -262,9 +264,9 @@ public class FragmentDynamic extends Fragment implements GetLoadVideosAsync.Load
 
                 }
                 if (videoWidth > videoHeight) {
-                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.home_280_card);
+                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.home_280_card, urlTitle);
                 } else {
-                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.list_single_card);
+                    mGridAdapter = new GridViewAdapter1(getContext(), url, R.layout.list_single_card,urlTitle);
                 }
                 mGridView.setAdapter(mGridAdapter);
                 mProgressBar.setVisibility(View.GONE);

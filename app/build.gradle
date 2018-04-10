@@ -462,8 +462,8 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"18852a67c1b0a8387c89fa7135fe8d83\""
             targetSdkVersion 23
-            versionCode 7
-            versionName '2.2.0'
+            versionCode 8
+            versionName '3.0.0'
         }
         fdghana_staging_ {
             dimension 'environment'

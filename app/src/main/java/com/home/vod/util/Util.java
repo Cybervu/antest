@@ -148,6 +148,7 @@ public class Util {
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static boolean favorite_clicked = false;
+    public static boolean review_clicked = false;
 
     public static int check_for_subscription = 0;
 

@@ -287,7 +287,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
+        LogUtil.showLog("BKS", "packagenameMAINactivity1===arrow.png" + SDKInitializer.user_Package_Name_At_Api);
 
         Util.drawer_collapse_expand_imageview.clear();
 
@@ -423,6 +423,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
+
 
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 /************chromecast***********/

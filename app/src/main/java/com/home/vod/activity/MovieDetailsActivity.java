@@ -373,6 +373,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
     public static final int PAYMENT_REQUESTCODE = 8889;
 
+    public static final int FAVOURITE_REQUEST = 1111;
+
 
     // voucher ends here //
 
@@ -383,6 +385,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+        Util.favorite_clicked = false;
 
         /***************chromecast**********************/
         if (mCastSession == null) {
@@ -443,7 +446,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             case R.id.action_register:
                 // Kushal
                 Intent registerIntent = new Intent(MovieDetailsActivity.this, FdGhana_loginActivity.class);
-                registerIntent.putExtra("type","signup");
+                registerIntent.putExtra("type", "signup");
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here
@@ -923,31 +926,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
 
                 if (loggedInStr != null) {
-                    if (isFavorite == 1) {
-                        Log.v("goofy", "Item deleted");
-
-                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
-                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
-                        deleteFavInputModel.setIsEpisode(isEpisode);
-
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
-
-                    } else {
-
-                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
-                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                        asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-
-                    }
+                    updateReviewStatus();
                 } else {
                     Util.favorite_clicked = true;
                     final Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
@@ -955,8 +934,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         public void run() {
                             registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             registerActivity.putExtra("from", this.getClass().getName());
-                            startActivity(registerActivity);
-
+                            startActivityForResult(registerActivity, FAVOURITE_REQUEST);
                         }
                     });
 
@@ -1474,7 +1452,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
-     /*chromecast-------------------------------------*/
+        /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
@@ -2323,6 +2301,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         } else if (requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK) {
             getVideoInfo();
+        } else if (requestCode == FAVOURITE_REQUEST && resultCode == RESULT_OK) {
+            updateReviewStatus();
         }
 
 
@@ -2337,22 +2317,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
     public void GetReviewDetails() {
+        try {
 
-
-        ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-        viewContentRatingInputModel.setAuthToken(authTokenStr);
-        viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
+            ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
+            viewContentRatingInputModel.setAuthToken(authTokenStr);
+            viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
 //        viewContentRatingInputModel.setUser_id("142026");
-        viewContentRatingInputModel.setContent_id(movieIdStr.trim());
-        viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynGetReviewDetails = new ViewContentRatingAsynTask(viewContentRatingInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
-        asynGetReviewDetails.executeOnExecutor(threadPoolExecutor);
+            viewContentRatingInputModel.setContent_id(movieIdStr.trim());
+            viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynGetReviewDetails = new ViewContentRatingAsynTask(viewContentRatingInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
+            asynGetReviewDetails.executeOnExecutor(threadPoolExecutor);
 
 
-        Log.v("MUVI2", "user id" + preferenceManager.getUseridFromPref());
-        Log.v("MUVI2", "Movie  id" + movieIdStr.trim());
-        Log.v("MUVI2", "View Content Rating Call");
-
+            Log.v("MUVI2", "user id" + preferenceManager.getUseridFromPref());
+            Log.v("MUVI2", "Movie  id" + movieIdStr.trim());
+            Log.v("MUVI2", "View Content Rating Call");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -3313,9 +3295,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     .into(moviePoster);
 
 
-        } else {
+        } else if (status == 414) {
+            noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
+
+            story_layout.setVisibility(View.GONE);
+            bannerImageRelativeLayout.setVisibility(View.GONE);
+            iconImageRelativeLayout.setVisibility(View.GONE);
+            return;
+        } else {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.bringToFront();
+            noDataLayout.setVisibility(View.VISIBLE);
+            playButton.setEnabled(false);
+            bannerImageRelativeLayout.setVisibility(View.GONE);
         }
 
         Log.v("MUVI", "call review details");
@@ -3793,5 +3787,35 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+    }
+
+    public void updateReviewStatus() {
+        if (isFavorite == 1) {
+            Log.v("goofy", "Item deleted");
+
+            DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+            deleteFavInputModel.setAuthTokenStr(authTokenStr);
+            deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            deleteFavInputModel.setMovieUniqueId(movieUniqueId);
+            deleteFavInputModel.setIsEpisode(isEpisode);
+
+            DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
+            deleteFavAsync.executeOnExecutor(threadPoolExecutor);
+
+
+        } else {
+
+            AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+            addToFavInputModel.setAuthToken(authTokenStr);
+            addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+            addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            addToFavInputModel.setIsEpisodeStr(isEpisode);
+
+            asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
+            asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+
+        }
+
+
     }
 }

@@ -60,6 +60,7 @@
             android:imeOptions="actionDone"
             android:paddingBottom="@dimen/Login_drawing_padding"
             android:paddingTop="@dimen/Login_drawing_padding"
+            android:maxLength="50"
             android:layout_alignLeft="@+id/sectionTitle"
             android:layout_marginBottom="@dimen/payment_margin_btn_top"
             android:layout_marginTop="@dimen/review_edit_text_margin"
@@ -87,13 +88,14 @@
 
 
             />
-        <View
+      <!--  <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/border_line_height"
+            android:id="@+id/prevReviews"
             android:background="@color/com_facebook_likeboxcountview_border_color"
             android:layout_below="@+id/submitReviewButton"
             android:layout_margin="@dimen/payment_relative_margin"
-            />
+            />-->
     </RelativeLayout>
 
 

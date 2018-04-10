@@ -509,6 +509,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 updateProgressBar();
             }
         }
+        try {
+            if (emVideoView != null) {
+                emVideoView.start();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -3289,8 +3296,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 
+
+
         Log.v("PINTU", "onPause called");
         super.onPause();
+        try {
+            if (emVideoView != null) {
+                emVideoView.pause();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private Runnable subtitleProcessesor = new Runnable() {

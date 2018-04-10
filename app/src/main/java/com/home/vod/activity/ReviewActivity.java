@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.GridView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.AddContentRatingAsynTask;
@@ -104,7 +107,9 @@ public class ReviewActivity extends AppCompatActivity implements
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+    public static final int REVIEW_REQUEST = 3333;
+    // Kushal
+    boolean limit= false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +134,7 @@ public class ReviewActivity extends AppCompatActivity implements
         submitReviewTextView = (EditText) findViewById(R.id.reviewEditText);
         submitButton = (Button) findViewById(R.id.submitReviewButton);
         addRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+        // maximum chracter in review
 
         FontUtls.loadFont(ReviewActivity.this, getResources().getString(R.string.light_fonts),submitButton);
         FontUtls.loadFont(ReviewActivity.this, getResources().getString(R.string.light_fonts),submitTitleTextView);
@@ -139,6 +145,13 @@ public class ReviewActivity extends AppCompatActivity implements
         String clickHereStr = languagePreference.getTextofLanguage(NEED_LOGIN_TO_REVIEW,DEFAULT_NEED_LOGIN_TO_REVIEW) + " " + languagePreference.getTextofLanguage(CLICK_HERE,DEFAULT_CLICK_HERE) + " "+ languagePreference.getTextofLanguage(TO_LOGIN,DEFAULT_TO_LOGIN);
 
         /*******enter key of keyboard *************/
+
+        //Set Max character
+        InputFilter filterArray = new InputFilter.LengthFilter(50);
+
+        //Kushal
+        checkForLoginDetails();
+        //checkForReviewLength(submitTitleTextView);
 
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -152,7 +165,8 @@ public class ReviewActivity extends AppCompatActivity implements
                 return null;
             }
         };
-
+        // Kushal
+        // To add maxlength to edittext as input filters (multiple)
         submitReviewTextView.setFilters(new InputFilter[]{filter});
 
         SpannableString mySpannableString = new SpannableString(clickHereStr);
@@ -165,9 +179,10 @@ public class ReviewActivity extends AppCompatActivity implements
                 final Intent registerActivity = new Intent(ReviewActivity.this, PreLoginActivity.class);
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        Util.review_clicked=true;
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         registerActivity.putExtra("from", this.getClass().getName());
-                        startActivity(registerActivity);
+                        startActivityForResult(registerActivity,REVIEW_REQUEST);
 
                     }
                 });
@@ -222,37 +237,62 @@ public class ReviewActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*if(isLogin == 1) {
-            if (pref != null) {
-                LogUtil.showLog("MUVI","FHFH");
-                String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-                if (loggedInStr == null) {
-                    LogUtil.showLog("MUVI","loggedInStr");
+    private void checkForLoginDetails() {
+        if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
-                    clickHereToLogin.setVisibility(View.VISIBLE);
-                    submitRatingLayout.setVisibility(View.GONE);
-                }else{
-                    LogUtil.showLog("MUVI","loggedInStr1");
-
-                    clickHereToLogin.setVisibility(View.GONE);
-                    submitRatingLayout.setVisibility(View.VISIBLE);
-                }
-            }else{
-                LogUtil.showLog("MUVI","loggedInStr2");
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
+            if (loggedInStr == null) {
+                LogUtil.showLog("MUVI","loggedInStr");
 
                 clickHereToLogin.setVisibility(View.VISIBLE);
                 submitRatingLayout.setVisibility(View.GONE);
+            }else{
+               /* if (viewContentRatingOutputModel.getShowrating() == 0){
+                    submitRatingLayout.setVisibility(View.GONE);
+                }else{
+                    submitRatingLayout.setVisibility(View.VISIBLE);
+
+                }*/
+                clickHereToLogin.setVisibility(View.GONE);
+                // submitRatingLayout.setVisibility(View.VISIBLE);
             }
         }else{
-            LogUtil.showLog("MUVI","loggedInStr3");
+            LogUtil.showLog("MUVI","loggedInStr2");
 
-            clickHereToLogin.setVisibility(View.GONE);
+            clickHereToLogin.setVisibility(View.VISIBLE);
             submitRatingLayout.setVisibility(View.GONE);
+        }
+    }
 
-        }*/
+   /* private void checkForReviewLength(TextView submitTitleTextView) {
+        submitTitleTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count>50){
+                    Toast.makeText(ReviewActivity.this, ""+count, Toast.LENGTH_SHORT).show();
+                    limit=true;
+                }else{
+                    limit=false;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }*/
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         GetReviewDetails();
     }
 

@@ -604,13 +604,12 @@ public class FdGhana_loginActivity extends AppCompatActivity implements LoginAsy
                             /** review **/
                             onBackPressed();
                         } else {
-                            if (com.home.vod.util.Util.check_for_subscription == 1) {
+                            if (com.home.vod.util.Util.check_for_subscription == 1 ||
+                                    com.home.vod.util.Util.favorite_clicked ||
+                                    com.home.vod.util.Util.review_clicked) {
                                 //go to subscription page
                                 if (NetworkStatus.getInstance().isConnected(this)) {
-
                                     setResultAtFinishActivity();
-
-
                                 } else {
                                     Toast.makeText(FdGhana_loginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }

@@ -1,6 +1,7 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,15 @@ public class GridViewAdapter1 extends BaseAdapter {
     private int layoutResourceId;
     private static LayoutInflater inflater=null;
     private ArrayList<String> urls = new ArrayList<>();
+    private ArrayList<String> urlTitles = new ArrayList<>();
     public ImageLoader imageLoader;
 
-    public GridViewAdapter1(Context mContext, ArrayList<String> url, int layoutResourceId) {
+    public GridViewAdapter1(Context mContext, ArrayList<String> url, int layoutResourceId,ArrayList<String> urlTitle) {
 
 
         this.mContext = mContext;
         this.urls = url;
+        this.urlTitles= urlTitle;
         this.layoutResourceId = layoutResourceId;
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -75,11 +78,11 @@ public class GridViewAdapter1 extends BaseAdapter {
         }
 
         //GridItem item = mGridData.get(position);
-        //holder.titleTextView.setText(Html.fromHtml(item.getTitle()));
+        holder.titleTextView.setText(Html.fromHtml(urlTitles.get(position)));
 
         Picasso.with(mContext).load(urls.get(position)).into(holder.imageView);
         //imageLoader.DisplayImage(urls.get(position), holder.imageView);
-        holder.titleTextView.setVisibility(View.GONE);
+        holder.titleTextView.setVisibility(View.VISIBLE);
         return vi;
     }
 

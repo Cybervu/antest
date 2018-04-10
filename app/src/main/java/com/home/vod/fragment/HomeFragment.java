@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         mDemoSlider = (SliderLayout) v.findViewById(R.id.sliderLayout);
 
 
-        sliderRelativeLayout.setVisibility(View.GONE);
+       // sliderRelativeLayout.setVisibility(View.GONE);
         noInternetLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
         noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
