@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/login_padding"
-            >
+            android:padding="@dimen/login_padding">
 
             <ImageView
                 android:id="@+id/loginImageView"
@@ -41,7 +40,6 @@
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:paddingBottom="@dimen/login_padding_bottom"
                 android:paddingTop="@dimen/login_padding_bottom"
-
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/pass_text_size"/>
