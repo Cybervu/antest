@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 
+import java.util.regex.Pattern;
+
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_LESS;
@@ -88,8 +90,9 @@ public class ResizableCustomView {
                         int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                         String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
                         try {
+                            String removedot = Pattern.quote("...");
                             if (text.contains("..."))
-                                text=text.replace("..."," ");
+                                text=text.replace(removedot," ");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
