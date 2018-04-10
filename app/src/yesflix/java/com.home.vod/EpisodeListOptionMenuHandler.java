@@ -34,6 +34,7 @@ import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -45,6 +46,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
@@ -90,7 +92,7 @@ public class EpisodeListOptionMenuHandler {
         filter_menu = menu.findItem(R.id.action_filter);
         filter_menu.setVisible(false);
         login_menu = menu.findItem(R.id.action_login);
-        (menu.findItem(R.id.menu_item_language)).setVisible(false);
+        menu_language= (menu.findItem(R.id.menu_item_language)).setVisible(false);
         profile_menu = menu.findItem(R.id.menu_item_profile);
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         purchage_menu = menu.findItem(R.id.action_purchage);

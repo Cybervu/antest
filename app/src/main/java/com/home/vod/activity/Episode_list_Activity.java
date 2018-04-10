@@ -560,10 +560,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                             Intent resumeIntent = new Intent(Episode_list_Activity.this, ResumePopupActivity.class);
                             if (Util.goToLibraryplayer)
-                                resumeIntent.putExtra("activity", "MyLibraryPlayer");
+                                resumeIntent.putExtra("activity","MyLibraryPlayer");
                             else
-                                resumeIntent.putExtra("activity", "Episode_list_Activity");
-
+                                resumeIntent.putExtra("activity","Episode_list_Activity");
                             startActivityForResult(resumeIntent, 1001);
 
                         } else {

@@ -697,6 +697,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+        softnet {
+            minSdkVersion 21
+            applicationId 'com.release.softnet'
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"7ac0a44a724382acd4b01c4332887aa6\""
+//             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            dimension 'vendor'
+        }
+        softnet_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        softnet_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -814,6 +833,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('nollyfiesta') && (environment.equals('nollyfiesta_staging_') || environment.equals('nollyfiesta_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('softnet') && (environment.equals('softnet_staging_') || environment.equals('softnet_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
