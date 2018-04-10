@@ -144,6 +144,7 @@ public class Util {
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static boolean favorite_clicked = false;
 
+
     public static int check_for_subscription = 0;
 
     public static String selected_season_id = "0";

@@ -31,7 +31,8 @@
                     android:id="@+id/episodeImageView"
                     android:layout_width="@dimen/episodelayout_width"
                     android:layout_height="@dimen/episodelayout_height"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/logo"
+                    android:scaleType="fitXY"/>
 
                 <ImageView
                     android:id="@+id/movieImageOverlay"
