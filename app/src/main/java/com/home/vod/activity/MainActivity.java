@@ -424,7 +424,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
 
-
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 /************chromecast***********/
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,

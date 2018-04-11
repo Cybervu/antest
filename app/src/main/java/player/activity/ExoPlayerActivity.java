@@ -509,9 +509,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 updateProgressBar();
             }
         }
+        // Kushal- To start the player when the phone is locked
         try {
-            if (emVideoView != null) {
-                emVideoView.start();
+            if (mCastSession!=null && mCastSession.isConnected()) {
+
+            }else{
+                if (emVideoView != null) {
+                    emVideoView.start();
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -3300,9 +3305,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         Log.v("PINTU", "onPause called");
         super.onPause();
+        // Kushal- To stop the player when the phone is locked
         try {
-            if (emVideoView != null) {
-                emVideoView.pause();
+            if (mCastSession!=null && mCastSession.isConnected()) {
+
+            }else{
+                if (emVideoView != null) {
+                    emVideoView.pause();
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -4374,7 +4384,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 PreviousUsedDataByApp(false);
                 emVideoView.start();
 
-                if (cast_disconnected_position != 0) {
+                if (cast_disconnected_position != 0 && content_types_id != 4) {
 
                     Log.v("BIBHU2", "onSessionEnded===and video log called");
 

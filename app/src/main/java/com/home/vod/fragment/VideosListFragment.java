@@ -60,6 +60,7 @@ import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 import com.home.apisdk.apiModel.LoadFilterVideoInput;
 import com.home.apisdk.apiModel.LoadFilterVideoOutput;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.VideolistFragmentHandler;
@@ -153,6 +154,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         LoadFilterVideoAsync.LoadFilterVideoListner{
 
     public static boolean clearClicked = false;
+    // Kushal
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    PreferenceManager preferenceManager;
 
 
     @Override
@@ -568,7 +572,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     String videoImageStrToHeight;
     int  videoHeight = 185;
     int  videoWidth = 256;
-    PreferenceManager preferenceManager;
     LanguagePreference languagePreference;
     GridItem itemToPlay;
     private ProgressBarHandler pDialog;
@@ -676,6 +679,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 }
             }
         };
+        // Kushal
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(getActivity());
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
+        //
         mCastContext = CastContext.getSharedInstance(getActivity());
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
 
@@ -696,7 +703,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
-        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
 
 
@@ -2000,11 +2006,18 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         // Do something that differs the Activity's menu here
 
        /* MenuItem item,item1;
         item= menu.findItem(R.id.action_filter);
        // item.setVisible(true);*/
+       // Kuhal - to remove the previous menu
+        menu.clear();
+        MenuItem item;
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+        item = menu.findItem(R.id.action_filter);
+        item.setVisible(false);
         videosListFragment.handleMenuFilter(menu);
 
 
@@ -2019,7 +2032,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         /***************chromecast**********************/
 
 
-        super.onCreateOptionsMenu(menu, inflater);
+
 
     }
 

@@ -40,6 +40,7 @@ import com.home.apisdk.apiModel.HomePageInputModel;
 import com.home.apisdk.apiModel.HomePageSectionModel;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HomePageHandler;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
@@ -50,6 +51,7 @@ import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -142,8 +144,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     private ViewPager viewPager;*/
     int banner[] = {R.drawable.slider,R.drawable.slider1,R.drawable.slider2,R.drawable.slider3,R.drawable.slider4};
   //  TextView line;
+    // Kushal
     HomePageHandler homePageHandler;
-
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    PreferenceManager preferenceManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -152,6 +156,11 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         setHasOptionsMenu(true);
         homePageHandler=new HomePageHandler(context,v,this);
         Util.image_orentiation.clear();
+
+        // Kushal
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(getActivity());
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
+        //
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
@@ -208,9 +217,16 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         // Do something that differs the Activity's menu here
 
+        //Kushal- To clear previous menu inflating
+       /* menu.clear();
+        inflater.inflate(R.menu.menu_main,menu);*/
+        //
+        menu.clear();
         MenuItem item;
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
       /*  *//***************chromecast**********************//*
@@ -221,7 +237,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         *//***************chromecast**********************/
 
-        super.onCreateOptionsMenu(menu, inflater);
+
 
     }
 
