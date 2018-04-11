@@ -2,8 +2,14 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -85,8 +91,9 @@ public class RegisterUIHandler {
 
     }
     public void setTermsTextView(LanguagePreference languagePreference){
-        termsTextView1.setText(Html.fromHtml(languagePreference.getTextofLanguage(CHK_OVER_18,DEFAULT_CHK_OVER_18)));
+        termsTextView1.setText(Html.fromHtml(languagePreference.getTextofLanguage(CHK_OVER_18,DEFAULT_CHK_OVER_18))+" "+languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
+        termsTextView.setVisibility(View.GONE);
 
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName_first);
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName_last);
@@ -99,11 +106,47 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.yesflix.de/terms-privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.lumiereseries.com/algemene-voorwaarden"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }
         });
+
+
+
+//        termsTextView1.setLinkTextColor(Color.BLUE); // default link color for clickable span, we can also set it in xml by android:textColorLink=""
+
+
+
+        ClickableSpan noUnderLineClickSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.lumiereseries.com/algemene-voorwaarden"));
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                context.startActivity(browserIntent);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.parseColor("#2acb99")); // specific color for this link
+            }
+        };
+
+        makeLinks(termsTextView1, new String[] {languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS)}, new ClickableSpan[] { noUnderLineClickSpan});
+
+
+
+
+
+
+
+
+
+
+
+
    }
    public void getRegisterName(){
          regNameStr_first = editName_first.getText().toString().trim();
@@ -122,6 +165,30 @@ public class RegisterUIHandler {
 
     public void callSignin(LanguagePreference languagePreference){
 
+    }
+
+
+    /**
+     *
+     * @param textView
+     * @param links
+     * @param clickableSpans
+     */
+
+    public void makeLinks(TextView textView, String[] links, ClickableSpan[] clickableSpans) {
+        SpannableString spannableString = new SpannableString(textView.getText());
+        for (int i = 0; i < links.length; i++) {
+            ClickableSpan clickableSpan = clickableSpans[i];
+            String link = links[i];
+
+            int startIndexOfLink = textView.getText().toString().indexOf(link);
+            spannableString.setSpan(clickableSpan, startIndexOfLink,
+                    startIndexOfLink + link.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        textView.setHighlightColor(
+                Color.TRANSPARENT); // prevent TextView change background when highlight
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 
 

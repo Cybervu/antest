@@ -102,7 +102,7 @@
  <color name="playPauseColor">#00000000</color>
  <color name="waterMarkTextColor">#80ffffff</color>
  <color name="seekTimeTextColor">#80ffffff</color>
- <color name="aboutustextcolor">#000</color>
+ <color name="aboutustextcolor">#FFFFFF</color>
  <color name="subTitleTextColor">#000</color>
  <color name="totalTimeTxtColor">#ffffff</color>
  <color name="contentTitleColor">#fff</color>

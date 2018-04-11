@@ -423,7 +423,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         if (!play_video) {
 
 
-
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -796,7 +795,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -878,7 +877,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
 
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1068,7 +1067,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(Episode_list_Activity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
@@ -1358,7 +1357,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
 
-                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                if (monitizationDetailsOutput.getPpv() != null && (Integer.parseInt(monitizationDetailsOutput.getPpv())) == 1) {
                     isVoucher = 0;
                 }
 
@@ -3166,6 +3165,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
 
         visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
 
         return true;
     }
@@ -4262,19 +4262,19 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
 
-                   if(isVoucher ==1){
-                       GetVoucherPlan();
-                   }else{
-                       if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                           ShowPpvPopUp();
-                       } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                           Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                           startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
-                       } else {
-                           ShowPpvPopUp();
-                       }
-                   }
+                    if (isVoucher == 1) {
+                        GetVoucherPlan();
+                    } else {
+                        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                            ShowPpvPopUp();
+                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                        } else {
+                            ShowPpvPopUp();
+                        }
+                    }
 
                 }
 

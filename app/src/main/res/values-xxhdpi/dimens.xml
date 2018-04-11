@@ -76,6 +76,7 @@
     <dimen name="editbox_text_size">16sp</dimen>
     <dimen name="itemtitle_text_size">18sp</dimen>
     <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="loginImageViewMarging_top_padding">5dp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
