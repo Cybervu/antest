@@ -22,7 +22,7 @@
         android:id="@+id/media_route_menu_item"
         android:title="@string/media_route_menu_title"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        android:orderInCategory="102"
+        android:orderInCategory="101"
         android:icon="@drawable/search"
         app:showAsAction="always" />
     <item
@@ -37,7 +37,7 @@
         android:id="@+id/action_filter"
         android:title="filter"
         android:icon="@drawable/filter"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         app:showAsAction="always|never"
         android:visible="false"        />
 
@@ -58,14 +58,17 @@
                 android:icon="@drawable/register"
                 android:title="Register"/>
 
-            <item
-                android:id="@+id/menu_item_language"
-                android:icon="@drawable/language"
-                android:title="Language"/>
+
             <item
                 android:id="@+id/menu_item_profile"
                 android:icon="@drawable/register"
                 android:title="Profile"/>
+
+            <item
+                android:id="@+id/menu_item_language"
+                android:icon="@drawable/language"
+                android:title="Language"/>
+
             <item
                 android:id="@+id/menu_item_favorite"
                 android:icon="@drawable/favorite"
