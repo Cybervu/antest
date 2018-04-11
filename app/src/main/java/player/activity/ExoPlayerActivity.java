@@ -1368,12 +1368,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         center_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!video_prepared)
+                    return;
                 Execute_Pause_Play();
             }
         });
         latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!video_prepared)
+                    return;
 
                 if (Util.hide_pause) {
                     Util.hide_pause = false;

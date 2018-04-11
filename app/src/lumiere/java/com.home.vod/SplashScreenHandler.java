@@ -31,7 +31,6 @@ public class SplashScreenHandler {
 
 
     public void changeFeatureProperties(FeatureHandler featureHandler){
-        featureHandler.setFeatureFlag(FeatureHandler.IS_OFFLINE,"0");
     }
 
 

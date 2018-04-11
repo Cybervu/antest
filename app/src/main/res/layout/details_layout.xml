@@ -332,6 +332,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="@dimen/ppv_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
+                    android:layout_marginBottom="@dimen/marginleft10dp"
                     android:textColor="@color/castCrewTitleTextColor"
                     android:textSize="@dimen/forgot_text_size"
                     android:textStyle="bold" />
