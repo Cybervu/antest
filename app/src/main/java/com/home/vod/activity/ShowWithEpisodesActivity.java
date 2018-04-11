@@ -970,10 +970,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
         if (status > 0) {
-
             if (status == 425) {
-
-
                 if (isVoucher == 1) {
                     // API call for get Voucher Plan
                     GetVoucherPlan();
@@ -992,7 +989,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     dlgAlert.create().show();
                 }
             } else if (status == 426) {
-
 
                 if (isVoucher == 1) {
                     // API call for get Voucher Plan
