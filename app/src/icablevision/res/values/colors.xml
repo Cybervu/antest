@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--added for app background color by bishal-->
-    <color name="seasonBackgroundColor">#fff</color>
-    <color name="background_start_color">#fff</color>
-    <color name="background_end_color">#fff</color>
-    <color name="appBackgroundColor">#fff</color>
-    <color name="textColor">#757575</color>
-    <color name="player_title_color">#757575</color>
-    <color name="videotextColor">#000000</color>
+    <color name="seasonBackgroundColor">#000000</color>
+    <color name="background_start_color">#000000</color>
+    <color name="background_end_color">#000000</color>
+    <color name="appBackgroundColor">#000000</color>
+    <color name="textColor">#ffffff</color>
+    <color name="player_title_color">#ffffff</color>
+    <color name="videotextColor">#ffffff</color>
     <!--added by bishal in detaills layout story color id-->
-    <color name="videostorytextcolor">#000000</color>
+    <color name="videostorytextcolor">#ffffff</color>
     <color name="banner_line_color">#32c5d2</color>
-    <color name="cast_description_color">#000</color>
-    <color name="videotitleColor">#000000</color>
+    <color name="cast_description_color">#ffffff</color>
+    <color name="videotitleColor">#ffffff</color>
     <color name="loginTextViewColor">#32c5d2</color>
     <color name="buttonTextColor">#fff</color>
     <color name="casttextColor">#32c5d2</color>
     <color name="borderColor">#32c5d2</color>
-    <color name="checkboxcolor">#000</color>
-    <color name="toolbarTitleColor">#fff</color>
-    <color name="aboutustestcolor">#fff</color>
+    <color name="checkboxcolor">#ffffff</color>
+    <color name="toolbarTitleColor">#ffffff</color>
+    <color name="aboutustestcolor">#000000</color>
     <color name="lollipop_spiner_color">#e2e1e1</color>
     <color name="lollipop_spiner_color2">#7a7a7a</color>
-    <color name="spinner_card_color">#FF0000</color>
+    <color name="spinner_card_color">#ffffff</color>
     <color name="style_circular_color">#999999</color>
     <color name="style_circular_color_2">#ff0400</color>
     <color name="spinner_card_color2">#FAFAFA</color>
-    <color name="forgotPasswordTextViewColor">#32c5d2</color>
-    <color name="iv_check_box_default_color">#5c6873</color>
+    <color name="forgotPasswordTextViewColor">#ffffff</color>
+    <color name="iv_check_box_default_color">#ffffff</color>
     <color name="fb_text_color">#fff</color>
     <color name="layout_background_color">#fdf3f3</color>
-    <color name="login_new_user_text_color">#737373</color>
-    <color name="card_backgroud_drawable">#303030</color>
+    <color name="login_new_user_text_color">#ffffff</color>
+    <color name="card_backgroud_drawable">#ffffff</color>
     <color name="edit_text_background">#EDEDED</color>
     <color name="ic_radio_button_default">#5c6873</color>
     <color name="favorite_color">#878282</color>
@@ -39,7 +39,7 @@
     <color name="edit_color">#dadada</color>
     <color name="hint_color">#999</color>
     <color name="edit_color2">#00FFFFFF</color>
-    <color name="alreadyMemberTextColor">#757575</color>
+    <color name="alreadyMemberTextColor">#FFFFFF</color>
     <color name="alreadyHaveALoginButtonTextColor">#32c5d2</color>
     <color name="border_color">#32c5d2</color>
     <color name="cancel_button_text_color">#32c5d2</color>
@@ -48,9 +48,9 @@
     <color name="FilterTitleTextColor">#32c5d2</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
-    <color name="pageTitleColor">#3f444a</color>
+    <color name="pageTitleColor">#ffffff</color>
     <color name="preOrderButtonTextColor">#DDD</color>
-    <color name="spinnerDropDownListColor">#000</color>
+    <color name="spinnerDropDownListColor">#ffffff</color>
     <color name="leftMenuBackground">#fff</color>
     <color name="colorPrimary">#32c5d2</color>
     <color name="navlogobackgroundcolor">#ffffff</color>
@@ -58,7 +58,7 @@
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
-    <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_drawer_lineColor">#ffffff</color>
     <color name="nav_lineColor">#32c5d2</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#32c5d2</color>
@@ -77,7 +77,7 @@
     <color name="filter_text_color">#000</color>
     <color name="censorRatingBackground">#32c5d2</color>
     <color name="white">#ffffff</color>
-    <color name="loader_color">#5d6c7e</color>
+    <color name="loader_color">#32c5d2</color>
     <color name="hint_background">#32c5d2</color>
     <color name="noInternetColor">#5c6873</color>
     <color name="editTextColor">#5c6873</color>

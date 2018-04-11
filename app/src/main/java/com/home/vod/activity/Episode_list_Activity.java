@@ -93,7 +93,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.vod.BuildConfig;
-import com.home.vod                                                                                                                                                                                                              .CheckVoucherOrPpvPaymentHandler;
+import com.home.vod.CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
@@ -402,7 +402,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         if (!play_video) {
 
 
-
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -513,21 +512,21 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
-            if(_video_details_output.isWatermark_status()){
+            if (_video_details_output.isWatermark_status()) {
                 playerModel.setWaterMark(true);
-                if(_video_details_output.isWatermark_email())
+                if (_video_details_output.isWatermark_email())
                     playerModel.useEmail(true);
                 else
                     playerModel.useEmail(false);
-                if(_video_details_output.isWatermark_ip())
+                if (_video_details_output.isWatermark_ip())
                     playerModel.useIp(true);
                 else
                     playerModel.useIp(false);
-                if(_video_details_output.isWatermark_date())
+                if (_video_details_output.isWatermark_date())
                     playerModel.useDate(true);
                 else
                     playerModel.useDate(false);
-            }else{
+            } else {
                 playerModel.setWaterMark(false);
             }
 
@@ -548,7 +547,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         });
                 dlgAlert.create().show();*/
             } else {
-
 
 
                 // condition for checking if the response has third party url or not.
@@ -775,7 +773,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -857,7 +855,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
 
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1047,7 +1045,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(Episode_list_Activity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
@@ -1337,7 +1335,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
 
-                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                if (monitizationDetailsOutput.getPpv() != null && (Integer.parseInt(monitizationDetailsOutput.getPpv())) == 1) {
                     isVoucher = 0;
                 }
 
@@ -1472,7 +1470,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             dlgAlert.create().show();
         }
     }
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     public enum PlaybackLocation {
         LOCAL,
@@ -1510,7 +1508,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -1520,7 +1518,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
-     /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     /*chromecast-------------------------------------*/
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
@@ -1572,13 +1570,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
     MediaInfo mediaInfo;
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.episode_listing);
-        Util.check_for_subscription=0;
+        Util.check_for_subscription = 0;
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(Episode_list_Activity.this);
@@ -1737,7 +1735,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         });
 
-/*----------------------------------chromecast-------------------------------------*/
+        /*----------------------------------chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
@@ -1834,7 +1832,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
 
     }
-/*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     public void clickItem(EpisodesListModel item) {
 
@@ -1939,11 +1937,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 } else {
 
-                        Util.check_for_subscription = 1;
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        registerActivity.putExtra("PlayerModel", playerModel);
-                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                    Util.check_for_subscription = 1;
+                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("PlayerModel", playerModel);
+                    startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
                 }
             } else {
@@ -3117,7 +3115,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
 
         return true;
     }
@@ -3155,7 +3153,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             case R.id.menu_item_favorite:
 
                 Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
-                favoriteIntent.putExtra("sectionName",languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
@@ -4040,19 +4038,19 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
 
-                   if(isVoucher ==1){
-                       GetVoucherPlan();
-                   }else{
-                       if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                           ShowPpvPopUp();
-                       } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                           Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                           startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
-                       } else {
-                           ShowPpvPopUp();
-                       }
-                   }
+                    if (isVoucher == 1) {
+                        GetVoucherPlan();
+                    } else {
+                        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                            ShowPpvPopUp();
+                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                        } else {
+                            ShowPpvPopUp();
+                        }
+                    }
 
                 }
 
@@ -4394,15 +4392,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     public void handleFor428Status(String subscription_Str) {
 
-        if(isVoucher == 1){
+        if (isVoucher == 1) {
             GetVoucherPlan();
-        }else {
+        } else {
             if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else {
                 ShowPpvPopUp();
             }

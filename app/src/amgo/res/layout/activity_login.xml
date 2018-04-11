@@ -208,7 +208,7 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text="new user "
-                    android:textColor="@color/login_new_user_text_color"
+                    android:textColor="@color/hint_color"
                     android:textSize="@dimen/signup_textsize"
                     />
 
