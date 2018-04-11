@@ -172,6 +172,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/button_radious"
                         android:padding="@dimen/payment_spinner_padding"
+                        android:text=""
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
