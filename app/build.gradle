@@ -633,7 +633,7 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"9c44e5b269f6e44d0d0d26d4ef047c47\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.1'
         }
         icablevision_staging_ {
             dimension 'environment'

@@ -259,7 +259,7 @@
                     android:layout_height="@dimen/offlinebtn_height"
                     android:layout_marginRight="@dimen/ppv_margin"
                     android:text="already member"
-                    android:textColor="@color/alreadyMemberTextColor"
+                    android:textColor="@color/hint_color"
                     android:textSize="@dimen/alreadymember_text_size" />
 
 

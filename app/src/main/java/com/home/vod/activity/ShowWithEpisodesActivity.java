@@ -789,6 +789,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 
+
+
                 itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
                         movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId));
 

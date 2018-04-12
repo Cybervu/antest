@@ -19,7 +19,8 @@
     <color name="borderColor">#d23232</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
-    <color name="aboutustestcolor">#fff</color>
+    <color name="aboutustestcolor">#5c6873</color>
+    <color name="aboutustextcolor">#FF0000</color>
     <color name="lollipop_spiner_color">#e2e1e1</color>
     <color name="lollipop_spiner_color2">#7a7a7a</color>
     <color name="spinner_card_color">#FF0000</color>
@@ -27,13 +28,13 @@
     <color name="style_circular_color_2">#ff0400</color>
     <color name="spinner_card_color2">#FAFAFA</color>
     <color name="forgotPasswordTextViewColor">#d23232</color>
-    <color name="iv_check_box_default_color">#5c6873</color>
+    <color name="iv_check_box_default_color">#d23232</color>
     <color name="fb_text_color">#fff</color>
     <color name="layout_background_color">#fdf3f3</color>
     <color name="login_new_user_text_color">#6e6f76</color>
     <color name="card_backgroud_drawable">#303030</color>
     <color name="edit_text_background">#EDEDED</color>
-    <color name="ic_radio_button_default">#8f8f8f</color>
+    <color name="ic_radio_button_default">#d23232</color>
     <color name="favorite_color">#878282</color>
     <color name="sign_up_text_color">#d23232</color>
     <color name="edit_color">#dadada</color>
@@ -77,7 +78,7 @@
     <color name="filter_text_color">#8f8f8f</color>
     <color name="censorRatingBackground">#d23232</color>
     <color name="white">#ffffff</color>
-    <color name="loader_color">#5d6c7e</color>
+    <color name="loader_color">#d23232</color>
     <color name="hint_background">#d23232</color>
     <color name="noInternetColor">#8f8f8f</color>
     <color name="editTextColor">#8f8f8f</color>
