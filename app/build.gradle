@@ -348,7 +348,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '3.0'
+            versionName '3.1'
         }
         magicmovies_staging_ {
             dimension 'environment'
@@ -357,6 +357,7 @@ android {
         }
         magicmovies_Prod_ {
             dimension 'environment'
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         ubereatsvod {
