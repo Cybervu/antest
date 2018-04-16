@@ -593,7 +593,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
-            versionName '3.0.0'
+            versionName '3.0.1'
         }
         yesflix_staging_ {
             dimension 'environment'
