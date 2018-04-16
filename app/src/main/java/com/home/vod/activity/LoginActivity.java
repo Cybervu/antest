@@ -77,7 +77,6 @@ import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GmailLoginInput;
 import com.home.apisdk.apiModel.GmailLoginOutput;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.Login_input;
 import com.home.apisdk.apiModel.Login_output;
 import com.home.apisdk.apiModel.LogoutInput;
@@ -85,11 +84,11 @@ import com.home.apisdk.apiModel.SimultaneousLogoutInput;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.CheckSubscriptionHandler;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
-
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
@@ -124,25 +123,23 @@ import player.activity.ExoPlayerActivity;
 import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
+import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_HERE_TITLE;
@@ -153,15 +150,15 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_E
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_START_BROWSING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
@@ -175,9 +172,10 @@ import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SIGN_UP_TITLE;
 import static com.home.vod.preferences.LanguagePreference.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.START_BROWSING;
+import static com.home.vod.preferences.LanguagePreference.TERMS;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
@@ -240,6 +238,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private String AuthImageUrl;
     String deviceRestrictionMessage = "";
     /////////////////////end//////////////////
+
 
     @Override
     public void onLoginPreExecuteStarted() {
@@ -334,6 +333,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(in);
                                         finish();
                                     }
@@ -341,6 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                     in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(in);
                                     finish();
                                 }
@@ -445,6 +446,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(in);
                             finish();
                         }
@@ -464,6 +466,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(in);
                             finish();
                         }
@@ -1429,7 +1432,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     //AsynLogInDetails asyncReg;
     VideoDetailsAsynctask asynLoadVideoUrls;
     EditText editEmailStr, editPasswordStr;
-    TextView forgotPassword, loginNewUser, signUpTextView;
+    TextView forgotPassword, loginNewUser, signUpTextView, skip;
     Button loginButton;
     LoginButton loginWithFacebookButton;
     int corePoolSize = 60;
@@ -1455,6 +1458,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
 
+    // Kushal
+    TextView headingText, termsAndCondition, termsAndCondition1, termsAndCondition2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1470,6 +1476,26 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         featureHandler = FeatureHandler.getFeaturePreference(LoginActivity.this);
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
         deviceName = myDevice.getName();
+
+        // Kushal
+        headingText= (TextView)findViewById(R.id.headingText);
+        termsAndCondition= (TextView) findViewById(R.id.termsAndCondition);
+        termsAndCondition1= (TextView) findViewById(R.id.termsAndCondition1);
+        termsAndCondition2= (TextView) findViewById(R.id.termsAndCondition2);
+        headingText.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        termsAndCondition.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+        termsAndCondition1.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
+        termsAndCondition2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view)
+            {
+                Intent browser= new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.pickbox_url_tc)));
+                startActivity(browser);
+            }
+
+        });
+        //
 
 
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
@@ -1528,16 +1554,33 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         editPasswordStr.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
         forgotPassword = (TextView) findViewById(R.id.forgotPasswordTextView);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), forgotPassword);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.pickbox_light_fonts), forgotPassword);
         forgotPassword.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
         loginNewUser = (TextView) findViewById(R.id.loginNewUser);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), loginNewUser);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.pickbox_light_fonts), loginNewUser);
 
         loginNewUser.setText(languagePreference.getTextofLanguage(NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.pickbox_light_fonts), signUpTextView);
 
+        // Kushal
+        skip = (TextView) findViewById(R.id.skip);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.pickbox_light_fonts), skip);
+        skip.setText(languagePreference.getTextofLanguage(START_BROWSING, DEFAULT_START_BROWSING));
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        //
 
         /*
          Because Of request of Sony we used BTN_REGISTER instead of SIGN_UP_TITLE
@@ -1546,10 +1589,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         //signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
 
+       // signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
 
         loginButton = (Button) findViewById(R.id.loginButton);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
+//        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.pickbox_bold_fonts), loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
@@ -3960,6 +4005,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(in);
                                             finish();
                                         }
@@ -3968,6 +4014,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(in);
                                         finish();
                                     }
@@ -4844,6 +4891,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(in);
                             finish();
                         }
@@ -4851,6 +4899,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(in);
                         finish();
                     }
@@ -5533,6 +5582,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                     in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(in);
                                     onBackPressed();
                                 }
@@ -5541,6 +5591,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(in);
                                 onBackPressed();
                             }

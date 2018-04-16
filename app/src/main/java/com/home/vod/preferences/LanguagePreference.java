@@ -483,6 +483,36 @@ public class LanguagePreference {
     public static String DEFAULT_REMOVE_DEVICE_SUCCESS = "Remove device request successful.";
 
 
+    //Kushal
+    public static String LANDING_TEXT = "LANDING_TEXT";
+    public static String START_BROWSING = "LANDING_SKIP";
+    public static String PICKBOX_T_AND_C = "LANDING_SKIP";
+    public static String FORGOT_PASSWORD_TEXT = "FORGOT_PASSWORD_TEXT";
+
+
+    public static String PICKBOX_COUNTRY_HEADING = "COUNTRY_HEADING";
+    public static String PICKBOX_LOGIN_HEADING = "LOGIN_HEADING";
+    public static String RESET_PASSWORD = "FORGOT_PASSWORD_HEADING";
+    public static String REGISTRATION= "REGISTER_HEADING";
+
+
+
+
+    //Kushal Default
+    public static String DEFAULT_LANDING_TEXT = "TV shows and movies available in Croatia, Serbia, Slovenia, Bosnia and Herzegovina, Montenegro and Macedonia (HD avaliable).";
+    public static String DEFAULT_START_BROWSING = "No thanks, start browsing";
+    public static String DEFAULT_PICKBOX_T_AND_C = "By signing in, you agree to Terms and Conditions at www.pickbox.tv/tc ";
+    public static String DEFAULT_FORGOT_PASSWORD_TEXT = "This is a sample text, the original text will be replaced when it will be fetched from the server";
+
+
+    public static String DEFAULT_PICKBOX_COUNTRY_HEADING = "your location";
+    public static String DEFAULT_PICKBOX_LOGIN_HEADING = "login";
+    public static String DEFAULT_RESET_PASSWORD = "reset your password";
+    public static String DEFAULT_REGISTRATION = "registration";
+
+
+
+
 
 
 

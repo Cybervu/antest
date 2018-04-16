@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Pickbox color scheme-->
+    <color name="colorPrimary">#1b262b</color>
+    <color name="colorPrimaryDark">#1b262b</color>
+    <color name="colorAccent">#05a7e1</color>
+    <color name="pickboxButtonColor">#05a7e1</color>
+    <color name="pickboxAssetColor">#293a42</color>
+    <color name="pickboxGlobalColor">#1e2f37</color>
+    <color name="pickboxButtonBorderColor">#4b4b4b</color>
+    <color name="pickboxEditTextColor">#ffffff</color>
+    <color name="pickboxCountryChooserCard">#23353d</color>
+
+
+
     <!--added for app background color by bishal-->
     <color name="seasonBackgroundColor">#fff</color>
     <color name="background_start_color">#000000</color>
@@ -52,9 +66,7 @@
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#000000</color>
     <color name="navlogobackgroundcolor">#ffffff</color>
-    <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#8f8f8f</color>
@@ -68,11 +80,10 @@
     <color name="pre_order_button_background">#fff</color>
     <color name="color_card_background">#000</color>
     <color name="fb_button_background">#3b5998</color>
-    <color name="colorAccent">#0faae3</color>
     <color name="textColorPrimary">#0faae3</color>
     <color name="windowBackground">#000000</color>
     <color name="selected_color">#000000</color>
-    <color name="unselected_color">#fff</color>
+    <color name="unselected_color">@color/colorAccent</color>
 
     <color name="filter_text_color">#8f8f8f</color>
     <color name="censorRatingBackground">#0faae3</color>

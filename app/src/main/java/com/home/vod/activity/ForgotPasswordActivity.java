@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.home.apisdk.apiController.ForgotpassAsynTask;
 import com.home.apisdk.apiModel.Forgotpassword_input;
 import com.home.apisdk.apiModel.Forgotpassword_output;
@@ -28,6 +27,7 @@ import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -36,32 +36,31 @@ import java.util.concurrent.TimeUnit;
 
 import player.activity.Player;
 
-import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD_TEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORD_RESET_LINK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESET_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD_TEXT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.PASSWORD_RESET_LINK;
+import static com.home.vod.preferences.LanguagePreference.RESET_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity implements ForgotpassAsynTask.ForgotpassDetailsListener{
@@ -84,6 +83,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     LanguagePreference languagePreference;
     FeatureHandler featureHandler;
 
+    // Kushal
+    TextView heading, sampleText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +99,12 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+
+        // Kushal
+        heading= (TextView)findViewById(R.id.headingText);
+        sampleText=(TextView)findViewById(R.id.forgotPasswordText);
+        heading.setText(languagePreference.getTextofLanguage(RESET_PASSWORD,DEFAULT_RESET_PASSWORD));
+        sampleText.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD_TEXT,DEFAULT_FORGOT_PASSWORD_TEXT));
 /*
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
             mActionBarToolbar.setNavigationIcon(null);
@@ -116,17 +124,20 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             }
         });
 
-        logoImageView = (ImageView) findViewById(R.id.logoImageView);
+       // logoImageView = (ImageView) findViewById(R.id.logoImageView);
         editEmailStr = (EditText) findViewById(R.id.editEmailStr);
         logintextView = (TextView) findViewById(R.id.loginTextView);
         submitButton = (Button) findViewById(R.id.submitButton);
-        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.regular_fonts),submitButton);
+      //  FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.regular_fonts),submitButton);
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.pickbox_bold_fonts),submitButton);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts),editEmailStr);
-        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts),logintextView);
+      //  FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts),logintextView);
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.pickbox_light_fonts),logintextView);
 
         editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
-        submitButton.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
-        logintextView.setText(languagePreference.getTextofLanguage(LOGIN,DEFAULT_LOGIN));
+       // submitButton.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
+        submitButton.setText(languagePreference.getTextofLanguage( BUTTON_RESET, DEFAULT_BUTTON_RESET));
+    //    logintextView.setText(languagePreference.getTextofLanguage(LOGIN,DEFAULT_LOGIN));
        /* editEmailStr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

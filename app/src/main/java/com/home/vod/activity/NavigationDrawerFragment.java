@@ -26,7 +26,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
 
-
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.MenusOutputModel;
@@ -59,14 +58,12 @@ import java.util.concurrent.TimeUnit;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
@@ -179,6 +176,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         mDrawerListView = (ExpandableListView) inflater.inflate (R.layout.drawer_drawer, container, false);
+        removeExpandableListViewDivider(mDrawerListView);
+
         mDrawerListView.setOnItemClickListener (new AdapterView.OnItemClickListener () {
             @Override
             public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
@@ -443,6 +442,14 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
         return mDrawerListView;
+    }
+
+    private void removeExpandableListViewDivider(ExpandableListView expView) {
+        expView.setGroupIndicator(null);
+        expView.setChildIndicator(null);
+        expView.setChildDivider(getResources().getDrawable(R.color.colorPrimary));
+        expView.setDivider(getResources().getDrawable(R.color.colorPrimary));
+        expView.setDividerHeight(2);
     }
 
 

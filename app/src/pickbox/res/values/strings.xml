@@ -12,6 +12,7 @@
     <string name="facebook_app_id">202452690354141</string>
     <string name="fb_login_protocol_scheme">fb491646201222573</string>
     <string name="fb_login_text">Login With Facebook</string>
+    <string name="pickbox_url_tc">http://www.pickbox.tv/tc</string>
     <string name="fb_registration_text">Register With Facebook</string>
 
     <!--

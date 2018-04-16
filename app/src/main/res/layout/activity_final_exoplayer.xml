@@ -161,7 +161,7 @@
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/paddingBottom5dp"
                     android:paddingTop="@dimen/paddingtop5dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -199,7 +199,8 @@
                         android:paddingTop="@dimen/cc_button_padding_top"
                         android:paddingBottom="@dimen/cc_button_padding_bottom"
                         android:id="@+id/cc_layout"
-                        android:layout_gravity="center_vertical|right"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
 
@@ -207,7 +208,6 @@
                             android:id="@+id/subtitle_change_btn"
                             android:layout_width="@dimen/subtitle_change_btn_width"
                             android:layout_height="@dimen/subtitle_change_btn_height"
-                            android:layout_marginRight="@dimen/marginRight20dp"
                             android:background="@drawable/cc_button_radious"
                             android:src="@drawable/subtitle_image" />
 

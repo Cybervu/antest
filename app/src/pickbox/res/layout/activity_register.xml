@@ -3,36 +3,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/colorPrimary">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"
+        android:visibility="gone"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:fillViewport="true">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_padding_left"
-            android:layout_marginRight="@dimen/layout_padding_right"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/Login_drawing_padding">
+            android:layout_margin="20dp"
+            android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/login_padding">
 
 
-            <ImageView
-                android:id="@+id/registerImageView"
-                android:layout_width="@dimen/forgot_logo_width"
-                android:layout_height="@dimen/forgot_logo_height"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/loginImageViewMarging_top"
-                android:background="@drawable/logo"
-                android:paddingTop="@dimen/Login_drawing_padding" />
+                <ImageView
+                    android:id="@+id/loginImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_pickbox_logo"
+                    android:paddingTop="@dimen/login_padding" />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:background="@color/colorAccent"></View>
+
+                <TextView
+                    android:id="@+id/headingText"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="REGISTRATION"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <EditText
+                android:id="@+id/editEmailStr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editNameStr"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Enter your email"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
+            <EditText
+                android:id="@+id/editPasswordStr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editEmailStr"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
+            <EditText
+                android:id="@+id/editConfirmPasswordStr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editPasswordStr"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Confirm your password"
+                android:inputType="textPassword"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
 
             <EditText
                 android:id="@+id/editNameStr"
@@ -40,65 +105,45 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                 android:drawablePadding="@dimen/Login_drawing_padding"
-                android:hint="name"
+                android:hint="Enter your name and surname"
+                android:padding="@dimen/register_edittext_padding"
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/edit_text_size" />
+            <Spinner
+                android:id="@+id/countrySpinner"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/languageSpinner"
+                android:backgroundTint="@color/hint_color"
+                android:popupBackground="#ffffff"
+                android:spinnerMode="dropdown"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+            <EditText
+                android:id="@+id/editMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Enter your mobile phone number"
+                android:inputType="number"
+                android:minEms="10"
                 android:padding="@dimen/register_edittext_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/edit_text_size" />
 
-            <EditText
-                android:id="@+id/editEmailStr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editNameStr"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_maring_top"
-                android:drawablePadding="@dimen/Login_drawing_padding"
-                android:hint="email"
-                android:padding="@dimen/register_edittext_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/edit_text_size" />
-
-            <EditText
-                android:id="@+id/editPasswordStr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editEmailStr"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_maring_top"
-                android:drawablePadding="@dimen/Login_drawing_padding"
-                android:hint="password"
-                android:inputType="textPassword"
-                android:padding="@dimen/register_edittext_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/edit_text_size"
 
 
-                />
 
-            <EditText
-                android:id="@+id/editConfirmPasswordStr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editPasswordStr"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_maring_top"
-                android:drawablePadding="@dimen/Login_drawing_padding"
-                android:hint="confirm password"
-                android:inputType="textPassword"
-                android:padding="@dimen/register_edittext_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/edit_text_size"
-
-                />
 
             <LinearLayout
                 android:id="@+id/ll"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editConfirmPasswordStr"
@@ -133,20 +178,24 @@
             <Button
                 android:id="@+id/registerButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/registerbtn_height"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/ll"
                 android:layout_marginTop="@dimen/payment_relative_margin"
-                android:background="@drawable/button_radious"
+                android:background="@drawable/pickbox_button_blue"
                 android:stateListAnimator="@null"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
+                android:text="REGISTER"
+                android:textStyle="bold"
+                android:padding="10dp"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/register_button" />
+                android:textSize="30sp" />
 
 
             <LinearLayout
                 android:id="@+id/btnLogin"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/registerButton"
@@ -205,6 +254,7 @@
 
 
             <RelativeLayout
+                android:visibility="gone"
                 android:padding="6dp"
                 android:layout_marginTop="20dp"
                 android:id="@+id/sign_in_button"
@@ -247,32 +297,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/registerButton"
-                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/ppv_margin"
+                android:layout_marginBottom="@dimen/marginright10dp"
                 android:gravity="center"
+                android:background="@drawable/pickbox_button_global"
                 android:orientation="horizontal">
 
 
                 <TextView
-                    android:id="@+id/alreadyMemberText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/offlinebtn_height"
+                    android:id="@+id/alreadyHaveALoginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:layout_marginRight="@dimen/ppv_margin"
-                    android:text="already member"
-                    android:textColor="@color/alreadyMemberTextColor"
+                    android:text="Already a member? Login here!"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/alreadymember_text_size" />
 
 
                 <TextView
-                    android:id="@+id/alreadyHaveALoginButton"
+                    android:visibility="gone"
+                    android:id="@+id/alreadyMemberText"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/offlinebtn_height"
                     android:layout_centerHorizontal="true"
-                    android:layout_toRightOf="@+id/alreadyMemberText"
+                    android:layout_toRightOf="@+id/alreadyHaveALoginButton"
                     android:clickable="true"
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="Login"
+                    android:textAllCaps="false"
                     android:textColor="@color/alreadyHaveALoginButtonTextColor"
                     android:textSize="@dimen/already_login_size"
                     android:textStyle="bold" />

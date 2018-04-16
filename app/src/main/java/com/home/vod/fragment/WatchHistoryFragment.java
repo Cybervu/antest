@@ -3,7 +3,6 @@ package com.home.vod.fragment;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -65,7 +63,6 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
@@ -970,7 +967,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                                     jsonObj.put("restrict_stream_id", "0");
                                 }
 
-                                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
+                                //jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
+                                jsonObj.put("domain_name", "https://pb.muvi.com/");
                                 jsonObj.put("is_log", "1");
                                 jsonObj.put("seek_status", "");
 
@@ -1044,7 +1042,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                                     jsonObj.put("restrict_stream_id", "0");
                                 }
 
-                                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
+                               // jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
+                                jsonObj.put("domain_name", "https://pb.muvi.com/");
                                 jsonObj.put("is_log", "1");
 
                                 //=====================End===================//

@@ -3,9 +3,7 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -46,8 +44,6 @@ import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -139,7 +135,9 @@ public class HomeFragment extends Fragment implements
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        //Kushal
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
  /*       *//***************chromecast**********************//*
@@ -627,7 +625,9 @@ public class HomeFragment extends Fragment implements
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(10000);
                 //   mDemoSlider.addOnPageChangeListener(this);
-                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
+                mDemoSlider.getPagerIndicator().setVisibility(View.VISIBLE);
+                // Kushal
+                mDemoSlider.getPagerIndicator().setDefaultIndicatorColor(R.color.colorAccent,R.color.white);
 
                 sliderRelativeLayout.setVisibility(View.VISIBLE);
 

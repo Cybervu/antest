@@ -38,21 +38,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.home.vod.R.id.loginWithFacebookButton;
-import static com.home.vod.R.id.registerButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
-import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
@@ -76,13 +72,16 @@ public class RegisterUIHandler {
     private LanguagePreference languagePreference;
     private Button registerButton;
     TextView fbLoginTextView;
-
+    List<String> country_List, country_Code_List;
+    Spinner country_spinner;
+    ArrayAdapter<String> Country_arrayAdapter;
     public RegisterUIHandler(Activity context) {
         this.context = context;
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
+        country_spinner = (Spinner) context.findViewById(R.id.countrySpinner);
 
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         gmailTest=(TextView) context.findViewById(R.id.textView);
@@ -111,10 +110,6 @@ public class RegisterUIHandler {
         }
     }
 
-    public void setCountryList(PreferenceManager preferenceManager) {
-
-
-    }
 
     public void setTermsTextView(LanguagePreference languagePreference) {
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
@@ -282,6 +277,71 @@ public class RegisterUIHandler {
                 ((RegisterActivity)context).signIn();
             }
         });
+    }
+
+    public void setCountryList(PreferenceManager preferenceManager) {
+
+        country_List = Arrays.asList(context.getResources().getStringArray(R.array.country));
+        country_Code_List = Arrays.asList(context.getResources().getStringArray(R.array.countrycode));
+        Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, country_List) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
+
+                return v;
+            }
+
+        };
+
+        country_spinner.setAdapter(Country_arrayAdapter);
+
+        selected_Country_Id =
+                preferenceManager.getCountryCodeFromPref();
+        LogUtil.showLog("MUVI", "primary Selected_Country_Id=" + selected_Country_Id);
+        if (selected_Country_Id.equals("0")) {
+            country_spinner.setSelection(224);
+            selected_Country_Id = country_Code_List.get(224);
+            LogUtil.showLog("MUVI", "country not  matche" + "==" + selected_Country_Id);
+        } else {
+            for (int i = 0; i < country_Code_List.size(); i++) {
+
+                LogUtil.showLog("MUVI", "Country names =" + country_Code_List.get(i));
+
+                if (selected_Country_Id.trim().equals(country_Code_List.get(i))) {
+                    country_spinner.setSelection(i);
+                    selected_Country_Id = country_Code_List.get(i);
+
+                    LogUtil.showLog("MUVI", "country  matched =" + selected_Country_Id);
+                }
+            }
+        }
+
+        Country_arrayAdapter.notifyDataSetChanged();
+
+
+        country_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                selected_Country_Id = country_Code_List.get(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
     }
 
 

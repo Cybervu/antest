@@ -12,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,10 +77,14 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
             episodeTitleTextView = (TextView) view.findViewById(R.id.episodeTitleTextView);
             episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             episodeNameTextView.setVisibility(View.GONE);
+          //  episodeNameTextView.setVisibility(View.VISIBLE);
             episodeDateTextView = (TextView) view.findViewById(R.id.episodeDateTextView);
-            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+            /*FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeNameTextView);
-            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeDateTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeDateTextView); */
+            FontUtls.loadFont(context,context.getResources().getString(R.string.pickbox_bold_fonts),episodeTitleTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.pickbox_regular_fonts),episodeNameTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.pickbox_regular_fonts),episodeDateTextView);
 
         /*    Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
             episodeTitleTextView.setTypeface(castDescriptionTypeface);
@@ -96,11 +100,14 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         public void bind(final EpisodesListModel item, final OnItemClickListener listener) {
-            episodeTitleTextView.setText(item.getEpisodeTitle());
+            /*episodeTitleTextView.setText(item.getEpisodeTitle());
             episodeNameTextView.setText(item.getEpisodeNumber());
+            episodeDateTextView.setText("");*/
             //episodeDateTextView.setText(item.getEpisodeTelecastOn());
-            episodeDateTextView.setText("");
-
+            //Kushal
+            episodeTitleTextView.setText(Episode_list_Activity.movieNameStr);
+            episodeNameTextView.setText(item.getEpisodeNumber());
+            episodeDateTextView.setText(item.getEpisodeTitle());
                 if(episodeDateTextView.getText().toString().matches("") || episodeDateTextView.getText().toString().matches(languagePreference
                         .getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
 

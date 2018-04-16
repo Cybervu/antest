@@ -2,14 +2,8 @@ package com.home.vod.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -18,8 +12,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
@@ -29,7 +21,6 @@ import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
-import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
@@ -50,39 +41,54 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
-import com.home.vod.util.Constant;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import player.model.ContactModel1;
 import player.utils.DBHelper;
 
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
-import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
-
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -679,7 +685,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     /**
      * Jump to next screen by checking condition.
      */
-    private void jumpToNextScreen() {
+    /*private void jumpToNextScreen() {
         Intent mIntent;
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
 //        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION).trim()).equals("1")) {
@@ -713,6 +719,84 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             startActivity(mIntent);
             finish();
             overridePendingTransition(0, 0);
+        }
+    }*/
+    private void jumpToNextScreen() {
+        Intent mIntent;
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+//        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION).trim()).equals("1")) {
+        boolean pickbox = true;
+        if (!pickbox) {
+            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                if (loggedInStr != null) {
+                    if (isSubscribed.trim().equals("1")) {
+                        mIntent = new Intent(SplashScreen.this, MainActivity.class);
+                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    } else {
+                        mIntent = new Intent(SplashScreen.this, SubscriptionActivity.class);
+                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    }
+                } else {
+                    mIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    overridePendingTransition(0, 0);
+                    startActivity(mIntent);
+                    finish();
+                }
+
+            } else {
+
+                mIntent = new Intent(SplashScreen.this, MainActivity.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        } else {
+            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                if (loggedInStr != null) {
+                    if (isSubscribed.trim().equals("1")) {
+                        mIntent = new Intent(SplashScreen.this, MainActivity.class);
+                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    } else {
+                        mIntent = new Intent(SplashScreen.this, SubscriptionActivity.class);
+                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    }
+                } else {
+                    mIntent = new Intent(SplashScreen.this, PickboxLandingActivity.class);
+                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    overridePendingTransition(0, 0);
+                    startActivity(mIntent);
+                    finish();
+                }
+
+            } else {
+                if (loggedInStr == null) {
+                    mIntent = new Intent(SplashScreen.this, PickboxLandingActivity.class);
+                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(mIntent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                }else{
+                    mIntent = new Intent(SplashScreen.this, MainActivity.class);
+                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(mIntent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+            }
         }
     }
 

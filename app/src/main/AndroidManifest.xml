@@ -286,6 +286,12 @@
         <activity android:name=".activity.ReviewActivity" />
         <activity android:name=".activity.SeasonActivity" />
         <activity android:name=".activity.ProgrammeActivity" />
+        <activity android:name=".activity.PickboxLandingActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PickboxChooseCountry"
+            android:label=""
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

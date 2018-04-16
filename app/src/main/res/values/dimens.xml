@@ -310,7 +310,7 @@
     <dimen name="videogrid_land_width">190dp</dimen>
     <dimen name="videogrid_land_height">106dp</dimen>
     <dimen name="testview_text_size">30sp</dimen>
-    <dimen name="testview1_text_size">15sp</dimen>
+    <dimen name="testview1_text_size">18sp</dimen>
     <dimen name="alreadymember_height">40dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="video_text_size">14sp</dimen>
@@ -396,7 +396,7 @@
     <item name="stroke_width" format="float" type="dimen">0.45</item>
 
     <dimen name="cc_button_padding_left">10dp</dimen>
-    <dimen name="cc_button_padding_right">32dp</dimen>
+    <dimen name="cc_button_padding_right">10dp</dimen>
     <dimen name="cc_button_padding_top">10dp</dimen>
     <dimen name="cc_button_padding_bottom">10dp</dimen>
 

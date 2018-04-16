@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +35,7 @@ import java.util.ArrayList;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder> {
@@ -119,7 +118,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         /*for (int j = 0; j > bannerUrls.size(); j++) {
             //image = bannerUrls.get(j);
         }*/
-            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
+       //     FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), itemRowHolder.itemTitle);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.pickbox_bold_fonts), itemRowHolder.itemTitle);
 
             itemRowHolder.itemTitle.setText(sectionName.trim());
             listItemAllignmentHandler.setAllignment(itemRowHolder.itemTitle);
@@ -328,6 +328,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(10000);
                 mDemoSlider.addOnPageChangeListener(this);
+                mDemoSlider.getPagerIndicator().setDefaultIndicatorColor(mContext.getResources().getColor(R.color.colorAccent), Color.parseColor("#EAAEAEAE"));
             } else {
                 mDemoSlider.stopAutoCycle();
                 mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);

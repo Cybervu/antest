@@ -1,6 +1,5 @@
 package com.home.vod;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -57,6 +56,7 @@ public class LoginHandler {
         loginWithFacebookButton.setVisibility(View.GONE);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
+
 
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.VISIBLE);
