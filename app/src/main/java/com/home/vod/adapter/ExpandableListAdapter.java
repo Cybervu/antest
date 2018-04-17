@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Html;
 import android.util.Log;
@@ -10,12 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
-import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
@@ -62,9 +60,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item1, null);
+
         }
-        TextView expandedListTextView = (TextView) convertView
-                .findViewById(R.id.expandedListItem);
+        TextView expandedListTextView = (TextView) convertView.findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), expandedListTextView);
 
@@ -95,53 +93,62 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int listPosition, boolean isExpanded, View convertView1, ViewGroup parent) {
         String listTitle = (String) getGroup(listPosition);
-         final ImageView iconimage,iconimage1;
-        int totalposition=listPosition;
+        final ImageView iconimage, iconimage1;
+        int totalposition = listPosition;
 //        Util.drawer_collapse_expand_imageview.clear();
 
         View convertView = null;
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
-           //convertView = layoutInflater.inflate(R.layout.nav_drawer_row, null);
+            //convertView = layoutInflater.inflate(R.layout.nav_drawer_row, null);
         }
-       TextView textViewLine = (TextView) convertView.findViewById(R.id.textViewLine);
 
-        TextView listTitleTextView = (TextView) convertView .findViewById(R.id.listTitle);
+        LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.layout);
+        for (int i = 0; i < ll.getChildCount(); i++) {
+            View v = ll.getChildAt(i);
+            if (v instanceof LinearLayout) {
+                LinearLayout l = (LinearLayout) v;
+                if (listPosition / 2 == 0)
+                    l.setId(R.id.test);
+                else
+                    l.setId(R.id.test1);
+            }
+        }
+
+        TextView textViewLine = (TextView) convertView.findViewById(R.id.textViewLine);
+
+        TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
         listTitleTextView.setText(Html.fromHtml(listTitle));
 
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), listTitleTextView);
 
-        iconimage=(ImageView) convertView.findViewById(R.id.iconimage);
-        iconimage1=(ImageView) convertView.findViewById(R.id.iconimage1);
+        iconimage = (ImageView) convertView.findViewById(R.id.iconimage);
+        iconimage1 = (ImageView) convertView.findViewById(R.id.iconimage1);
         //listTitleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, isExpanded ? 0 : android.R.drawable.ic_menu_more, 0);
 
 
-        if(expandableListDetail.get(this.expandableListTitle.get(listPosition)).size()>0){
-            iconimage .setVisibility(View.VISIBLE);
-            Log.v("SUBHA","iconimage visible Position ===== "+ listPosition);
+        if (expandableListDetail.get(this.expandableListTitle.get(listPosition)).size() > 0) {
+            iconimage.setVisibility(View.VISIBLE);
+            Log.v("SUBHA", "iconimage visible Position ===== " + listPosition);
         }
 
-         //for expand less and expand the child content
+        //for expand less and expand the child content
         //***for this we have clear drawer_collapse in splashscreen and create a arraylist for imageview which is declare in Util
         //****in NavigationdrawerFragment we have two method ongroupcollapse and ongroupexpand ther we written logic( expnad and less)
         boolean add_to_array = true;
 
 
-        for(int k = 0; k< Util.drawer_collapse_expand_imageview.size(); k++)
-        {
+        for (int k = 0; k < Util.drawer_collapse_expand_imageview.size(); k++) {
             String Data[] = Util.drawer_collapse_expand_imageview.get(k).split(",");
-            if(listPosition == Integer.parseInt(Data[0]))
-            {
+            if (listPosition == Integer.parseInt(Data[0])) {
                 add_to_array = false;
             }
         }
-        if(add_to_array)
-        {
-            Util.drawer_collapse_expand_imageview.add(listPosition+","+Util.image_compressed);
+        if (add_to_array) {
+            Util.drawer_collapse_expand_imageview.add(listPosition + "," + Util.image_compressed);
         }
 
 /*
@@ -153,18 +160,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         try {
             String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
-            if(listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 1)
-            {
+            if (listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 1) {
                 iconimage.setImageResource(R.drawable.ic_remove_black_24dp);
 
-                Log.v("SUBHA1","image expanded ="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
-            }
-
-            else if(listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 0)
-            {
+                Log.v("SUBHA1", "image expanded =" + expand_collapse_image_info[0] + "," + expand_collapse_image_info[1]);
+            } else if (listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 0) {
                 iconimage.setImageResource(R.drawable.ic_add_black_24dp);
 
-                Log.v("SUBHA1","image collapsed ="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
+                Log.v("SUBHA1", "image collapsed =" + expand_collapse_image_info[0] + "," + expand_collapse_image_info[1]);
             }
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -173,10 +176,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 //*************underline where the mainmenu arraylist data finish*************
 
-        if(footerMenuModelArrayList.size()>0)
-        {
-            if (listPosition==mainMenuModelArrayList.size()){
-                textViewLine .setVisibility(View.VISIBLE);
+        if (footerMenuModelArrayList.size() > 0) {
+            if (listPosition == mainMenuModelArrayList.size()) {
+                textViewLine.setVisibility(View.VISIBLE);
             }
         }
 
