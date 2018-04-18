@@ -17,6 +17,7 @@
     <color name="buttonTextColor">#F1F3DC</color>
     <color name="casttextColor">#60008C</color>
     <color name="borderColor">#60008C</color>
+    <color name="aboutustextcolor">#000000</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="aboutustestcolor">#fff</color>
