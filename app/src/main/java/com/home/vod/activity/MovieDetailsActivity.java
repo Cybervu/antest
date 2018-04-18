@@ -925,34 +925,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
 
                 if (loggedInStr != null) {
-                    if (isFavorite == 1) {
-                        Log.v("goofy", "Item deleted");
-
-                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
-                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
-                        deleteFavInputModel.setIsEpisode(isEpisode);
-                        deleteFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
-
-                    } else {
-
-                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
-                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        addToFavInputModel.setIsEpisodeStr(isEpisode);
-                        addToFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                        asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-
-                    }
+                        add_delete_favourite();
                 } else {
                     Util.favorite_clicked = true;
                     final Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
@@ -3480,9 +3453,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         }
         try {
+
             if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
 
-                Util.favorite_clicked = false;
                 AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
                 addToFavInputModel.setAuthToken(authTokenStr);
                 addToFavInputModel.setMovie_uniq_id(movieUniqueId);
@@ -3495,6 +3468,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 favorite_view.setImageResource(R.drawable.favorite_red);
             }
+
+            Util.favorite_clicked = false;
+
+
             /***favorite *****/
         } catch (Exception e) {
 
@@ -3905,6 +3882,40 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+    }
+
+    /**
+     * This method is applicable to add or delete favourite .
+     */
+    public void add_delete_favourite(){
+        if (isFavorite == 1) {
+
+
+            DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+            deleteFavInputModel.setAuthTokenStr(authTokenStr);
+            deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            deleteFavInputModel.setMovieUniqueId(movieUniqueId);
+            deleteFavInputModel.setIsEpisode(isEpisode);
+            deleteFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+            DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
+            deleteFavAsync.executeOnExecutor(threadPoolExecutor);
+
+
+        } else {
+
+            AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+            addToFavInputModel.setAuthToken(authTokenStr);
+            addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+            addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            addToFavInputModel.setIsEpisodeStr(isEpisode);
+            addToFavInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+            asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
+            asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+
+        }
     }
 
 

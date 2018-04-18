@@ -110,7 +110,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
     protected Void doInBackground(ContentListInput... params) {
 
         try {
-           /* HttpClient httpclient = new DefaultHttpClient();
+          /*  HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 

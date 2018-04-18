@@ -348,7 +348,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '3.0'
+            versionName '3.1'
         }
         magicmovies_staging_ {
             dimension 'environment'
@@ -357,6 +357,7 @@ android {
         }
         magicmovies_Prod_ {
             dimension 'environment'
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
             buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         ubereatsvod {
@@ -592,7 +593,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
-            versionName '3.0.0'
+            versionName '3.0.1'
         }
         yesflix_staging_ {
             dimension 'environment'
@@ -632,7 +633,7 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"9c44e5b269f6e44d0d0d26d4ef047c47\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.1'
         }
         icablevision_staging_ {
             dimension 'environment'
@@ -694,6 +695,25 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         nollyfiesta_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        softnet {
+            minSdkVersion 21
+            applicationId 'com.release.softnet'
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"7ac0a44a724382acd4b01c4332887aa6\""
+//             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            dimension 'vendor'
+        }
+        softnet_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        softnet_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -814,6 +834,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('nollyfiesta') && (environment.equals('nollyfiesta_staging_') || environment.equals('nollyfiesta_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('softnet') && (environment.equals('softnet_staging_') || environment.equals('softnet_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

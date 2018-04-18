@@ -666,12 +666,7 @@ public class RegisterActivity extends AppCompatActivity implements
             }
         });
 
-        alreadyMemmberText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RegisterActivity.this, "There's some error. Please try again !", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

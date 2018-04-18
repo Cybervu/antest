@@ -433,5 +433,7 @@
 
     <dimen name="vertical_spacing">6dp</dimen>
     <dimen name="horizontal_spacing">6dp</dimen>
+    <dimen name="padding_left">10dp</dimen>
+    <dimen name="padding_right">0dp</dimen>
 </resources>
 

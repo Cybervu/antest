@@ -789,6 +789,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 
+
+
                 itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
                         movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId));
 
@@ -970,10 +972,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
         if (status > 0) {
-
             if (status == 425) {
-
-
                 if (isVoucher == 1) {
                     // API call for get Voucher Plan
                     GetVoucherPlan();
@@ -992,7 +991,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     dlgAlert.create().show();
                 }
             } else if (status == 426) {
-
 
                 if (isVoucher == 1) {
                     // API call for get Voucher Plan
@@ -1245,10 +1243,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             /***favorite *****/
 
             try {
-
             if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
 
-                Util.favorite_clicked = false;
                 AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
                 addToFavInputModel.setAuthToken(authTokenStr);
                 addToFavInputModel.setMovie_uniq_id(movieUniqueId);
@@ -1258,10 +1254,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
             } else if (loggedInStr != null && isFavorite == 1) {
-
                 favorite_view_episode.setImageResource(R.drawable.favorite_red);
             }
-            /***favorite *****/
+
+                Util.favorite_clicked = false;
+
+                /***favorite *****/
         } catch (Exception e) {}
     }
 
@@ -2244,32 +2242,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
 
                 if (loggedInStr != null) {
-                    if (isFavorite == 1) {
+                   add_delete_favourite();
 
-                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
-                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
-                        deleteFavInputModel.setIsEpisode(isEpisode);
-
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
-                       /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
-                        asynFavoriteDelete.execute();*/
-                    } else {
-                        LogUtil.showLog("MUVI", "favorite");
-                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
-                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                        asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-
-
-                    }
                 } else {
                     Util.favorite_clicked = true;
                     Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
@@ -3856,6 +3830,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+//            add_delete_favourite();
+
         }
         // **************chromecast*********************//
 
@@ -5992,5 +5969,38 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+    }
+
+
+    /**
+     * This method is applicable to add or delete favourite .
+     */
+    public void add_delete_favourite(){
+        if (isFavorite == 1) {
+
+            DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+            deleteFavInputModel.setAuthTokenStr(authTokenStr);
+            deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            deleteFavInputModel.setMovieUniqueId(movieUniqueId);
+            deleteFavInputModel.setIsEpisode(isEpisode);
+
+            DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+            deleteFavAsync.executeOnExecutor(threadPoolExecutor);
+
+                       /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
+                        asynFavoriteDelete.execute();*/
+        } else {
+            LogUtil.showLog("MUVI", "favorite");
+            AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+            addToFavInputModel.setAuthToken(authTokenStr);
+            addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+            addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+            addToFavInputModel.setIsEpisodeStr(isEpisode);
+
+            asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+            asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+
+
+        }
     }
 }

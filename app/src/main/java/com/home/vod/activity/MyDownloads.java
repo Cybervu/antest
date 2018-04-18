@@ -421,7 +421,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         unregisterReceiver(UpadateDownloadList);
     }
 
-/*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -429,12 +429,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         MenuItem item, item1, item2, item3, item4, item5, item6, item7, item8;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        */
-/***************chromecast**********************//*
 
-
-        */
-/***************chromecast**********************//*
 
 
         (menu.findItem(R.id.menu_item_language)).setVisible(false);
@@ -452,7 +447,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
         item7 = menu.findItem(R.id.action_search);
-        item7.setVisible(false);
+        item7.setVisible(true);
         item8 = menu.findItem(R.id.submenu);
         item8.setVisible(false);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
@@ -462,7 +457,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.action_search:
+                final Intent searchIntent = new Intent(MyDownloads.this, SearchActivity.class);
+                searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(searchIntent);
+                // Not implemented here
+                return false;
             case R.id.action_filter:
                 // Not implemented here
                 return false;
@@ -472,7 +472,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         }
         return false;
     }
-*/
+
 
     private BroadcastReceiver UpadateDownloadList = new BroadcastReceiver() {
         @Override

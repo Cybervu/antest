@@ -221,6 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/login_butn_height"
                     android:layout_marginRight="@dimen/ppv_margin"
+                    android:gravity="center_vertical"
                     android:text="already member"
                     android:textColor="@color/alreadyMemberTextColor"
                     android:textSize="@dimen/videoTitle_textview" />
@@ -234,6 +235,7 @@
                     android:layout_toRightOf="@+id/alreadyMemberText"
                     android:clickable="true"
                     android:maxLines="3"
+                    android:gravity="center_vertical"
                     android:singleLine="false"
                     android:text="Login"
                     android:textColor="@color/alreadyHaveALoginButtonColor"

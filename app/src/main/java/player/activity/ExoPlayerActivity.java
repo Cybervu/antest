@@ -280,6 +280,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     boolean censor_layout = true;
     HandleOfflineInExoplayer handleOfflineInExoplayer;
     Timer MovableTimer;
+    boolean player_is_in_forground = true;
 
 
     // ExoPlayerActivity.this is added for the new video log API;
@@ -495,7 +496,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         }catch (Exception e){}*/
-
+        player_is_in_forground = true;
 
         AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
@@ -1367,12 +1368,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         center_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!video_prepared)
+                    return;
                 Execute_Pause_Play();
             }
         });
         latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!video_prepared)
+                    return;
 
                 if (Util.hide_pause) {
                     Util.hide_pause = false;
@@ -2188,6 +2193,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onOrientationChange(int orientation) {
 
+        if(!player_is_in_forground)
+            return;
 
         if (orientation == 90) {
 
@@ -3533,7 +3540,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         }catch (Exception e){}*/
 
-
+        player_is_in_forground = false;
         if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 
