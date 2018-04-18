@@ -43,7 +43,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD_TEXT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORD_RESET_LINK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESET_PASSWORD;
@@ -53,7 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD_TEXT;
+import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PASSWORD_RESET_LINK;
 import static com.home.vod.preferences.LanguagePreference.RESET_PASSWORD;
@@ -104,7 +104,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         heading= (TextView)findViewById(R.id.headingText);
         sampleText=(TextView)findViewById(R.id.forgotPasswordText);
         heading.setText(languagePreference.getTextofLanguage(RESET_PASSWORD,DEFAULT_RESET_PASSWORD));
-        sampleText.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD_TEXT,DEFAULT_FORGOT_PASSWORD_TEXT));
+        sampleText.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD_CONTENT,DEFAULT_FORGOT_PASSWORD_CONTENT));
 /*
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
             mActionBarToolbar.setNavigationIcon(null);
