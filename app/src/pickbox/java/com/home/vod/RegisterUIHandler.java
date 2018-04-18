@@ -39,7 +39,9 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
+import static com.home.vod.preferences.LanguagePreference.CHOOSE_COUNTRY_ALERT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHOOSE_COUNTRY_ALERT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
@@ -306,8 +308,10 @@ public class RegisterUIHandler {
                 preferenceManager.getCountryCodeFromPref();
         LogUtil.showLog("MUVI", "primary Selected_Country_Id=" + selected_Country_Id);
         if (selected_Country_Id.equals("0")) {
-            country_spinner.setSelection(224);
-            selected_Country_Id = country_Code_List.get(224);
+            /*country_spinner.setSelection(224);
+            selected_Country_Id = country_Code_List.get(224); */
+            country_spinner.setSelection(0);
+            selected_Country_Id = country_Code_List.get(0);
             LogUtil.showLog("MUVI", "country not  matche" + "==" + selected_Country_Id);
         } else {
             for (int i = 0; i < country_Code_List.size(); i++) {
@@ -331,7 +335,11 @@ public class RegisterUIHandler {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                selected_Country_Id = country_Code_List.get(position);
+                if (country_Code_List.get(position).toLowerCase().equalsIgnoreCase("choose a country")){
+                    Toast.makeText(context, languagePreference.getTextofLanguage(CHOOSE_COUNTRY_ALERT_MESSAGE, DEFAULT_CHOOSE_COUNTRY_ALERT_MESSAGE), Toast.LENGTH_SHORT).show();
+                }else {
+                    selected_Country_Id = country_Code_List.get(position);
+                }
 
             }
 

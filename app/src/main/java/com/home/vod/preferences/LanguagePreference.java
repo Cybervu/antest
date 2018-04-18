@@ -488,6 +488,7 @@ public class LanguagePreference {
     public static String START_BROWSING = "LANDING_SKIP";
     public static String PICKBOX_T_AND_C = "LANDING_SKIP";
     public static String FORGOT_PASSWORD_CONTENT = "FORGOT_PASSWORD_CONTENT";
+    public static String CHOOSE_COUNTRY_ALERT_MESSAGE = "CHOOSE_COUNTRY_ALERT_MESSAGE";
 
 
     public static String YOUR_LOCATION= "YOUR_LOCATION";
@@ -503,6 +504,7 @@ public class LanguagePreference {
     public static String DEFAULT_START_BROWSING = "No thanks, start browsing";
     public static String DEFAULT_PICKBOX_T_AND_C = "By signing in, you agree to Terms and Conditions at www.pickbox.tv/tc ";
     public static String DEFAULT_FORGOT_PASSWORD_CONTENT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    public static String DEFAULT_CHOOSE_COUNTRY_ALERT_MESSAGE = "Please choose a country";
 
 
     public static String DEFAULT_YOUR_LOCATION = "your location";
