@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiModel.GetMenusInputModel;
@@ -915,7 +914,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
-            Toast.makeText(getContext(), ""+titleArray+""+expandableListDetail, Toast.LENGTH_SHORT).show();
             adapter = new ExpandableListAdapter(getActivity (),titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
             mDrawerListView.setAdapter (adapter);
             adapter.notifyDataSetChanged();

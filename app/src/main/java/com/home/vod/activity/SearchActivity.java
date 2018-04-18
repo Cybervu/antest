@@ -1,6 +1,5 @@
 package com.home.vod.activity;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -25,23 +22,20 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.home.apisdk.apiController.SearchDataAsynTask;
 import com.home.apisdk.apiModel.Search_Data_input;
@@ -55,9 +49,6 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SearchProgressHandler;
-import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -75,24 +66,18 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
-import static com.home.vod.preferences.LanguagePreference.SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_PLACEHOLDER;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
@@ -218,6 +203,9 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         searchProgressBarHandler = new SearchProgressHandler(SearchActivity.this);
 
@@ -514,33 +502,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     if (firstTime == true){
 
                         new RetrieveFeedTask().execute(videoImageStrToHeight);
-
-                        /*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
-                        ).error(R.drawable.no_image).into(new Target() {
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                videoWidth = bitmap.getWidth();
-                                videoHeight = bitmap.getHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(final Drawable errorDrawable) {
-                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
-                                videoWidth = errorDrawable.getIntrinsicWidth();
-                                videoHeight = errorDrawable.getIntrinsicHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
-
-                            }
-                        });*/
 
                     }else {
                         AsynLOADUI loadUI = new AsynLOADUI();
@@ -904,7 +865,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 }
 
             }
-            Util.hideKeyboard(SearchActivity.this);
+           // Util.hideKeyboard(SearchActivity.this);
         }
     }
 
@@ -1069,6 +1030,28 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         toast = Toast.makeText(context, Html.fromHtml("<font color='"+getResources().getColor(R.color.hint_background)+"' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_button);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            }
+        }
     }
 
 }

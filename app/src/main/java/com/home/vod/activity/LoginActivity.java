@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -77,7 +78,6 @@ import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GmailLoginInput;
 import com.home.apisdk.apiModel.GmailLoginOutput;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.Login_input;
 import com.home.apisdk.apiModel.Login_output;
 import com.home.apisdk.apiModel.LogoutInput;
@@ -85,11 +85,11 @@ import com.home.apisdk.apiModel.SimultaneousLogoutInput;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.CheckSubscriptionHandler;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
-
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
@@ -136,13 +136,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_HERE_TITLE;
@@ -153,7 +149,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_E
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
@@ -161,7 +156,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
-import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
@@ -175,7 +169,6 @@ import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SIGN_UP_TITLE;
 import static com.home.vod.preferences.LanguagePreference.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
@@ -1498,6 +1491,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
         editEmailStr = (EditText) findViewById(R.id.editEmailStr);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editEmailStr);
@@ -5840,6 +5836,28 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         sendBroadcast(Sintent);
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_button);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            }
+        }
     }
 
 }

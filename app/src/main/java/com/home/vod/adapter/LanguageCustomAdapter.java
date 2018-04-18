@@ -32,12 +32,15 @@ public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.language_recycler_layout, viewGroup, false);
+
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.language.setText(languageModels.get(position).getLanguageName());
+
       /*  if (Util.getTextofLanguage(mContext, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE).equalsIgnoreCase(languageModels.get(position).getLanguageId())){
             holder.imageView.setImageResource(R.drawable.selected);
         }else{

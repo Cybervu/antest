@@ -14,11 +14,19 @@ import android.widget.TextView;
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.home.vod.preferences.LanguagePreference.ABOUT_US;
+import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ABOUT_US;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
+import static com.home.vod.preferences.LanguagePreference.HOME;
 
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -105,23 +113,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             //convertView = layoutInflater.inflate(R.layout.nav_drawer_row, null);
         }
 
-        LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.layout);
-        for (int i = 0; i < ll.getChildCount(); i++) {
-            View v = ll.getChildAt(i);
-            if (v instanceof LinearLayout) {
-                LinearLayout l = (LinearLayout) v;
-                if (listPosition / 2 == 0)
-                    l.setId(R.id.test);
-                else
-                    l.setId(R.id.test1);
-            }
-        }
+
+
 
         TextView textViewLine = (TextView) convertView.findViewById(R.id.textViewLine);
 
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
         listTitleTextView.setText(Html.fromHtml(listTitle));
+
+        // Kushal - set id to the layout
+        LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(context);
+
+        LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.layout);
+        for (int i = 0; i < ll.getChildCount(); i++) {
+            View v = ll.getChildAt(i);
+            if (v instanceof LinearLayout) {
+                LinearLayout l = (LinearLayout) v;
+                if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US)))
+                    l.setId(R.id.contact_us_layout);
+                else  if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
+                    l.setId(R.id.home_layout);
+                else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US))){
+                    l.setId(R.id.about_us_layout);
+                }
+            }
+        }
 
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), listTitleTextView);
 
