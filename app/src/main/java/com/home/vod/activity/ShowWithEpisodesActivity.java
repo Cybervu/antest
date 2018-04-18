@@ -613,6 +613,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 season_spinner.setVisibility(View.VISIBLE);
                 ArrayAdapter adapter = new ArrayAdapter(ShowWithEpisodesActivity.this, R.layout.dropdownlist, season);
                 season_spinner.setAdapter(adapter);
+
+                // Kushal - set id to spinner adapter Seasons
             }
 
 

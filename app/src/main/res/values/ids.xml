@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="test" type="id"/>
-    <item name="test1" type="id"/>
+
+    <!--Navigation Drawer static menu id-->
+    <item name="contact_us_layout" type="id"/>
+    <item name="home_layout" type="id"/>
+    <item name="about_us_layout" type="id"/>
+    <item name="my_library_layout" type="id"/>
+    <item name="my_favourite_layout" type="id"/>
+    <item name="my_download_layout" type="id"/>
+    <item name="watch_history_layout" type="id"/>
+
+    <!--hamburger icon and back button id-->
+    <item name="drawer_menu" type="id"/>
+    <item name="back_button" type="id"/>
+
+    <!--season id-->
+    <item name="season_one" type="id"/>
+    <item name="season_two" type="id"/>
+    <item name="season_more" type="id"/>
+
+    <!--Resolutions id-->
+
+    <item name="resolution_144" type="id"/>
+    <item name="resolution_240" type="id"/>
+    <item name="resolution_360" type="id"/>
+    <item name="resolution_480" type="id"/>
+    <item name="resolution_720" type="id"/>
+    <item name="resolution_1080" type="id"/>
+    <item name="resolution_1440" type="id"/>
+    <item name="resolution_2048" type="id"/>
+    <item name="resolution_4096" type="id"/>
+    <item name="resolution_7680" type="id"/>
+    <item name="resolution_Best" type="id"/>
+    <item name="resolution_Auto" type="id"/>
+
+    <!--Download id-->
+
+    <item name="download_144" type="id"/>
+    <item name="download_240" type="id"/>
+    <item name="download_360" type="id"/>
+    <item name="download_480" type="id"/>
+    <item name="download_720" type="id"/>
+    <item name="download_1080" type="id"/>
+    <item name="download_1440" type="id"/>
+    <item name="download_2048" type="id"/>
+    <item name="download_4096" type="id"/>
+    <item name="download_7680" type="id"/>
+    <item name="download_Best" type="id"/>
+    <item name="download_Auto" type="id"/>
+
+
 </resources>
