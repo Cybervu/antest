@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Navigation Drawer static menu id-->
     <item name="contact_us_layout" type="id"/>
     <item name="home_layout" type="id"/>
     <item name="about_us_layout" type="id"/>
+    <item name="my_library_layout" type="id"/>
+    <item name="my_favourite_layout" type="id"/>
+    <item name="my_download_layout" type="id"/>
+    <item name="watch_history_layout" type="id"/>
+
+    <!--hamburger icon and back button id-->
     <item name="drawer_menu" type="id"/>
     <item name="back_button" type="id"/>
+
+    <!--season id-->
+    <item name="season_one" type="id"/>
+    <item name="season_two" type="id"/>
+    <item name="season_more" type="id"/>
 
     <!--Resolutions id-->
 

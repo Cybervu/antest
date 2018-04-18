@@ -22,18 +22,18 @@ public class DownloadOptionAdapter extends BaseAdapter {
     int selected_option = 0;
     private String[] resolutionName = {"144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2048p", "4096p", "7680p", "best", "auto"};
     private int[] resolutionId = {
-            R.id.resolution_144,
-            R.id.resolution_240,
-            R.id.resolution_360,
-            R.id.resolution_480,
-            R.id.resolution_720,
-            R.id.resolution_1080,
-            R.id.resolution_1440,
-            R.id.resolution_2048,
-            R.id.resolution_4096,
-            R.id.resolution_7680,
-            R.id.resolution_Best,
-            R.id.resolution_Auto};
+            R.id.download_144,
+            R.id.download_240,
+            R.id.download_360,
+            R.id.download_480,
+            R.id.download_720,
+            R.id.download_1080,
+            R.id.download_1440,
+            R.id.download_2048,
+            R.id.download_4096,
+            R.id.download_7680,
+            R.id.download_Best,
+            R.id.download_Auto};
 
     public DownloadOptionAdapter(Context mContext, ArrayList List_Of_FileSize , ArrayList ResolutionFormat) {
         this.mContext = mContext;
