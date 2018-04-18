@@ -33,12 +33,12 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PICKBOX_COUNTRY_HEADING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_LOCATION;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.PICKBOX_COUNTRY_HEADING;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.YOUR_LOCATION;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class PickboxChooseCountry extends AppCompatActivity implements
@@ -104,7 +104,7 @@ public class PickboxChooseCountry extends AppCompatActivity implements
     private void setLanguage() {
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         submitButton.setText(languagePreference.getTextofLanguage(NEXT, DEFAULT_NEXT));
-        headingText.setText(languagePreference.getTextofLanguage(PICKBOX_COUNTRY_HEADING,DEFAULT_PICKBOX_COUNTRY_HEADING));
+        headingText.setText(languagePreference.getTextofLanguage(YOUR_LOCATION,DEFAULT_YOUR_LOCATION));
     }
 
     private void checkForArrowVisibility() {

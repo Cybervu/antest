@@ -490,7 +490,7 @@ public class LanguagePreference {
     public static String FORGOT_PASSWORD_TEXT = "FORGOT_PASSWORD_TEXT";
 
 
-    public static String PICKBOX_COUNTRY_HEADING = "COUNTRY_HEADING";
+    public static String YOUR_LOCATION= "YOUR_LOCATION";
     public static String PICKBOX_LOGIN_HEADING = "LOGIN_HEADING";
     public static String RESET_PASSWORD = "FORGOT_PASSWORD_HEADING";
     public static String REGISTRATION= "REGISTER_HEADING";
@@ -505,7 +505,7 @@ public class LanguagePreference {
     public static String DEFAULT_FORGOT_PASSWORD_TEXT = "This is a sample text, the original text will be replaced when it will be fetched from the server";
 
 
-    public static String DEFAULT_PICKBOX_COUNTRY_HEADING = "your location";
+    public static String DEFAULT_YOUR_LOCATION = "your location";
     public static String DEFAULT_PICKBOX_LOGIN_HEADING = "login";
     public static String DEFAULT_RESET_PASSWORD = "reset your password";
     public static String DEFAULT_REGISTRATION = "registration";
