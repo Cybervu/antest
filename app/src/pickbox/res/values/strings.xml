@@ -46,7 +46,6 @@
 
 
     <string-array name="country">
-        <item>Choose a country</item>
         <item>Afghanistan</item>
         <item>Albania</item>
         <item>Algeria</item>
@@ -291,7 +290,6 @@
 
     <string-array name="countrycode">
 
-        <item>OO</item>
         <item>AF</item>
         <item>AL</item>
         <item>DZ</item>

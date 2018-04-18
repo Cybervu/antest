@@ -309,14 +309,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             }
             else if(status == 454){
-               /* noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);*/
-                preferenceManager.setCountryCodeToPref("en");
-                SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-                planListInput.setAuthToken(authTokenStr);
-                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
-                asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+                noInternetLayout.setVisibility(View.GONE);
+                geoBlockedLayout.setVisibility(View.VISIBLE);
             }
             else {
 

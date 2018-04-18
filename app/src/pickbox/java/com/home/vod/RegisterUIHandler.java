@@ -308,10 +308,8 @@ public class RegisterUIHandler {
                 preferenceManager.getCountryCodeFromPref();
         LogUtil.showLog("MUVI", "primary Selected_Country_Id=" + selected_Country_Id);
         if (selected_Country_Id.equals("0")) {
-            /*country_spinner.setSelection(224);
-            selected_Country_Id = country_Code_List.get(224); */
-            country_spinner.setSelection(0);
-            selected_Country_Id = country_Code_List.get(0);
+            country_spinner.setSelection(224);
+            selected_Country_Id = country_Code_List.get(224);
             LogUtil.showLog("MUVI", "country not  matche" + "==" + selected_Country_Id);
         } else {
             for (int i = 0; i < country_Code_List.size(); i++) {
