@@ -284,12 +284,11 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                       /* final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+                        final Intent startIntent = new Intent(getActivity(), MainActivity.class);
                                 startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 getActivity().startActivity(startIntent);
-                                getActivity().finish();*/
-
+                                getActivity().finish();
 
                     }
                 }
