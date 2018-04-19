@@ -53,6 +53,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -504,6 +505,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
                             line.setVisibility(View.VISIBLE);
                             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
                             tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                                 ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
                                 int tabsCount = vg.getChildCount();
@@ -535,6 +537,14 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 }
             }
 
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                //noinspection ConstantConditions
+                TextView tv=(TextView)LayoutInflater.from(getContext()).inflate(R.layout.custom_tab,null);
+                tv.setText(tabLayout.getTabAt(i).getText());
+                FontUtls.loadFont(getContext(), getContext().getResources().getString(R.string.regular_fonts), tv);
+                tabLayout.getTabAt(i).setCustomView(tv);
+
+            }
 
 
             float density = context.getResources().getDisplayMetrics().density;

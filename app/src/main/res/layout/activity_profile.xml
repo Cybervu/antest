@@ -42,22 +42,19 @@
                         android:id="@+id/editProfileNameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_below="@+id/iconImageViewLayout"
-                        android:layout_centerHorizontal="true"
-
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/login_padding_bottom"
+                        android:maxLines="1"
+                        android:inputType="text|textNoSuggestions|textVisiblePassword" android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size" />
+
 
                     <EditText
                         android:id="@+id/emailAddressEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/editProfileNameEditText"
                         android:layout_marginTop="@dimen/forgotlayout_margin"
                         android:clickable="false"
                         android:editable="false"

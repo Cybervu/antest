@@ -241,6 +241,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="12dp"
                                 android:background="@drawable/edittext_bg"
+                                android:inputType="text|textNoSuggestions|textVisiblePassword" android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                                 android:paddingLeft="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="16dp"
@@ -278,8 +279,8 @@
                                 android:layout_below="@+id/loginLayout"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="20dp"
-                                android:scaleType="center"
                                 android:background="@drawable/arrow_button_bg"
+                                android:scaleType="center"
                                 android:src="@drawable/arrow"
                                 android:textColor="@color/white" />
                         </LinearLayout>

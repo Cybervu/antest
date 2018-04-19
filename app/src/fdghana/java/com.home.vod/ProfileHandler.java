@@ -2,6 +2,7 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.InputType;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -43,6 +44,7 @@ public class ProfileHandler {
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editProfileNameEditText);
         languagePreference = LanguagePreference.getLanguagePreference(context);
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT,DEFAULT_NAME_HINT));
+        //editProfileNameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 
 
     }

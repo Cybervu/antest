@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -267,7 +268,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);
         } else {
-            sectionTitle.setText("");
+            sectionTitle.setText(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 
         }
 

@@ -366,9 +366,9 @@
                     android:gravity="center"
                     android:layout_marginTop="@dimen/marginleft10dp"
                     android:text=""
-                    android:textColor="@color/transaction_text_color"
+                    android:textColor="@color/holo_red_dark"
                     android:textSize="@dimen/preorderbtn_text_size"
-                    android:textStyle="bold" />
+                    android:textStyle="normal" />
             </RelativeLayout>
 
 

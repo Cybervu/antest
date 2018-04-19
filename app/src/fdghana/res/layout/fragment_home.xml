@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lineTextView1"
-        app:tabIndicatorHeight="0.3dp"
+        app:tabIndicatorHeight="3dp"
         app:tabGravity="center"
         android:foreground="@drawable/menu_overlay"
         app:tabMaxWidth="0dp"/>
