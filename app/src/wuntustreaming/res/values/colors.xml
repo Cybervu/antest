@@ -26,7 +26,7 @@
  <color name="casttextColor">#580661</color>
  <color name="alreadyMemberTextColor">#000</color>
  <color name="alreadyHaveALoginButtonTextColor">#eda3b0 </color>
- <color name="border_color">#eda3b0 </color>
+ <color name="border_color">#eda3b0</color>
  <color name="cancel_button_text_color">#eda3b0 </color>
  <color name="transparent">@android:color/transparent</color>
  <color name="castCrewTitleTextColor">#eda3b0 </color>
@@ -40,6 +40,10 @@
  <color name="colorPrimaryDark">#a1d0ca</color>
  <color name="languagePopupColor">#fff</color>
  <color name="languagePopupFadeColor">#50696969</color>
+
+ <color name="languagePopupBackgroundColor">#50696969</color>
+ <color name="languagePopupViewBackgroundColor">#eda3b0</color>
+
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000000</color>
  <color name="nav_drawer_text_Color">#000000</color>

@@ -64,6 +64,13 @@
     <color name="listTitleContentColor">#fff</color>
     <color name="languagePopup">#fff</color>
     <color name="languagePopupFade">#fff</color>
+
+
+
+    <color name="languagePopupBackgroundColor">#ffffff</color>
+    <color name="languagePopupViewBackgroundColor">#f2e35d</color>
+
+
     <color name="genreTextColor">#666</color>
     <color name="navDrawerTextColor">#666</color>
     <color name="ccbuttonbg">#f2e35d</color>

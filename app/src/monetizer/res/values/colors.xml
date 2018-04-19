@@ -118,4 +118,7 @@
     <!---this part is added for manage device-->
     <color name="device_name_color">#fff</color>
 
+    <color name="languagePopupBackgroundColor">#ffffff</color>
+    <color name="languagePopupViewBackgroundColor">#580661</color>
+
 </resources>
