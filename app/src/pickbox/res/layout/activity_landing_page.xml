@@ -6,6 +6,7 @@
     android:background="@color/colorPrimary">
 
     <ImageView
+        android:id="@+id/backgroundImagePickbox"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/landing_background"
@@ -24,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="20dp"
         android:gravity="center"
         android:orientation="vertical">
         <RelativeLayout
@@ -40,6 +40,7 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:padding="20dp"
             android:src="@drawable/ic_pickbox_logo" />
 
             <TextView
@@ -52,6 +53,8 @@
                 android:text="TV shows and movies available in Croatia, Serbia, Slovenia, Bosnia and Herzegovina, Montenegro and Macedonia (HD avaliable)."
                 android:textAlignment="center"
                 android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -61,7 +64,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="@color/colorAccent"
-                android:textAlignment="center"></View>
+                android:textAlignment="center"/>
         </RelativeLayout>
 
 

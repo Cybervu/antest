@@ -17,9 +17,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="15dp"
+        android:layout_height="?attr/actionBarSize"
         android:adjustViewBounds="true"
+        android:padding="10dp"
         android:src="@drawable/ic_pickbox_logo"
         android:id="@+id/toolbar_logo"
         />

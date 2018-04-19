@@ -59,12 +59,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHANGE_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -72,14 +69,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VALID_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -87,7 +81,6 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class ProfileActivity extends AppCompatActivity implements
@@ -174,12 +167,16 @@ public class ProfileActivity extends AppCompatActivity implements
         country_spinner.setVisibility(View.GONE);
         language_spinner.setVisibility(View.GONE);
         // FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editProfileNameEditText);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
-
+     /*   FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editNewPassword);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), changePassword);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), update_profile);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);*/
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.pickbox_light_fonts), editConfirmPassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.pickbox_light_fonts), editNewPassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.pickbox_regular_fonts), changePassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.pickbox_regular_fonts), update_profile);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.pickbox_regular_fonts), manage_devices);
 
         //  editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));

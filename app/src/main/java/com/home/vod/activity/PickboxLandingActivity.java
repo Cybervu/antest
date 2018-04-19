@@ -1,12 +1,15 @@
 package com.home.vod.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,11 +36,13 @@ public class PickboxLandingActivity extends AppCompatActivity {
     TextView landingText,termsAndCondition , termsAndCondition1, termsAndCondition2;
     LinearLayout registerButtonLayout, skipButtonLayout;
     LanguagePreference languagePreference;
+    ImageView backgroundImage;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         initViews();
+        setBackgroundTabMobile();
         setFont();
         setLanguage();
 
@@ -74,6 +79,13 @@ public class PickboxLandingActivity extends AppCompatActivity {
         });
     }
 
+    private void setBackgroundTabMobile() {
+        if(isTablet(getApplicationContext())){
+            backgroundImage.setImageDrawable(getResources().getDrawable(R.drawable.landing_background_tab));
+        }else{
+            backgroundImage.setImageDrawable(getResources().getDrawable(R.drawable.landing_background_mobile));
+        }
+    }
 
 
     private void intentToCountrySelectActivity(String type) {
@@ -94,7 +106,7 @@ public class PickboxLandingActivity extends AppCompatActivity {
         termsAndCondition= (TextView) findViewById(R.id.termsAndCondition);
         termsAndCondition1= (TextView) findViewById(R.id.termsAndCondition1);
         termsAndCondition2= (TextView) findViewById(R.id.termsAndCondition2);
-
+        backgroundImage= (ImageView)findViewById(R.id.backgroundImagePickbox);
     }
 
     private void setFont() {
@@ -112,6 +124,15 @@ public class PickboxLandingActivity extends AppCompatActivity {
         termsAndCondition1.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
 
 
+    }
+
+    /*
+    Check for tablet or mobile
+     */
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 }

@@ -125,6 +125,7 @@
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size"
+                        android:inputType="text|textNoSuggestions"
                         android:visibility="visible"/>
 
                     <EditText

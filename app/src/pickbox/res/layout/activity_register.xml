@@ -67,6 +67,7 @@
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
                 android:drawablePadding="@dimen/Login_drawing_padding"
+                android:inputType="textEmailAddress|textNoSuggestions"
                 android:hint="Enter your email"
                 android:padding="@dimen/register_edittext_padding"
                 android:textColor="@color/editTextColor"
@@ -109,6 +110,7 @@
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="Enter your name and surname"
                 android:padding="@dimen/register_edittext_padding"
+                android:inputType="textVisiblePassword|textNoSuggestions|text"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/edit_text_size" />

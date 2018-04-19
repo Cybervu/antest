@@ -609,8 +609,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                         }
                                     }
 
-                                    /*progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-                                    progressBarHandler.show();*/
+                                    progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+                                    progressBarHandler.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1881,7 +1881,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
             playerModel.setIsFreeContent(isFreeContent);
             playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
-            playerModel.setVideoTitle(item.getEpisodeTitle());
+           // playerModel.setVideoTitle(item.getEpisodeTitle());
+            playerModel.setVideoTitle(movieNameStr);
             playerModel.setVideoStory(item.getEpisodeDescription());
             playerModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
             playerModel.setVideoDuration(item.getEpisodeDuration());
@@ -4061,8 +4062,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressBarHandler(Episode_list_Activity.this);
-            pDialog.show();
 
         }
 
@@ -4120,13 +4119,22 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         @Override
         protected void onPostExecute(String file_url) {
             LogUtil.showLog("MUVI", "Download Completed");
-            FakeSubTitlePath.remove(0);
+
+
+            try{
+                FakeSubTitlePath.remove(0);
+
+            }catch (Exception e){
+            }
+
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
+
+                if (progressBarHandler != null && progressBarHandler.isShowing()) {
+                    progressBarHandler.hide();
                 }
+
                 playerModel.setSubTitlePath(SubTitlePath);
                 Intent playVideoIntent;
                 if (Util.goToLibraryplayer) {

@@ -91,7 +91,7 @@
     <color name="loader_color">#0faae3</color>
     <color name="hint_background">#0faae3</color>
     <color name="noInternetColor">#8f8f8f</color>
-    <color name="editTextColor">#8f8f8f</color>
+    <color name="editTextColor">#ffffff</color>
     <color name="voucher_inactive_button">#c3c3c3</color>
     <color name="movieTitleColor">#fff</color>
     <!--movie censor test color-->

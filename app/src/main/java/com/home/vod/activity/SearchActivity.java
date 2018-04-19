@@ -904,7 +904,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 }
 
             }
-            Util.hideKeyboard(SearchActivity.this);
+           /* Util.hideKeyboard(SearchActivity.this);*/
         }
     }
 

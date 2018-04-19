@@ -13,12 +13,12 @@
         layout="@layout/toolbar"
         android:visibility="gone" />
 
-    <ScrollView
+  <!--  <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@android:color/transparent"
-        android:fillViewport="true">
+        android:fillViewport="true">-->
 
 
         <LinearLayout
@@ -161,7 +161,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    <!--</ScrollView>-->
 
     <RelativeLayout
         android:id="@+id/noInternet"
