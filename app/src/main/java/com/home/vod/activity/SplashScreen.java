@@ -110,7 +110,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
-    String ipAddressStr="";
+    String ipAddressStr = "";
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
@@ -140,7 +140,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         Util.getDPI(this);
         Util.printMD5Key(this);
-        dbHelper=new DBHelper(SplashScreen.this);
+        dbHelper = new DBHelper(SplashScreen.this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -185,7 +185,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP){
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Do something for lollipop and above versions
             noInternetTextView.setText("The app is not compatible for this OS.");
             noInternetLayout.setVisibility(View.VISIBLE);
@@ -262,8 +262,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
 
-        Log.v("MUVI11","ipAddressStr====="+ipAddressStr);
-        Log.v("MUVI11","getIPAddress====="+getIPAddress(true));
+        Log.v("MUVI11", "ipAddressStr=====" + ipAddressStr);
+        Log.v("MUVI11", "getIPAddress=====" + getIPAddress(true));
 
 //        Toast.makeText(getApplicationContext(),"response of ipaddress = "+message,Toast.LENGTH_LONG).show();
 
@@ -301,18 +301,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
-            }
-            else if(status == 454){
-               /* noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);*/
-                preferenceManager.setCountryCodeToPref("en");
-                SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-                planListInput.setAuthToken(authTokenStr);
-                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
-                asynGetPlanid.executeOnExecutor(threadPoolExecutor);
-            }
-            else {
+            } else if (status == 454) {
+                noInternetLayout.setVisibility(View.GONE);
+                geoBlockedLayout.setVisibility(View.VISIBLE);
+
+
+            } else {
 
                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
                 noInternetLayout.setVisibility(View.VISIBLE);
@@ -360,16 +354,17 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     @Override
-    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message ,String response) {
+    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message, String response) {
 
-        try{
+        try {
 
             featureHandler.setDefaultFeaturePref(response);
 
-        }catch (Exception e){}
-         /*@BISHAL
+        } catch (Exception e) {
+        }
+        /*@BISHAL
          */
-        if (status==200){
+        if (status == 200) {
             //Util.login_registration_require=true;
             languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
@@ -387,7 +382,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
             preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
-            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE,"1");
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "1");
 
 
             /**
@@ -396,11 +391,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             splashScreenHandler.changeFeatureProperties(featureHandler);
             /*@BISHAL
-            *Handle 455 status
-         */
-        }else if (status==455){
+             *Handle 455 status
+             */
+        } else if (status == 455) {
             //Util.login_registration_require=false;
-            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE,"0");
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "0");
         }
 
 
@@ -444,10 +439,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
         if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
             languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
-        }
-
-        else {
-            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE);
+        } else {
+            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
         }
 
         // Call For Language Translation.
@@ -610,8 +603,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (status == null) {
             isSubscribed = "0";
         }
-        if (code==200){
-            isSubscribed=get_userProfile_output.getIsSubscribed();
+        if (code == 200) {
+            isSubscribed = get_userProfile_output.getIsSubscribed();
         }
 
         Call_One_Step_Procedure();
@@ -724,18 +717,16 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
-        if (status==200){
+        if (status == 200) {
 
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
             asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-        }
-        else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
+        } else if (status == Util.ERROR_CODE_EXPIRED_AUTHTOKEN) {
             geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
 
             noInternetTextView.setText("Oops something went wrong.Please try again later .");
             noInternetLayout.setVisibility(View.VISIBLE);
@@ -761,7 +752,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     if (!addr.isLoopbackAddress()) {
                         String sAddr = addr.getHostAddress();
                         //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':')<0;
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
 
                         if (useIPv4) {
                             if (isIPv4)
@@ -769,13 +760,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         } else {
                             if (!isIPv4) {
                                 int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
                             }
                         }
                     }
                 }
             }
-        } catch (Exception ex) { } // for now eat exceptions
+        } catch (Exception ex) {
+        } // for now eat exceptions
         return "";
     }
 
