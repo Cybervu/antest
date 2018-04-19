@@ -33,7 +33,7 @@
     <color name="borderColor">#0faae3</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
-    <color name="aboutustestcolor">#fff</color>
+    <color name="aboutustestcolor">@color/colorPrimary</color>
     <color name="lollipop_spiner_color">#e2e1e1</color>
     <color name="lollipop_spiner_color2">#7a7a7a</color>
     <color name="spinner_card_color">#0faae3</color>
@@ -69,6 +69,10 @@
     <color name="navlogobackgroundcolor">#ffffff</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#0faae3</color>
+
     <color name="filterTextColor">#8f8f8f</color>
     <color name="nav_drawer_lineColor">#8f8f8f</color>
     <color name="nav_lineColor">#0faae3</color>
@@ -131,4 +135,7 @@
     <color name="nav_text_line_color">#0faae3</color>
     <color name="favorite_unselected_color">#0faae3</color>
     <color name="favorite_selected_color">#0faae3</color>
+
+
+    <color name="aboutustextcolor">#FFFFFF</color>
 </resources>

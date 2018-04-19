@@ -171,7 +171,7 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 20
             targetSdkVersion 25
-            versionName '3.3.0'
+            versionName '3.3.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -554,7 +554,7 @@ android {
             applicationId 'com.release.aeonvideotest'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"5989d8312c5e04a6ae52e3e4cd75e483\""
         }
@@ -666,7 +666,7 @@ android {
             applicationId 'hr.aviion.Pickbox'
             targetSdkVersion 23
             versionCode 1
-            versionName '1.0.1'
+            versionName '1.0.2'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"c39601921c9aa910c88df4c6d334227c\""

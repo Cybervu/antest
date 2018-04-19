@@ -195,7 +195,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
                         movieTypeStr = movieTypeStr.trim();
-                        movieTypeStr = movieTypeStr.replaceAll(" ","");
+//                        movieTypeStr = movieTypeStr.replaceAll(" ","");
 
                         if(movieTypeStr.contains(",")){
                             String data[] = movieTypeStr.split(",");

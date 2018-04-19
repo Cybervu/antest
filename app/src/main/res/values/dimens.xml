@@ -435,5 +435,6 @@
     <dimen name="horizontal_spacing">6dp</dimen>
     <dimen name="padding_left">10dp</dimen>
     <dimen name="padding_right">0dp</dimen>
+    <dimen name="pre_order_margin_buttom">3dp</dimen>
 </resources>
 

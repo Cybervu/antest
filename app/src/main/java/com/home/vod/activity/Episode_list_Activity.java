@@ -830,7 +830,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     Log.v("BIBHU4", "restrict_stream_id============0");
                 }
 
-               // jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                // jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
                 jsonObj.put("domain_name", "https://pb.muvi.com/");
                 jsonObj.put("is_log", "1");
 
@@ -1468,7 +1468,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             dlgAlert.create().show();
         }
     }
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     public enum PlaybackLocation {
         LOCAL,
@@ -1506,7 +1506,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -1516,7 +1516,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
-     /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     /*chromecast-------------------------------------*/
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
@@ -1568,7 +1568,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
     MediaInfo mediaInfo;
- /*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1733,14 +1733,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         });
 
-/*----------------------------------chromecast-------------------------------------*/
+        /*----------------------------------chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-      //  mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //  mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -1830,7 +1830,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
 
     }
-/*chromecast-------------------------------------*/
+    /*chromecast-------------------------------------*/
 
     public void clickItem(EpisodesListModel item) {
 
@@ -1881,7 +1881,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
             playerModel.setIsFreeContent(isFreeContent);
             playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
-           // playerModel.setVideoTitle(item.getEpisodeTitle());
+            // playerModel.setVideoTitle(item.getEpisodeTitle());
             playerModel.setVideoTitle(movieNameStr);
             playerModel.setVideoStory(item.getEpisodeDescription());
             playerModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
@@ -1936,11 +1936,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 } else {
 
-                        Util.check_for_subscription = 1;
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        registerActivity.putExtra("PlayerModel", playerModel);
-                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                    Util.check_for_subscription = 1;
+                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("PlayerModel", playerModel);
+                    startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
                 }
             } else {
