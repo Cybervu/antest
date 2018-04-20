@@ -3282,7 +3282,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         changeSortPopUp.setFocusable(true);
-        changeSortPopUp.setElevation(50);
+       // changeSortPopUp.setElevation(50);
         // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
         int OFFSET_X = 0;
         int OFFSET_Y = getSupportActionBar().getHeight();

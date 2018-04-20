@@ -624,6 +624,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
         View layout = layoutInflater.inflate(R.layout.option_menu_popup_layout, viewGroup);
+       // Kushal - to disbale hardwareaccelerated
+        //layout.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         initLayouts(layout);
 
         // Creating the PopupWindow
@@ -632,7 +634,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         changeSortPopUp.setFocusable(true);
-        changeSortPopUp.setElevation(50);
         // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
         int OFFSET_X = 0;
         int OFFSET_Y = getSupportActionBar().getHeight();

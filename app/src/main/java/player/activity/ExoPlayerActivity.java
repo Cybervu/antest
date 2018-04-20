@@ -743,6 +743,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         episodeId = playerModel.getEpisode_id();
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        //Kushal
+        emVideoView.setLayerType(View.LAYER_TYPE_HARDWARE,null);
         cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);

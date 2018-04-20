@@ -666,7 +666,7 @@ android {
             applicationId 'hr.aviion.Pickbox'
             targetSdkVersion 23
             versionCode 1
-            versionName '1.0.3'
+            versionName '1.0.4'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"c39601921c9aa910c88df4c6d334227c\""
