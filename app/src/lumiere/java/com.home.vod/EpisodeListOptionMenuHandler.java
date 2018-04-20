@@ -64,8 +64,8 @@ public class EpisodeListOptionMenuHandler {
     private int PROFILE_INDEX = 3;
     private int PURCHASE_INDEX = 4;
     private int LOGOUT_INDEX = 5;
-    MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
-            login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language, action_searchmenu, submenu;
+    private MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
+            login_menu, register_menu, mediaRouteMenuItem, menu_language, action_searchmenu, submenu;
 //
 
 
@@ -104,6 +104,7 @@ public class EpisodeListOptionMenuHandler {
         /***************chromecast**********************/
 
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
@@ -147,11 +148,11 @@ public class EpisodeListOptionMenuHandler {
             visibility[PROFILE_INDEX] = true;
 
 
-            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
+           /* if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
-
+*/
             purchage_menu.setVisible(true);
             logout_menu.setVisible(true);
             // Kushal
@@ -200,8 +201,8 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(false);
             purchage_menu.setVisible(false);
             logout_menu.setVisible(false);
-            mydownload_menu.setVisible(false);
-            favorite_menu.setVisible(false);
+           /* mydownload_menu.setVisible(false);
+            favorite_menu.setVisible(false);*/
             //Kushal
             visibility[PROFILE_INDEX] = false;
             visibility[PURCHASE_INDEX] = false;
@@ -217,8 +218,8 @@ public class EpisodeListOptionMenuHandler {
         profile_menu.setVisible(false);
         purchage_menu.setVisible(false);
         logout_menu.setVisible(false);
-        mydownload_menu.setVisible(false);
-        favorite_menu.setVisible(false);
+       /* mydownload_menu.setVisible(false);
+        favorite_menu.setVisible(false);*/
         menu_language.setVisible(false);
     }
 }
