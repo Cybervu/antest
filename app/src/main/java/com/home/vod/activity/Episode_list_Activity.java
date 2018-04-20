@@ -609,8 +609,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                         }
                                     }
 
-                                    /*progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-                                    progressBarHandler.show();*/
+                                    progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+                                    progressBarHandler.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4063,8 +4063,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressBarHandler(Episode_list_Activity.this);
-            pDialog.show();
+           /* pDialog = new ProgressBarHandler(Episode_list_Activity.this);
+            pDialog.show();*/
 
         }
 
@@ -4126,8 +4126,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
+                if (progressBarHandler != null && progressBarHandler.isShowing()) {
+                    progressBarHandler.hide();
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
                 Intent playVideoIntent;

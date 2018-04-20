@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/languagePopupFadeColor"
+            android:background="@color/languagePopupBackgroundColor"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -24,13 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/videoCensorRatingTextView_margin"
-                android:layout_marginLeft="@dimen/pre_order_button_margin"
-                android:textAlignment="viewStart"
                 android:layout_marginTop="@dimen/login_button_margin"
                 android:textColor="@color/textColor"
                 android:textSize="@dimen/languagepop_text_size"
                 android:textStyle="bold"
-                android:gravity="start" />
+                android:gravity="center_horizontal" />
 
 
             <LinearLayout
@@ -65,6 +63,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/lineTextView_height"
-            android:background="@color/border_color" />
+            android:background="@color/languagePopupViewBackgroundColor" />
     </LinearLayout>
 </LinearLayout>

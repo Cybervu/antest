@@ -134,6 +134,11 @@
     <color name="textShadowColor">#333</color>
     <color name="languagePopup">#fff</color>
     <color name="languagePopupFade">#50696969</color>
+
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#57ad57</color>
+
     <color name="languagePopupBottom">#784128</color>
 
     <color name="episodeBackgroundColor">#e5f9e5</color>

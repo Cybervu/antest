@@ -273,7 +273,10 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
                                 startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 getActivity().startActivity(startIntent);
                                 getActivity().finish();
+<<<<<<< HEAD
 
+=======
+>>>>>>> c6669f0ec73bfdcca507fcdecd83d2e0d7e266fc
 
                     }
                 }

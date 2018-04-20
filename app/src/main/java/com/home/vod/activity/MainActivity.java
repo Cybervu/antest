@@ -1117,10 +1117,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 } else {
                     Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
                 }
             }
-
     }
 
 
