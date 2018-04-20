@@ -2,14 +2,8 @@ package com.home.vod.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -18,8 +12,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
@@ -29,7 +21,6 @@ import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
-import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
@@ -50,39 +41,54 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
-import com.home.vod.util.Constant;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import player.model.ContactModel1;
 import player.utils.DBHelper;
 
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
-import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
-
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -174,6 +180,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }*/
 
 
+        // Kushal
+
+
         splashScreenHandler.handleSplashscreen(imageResize);
 
 
@@ -224,6 +233,53 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
     }
 
+    // Kushal
+
+    /*private void askPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(SplashScreen.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(SplashScreen.this,
+                    new String[]{Manifest.permission
+                            .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
+                    111);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 111: {
+
+                if (grantResults.length > 0) {
+                    if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+                        //Call whatever you want
+                       *//* if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
+                            Episode_Details_input episodeDetailsInput = new Episode_Details_input();
+                            episodeDetailsInput.setAuthtoken(authTokenStr);
+                            episodeDetailsInput.setPermalink(permalinkStr);
+                            episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
+                            episodeDetailsInput.setLimit(String.valueOf(limit));
+                            episodeDetailsInput.setOffset(String.valueOf(offset));
+                            episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                            episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+                            asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
+                            asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                        }*//*
+
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
+
+            }
+        }
+    }*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +293,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         splashScreenHandler = new SplashScreenHandler(this);
 
         _init();
+
+        // Kushal
+       //askPermission();
     }
 
     @Override
@@ -771,4 +830,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         return "";
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 }

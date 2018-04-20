@@ -178,11 +178,13 @@ android {
         }
         lumiere_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com//rest/\""
         }
         lumiere_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
         }
         /*Structuring Matas flavour with dimension*/
         matas {
