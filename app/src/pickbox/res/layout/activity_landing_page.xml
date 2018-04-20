@@ -9,7 +9,6 @@
         android:id="@+id/backgroundImagePickbox"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/landing_background"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 
