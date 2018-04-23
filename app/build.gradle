@@ -178,13 +178,13 @@ android {
         }
         lumiere_staging_ {
             dimension 'environment'
-            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com//rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com//rest/\""
         }
         lumiere_Prod_ {
             dimension 'environment'
-            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
         }
         /*Structuring Matas flavour with dimension*/
         matas {
@@ -557,7 +557,7 @@ android {
             applicationId 'com.release.aeonvideotest'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"5989d8312c5e04a6ae52e3e4cd75e483\""
         }

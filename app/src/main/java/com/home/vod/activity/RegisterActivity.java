@@ -556,17 +556,17 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         registerImageView = (ImageView) findViewById(R.id.registerImageView);
-        /*editName = (EditText) findViewById(R.id.editNameStr);
+        /*editName = (EditText) findViewById(R.id.back_btn);
 
-        editName_first = (EditText) findViewById(R.id.editNameStr_first);
-        editName_last = (EditText) findViewById(R.id.editNameStr_last);*/
+        editName_first = (EditText) findViewById(R.id.back_btn_first);
+        editName_last = (EditText) findViewById(R.id.back_btn_last);*/
 
-        editEmail = (EditText) findViewById(R.id.editEmailStr);
-        editPassword = (EditText) findViewById(R.id.editPasswordStr);
-        editConfirmPassword = (EditText) findViewById(R.id.editConfirmPasswordStr);
-        registerButton = (Button) findViewById(R.id.registerButton);
+        editEmail = (EditText) findViewById(R.id.email_txt);
+        editPassword = (EditText) findViewById(R.id.pwd_txt);
+        editConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
+        registerButton = (Button) findViewById(R.id.register);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
-        loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
+        loginTextView = (TextView) findViewById(R.id.login);
 
         /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);
@@ -4480,15 +4480,15 @@ public class RegisterActivity extends AppCompatActivity implements
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_button);
+                b.setId(R.id.back_btn);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);
                     } else {
-                        b.setId(R.id.back_button);
+                        b.setId(R.id.back_btn);
                     }
                 }catch (Exception e){
-                    b.setId(R.id.back_button);
+                    b.setId(R.id.back_btn);
                 }*/
             }
         }

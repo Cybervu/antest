@@ -48,10 +48,9 @@
                 android:textSize="@dimen/email_text_size"/>
 
             <EditText
-                android:id="@+id/editPasswordStr"
+                android:id="@+id/pwd_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editEmailStr"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/login_maring_top"
                 android:drawablePadding="@dimen/login_padding"
@@ -69,13 +68,12 @@
                 android:id="@+id/alreadyLoginLinearLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editPasswordStr"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="@dimen/relative_margin_top"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/forgotPasswordTextView"
+                    android:id="@+id/forgot_pwd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/forgotPasswordTextViewColor"

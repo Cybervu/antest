@@ -1,10 +1,23 @@
 package com.home.vod.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -141,6 +154,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     int ipAddressCalled = 0;
 
 
+    // Kushal
+    private static final int RC_SETTINGS = 6739;
+
+
     private void _init() {
 
 
@@ -194,6 +211,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
+
+    }
+
+    private void apiCall() {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Do something for lollipop and above versions
             noInternetTextView.setText("The app is not compatible for this OS.");
@@ -235,50 +256,157 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     // Kushal
 
-    /*private void askPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(SplashScreen.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+    private void askPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            showExplanationForPermission();
+            /*ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);*/
+           /*         111);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                showExplanationForPermission();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        111);
+                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }*/
+        } else {
+            apiCall();
+        }
+
+
+       /* if (ActivityCompat.shouldShowRequestPermissionRationale(SplashScreen.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             ActivityCompat.requestPermissions(SplashScreen.this,
                     new String[]{Manifest.permission
                             .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
                     111);
+        } else {
+            ActivityCompat.requestPermissions(SplashScreen.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    111);
+        }*/
+    }
+
+    private void showExplanationForPermission() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getThemedContext());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle(getResources().getString(R.string.storagePermissionNecessary));
+        alertBuilder.setMessage(getApplicationName(getApplicationContext()) + " " + getResources().getString(R.string.storagePermissionToPlayVideo));
+        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityCompat.requestPermissions(SplashScreen.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        111);
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
+    private Context getThemedContext() {
+        ContextThemeWrapper themedContext;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            themedContext = new ContextThemeWrapper(SplashScreen.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+        } else {
+            themedContext = new ContextThemeWrapper(SplashScreen.this, android.R.style.Theme_Light_NoTitleBar);
         }
+        return themedContext;
+    }
+
+    public static String getApplicationName(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+
         switch (requestCode) {
             case 111: {
-
-                if (grantResults.length > 0) {
-                    if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
-                        //Call whatever you want
-                       *//* if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
-                            Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                            episodeDetailsInput.setAuthtoken(authTokenStr);
-                            episodeDetailsInput.setPermalink(permalinkStr);
-                            episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
-                            episodeDetailsInput.setLimit(String.valueOf(limit));
-                            episodeDetailsInput.setOffset(String.valueOf(offset));
-                            episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                            episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                            asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
-                            asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
+                for (String permission : permissions) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                        //denied
+                        finish();
+                        Log.e("denied", permission);
+                    } else {
+                        if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                            //allowed
+                            apiCall();
+                            Log.e("allowed", permission);
                         } else {
-                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                        }*//*
+                            //set to never ask again
+                            // Toast.makeText(this, "Set to never ask again", Toast.LENGTH_SHORT).show();
+                            goTosettings();
+                            Log.e("set to never ask again", permission);
+                            //do something here.
+                        }
+                    }
+                }
 
+               /* if (grantResults.length > 0) {
+                    if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+                        apiCall();
                     } else {
                         finish();
                     }
                 } else {
                     finish();
-                }
+                }*/
 
             }
         }
-    }*/
+    }
+
+    private void goTosettings() {
+        new AlertDialog.Builder(getThemedContext()).setTitle(getResources().getString(R.string.permissionsRequired))
+                .setMessage(getResources().getString(R.string.permissionsRequiredMessage))
+                .setPositiveButton("settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    @SuppressWarnings("InlinedAPI")
+                    public void onClick(DialogInterface dialog, int which) {
+                        openSettings();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).create().show();
+
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", getPackageName(), null));
+        startActivityForResult(intent, RC_SETTINGS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SETTINGS) {
+            askPermission();
+        }
+        // finish();
+    }
 
 
     @Override
@@ -293,9 +421,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         splashScreenHandler = new SplashScreenHandler(this);
 
         _init();
-
         // Kushal
-       //askPermission();
+        askPermission();
+
     }
 
     @Override
@@ -304,7 +432,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onPause();
         LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
-        finish();
+        //finish();
         overridePendingTransition(0, 0);
     }
 

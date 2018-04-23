@@ -954,15 +954,15 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_button);
+                b.setId(R.id.back_btn);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);
                     } else {
-                        b.setId(R.id.back_button);
+                        b.setId(R.id.back_btn);
                     }
                 }catch (Exception e){
-                    b.setId(R.id.back_button);
+                    b.setId(R.id.back_btn);
                 }*/
             }
         }
