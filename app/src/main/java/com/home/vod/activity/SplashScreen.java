@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -257,57 +258,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     // Kushal
 
     private void askPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
+
             showExplanationForPermission();
-            /*ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);*/
-           /*         111);
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                showExplanationForPermission();
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        111);
-                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }*/
+
         } else {
             apiCall();
         }
-
-
-       /* if (ActivityCompat.shouldShowRequestPermissionRationale(SplashScreen.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ActivityCompat.requestPermissions(SplashScreen.this,
-                    new String[]{Manifest.permission
-                            .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
-                    111);
-        } else {
-            ActivityCompat.requestPermissions(SplashScreen.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    111);
-        }*/
-    }
-
-    private void showExplanationForPermission() {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getThemedContext());
-        alertBuilder.setCancelable(false);
-        alertBuilder.setTitle(getResources().getString(R.string.storagePermissionNecessary));
-        alertBuilder.setMessage(getApplicationName(getApplicationContext()) + " " + getResources().getString(R.string.storagePermissionToPlayVideo));
-        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(SplashScreen.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        111);
-            }
-        });
-
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
     }
 
     private Context getThemedContext() {
@@ -402,7 +360,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_SETTINGS) {
+        if (requestCode == RC_SETTINGS ) {
             askPermission();
         }
         // finish();
@@ -422,7 +380,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         _init();
         // Kushal
-        askPermission();
+         askPermission();
+
 
     }
 
@@ -962,5 +921,21 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     protected void onResume() {
         super.onResume();
 
+    }
+    private void showExplanationForPermission(){
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getThemedContext());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle(getResources().getString(R.string.storagePermissionNecessary));
+        alertBuilder.setMessage(getApplicationName(getApplicationContext()) +" "+ getResources().getString(R.string.storagePermissionToPlayVideo));
+        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityCompat.requestPermissions(SplashScreen.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},  111);
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 }
