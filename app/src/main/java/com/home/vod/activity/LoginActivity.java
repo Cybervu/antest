@@ -192,8 +192,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         , AsyncGmailReg.AsyncGmailListener, GetIpAddressAsynTask.IpAddressListener {
 
 
-
-
     /***************************************************************************/
 
     TextView gmailTest;
@@ -301,7 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
 
-                        if(Util.favorite_clicked) {
+                        if (Util.favorite_clicked) {
                             finish();
                             return;
                         }
@@ -330,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         startActivity(intent);
                                         finish();
                                         overridePendingTransition(0, 0);
-                                    }else {
+                                    } else {
                                         Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -497,8 +495,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                 new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
 
-            }
-           else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+            } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 if (Util.dataModel.getContentTypesId() == 3) {
                     // Show Popup
                     ShowPpvPopUp();
@@ -513,9 +510,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     startActivity(intent);
                     finish();
                     overridePendingTransition(0, 0);
-                }else if (Util.dataModel.getIsConverted() == 0) {
+                } else if (Util.dataModel.getIsConverted() == 0) {
                     Util.showNoDataAlert(LoginActivity.this);
-                }else {
+                } else {
                     if (NetworkStatus.getInstance().isConnected(this)) {
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
@@ -1475,7 +1472,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN,DEFAULT_LOGIN));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         //playerModel = new Player();
@@ -1554,8 +1551,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
 
-
-
         preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -1614,7 +1609,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         /***************************************************************************/
 
-        gmailTest=(TextView) findViewById(R.id.textView);
+        gmailTest = (TextView) findViewById(R.id.textView);
         googleSignView = (RelativeLayout) findViewById(R.id.sign_in_button);
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
@@ -1625,28 +1620,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
 
-        if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK, FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             btnLogin.setVisibility(View.GONE);
         }
 
-        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+        if (featureHandler.getFeatureStatus(FeatureHandler.GOOGLE, FeatureHandler.DEFAULT_GOOGLE)) {
             googleSignView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             googleSignView.setVisibility(View.GONE);
         }
-
 
 
         /***************************************************************************/
 
 
-       // loginHandler = new LoginHandler(this);
+        // loginHandler = new LoginHandler(this);
         callSignin(languagePreference);
         callFblogin(callbackManager, loginButton, languagePreference);
-
-
 
 
         // Configure Google Sign In
@@ -1817,12 +1809,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
-                if(regEmailStr.equals("")) {
+                if (regEmailStr.equals("")) {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
-                }else if(regPasswordStr.equals("")) {
+                } else if (regPasswordStr.equals("")) {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
                 }
-                }
+            }
         } else {
             Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
@@ -3745,7 +3737,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }
 
 
-
     @Override
     public void onCheckFbUserDetailsAsynPreExecuteStarted() {
 
@@ -3927,7 +3918,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         } else {
 
 
-                            if(Util.favorite_clicked) {
+                            if (Util.favorite_clicked) {
                                 finish();
                                 return;
                             }
@@ -3950,13 +3941,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 } else {
                                     if (PlanId.equals("1") && socialAuthOutputModel.getIsSubscribed().equals("0")) {
 
-                                        if (CheckSubscriptionHandler.isSubscriptionAllowed){
+                                        if (CheckSubscriptionHandler.isSubscriptionAllowed) {
                                             Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                             startActivity(intent);
                                             finish();
                                             overridePendingTransition(0, 0);
-                                        }else {
+                                        } else {
                                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -4840,7 +4831,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             startActivity(intent);
                             finish();
                             overridePendingTransition(0, 0);
-                        }else {
+                        } else {
                             Intent in = new Intent(LoginActivity.this, MainActivity.class);
                             in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -5481,7 +5472,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
 
                 //load video urls according to resolution
-                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))){
+                if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
 
                     Log.v("BIBHU", "isRestrictDevice called");
                     // Call For Check Api.
@@ -5529,7 +5520,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     ForgotPasswordActivity.forgotA.finish();
                                 }*/
                                     onBackPressed();
-                                }else {
+                                } else {
                                     Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                     in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -5623,7 +5614,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             startActivity(intent);
                             finish();
                             overridePendingTransition(0, 0);
-                        }else {
+                        } else {
                             if (Util.dataModel.getContentTypesId() == 3) {
                                 // Show Popup
                                 ShowPpvPopUp();
@@ -5678,35 +5669,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     }
 
-    public void setResultAtFinishActivity(){
+    public void setResultAtFinishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // *********************************************************************************************************//
 
 
-
-
-    public void callSignin(LanguagePreference languagePreference){
+    public void callSignin(LanguagePreference languagePreference) {
         gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN));
         googleSignView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -5715,11 +5688,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             }
         });
     }
-    public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){
 
-        this.registerButton=registerButton;
-        this.languagePreference=languagePreference;
-        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK));
+    public void callFblogin(final CallbackManager callbackManager, Button registerButton, LanguagePreference languagePreference) {
+
+        this.registerButton = registerButton;
+        this.languagePreference = languagePreference;
+        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5768,16 +5742,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("first_name") + " " + json.getString("last_name");
                                         }
-                                        fName =  json.getString("first_name");
+                                        fName = json.getString("first_name");
                                     } else {
 
                                         if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
                                             fbName = json.getString("last_name");
-                                            fName =  json.getString("last_name");
-                                        }else{
+                                            fName = json.getString("last_name");
+                                        } else {
                                             if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
                                                 fbName = json.getString("name");
-                                                fName = json.getString("name").replace(" ","").trim();
+                                                fName = json.getString("name").replace(" ", "").trim();
                                             }
                                         }
 
@@ -5798,7 +5772,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     registerButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
-                                    handleFbUserDetails(fbUserId,fbEmail,fbName);
+                                    handleFbUserDetails(fbUserId, fbEmail, fbName);
                                 }
 
                             } catch (JSONException e) {
