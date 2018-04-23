@@ -3,24 +3,21 @@ package com.home.vod.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,28 +26,15 @@ import com.home.apisdk.apiModel.GetCastDetailsInput;
 import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
-import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
-import com.home.vod.util.Util;
-
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -65,14 +49,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.FILMOGRAPHY;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -120,6 +102,9 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 finish();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
 
         if (getIntent().getStringExtra("castPermalink") != null) {
@@ -934,6 +919,28 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                                    RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset);
+        }
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
         }
     }
 }

@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,17 +24,10 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.home.vod.R.id.loginWithFacebookButton;
-import static com.home.vod.R.id.registerButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -83,7 +71,7 @@ public class RegisterUIHandler {
         googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        editName = (EditText) context.findViewById(R.id.name_txt);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);

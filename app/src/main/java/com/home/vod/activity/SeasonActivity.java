@@ -1,7 +1,5 @@
 package com.home.vod.activity;
 
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,8 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
-
+import android.widget.ImageButton;
 
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
 import com.home.apisdk.apiModel.ContentDetailsInput;
@@ -22,18 +19,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -123,6 +109,10 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 onBackPressed();
             }
         });
+
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
 
         // seasonGridView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -336,5 +326,27 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
     }
 */
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
+    }
 
 }

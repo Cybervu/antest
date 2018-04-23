@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,7 +30,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,7 +53,6 @@ import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -63,7 +60,6 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
@@ -82,28 +78,27 @@ import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
 import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
-import com.home.apisdk.apiModel.MonitizationDetailsInput;
-import com.home.apisdk.apiModel.MonitizationDetailsOutput;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MonitizationDetailsInput;
+import com.home.apisdk.apiModel.MonitizationDetailsOutput;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.ValidateVoucherInputModel;
+import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.vod.BuildConfig;
-import com.home.vod                                                                                                                                                                                                              .CheckVoucherOrPpvPaymentHandler;
+import com.home.vod.CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListViewMoreAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
@@ -118,17 +113,12 @@ import com.home.vod.util.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -139,8 +129,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
@@ -175,11 +163,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AV
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EPISODE_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
@@ -203,11 +190,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
-
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO;
@@ -235,19 +221,7 @@ import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 /**
  * Created by Muvi on 2/6/2017.
  */
@@ -423,7 +397,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         if (!play_video) {
 
 
-
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -582,6 +555,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         if ((Util.dataModel.getPlayPos() * 1000) > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                             Intent resumeIntent = new Intent(Episode_list_Activity.this, ResumePopupActivity.class);
+                            if (Util.goToLibraryplayer)
+                                resumeIntent.putExtra("activity","MyLibraryPlayer");
+                            else
+                                resumeIntent.putExtra("activity","Episode_list_Activity");
                             startActivityForResult(resumeIntent, 1001);
 
                         } else {
@@ -632,8 +609,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                         }
                                     }
 
-                                    /*progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-                                    progressBarHandler.show();*/
+                                    progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+                                    progressBarHandler.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -792,7 +769,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } catch (JSONException e) {
             }
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -874,7 +851,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
 
             List tracks = new ArrayList();
-            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                 for (int i = 0; i < FakeSubTitlePath.size(); i++) {
                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1064,7 +1041,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(Episode_list_Activity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
@@ -1354,7 +1331,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (monitizationDetailsOutput.getVoucher() != null) {
                 isVoucher = Integer.parseInt(monitizationDetailsOutput.getVoucher());
 
-                if(monitizationDetailsOutput.getPpv()!=null && (Integer.parseInt(monitizationDetailsOutput.getPpv()))==1){
+                if (monitizationDetailsOutput.getPpv() != null && (Integer.parseInt(monitizationDetailsOutput.getPpv())) == 1) {
                     isVoucher = 0;
                 }
 
@@ -1637,6 +1614,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
         TextView sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(Episode_list_Activity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
@@ -3162,6 +3143,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
 
         visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
 
         return true;
     }
@@ -4081,8 +4063,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressBarHandler(Episode_list_Activity.this);
-            pDialog.show();
+           /* pDialog = new ProgressBarHandler(Episode_list_Activity.this);
+            pDialog.show();*/
 
         }
 
@@ -4144,8 +4126,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
+                if (progressBarHandler != null && progressBarHandler.isShowing()) {
+                    progressBarHandler.hide();
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
                 Intent playVideoIntent;
@@ -4258,19 +4240,19 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
 
-                   if(isVoucher ==1){
-                       GetVoucherPlan();
-                   }else{
-                       if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                           ShowPpvPopUp();
-                       } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                           Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-                           intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                           startActivityForResult(intent,VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
-                       } else {
-                           ShowPpvPopUp();
-                       }
-                   }
+                    if (isVoucher == 1) {
+                        GetVoucherPlan();
+                    } else {
+                        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                            ShowPpvPopUp();
+                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
+                        } else {
+                            ShowPpvPopUp();
+                        }
+                    }
 
                 }
 
@@ -4659,5 +4641,28 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+    }
+
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
     }
 }
