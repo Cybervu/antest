@@ -1,10 +1,7 @@
 package com.home.vod;
 
 import android.app.Activity;
-import android.support.v7.app.MediaRouteButton;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.home.vod.util.FeatureHandler;
 

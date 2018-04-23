@@ -18,28 +18,24 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
 import com.home.apisdk.apiController.GetInvoicePdfAsynTask;
-import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
 import com.home.apisdk.apiController.TransactionDetailsAsynctask;
 import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
 import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
 import com.home.apisdk.apiModel.GetInvoicePdfInputModel;
 import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.apisdk.apiModel.TransactionInputModel;
 import com.home.apisdk.apiModel.TransactionOutputModel;
 import com.home.vod.R;
@@ -49,15 +45,12 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import java.io.BufferedInputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -75,7 +68,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVOICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ORDER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANASCTION_DETAIL;
@@ -90,7 +82,6 @@ import static com.home.vod.preferences.LanguagePreference.INVOICE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_PDF;
-import static com.home.vod.preferences.LanguagePreference.ORDER;
 import static com.home.vod.preferences.LanguagePreference.PLAN_NAME;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
@@ -161,6 +152,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             }
         });
         mActionBarToolbar.setTitle("");
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
 
         noInternet = (RelativeLayout) findViewById(R.id.noInternet);
@@ -295,9 +289,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
         downloadFileFromURL=new DownloadFileFromURL();
-        downloadFileFromURL.execute(Util.pdf_download_url(TransactionDetailsActivity.this) + download_Url);
+        downloadFileFromURL.execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
-        LogUtil.showLog("MUVI", "Url=" + Util.pdf_download_url(TransactionDetailsActivity.this) + download_Url);
+        LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
 
     }
 
@@ -999,5 +993,28 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
         downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
+    }
+
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            }
+        }
     }
 }

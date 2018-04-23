@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,24 +49,9 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,8 +63,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import player.activity.ResumePopupActivity;
 import player.model.ContactModel1;
 import player.utils.DBHelper;
@@ -88,7 +71,6 @@ import player.utils.Util;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOADED_ACCESS_EXPIRED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DOWNLOADED_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -304,6 +286,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             }
         });
 
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
         if(com.home.vod.util.Util.hideBcakIcon){
             mActionBarToolbar.setNavigationIcon(null);
 //            getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -330,6 +316,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
         download = dbHelper.getContactt(emailIdStr, 1);
+        if (NetworkStatus.getInstance().isConnected(MyDownloads.this)){
             if (download.size() > 0) {
                 adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
                 list.setAdapter(adapter);
@@ -337,7 +324,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 nodata.setVisibility(View.VISIBLE);
                 noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
             }
-
+        }else {
+            nodata.setVisibility(View.VISIBLE);
+            noDataTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        }
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1533,6 +1523,29 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 DB.execSQL(Qry1);
             }
         }).start();
+    }
+
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
     }
 }
 

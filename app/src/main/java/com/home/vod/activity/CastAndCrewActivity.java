@@ -100,6 +100,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
                 finish();
             }
         });
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
@@ -385,6 +388,25 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 //        overridePendingTransition(0, 0);
         super.onBackPressed();
     }*/
-
-
+/*
+    Kushal- To set id to back button in Action Bar
+     */
+   private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+       for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+           View v = mActionBarToolbar.getChildAt(i);
+           if (v instanceof ImageButton) {
+               ImageButton b = (ImageButton) v;
+               b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+           }
+       }
+   }
 }

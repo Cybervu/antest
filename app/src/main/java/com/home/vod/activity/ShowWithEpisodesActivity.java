@@ -30,7 +30,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -98,31 +97,30 @@ import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
 import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
-import com.home.apisdk.apiModel.MonitizationDetailsInput;
-import com.home.apisdk.apiModel.MonitizationDetailsOutput;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MonitizationDetailsInput;
+import com.home.apisdk.apiModel.MonitizationDetailsOutput;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.ValidateVoucherInputModel;
+import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
-import com.home.vod.R;
-import com.home.vod.BuildConfig;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
@@ -134,7 +132,8 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
-
+import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -155,8 +154,101 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ResumePopupActivity;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
-import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
+import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
+import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
+import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.NEXT;
+import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.REVIEWS;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
+import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.VOUCHER_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.CAST_INTENT_KEY;
 import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
 import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
@@ -166,17 +258,6 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-
-
-import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
 
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements
@@ -2024,6 +2105,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         btnmore = (Button) findViewById(R.id.btnMore);
         favorite_view_episode = (ImageView) findViewById(R.id.favorite_view_episode);
@@ -6128,6 +6213,29 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
 
 
+        }
+    }
+
+
+    /*
+   Kushal- To set id to back button in Action Bar
+    */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
         }
     }
 }

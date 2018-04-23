@@ -9,10 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
 import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
@@ -24,10 +24,8 @@ import com.home.vod.model.RecyclerItemClickListener;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -36,19 +34,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
-import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
@@ -117,6 +109,9 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
@@ -398,4 +393,28 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
         overridePendingTransition(0, 0);
         super.onBackPressed();
     }
+
+
+    /*
+Kushal- To set id to back button in Action Bar
+ */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_btn);
+            /*try {
+                if (b.getContentDescription().equals("Open")) {
+                    b.setId(R.id.drawer_menu);
+                } else {
+                    b.setId(R.id.back_btn);
+                }
+            }catch (Exception e){
+                b.setId(R.id.back_btn);
+            }*/
+            }
+        }
+    }
+
 }

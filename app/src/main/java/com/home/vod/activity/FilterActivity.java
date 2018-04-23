@@ -13,6 +13,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
@@ -89,6 +90,10 @@ public class FilterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(toolbar);
+
         resetButton = (Button)findViewById(R.id.resetButton);
         applyButton = (Button)findViewById(R.id.applyButton);
         genreListData = (RecyclerView) findViewById(R.id.demoListView);
@@ -293,6 +298,28 @@ public class FilterActivity extends AppCompatActivity {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+        }
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back_button);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            }
         }
     }
 

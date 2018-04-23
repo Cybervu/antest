@@ -11,11 +11,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -51,11 +50,9 @@ import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
-import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
 import com.home.vod.R;
@@ -96,23 +93,35 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
@@ -120,16 +129,6 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
         LogoutAsynctask.LogoutListener,
@@ -306,8 +305,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         toolbarTitleHandler=new ToolbarTitleHandler(this);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         LogUtil.showLog("Abhishek", "Toolbar");
+
+        // Kushal
+        setIdToActionBarBackButton(mToolbar);
 
         //**** chromecast*************//*
 
@@ -322,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         };
 
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        //mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 
 
         // int startPosition = getInt("startPosition", 0);
@@ -1113,10 +1117,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 } else {
                     Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
                 }
             }
-
     }
 
 
@@ -1772,6 +1774,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
         searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(searchIntent);
+    }
+
+    /*
+    Kushal - To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.drawer_menu);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
     }
 
 }
