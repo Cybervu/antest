@@ -121,5 +121,5 @@
  <color name="chromecast_color">#ffffff</color>
 
  <!---this part is added for manage device-->
- <color name="device_name_color">#111111</color>
+ <color name="device_name_color">#ffffff</color>
 </resources>
