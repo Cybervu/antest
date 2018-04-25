@@ -347,7 +347,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
             targetSdkVersion 23
             versionCode 4
-            versionName '3.0'
+            versionName '3.0.1'
         }
         onyx_staging_ {
             dimension 'environment'

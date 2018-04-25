@@ -1,0 +1,183 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+	package
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:3:5-30
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:1-65:12
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:5:22-76
+application
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:6:5-63:19
+	android:supportsRtl
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:7:9-35
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:6:45-77
+	android:allowBackup
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:6:18-44
+activity#com.home.api.player.activity.AdPlayerActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:9:9-11:51
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:11:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:10:13-29
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:9:19-79
+activity#com.home.api.player.activity.CastAndCrewActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:12:9-14:51
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:14:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:13:13-29
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:12:19-82
+activity#com.home.api.player.activity.CastCrewDetailsActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:15:9-18:53
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:17:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:16:13-29
+	android:theme
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:18:13-51
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:15:19-86
+activity#com.home.api.player.activity.ExoPlayerActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:19:9-23:56
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:22:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:21:13-29
+	android:windowSoftInputMode
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:23:13-54
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:20:13-74
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:19:19-80
+activity#com.home.api.player.activity.MyActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:24:9-26:51
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:26:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:25:13-29
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:24:19-73
+activity#com.home.api.player.activity.MyLibraryPlayer
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:27:9-31:56
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:30:13-50
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:29:13-29
+	android:windowSoftInputMode
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:31:13-54
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:28:13-74
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:27:19-78
+activity#com.home.api.player.activity.ResolutionChangeActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:32:9-34:74
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:33:13-59
+	android:theme
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:34:13-72
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:32:19-87
+activity#com.home.api.player.activity.ResumePopupActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:35:9-39:65
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:38:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:37:13-29
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:36:13-59
+	android:theme
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:39:13-63
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:35:19-82
+activity#com.home.api.player.activity.Subtitle_Resolution
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:40:9-44:74
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:43:13-47
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:42:13-29
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:41:13-59
+	android:theme
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:44:13-72
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:40:19-82
+activity#com.home.api.player.activity.SubtitleList
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:45:9-47:74
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:46:13-59
+	android:theme
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:47:13-72
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:45:19-75
+activity#com.home.api.player.activity.SupportActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:48:9-50:51
+	android:screenOrientation
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:50:13-49
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:49:13-29
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:48:19-78
+activity#com.home.api.player.activity.ThirdPartyPlayer
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:51:9-54:56
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:53:13-29
+	android:windowSoftInputMode
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:54:13-54
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:52:13-74
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:51:19-79
+activity#com.home.api.player.activity.YouTubeAPIActivity
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:55:9-58:56
+	android:label
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:57:13-29
+	android:windowSoftInputMode
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:58:13-54
+	android:configChanges
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:56:13-74
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:55:19-81
+service#com.home.api.player.activity.DataConsumptionService
+ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:60:9-62:39
+	android:enabled
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:61:13-35
+	android:exported
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:62:13-36
+	android:name
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml:60:18-84
+uses-sdk
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		ADDED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
+		INJECTED from E:\VOD_NEW_CLONE\VOD\muvisdk\src\main\AndroidManifest.xml
