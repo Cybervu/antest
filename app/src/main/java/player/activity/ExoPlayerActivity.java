@@ -1641,14 +1641,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View v) {
 
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ExoPlayerActivity.this)) {
-                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                    try {
-                        Util.call_finish_at_onUserLeaveHint = false;
-                        startActivityForResult(intent, 22222);
-                    } catch (ActivityNotFoundException e) {
-                    }
-                } else {
 
                     download.setEnabled(false);
 
@@ -1689,7 +1681,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     if (playerModel.getOfflineUrl().size() > 0) {
                         Download_SubTitle(playerModel.getOfflineUrl().get(0));
                     }
-                }
+
 
             }
         });
