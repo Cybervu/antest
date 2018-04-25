@@ -219,7 +219,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     FeatureHandler featureHandler;
 
     // Kushal
-    int option_menu_id[]={R.id.login,R.id.register,R.id.language,R.id.profile,R.id.purchase,R.id.logout};
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language_popup,R.id.profile,R.id.purchase,R.id.logout};
     PopupWindow changeSortPopUp;
     LinearLayout linearLayout[];
     boolean[] visibility;
@@ -1710,7 +1710,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(ViewMoreActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -1824,11 +1824,11 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
-            case R.id.submenu:
+            case R.id.option:
                 /*
                 Show to popup menu
                  */
-                showPopupMenu(findViewById(R.id.submenu));
+                showPopupMenu(findViewById(R.id.option));
                 return false;
             default:
                 break;
@@ -1892,7 +1892,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(registerIntent);
                 changeSortPopUp.dismiss();
                 break;
-            case R.id.language:
+            case R.id.language_popup:
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 if (languageModel != null && languageModel.size() > 0) {
@@ -2549,7 +2549,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

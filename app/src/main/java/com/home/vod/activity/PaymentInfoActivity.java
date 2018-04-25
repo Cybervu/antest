@@ -1175,7 +1175,7 @@ public class PaymentInfoActivity extends AppCompatActivity implements VideoDetai
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

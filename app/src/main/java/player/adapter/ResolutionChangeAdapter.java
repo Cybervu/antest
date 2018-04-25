@@ -36,8 +36,8 @@ public class ResolutionChangeAdapter extends BaseAdapter {
             R.id.resolution_2048,
             R.id.resolution_4096,
             R.id.resolution_7680,
-            R.id.resolution_Best,
-            R.id.resolution_Auto};
+            R.id.resolution_best,
+            R.id.resolution_auto};
 
     //public constructor
     public ResolutionChangeAdapter(Context context, ArrayList<String> items) {
@@ -97,7 +97,17 @@ public class ResolutionChangeAdapter extends BaseAdapter {
     }
 
     private void setIdToResolutionLayout(View convertView, TextView title) {
-        LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.layout);
+
+        if (convertView instanceof LinearLayout) {
+            LinearLayout l= (LinearLayout)convertView;
+            for (int j=0; j<resolutionName.length;j++) {
+                if (title.getText().toString().toLowerCase().equalsIgnoreCase(resolutionName[j])){
+                    l.setId(resolutionId[j]);
+                }
+            }
+        }
+
+        /*LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.layout);
         for (int i = 0; i < layout.getChildCount(); i++) {
             View v = layout.getChildAt(i);
             if (v instanceof LinearLayout) {
@@ -109,6 +119,6 @@ public class ResolutionChangeAdapter extends BaseAdapter {
                 }
             }
 
-        }
+        }*/
     }
 }

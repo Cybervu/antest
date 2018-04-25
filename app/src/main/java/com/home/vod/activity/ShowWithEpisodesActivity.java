@@ -332,7 +332,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
 
     // Kushal
-    int option_menu_id[]={R.id.login,R.id.register,R.id.language,R.id.profile,R.id.purchase,R.id.logout};
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language_popup,R.id.profile,R.id.purchase,R.id.logout};
     PopupWindow changeSortPopUp;
     LinearLayout linearLayout[];
     boolean[] visibility;
@@ -2110,15 +2110,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         setIdToActionBarBackButton(mActionBarToolbar);
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        btnmore = (Button) findViewById(R.id.btnMore);
-        favorite_view_episode = (ImageView) findViewById(R.id.favorite_view_episode);
+        btnmore = (Button) findViewById(R.id.Viewall);
+        favorite_view_episode = (ImageView) findViewById(R.id.favourite);
 
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
 
         btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
-        playButton = (ImageView) findViewById(R.id.playButton);
+        playButton = (ImageView) findViewById(R.id.play);
         watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), watchTrailerButton);
         watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
@@ -2126,14 +2126,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         playButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
-        videoGenreTextView = (TextView) findViewById(R.id.videoGenreTextView);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoTitle = (TextView) findViewById(R.id.content_title);
+        videoGenreTextView = (TextView) findViewById(R.id.genre);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         playButton.setVisibility(View.GONE);
 
         videoCastCrewTitleTextView.setVisibility(View.GONE);
@@ -2215,7 +2215,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
         // *** rating***////
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar = (RatingBar) findViewById(R.id.rating);
         ratingBar.setFocusable(false);
         ratingBar.setVisibility(View.GONE);
 
@@ -2224,7 +2224,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 return true;
             }
         });
-        viewRatingTextView = (TextView) findViewById(R.id.viewRatingTextView);
+        viewRatingTextView = (TextView) findViewById(R.id.review);
 
 
         // *****rating********///
@@ -3551,7 +3551,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(ShowWithEpisodesActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -3671,11 +3671,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 dlgAlert.create().show();
 
                 return false;
-            case R.id.submenu:
+            case R.id.option:
                 /*
                 Show to popup menu
                  */
-                showPopupMenu(findViewById(R.id.submenu));
+                showPopupMenu(findViewById(R.id.option));
                 return false;
             default:
                 break;
@@ -3738,7 +3738,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 startActivity(registerIntent);
                 changeSortPopUp.dismiss();
                 break;
-            case R.id.language:
+            case R.id.language_popup:
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 if (languageModel != null && languageModel.size() > 0) {
@@ -6225,7 +6225,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

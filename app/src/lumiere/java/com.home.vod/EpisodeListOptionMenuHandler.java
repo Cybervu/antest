@@ -15,11 +15,15 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 
@@ -41,8 +45,8 @@ public class EpisodeListOptionMenuHandler {
     private int PROFILE_INDEX = 3;
     private int PURCHASE_INDEX = 4;
     private int LOGOUT_INDEX = 5;
-    private MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
-            login_menu, register_menu, mediaRouteMenuItem, menu_language, action_searchmenu, submenu;
+    MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
+            login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language, action_searchmenu, submenu;
 //
 
 
@@ -68,8 +72,10 @@ public class EpisodeListOptionMenuHandler {
         purchage_menu = menu.findItem(R.id.action_purchage);
         logout_menu = menu.findItem(R.id.action_logout);
         register_menu = menu.findItem(R.id.action_register);
-        action_searchmenu = menu.findItem(R.id.action_search);
-        submenu = menu.findItem(R.id.submenu);
+        mydownload_menu = menu.findItem(R.id.action_mydownload);
+        favorite_menu = menu.findItem(R.id.menu_item_favorite);
+        action_searchmenu = menu.findItem(R.id.search);
+        submenu = menu.findItem(R.id.option);
 
         /***************chromecast**********************/
 
@@ -79,17 +85,21 @@ public class EpisodeListOptionMenuHandler {
         /***************chromecast**********************/
 
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
+        mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+        purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+        favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+
+
         submenu.setVisible(true);
         // Kushal
         visibility = new boolean[6];
 
         action_searchmenu.setVisible(true);
-        purchage_menu.setVisible(false);
         filter_menu.setVisible(false);
         if ((featureHandler.getFeatureStatus(FeatureHandler.CHROMECAST, FeatureHandler.DEFAULT_CHROMECAST)))
             mediaRouteMenuItem.setVisible(true);
@@ -118,22 +128,24 @@ public class EpisodeListOptionMenuHandler {
             visibility[PROFILE_INDEX] = true;
 
 
-           /* if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
-*/
-            purchage_menu.setVisible(true);
+
+            //purchage_menu.setVisible(true);
+            purchage_menu.setVisible(false);
             logout_menu.setVisible(true);
             // Kushal
-            visibility[PURCHASE_INDEX] = true;
+            //visibility[PURCHASE_INDEX] = true;
+            visibility[PURCHASE_INDEX] = false;
             visibility[LOGOUT_INDEX] = true;
 
-            /*if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
                 mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);
-*/
+
 
         } else if (loggedInStr == null) {
 
@@ -157,8 +169,8 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(false);
             purchage_menu.setVisible(false);
             logout_menu.setVisible(false);
-           /* mydownload_menu.setVisible(false);
-            favorite_menu.setVisible(false);*/
+            mydownload_menu.setVisible(false);
+            favorite_menu.setVisible(false);
             //Kushal
             visibility[PROFILE_INDEX] = false;
             visibility[PURCHASE_INDEX] = false;
@@ -174,8 +186,8 @@ public class EpisodeListOptionMenuHandler {
         profile_menu.setVisible(false);
         purchage_menu.setVisible(false);
         logout_menu.setVisible(false);
-       /* mydownload_menu.setVisible(false);
-        favorite_menu.setVisible(false);*/
+        mydownload_menu.setVisible(false);
+        favorite_menu.setVisible(false);
         menu_language.setVisible(false);
     }
 }

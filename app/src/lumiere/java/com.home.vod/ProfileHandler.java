@@ -2,7 +2,6 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,9 +11,6 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 
-import player.utils.Util;
-
-import static com.home.vod.R.id.editProfileNameEditText;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
@@ -37,11 +33,13 @@ public class ProfileHandler {
     public String last_name="";
 
     public String phoneStr="";
+    TextView name_of_user;
 
     public ProfileHandler(Activity context){
         this.context=context;
         editProfileNameEditText_first = (EditText) context.findViewById(R.id.editProfileNameEditText_first);
         editProfileNameEditText_last = (EditText) context.findViewById(R.id.editProfileNameEditText_last);
+        name_of_user = (TextView) context.findViewById(R.id.name_of_user);
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editProfileNameEditText_first);
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editProfileNameEditText_last);
         languagePreference = LanguagePreference.getLanguagePreference(context);
@@ -51,10 +49,10 @@ public class ProfileHandler {
     }
     public void updateProfileHandler() {
 
-        if (editProfileNameEditText_first.getText().toString().matches("")) {
+        if (editProfileNameEditText_first.getText().toString().trim().matches("")) {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(FIRST_NAME, DEFAULT_FIRST_NAME).toString().toLowerCase());
             return;
-        } else if (editProfileNameEditText_last.getText().toString().matches("")) {
+        } else if (editProfileNameEditText_last.getText().toString().trim().matches("")) {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(LAST_NAME, DEFAULT_LAST_NAME).toString().toLowerCase());
             return;
         }
@@ -70,7 +68,7 @@ public class ProfileHandler {
                         InputMethodManager.HIDE_NOT_ALWAYS);
                 first_nameStr = editProfileNameEditText_first.getText().toString().trim();
                 last_nameStr = editProfileNameEditText_last.getText().toString().trim();
-                //final_name = first_nameStr + " " + last_nameStr;
+              //  final_name = first_nameStr + " " + last_nameStr;
                 ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
 
             }
@@ -86,6 +84,7 @@ public class ProfileHandler {
             editProfileNameEditText_last.setText(last_name.trim());
             editProfileNameEditText_first.setSelection(editProfileNameEditText_first.getText().length());
             editProfileNameEditText_last.setSelection(editProfileNameEditText_last.getText().length());
+            name_of_user.setText(first_name+" "+last_name);
         } catch (Exception e) {
             e.printStackTrace();
         }

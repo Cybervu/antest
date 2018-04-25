@@ -31,7 +31,7 @@
                     android:orientation="vertical">
 
                     <com.devbrackets.android.exomedia.ui.widget.EMVideoView
-                        android:id="@+id/emVideoView"
+                        android:id="@+id/player_screen"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#000000"
@@ -54,7 +54,7 @@
 
 
                         <ImageButton
-                            android:id="@+id/latest_center_play_pause"
+                            android:id="@+id/play_centre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
@@ -78,7 +78,7 @@
                             android:visibility="visible">
 
                             <TextView
-                                android:id="@+id/emailAddressTextView"
+                                android:id="@+id/ip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -86,7 +86,7 @@
                             </TextView>
 
                             <TextView
-                                android:id="@+id/ipAddressTextView"
+                                android:id="@+id/email"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -94,7 +94,7 @@
                             </TextView>
 
                             <TextView
-                                android:id="@+id/dateTextView"
+                                android:id="@+id/date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -118,7 +118,7 @@
 
 
                         <com.home.vod.util.StrokedTextView
-                            android:id="@+id/offLine_subtitleText"
+                            android:id="@+id/subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
@@ -203,7 +203,7 @@
 
 
                         <ImageView
-                            android:id="@+id/subtitle_change_btn"
+                            android:id="@+id/setting"
                             android:layout_width="@dimen/subtitle_change_btn_width"
                             android:layout_height="@dimen/subtitle_change_btn_height"
                             android:layout_marginRight="@dimen/marginRight20dp"
@@ -236,7 +236,7 @@
 
                         <ImageButton
                             android:layout_marginLeft="@dimen/marginleft10dp"
-                            android:id="@+id/center_play_pause"
+                            android:id="@+id/play"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
@@ -248,7 +248,7 @@
 
 
                         <SeekBar
-                            android:id="@+id/progress"
+                            android:id="@+id/progress_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -267,7 +267,7 @@
                             android:textSize="@dimen/totaltme_text_size" />
 
                         <ImageView
-                            android:id="@+id/compress_expand"
+                            android:id="@+id/max_min"
                             android:layout_width="@dimen/compress_expand_height"
                             android:layout_height="@dimen/compress_expand_width"
                             android:padding="@dimen/padding15dp"
@@ -298,7 +298,7 @@
 
 
                     <TextView
-                        android:id="@+id/videoTitle"
+                        android:id="@+id/content_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/relativeOverlayLayout"
@@ -320,7 +320,7 @@
                         android:visibility="gone">
 
                         <ImageView
-                            android:id="@+id/downloadImageView"
+                            android:id="@+id/download"
                             android:layout_width="@dimen/downloadimg_width"
                             android:layout_height="@dimen/downloadimg_height"
                             android:layout_alignParentRight="true"
@@ -360,7 +360,7 @@
 
 
                 <TextView
-                    android:id="@+id/GenreTextView"
+                    android:id="@+id/genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/videoTitle"
@@ -381,16 +381,16 @@
                     android:layout_alignLeft="@+id/bannerImageView"
                     android:layout_alignRight="@+id/bannerImageView"
                     android:layout_alignStart="@+id/bannerImageView"
-                    android:layout_below="@+id/videoGenreTextView"
+                    android:layout_below="@+id/videogenre"
                     android:orientation="horizontal"
                     android:paddingBottom="0dp">
 
 
                     <TextView
-                        android:id="@+id/videoDurationTextView"
+                        android:id="@+id/video_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -401,7 +401,7 @@
                         android:id="@+id/videoCensorRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:background="@drawable/button_bg_orange"
@@ -415,7 +415,7 @@
                         android:id="@+id/videoCensorRatingTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -427,7 +427,7 @@
                         android:id="@+id/videoReleaseDateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -450,7 +450,7 @@
                     android:textSize="@dimen/genre_textsize" />
 
                 <TextView
-                    android:id="@+id/videoCastCrewTitleTextView"
+                    android:id="@+id/cast_crew"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

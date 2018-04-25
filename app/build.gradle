@@ -51,7 +51,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 
     productFlavors {
         /*Structuring Default flavour with dimension*/
@@ -61,7 +66,7 @@ android {
             minSdkVersion 21
             targetSdkVersion 23
             versionCode 4
-            versionName "2.0.1"
+            versionName "2.1.0"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
@@ -171,20 +176,21 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 20
             targetSdkVersion 25
-            versionName '3.3.1'
+            versionName '3.3.2'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
+            buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""//Lumiere Replica Server
+           // buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
         }
         lumiere_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com//rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
         }
         lumiere_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
-            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonyreplica.muvi.com/rest/\""
         }
         /*Structuring Matas flavour with dimension*/
         matas {

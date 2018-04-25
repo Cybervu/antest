@@ -432,9 +432,9 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         item5.setVisible(false);
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
-        item7 = menu.findItem(R.id.action_search);
+        item7 = menu.findItem(R.id.search);
         item7.setVisible(true);
-        item8 = menu.findItem(R.id.submenu);
+        item8 = menu.findItem(R.id.option);
         item8.setVisible(false);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
         return true;
@@ -443,7 +443,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(MyDownloads.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -1534,7 +1534,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

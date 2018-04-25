@@ -28,7 +28,6 @@ import com.home.vod.util.FontUtls;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.home.vod.R.id.loginWithFacebookButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -75,7 +74,7 @@ public class RegisterUIHandler {
         btnLogin.setVisibility(View.VISIBLE);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         googleSignView.setVisibility(View.VISIBLE);
-        editName = (EditText) context.findViewById(R.id.name_txt);
+        editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
 

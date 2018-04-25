@@ -298,10 +298,10 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         public ItemRowHolder(View view) {
             super(view);
 
-            this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+            this.itemTitle = (TextView) view.findViewById(R.id.sectiontitle);
             this.section_title_layout = (RelativeLayout) view.findViewById(R.id.section_title_layout);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
-            this.btnMore = (Button) view.findViewById(R.id.btnMore);
+            this.btnMore = (Button) view.findViewById(R.id.viewall);
             FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), this.btnMore);
 
 /*
