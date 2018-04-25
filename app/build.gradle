@@ -170,7 +170,7 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 20
             targetSdkVersion 25
-            versionName '3.3.0'
+            versionName '3.3.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
             //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -348,16 +348,17 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '3.0'
+            versionName '3.2.0'
         }
         magicmovies_staging_ {
             dimension 'environment'
-//            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://mynina.muvi.com/rest/\""
         }
         ubereatsvod {
             minSdkVersion 21
@@ -592,7 +593,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"ceab097dd1673797dacba30f02f488ee\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             versionCode 1
-            versionName '3.0.0'
+            versionName '3.0.1'
         }
         yesflix_staging_ {
             dimension 'environment'
@@ -632,7 +633,7 @@ android {
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"9c44e5b269f6e44d0d0d26d4ef047c47\""
             versionCode 1
-            versionName '1.0'
+            versionName '1.1'
         }
         icablevision_staging_ {
             dimension 'environment'

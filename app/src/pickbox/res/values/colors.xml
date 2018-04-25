@@ -57,6 +57,10 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#0faae3</color>
+
     <color name="filterTextColor">#8f8f8f</color>
     <color name="nav_drawer_lineColor">#8f8f8f</color>
     <color name="nav_lineColor">#0faae3</color>

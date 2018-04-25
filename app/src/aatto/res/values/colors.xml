@@ -42,6 +42,11 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#242424</color>
+
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#ff2c54</color>
+
     <color name="filterTextColor">#000000</color>
     <color name="exoplayerstory_color">#fff</color>
     <color name="videoTitleTextColor">#fff</color>

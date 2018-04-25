@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2015 Google Inc. All rights reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,73 +19,72 @@
 
     <item
         android:id="@+id/media_route_menu_item"
+        android:orderInCategory="101"
         android:title="@string/media_route_menu_title"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        android:orderInCategory="102"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_search"
-        android:title="search"
         android:icon="@drawable/search"
         android:orderInCategory="103"
-        app:showAsAction="always|never"
+        android:title="search"
         android:visible="false"
-        />
+        app:showAsAction="always|never" />
     <item
         android:id="@+id/action_filter"
-        android:title="filter"
         android:icon="@drawable/filter"
-        android:orderInCategory="101"
-        app:showAsAction="always|never"
+        android:orderInCategory="102"
+        android:title="filter"
         android:visible="false"
-        />
+        app:showAsAction="always|never" />
 
     <item
         android:id="@+id/submenu"
-        android:title=""
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"
-        app:showAsAction="always|never"
-        android:visible="false">
+        android:title=""
+        android:visible="false"
+        app:showAsAction="always|never">
         <menu>
             <item
                 android:id="@+id/action_login"
                 android:icon="@drawable/login"
-                android:title="Login"/>
+                android:title="Login" />
             <item
                 android:id="@+id/action_register"
                 android:icon="@drawable/register"
-                android:title="Register"/>
+                android:title="Register" />
+
+
+            <item
+                android:id="@+id/menu_item_profile"
+                android:icon="@drawable/register"
+                android:title="Profile" />
 
             <item
                 android:id="@+id/menu_item_language"
                 android:icon="@drawable/language"
-                android:title="Language"/>
-            <item
-                android:id="@+id/menu_item_profile"
-                android:icon="@drawable/register"
-                android:title="Profile"/>
+                android:title="Language" />
 
             <item
                 android:id="@+id/menu_item_favorite"
                 android:icon="@drawable/favorite"
-                android:title="My favorites"/>
+                android:title="My favorites" />
             <item
                 android:id="@+id/action_purchage"
                 android:icon="@drawable/purchase_history"
-                android:title="Purchase History"/>
+                android:title="Purchase History" />
             <item
                 android:id="@+id/action_mydownload"
                 android:icon="@drawable/action_download"
-                android:title="My Download"/>
+                android:title="My Download" />
             <item
                 android:id="@+id/action_logout"
                 android:icon="@drawable/logout"
-                android:title="Logout"/>
+                android:title="Logout" />
 
         </menu>
     </item>
-
 
 
     <!-- <item

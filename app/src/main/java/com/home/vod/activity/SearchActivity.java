@@ -515,33 +515,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                         new RetrieveFeedTask().execute(videoImageStrToHeight);
 
-                        /*Picasso.with(SearchActivity.this).load(videoImageStrToHeight
-                        ).error(R.drawable.no_image).into(new Target() {
-
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                videoWidth = bitmap.getWidth();
-                                videoHeight = bitmap.getHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(final Drawable errorDrawable) {
-                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
-                                videoWidth = errorDrawable.getIntrinsicWidth();
-                                videoHeight = errorDrawable.getIntrinsicHeight();
-                                AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
-
-                            }
-                        });*/
-
                     }else {
                         AsynLOADUI loadUI = new AsynLOADUI();
                         loadUI.executeOnExecutor(threadPoolExecutor);
@@ -904,7 +877,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 }
 
             }
-            Util.hideKeyboard(SearchActivity.this);
+           // Util.hideKeyboard(SearchActivity.this);
         }
     }
 
