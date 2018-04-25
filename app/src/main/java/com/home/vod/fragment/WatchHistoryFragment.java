@@ -3,7 +3,6 @@ package com.home.vod.fragment;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -1619,8 +1617,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         /***************chromecast**********************/
         MenuItem item,item1,item2,item3;
         item = menu.findItem(R.id.action_filter);
-        item1 = menu.findItem(R.id.submenu);
-        item2 = menu.findItem(R.id.action_search);
+        item1 = menu.findItem(R.id.option);
+        item2 = menu.findItem(R.id.search);
         item3 = menu.findItem(R.id.media_route_menu_item);
         item.setVisible(false);
         item1.setVisible(false);

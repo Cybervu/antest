@@ -380,7 +380,7 @@
 
 
                 <Button
-                    android:id="@+id/btnMore"
+                    android:id="@+id/Viewall"
                     android:layout_width="@dimen/btnmore_width"
                     android:layout_height="@dimen/btnmore_height"
                     android:layout_alignParentEnd="true"

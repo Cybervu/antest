@@ -20,20 +20,21 @@ public class DownloadOptionAdapter extends BaseAdapter {
     private ArrayList ResolutionFormat ;
 
     int selected_option = 0;
-    private String[] resolutionName = {"144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2048p", "4096p", "7680p", "best", "auto"};
+    private String[] resolutionName = {"144p", "240p", "360p", "480p","640p", "720p", "1080p", "1440p", "2048p", "4096p", "7680p", "best", "auto"};
     private int[] resolutionId = {
             R.id.download_144,
             R.id.download_240,
             R.id.download_360,
             R.id.download_480,
+            R.id.download_640,
             R.id.download_720,
             R.id.download_1080,
             R.id.download_1440,
             R.id.download_2048,
             R.id.download_4096,
             R.id.download_7680,
-            R.id.download_Best,
-            R.id.download_Auto};
+            R.id.download_best,
+            R.id.download_auto};
 
     public DownloadOptionAdapter(Context mContext, ArrayList List_Of_FileSize , ArrayList ResolutionFormat) {
         this.mContext = mContext;
@@ -108,7 +109,16 @@ public class DownloadOptionAdapter extends BaseAdapter {
     }
 
     private void setIdToDownloadLayout(View convertView, RadioButton radioButton) {
-        LinearLayout layout= (LinearLayout)convertView.findViewById(R.id.layout);
+
+        if (convertView instanceof LinearLayout){
+            LinearLayout l= (LinearLayout)convertView;
+            for(int j=0; j<resolutionName.length; j++){
+                if (radioButton.getText().toString().toLowerCase().contains(resolutionName[j])){
+                    l.setId(resolutionId[j]);
+                }
+            }
+        }
+       /* LinearLayout layout= (LinearLayout)convertView.findViewById(R.id.layout);
         for (int i=0; i<layout.getChildCount();i++){
             View v= layout.getChildAt(i);
             if (v instanceof LinearLayout){
@@ -120,6 +130,6 @@ public class DownloadOptionAdapter extends BaseAdapter {
                 }
             }
 
-        }
+        }*/
     }
 }

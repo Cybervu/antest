@@ -361,7 +361,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public static final int PAYMENT_REQUESTCODE = 8889;
 
     // Kushal
-    int option_menu_id[] = {R.id.login, R.id.register, R.id.language, R.id.profile, R.id.purchase, R.id.logout};
+    int option_menu_id[] = {R.id.login, R.id.register, R.id.language_popup, R.id.profile, R.id.purchase, R.id.logout};
     PopupWindow changeSortPopUp;
     LinearLayout linearLayout[];
     boolean[] visibility;
@@ -446,7 +446,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(MovieDetailsActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -560,11 +560,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 dlgAlert.create().show();
 
                 return false;
-            case R.id.submenu:
+            case R.id.option:
                /*
                Show to popup menu
                 */
-                showPopupMenu(findViewById(R.id.submenu));
+                showPopupMenu(findViewById(R.id.option));
                 return false;
 
             default:
@@ -628,7 +628,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 startActivity(registerIntent);
                 changeSortPopUp.dismiss();
                 break;
-            case R.id.language:
+            case R.id.language_popup:
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 if (languageModel != null && languageModel.size() > 0) {
@@ -1015,10 +1015,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         Util.goToLibraryplayer = false;
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        playButton = (ImageView) findViewById(R.id.playButton);
+        playButton = (ImageView) findViewById(R.id.play);
         watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
         preorderButton = (Button) findViewById(R.id.preOrderButton);
-        favorite_view = (ImageView) findViewById(R.id.favorite_view);
+        favorite_view = (ImageView) findViewById(R.id.favourite);
         Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         watchTrailerButton.setTypeface(submitButtonTypeface);
         Typeface preorderButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
@@ -1026,25 +1026,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         preorderButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
-        videoGenreTextView = (TextView) findViewById(R.id.videoGenreTextView);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoTitle = (TextView) findViewById(R.id.content_title);
+        videoGenreTextView = (TextView) findViewById(R.id.genre);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+      //  ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         viewStoryLayout = (RelativeLayout) findViewById(R.id.viewStoryLayout);
 
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
 
 
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         videoCastCrewTitleTextView.setVisibility(View.GONE);
 
 
         // *** rating***////
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar = (RatingBar) findViewById(R.id.rating);
         ratingBar.setFocusable(false);
         ratingBar.setVisibility(View.GONE);
 
@@ -1053,7 +1053,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 return true;
             }
         });
-        viewRatingTextView = (TextView) findViewById(R.id.viewRatingTextView);
+        viewRatingTextView = (TextView) findViewById(R.id.review);
         // loggedInStr = preferenceManager.getLoginStatusFromPref();
         //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
 
@@ -4112,7 +4112,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

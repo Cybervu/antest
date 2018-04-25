@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -304,6 +305,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             }
         });
 
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
         if(com.home.vod.util.Util.hideBcakIcon){
             mActionBarToolbar.setNavigationIcon(null);
 //            getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -442,9 +447,9 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         item5.setVisible(false);
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
-        item7 = menu.findItem(R.id.action_search);
+        item7 = menu.findItem(R.id.search);
         item7.setVisible(true);
-        item8 = menu.findItem(R.id.submenu);
+        item8 = menu.findItem(R.id.option);
         item8.setVisible(false);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
         return true;
@@ -453,7 +458,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(MyDownloads.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -1533,6 +1538,29 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 DB.execSQL(Qry1);
             }
         }).start();
+    }
+
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
     }
 }
 

@@ -561,8 +561,8 @@ public class RegisterActivity extends AppCompatActivity implements
         editName_first = (EditText) findViewById(R.id.back_btn_first);
         editName_last = (EditText) findViewById(R.id.back_btn_last);*/
 
-        editEmail = (EditText) findViewById(R.id.email_txt);
-        editPassword = (EditText) findViewById(R.id.pwd_txt);
+        editEmail = (EditText) findViewById(R.id.email);
+        editPassword = (EditText) findViewById(R.id.pwd);
         editConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
         registerButton = (Button) findViewById(R.id.register);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
@@ -4480,7 +4480,7 @@ public class RegisterActivity extends AppCompatActivity implements
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);
