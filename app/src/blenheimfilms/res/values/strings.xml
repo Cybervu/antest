@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NollyfiestaTv</string>
+    <string name="app_name">Blenheim Films</string>
     <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
     <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
 
@@ -7,7 +7,7 @@
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="studio_site">https://www.myamgo.com</string>
+    <string name="studio_site">https://www.blenheimfilms.muvi.com</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
     <string name="facebook_app_id">335795693608108</string>
     <string name="fb_login_protocol_scheme">fb491646201222573</string>

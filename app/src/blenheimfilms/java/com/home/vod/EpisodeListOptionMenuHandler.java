@@ -122,10 +122,10 @@ public class EpisodeListOptionMenuHandler {
 
             logout_menu.setVisible(true);
 
-            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
+          /*  if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
                 mydownload_menu.setVisible(true);
             else
-                mydownload_menu.setVisible(false);
+                mydownload_menu.setVisible(false);*/
 
 
         } else if (loggedInStr == null) {
@@ -145,7 +145,7 @@ public class EpisodeListOptionMenuHandler {
             purchage_menu.setVisible(false);
             logout_menu = menu.findItem(R.id.action_logout);
             logout_menu.setVisible(false);
-            mydownload_menu.setVisible(false);
+           // mydownload_menu.setVisible(false);
             favorite_menu.setVisible(false);
 
         }

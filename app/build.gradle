@@ -717,6 +717,26 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
+        blenheimfilms {
+            minSdkVersion 21
+            applicationId 'com.release.blenheimfilms'
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"c312e7f639d08b42f5f247bafcd724da\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            dimension 'vendor'
+        }
+        blenheimfilms_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        blenheimfilms_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -838,6 +858,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('softnet') && (environment.equals('softnet_staging_') || environment.equals('softnet_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('blenheimfilms') && (environment.equals('blenheimfilms_staging_') || environment.equals('blenheimfilms_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
