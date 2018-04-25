@@ -84,7 +84,8 @@
             <item
                 android:id="@+id/action_mydownload"
                 android:icon="@drawable/action_download"
-                android:title="My Download"/>
+                android:title="My Download"
+                android:visible="false"/>
             <item
                 android:id="@+id/action_logout"
                 android:icon="@drawable/logout"

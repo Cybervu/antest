@@ -13,7 +13,8 @@
     <string name="fb_login_protocol_scheme">fb2498304373728167</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
-
+    <!--pdf download url added -->
+    <string name="pdf_download_url">https://cms.muvi.com/docs/</string>
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->
