@@ -55,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
@@ -558,7 +559,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
         }
 
-        download = (ImageView) findViewById(R.id.downloadImageView);
+        download = (ImageView) findViewById(R.id.download);
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
         new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
@@ -641,19 +642,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             emailIdStr = playerModel.getEmailId();
         }
 
-        emVideoView = (VideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.player_screen);
         cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
-        subtitleText = (StrokedTextView) findViewById(R.id.offLine_subtitleText);
-        subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
-
-        latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
+        subtitleText = (StrokedTextView) findViewById(R.id.subtitle);
+        subtitle_change_btn = (ImageView) findViewById(R.id.setting);
+        latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
+        videoTitle = (TextView) findViewById(R.id.content_title);
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
         videoTitle.setTypeface(videoTitleface);
-        GenreTextView = (TextView) findViewById(R.id.GenreTextView);
+        GenreTextView = (TextView) findViewById(R.id.genre);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         GenreTextView.setTypeface(GenreTextViewface);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
@@ -668,7 +668,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         story = (TextView) findViewById(R.id.story);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         story.setTypeface(storyTypeface);
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
@@ -993,20 +993,20 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         last_ll = (LinearLayout) findViewById(R.id.last_ll);
         linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
 
-        ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
-        emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
-        dateTextView = (TextView) findViewById(R.id.dateTextView);
+        ipAddressTextView = (TextView) findViewById(R.id.ip);
+        emailAddressTextView = (TextView) findViewById(R.id.email);
+        dateTextView = (TextView) findViewById(R.id.date);
 
         ipAddressTextView.setVisibility(View.GONE);
         emailAddressTextView.setVisibility(View.GONE);
         dateTextView.setVisibility(View.GONE);
 
-        compress_expand = (ImageView) findViewById(R.id.compress_expand);
+        compress_expand = (ImageView) findViewById(R.id.max_min);
         compress_expand.setVisibility(View.GONE);
         back = (ImageButton) findViewById(R.id.back);
 
-        seekBar = (SeekBar) findViewById(R.id.progress);
-        center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
+        seekBar = (SeekBar) findViewById(R.id.progress_bar);
+        center_play_pause = (ImageButton) findViewById(R.id.play);
 
         current_time = (TextView) findViewById(R.id.current_time);
         total_time = (TextView) findViewById(R.id.total_time);

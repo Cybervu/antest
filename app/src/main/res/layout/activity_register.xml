@@ -59,7 +59,7 @@
                 android:textColorHint="@color/hintTextColor"
                 android:textSize="16dp" />-->
             <EditText
-                android:id="@+id/name_txt"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -74,7 +74,7 @@
                 android:visibility="visible"/>
 
             <EditText
-                android:id="@+id/email_txt"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
@@ -88,10 +88,9 @@
                 android:textSize="@dimen/edit_text_size" />
 
             <EditText
-                android:id="@+id/pwd_txt"
+                android:id="@+id/pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/email_txt"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/login_maring_top"
                 android:drawablePadding="@dimen/Login_drawing_padding"

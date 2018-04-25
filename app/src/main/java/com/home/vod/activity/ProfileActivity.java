@@ -426,7 +426,10 @@ public class ProfileActivity extends AppCompatActivity implements
                 editNewPassword.setVisibility(View.GONE);
 
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
-                name_of_user.setText(profileHandler.first_nameStr);
+
+               /* name_of_user.setText(((EditText)findViewById(R.id.editProfileNameEditText_first)).getText().toString().trim()+" "+
+                        ((EditText)findViewById(R.id.editProfileNameEditText_last)).getText().toString().trim());*/
+               name_of_user.setText(profileHandler.first_nameStr+" "+profileHandler.last_nameStr);
 
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
@@ -748,8 +751,8 @@ public class ProfileActivity extends AppCompatActivity implements
                 Language_arrayAdapter.notifyDataSetChanged();
 
 
-                profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(), get_userProfile_output.getCustom_last_name(), get_userProfile_output.getPhone());
                 name_of_user.setText(get_userProfile_output.getDisplay_name());
+                profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(), get_userProfile_output.getCustom_last_name(), get_userProfile_output.getPhone());
                 emailAddressEditText.setText(get_userProfile_output.getEmail());
                 if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
                     bannerImageView.setAlpha(0.8f);
@@ -857,7 +860,7 @@ Kushal- To set id to back button in Action Bar
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
             /*try {
                 if (b.getContentDescription().equals("Open")) {
                     b.setId(R.id.drawer_menu);

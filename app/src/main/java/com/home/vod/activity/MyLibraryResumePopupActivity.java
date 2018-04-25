@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.SensorOrientationChangeNotifier;
-import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
@@ -38,8 +37,8 @@ import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
          LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainlayout);
 
          LinearLayout popupLayout = (LinearLayout) findViewById(R.id.popupLayout);
-         Button yesButton = (Button) findViewById(R.id.yesButton);
-         Button cancelButton = (Button) findViewById(R.id.cancelButton);
+         Button yesButton = (Button) findViewById(R.id.resume);
+         Button cancelButton = (Button) findViewById(R.id.cancel);
          TextView resumeTitleTextView = (TextView) findViewById(R.id.resumeTitleTextView);
          resumeTitleTextView.setText(languagePreference.getTextofLanguage(RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE));
          yesButton.setText(languagePreference.getTextofLanguage(CONTINUE_BUTTON, DEAFULT_CONTINUE_BUTTON));

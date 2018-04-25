@@ -1492,12 +1492,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);
 
-        editEmailStr = (EditText) findViewById(R.id.email_txt);
+        editEmailStr = (EditText) findViewById(R.id.email);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editEmailStr);
 
         editEmailStr.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
-        editPasswordStr = (EditText) findViewById(R.id.pwd_txt);
+        editPasswordStr = (EditText) findViewById(R.id.pwd);
 
 
         InputFilter filter = new InputFilter() {
@@ -1520,7 +1520,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         editPasswordStr.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
-        forgotPassword = (TextView) findViewById(R.id.forgot_pwd);
+        forgotPassword = (TextView) findViewById(R.id.forgot);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), forgotPassword);
         forgotPassword.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
         loginNewUser = (TextView) findViewById(R.id.loginNewUser);
@@ -1528,7 +1528,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         loginNewUser.setText(languagePreference.getTextofLanguage(NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
-        signUpTextView = (TextView) findViewById(R.id.signUpTextView);
+        signUpTextView = (TextView) findViewById(R.id.register);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
 
@@ -1541,7 +1541,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
 
-        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.login);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
@@ -5820,7 +5820,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

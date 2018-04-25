@@ -133,28 +133,50 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         // Kushal - set id to the layout
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(context);
 
-        LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.layout);
+        if(convertView instanceof LinearLayout){
+            LinearLayout l = (LinearLayout) convertView;
+            if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US)))
+                l.setId(R.id.contact_us);
+            else  if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
+                l.setId(R.id.home);
+            else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US))){
+                l.setId(R.id.about_us);
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(WATCH_HISTORY,DEFAULT_WATCH_HISTORY))){
+                l.setId(R.id.watch_history);
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD))){
+                l.setId(R.id.my_download);
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE))){
+                l.setId(R.id.my_favourite);
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))){
+                l.setId(R.id.my_library);
+            }
+        }
+
+
+
+
+        /*LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.layout);
         for (int i = 0; i < ll.getChildCount(); i++) {
             View v = ll.getChildAt(i);
             if (v instanceof LinearLayout) {
                 LinearLayout l = (LinearLayout) v;
                 if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US)))
-                    l.setId(R.id.contact_us_layout);
+                    l.setId(R.id.contact_us);
                 else  if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
-                    l.setId(R.id.home_layout);
+                    l.setId(R.id.home);
                 else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US))){
-                    l.setId(R.id.about_us_layout);
+                    l.setId(R.id.about_us);
                 }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(WATCH_HISTORY,DEFAULT_WATCH_HISTORY))){
-                    l.setId(R.id.watch_history_layout);
+                    l.setId(R.id.watch_history);
                 }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD))){
-                    l.setId(R.id.my_download_layout);
+                    l.setId(R.id.my_download);
                 }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE))){
-                    l.setId(R.id.my_favourite_layout);
+                    l.setId(R.id.my_favourite);
                 }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))){
-                    l.setId(R.id.my_library_layout);
+                    l.setId(R.id.my_library);
                 }
             }
-        }
+        }*/
 
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), listTitleTextView);
 

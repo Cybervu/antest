@@ -3,9 +3,7 @@ package player.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,7 +11,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
@@ -23,9 +20,7 @@ import player.utils.SensorOrientationChangeNotifier;
 import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEAFULT_CONTINUE_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.RESUME;
@@ -58,8 +53,8 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
 
 
         LinearLayout popupLayout = (LinearLayout) findViewById(R.id.popupLayout);
-        Button yesButton = (Button) findViewById(R.id.yesButton);
-        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        Button yesButton = (Button) findViewById(R.id.resume);
+        Button cancelButton = (Button) findViewById(R.id.cancel);
         TextView resumeTitleTextView = (TextView) findViewById(R.id.resumeTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         resumeTitleTextView.setText(languagePreference.getTextofLanguage(RESUME_MESSAGE,DEFAULT_RESUME_MESSAGE));

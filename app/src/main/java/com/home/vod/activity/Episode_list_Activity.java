@@ -355,7 +355,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 // This method is to reset all item data
 
     // Kushal
-    int option_menu_id[]={R.id.login,R.id.register,R.id.language,R.id.profile,R.id.purchase,R.id.logout};
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language_popup,R.id.profile,R.id.purchase,R.id.logout};
     PopupWindow changeSortPopUp;
     LinearLayout linearLayout[];
     boolean[] visibility;
@@ -3176,7 +3176,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             case R.id.media_route_menu_item:
                 // Not implemented here
                 return false;
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(Episode_list_Activity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -3280,11 +3280,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 dlgAlert.create().show();
 
                 return false;
-            case R.id.submenu:
+            case R.id.option:
                 /*
                 Show to popup menu
                  */
-                showPopupMenu(findViewById(R.id.submenu));
+                showPopupMenu(findViewById(R.id.option));
                 return false;
             default:
                 break;
@@ -3346,7 +3346,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 startActivity(registerIntent);
                 changeSortPopUp.dismiss();
                 break;
-            case R.id.language:
+            case R.id.language_popup:
                 default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 if (languageModel != null && languageModel.size() > 0) {
@@ -4674,7 +4674,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

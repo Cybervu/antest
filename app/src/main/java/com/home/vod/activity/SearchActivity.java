@@ -545,7 +545,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
       //  searchView.setMinimumWidth(15000);
         //searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setImeOptions(0);
@@ -1040,7 +1040,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back_btn);
+                b.setId(R.id.back);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);
