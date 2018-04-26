@@ -136,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity implements
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        profileHandler=new ProfileHandler(this);
+        profileHandler = new ProfileHandler(this);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
@@ -184,7 +184,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -351,7 +351,6 @@ public class ProfileActivity extends AppCompatActivity implements
         });
 
 
-
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -429,7 +428,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                /* name_of_user.setText(((EditText)findViewById(R.id.editProfileNameEditText_first)).getText().toString().trim()+" "+
                         ((EditText)findViewById(R.id.editProfileNameEditText_last)).getText().toString().trim());*/
-               name_of_user.setText(profileHandler.first_nameStr+" "+profileHandler.last_nameStr);
+                name_of_user.setText(profileHandler.first_nameStr + " " + profileHandler.last_nameStr);
 
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
@@ -816,7 +815,6 @@ public class ProfileActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     public void onBackPressed() {
         finish();
@@ -849,7 +847,7 @@ public class ProfileActivity extends AppCompatActivity implements
     }
 
     public boolean passwordMatchValidation() {
-        return editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim());
+            return editConfirmPassword.getText().toString().trim().matches(editNewPassword.getText().toString().trim());
     }
 
     /*
