@@ -71,7 +71,7 @@ public class RegisterUIHandler {
         googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
-        editName = (EditText) context.findViewById(R.id.name_txt);
+        editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);

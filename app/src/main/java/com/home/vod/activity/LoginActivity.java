@@ -1606,7 +1606,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         /***************************************************************************/
 
         gmailTest = (TextView) findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) findViewById(R.id.sign_in_button);
+        googleSignView = (RelativeLayout) findViewById(R.id.login_google);
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
@@ -1614,7 +1614,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), fbLoginTextView);
 
 
-        btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) findViewById(R.id.login_facebook);
 
         if (featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK, FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);

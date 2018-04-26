@@ -48,7 +48,7 @@ public class ProfileHandler {
     }
     public void updateProfileHandler() {
 
-        if (editProfileNameEditText.getText().toString().matches("")) {
+        if (editProfileNameEditText.getText().toString().trim().matches("")) {
             ((ProfileActivity) context).ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(FIRST_NAME, DEFAULT_FIRST_NAME).toString().toLowerCase());
             return;
         }

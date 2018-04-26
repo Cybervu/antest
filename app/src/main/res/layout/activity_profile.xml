@@ -120,6 +120,7 @@
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
+                        android:inputType="text|textNoSuggestions|textVisiblePassword"
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/login_padding_bottom"
                         android:textColor="@color/editTextColor"
