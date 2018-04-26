@@ -128,7 +128,7 @@ public class Util {
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static final String UpdateGoogleid = "UpdateGoogleid";
 
-
+    public static int main_menu_list_size = -2;
     public static PPVModel ppvModel = null;
     public static APVModel apvModel = null;
     public static CurrencyModel currencyModel = null;
@@ -144,8 +144,8 @@ public class Util {
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static boolean favorite_clicked = false;
 
+
     public static int check_for_subscription = 0;
-    public static int main_menu_list_size = -2;
 
     public static String selected_season_id = "0";
     public static String selected_episode_id = "0";
@@ -161,14 +161,17 @@ public class Util {
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
-    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+ /*   public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
     public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
-    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
-
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";*/
+    public static String pdf_download_url(Context context){
+        return context.getString(R.string.pdf_download_url);
+    }
     public static boolean app_is_in_player_context = false;
     public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
     public static int image_compressed = 3;
     public static boolean hideBcakIcon = false;
+    public static boolean login_registration_require = false;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =
@@ -247,11 +250,7 @@ public class Util {
 
     public static boolean isValidPhone(String phone) {
 
-        if ((phone.length() >= 10) && (phone.length() <= 15)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (phone.length() >= 10) && (phone.length() <= 15);
     }
 
     public static boolean isConfirmPassword(String password, String confirmPassword) {
@@ -495,11 +494,11 @@ public class Util {
 
                         if (mContext instanceof LoginActivity) {
                             mContext.startActivity(in);
-                            ((LoginActivity) mContext).onBackPressed();
+                            mContext.onBackPressed();
                         }
                         if (mContext instanceof RegisterActivity) {
                             mContext.startActivity(in);
-                            ((RegisterActivity) mContext).onBackPressed();
+                            mContext.onBackPressed();
                         }
 
                     }
@@ -552,7 +551,8 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
-        setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);
+        setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, DEFAULT_ADDED_TO_FAV, "added_to_fav", json);
+        setTranslationLanguageToPref(languagePreference, DELETE_FROM_FAV, DEFAULT_DELETE_FROM_FAV, "content_remove_favourite", json);
         setTranslationLanguageToPref(languagePreference, ENTER_EMPTY_FIELD, DEFAULT_ENTER_EMPTY_FIELD, "enter_register_fields_data", json);
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);

@@ -17,14 +17,14 @@ public class HandleRatingbar {
         this.context=context;
     }
     public void handleVisibleUnvisibleRating(RatingBar ratingBar){
-        ratingBar.setVisibility(View.GONE);
+        ratingBar.setVisibility(View.VISIBLE);
 
     }
     public void handleVisibleUnvisibleRatingTextView(TextView viewRatingTextView){
-        viewRatingTextView.setVisibility(View.GONE);
+        viewRatingTextView.setVisibility(View.VISIBLE);
     }
     public void handleVisibleUnvisibleFavicon(ImageView favorite_view){
-        favorite_view.setVisibility(View.GONE);
+        favorite_view.setVisibility(View.VISIBLE);
     }
 
 }

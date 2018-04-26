@@ -173,7 +173,7 @@ enum ContentTypes3 {
             "video/mp2t");
     String mediaSourceParamsContentType = null;
 
-    private ContentTypes3(String mediaSourceParamsContentType) {
+    ContentTypes3(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
 
@@ -494,11 +494,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
         });
 
-        if (playerModel.getVideoUrl().contains(".mpd")) {
-            isDrm = true;
-        } else {
-            isDrm = false;
-        }
+        isDrm = playerModel.getVideoUrl().contains(".mpd");
 
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -923,7 +919,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (censor_layout) {
 
-            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
+            findViewById(R.id.durationratingLiearLayout).setVisibility(View.GONE);
         }
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
 
@@ -952,7 +948,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     //Will Add Some Data to send
                     Util.call_finish_at_onUserLeaveHint = false;
                     Util.hide_pause = true;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
                     if (emVideoView.isPlaying()) {
@@ -1153,7 +1149,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     Util.hide_pause = false;
                 }
 
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -1327,7 +1323,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 video_completed = false;
                 if (progressView != null) {
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                    findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
                 }
@@ -1375,10 +1371,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         startTimer();
 
                         if (played_length > 0) {
-                            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                            findViewById(R.id.progress_view).setVisibility(View.GONE);
                             Util.call_finish_at_onUserLeaveHint = false;
 
                             Intent resumeIntent = new Intent(MyLibraryPlayer.this, ResumePopupActivity.class);
+                            resumeIntent.putExtra("activity","MyLibraryPlayer");
                             startActivityForResult(resumeIntent, 1001);
                         } else {
 
@@ -1637,7 +1634,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                                                 public void run() {
 
 
-                                                                    Progress.setProgress((int) 0);
+                                                                    Progress.setProgress(0);
                                                                     //percentg.setText(0+"%");
                                                                     percentg.setVisibility(View.GONE);
                                                                     download.setVisibility(View.VISIBLE);
@@ -1999,7 +1996,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -2155,7 +2152,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 // Added Later By Bibhu
 
                 primary_ll.setVisibility(View.GONE);
@@ -2188,7 +2185,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
 
                 if (playerModel.getMidRoll() == 1) {
 
@@ -2202,7 +2199,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     //Will Add Some Data to send
                                     Util.call_finish_at_onUserLeaveHint = false;
                                     Util.hide_pause = true;
-                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
                                     if (emVideoView.isPlaying()) {
@@ -2857,7 +2854,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (resultCode == RESULT_OK) {
             if (requestCode == 1001) {
-
                 Util.call_finish_at_onUserLeaveHint = true;
 
 
@@ -3019,7 +3015,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Intent intent  = new Intent(MyLibraryPlayer.this, SupportActivity1.class);
         startActivity(intent);
         finish();
-
 
     }
 
@@ -3852,7 +3847,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
 
-                                Progress.setProgress((int) model.getProgress());
+                                Progress.setProgress(model.getProgress());
                                 percentg.setText(model.getProgress() + "%");
 //
                                 if (model.getProgress() == 100) {
@@ -4300,7 +4295,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 stoptimertask();
                 Util.call_finish_at_onUserLeaveHint = false;
                 Util.hide_pause = true;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.VISIBLE);
                 subtitleText.setText("");
                 emVideoView.setEnabled(false);
@@ -4806,9 +4801,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     public void ShowDownloadOptionPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MyLibraryPlayer.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) MyLibraryPlayer.this.getSystemService(MyLibraryPlayer.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) MyLibraryPlayer.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.activity_download_popup, null);
+        View convertView = inflater.inflate(R.layout.activity_download_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 

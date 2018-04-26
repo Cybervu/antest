@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--added for app background color by bishal-->
+    <color name="seasonBackgroundColor">#FEF0E3</color>
     <color name="background_start_color">#FEF0E3</color>
     <color name="background_end_color">#FEF0E3</color>
     <color name="appBackgroundColor">#FEF0E3</color>
     <color name="videotextColor">#784128</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#784128</color>
+    <color name="banner_line_color">#784128</color>
+    <color name="cast_description_color">#784128</color>
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#784128</color>
     <color name="buttonTextColor">#fff</color>
@@ -37,6 +42,7 @@
     <color name="border_color">#784128</color>
     <color name="cancel_button_text_color">#264177</color>
     <color name="castCrewTitleTextColor">#784128</color>
+    <color name="FilterTitleTextColor">#784128</color>
     <color name="subtitleListColor">#fff</color>
     <color name="pageTitleColor">#784128</color>
     <color name="preOrderButtonTextColor">#DDD</color>
@@ -44,11 +50,17 @@
     <color name="navlogobackgroundcolor">#FEF0E3</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#FEF0E3</color>
+
+
+    <color name="languagePopupBackgroundColor">#FEF0E3</color>
+    <color name="languagePopupViewBackgroundColor">#784128</color>
+
     <color name="filtertextcolor">#5c6873</color>
     <color name="nav_drawer_lineColor">#784128</color>
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#784128</color>
+    <color name="view_more_less">#784128</color>
     <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
@@ -64,6 +76,8 @@
     <color name="editTextColor">#784128</color>
     <color name="voucher_inactive_button">#60008C</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="cast_crew_titleCololr">#784128</color>
     <color name="videoTitleTextColor">#000</color>
     <color name="videomovieTitleColor">#3f444a</color>
@@ -209,6 +223,7 @@
     <color name="bar_color">#784128</color>
     <color name="background">#FEF0E3</color>
     <color name="textColor">#784128</color>
+    <color name="player_title_color">#784128</color>
     <color name="toolbarColor">#784128</color>
     <color name="episodeLinearColor">#f2dfcd</color>
     <color name="textShadowColor">#333</color>
@@ -235,5 +250,6 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
-
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#5c3c1d</color>
 </resources>

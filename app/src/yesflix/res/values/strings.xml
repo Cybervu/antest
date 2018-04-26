@@ -8,8 +8,13 @@
     <string name="studio_site">www.yesflix.de/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
 
-    <string name="fonts">fonts/ARIAL-Light.ttf</string>
-    <string name="fonts_regular">fonts/ARIAL-REGULAR.TTF</string>
+    <!--<string name="fonts">fonts/ARIAL-Light.ttf</string>-->
+    <string name="regular_fonts">fonts/ROBOTO-REGULAR.TTF</string>
+    <string name="light_fonts">fonts/ROBOTO-REGULAR.TTF</string>
+   <!-- <string name="fonts">OpenSans-Regular.ttf</string>
+    <string name="fonts_regular">OpenSans-Regular.ttf</string>-->
+    <!--pdf download url added -->
+    <string name="pdf_download_url">https://sonydadc.muvi.com/docs/</string>
 
     <string name="app_id">A2350017</string>
     <!--<string name="app_id">B984663F</string>-->

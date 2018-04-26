@@ -31,14 +31,14 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/drawer_liner_height"
                 android:background="@color/navlogobackgroundcolor">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="@dimen/drawer_image_height"
                     android:layout_gravity="center"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="@dimen/margin_right18dp"
                     android:src="@drawable/logo"
                     />
             </LinearLayout>

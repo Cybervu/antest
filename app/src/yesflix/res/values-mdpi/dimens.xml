@@ -95,4 +95,7 @@
     <dimen name="viewmore_btn_height">35dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
+    <dimen name="vertical_spacing">6dp</dimen>
+    <dimen name="horizontal_spacing">6dp</dimen>
+
 </resources>

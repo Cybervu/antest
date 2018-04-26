@@ -111,7 +111,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             httppost.addHeader(HeaderConstants.NAME_ON_CARD, this.authUserPaymentInfoInputModel.getName_on_card());
             httppost.addHeader(HeaderConstants.EXPIRY_MONTH, this.authUserPaymentInfoInputModel.getExpiryMonth());
             httppost.addHeader(HeaderConstants.EXPIRY_YEAR, this.authUserPaymentInfoInputModel.getExpiryYear());
-            httppost.addHeader(HeaderConstants.CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber());
+            httppost.addHeader(HeaderConstants.AUTH_USER_CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber());
             httppost.addHeader(HeaderConstants.CVV, this.authUserPaymentInfoInputModel.getCvv().trim());
             httppost.addHeader(HeaderConstants.EMAIL, this.authUserPaymentInfoInputModel.getEmail().trim());
 

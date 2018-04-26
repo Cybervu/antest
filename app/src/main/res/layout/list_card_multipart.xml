@@ -24,7 +24,8 @@
         android:layout_height="@dimen/listcard_height"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/movieImageOverlay"

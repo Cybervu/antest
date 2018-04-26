@@ -43,6 +43,7 @@ import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
@@ -90,12 +91,14 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOADED_ACC
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DOWNLOADED_VIDEOS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOADED_ACCESS_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_DOWNLOADED_VIDEOS;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
@@ -289,10 +292,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,13 +330,19 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
         download = dbHelper.getContactt(emailIdStr, 1);
-        if (download.size() > 0) {
-            adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
-            list.setAdapter(adapter);
-        } else {
+        if (NetworkStatus.getInstance().isConnected(MyDownloads.this)){
+            if (download.size() > 0) {
+                adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
+                list.setAdapter(adapter);
+            } else {
+                nodata.setVisibility(View.VISIBLE);
+                noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
+            }
+        }else {
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
+            noDataTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         }
+
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -412,6 +421,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         unregisterReceiver(UpadateDownloadList);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -419,9 +429,8 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         MenuItem item, item1, item2, item3, item4, item5, item6, item7, item8;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        /***************chromecast**********************/
 
-        /***************chromecast**********************/
+
 
         (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
@@ -438,7 +447,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
         item7 = menu.findItem(R.id.action_search);
-        item7.setVisible(false);
+        item7.setVisible(true);
         item8 = menu.findItem(R.id.submenu);
         item8.setVisible(false);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
@@ -448,7 +457,12 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.action_search:
+                final Intent searchIntent = new Intent(MyDownloads.this, SearchActivity.class);
+                searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(searchIntent);
+                // Not implemented here
+                return false;
             case R.id.action_filter:
                 // Not implemented here
                 return false;
@@ -458,6 +472,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         }
         return false;
     }
+
 
     private BroadcastReceiver UpadateDownloadList = new BroadcastReceiver() {
         @Override

@@ -73,6 +73,7 @@ public class ResolutionChangeActivity extends Activity {
                 playerIntent.putExtra("position", ""+position);
                 playerIntent.putExtra("type", "resolution");
                 setResult(RESULT_OK, playerIntent);
+                overridePendingTransition(0, 0);
                 finish();
             }
         });
@@ -84,6 +85,7 @@ public class ResolutionChangeActivity extends Activity {
                 playerIntent.putExtra("position", "nothing");
                 playerIntent.putExtra("type", "resolution");
                 setResult(RESULT_OK, playerIntent);
+                overridePendingTransition(0, 0);
                 finish();
                 return false;
             }
@@ -98,6 +100,7 @@ public class ResolutionChangeActivity extends Activity {
         playerIntent.putExtra("position", "nothing");
         playerIntent.putExtra("type", "resolution");
         setResult(RESULT_OK, playerIntent);
+        overridePendingTransition(0, 0);
         finish();
     }
 }

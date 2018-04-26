@@ -51,6 +51,7 @@ public class SplashScreenHandler {
 
 
     public void changeFeatureProperties(FeatureHandler featureHandler){
+        featureHandler.setFeatureFlag(FeatureHandler.SIGNUP_STEP,"0");
     }
 
 

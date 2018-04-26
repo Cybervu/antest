@@ -44,9 +44,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import android.widget.Toast;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_POST_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.CLICK_HERE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_POST_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -55,6 +58,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REVIEW_H
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEED_LOGIN_TO_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBMIT_YOUR_RATING_TITLE;
@@ -63,6 +67,7 @@ import static com.home.vod.preferences.LanguagePreference.ENTER_REVIEW_HERE;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.NEED_LOGIN_TO_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SUBMIT_YOUR_RATING_TITLE;
 import static com.home.vod.preferences.LanguagePreference.TO_LOGIN;
@@ -115,6 +120,8 @@ public class ReviewActivity extends AppCompatActivity implements
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(REVIEWS,DEFAULT_REVIEWS));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -221,6 +228,10 @@ public class ReviewActivity extends AppCompatActivity implements
 
 
 
+    }
+
+    private String getEmojiByUnicode(int unicode) {
+        return new String(Character.toChars(unicode));
     }
 
     @Override

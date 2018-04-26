@@ -1,16 +1,24 @@
 package com.home.vod.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -18,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
@@ -28,7 +35,6 @@ import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
-import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
@@ -49,39 +55,54 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
-import com.home.vod.util.Constant;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import player.model.ContactModel1;
 import player.utils.DBHelper;
 
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
-import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_NO_LONGER_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
-
 import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -109,7 +130,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
-    String ipAddressStr="";
+    String ipAddressStr = "";
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
@@ -119,12 +140,31 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     SplashScreenHandler splashScreenHandler;
 
 
+    /**
+     * Splashreen Modified.
+     */
+
+    int geoBlockEnable = 0;
+    int geoBlockCalled = 0;
+    int planListCalled = 0;
+    int isRegistrationEnableCalled = 0;
+    int languageListCalled = 0;
+    int languageTranslationCalled = 0;
+    int genreListCalled = 0;
+    int userProfileCalled = 0;
+    int ipAddressCalled = 0;
+
+
+    // Kushal
+    private static final int RC_SETTINGS = 6739;
+
+
     private void _init() {
 
 
         Util.getDPI(this);
         Util.printMD5Key(this);
-        dbHelper=new DBHelper(SplashScreen.this);
+        dbHelper = new DBHelper(SplashScreen.this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -158,6 +198,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }*/
 
 
+        // Kushal
+
+
         splashScreenHandler.handleSplashscreen(imageResize);
 
 
@@ -169,7 +212,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP){
+
+    }
+
+    private void apiCall() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Do something for lollipop and above versions
             noInternetTextView.setText("The app is not compatible for this OS.");
             noInternetLayout.setVisibility(View.VISIBLE);
@@ -208,6 +255,117 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
     }
 
+    // Kushal
+
+    private void askPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            showExplanationForPermission();
+
+        } else {
+            apiCall();
+        }
+    }
+
+    private Context getThemedContext() {
+        ContextThemeWrapper themedContext;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            themedContext = new ContextThemeWrapper(SplashScreen.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+        } else {
+            themedContext = new ContextThemeWrapper(SplashScreen.this, android.R.style.Theme_Light_NoTitleBar);
+        }
+        return themedContext;
+    }
+
+    public static String getApplicationName(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+
+        switch (requestCode) {
+            case 111: {
+                for (String permission : permissions) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                        //denied
+                        finish();
+                        Log.e("denied", permission);
+                    } else {
+                        if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                            //allowed
+                            apiCall();
+                            Log.e("allowed", permission);
+                        } else {
+                            //set to never ask again
+                            // Toast.makeText(this, "Set to never ask again", Toast.LENGTH_SHORT).show();
+                            goTosettings();
+                            Log.e("set to never ask again", permission);
+                            //do something here.
+                        }
+                    }
+                }
+
+               /* if (grantResults.length > 0) {
+                    if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+                        apiCall();
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }*/
+
+            }
+        }
+    }
+
+    private void goTosettings() {
+        new AlertDialog.Builder(getThemedContext()).setTitle(getResources().getString(R.string.permissionsRequired))
+                .setMessage(getResources().getString(R.string.permissionsRequiredMessage))
+                .setPositiveButton("settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    @SuppressWarnings("InlinedAPI")
+                    public void onClick(DialogInterface dialog, int which) {
+                        openSettings();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).create().show();
+
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", getPackageName(), null));
+        startActivityForResult(intent, RC_SETTINGS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SETTINGS ) {
+            askPermission();
+        }
+        // finish();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,6 +379,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         splashScreenHandler = new SplashScreenHandler(this);
 
         _init();
+        // Kushal
+         askPermission();
+
+
     }
 
     @Override
@@ -229,7 +391,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onPause();
         LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
-        finish();
+        //finish();
         overridePendingTransition(0, 0);
     }
 
@@ -246,9 +408,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
 
-        Log.v("MUVI11","ipAddressStr====="+ipAddressStr);
-        Log.v("MUVI11","getIPAddress====="+getIPAddress(true));
+        Log.v("MUVI11", "ipAddressStr=====" + ipAddressStr);
+        Log.v("MUVI11", "getIPAddress=====" + getIPAddress(true));
 
+//        Toast.makeText(getApplicationContext(),"response of ipaddress = "+message,Toast.LENGTH_LONG).show();
 
         if (ipAddressStr.equals("")) {
             noInternetTextView.setText("Could not detect your IP.");
@@ -284,12 +447,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
-            }
-            else if(status == 454){
+            } else if (status == 454) {
                 noInternetLayout.setVisibility(View.GONE);
                 geoBlockedLayout.setVisibility(View.VISIBLE);
-            }
-            else {
+
+
+            } else {
+
                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
                 noInternetLayout.setVisibility(View.VISIBLE);
                 geoBlockedLayout.setVisibility(View.GONE);
@@ -336,39 +500,49 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     @Override
-    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message ,String response) {
+    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message, String response) {
 
-
-        try{
+        try {
 
             featureHandler.setDefaultFeaturePref(response);
 
-        }catch (Exception e){}
-        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
-
-
-        languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
-        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
-
-        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, "" + isRegistrationEnabledOutputModel.getIsRestrictDevice());
-        languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
-        languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
-
-        languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
-        languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
-        languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
-
-
-        preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
-
-
-        /**
-         * Override feature properties.
+        } catch (Exception e) {
+        }
+        /*@BISHAL
          */
+        if (status == 200) {
+            //Util.login_registration_require=true;
+            languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
-        splashScreenHandler.changeFeatureProperties(featureHandler);
+
+            languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
+            languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
+
+            languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, "" + isRegistrationEnabledOutputModel.getIsRestrictDevice());
+            languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
+            languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
+
+            languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
+            languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
+            languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
 
 
+            preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "1");
+
+
+            /**
+             * Override feature properties.
+             */
+
+            splashScreenHandler.changeFeatureProperties(featureHandler);
+            /*@BISHAL
+             *Handle 455 status
+             */
+        } else if (status == 455) {
+            //Util.login_registration_require=false;
+            featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "0");
+        }
 
 
         LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
@@ -411,10 +585,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
         if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
             languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
-        }
-
-        else {
-            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE);
+        } else {
+            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
         }
 
         // Call For Language Translation.
@@ -577,8 +749,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (status == null) {
             isSubscribed = "0";
         }
-        if (code==200){
-            isSubscribed=get_userProfile_output.getIsSubscribed();
+        if (code == 200) {
+            isSubscribed = get_userProfile_output.getIsSubscribed();
         }
 
         Call_One_Step_Procedure();
@@ -666,7 +838,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     overridePendingTransition(0, 0);
                 }
             } else {
-                mIntent = new Intent(SplashScreen.this, RegisterActivity.class);
+                mIntent = new Intent(SplashScreen.this, LoginActivity.class);
                 mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 overridePendingTransition(0, 0);
                 startActivity(mIntent);
@@ -691,33 +863,17 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
-        if (status==200){
-//            if (NetworkStatus.getInstance().isConnected(this)) {
-               GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+        if (status == 200) {
 
-              //  ipAddressStr = getIPAddress(true);
-              /*  if (ipAddressStr.equals("")) {
-                    noInternetTextView.setText("Could not detect your IP.");
-                    noInternetLayout.setVisibility(View.VISIBLE);
-                    geoBlockedLayout.setVisibility(View.GONE);
-                } else {
-                    CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-                    checkGeoBlockInputModel.setAuthToken(authTokenStr);
-                    checkGeoBlockInputModel.setIp(ipAddressStr);
-                    CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
-                    asynGetCountry.executeOnExecutor(threadPoolExecutor);
-                }*/
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-//            }
-        }
-        else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
+        } else if (status == Util.ERROR_CODE_EXPIRED_AUTHTOKEN) {
             geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
-//            geoTextView.setText("Thanks for visiting Plusnights. The trial has now ended, but keep your eyes peeled for more information coming later this year. Thanks, and we hope you enjoyed your film!");
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
+
             noInternetTextView.setText("Oops something went wrong.Please try again later .");
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
@@ -742,7 +898,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     if (!addr.isLoopbackAddress()) {
                         String sAddr = addr.getHostAddress();
                         //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':')<0;
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
 
                         if (useIPv4) {
                             if (isIPv4)
@@ -750,14 +906,36 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         } else {
                             if (!isIPv4) {
                                 int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
                             }
                         }
                     }
                 }
             }
-        } catch (Exception ex) { } // for now eat exceptions
+        } catch (Exception ex) {
+        } // for now eat exceptions
         return "";
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+    private void showExplanationForPermission(){
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getThemedContext());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle(getResources().getString(R.string.storagePermissionNecessary));
+        alertBuilder.setMessage(getApplicationName(getApplicationContext()) +" "+ getResources().getString(R.string.storagePermissionToPlayVideo));
+        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityCompat.requestPermissions(SplashScreen.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},  111);
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
 }

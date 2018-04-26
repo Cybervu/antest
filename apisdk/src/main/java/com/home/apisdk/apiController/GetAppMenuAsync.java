@@ -257,7 +257,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                 footerMenu.setIsSubcategoryPresent(isSubcategoryPresent);
                             }
                             if (LinkType!=null && !LinkType.equals("")){
-                                if (LinkType.equals("0")){
+                                if (LinkType.equals("0")|| LinkType.equals("3")){
                                     mainMenuArrayList.add(mainMenu);
                                 }
                                 else{

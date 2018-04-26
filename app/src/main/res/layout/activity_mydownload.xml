@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/app_background"
     android:layout_height="match_parent">
 
     <include
@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@color/transparent"
         android:padding="@dimen/manage_device_padding"
         android:visibility="gone"
         android:id="@+id/noData"
@@ -39,5 +39,6 @@
         android:dividerHeight="@dimen/manage_device_padding"
         android:layout_marginLeft="@dimen/my_download_margin"
         android:layout_marginRight="@dimen/my_download_margin"
+        android:layout_marginTop="@dimen/my_download_margin"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

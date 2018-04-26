@@ -14,10 +14,12 @@
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
 
+    <!--pdf download url added -->
+    <string name="pdf_download_url">https://cms.muvi.com/docs/</string>
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->
-    <string name="app_id">49A4D3B2</string>
+    <string name="app_id">7B4A6B91</string>
 
     <!--<string name="app_id">9C631550</string>-->
     <string name="action_settings">Settings</string>

@@ -34,20 +34,24 @@ import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
@@ -88,13 +92,16 @@ public class EpisodeListOptionMenuHandler {
         filter_menu = menu.findItem(R.id.action_filter);
         filter_menu.setVisible(false);
         login_menu = menu.findItem(R.id.action_login);
-        (menu.findItem(R.id.menu_item_language)).setVisible(false);
+        menu_language = menu.findItem(R.id.menu_item_language);
+       // (menu.findItem(R.id.menu_item_language)).setVisible(false);
         profile_menu = menu.findItem(R.id.menu_item_profile);
-        purchage_menu = menu.findItem(R.id.action_purchage);
         logout_menu = menu.findItem(R.id.action_logout);
         register_menu = menu.findItem(R.id.action_register);
         action_searchmenu = menu.findItem(R.id.action_search);
         submenu = menu.findItem(R.id.submenu);
+        mydownload_menu = menu.findItem(R.id.action_mydownload);
+        purchage_menu = menu.findItem(R.id.action_purchage);
+        favorite_menu = menu.findItem(R.id.menu_item_favorite);
 
         /***************chromecast**********************/
 
@@ -104,10 +111,14 @@ public class EpisodeListOptionMenuHandler {
         /***************chromecast**********************/
 
         login_menu.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
         register_menu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
+        mydownload_menu.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+        favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+
         submenu.setVisible(true);
         action_searchmenu.setVisible(true);
         purchage_menu.setVisible(false);
@@ -118,14 +129,35 @@ public class EpisodeListOptionMenuHandler {
             mediaRouteMenuItem.setVisible(false);
 
 
+        /**
+         * Multiple language feature has been activated for Lumiere.
+         */
+
+        if (preferenceManager.getLanguageListFromPref().equals("1"))
+            menu_language.setVisible(false);
+        else
+            menu_language.setVisible(true);
+
         if (loggedInStr != null) {
 
             login_menu.setVisible(false);
             register_menu.setVisible(false);
             profile_menu.setVisible(true);
-
-
             logout_menu.setVisible(true);
+
+
+            /**
+             * This has been modified.
+             */
+            if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
+                favorite_menu.setVisible(false);
+            else
+                favorite_menu.setVisible(false);
+
+            if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
+                mydownload_menu.setVisible(false);
+            else
+                mydownload_menu.setVisible(false);
 
 
         } else if (loggedInStr == null) {

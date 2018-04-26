@@ -89,7 +89,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
         noInternet.setVisibility(View.GONE);
 
-
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getArguments().getString("title")));
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
 
 
@@ -137,11 +137,11 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         else {
             noInternet.setVisibility(View.VISIBLE);
         }
-        TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
-        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), categoryTitle);
+      //  TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
+       // FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), categoryTitle);
         /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);*/
-        categoryTitle.setText(Html.fromHtml(getArguments().getString("title")));
+       // categoryTitle.setText(Html.fromHtml(getArguments().getString("title")));
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();

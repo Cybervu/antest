@@ -124,6 +124,7 @@ public class SubtitleList extends Activity{
                 playerIntent.putExtra("position", ""+position);
                 playerIntent.putExtra("type", "subtitle");
                 setResult(RESULT_OK, playerIntent);
+                overridePendingTransition(0, 0);
                 finish();
             }
         });
@@ -135,6 +136,7 @@ public class SubtitleList extends Activity{
                 playerIntent.putExtra("type", "subtitle");
                 playerIntent.putExtra("position", "nothing");
                 setResult(RESULT_OK, playerIntent);
+                overridePendingTransition(0, 0);
                 finish();
                 return false;
             }
@@ -150,6 +152,7 @@ public class SubtitleList extends Activity{
         playerIntent.putExtra("type", "subtitle");
         playerIntent.putExtra("position", "nothing");
         setResult(RESULT_OK, playerIntent);
+        overridePendingTransition(0, 0);
         finish();
     }
 

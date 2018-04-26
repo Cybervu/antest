@@ -127,7 +127,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton  back, center_play_pause;
-    LinearLayout back_layout;
+    LinearLayout back_layout,compress_layout;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
@@ -257,8 +257,8 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             userIdStr = "";
         }
 
-        ((ImageView) findViewById(R.id.subtitle_change_btn)).setVisibility(View.INVISIBLE);
-
+        findViewById(R.id.subtitle_change_btn).setVisibility(View.INVISIBLE);
+        compress_layout=(LinearLayout)findViewById(R.id.compress_layout);
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
@@ -277,6 +277,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+
         Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
 
@@ -568,6 +569,69 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                         current_time.setVisibility(View.VISIBLE);
                         Start_Timer();
                     }
+
+                }
+
+
+            }
+        });
+
+        compress_layout.setOnClickListener(new View.OnClickListener(){
+            @Override
+
+            public void onClick(View view){
+                   if (compressed) {
+                    compressed = false;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    player_layout.setLayoutParams(params);
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    hideSystemUI();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+
+                    LinearLayout.LayoutParams params1 = null;
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+                        if(TrailerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+
+                        }
+                        else
+                        {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+                        }
+                    }
+                    else
+                    {
+                        if(TrailerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+                        }
+                        else
+                        {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                        }
+                    }
+                    player_layout.setLayoutParams(params1);
+                    compressed = true;
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    showSystemUI();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
                 }
 
@@ -1169,7 +1233,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     private int millisecondsToString(int milliseconds)  {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -1427,7 +1491,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
                     previous_matching_time = current_matching_time;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                 }
             }catch (Exception e){
 

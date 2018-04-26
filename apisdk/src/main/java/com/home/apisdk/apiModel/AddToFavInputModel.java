@@ -8,7 +8,28 @@ package com.home.apisdk.apiModel;
 
 public class AddToFavInputModel {
 
-    String authToken, movie_uniq_id, isEpisodeStr, loggedInStr;
+    String authToken;
+    String movie_uniq_id;
+    String isEpisodeStr;
+    String loggedInStr;
+    String language;;
+    /**
+     * This Method is use to get the Language
+     *
+     * @return language
+     */
+    public String getLanguage() {
+        return language;
+    }
+    /**
+     * This Method is use to set the Language
+     *
+     * @param language For Setting the Auth Token
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
 
     /**
      * This Method is use to get the Auth Token

@@ -1,8 +1,9 @@
 <resources>
     <string name="default_web_client_ids">914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com</string>
     <string name="app_name">Vishwam.tv</string>
-    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
-    <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
+    <!--<string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>-->
+    <string name="regular_fonts">fonts/ROBOTO-REGULAR.TTF</string>
+    <string name="light_fonts">fonts/ROBOTO-REGULAR.TTF</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>
@@ -39,13 +40,22 @@
     <string name="play_now">Play Now</string>
     <string name="introducing_cast">Introducing Cast</string>
 
-    <string name="fonts">fonts/ROBOTO-LIGHT.TTF</string>
+    <string name="fonts">fonts/ROBOTO-REGULAR.TTF</string>
     <string name="fonts_regular">fonts/ROBOTO-REGULAR.TTF</string>
+
+    <!--<string name="fonts">OpenSans-Regular.ttf</string>-->
+    <!--<string name="fonts_regular">OpenSans-Regular.ttf</string>-->
 
 
     <string name="addReview"><u>Click here to login and add your review</u></string>
 
     <!--country and Language -->
+
+    <!--permission alert dialog string -->
+    <string name="storagePermissionNecessary">Storage permission necessary</string>
+    <string name="storagePermissionToPlayVideo"> needs storage permission to play videos.</string>
+    <string name="permissionsRequired">Permission Required</string>
+    <string name="permissionsRequiredMessage">Required permission(s) have been set not to ask again! Please provide them from settings.\nPermissions --> Storage </string>
 
 
     <string-array name="country">

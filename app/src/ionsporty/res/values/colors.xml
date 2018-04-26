@@ -3,54 +3,67 @@
  <!--added for app background color by bishal-->
  <color name="background_start_color">#000000</color>
  <color name="background_end_color">#000000</color>
-   <color name="appBackgroundColor">#000000</color>
-    <color name="textColor">#ffffff</color>
-    <color name="loginTextViewColor">#930f18</color>
-    <color name="buttonTextColor">#fff</color>
-    <color name="forgotPasswordTextViewColor">#930f18</color>
-    <color name="fb_text_color">#fff</color>
-    <color name="login_new_user_text_color">#757575</color>
-    <color name="sign_up_text_color">#930f18</color>
-    <color name="hint_color">#737373</color>
-    <color name="alreadyMemberTextColor">#757575</color>
-    <color name="alreadyHaveALoginButtonTextColor">#930f18</color>
-    <color name="border_color">#930f18</color>
-    <color name="cancel_button_text_color">#930f18</color>
-    <color name="transparent">@android:color/transparent</color>
-    <color name="castCrewTitleTextColor">#930f18</color>
-    <color name="subtitleListColor">#fff</color>
-    <color name="episodeBackgroundColor">#080808</color>
-    <color name="preOrderButtonTextColor">#DDD</color>
-    <color name="spinnerDropDownListColor">#000</color>
-    <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#0f0f0f</color>
-    <color name="colorPrimaryDark">#252626</color>
-    <color name="languagePopupColor">#000000</color>
-    <color name="languagePopupFadeColor">#50696969</color>
-    <color name="filterTextColor">#fff</color>
-    <color name="nav_drawer_lineColor">#000</color>
-    <color name="nav_drawer_text_Color">#525252</color>
-    <color name="button_background">#930f18</color>
-    <color name="cancel_button_background">#DDD</color>
-    <color name="pre_order_button_background">#fff</color>
-    <color name="color_card_background">#000</color>
-    <color name="fb_button_background">#3b5998</color>
-    <color name="colorAccent">#930f18</color>
-    <color name="textColorPrimary">#3b5998</color>
-    <color name="windowBackground">#000</color>
-    <color name="selected_color">#000</color>
-    <color name="unselected_color">#fff</color>
+ <color name="appBackgroundColor">#000000</color>
+ <color name="textColor">#ffffff</color>
+ <color name="player_title_color">#ffffff</color>
+ <color name="loginTextViewColor">#930f18</color>
+ <color name="buttonTextColor">#fff</color>
+ <color name="forgotPasswordTextViewColor">#930f18</color>
+ <color name="fb_text_color">#fff</color>
+ <color name="login_new_user_text_color">#757575</color>
+ <color name="sign_up_text_color">#930f18</color>
+ <color name="hint_color">#737373</color>
+ <color name="alreadyMemberTextColor">#757575</color>
+ <color name="alreadyHaveALoginButtonTextColor">#930f18</color>
+ <color name="border_color">#930f18</color>
+ <!--added by bishal in detaills layout story color id-->
+ <color name="videostorytextcolor">#ffffff</color>
+ <color name="banner_line_color">#930f18</color>
+ <color name="cancel_button_text_color">#930f18</color>
+ <color name="transparent">@android:color/transparent</color>
+ <color name="castCrewTitleTextColor">#930f18</color>
+ <color name="FilterTitleTextColor">#930f18</color>
+ <color name="subtitleListColor">#fff</color>
+ <color name="episodeBackgroundColor">#080808</color>
+ <color name="preOrderButtonTextColor">#DDD</color>
+ <color name="spinnerDropDownListColor">#000</color>
+ <color name="leftMenuBackground">#fff</color>
+ <color name="colorPrimary">#0f0f0f</color>
+ <color name="colorPrimaryDark">#252626</color>
+ <color name="languagePopupColor">#000000</color>
+ <color name="languagePopupFadeColor">#50696969</color>
 
-    <color name="filter_text_color">#000</color>
 
-    <color name="loader_color">#3593d9</color>
-    <color name="hint_background">#930f18</color>
-    <color name="pageTitleColor">#ffffff</color>
-    <color name="noInternetColor">#fff</color>
-    <color name="editTextColor">#fff</color>
-    <color name="movieTitleColor">#ffffff</color>
-    <color name="resumePopupColor">#000000</color>
-   <color name="dividerColor">#930f18</color>
+ <color name="languagePopupBackgroundColor">#50696969</color>
+ <color name="languagePopupViewBackgroundColor">#930f18</color>
+
+ <color name="filterTextColor">#fff</color>
+ <color name="nav_drawer_lineColor">#000</color>
+ <color name="nav_drawer_text_Color">#525252</color>
+ <color name="button_background">#930f18</color>
+ <color name="view_more_less">#930f18</color>
+ <color name="cancel_button_background">#DDD</color>
+ <color name="pre_order_button_background">#fff</color>
+ <color name="color_card_background">#000</color>
+ <color name="fb_button_background">#3b5998</color>
+ <color name="colorAccent">#930f18</color>
+ <color name="textColorPrimary">#3b5998</color>
+ <color name="windowBackground">#000</color>
+ <color name="selected_color">#000</color>
+ <color name="unselected_color">#fff</color>
+
+ <color name="filter_text_color">#000</color>
+
+ <color name="loader_color">#3593d9</color>
+ <color name="hint_background">#930f18</color>
+ <color name="pageTitleColor">#ffffff</color>
+ <color name="noInternetColor">#fff</color>
+ <color name="editTextColor">#fff</color>
+ <color name="movieTitleColor">#ffffff</color>
+ <!--movie censor test color-->
+ <color name="censor_test_color">#fff</color>
+ <color name="resumePopupColor">#000000</color>
+ <color name="dividerColor">#930f18</color>
  <color name="playerColor">#000000</color>
  <color name="playPauseColor">#00000000</color>
  <color name="waterMarkTextColor">#80ffffff</color>
@@ -78,4 +91,8 @@
  <!--added for subtitle color by anu-->
  <color name="subtitle_solid_color">#fff</color>
  <color name="subtitle_outline_color">#000000</color>
+ <!---this part is added for manage device-->
+ <color name="device_name_color">#0f0f0f</color>
+ <color name="seasonBackgroundColor">#e2e1e1</color>
+
 </resources>

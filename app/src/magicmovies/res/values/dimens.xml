@@ -120,7 +120,6 @@
     <dimen name="voucher_code_height">48dp</dimen>
     <dimen name="pre_order_button_margin">6dp</dimen>
     <dimen name="loginImageViewMarging_top">15dp</dimen>
-    <dimen name="facebook_image_margin_right">0dp</dimen>
     <dimen name="ppv_apply_btn_height">44dp</dimen>
     <dimen name="payment_spinner_padding_left">12dp</dimen>
     <dimen name="profile_image_view_margin_top">165dp</dimen>
@@ -135,7 +134,6 @@
     <dimen name="videoGenreTextView_margin">200dp</dimen>
     <dimen name="login_btn_margin_top">16dp</dimen>
     <dimen name="payment_spinner_padding">6dp</dimen>
-    <dimen name="facebook_padding">6dp</dimen>
     <dimen name="payment_margin_textview_top">38dp</dimen>
     <dimen name="login_maring_top">12dp</dimen>
     <dimen name="profile_spinner_margin">15dp</dimen>
@@ -311,7 +309,7 @@
     <dimen name="videogrid_height">178dp</dimen>
     <dimen name="videogrid_land_width">190dp</dimen>
     <dimen name="videogrid_land_height">106dp</dimen>
-    <dimen name="testview_text_size">36sp</dimen>
+    <dimen name="testview_text_size">30sp</dimen>
     <dimen name="testview1_text_size">15sp</dimen>
     <dimen name="alreadymember_height">40dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
@@ -357,6 +355,9 @@
     <dimen name="border_line_height">1dp</dimen>
     <dimen name="review_text_size">18sp</dimen>
     <dimen name="review_edittext_size">16sp</dimen>
+    <!--added for Review edittext-->
+    <dimen name="review_edit_min_size">25dp</dimen>
+    <dimen name="review_edit_max_size">100dp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
@@ -384,6 +385,55 @@
     <dimen name="margin_right18dp">18dp</dimen>
 
     <dimen name="gridbottom8dp">1dp</dimen>
+<!---this is for facebook button padding-->
+    <dimen name="facebook_padding">6dp</dimen>
+    <!---this is for trailer  button padding-->
     <dimen name="trailer_btn_padding">6dp</dimen>
+    <!---this is for videolistfragment   Textview padding-->
+    <dimen name="videolistleftmargin">5dp</dimen>
+    <!--added for subtitle outline by anu-->
+    <dimen name="subtitle_text_size">15sp</dimen>
+    <item name="stroke_width" format="float" type="dimen">0.45</item>
+
+    <dimen name="cc_button_padding_left">10dp</dimen>
+    <dimen name="cc_button_padding_right">32dp</dimen>
+    <dimen name="cc_button_padding_top">10dp</dimen>
+    <dimen name="cc_button_padding_bottom">10dp</dimen>
+
+    <!--Vector Image Dimens Author@Abhishek-->
+    <dimen name="ic_search_width_height">36dp</dimen>
+    <dimen name="ic_back_width_height">10dp</dimen>
+    <dimen name="optionmanu_height_width">36dp</dimen>
+    <dimen name="ic_play_height_width">100dp</dimen>
+    <dimen name="savecard_tick_height_width">35dp</dimen>
+    <dimen name="pause_height_width">90dp</dimen>
+    <dimen name="full_screen_half_screen_dimen">60dp</dimen>
+    <dimen name="close_height_width">128dp</dimen>
+    <dimen name="action_download_height_width">20dp</dimen>
+    <dimen name="cc_icon_height_width">512dp</dimen>
+    <dimen name="centre_ic_media_height_width">100dp</dimen>
+    <dimen name="delete_height_width">64dp</dimen>
+    <dimen name="download_black_height_width">60dp</dimen>
+    <dimen name="fb_height_width">30dp</dimen>
+    <dimen name="filter_height_width">36dp</dimen>
+    <dimen name="ic_media_pause_play_height_width">35dp</dimen>
+    <dimen name="login_height_width">20dp</dimen>
+    <dimen name="logout_height_width">20dp</dimen>
+    <dimen name="mark_height_width">256dp</dimen>
+    <dimen name="offline_height_width">100dp</dimen>
+    <dimen name="purchase_history_height_width">20dp</dimen>
+    <dimen name="resolution_icon_height_width">130dp</dimen>
+    <dimen name="saved_card_height_width">25dp</dimen>
+    <dimen name="search_height_width">25dp</dimen>
+    <dimen name="selected_radio_height_width">50dp</dimen>
+    <dimen name="select_resolution_height_width">64dp</dimen>
+    <dimen name="star_height_width">48dp</dimen>
+    <dimen name="subtitle_height_width">100dp</dimen>
+
+    <dimen name="vertical_spacing">6dp</dimen>
+    <dimen name="horizontal_spacing">6dp</dimen>
+
+    <dimen name="padding_left">8dp</dimen>
+    <dimen name="padding_right">8dp</dimen>
 </resources>
 

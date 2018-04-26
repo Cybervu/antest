@@ -3,6 +3,7 @@ package player.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -106,35 +107,38 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
     @Override
     public void onOrientationChange(int orientation) {
         LogUtil.showLog("BIBHU","value================"+ Util.player_description);
+      /*   orientation = this.getResources().getConfiguration().orientation;
+       if (orientation == Configuration.ORIENTATION_PORTRAIT){
+           setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+       }else {*/
+        if(getIntent().getStringExtra("activity").equals("MyLibraryPlayer")){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else{
+           if (Util.player_description) {
+               setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+           } else {
+               if (orientation == 90) {
+                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                   //current_time.setVisibility(View.GONE);
+               } else if (orientation == 270) {
 
+                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                   //current_time.setVisibility(View.GONE);
 
-        if(Util.player_description)
-        {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        else
-        {
-            if (orientation == 90) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                //current_time.setVisibility(View.GONE);
-            } else if (orientation == 270) {
+                   // Do some landscape stuff
+               } else if (orientation == 180) {
 
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                //current_time.setVisibility(View.GONE);
+                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                   //current_time.setVisibility(View.GONE);
 
-                // Do some landscape stuff
-            } else if (orientation == 180) {
+               } else if (orientation == 0) {
 
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                //current_time.setVisibility(View.GONE);
+                   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                   //current_time.setVisibility(View.GONE);
+               }
 
-            } else if (orientation == 0) {
-
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                //current_time.setVisibility(View.GONE);
-            }
-
-        }
+           }
+       }
 
     }
 }

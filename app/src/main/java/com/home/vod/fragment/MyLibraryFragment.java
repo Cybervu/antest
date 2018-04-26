@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -395,10 +396,16 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
-
+        Util.check_for_subscription=0;
         context = getActivity();
         featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
@@ -436,7 +443,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
-        sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+      //  sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
@@ -457,16 +464,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
 
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
-            sectionTitle.setText(titleListName);
+           // sectionTitle.setText(titleListName);
         } else {
-            sectionTitle.setText("");
+         //   sectionTitle.setText("");
 
         }
-        Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(sectionTitleTypeface);
+     /*   Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+        sectionTitle.setTypeface(sectionTitleTypeface);*/
 
         gridView.setAdapter(customGridAdapter);
 
@@ -649,16 +657,16 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("1")) {
                         // Call Load Videos Url to play the Video
 
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-                            validateUserInput.setPurchaseType("episode");
-                            validateUserInput.setSeasonId("" + season_id);
-                            validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                        ValidateUserInput validateUserInput = new ValidateUserInput();
+                        validateUserInput.setAuthToken(authTokenStr);
+                        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                        validateUserInput.setMuviUniqueId(movieUniqueId.trim());
+                        validateUserInput.setPurchaseType("episode");
+                        validateUserInput.setSeasonId("" + season_id);
+                        validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
+                        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
+                        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id == 0) {
@@ -797,12 +805,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
-
-                play_video = false;
-            } else {
-                play_video = true;
-            }
+            play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
             play_video = true;
         }
@@ -1098,7 +1101,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 }
                             }
 
-                            mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                            mediaInfo = new MediaInfo.Builder(playerModel.getVideoUrl().trim())
                                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                                     .setContentType(mediaContentType)
                                     .setMetadata(movieMetadata)
@@ -1111,6 +1114,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         }
                         return;
                     }
+
+
                     playerModel.setThirdPartyPlayer(false);
 
                     /***ad **/
@@ -1820,7 +1825,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
                     String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
                     movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
-                    movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
+                    movieUniqueId = myLibraryOutputModelArray.get(i).getMuvi_uniq_id();
                     int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
                     int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
                     int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
@@ -2305,19 +2310,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         super.onDetach();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
-/***************chromecast**********************/
 
-        CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
-        /***************chromecast**********************/
-        MenuItem item;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
 
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
@@ -2603,7 +2596,25 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         itemsInServer = 0;
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+/***************chromecast**********************/
 
+        CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
+        /***************chromecast**********************/
+        MenuItem item,item1,item2,item3;
+        item = menu.findItem(R.id.action_filter);
+        item1 = menu.findItem(R.id.submenu);
+        item2 = menu.findItem(R.id.action_search);
+        item3 = menu.findItem(R.id.media_route_menu_item);
+        item.setVisible(false);
+        item1.setVisible(false);
+        item2.setVisible(true);
+        item3.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

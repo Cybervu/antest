@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
+        android:background="@drawable/app_background"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -176,12 +176,19 @@
                 android:paddingTop="@dimen/name_user_margin_bottom"
                 android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/back"
+                <LinearLayout
+                    android:id="@+id/back_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/profile_spinner_margin"
-                    android:background="@drawable/ic_back" />
+                    android:padding="@dimen/marginLeft15dp">
+
+                    <ImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_back" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -194,7 +201,6 @@
                         android:layout_width="@dimen/subtitle_width"
                         android:layout_height="@dimen/subtitle_height"
                         android:layout_marginRight="@dimen/payment_relative_margin"
-                        android:background="@drawable/cc_button_radious"
                         android:src="@drawable/subtitle_image" />
 
                 </LinearLayout>
@@ -238,6 +244,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/ppv_margin"
+                        android:paddingBottom="8dp"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
                         android:visibility="visible" />
@@ -260,6 +267,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="10"
+                        android:paddingBottom="8dp"
                         android:progressDrawable="@drawable/seekbar"
                         android:thumb="@drawable/thumb_drawable" />
 
@@ -270,66 +278,32 @@
                         android:layout_marginRight="@dimen/ppv_margin"
                         android:gravity="center"
                         android:text=""
+                        android:paddingBottom="8dp"
                         android:textColor="@color/totalTimeTxtColor"
                         android:textSize="@dimen/totaltme_text_size" />
 
-                    <ImageView
-                        android:id="@+id/compress_expand"
-                        android:layout_width="@dimen/compress_width"
-                        android:layout_height="@dimen/compress_height"
-                        android:layout_marginRight="@dimen/compress_expand_margin"
-                        android:gravity="center"
-                        android:src="@drawable/ic_media_fullscreen_stretch"
-                        android:visibility="visible" />
+                    <LinearLayout
+                        android:id="@+id/compress_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
+
+                        <ImageView
+                            android:id="@+id/compress_expand"
+                            android:layout_width="@dimen/compress_width"
+                            android:layout_height="@dimen/compress_height"
+                            android:layout_marginRight="@dimen/compress_expand_margin"
+                            android:gravity="center"
+                            android:src="@drawable/ic_media_fullscreen_stretch"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/downloadRelativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textlinearlayout"
-            android:background="@android:color/white"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/downloadImageView"
-                android:layout_width="@dimen/downloadimg_width"
-                android:layout_height="@dimen/downloadimg_height"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/payment_relative_margin"
-                android:layout_marginTop="@dimen/textColor_margin" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleInverse"
-                android:layout_width="@dimen/progressbar_width"
-                android:layout_height="@dimen/progressbar_height"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/loginImageViewMarging_top"
-                android:indeterminate="false"
-                android:indeterminateDrawable="@drawable/progress_rawable"
-                android:indeterminateDuration="1000"
-                android:max="100"
-                android:progress="0"
-                android:secondaryProgress="100"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/percentage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/progressBar"
-                android:layout_alignRight="@+id/progressBar"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/ppv_margin"
-                android:text=""
-                android:textColor="@color/subTitleTextColor"
-                android:textSize="@dimen/percentage_text_size"
-                android:visibility="gone" />
         </RelativeLayout>
 
 
@@ -338,7 +312,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bannerImageRelativeLayout"
-            android:background="@color/appBackgroundColor"
+            android:layout_marginTop="@dimen/ppv_margin"
+            android:background="@color/transparent"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -353,19 +328,69 @@
                  android:textColor="@color/details_story_color"
                  android:textSize="14dp" />-->
 
-
-            <TextView
-                android:id="@+id/videoTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/ppv_margin"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text=""
-                android:textColor="@color/videomovieTitleColor"
-                android:textSize="@dimen/videotitle_text_size"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/videoTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/videomovieTitleColor"
+                    android:textSize="@dimen/forgot_text_size"
+                    android:textStyle="bold" />
+
+
+                <RelativeLayout
+                    android:id="@+id/downloadRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textlinearlayout"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/downloadImageView"
+                        android:layout_width="@dimen/downloadimg_width"
+                        android:layout_height="@dimen/downloadimg_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/payment_relative_margin"
+                        android:layout_marginTop="@dimen/textColor_margin"
+                        android:src="@drawable/download_black"
+                        android:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/progressbar_width"
+                        android:layout_height="@dimen/progressbar_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/style_circular"
+                        android:secondaryProgress="100" />
+
+                    <TextView
+                        android:id="@+id/percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/progressBar"
+                        android:layout_alignRight="@+id/progressBar"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/ppv_margin"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/dividerColor"
+                        android:textSize="@dimen/percentage_text_size"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/GenreTextView"
@@ -444,18 +469,54 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/videoStoryTextView"
+            <!-- <com.release.cube.utils.ExpandableTextView
+                 android:id="@+id/story"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/durationratingLiearLayout"
+                 android:layout_marginBottom="10dp"
+                 android:layout_marginLeft="12dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginTop="8dp"
+
+                 android:text=""
+                 android:textColor="@color/videotextColor"
+                 android:textSize="14dp" />-->
+
+
+            <RelativeLayout
+                android:id="@+id/viewStoryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/durationratingLiearLayout"
-                android:layout_marginBottom="@dimen/ppv_margin"
-                android:layout_marginLeft="@dimen/videoStoryTextView_margin"
+                android:layout_marginBottom="@dimen/my_download_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
-                android:layout_marginTop="@dimen/textColor_margin"
-                android:text=""
-                android:textColor="@color/videotextColor"
-                android:textSize="@dimen/video_text_size" />
+                android:layout_marginTop="@dimen/compress_expand_margin">
+
+                <TextView
+                    android:id="@+id/videoStoryTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/login_btn_margin_top"
+                    android:layout_toLeftOf="@+id/storyViewMoreButton"
+                    android:ellipsize="end"
+                    android:textColor="@color/videotextColor"
+                    android:textSize="@dimen/cast_description_text" />
+
+                <Button
+                    android:id="@id/storyViewMoreButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/transparent"
+                    android:text="View More"
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_background"
+                    android:textSize="@dimen/cast_description_text"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/videoCastCrewTitleTextView"
@@ -464,9 +525,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
-                android:textAlignment="viewStart"
-                android:gravity="start"
-                android:textColor="@color/cast_crew_titleCololr"
+                android:textColor="@color/castCrewTitleTextColor"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />
 

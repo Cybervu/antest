@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="teal_100">#FFCDD2</color>
     <color name="teal_500">#F44336</color>
     <color name="disableTextColor">#50757575</color>
@@ -8,6 +9,7 @@
     <color name="colorPrimary">#87005F</color>
     <color name="navlogobackgroundcolor">#87005F</color>
     <color name="castCrewTitleTextColor">#C81E6E </color>
+    <color name="FilterTitleTextColor">#C81E6E</color>
     <color name="colorPrimaryDark">#87005F</color>
     <!--added for app background color by bishal-->
     <color name="background_start_color">#fff</color>
@@ -15,6 +17,8 @@
     <color name="appBackgroundColor">#fff</color>
     <color name="border_color">#C81E6E</color>
     <color name="videomovieTitleColor">#C81E6E </color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="cast_crew_titleCololr">#676D70</color>
     <color name="forgotPasswordTextViewColor">#676D70</color>
     <color name="sign_up_text_color">#676D70</color>
@@ -22,6 +26,7 @@
     <color name="terms_text_color">#676D70</color>
     <color name="loginTextViewColor">#676D70</color>
     <color name="textColor">#C81E6E</color>
+    <color name="player_title_color">#C81E6E</color>
 
     <color name="no_internet_textColor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
@@ -47,6 +52,7 @@
     <color name="dividerColor">#C81E6E</color>
     <color name="borderColor">#C81E6E</color>
     <color name="button_background">#C81E6E </color>
+    <color name="view_more_less">#C81E6E </color>
     <color name="videoTitleTextColor">#C81E6E</color>
     <color name="detailsPageTextColor">#fff</color>
     <color name="subtitleListBgColor">#fff</color>
@@ -61,6 +67,10 @@
     <color name="listTitleContentColor">#fff</color>
     <color name="languagePopup">#fff</color>
     <color name="languagePopupFade">#fff</color>
+
+    <color name="languagePopupBackgroundColor">#fff</color>
+    <color name="languagePopupViewBackgroundColor">#C81E6E</color>
+
     <color name="genreTextColor">#666</color>
     <color name="navDrawerTextColor">#666</color>
     <color name="ccbuttonbg">#C81E6E</color>
@@ -76,10 +86,16 @@
     <color name="leftMenuBgColor">#87005F</color>
     <color name="aboutustestcolor">#fff</color>
     <color name="videotextColor">#666</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#666</color>
+    <color name="banner_line_color">#C81E6E</color>
+    <color name="cast_description_color">#666</color>
     <color name="dialogepopupbackgroundcolor">#1e292d</color>
     <color name="chromecast_color">#ffffff</color>
 
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#87005F</color>
 </resources>

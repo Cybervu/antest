@@ -168,4 +168,9 @@
     <dimen name="facebook_padding">0dp</dimen>
     <!---this is for videolistfragment   Textview padding-->
     <dimen name="videolistleftmargin">5dp</dimen>
+
+    <dimen name="padding_left">10dp</dimen>
+    <dimen name="padding_right">0dp</dimen>
+
+
 </resources>

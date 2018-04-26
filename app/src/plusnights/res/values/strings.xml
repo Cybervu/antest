@@ -11,7 +11,8 @@
     <string name="fonts">fonts/ARIAL-Light.ttf</string>
     <string name="fonts_regular">fonts/ARIAL-REGULAR.TTF</string>
 
-
+    <!--pdf download url added -->
+    <string name="pdf_download_url">https://sonydadc.muvi.com/docs/</string>
 
     <string name="app_id">7C714EB2</string>
     <!--<string name="app_id">B984663F</string>-->

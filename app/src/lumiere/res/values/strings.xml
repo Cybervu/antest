@@ -12,8 +12,12 @@
     <string name="fonts_regular">fonts/ROBOTO-REGULAR.TTF</string>
 
 
-
+    <!--pdf download url added -->
+    <string name="pdf_download_url">https://sonydadc.muvi.com/docs/</string>
     <string name="app_id">9C631550</string>
+    <!--<string name="app_id">8162836C</string>-->
+    <!--<string name="app_id">96B30BA0</string>-->
+
     <string name="action_settings">Settings</string>
     <string name="cast_app_name">GoogleCastPlayer</string>
     <string name="media_route_menu_title">Play on&#8230;</string>

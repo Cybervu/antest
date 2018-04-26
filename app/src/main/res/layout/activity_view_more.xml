@@ -11,28 +11,30 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/sectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/videolistleftmargin"
+        android:layout_marginLeft="@dimen/marginright5dp"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="normal"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"/>-->
 
     <GridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:layout_below="@+id/sectionTitle"
+        android:layout_below="@+id/toolbar"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/pre_order_button_margin"
-        android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:verticalSpacing="@dimen/pre_order_button_margin"
+        android:horizontalSpacing="@dimen/horizontal_spacing"
+        android:verticalSpacing="@dimen/vertical_spacing"
+
+
 
         />
     <!--<com.twotoasters.jazzylistview.JazzyGridView
@@ -81,7 +83,7 @@
             android:maxLines="4"
             android:singleLine="false"
             android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/itemtitle_text_size"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 

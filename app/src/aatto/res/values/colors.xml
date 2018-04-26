@@ -8,6 +8,10 @@
     <color name="appBackgroundColor">#161616</color>
     <color name="textColor">#fff</color>
     <color name="videotextColor">#fff</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#fff</color>
+    <color name="banner_line_color">#ff2c54</color>
+    <color name="cast_description_color">#fff</color>
     <color name="videotitleColor">#ff2c54</color>
     <color name="savecardtextcolor">#fff</color>
     <color name="loginTextViewColor">#ff2c54</color>
@@ -26,6 +30,7 @@
     <color name="cancel_button_text_color">#ff2c54</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#ff2c54</color>
+    <color name="FilterTitleTextColor">#ff2c54</color>
     <color name="subtitleListColor">#fff</color>
     <color name="borderColor">#ff2c54</color>
     <color name="episodeBackgroundColor">#242424</color>
@@ -37,6 +42,11 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#242424</color>
+
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#ff2c54</color>
+
     <color name="filterTextColor">#000000</color>
     <color name="exoplayerstory_color">#fff</color>
     <color name="videoTitleTextColor">#fff</color>
@@ -45,6 +55,7 @@
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="nav_lineColor">#000000</color>
     <color name="button_background">#ff2c54</color>
+    <color name="view_more_less">#ff2c54</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
     <color name="color_card_background">#000</color>
@@ -62,6 +73,7 @@
     <color name="noInternetColor">#fff</color>
     <color name="editTextColor">#fff</color>
     <color name="movieTitleColor">#fff</color>
+    <color name="censor_test_color">#fff </color>
     <color name="videomovieTitleColor">#fff</color>
     <color name="resumePopupColor">#fff</color>
     <color name="dividerColor">#ff2c54</color>
@@ -89,4 +101,13 @@
     <!--added for subtitle color by anu-->
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
+    <color name="seasonBackgroundColor">#fff</color>
+    <!---this is  for player title color -->
+    <color name="player_title_color">#fff</color>
+    <!---this is added for mangae device-->
+    <color name="device_name_color">#fff</color>
+
 </resources>
+
+
+

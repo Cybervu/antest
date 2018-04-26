@@ -151,4 +151,7 @@
     <dimen name="gridbottom8dp">0dp</dimen>
     <!---this is for facebook button padding-->
     <dimen name="facebook_padding">0dp</dimen>
+
+    <dimen name="vertical_spacing">3dp</dimen>
+    <dimen name="horizontal_spacing">6dp</dimen>
 </resources>

@@ -127,12 +127,18 @@
     <color name="bar_color">#e0e0e0</color>
     <color name="background">#fff</color>
     <color name="textColor">#555</color>
+    <color name="player_title_color">#555</color>
     <color name="page_title_color">#57ad57</color>
     <color name="toolbarColor">#57ad57</color>
 
     <color name="textShadowColor">#333</color>
     <color name="languagePopup">#fff</color>
     <color name="languagePopupFade">#50696969</color>
+
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#57ad57</color>
+
     <color name="languagePopupBottom">#784128</color>
 
     <color name="episodeBackgroundColor">#e5f9e5</color>
@@ -150,11 +156,17 @@
     <color name="editunselected">#999</color>
     <color name="listTitleContentColor">#ffffff</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="durationcolor">#fff</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="navdrawerImageBelowLineColor">#454444</color>
     <color name="border_color">#57ad57</color>
     <color name="videotextColor">#555</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#555</color>
+    <color name="banner_line_color">#57ad57</color>
+    <color name="cast_description_color">#555</color>
     <color name="contactFormTitle">#57ad57</color>
     <color name="videomovieTitleColor">#57ad57</color>
     <color name="videoTitleTextColor">#57ad57</color>
@@ -162,6 +174,7 @@
     <color name="cast_crew_textcolor">#57ad57</color>
     <color name="sign_up_text_color">#57ad57</color>
     <color name="button_background">#57ad57</color>
+    <color name="view_more_less">#57ad57</color>
     <color name="alreadyHaveALoginButtonTextColor">#57ad57</color>
     <color name="forgotPasswordTextViewColor">#57ad57</color>
     <color name="loginTextViewColor">#57ad57</color>

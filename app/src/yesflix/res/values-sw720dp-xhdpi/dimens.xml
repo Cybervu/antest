@@ -166,4 +166,9 @@
     <dimen name="gridbottom8dp">8dp</dimen>
     <!---this is for facebook button padding-->
     <dimen name="facebook_padding">0dp</dimen>
+    <!---this is for videolistfragment   Textview padding-->
+    <dimen name="videolistleftmargin">5dp</dimen>
+
+    <dimen name="vertical_spacing">9dp</dimen>
+    <dimen name="horizontal_spacing">4dp</dimen>
 </resources>

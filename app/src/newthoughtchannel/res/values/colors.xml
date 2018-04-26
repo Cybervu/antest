@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--added for app background color by bishal-->
+    <color name="seasonBackgroundColor">#fff</color>
     <color name="background_start_color">#fff</color>
     <color name="background_end_color">#fff</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="textColor">#757575</color>
+    <color name="player_title_color">#757575</color>
     <color name="videotextColor">#000000</color>
+    <!--added by bishal in detaills layout story color id-->
+    <color name="videostorytextcolor">#000000</color>
+    <color name="banner_line_color">#264177</color>
+    <color name="cast_description_color">#000</color>
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#264177</color>
     <color name="buttonTextColor">#fff</color>
@@ -40,6 +46,7 @@
     <color name="cancel_button_text_color">#264177</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#264177</color>
+    <color name="FilterTitleTextColor">#264177</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
     <color name="pageTitleColor">#3f444a</color>
@@ -51,11 +58,16 @@
     <color name="colorPrimaryDark">#264177</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
+
+    <color name="languagePopupBackgroundColor">#50696969</color>
+    <color name="languagePopupViewBackgroundColor">#264177</color>
+
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#264177</color>
+    <color name="view_more_less">#264177</color>
     <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
@@ -76,6 +88,8 @@
     <color name="editTextColor">#5c6873</color>
     <color name="voucher_inactive_button">#c3c3c3</color>
     <color name="movieTitleColor">#fff</color>
+    <!--movie censor test color-->
+    <color name="censor_test_color">#fff</color>
     <color name="videoTitleTextColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
@@ -105,4 +119,7 @@
     <color name="subtitle_solid_color">#fff</color>
     <color name="subtitle_outline_color">#000000</color>
     <color name="cast_crew_titleCololr">#264177</color>
+    <!---this part is added for manage device-->
+    <color name="device_name_color">#264177</color>
+
 </resources>

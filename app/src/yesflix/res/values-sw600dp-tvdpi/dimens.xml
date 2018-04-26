@@ -160,4 +160,10 @@
     <dimen name="facebook_padding">0dp</dimen>
     <!---this is for trailer  button padding-->
     <dimen name="trailer_btn_padding">2dp</dimen>
+    <!---this is for videolistfragment   Textview padding-->
+    <dimen name="videolistleftmargin">7dp</dimen>
+
+
+    <dimen name="vertical_spacing">1dp</dimen>
+    <dimen name="horizontal_spacing">8dp</dimen>
 </resources>

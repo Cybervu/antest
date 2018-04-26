@@ -116,5 +116,8 @@
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">14sp</dimen>
     <dimen name="gridbottom8dp">1dp</dimen>
+
+    <dimen name="vertical_spacing">8dp</dimen>
+    <dimen name="horizontal_spacing">6dp</dimen>
 </resources>
 

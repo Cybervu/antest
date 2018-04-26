@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class RegisterUIHandler {
     private EditText editName;
     public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
     private LanguagePreference languagePreference;
+    private RelativeLayout googleSignView;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
@@ -56,13 +58,19 @@ public class RegisterUIHandler {
         btnLogin.setVisibility(View.GONE);
         editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
-
+        googleSignView = (RelativeLayout)context.findViewById(R.id.sign_in_button);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
         if(featureHandler.getFeatureStatus(FeatureHandler.FACEBOOK,FeatureHandler.DEFAULT_FACEBOOK)) {
             btnLogin.setVisibility(View.VISIBLE);
         }else {
             btnLogin.setVisibility(View.GONE);
+        }
+
+        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+            googleSignView.setVisibility(View.VISIBLE);
+        }else {
+            googleSignView.setVisibility(View.GONE);
         }
 
     }

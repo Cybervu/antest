@@ -45,7 +45,7 @@
                 android:hint="First Name"
                 android:padding="17dp"
                 android:textColor="@color/editTexColor"
-                android:textColorHint="@color/hintTextColor"
+                android:textColorHint="@color/hint_color"
                 android:textSize="16dp" />
             <EditText
                 android:id="@+id/editNameStr_last"
@@ -56,7 +56,7 @@
                 android:hint="Last Name"
                 android:padding="17dp"
                 android:textColor="@color/editTexColor"
-                android:textColorHint="@color/hintTextColor"
+                android:textColorHint="@color/hint_color"
                 android:textSize="16dp" />
             <EditText
                 android:id="@+id/editNameStr"
