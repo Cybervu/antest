@@ -7,6 +7,7 @@ package com.home.apisdk.apiController;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 
 
@@ -29,6 +30,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This Class gives all the important content about movie/series such as story, poster, Release Date etc.
@@ -195,13 +198,18 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
                         movieTypeStr = movieTypeStr.trim();
-//                        movieTypeStr = movieTypeStr.replaceAll(" ","");
+                        movieTypeStr =Html.fromHtml(movieTypeStr).toString();
+                        Pattern pattern = Pattern.compile("[^a-z A-Z]");
+                        Matcher matcher = pattern.matcher(movieTypeStr);
+                        movieTypeStr= matcher.replaceAll("");
+                      //  movieTypeStr = movieTypeStr.replaceAll(" ","");
+//                        movieTypeStr = movieTypeStr.replaceAll(" ,",",");
 
                         if(movieTypeStr.contains(",")){
                             String data[] = movieTypeStr.split(",");
                             movieTypeStr = "";
                             for(int i=0;i<data.length;i++){
-                                movieTypeStr = movieTypeStr+data[i]+", ";
+                                movieTypeStr = movieTypeStr+(data[i].trim())+", ";
                             }
                             movieTypeStr =movieTypeStr.trim();
                             if (movieTypeStr.charAt(movieTypeStr.length()-1)==','){

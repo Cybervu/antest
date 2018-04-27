@@ -160,6 +160,7 @@
                         android:padding="@dimen/payment_spinner_padding"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
+                        android:elevation="1dp"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/preorderbtn_text_size"
                         android:visibility="gone" />
@@ -167,7 +168,7 @@
 
                     <Button
                         android:id="@+id/viewTrailerButton"
-                        android:layout_width="@dimen/btnmore_width"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/btnmore_height"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/button_radious"
