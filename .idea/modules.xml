@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MediaLib/MediaLib.iml" filepath="$PROJECT_DIR$/MediaLib/MediaLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/VOD.iml" filepath="$PROJECT_DIR$/.idea/VOD.iml" />
-      <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
+      <module fileurl="file://D:\Workspace\VOD\VOD.iml" filepath="D:\Workspace\VOD\VOD.iml" />
       <module fileurl="file://F:\Vod26_feb_newgitcode\VOD\.idea\VOD_Latest.iml" filepath="F:\Vod26_feb_newgitcode\VOD\.idea\VOD_Latest.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
