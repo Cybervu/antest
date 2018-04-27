@@ -58,7 +58,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
 import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
 import com.google.ads.interactivemedia.v3.api.AdEvent;
@@ -287,7 +287,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     TextView story;
     private static final int MAX_LINES = 2;
 
-    private EMVideoView emVideoView;
+    private VideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
 
@@ -641,7 +641,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             emailIdStr = playerModel.getEmailId();
         }
 
-        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.emVideoView);
         cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
         subtitleText = (StrokedTextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
@@ -1077,7 +1077,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mHandler.removeCallbacks(updateTimeTask);
-                playerStartPosition = emVideoView.getCurrentPosition();
+                playerStartPosition = (int)emVideoView.getCurrentPosition();
 
                 // Call New Video Log Api.
 
@@ -1105,7 +1105,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 playerPreviousPosition = playerStartPosition;
 
                 log_temp_id = "0";
-                player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+                player_start_time = millisecondsToString((int)emVideoView.getCurrentPosition());
                 playerPosition = player_start_time;
 
                 // ============End=====================//
@@ -1382,7 +1382,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             PreviousUsedDataByApp(false);
                             requestAds(playerModel.getChannel_id());
                             emVideoView.start();
-                            seekBar.setProgress(emVideoView.getCurrentPosition());
+                            seekBar.setProgress((int)emVideoView.getCurrentPosition());
                             updateProgressBar();
 
                             if (SubTitlePath.size() > 0) {
@@ -1835,7 +1835,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             //  Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
 
 
-                            int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
+                            int currentPositionStr = millisecondsToString((int)emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
 
@@ -1845,7 +1845,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 log_temp_id = "0";
 
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "complete";
@@ -1860,7 +1860,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                                 playerPreviousPosition = 0;
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
@@ -2128,18 +2128,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         public void run() {
 
 
-            if (emVideoView.getCurrentPosition() % 2 == 0)
+            if ((int)emVideoView.getCurrentPosition() % 2 == 0)
                 BufferBandWidth();
 
-            current_played_length = emVideoView.getCurrentPosition();
+            current_played_length = (int)emVideoView.getCurrentPosition();
 
           /*  if (played_length > 0) {
                 emVideoView.seekTo(34000);
                 seekBar.setProgress(34000);
             }else {*/
-            seekBar.setProgress(emVideoView.getCurrentPosition());
+            seekBar.setProgress((int)emVideoView.getCurrentPosition());
 //            }
-            seekBar.setMax(emVideoView.getDuration());
+            seekBar.setMax((int)emVideoView.getDuration());
             Calcute_Currenttime_With_TotalTime();
             mHandler.postDelayed(this, 1000);
 
@@ -2148,7 +2148,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 //                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
             }
 
-            current_matching_time = emVideoView.getCurrentPosition();
+            current_matching_time = (int)emVideoView.getCurrentPosition();
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
@@ -2871,7 +2871,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 } else {
                     PreviousUsedDataByApp(false);
                     emVideoView.start();
-                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    seekBar.setProgress((int)emVideoView.getCurrentPosition());
                     updateProgressBar();
                 }
 
@@ -3130,7 +3130,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         public void run() {
             if (emVideoView != null && emVideoView.isPlaying()) {
-                int currentPos = emVideoView.getCurrentPosition();
+                int currentPos = (int)emVideoView.getCurrentPosition();
                 Collection<Caption> subtitles = srt.captions.values();
                 for (Caption caption : subtitles) {
                     if (currentPos >= caption.start.mseconds
@@ -5017,7 +5017,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
                     return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
                 }
-                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + (int)emVideoView.getCurrentPosition());
                 Log.v("SUBHA", "emVideoView.getDuration()" + emVideoView.getDuration());
 
                /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
@@ -5025,7 +5025,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             emVideoView.getDuration());
                 }
 */
-                return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                return new VideoProgressUpdate((int)emVideoView.getCurrentPosition(),
                         emVideoView.getDuration());
             }
         });

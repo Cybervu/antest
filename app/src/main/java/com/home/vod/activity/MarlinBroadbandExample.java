@@ -54,6 +54,7 @@ import player.subtitle_support.FormatSRT_WithoutCaption;
 import player.subtitle_support.TimedTextObject;
 
 import com.androidquery.AQuery;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
@@ -104,7 +105,6 @@ import java.util.concurrent.TimeUnit;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import javax.net.ssl.HttpsURLConnection;
 
 import player.activity.ResumePopupActivity;
@@ -175,6 +175,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	String download_content_type="";
 	FeatureHandler featureHandler;
 	boolean resume_orientation = false;
+	LinearLayout new_detailsLayout;
 
 
 
@@ -219,7 +220,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			videoCastCrewTitleTextView;
 	TextView story;
 
-	private EMVideoView emVideoView;
+	private VideoView emVideoView;
 	int seek_label_pos = 0;
 	int content_types_id = 0;
 
@@ -456,7 +457,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 
-		emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+		new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
+		emVideoView = (VideoView) findViewById(R.id.emVideoView);
 		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
 		subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
@@ -790,7 +792,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				mHandler.removeCallbacks(updateTimeTask);
-				playerStartPosition = emVideoView.getCurrentPosition();
+				playerStartPosition = (int)emVideoView.getCurrentPosition();
 
 				asyncVideoLogDetails = new AsyncVideoLogDetails();
 				asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
@@ -818,7 +820,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					playerPreviousPosition = playerStartPosition;
 
 					log_temp_id = "0";
-					player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+					player_start_time = millisecondsToString((int)emVideoView.getCurrentPosition());
 					playerPosition = player_start_time;
 
 
@@ -845,7 +847,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				current_time.setVisibility(View.VISIBLE);
 				updateProgressBar();
 				if (playerPreviousPosition == 0) {
-					if (playerStartPosition < emVideoView.getCurrentPosition()) {
+					if (playerStartPosition < (int)emVideoView.getCurrentPosition()) {
 						isFastForward = true;
 						playerPreviousPosition = playerStartPosition;
 
@@ -1060,7 +1062,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							Log.v("BIBHU3", " called 1============");
 
 							emVideoView.start();
-							seekBar.setProgress(emVideoView.getCurrentPosition());
+							seekBar.setProgress((int)emVideoView.getCurrentPosition());
 							updateProgressBar();
 
 							if (SubTitlePath.size() > 0) {
@@ -1377,10 +1379,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
-			seekBar.setProgress(emVideoView.getCurrentPosition());
-			seekBarProgress = emVideoView.getCurrentPosition();
-			current_played_length = emVideoView.getCurrentPosition();
-			seekBar.setMax(emVideoView.getDuration());
+			seekBar.setProgress((int)emVideoView.getCurrentPosition());
+			seekBarProgress = (int)emVideoView.getCurrentPosition();
+			current_played_length = (int)emVideoView.getCurrentPosition();
+			seekBar.setMax((int)emVideoView.getDuration());
 			Calcute_Currenttime_With_TotalTime();
 			mHandler.postDelayed(this, 1000);
 
@@ -1388,10 +1390,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				showCurrentTime();
 			}
 
-			current_matching_time = emVideoView.getCurrentPosition();
-			playerPosition = millisecondsToString(emVideoView.getCurrentPosition());
+			current_matching_time = (int)emVideoView.getCurrentPosition();
+			playerPosition = millisecondsToString((int)emVideoView.getCurrentPosition());
 
-			int duration = emVideoView.getDuration() / 1000;
+			int duration = (int)emVideoView.getDuration() / 1000;
 			/*if (currentPositionStr > 0 && currentPositionStr == duration) {
 				asyncVideoLogDetails = new AsyncVideoLogDetails();
 				watchStatus = "complete";
@@ -1399,7 +1401,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 			if (player.utils.Util.checkNetwork(MarlinBroadbandExample.this)) {
-				if (emVideoView.getCurrentPosition() > 0 && ((millisecondsToString(emVideoView.getCurrentPosition())) % 60) == 0) {
+				if ((int)emVideoView.getCurrentPosition() > 0 && ((millisecondsToString((int)emVideoView.getCurrentPosition())) % 60) == 0) {
 
 					watchStatus = "halfplay";
 					asyncVideoLogDetails = new AsyncVideoLogDetails();
@@ -1763,7 +1765,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 				} else {
 					emVideoView.start();
-					seekBar.setProgress(emVideoView.getCurrentPosition());
+					seekBar.setProgress((int)emVideoView.getCurrentPosition());
 					updateProgressBar();
 				}
 
@@ -1785,7 +1787,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		super.onDestroy();
 
 		try{
-			if (emVideoView.getCurrentPosition() > 0 && (emVideoView.getCurrentPosition() >= emVideoView.getDuration())) {
+			if ((int)emVideoView.getCurrentPosition() > 0 && ((int)emVideoView.getCurrentPosition() >= emVideoView.getDuration())) {
 				watchStatus = "complete";
 				asyncVideoLogDetails = new AsyncVideoLogDetails();
 				asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
@@ -1805,7 +1807,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		if (!stopcalling_onpause) {
 			SQLiteDatabase DB = MarlinBroadbandExample.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-			String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET Flag = '0' , PlayedDuration = '" + emVideoView.getCurrentPosition() + "'" +
+			String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET Flag = '0' , PlayedDuration = '" + (int)emVideoView.getCurrentPosition() + "'" +
 					" WHERE UniqueId = '" + UniqueId + "'";
 			DB.execSQL(Qry1);
 		}
@@ -1935,7 +1937,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		@Override
 		public void run() {
 			if (emVideoView != null && emVideoView.isPlaying()) {
-				int currentPos = emVideoView.getCurrentPosition();
+				int currentPos = (int)emVideoView.getCurrentPosition();
 				Collection<Caption> subtitles = srt.captions.values();
 				for (Caption caption : subtitles) {
 					if (currentPos >= caption.start.mseconds
@@ -2002,6 +2004,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	private void hideSystemUI() {
 
         story.setText("");
+		new_detailsLayout.setVisibility(View.GONE);
 
 		// Set the IMMERSIVE flag.
 		// Set the content to appear under the system bars so that the content
@@ -2019,6 +2022,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	private void showSystemUI() {
 
         story.setText(storydes);
+		new_detailsLayout.setVisibility(View.VISIBLE);
 
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(

@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MediaLib/MediaLib.iml" filepath="$PROJECT_DIR$/MediaLib/MediaLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/VOD.iml" filepath="$PROJECT_DIR$/.idea/VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Workspace\VOD\library\library.iml" filepath="D:\Workspace\VOD\library\library.iml" />
     </modules>
   </component>
 </project>
