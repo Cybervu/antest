@@ -161,10 +161,12 @@ public class Util {
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
-    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+ /*   public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
     public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
-    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
-
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";*/
+    public static String pdf_download_url(Context context){
+        return context.getString(R.string.pdf_download_url);
+    }
     public static boolean app_is_in_player_context = false;
     public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
     public static int image_compressed = 3;

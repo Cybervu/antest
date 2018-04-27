@@ -572,6 +572,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 updateProgressBar();
             }
         }
+        try {
+            if (mCastSession!=null && mCastSession.isConnected()) {
+
+            }else{
+                if (emVideoView != null) {
+                    emVideoView.start();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -3540,6 +3551,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         Log.v("PINTU", "onPause called");
         super.onPause();
+        try {
+            if (mCastSession!=null && mCastSession.isConnected()) {
+
+            }else{
+                if (emVideoView != null) {
+                    emVideoView.pause();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private Runnable subtitleProcessesor = new Runnable() {
