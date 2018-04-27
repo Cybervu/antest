@@ -47,7 +47,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class  ThirdPartyPlayer extends ActionBarActivity {
     WebView mWebView;
     Player playerModel;
-   // Toolbar mActionBarToolbar;
+    // Toolbar mActionBarToolbar;
     private ProgressBarHandler asyncpDialog;
     String frameVideo = "";
     String ipAddressStr = "";
@@ -103,6 +103,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         if (playerModel.getVideoUrl().substring(playerModel.getVideoUrl().lastIndexOf("&") + 1).equalsIgnoreCase("autoplay=1")){
         }else{
             playerModel.setVideoUrl("\""+playerModel.getVideoUrl()+"\"");
+//            playerModel.setVideoUrl("https:////iframe.dacast.com/b/106615/c/463712");
             frameVideo += "<html><body style=\"margin:0 ; padding :0;\">";
             frameVideo += "<iframe style=\"width :100%; height: 100%; margin:0 ; padding :0;";
             frameVideo += "\"src="+playerModel.getVideoUrl().trim()+"frameborder=\"0\" allowfullscreen></iframe>\"";
@@ -115,7 +116,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         mWebView.setFocusable(true);
         mWebView.setFocusableInTouchMode(true);
         mWebView.getSettings().setJavaScriptEnabled(true);
-       // mWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+        // mWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2){
             mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
@@ -176,10 +177,9 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         if (playerModel.getVideoUrl().substring(playerModel.getVideoUrl().lastIndexOf("&") + 1).equalsIgnoreCase("autoplay=1")){
             mWebView.loadUrl(playerModel.getVideoUrl().trim());
         }else{
-            mWebView.loadData(frameVideo, "text/html", "utf-8");
+            mWebView.loadUrl(playerModel.getVideoUrl().trim());
 
         }
-
 
      /*   mWebView.setOnTouchListener(new View.OnTouchListener() {
             @Override
