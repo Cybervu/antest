@@ -24,10 +24,12 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANDING_TEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_START_BROWSING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS_CONDITION;
 import static com.home.vod.preferences.LanguagePreference.LANDING_TEXT;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.START_BROWSING;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
+import static com.home.vod.preferences.LanguagePreference.TERMS_CONDITION;
 
 public class PickboxLandingActivity extends AppCompatActivity {
 
@@ -120,7 +122,7 @@ public class PickboxLandingActivity extends AppCompatActivity {
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
         registerText.setText(languagePreference.getTextofLanguage(BTN_REGISTER , DEFAULT_LOGIN));
         skipText.setText(languagePreference.getTextofLanguage(START_BROWSING, DEFAULT_START_BROWSING));
-        termsAndCondition.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+        termsAndCondition.setText(languagePreference.getTextofLanguage(TERMS_CONDITION, DEFAULT_TERMS_CONDITION));
         termsAndCondition1.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
 
 

@@ -622,6 +622,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, GENRE, "", "genre", json);
 
         setTranslationLanguageToPref(languagePreference, AGREE_TERMS, DEFAULT_AGREE_TERMS, "agree_terms", json);
+        setTranslationLanguageToPref(languagePreference, TERMS_CONDITION, DEFAULT_TERMS_CONDITION, "terms_and_conditions", json);
         setTranslationLanguageToPref(languagePreference, ENTER_REVIEW_HERE, DEFAULT_ENTER_REVIEW_HERE, "enter_review_here", json);
         setTranslationLanguageToPref(languagePreference, TO_LOGIN, DEFAULT_TO_LOGIN, "to_login", json);
         setTranslationLanguageToPref(languagePreference, CLICK_HERE, DEFAULT_CLICK_HERE, "click_here", json);
@@ -633,6 +634,13 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
         setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        /*2Author Bishal
+        *translation key added
+         */
+        setTranslationLanguageToPref(languagePreference, LANDING_TEXT, DEFAULT_LANDING_TEXT, "landing_text", json);
+        setTranslationLanguageToPref(languagePreference, FORGOT_PASSWORD_CONTENT, DEFAULT_FORGOT_PASSWORD_CONTENT, "forgot_password_content", json);
+        setTranslationLanguageToPref(languagePreference, START_BROWSING, DEFAULT_START_BROWSING, "start_browsing", json);
+
         setTranslationLanguageToPref(languagePreference, NO_RESULT_FOUND_REFINE_YOUR_SEARCH, DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH, "no_result_found_refine_your_search", json);
         setTranslationLanguageToPref(languagePreference, FIRST_NAME, DEFAULT_FIRST_NAME, "first_name", json);
         setTranslationLanguageToPref(languagePreference, LAST_NAME, DEFAULT_LAST_NAME, "last_name", json);

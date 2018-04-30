@@ -6,6 +6,6 @@
     android:gravity="center_vertical"
     android:paddingLeft="@dimen/payment_spinner_padding_left"
     android:text="vbuivheiuv"
-    android:textColor="@color/editTextColor"
+    android:textColor="@color/hint_color"
     android:textColorHint="@color/hint_color"
     android:textSize="@dimen/edit_text_size" />

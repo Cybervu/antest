@@ -160,7 +160,9 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            />
         <activity
             android:name=".activity.CastAndCrewActivity"
             android:label=""

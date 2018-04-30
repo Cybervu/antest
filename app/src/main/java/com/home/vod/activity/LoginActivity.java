@@ -154,6 +154,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIMULTANEOUS_L
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_START_BROWSING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS_CONDITION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
@@ -176,6 +177,7 @@ import static com.home.vod.preferences.LanguagePreference.SIMULTANEOUS_LOGOUT_SU
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.START_BROWSING;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
+import static com.home.vod.preferences.LanguagePreference.TERMS_CONDITION;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
@@ -1483,7 +1485,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         termsAndCondition1= (TextView) findViewById(R.id.termsAndCondition1);
         termsAndCondition2= (TextView) findViewById(R.id.termsAndCondition2);
         headingText.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        termsAndCondition.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+        termsAndCondition.setText(languagePreference.getTextofLanguage(TERMS_CONDITION, DEFAULT_TERMS_CONDITION));
         termsAndCondition1.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
         termsAndCondition2.setOnClickListener(new View.OnClickListener() {
 

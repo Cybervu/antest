@@ -346,7 +346,8 @@
                     android:layout_marginLeft="@dimen/paddingBottom5dp"
                     android:text="Terms and Conditions at "
                     android:textColor="@color/login_new_user_text_color"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/termsAndCondition2"
                     android:layout_width="wrap_content"
@@ -355,7 +356,8 @@
                     android:layout_marginLeft="@dimen/paddingBottom5dp"
                     android:text="www.pickbox.tv/tc"
                     android:textColor="@color/login_new_user_text_color"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </LinearLayout>

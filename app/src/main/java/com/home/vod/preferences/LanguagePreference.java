@@ -95,6 +95,7 @@ public class LanguagePreference {
     public static String DEFAULT_CHK_OVER_18 = "By clicking on Register, I agree to";
     public static final String BUTTON_OK = "BUTTON_OK";
     public static final String AGREE_TERMS = "AGREE_TERMS";
+    public static final String TERMS_CONDITION = "AGREE_TERMS";
     public static final String TERMS = "TERMS";
     public static final String OOPS_INVALID_EMAIL = "OOPS_INVALID_EMAIL";
     public static final String VALID_CONFIRM_PASSWORD = "VALID_CONFIRM_PASSWORD";
@@ -295,6 +296,7 @@ public class LanguagePreference {
 
     public static String DEFAULT_TERMS = "terms";
     public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
+    public static String DEFAULT_TERMS_CONDITION = "terms and condition";
     public static final String DEFAULT_TO_LOGIN = "to Login.";
     public static final String DEFAULT_CLICK_HERE = "Click here";
     public static final String DEFAULT_IS_MYLIBRARY = "0";
@@ -500,7 +502,7 @@ public class LanguagePreference {
 
 
     //Kushal Default
-    public static String DEFAULT_LANDING_TEXT = "TV shows and movies available in Croatia, Serbia, Slovenia, Bosnia and Herzegovina, Montenegro and Macedonia (HD avaliable).";
+    public static String DEFAULT_LANDING_TEXT = "TV shows and movies available in Croatia, Serbia, Slovenia, Bosnia and Herzegovina, Montenegro and Macedonia (HD available).";
     public static String DEFAULT_START_BROWSING = "No thanks, start browsing";
     public static String DEFAULT_PICKBOX_T_AND_C = "By signing in, you agree to Terms and Conditions at www.pickbox.tv/tc ";
     public static String DEFAULT_FORGOT_PASSWORD_CONTENT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
