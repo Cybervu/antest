@@ -558,7 +558,7 @@ android {
             applicationId 'com.release.aeonvideotest'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.0.2"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"5989d8312c5e04a6ae52e3e4cd75e483\""
         }

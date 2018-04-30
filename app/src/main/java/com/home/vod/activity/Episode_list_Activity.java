@@ -22,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -3280,7 +3281,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 dlgAlert.create().show();
 
                 return false;
-            case R.id.option:
+            case R.id.option :
                 /*
                 Show to popup menu
                  */
