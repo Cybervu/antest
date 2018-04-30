@@ -52,13 +52,13 @@ public class LoginHandler {
     public LoginHandler(LoginActivity context) {
         this.context=context;
         gmailTest=(TextView) context.findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+            googleSignView = (RelativeLayout) context.findViewById(R.id.login_google);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
 
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.login_facebook);
         btnLogin.setVisibility(View.VISIBLE);
         googleSignView.setVisibility(View.VISIBLE);
     }

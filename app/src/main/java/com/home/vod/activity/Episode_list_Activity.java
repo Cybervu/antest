@@ -3143,8 +3143,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
 
         visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
-
         return true;
     }
 
@@ -3258,7 +3256,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 dlgAlert.create().show();
 
                 return false;
-            case R.id.option:
+            case R.id.option :
                 /*
                 Show to popup menu
                  */

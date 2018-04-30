@@ -51,7 +51,8 @@ import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
-import com.home.vod.EpisodeListOptionMenuHandler;
+
+
 import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -105,6 +106,7 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
+import com.home.vod.EpisodeListOptionMenuHandler;
 
 
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener, ViewFavouriteAsynTask.ViewFavouriteListener,
@@ -201,7 +203,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     private GridView gridView;
     // private JazzyGridView gridView;
     RelativeLayout footerView;
-    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    public EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     ///
 
     //////
