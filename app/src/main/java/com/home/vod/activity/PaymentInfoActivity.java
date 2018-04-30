@@ -11,10 +11,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+//import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -31,14 +33,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
 import com.home.apisdk.apiController.RegisterUserPaymentAsyntask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
+import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
 import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
@@ -50,6 +54,12 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -67,10 +77,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_PAY_NOW;
 import static com.home.vod.preferences.LanguagePreference.CARD_WILL_CHARGE;
@@ -85,19 +91,25 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_DE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NUMBER_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CVV_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBSCRIPTION_COMPLETED;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.ERROR_TRANSACTION_PROCESS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 
 public class PaymentInfoActivity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetailsListener,
@@ -229,9 +241,6 @@ public class PaymentInfoActivity extends AppCompatActivity implements VideoDetai
                 onBackPressed();
             }
         });
-
-        // Kushal - To set Id to action bar back button
-        setIdToActionBarBackButton(mActionBarToolbar);
         languagePreference = LanguagePreference.getLanguagePreference(PaymentInfoActivity.this);
         featureHandler = FeatureHandler.getFeaturePreference(PaymentInfoActivity.this);
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -1167,26 +1176,5 @@ public class PaymentInfoActivity extends AppCompatActivity implements VideoDetai
         }
     }
 
-    /*
-    Kushal- To set id to back button in Action Bar
-     */
-    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
-        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
-            View v = mActionBarToolbar.getChildAt(i);
-            if (v instanceof ImageButton) {
-                ImageButton b = (ImageButton) v;
-                b.setId(R.id.back);
-                /*try {
-                    if (b.getContentDescription().equals("Open")) {
-                        b.setId(R.id.drawer_menu);
-                    } else {
-                        b.setId(R.id.back_btn);
-                    }
-                }catch (Exception e){
-                    b.setId(R.id.back_btn);
-                }*/
-            }
-        }
-    }
 
 }

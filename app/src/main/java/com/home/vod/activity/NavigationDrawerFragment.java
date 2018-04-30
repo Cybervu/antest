@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+//import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +26,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiModel.GetMenusInputModel;
@@ -59,12 +60,14 @@ import java.util.concurrent.TimeUnit;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
@@ -471,16 +474,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
-
-
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity (),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
-        )
-
-        {
+        ) {
             @Override
             public void onDrawerClosed (View drawerView) {
                 super.onDrawerClosed (drawerView);
@@ -524,7 +523,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
             }
         };
-
 
 
         // Defer code dependent on restoration of previous instance state.
@@ -613,6 +611,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     private ActionBar getActionBar () {
+       // return ((ActionBarActivity) getActivity ()).getSupportActionBar ();
         return ((AppCompatActivity) getActivity ()).getSupportActionBar ();
     }
 
@@ -906,7 +905,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         }
 
-       // Util.drawer_collapse_expand_imageview.clear();
+        Util.drawer_collapse_expand_imageview.clear();
 
 
         if(Util.main_menu_list_size == menusOutputModelLocal.getMainMenuModel().size()){
@@ -915,7 +914,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
-            Toast.makeText(getContext(), ""+titleArray+""+expandableListDetail, Toast.LENGTH_SHORT).show();
             adapter = new ExpandableListAdapter(getActivity (),titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
             mDrawerListView.setAdapter (adapter);
             adapter.notifyDataSetChanged();
