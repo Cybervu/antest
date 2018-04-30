@@ -11,8 +11,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -114,7 +115,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, NavigationDrawerFragment.NavigationDrawerCallbacks,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
