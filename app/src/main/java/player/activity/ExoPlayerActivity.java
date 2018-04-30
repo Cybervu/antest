@@ -576,7 +576,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (mCastSession!=null && mCastSession.isConnected()) {
 
             }else{
-                if (emVideoView != null && Util.call_finish_at_onUserLeaveHint) {
+                if (emVideoView != null && Util.call_finish_at_onUserLeaveHint && video_prepared) {
                     emVideoView.start();
                 }
             }

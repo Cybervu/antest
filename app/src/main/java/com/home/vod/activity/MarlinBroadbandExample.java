@@ -493,7 +493,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
 		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		buttonLayoutParams.setMargins(0, 0, 0, 170);
+		int margin =(int)(getResources().getDimension(R.dimen.marginleft10dp)) ;
+		buttonLayoutParams.setMargins(margin, margin, margin, 170);
 		story.setLayoutParams(buttonLayoutParams);
 
 
