@@ -3,8 +3,11 @@ package player.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -14,6 +17,8 @@ import android.widget.TextView;
 import com.home.vod.R;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import player.utils.Util;
 
@@ -22,6 +27,7 @@ public class Subtitle_Resolution extends Activity {
 
     LinearLayout main_layout,slidelayout,resolution_view,subtitle_view;
     TextView resolution_text,subtitle_text;
+    Timer timer;
 
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
@@ -32,6 +38,33 @@ public class Subtitle_Resolution extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subtitle__resolution);
+
+
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try{
+
+                            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                            int orientation = display.getRotation();
+
+                            Log.v("PINTU", "CheckAvailabilityOfChromecast called orientation="+orientation);
+
+                            if (orientation == 1|| orientation == 3) {
+                                hideSystemUI();
+                            }}catch (Exception e){}
+                    }
+                });
+            }
+        },0,500);
+
 
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
         slidelayout = (LinearLayout) findViewById(R.id.slidelayout);
@@ -114,6 +147,9 @@ public class Subtitle_Resolution extends Activity {
         main_layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+                Util.call_finish_at_onUserLeaveHint = true;
+
                 Intent playerIntent = new Intent();
                 playerIntent.putExtra("position", "nothing");
                 playerIntent.putExtra("type", "subtitle_resolution");
@@ -128,11 +164,37 @@ public class Subtitle_Resolution extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+        Util.call_finish_at_onUserLeaveHint = true;
+
         Intent playerIntent = new Intent();
         playerIntent.putExtra("position", "nothing");
         playerIntent.putExtra("type", "subtitle_resolution");
         setResult(RESULT_OK, playerIntent);
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        try{
+            timer.cancel();
+        }catch (Exception e){}
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 }

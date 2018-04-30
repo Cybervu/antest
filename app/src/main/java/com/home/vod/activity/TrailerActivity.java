@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
@@ -125,6 +125,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     AsyncFFVideoLogDetails asyncFFVideoLogDetails;
 
     AsynGetIpAddress asynGetIpAddress;
+    LinearLayout new_detailsLayout;
 
     ImageButton  back, center_play_pause;
     LinearLayout back_layout,compress_layout;
@@ -170,7 +171,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     TextView videoTitle,GenreTextView,videoDurationTextView,videoCensorRatingTextView,videoCensorRatingTextView1,videoReleaseDateTextView,
             videoStoryTextView,videoCastCrewTitleTextView;
 
-    private EMVideoView emVideoView;
+    private VideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
     boolean censor_layout = true;
@@ -226,6 +227,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         content_types_id = Util.dataModel.getContentTypesId();
+        new_detailsLayout = (LinearLayout)findViewById(R.id.new_detailsLayout);
 
         PreviousUsedDataByApp(true);
 
@@ -259,7 +261,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
         findViewById(R.id.subtitle_change_btn).setVisibility(View.INVISIBLE);
         compress_layout=(LinearLayout)findViewById(R.id.compress_layout);
-        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.emVideoView);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
@@ -493,7 +495,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mHandler.removeCallbacks(updateTimeTask);
-                playerStartPosition = emVideoView.getCurrentPosition();
+                playerStartPosition = (int)emVideoView.getCurrentPosition();
 
                 // Call New Video Log Api.
 
@@ -520,7 +522,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 playerPreviousPosition = playerStartPosition;
 
                 log_temp_id = "0";
-                player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+                player_start_time = millisecondsToString((int)emVideoView.getCurrentPosition());
                 playerPosition = player_start_time;
 
                 // ============End=====================//
@@ -1082,7 +1084,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                     public void run() {
                         if (emVideoView != null) {
 
-                            int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
+                            int currentPositionStr = millisecondsToString((int)emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
 
@@ -1090,7 +1092,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                                 isFastForward = false;
                                 log_temp_id = "0";
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "complete";
@@ -1105,7 +1107,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
                                 playerPreviousPosition = 0;
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
@@ -1448,12 +1450,12 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         public void run() {
 
             try{
-                if (emVideoView.getCurrentPosition() % 2 == 0)
+                if ((int)emVideoView.getCurrentPosition() % 2 == 0)
                     BufferBandWidth();
 
 
-                seekBar.setProgress(emVideoView.getCurrentPosition());
-                seekBar.setMax(emVideoView.getDuration());
+                seekBar.setProgress((int)emVideoView.getCurrentPosition());
+                seekBar.setMax((int)emVideoView.getDuration());
                 Calcute_Currenttime_With_TotalTime();
                 mHandler.postDelayed(this, 1000);
 
@@ -1461,7 +1463,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                     showCurrentTime();
                 }
 
-                current_matching_time = emVideoView.getCurrentPosition();
+                current_matching_time = (int)emVideoView.getCurrentPosition();
 
 
                 if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
@@ -1681,6 +1683,9 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     }
 
     private void hideSystemUI() {
+
+        new_detailsLayout.setVisibility(View.GONE);
+
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
         // doesn't resize when the system bars hide and show.
@@ -1695,6 +1700,8 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     }
 
     private void showSystemUI() {
+
+        new_detailsLayout.setVisibility(View.VISIBLE);
 
         if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches("")){
             videoStoryTextView.setText(Util.dataModel.getVideoStory());
