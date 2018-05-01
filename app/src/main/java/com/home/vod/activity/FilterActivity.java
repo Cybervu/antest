@@ -1,14 +1,12 @@
 package com.home.vod.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,13 +16,11 @@ import android.widget.ImageButton;
 import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
 import com.home.vod.adapter.FilterAdapter;
-
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.FilterListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
-
 
 import java.util.ArrayList;
 

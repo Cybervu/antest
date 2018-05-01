@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -15,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiController.GetCelibrityAsyntask;
 import com.home.apisdk.apiModel.CelibrityInputModel;
@@ -26,10 +24,8 @@ import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;

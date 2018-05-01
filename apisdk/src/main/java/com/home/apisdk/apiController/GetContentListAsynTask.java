@@ -10,18 +10,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
