@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+                    <com.devbrackets.android.exomedia.ui.widget.VideoView
                         android:id="@+id/player_screen"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -147,7 +147,7 @@
                              android:textSize="18dp"
                              android:visibility="visible" />-->
 
-                    </com.devbrackets.android.exomedia.ui.widget.EMVideoView>
+                    </com.devbrackets.android.exomedia.ui.widget.VideoView>
 
                 </LinearLayout>
 
