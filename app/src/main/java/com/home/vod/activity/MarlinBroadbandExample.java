@@ -26,6 +26,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
+//import android.support.v7.app.NotificationCompat;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
@@ -45,7 +46,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import player.activity.ExoPlayerActivity;
 import player.subtitle_support.Caption;
