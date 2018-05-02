@@ -574,6 +574,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         return false;
     }
 
+
     //*************chromecast*****************//*
     @Override
     public void onResume() {
