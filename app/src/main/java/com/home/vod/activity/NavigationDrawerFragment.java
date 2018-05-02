@@ -903,7 +903,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         }
 
-        Util.drawer_collapse_expand_imageview.clear();
+       // Util.drawer_collapse_expand_imageview.clear();
 
 
         if(Util.main_menu_list_size == menusOutputModelLocal.getMainMenuModel().size()){

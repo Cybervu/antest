@@ -42,6 +42,7 @@ import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -128,6 +129,7 @@ public class HomeFragment extends Fragment implements
     String videoImageStrToHeight;
     int ui_completed = 0;
     int loading_completed = 0;
+    PreferenceManager preferenceManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -135,6 +137,7 @@ public class HomeFragment extends Fragment implements
         context = getActivity();
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
@@ -194,6 +197,13 @@ public class HomeFragment extends Fragment implements
 
             HomePageInputModel homePageInputModel = new HomePageInputModel();
             homePageInputModel.setAuthToken(authTokenStr);
+
+            if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                homePageInputModel.setUserId(preferenceManager.getUseridFromPref());
+            }else{
+                homePageInputModel.setUserId("");
+            }
+
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
@@ -299,6 +309,13 @@ public class HomeFragment extends Fragment implements
                  counter++;
                  LoadVideoInput loadVideoInput = new LoadVideoInput();
                  loadVideoInput.setAuthToken(authTokenStr);
+
+                 if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                     loadVideoInput.setUserId(preferenceManager.getUseridFromPref());
+                 }else{
+                     loadVideoInput.setUserId("");
+                 }
+
                  loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                  loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                  asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
@@ -382,6 +399,13 @@ public class HomeFragment extends Fragment implements
                 // default data
                 LoadVideoInput loadVideoInput = new LoadVideoInput();
                 loadVideoInput.setAuthToken(authTokenStr);
+
+                if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                    loadVideoInput.setUserId(preferenceManager.getUseridFromPref());
+                }else{
+                    loadVideoInput.setUserId("");
+                }
+
                 loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                 asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
@@ -571,6 +595,13 @@ public class HomeFragment extends Fragment implements
 
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
                     loadVideoInput.setAuthToken(authTokenStr);
+
+                    if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                        loadVideoInput.setUserId(preferenceManager.getUseridFromPref());
+                    }else{
+                        loadVideoInput.setUserId("");
+                    }
+
                     loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);

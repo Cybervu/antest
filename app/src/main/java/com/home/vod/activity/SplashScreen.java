@@ -708,6 +708,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if (languageModels.size() == 1) {
             preferenceManager.setLanguageListToPref("1");
+        }else {
+            preferenceManager.setLanguageListToPref(""+languageModels.size());
         }
         if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
             languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);

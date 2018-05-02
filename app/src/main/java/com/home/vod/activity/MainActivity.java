@@ -481,7 +481,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                 if (languageModel != null && languageModel.size() > 0) {
 
-
                     ShowLanguagePopup();
 
                 } else {
@@ -1115,6 +1114,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                finish();
 
 
             } catch (JSONException e) {
