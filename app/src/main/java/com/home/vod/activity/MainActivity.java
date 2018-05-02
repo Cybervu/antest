@@ -581,12 +581,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         if(preferenceManager.getLanguageChangeStatus().equals("1")){
+            preferenceManager.setLanguageChangeStatus("0");
 
             Intent mIntent = new Intent(MainActivity.this, MainActivity.class);
             mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(mIntent);
             finish();
-            preferenceManager.setLanguageChangeStatus("0");
         }
 
         mCastContext.addCastStateListener(mCastStateListener);

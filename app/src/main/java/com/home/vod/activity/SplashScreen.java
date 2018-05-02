@@ -241,7 +241,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
 
         if (NetworkStatus.getInstance().isConnected(this)) {
+
+
             SDKInitializer.getInstance().init(this, this, authTokenStr);
+            SDKInitializer.setData(this);
 
             /*Calling Ip-Address API*/
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
@@ -451,6 +454,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                              }
 
                              if(sdkInitializerSuccessStatus == 5){
+
+                                 Log.v("MUVI123","step = 1");
+
                                  noInternetTextView.setText("Oops something went wrong.Please try again later .");
                                  noInternetLayout.setVisibility(View.VISIBLE);
                                  geoBlockedLayout.setVisibility(View.GONE);
@@ -459,6 +465,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                              }
 
                              if(ipAdressSuccessStatus == 5){
+
+                                 Log.v("MUVI123","step = 2");
+
+
                                  noInternetTextView.setText("Could not detect your IP.");
                                  noInternetLayout.setVisibility(View.VISIBLE);
                                  geoBlockedLayout.setVisibility(View.GONE);
@@ -470,6 +480,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                              if(geoBloackCalled){
                                  if(geoBloackSuccessStatus == 3 || geoBloackSuccessStatus == 5){
+
+                                     Log.v("MUVI123","step = 3");
+
+
                                      noInternetTextView.setText("Oops something went wrong.Please try again later .");
                                      noInternetLayout.setVisibility(View.VISIBLE);
                                      geoBlockedLayout.setVisibility(View.GONE);
@@ -488,6 +502,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
                              if(isRegistrationEnabledSuccessStatus == 5){
+
+                                 Log.v("MUVI123","step = 4");
+
+
                                  noInternetTextView.setText("Oops something went wrong.Please try again later .");
                                  noInternetLayout.setVisibility(View.VISIBLE);
                                  geoBlockedLayout.setVisibility(View.GONE);

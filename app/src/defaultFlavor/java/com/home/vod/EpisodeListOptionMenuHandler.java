@@ -105,7 +105,6 @@ public class EpisodeListOptionMenuHandler {
         else
             menu_language.setVisible(true);
 
-
         if (loggedInStr != null) {
 
             login_menu.setVisible(false);
