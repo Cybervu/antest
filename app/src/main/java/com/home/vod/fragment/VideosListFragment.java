@@ -663,6 +663,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         /*MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setTitle(getArguments().getString("title"));*/
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal - set Id to back button and text in Toolabr
+        android.support.v7.widget.Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
+
         videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
@@ -2533,5 +2537,31 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             phandler.show();*/
 
         }
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(android.support.v7.widget.Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_video_list);
+            }
+        }
+
     }
 }

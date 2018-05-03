@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
@@ -31,12 +32,14 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.SORT_BY;
@@ -90,8 +93,8 @@ public class FilterActivity extends AppCompatActivity {
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(toolbar);
 
-        resetButton = (Button)findViewById(R.id.resetButton);
-        applyButton = (Button)findViewById(R.id.applyButton);
+        resetButton = (Button)findViewById(R.id.reset);
+        applyButton = (Button)findViewById(R.id.apply);
         genreListData = (RecyclerView) findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(FilterActivity.this, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -315,6 +318,11 @@ public class FilterActivity extends AppCompatActivity {
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if (t.getText().toString().contains(languagePreference.getTextofLanguage(FILTER_BY,DEFAULT_FILTER_BY))) {
+                    t.setId(R.id.page_title_filter);
+                }
             }
         }
     }

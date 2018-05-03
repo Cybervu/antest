@@ -44,7 +44,7 @@ public class LoginHandler {
     public LoginHandler(LoginActivity context){
         this.context=context;
        // GoogleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.login_facebook);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);

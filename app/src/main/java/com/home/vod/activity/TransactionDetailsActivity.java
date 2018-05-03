@@ -289,9 +289,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
         downloadFileFromURL=new DownloadFileFromURL();
-        downloadFileFromURL.execute(Util.Dwonload_pdf_rootUrl + download_Url);
+        downloadFileFromURL.execute(Util.pdf_download_url(TransactionDetailsActivity.this) + download_Url);
 
-        LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
+        LogUtil.showLog("MUVI", "Url=" + Util.pdf_download_url(TransactionDetailsActivity.this) + download_Url);
 
     }
 

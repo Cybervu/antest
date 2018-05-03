@@ -413,6 +413,9 @@ Kushal- To set id to back button in Action Bar
             }catch (Exception e){
                 b.setId(R.id.back_btn);
             }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_purchase_history);
             }
         }
     }

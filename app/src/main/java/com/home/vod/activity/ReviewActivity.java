@@ -758,6 +758,9 @@ public class ReviewActivity extends AppCompatActivity implements
                 }catch (Exception e){
                     b.setId(R.id.back_button);
                 }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_review);
             }
         }
     }

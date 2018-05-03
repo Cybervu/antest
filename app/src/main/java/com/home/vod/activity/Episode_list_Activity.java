@@ -160,6 +160,7 @@ import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
@@ -170,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LAN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
@@ -4685,6 +4687,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if (t.getText().toString().contains(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON))) {
+                    t.setId(R.id.page_title_season);
+                }
             }
         }
     }

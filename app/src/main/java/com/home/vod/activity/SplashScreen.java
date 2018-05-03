@@ -143,15 +143,50 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
      * Splashreen Modified.
      */
 
-    int geoBlockEnable = 0;
-    int geoBlockCalled = 0;
-    int planListCalled = 0;
-    int isRegistrationEnableCalled = 0;
-    int languageListCalled = 0;
-    int languageTranslationCalled = 0;
-    int genreListCalled = 0;
-    int userProfileCalled = 0;
-    int ipAddressCalled = 0;
+
+   /* Code Details
+    0 = initial call
+    1 = success
+    2 = error form api
+    3 = null data
+    4 = no internet
+    5 = other   */
+
+    boolean sdkInitializerCalled = false ;
+    int     sdkInitializerSuccessStatus = 0 ;
+    String  sdkInitializerMsg = "";
+
+    boolean ipAdressCalled = false ;
+    int     ipAdressSuccessStatus = 0 ;
+    String  ipAdressMsg = "";
+
+    boolean geoBloackCalled = false ;
+    int     geoBloackSuccessStatus = 0 ;
+    String  geoBloackMsg = "";
+
+    boolean isRegistrationEnabledCalled = false ;
+    int     isRegistrationEnabledSuccessStatus = 0 ;
+    String  isRegistrationEnabledMsg = "";
+
+    boolean planListCalled = false ;
+    int     planListSuccessStatus = 0 ;
+    String  planListMsg = "";
+
+    boolean languageListCalled = false ;
+    int     languageListSuccessStatus = 0 ;
+    String  languageListMsg = "";
+
+    boolean languageTranslationCalled = false ;
+    int     languageTranslationSuccessStatus = 0 ;
+    String  languageTranslationMsg = "";
+
+    boolean genreCalled = false ;
+    int     genreSuccessStatus = 0 ;
+    String  genreMsg = "";
+
+    boolean profileCalled = false ;
+    int     profileSuccessStatus = 0 ;
+    String  profileMsg = "";
 
 
     // Kushal

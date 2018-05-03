@@ -5830,6 +5830,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_login);
+                /*if (t.getText().toString().contains(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD))) {
+
+                }*/
             }
         }
     }

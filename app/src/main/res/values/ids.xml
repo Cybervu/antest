@@ -54,5 +54,26 @@
     <!--subtitile-->
     <item name="off" type="id"/>
 
-
+   <!-- Page Titles-->
+    <item name="page_title_cast_crew" type="id"/>
+    <item name="page_title_season" type="id"/>
+    <item name="page_title_my_favourite" type="id"/>
+    <item name="page_title_filter" type="id"/>
+    <item name="page_title_forgot_password" type="id"/>
+    <item name="page_title_login" type="id"/>
+    <item name="page_title" type="id"/>
+    <item name="page_title_manage_device" type="id"/>
+    <item name="page_title_my_download" type="id"/>
+    <item name="page_title_profile" type="id"/>
+    <item name="page_title_register" type="id"/>
+    <item name="page_title_review" type="id"/>
+    <item name="page_title_search" type="id"/>
+    <item name="page_title_viewall" type="id"/>
+    <item name="page_title_my_library" type="id"/>
+    <item name="page_title_watch_history" type="id"/>
+    <item name="page_title_about_us" type="id"/>
+    <item name="page_title_contact_us" type="id"/>
+    <item name="page_title_video_list" type="id"/>
+    <item name="page_title_purchase_history" type="id"/>
+    <item name="page_title_footer_menu" type="id"/>
 </resources>

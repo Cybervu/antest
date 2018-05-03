@@ -2110,7 +2110,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         setIdToActionBarBackButton(mActionBarToolbar);
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        btnmore = (Button) findViewById(R.id.Viewall);
+        btnmore = (Button) findViewById(R.id.viewall);
         favorite_view_episode = (ImageView) findViewById(R.id.favourite);
 
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
@@ -2119,7 +2119,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         btnmore.setVisibility(View.GONE);
         playButton = (ImageView) findViewById(R.id.play);
-        watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
+        watchTrailerButton = (Button) findViewById(R.id.viewtrailer);
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), watchTrailerButton);
         watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
@@ -2130,7 +2130,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoGenreTextView = (TextView) findViewById(R.id.genre);
         videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);

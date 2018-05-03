@@ -3,6 +3,7 @@ package com.home.vod.fragment;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,6 +28,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -437,6 +440,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
            // sectionTitle.setText(titleListName);
@@ -684,7 +690,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -2393,5 +2399,31 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         }
     }
 /***************chromecast**********************/
+
+ /*
+    Kushal- To set id to back button in Action Bar
+     */
+private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+    for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+        View v = mActionBarToolbar.getChildAt(i);
+        if (v instanceof ImageButton) {
+            ImageButton b = (ImageButton) v;
+            b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+        } else if (v instanceof TextView) {
+            TextView t = (TextView) v;
+            t.setId(R.id.page_title_watch_history);
+        }
+    }
+
+}
 
 }

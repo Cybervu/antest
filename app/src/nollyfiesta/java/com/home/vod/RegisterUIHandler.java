@@ -79,20 +79,20 @@ public class RegisterUIHandler {
 
     public RegisterUIHandler(Activity context) {
         this.context = context;
-        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
+        termsTextView = (TextView) context.findViewById(R.id.terms);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
 
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.resister_facebook);
         gmailTest=(TextView) context.findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         btnLogin.setVisibility(View.VISIBLE);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         googleSignView.setVisibility(View.VISIBLE);
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
 
