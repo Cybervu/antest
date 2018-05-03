@@ -602,6 +602,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         featureHandler = FeatureHandler.getFeaturePreference(ExoPlayerActivity.this);
 
+
+        //****************************************8
+
+
+//        playerModel.setThirdPartyPlayer(true);
+//        playerModel.setVideoUrl("//iframe.dacast.com/b/106615/c/463712");
+
+        //****************************************8
+
+
+
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
 
@@ -621,7 +632,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         finish();
                         return;
                     }
-                } else {
+                }
+                else if(playerModel.getVideoUrl().contains("dacast.com")){
+                    final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, DacastPlayer.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
+                    finish();
+                    return;
+                }
+
+                else {
                     final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     playVideoIntent.putExtra("PlayerModel", playerModel);

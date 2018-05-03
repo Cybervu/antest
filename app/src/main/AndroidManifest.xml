@@ -63,6 +63,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="player.activity.DacastPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name="player.activity.YouTubeAPIActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

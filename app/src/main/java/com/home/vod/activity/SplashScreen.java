@@ -244,8 +244,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
             SDKInitializer.getInstance().init(this, this, authTokenStr);
-            SDKInitializer.setData(this);
 
+
+            SDKInitializer.setData(this);
             /*Calling Ip-Address API*/
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
             asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
