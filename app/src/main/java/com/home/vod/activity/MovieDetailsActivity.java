@@ -1016,7 +1016,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.play);
-        watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
+        watchTrailerButton = (Button) findViewById(R.id.viewtrailer);
         preorderButton = (Button) findViewById(R.id.preOrderButton);
         favorite_view = (ImageView) findViewById(R.id.favourite);
         Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
@@ -1031,7 +1031,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
       //  ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         viewStoryLayout = (RelativeLayout) findViewById(R.id.viewStoryLayout);
 

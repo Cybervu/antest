@@ -25,7 +25,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiModel.GetMenusInputModel;
@@ -59,14 +59,12 @@ import java.util.concurrent.TimeUnit;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
@@ -108,10 +106,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     boolean watch_history_added = false;
     boolean my_favourite_added = false;
     boolean my_download_added = false;
-    MenusOutputModel menusOutputModelLocal,menusOutputModelFromAPI = new MenusOutputModel();
+    MenusOutputModel menusOutputModelLocal, menusOutputModelFromAPI = new MenusOutputModel();
     int status;
     String message;
-    String loggedInStr=null;
+    String loggedInStr = null;
     Fragment fragment = null;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -121,8 +119,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     String Title, Permalink, ID, TitleChild, PermalinkChild, IDChild, ClasChild, UserTitleChild,
             UserIDChild, UserParentIdChild, UserPermalinkChild, UserClasChild, fdomain, flink_type, fid, fdisplay_name,
             fpermalink, furl, ParentIdChild, LinkTypeChild, ParentId, Clas, LinkType, UserTitle, UserPermalink, UserID,
-            UserParentId, UserClas,Value,Id_seq,Language_id,Language_parent_id,ValueChild,Id_seq_Child,Language_id_Child,Language_parent_id_Child;
-
+            UserParentId, UserClas, Value, Id_seq, Language_id, Language_parent_id, ValueChild, Id_seq_Child, Language_id_Child, Language_parent_id_Child;
 
 
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
@@ -133,7 +130,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     @Override
-    public void onCreate (Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
@@ -150,7 +147,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     @Override
     public void onGetMenusPreExecuteStarted() {
-        progressDialog = new ProgressBarHandler(getActivity ());
+        progressDialog = new ProgressBarHandler(getActivity());
         progressDialog.show();
     }
 
@@ -160,30 +157,30 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             progressDialog.hide();
             progressDialog = null;
         }
-        this.menusOutputModelLocal =menusOutputModel;
-        this.menusOutputModelFromAPI =menusOutputModel;
-        this.status=status;
-        this.message=message;
-        if (status==200){
+        this.menusOutputModelLocal = menusOutputModel;
+        this.menusOutputModelFromAPI = menusOutputModel;
+        this.status = status;
+        this.message = message;
+        if (status == 200) {
             setMenuItemsInDrawer(true);
         }
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated (savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu (true);
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        mDrawerListView = (ExpandableListView) inflater.inflate (R.layout.drawer_drawer, container, false);
-        mDrawerListView.setOnItemClickListener (new AdapterView.OnItemClickListener () {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mDrawerListView = (ExpandableListView) inflater.inflate(R.layout.drawer_drawer, container, false);
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                selectItem (position);
+                selectItem(position);
 
             }
         });
@@ -193,20 +190,19 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
      */
         //for expand the child content in navigation
-        mDrawerListView.setOnGroupExpandListener (new OnGroupExpandListener() {
+        mDrawerListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 
             @Override
-            public void onGroupExpand (int groupPosition) {
+            public void onGroupExpand(int groupPosition) {
 
                 Util.drawer_collapse_expand_imageview.remove(groupPosition);
                 Util.drawer_collapse_expand_imageview.add(groupPosition,groupPosition+","+1);
-                Log.v("SUBHA1","setOnGroupExpandListener==="+groupPosition);
+                Log.v("SUBHA1", "setOnGroupExpandListener===" + groupPosition);
 
 
-                for(int i=0;i<Util.drawer_collapse_expand_imageview.size();i++)
-                {
+                for (int i = 0; i < Util.drawer_collapse_expand_imageview.size(); i++) {
                     String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(i).split(",");
-                    Log.v("SUBHA1","setOnGroupExpandListener===Data=========="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
+                    Log.v("SUBHA1", "setOnGroupExpandListener===Data==========" + expand_collapse_image_info[0] + "," + expand_collapse_image_info[1]);
                 }
 
 
@@ -217,13 +213,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             @Override
             public void onGroupCollapse(int groupPosition) {
                 Util.drawer_collapse_expand_imageview.remove(groupPosition);
-                Util.drawer_collapse_expand_imageview.add(groupPosition,groupPosition+","+0);
-                Log.v("SUBHA1","setOnGroupCollapseListener===="+groupPosition);
+                Util.drawer_collapse_expand_imageview.add(groupPosition, groupPosition + "," + 0);
+                Log.v("SUBHA1", "setOnGroupCollapseListener====" + groupPosition);
 
-                for(int i=0;i<Util.drawer_collapse_expand_imageview.size();i++)
-                {
+                for (int i = 0; i < Util.drawer_collapse_expand_imageview.size(); i++) {
                     String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(i).split(",");
-                    Log.v("SUBHA1","setOnGroupCollapseListener===Data=========="+expand_collapse_image_info[0]+","+expand_collapse_image_info[1]);
+                    Log.v("SUBHA1", "setOnGroupCollapseListener===Data==========" + expand_collapse_image_info[0] + "," + expand_collapse_image_info[1]);
                 }
 
 
@@ -231,15 +226,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
 
-        mDrawerListView.setOnGroupClickListener (new ExpandableListView.OnGroupClickListener () {
-            public boolean onGroupClick (ExpandableListView parent, View v, int listPosition, long id) {
+        mDrawerListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            public boolean onGroupClick(ExpandableListView parent, View v, int listPosition, long id) {
                 boolean retVal = true;
                 boolean mylibrary_title_added = false;
 
 
-                if (menusOutputModelLocal.getMainMenuModel().size()>listPosition){
+                if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
 
-                    for (int l = 0; l< menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size(); l++){
+                    for (int l = 0; l < menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size(); l++) {
                         if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getId().equals
                                 (menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(l).getParent_id())) {
                             retVal = false;
@@ -249,28 +244,25 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 }
 
 
-                for (int i = 0; i < menusOutputModelLocal.getFooterMenuModel().size (); i++) {
-                    Log.v("SUBHA","title"+ menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink());
-                    Log.v("SUBHA","titleArray.get(listPosition)"+titleArray.get(listPosition));
+                for (int i = 0; i < menusOutputModelLocal.getFooterMenuModel().size(); i++) {
+                    Log.v("SUBHA", "title" + menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink());
+                    Log.v("SUBHA", "titleArray.get(listPosition)" + titleArray.get(listPosition));
 
-                    if(menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name().trim().equals(titleArray.get(listPosition)))
-                    {
-                        if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().equals("contactus"))
-                        {                         //   isNavigated = 1;
+                    if (menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name().trim().equals(titleArray.get(listPosition))) {
+                        if (menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().equals("contactus")) {                         //   isNavigated = 1;
 
                             fragment = new ContactUsFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString("title", menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
-                            Log.v("SUBHA","CONTACT USfooterMenuModelArrayList.get(i).getPermalink()"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
+                            Log.v("SUBHA", "CONTACT USfooterMenuModelArrayList.get(i).getPermalink()" + menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
 
                             fragment.setArguments(bundle);
-                            getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
+                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        }
-                        else {
+                        } else {
 
 
-                            if (menusOutputModelLocal.getFooterMenuModel().get(i).getLink_type().trim().equalsIgnoreCase("2")){
+                            if (menusOutputModelLocal.getFooterMenuModel().get(i).getLink_type().trim().equalsIgnoreCase("2")) {
                                /* Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);
@@ -283,21 +275,21 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);*/
 
-                                String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
+                                String externalLink = menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                                 browserIntent.setData(Uri.parse(externalLink));
                                 getActivity().startActivity(browserIntent);
 
-                            }else {
+                            } else {
                                 // isNavigated = 1;
 
                                 fragment = new AboutUsFragment();
                                 Bundle bundle = new Bundle();
-                                Log.v("SUBHA","footerMenuModelArrayList.get(i).getPermalink()"+ menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink());
+                                Log.v("SUBHA", "footerMenuModelArrayList.get(i).getPermalink()" + menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink());
                                 bundle.putString("item", menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink());
                                 bundle.putString("title", menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
                                 fragment.setArguments(bundle);
-                                getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
+                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                                 mDrawerLayout.closeDrawers();
 
 
@@ -309,24 +301,21 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 }
 
 
-
-                if(listPosition==0)
-                {
+                if (listPosition == 0) {
                     // isNavigated = 1;
 
                     Fragment fragment = new HomeFragment();
                     Bundle bundle = new Bundle();
                     fragment.setArguments(bundle);
-                    getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
+                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                     mDrawerLayout.closeDrawers();
                 }
                 // this is for if child is not there then another fragment open
                 else {
-                    if (retVal){
+                    if (retVal) {
 
-                        if(menusOutputModelLocal.getMainMenuModel().size()>listPosition)
-                        {
-                            if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))){
+                        if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
+                            if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                                 // isNavigated = 1;
 
                                 fragment = new MyLibraryFragment();
@@ -335,36 +324,28 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 fragment.setArguments(bundle);
                                 getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                                 mDrawerLayout.closeDrawers();
-                            }
-                            else if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))){
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
                                 fragment = new WatchHistoryFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
                                 fragment.setArguments(bundle);
                                 getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                                 mDrawerLayout.closeDrawers();
-                            }
-
-                            else if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))){
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
 
                                 Intent mydownload = new Intent(getActivity(), MyDownloads.class);
                                 startActivity(mydownload);
                                 mDrawerLayout.closeDrawers();
-                            }
-
-                            else if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))){
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
 
                                 Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
                                 favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(favoriteIntent);
                                 mDrawerLayout.closeDrawers();
-                            }
+                            } else {
 
-                            else
-                            {
-
-                                if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")){
+                                if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")) {
                                     //  isNavigated = 1;
 
                                     // getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -375,7 +356,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                     return retVal;
 
 
-                                }else {
+                                } else {
                                     // isNavigated = 1;
 
                                     fragment = new VideosListFragment();
@@ -396,58 +377,54 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
 
-
-        mDrawerListView.setOnChildClickListener (new ExpandableListView.OnChildClickListener () {
+        mDrawerListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
-            public boolean onChildClick (ExpandableListView parent, View v,
-                                         int listPosition, int childPosition, long id) {
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int listPosition, int childPosition, long id) {
 
-                String ParentId = menusOutputModelLocal.getMainMenuModel().get(listPosition).getId ();
+                String ParentId = menusOutputModelLocal.getMainMenuModel().get(listPosition).getId();
                 ArrayList<Integer> arrayList = new ArrayList<Integer>();
 
-                for(int i = 0; i< menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size(); i++)
-                {
-                    LogUtil.showLog("BKS","size of whole==="+ menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size());
-                    if(menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(i).getParent_id().equals (ParentId))
-                    {
+                for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size(); i++) {
+                    LogUtil.showLog("BKS", "size of whole===" + menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().size());
+                    if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(i).getParent_id().equals(ParentId)) {
                         arrayList.add(i);
                     }
                 }
 
-                LogUtil.showLog("BKS","size add child menu==="+arrayList.size());
+                LogUtil.showLog("BKS", "size add child menu===" + arrayList.size());
                 // isNavigated = 1;
 
                 Fragment fragment = new VideosListFragment();
                 Bundle args = new Bundle();
-                args.putString ("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(arrayList.get(childPosition)).getTitle());
-                args.putString ("item", menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(arrayList.get(childPosition)).getPermalink());
-                fragment.setArguments (args);
+                args.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(arrayList.get(childPosition)).getTitle());
+                args.putString("item", menusOutputModelLocal.getMainMenuModel().get(listPosition).getMainMenuChildModel().get(arrayList.get(childPosition)).getPermalink());
+                fragment.setArguments(args);
 
                 //Inflate the fragment
 
                 //=========================================================//
 
-                getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
-                mDrawerLayout.closeDrawers ();
+                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                mDrawerLayout.closeDrawers();
 
                 return true;
             }
         });
 
-        mDrawerListView.setItemChecked (mCurrentSelectedPosition, true);
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-        View header = inflater.inflate (R.layout.drawer_header, null);
-        mDrawerListView.addHeaderView (header);
-
+        View header = inflater.inflate(R.layout.drawer_header, null);
+        mDrawerListView.addHeaderView(header);
 
 
         return mDrawerListView;
     }
 
 
-    public boolean isDrawerOpen () {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen (mFragmentContainerView);
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
     /**
@@ -456,44 +433,44 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp (int fragmentId, DrawerLayout drawerLayout) {
-        mFragmentContainerView = getActivity ().findViewById (fragmentId);
+    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+        mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
         // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow (R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
         try {
-            ActionBar actionBar = getActionBar ();
+            ActionBar actionBar = getActionBar();
 
-            actionBar.setDisplayHomeAsUpEnabled (true);
-            actionBar.setHomeButtonEnabled (true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
         } catch (Exception e) {
         }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity (),                    /* host Activity */
+                getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             @Override
-            public void onDrawerClosed (View drawerView) {
-                super.onDrawerClosed (drawerView);
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
                 //getActionBar ().setIcon (R.drawable.ic_drawer);
 
-                if (!isAdded ()) {
+                if (!isAdded()) {
                     return;
                 }
 
-                getActivity ().supportInvalidateOptionsMenu (); // calls onPrepareOptionsMenu()
+                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
-            public void onDrawerOpened (View drawerView) {
-                super.onDrawerOpened (drawerView);
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
                 setMenuItemsInDrawer(false);
 
              /*   Boolean isMyLibraryAdded=false;
@@ -525,32 +502,32 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
         // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post (new Runnable() {
+        mDrawerLayout.post(new Runnable() {
             @Override
-            public void run () {
-                mDrawerToggle.syncState ();
+            public void run() {
+                mDrawerToggle.syncState();
             }
         });
 
-        mDrawerLayout.setDrawerListener (mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem (int position) {
+    private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked (position, true);
+            mDrawerListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer (mFragmentContainerView);
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected (position);
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
     @Override
-    public void onAttach (Activity activity) {
-        super.onAttach (activity);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
@@ -559,8 +536,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     @Override
-    public void onDetach () {
-        super.onDetach ();
+    public void onDetach() {
+        super.onDetach();
         mCallbacks = null;
     }
 
@@ -571,46 +548,46 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }*/
 
     @Override
-    public void onConfigurationChanged (Configuration newConfig) {
-        super.onConfigurationChanged (newConfig);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         // Forward the new configuration the drawer toggle component.
-        mDrawerToggle.onConfigurationChanged (newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen ()) {
-            inflater.inflate (R.menu.menu_main, menu);
-            showGlobalContextActionBar ();
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            inflater.inflate(R.menu.menu_main, menu);
+            showGlobalContextActionBar();
         }
-        super.onCreateOptionsMenu (menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected (item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
 
-        return super.onOptionsItemSelected (item);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
-    private void showGlobalContextActionBar () {
-        ActionBar actionBar = getActionBar ();
-        actionBar.setDisplayShowTitleEnabled (true);
-        actionBar.setNavigationMode (ActionBar.NAVIGATION_MODE_STANDARD);
+    private void showGlobalContextActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
     }
 
-    private ActionBar getActionBar () {
-        return ((AppCompatActivity) getActivity ()).getSupportActionBar ();
+    private ActionBar getActionBar() {
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     /**
@@ -624,16 +601,16 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
 
-    public void setMenuItemsInDrawer(boolean loadHomeFragment){
+    public void setMenuItemsInDrawer(boolean loadHomeFragment) {
 
         featureHandler = FeatureHandler.getFeaturePreference(getActivity());
 
 
 //        if(!loadHomeFragment){
-        try{
-               /* boolean my_libary_added1 = checkMyLibAdded(menusOutputModelLocal);
+        try {
+            /* boolean my_libary_added1 = checkMyLibAdded(menusOutputModelLocal);
 
-               *//* for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+             *//* for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
 
                     if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                         my_libary_added1 = true;
@@ -656,7 +633,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             Util.main_menu_list_size = -2;
         }
 //        }
@@ -668,24 +645,24 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         try {
             menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
             menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         titleArray.clear();
-       /* Adding Home Menu*/
+        /* Adding Home Menu*/
         MenusOutputModel.MainMenu mainMenuHome = new MenusOutputModel().new MainMenu();
-        mainMenuHome.setTitle (languagePreference.getTextofLanguage(HOME,DEFAULT_HOME));
-        menusOutputModelLocal.getMainMenuModel().add(0,mainMenuHome);
-        MenusOutputModel.FooterMenu footerMenu=new MenusOutputModel().new FooterMenu();
-        footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US));
+        mainMenuHome.setTitle(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME));
+        menusOutputModelLocal.getMainMenuModel().add(0, mainMenuHome);
+        MenusOutputModel.FooterMenu footerMenu = new MenusOutputModel().new FooterMenu();
+        footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
         footerMenu.setPermalink("contactus");
-        menusOutputModelLocal.getFooterMenuModel().add(0,footerMenu);
+        menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
 
 
-         /* Adding MyDownload*/
+        /* Adding MyDownload*/
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
                 my_download_added = true;
@@ -694,25 +671,22 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE) && loggedInStr != null) {
-            if(!my_download_added)
-            {
+            if (!my_download_added) {
                 MenusOutputModel.MainMenu mainMenuMydownload = new MenusOutputModel().new MainMenu();
-                mainMenuMydownload.setTitle (languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+                mainMenuMydownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
                 menusOutputModelLocal.getMainMenuModel().add(mainMenuMydownload);
             }
-        }
-        else{
-            if(my_download_added)
-            {
-                menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
+        } else {
+            if (my_download_added) {
+                menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
             }
         }
 
 
-         /* Adding My Favourite */
+        /* Adding My Favourite */
 
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
                 my_favourite_added = true;
@@ -720,34 +694,30 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
 
-
         if (featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE) && loggedInStr != null) {
-            if(!my_favourite_added)
-            {
+            if (!my_favourite_added) {
                 MenusOutputModel.MainMenu mainMenuMyfavourite = new MenusOutputModel().new MainMenu();
-                mainMenuMyfavourite.setTitle (languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
-                if(checkMyDownloadAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-1,mainMenuMyfavourite);
-                }else{
+                mainMenuMyfavourite.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                if (checkMyDownloadAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuMyfavourite);
+                } else {
                     menusOutputModelLocal.getMainMenuModel().add(mainMenuMyfavourite);
                 }
             }
-        }
-        else{
-            if(my_favourite_added)
-            {
-                if(checkMyDownloadAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-2);
-                }else{
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
+        } else {
+            if (my_favourite_added) {
+                if (checkMyDownloadAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
                 }
             }
         }
 
 
-       /* Adding My Library*/
+        /* Adding My Library*/
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                 my_libary_added = true;
@@ -756,40 +726,37 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_MYLIBRARY, FeatureHandler.DEFAULT_IS_MYLIBRARY) && loggedInStr != null) {
-            if(!my_libary_added)
-            {
+            if (!my_libary_added) {
                 MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();
-                mainMenuLibrary.setTitle (languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY));
+                mainMenuLibrary.setTitle(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY));
 
-                if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-2,mainMenuLibrary);
-                }else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)){
+                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuLibrary);
+                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(mainMenuLibrary);
-                }else {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-1,mainMenuLibrary);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuLibrary);
                 }
 
             }
-        }
-        else{
-            if(my_libary_added)
-            {
-                if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-3);
-                }else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
-                }else {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-2);
+        } else {
+            if (my_libary_added) {
+                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
                 }
             }
         }
 
 
 
-       /* Adding Watch History */
+        /* Adding Watch History */
 
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
                 watch_history_added = true;
@@ -797,49 +764,45 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
 
-
         if (featureHandler.getFeatureStatus(FeatureHandler.WATCH_HISTORY, FeatureHandler.DEFAULT_IS_WATCH_HISTORY) && loggedInStr != null) {
-            if(!watch_history_added)
-            {
+            if (!watch_history_added) {
                 MenusOutputModel.MainMenu mainMenuWatchHistory = new MenusOutputModel().new MainMenu();
-                mainMenuWatchHistory.setTitle (languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY));
+                mainMenuWatchHistory.setTitle(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY));
 
-                if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-3,mainMenuWatchHistory);
+                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 3, mainMenuWatchHistory);
 
-                }else if(!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)){
+                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(mainMenuWatchHistory);
-                }else if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-2,mainMenuWatchHistory);
+                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
 
-                }else if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-2,mainMenuWatchHistory);
+                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
 
-                }else if(checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-2,mainMenuWatchHistory);
+                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
 
-                }else {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size()-1,mainMenuWatchHistory);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuWatchHistory);
                 }
 
             }
-        }
-        else{
-            if(watch_history_added)
-            {
+        } else {
+            if (watch_history_added) {
 
-                if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-4);
-                }else if(!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-1);
-                }else if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-3);
-                }else if(checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-3);
-                }else if(checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)){
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-3);
-                }else {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size()-2);
+                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 4);
+                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
+                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
                 }
 
             }
@@ -847,7 +810,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* *//* Adding Favourite*//*
+        /* *//* Adding Favourite*//*
 
 
 
@@ -880,7 +843,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         if (menusOutputModelLocal.getMainMenuModel() != null && menusOutputModelLocal.getMainMenuModel().size() > 0) {
 
-            for (int i = 0; i< menusOutputModelLocal.getMainMenuModel().size(); i++) {
+            for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
                 titleArray.add(menusOutputModelLocal.getMainMenuModel().get(i).getTitle());
                 ArrayList<String> childArray = new ArrayList<>();
 
@@ -894,8 +857,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
 
-
-        for (int k = 0; k < menusOutputModelLocal.getFooterMenuModel().size (); k++) {
+        for (int k = 0; k < menusOutputModelLocal.getFooterMenuModel().size(); k++) {
             titleArray.add(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name());
             ArrayList<String> childArray = new ArrayList<>();
 
@@ -903,38 +865,35 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         }
 
-        Util.drawer_collapse_expand_imageview.clear();
+        // Commented by kushal - as app was crashing when clicked on the expand button.
+        // Util.drawer_collapse_expand_imageview.clear();
 
 
-        if(Util.main_menu_list_size == menusOutputModelLocal.getMainMenuModel().size()){
+        if (Util.main_menu_list_size == menusOutputModelLocal.getMainMenuModel().size()) {
 
-        }else {
+        } else {
 
 
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
-            adapter = new ExpandableListAdapter(getActivity (),titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
-            mDrawerListView.setAdapter (adapter);
+            adapter = new ExpandableListAdapter(getActivity(), titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
+            mDrawerListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
 
 
-
-
-
-        if(loadHomeFragment)
-        {
+        if (loadHomeFragment) {
             Fragment fragment = new HomeFragment();
             Bundle bundle = new Bundle();
             fragment.setArguments(bundle);
-            getFragmentManager ().beginTransaction ().replace (R.id.container, fragment).commit ();
+            getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         }
 
     }
 
-    private boolean checkMyLibAdded(MenusOutputModel menusOutputModelLocal){
+    private boolean checkMyLibAdded(MenusOutputModel menusOutputModelLocal) {
         boolean status = false;
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
                 status = true;
@@ -944,10 +903,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         return status;
     }
 
-    private boolean checkWatchHistoryAdded(MenusOutputModel menusOutputModelLocal){
+    private boolean checkWatchHistoryAdded(MenusOutputModel menusOutputModelLocal) {
         boolean status = false;
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
                 status = true;
@@ -957,10 +916,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         return status;
     }
 
-    private boolean checkMyfavouritrAdded(MenusOutputModel menusOutputModelLocal){
+    private boolean checkMyfavouritrAdded(MenusOutputModel menusOutputModelLocal) {
         boolean status = false;
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
                 status = true;
@@ -970,10 +929,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         return status;
     }
 
-    private boolean checkMyDownloadAdded(MenusOutputModel menusOutputModelLocal){
+    private boolean checkMyDownloadAdded(MenusOutputModel menusOutputModelLocal) {
         boolean status = false;
 
-        for(int i=0;i<menusOutputModelLocal.getMainMenuModel().size();i++) {
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
 
             if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
                 status = true;

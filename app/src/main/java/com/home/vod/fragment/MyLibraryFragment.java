@@ -27,6 +27,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -134,12 +135,14 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSC
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -154,6 +157,7 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -388,7 +392,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
-        Util.check_for_subscription=0;
+        Util.check_for_subscription = 0;
         context = getActivity();
         featureHandler = FeatureHandler.getFeaturePreference(context);
         rootView.setFocusableInTouchMode(true);
@@ -426,7 +430,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
-      //  sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        //  sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
@@ -447,13 +451,16 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
 
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
-           // sectionTitle.setText(titleListName);
+            // sectionTitle.setText(titleListName);
         } else {
-         //   sectionTitle.setText("");
+            //   sectionTitle.setText("");
 
         }
      /*   Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
@@ -677,8 +684,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         detailsIntent.putExtra("content_types_id", "" + "3");
 
 
-
-
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -690,14 +695,14 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             }
         });
 
-         /*chromecast-------------------------------------*/
+        /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(getActivity());
 
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(getActivity());
-       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
+        // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -786,7 +791,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         boolean play_video = true;
 
-        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
 
             play_video = !_video_details_output.getStreaming_restriction().trim().equals("0");
         } else {
@@ -965,7 +970,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 jsonObj.put("device_type", "2");
                                 jsonObj.put("log_id", "0");
 
-                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
+                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                     jsonObj.put("restrict_stream_id", "1");
                                 } else {
                                     jsonObj.put("restrict_stream_id", "0");
@@ -993,7 +998,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }
 
                             List tracks = new ArrayList();
-                            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                                 for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1039,7 +1044,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 jsonObj.put("log_id", "0");
                                 jsonObj.put("seek_status", "");
 
-                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION))  {
+                                if (featureHandler.getFeatureStatus(FeatureHandler.IS_STREAMING_RESTRICTION, FeatureHandler.DEFAULT_IS_STREAMING_RESTRICTION)) {
                                     jsonObj.put("restrict_stream_id", "1");
                                 } else {
                                     jsonObj.put("restrict_stream_id", "0");
@@ -1069,7 +1074,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             List tracks = new ArrayList();
-                            if(featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE,FeatureHandler.DEFAULT_IS_SUBTITLE)) {
+                            if (featureHandler.getFeatureStatus(FeatureHandler.IS_SUBTITLE, FeatureHandler.DEFAULT_IS_SUBTITLE)) {
 
                                 for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                     MediaTrack englishSubtitle = new MediaTrack.Builder(i,
@@ -1789,14 +1794,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     @Override
     public void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, String totalItems, String message) {
 
-        try{
+        try {
             try {
                 if (videoPDialog != null && videoPDialog.isShowing()) {
                     videoPDialog.hide();
                 }
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
 
-            if(status == 200){
+            if (status == 200) {
 
                 String movieImageStr = "";
 
@@ -1870,14 +1876,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     }
                 }
 
-            }else{
+            } else {
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             }
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
 
     }
@@ -2294,8 +2301,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     }
 
 
-
-
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -2330,21 +2335,21 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 gridView.setLayoutParams(layoutParams);
                 gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
-                if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                     }
 
-                } else if (getActivity() !=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                } else if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if (getActivity()!=null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                } else if (getActivity() != null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
                     gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
@@ -2361,7 +2366,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -2369,7 +2374,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -2388,7 +2393,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -2396,7 +2401,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -2579,6 +2584,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         itemsInServer = 0;
 
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
@@ -2586,7 +2592,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
         /***************chromecast**********************/
-        MenuItem item,item1,item2,item3;
+        MenuItem item, item1, item2, item3;
         item = menu.findItem(R.id.action_filter);
         item1 = menu.findItem(R.id.option);
         item2 = menu.findItem(R.id.search);
@@ -3883,6 +3889,31 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         }
     }
-/***************chromecast**********************/
 
+    /***************chromecast**********************/
+ /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_my_library);
+            }
+        }
+
+    }
 }

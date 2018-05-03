@@ -65,9 +65,9 @@ public class RegisterUIHandler {
 
     public RegisterUIHandler(Activity context){
         this.context=context;
-        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
+        termsTextView = (TextView) context.findViewById(R.id.terms);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         btnLogin.setVisibility(View.GONE);
 
 

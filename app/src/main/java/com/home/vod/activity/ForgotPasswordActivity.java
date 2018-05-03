@@ -43,6 +43,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -52,6 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -115,9 +117,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         });
 
         logoImageView = (ImageView) findViewById(R.id.logoImageView);
-        editEmailStr = (EditText) findViewById(R.id.editEmailStr);
-        logintextView = (TextView) findViewById(R.id.loginTextView);
-        submitButton = (Button) findViewById(R.id.submitButton);
+        editEmailStr = (EditText) findViewById(R.id.email);
+        logintextView = (TextView) findViewById(R.id.login);
+        submitButton = (Button) findViewById(R.id.submit);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.regular_fonts), submitButton);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts), editEmailStr);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts), logintextView);
@@ -198,6 +200,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if (t.getText().toString().contains(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD))) {
+                    t.setId(R.id.page_title_forgot_password);
+                }
             }
         }
     }

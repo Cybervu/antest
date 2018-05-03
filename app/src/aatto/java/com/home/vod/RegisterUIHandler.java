@@ -74,12 +74,12 @@ public class RegisterUIHandler {
         this.context=context;
         /*termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);*/
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);

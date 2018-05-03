@@ -134,14 +134,14 @@ public class ProfileActivity extends AppCompatActivity implements
         featureHandler = FeatureHandler.getFeaturePreference(ProfileActivity.this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
-        editNewPassword = (EditText) findViewById(R.id.editNewPassword);
-        editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
+        editNewPassword = (EditText) findViewById(R.id.pwd);
+        editConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
         profileHandler = new ProfileHandler(this);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
-        emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
+        emailAddressEditText = (EditText) findViewById(R.id.email);
         emailAddressEditText.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
-        changePassword = (Button) findViewById(R.id.changePasswordButton);
+        changePassword = (Button) findViewById(R.id.change_password);
         update_profile = (Button) findViewById(R.id.update_profile);
         manage_devices = (Button) findViewById(R.id.manage_devices);
 
@@ -868,6 +868,9 @@ Kushal- To set id to back button in Action Bar
             }catch (Exception e){
                 b.setId(R.id.back_btn);
             }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_profile);
             }
         }
     }

@@ -113,7 +113,7 @@
                     />
 
                 <RelativeLayout
-                    android:id="@+id/favorite"
+                    android:id="@+id/favorite_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right">
@@ -152,7 +152,7 @@
                         android:layout_width="@dimen/viewmore_btn_width"
                         android:layout_height="@dimen/viewmore_btn_height"
                         android:layout_marginRight="@dimen/pre_order_button_margin"
-                        android:layout_toLeftOf="@+id/viewTrailerButton"
+                        android:layout_toLeftOf="@+id/viewtrailer"
                         android:background="@drawable/preorder_button"
                         android:padding="@dimen/trailer_btn_padding"
                         android:stateListAnimator="@null"
@@ -163,7 +163,7 @@
 
 
                     <Button
-                        android:id="@+id/viewTrailerButton"
+                        android:id="@+id/viewtrailer"
                         android:layout_width="@dimen/viewmore_btn_width"
                         android:layout_height="@dimen/viewmore_btn_height"
                         android:layout_alignParentRight="true"
@@ -223,7 +223,7 @@
 
 
                     <TextView
-                        android:id="@+id/videoReleaseDateTextView"
+                        android:id="@+id/video_release_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"

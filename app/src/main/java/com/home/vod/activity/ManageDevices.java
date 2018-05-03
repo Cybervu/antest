@@ -271,6 +271,9 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_manage_device);
             }
         }
     }
