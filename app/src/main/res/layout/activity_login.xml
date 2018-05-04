@@ -183,7 +183,6 @@
                 android:layout_height="@dimen/registerbtn_height"
                 android:clickable="true"
                 android:padding="@dimen/login_linear_padding"
-                android:layout_margin="@dimen/login_linear_margin_top"
                 android:elevation="2dp"
                 android:background="@drawable/gbg"
                 android:layout_below="@+id/login_facebook"

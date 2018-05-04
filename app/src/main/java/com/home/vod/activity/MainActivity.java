@@ -1322,6 +1322,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(intent);
                 finish();
 
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 noInternetLayout.setVisibility(View.GONE);
