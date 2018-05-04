@@ -1546,7 +1546,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
                 if (t.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD)))
-                    t.setId(R.id.page_title);
+                    t.setId(R.id.page_title_my_download);
             }
         }
     }
