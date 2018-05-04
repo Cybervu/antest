@@ -38,7 +38,7 @@
                 android:paddingTop="@dimen/Login_drawing_padding" />
 
             <EditText
-                android:id="@+id/editNameStr"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -52,7 +52,7 @@
                 android:textSize="@dimen/edit_text_size" />
 
             <EditText
-                android:id="@+id/editEmailStr"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
@@ -66,7 +66,7 @@
                 android:textSize="@dimen/edit_text_size" />
 
             <EditText
-                android:id="@+id/editPasswordStr"
+                android:id="@+id/pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editEmailStr"
@@ -84,7 +84,7 @@
                 />
 
             <EditText
-                android:id="@+id/editConfirmPasswordStr"
+                android:id="@+id/confirm_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPasswordStr"
@@ -121,7 +121,7 @@
                     android:textSize="@dimen/playbtn_text_size" />
 
                 <TextView
-                    android:id="@+id/termsTextView"
+                    android:id="@+id/terms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -134,7 +134,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/registerButton"
+                android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/registerbtn_height"
                 android:layout_alignParentLeft="true"
@@ -149,7 +149,7 @@
 
 
             <LinearLayout
-                android:id="@+id/btnLogin"
+                android:id="@+id/register_facebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/registerButton"
@@ -210,7 +210,7 @@
             <RelativeLayout
                 android:padding="6dp"
                 android:layout_marginTop="20dp"
-                android:id="@+id/sign_in_button"
+                android:id="@+id/register_google"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/registerbtn_height"
                 android:paddingRight="8dp"
@@ -267,7 +267,7 @@
 
 
                 <TextView
-                    android:id="@+id/alreadyHaveALoginButton"
+                    android:id="@+id/login"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/offlinebtn_height"
                     android:layout_centerHorizontal="true"

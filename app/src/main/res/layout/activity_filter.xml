@@ -28,7 +28,7 @@
         android:layout_marginBottom="10dp">
 
         <Button
-            android:id="@+id/resetButton"
+            android:id="@+id/reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/button_background"
@@ -37,11 +37,11 @@
             android:textColor="@color/buttonTextColor" />
 
         <Button
-            android:id="@+id/applyButton"
+            android:id="@+id/apply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/filter_marginLeft"
-            android:layout_toRightOf="@+id/resetButton"
+            android:layout_toRightOf="@+id/reset"
             android:background="@color/button_background"
             android:text="Apply"
             android:textColor="@color/buttonTextColor" />

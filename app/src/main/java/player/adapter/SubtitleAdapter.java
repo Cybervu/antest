@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -55,6 +56,14 @@ public class SubtitleAdapter extends BaseAdapter {
 
         //sets the text for item name and item description from the current item object
         title.setText(items.get(position));
+
+        //Kushal
+        if (convertView instanceof LinearLayout){
+            LinearLayout l= (LinearLayout)convertView;
+            if(items.get(position).toLowerCase().contains("off")){
+                l.setId(R.id.off);
+            }
+        }
 
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),title);
 

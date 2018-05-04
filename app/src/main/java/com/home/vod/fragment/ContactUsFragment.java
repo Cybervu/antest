@@ -4,20 +4,19 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,23 +30,11 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
@@ -56,7 +43,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
-import static com.home.vod.preferences.LanguagePreference.MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
@@ -103,6 +89,10 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         /*categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(getArguments().getString("title"));*/
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
+
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
@@ -290,6 +280,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
                                 getActivity().startActivity(startIntent);
                                 getActivity().finish();
 
+
                     }
                 }
                 return false;
@@ -339,7 +330,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     public void SubmmitClicked() {
@@ -505,6 +496,31 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         editMessageStr.setError(null);
         editNameStr.setError(null);
         editEmailStr.setError(null);
+
+    }
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_contact_us);
+            }
+        }
 
     }
 }

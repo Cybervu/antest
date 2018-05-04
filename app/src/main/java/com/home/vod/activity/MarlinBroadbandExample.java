@@ -26,7 +26,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
-import android.support.v7.app.NotificationCompat;
+//import android.support.v7.app.NotificationCompat;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
@@ -458,20 +458,20 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
-		emVideoView = (VideoView) findViewById(R.id.emVideoView);
+		emVideoView = (VideoView) findViewById(R.id.player_screen);
 		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
-		subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+		subtitle_change_btn = (ImageView) findViewById(R.id.setting);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
-		latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
-		videoTitle = (TextView) findViewById(R.id.videoTitle);
+		latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
+		videoTitle = (TextView) findViewById(R.id.content_title);
 		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
 		videoTitle.setTypeface(videoTitleface);
-		GenreTextView = (TextView) findViewById(R.id.GenreTextView);
+		GenreTextView = (TextView) findViewById(R.id.genre);
 		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
 		GenreTextView.setTypeface(GenreTextViewface);
-		videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+		videoDurationTextView = (TextView) findViewById(R.id.video_duration);
 		Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
 		videoDurationTextView.setTypeface(videoDurationTextViewface);
 		videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
@@ -486,34 +486,32 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		story = (TextView) findViewById(R.id.story);
 		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
 		story.setTypeface(storyTypeface);
-		videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+		videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
 		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
-		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		int margin =(int)(getResources().getDimension(R.dimen.marginleft10dp)) ;
+		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		int margin =(int)getResources().getDimension(R.dimen.marginleft10dp);
 		buttonLayoutParams.setMargins(margin, margin, margin, 170);
 		story.setLayoutParams(buttonLayoutParams);
 
 
 
-		download = (ImageView) findViewById(R.id.downloadImageView);
+		download = (ImageView) findViewById(R.id.download);
 		Progress = (ProgressBar) findViewById(R.id.progressBar);
 		percentg = (TextView) findViewById(R.id.percentage);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
 		// Adding Chromecast in Offline Player
-
-
 		/***************chromecast**********************/
 
 		mAquery = new AQuery(this);
 		setupCastListener();
 
 		mCastContext = CastContext.getSharedInstance(this);
-		mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+		//mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 		mCastSession = CastContext.getSharedInstance(this).getSessionManager().getCurrentCastSession();
 		mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -728,19 +726,19 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		last_ll = (LinearLayout) findViewById(R.id.last_ll);
 		linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
 
-		ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
-		emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
-		dateTextView = (TextView) findViewById(R.id.dateTextView);
+		ipAddressTextView = (TextView) findViewById(R.id.ip);
+		emailAddressTextView = (TextView) findViewById(R.id.email);
+		dateTextView = (TextView) findViewById(R.id.date);
 
 		ipAddressTextView.setVisibility(View.GONE);
 		emailAddressTextView.setVisibility(View.GONE);
 		dateTextView.setVisibility(View.GONE);
 
-		compress_expand = (ImageView) findViewById(R.id.compress_expand);
+		compress_expand = (ImageView) findViewById(R.id.max_min);
 		back = (ImageButton) findViewById(R.id.back);
 
-		seekBar = (SeekBar) findViewById(R.id.progress);
-		center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
+		seekBar = (SeekBar) findViewById(R.id.progress_bar);
+		center_play_pause = (ImageButton) findViewById(R.id.play);
 
 		current_time = (TextView) findViewById(R.id.current_time);
 		total_time = (TextView) findViewById(R.id.total_time);
@@ -2617,6 +2615,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				@Override
 				public void onSendingRemoteMediaRequest() {
 				}
+
+				/*@Override
+				public void onAdBreakStatusUpdated() {
+
+				}*/
 			});
 
 			remoteMediaClient.load(mSelectedMedia, autoPlay, position);

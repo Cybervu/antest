@@ -62,12 +62,11 @@
                 android:textSize="@dimen/email_text_size" />
 
             <EditText
-                android:id="@+id/editEmailStr"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/videoStoryTextView_margin"
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="email"
                 android:padding="@dimen/login_padding_bottom"
@@ -76,12 +75,10 @@
                 android:textSize="@dimen/email_text_size" />
 
             <EditText
-                android:id="@+id/editPasswordStr"
+                android:id="@+id/pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editEmailStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/videoStoryTextView_margin"
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="password"
                 android:inputType="textPassword"
@@ -94,12 +91,11 @@
                 />
 
             <EditText
-                android:id="@+id/editConfirmPasswordStr"
+                android:id="@+id/confirm_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPasswordStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/videoStoryTextView_margin"
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="confirm password"
                 android:inputType="textPassword"
@@ -147,7 +143,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/registerButton"
+                android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/activation_height"
                 android:layout_alignParentLeft="true"
@@ -228,7 +224,7 @@
 
 
                 <TextView
-                    android:id="@+id/alreadyHaveALoginButton"
+                    android:id="@+id/login"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/login_butn_height"
                     android:layout_centerHorizontal="true"

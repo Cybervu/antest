@@ -3,6 +3,7 @@
     xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fillViewport="true">
 
     <RelativeLayout
@@ -10,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,7 +22,7 @@
                 android:id="@+id/player_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/player_relativlayout_height"
-               >
+                android:background="@color/playerBgColor">
 
                 <LinearLayout
                     android:id="@+id/secondary_ll"
@@ -30,12 +31,12 @@
                     android:orientation="vertical">
 
                     <com.devbrackets.android.exomedia.ui.widget.VideoView
-                        android:id="@+id/emVideoView"
+                        android:id="@+id/player_screen"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#000000"
                         android:visibility="visible"
-                        app:useDefaultControls="false">
+                        EMVideoView:useDefaultControls="false">
 
 
                         <ProgressBar
@@ -53,7 +54,7 @@
 
 
                         <ImageButton
-                            android:id="@+id/latest_center_play_pause"
+                            android:id="@+id/play_centre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
@@ -61,6 +62,7 @@
                             android:background="#00000000"
                             android:src="@drawable/center_ic_media_pause"
                             android:visibility="gone" />
+
 
 
                         <LinearLayout
@@ -76,7 +78,7 @@
                             android:visibility="visible">
 
                             <TextView
-                                android:id="@+id/emailAddressTextView"
+                                android:id="@+id/ip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -84,7 +86,7 @@
                             </TextView>
 
                             <TextView
-                                android:id="@+id/ipAddressTextView"
+                                android:id="@+id/email"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -92,7 +94,7 @@
                             </TextView>
 
                             <TextView
-                                android:id="@+id/dateTextView"
+                                android:id="@+id/date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#80ffffff">
@@ -116,7 +118,7 @@
 
 
                         <com.home.vod.util.StrokedTextView
-                            android:id="@+id/offLine_subtitleText"
+                            android:id="@+id/subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
@@ -126,10 +128,24 @@
                             android:ellipsize="middle"
                             android:gravity="center"
                             android:text=""
-                            android:textColor="@color/subtitle_solid_color"
                             android:textSize="@dimen/subtitle_text_size"
+                            android:textColor="@color/subtitle_solid_color"
                             strokeAttrs:textStrokeColor="@color/subtitle_outline_color"
-                            strokeAttrs:textStrokeWidth="@dimen/stroke_width" />
+                            strokeAttrs:textStrokeWidth="@dimen/stroke_width"
+                            />
+                        <!-- <TextView
+                             android:id="@+id/detais_text"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_alignParentBottom="true"
+                             android:layout_alignParentEnd="true"
+                             android:layout_alignParentRight="true"
+                             android:layout_marginBottom="103dp"
+                             android:paddingRight="10dp"
+                             android:text="Add Your Text Here"
+                             android:textColor="#ffffff"
+                             android:textSize="18dp"
+                             android:visibility="visible" />-->
 
                     </com.devbrackets.android.exomedia.ui.widget.VideoView>
 
@@ -148,17 +164,17 @@
                     android:visibility="gone">
 
                     <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:padding="@dimen/marginLeft15dp"
                         android:id="@+id/back_layout"
+                        android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/marginLeft15dp">
-
-                        <ImageButton
-                            android:id="@+id/back"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/ic_back" />
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_back" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -176,19 +192,18 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/cc_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/cc_button_padding_bottom"
                         android:paddingLeft="@dimen/cc_button_padding_left"
-                        android:paddingRight="@dimen/cc_button_padding_right"
-                        android:paddingTop="@dimen/cc_button_padding_top">
+                        android:paddingTop="@dimen/cc_button_padding_top"
+                        android:paddingBottom="@dimen/cc_button_padding_bottom"
+                        android:id="@+id/cc_layout"
+                        android:layout_gravity="center_vertical|right"
+                        android:orientation="horizontal">
 
 
                         <ImageView
-                            android:id="@+id/subtitle_change_btn"
+                            android:id="@+id/setting"
                             android:layout_width="@dimen/subtitle_change_btn_width"
                             android:layout_height="@dimen/subtitle_change_btn_height"
                             android:layout_marginRight="@dimen/marginRight20dp"
@@ -206,8 +221,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:background="#00000000"
-                    android:gravity="center_vertical"
                     android:orientation="vertical"
+                    android:gravity="center_vertical"
                     android:visibility="gone">
 
                     <LinearLayout
@@ -220,19 +235,20 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:id="@+id/center_play_pause"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
+                            android:id="@+id/play"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/marginleft10dp"
                             android:background="#00000000"
                             android:src="@drawable/ic_media_pause"
                             android:visibility="visible" />
 
 
+
                         <SeekBar
-                            android:id="@+id/progress"
+                            android:id="@+id/progress_bar"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -251,13 +267,13 @@
                             android:textSize="@dimen/totaltme_text_size" />
 
                         <ImageView
-                            android:id="@+id/compress_expand"
+                            android:id="@+id/max_min"
                             android:layout_width="@dimen/compress_expand_height"
                             android:layout_height="@dimen/compress_expand_width"
-                            android:layout_marginRight="@dimen/marginright5dp"
-                            android:gravity="center"
                             android:padding="@dimen/padding15dp"
+                            android:layout_marginRight="@dimen/marginright5dp"
                             android:src="@drawable/ic_media_fullscreen_stretch"
+                            android:gravity="center"
                             android:visibility="visible" />
                     </LinearLayout>
 
@@ -282,7 +298,7 @@
 
 
                     <TextView
-                        android:id="@+id/videoTitle"
+                        android:id="@+id/content_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/relativeOverlayLayout"
@@ -304,7 +320,7 @@
                         android:visibility="gone">
 
                         <ImageView
-                            android:id="@+id/downloadImageView"
+                            android:id="@+id/download"
                             android:layout_width="@dimen/downloadimg_width"
                             android:layout_height="@dimen/downloadimg_height"
                             android:layout_alignParentRight="true"
@@ -344,10 +360,10 @@
 
 
                 <TextView
-                    android:id="@+id/GenreTextView"
+                    android:id="@+id/genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/videoTitle"
+                    android:layout_below="@+id/content_title"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     android:layout_marginRight="@dimen/marginright10dp"
@@ -365,16 +381,16 @@
                     android:layout_alignLeft="@+id/bannerImageView"
                     android:layout_alignRight="@+id/bannerImageView"
                     android:layout_alignStart="@+id/bannerImageView"
-                    android:layout_below="@+id/videoGenreTextView"
+                    android:layout_below="@+id/videogenre"
                     android:orientation="horizontal"
                     android:paddingBottom="0dp">
 
 
                     <TextView
-                        android:id="@+id/videoDurationTextView"
+                        android:id="@+id/video_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -385,7 +401,7 @@
                         android:id="@+id/videoCensorRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:background="@drawable/button_bg_orange"
@@ -399,7 +415,7 @@
                         android:id="@+id/videoCensorRatingTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -411,7 +427,7 @@
                         android:id="@+id/videoReleaseDateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
+                        android:layout_below="@+id/videogenre"
                         android:layout_marginLeft="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
@@ -424,7 +440,7 @@
                     android:id="@+id/story"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/videoTitle"
+                    android:layout_below="@+id/content_title"
                     android:layout_marginBottom="@dimen/marginleft10dp"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     android:layout_marginRight="@dimen/marginright10dp"
@@ -434,7 +450,7 @@
                     android:textSize="@dimen/genre_textsize" />
 
                 <TextView
-                    android:id="@+id/videoCastCrewTitleTextView"
+                    android:id="@+id/cast_crew"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

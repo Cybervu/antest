@@ -1,29 +1,27 @@
 package com.home.vod.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
 import com.home.vod.adapter.FilterAdapter;
-
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.FilterListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
-
 
 import java.util.ArrayList;
 
@@ -34,12 +32,14 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.SORT_BY;
@@ -89,8 +89,12 @@ public class FilterActivity extends AppCompatActivity {
                 finish();
             }
         });
-        resetButton = (Button)findViewById(R.id.resetButton);
-        applyButton = (Button)findViewById(R.id.applyButton);
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(toolbar);
+
+        resetButton = (Button)findViewById(R.id.reset);
+        applyButton = (Button)findViewById(R.id.apply);
         genreListData = (RecyclerView) findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(FilterActivity.this, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -293,6 +297,33 @@ public class FilterActivity extends AppCompatActivity {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+        }
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if (t.getText().toString().contains(languagePreference.getTextofLanguage(FILTER_BY,DEFAULT_FILTER_BY))) {
+                    t.setId(R.id.page_title_filter);
+                }
+            }
         }
     }
 

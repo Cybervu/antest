@@ -49,14 +49,13 @@
 
     <string name="addReview"><u>Click here to login and add your review</u></string>
 
-    <!--country and Language -->
-
     <!--permission alert dialog string -->
     <string name="storagePermissionNecessary">Storage permission necessary</string>
     <string name="storagePermissionToPlayVideo"> needs storage permission to play videos.</string>
     <string name="permissionsRequired">Permission Required</string>
     <string name="permissionsRequiredMessage">Required permission(s) have been set not to ask again! Please provide them from settings.\nPermissions --> Storage </string>
 
+    <!--country and Language -->
 
     <string-array name="country">
         <item>Afghanistan</item>

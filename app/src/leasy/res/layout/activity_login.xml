@@ -36,7 +36,7 @@
                 android:paddingTop="@dimen/login_padding" />
 
             <EditText
-                android:id="@+id/editEmailStr"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
@@ -50,7 +50,7 @@
                 android:textSize="@dimen/email_text_size"/>
 
             <EditText
-                android:id="@+id/editPasswordStr"
+                android:id="@+id/pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editEmailStr"
@@ -87,7 +87,7 @@
                     android:textSize="@dimen/forgot_text_size" />
 -->
                 <Button
-                    android:id="@+id/loginButton"
+                    android:id="@+id/login"
                     android:layout_width="@dimen/login_butn_width"
                     android:layout_height="@dimen/login_butn_height"
                     android:background="@drawable/button_radious"
@@ -112,7 +112,7 @@
                 android:layout_gravity="center">
 
                 <TextView
-                    android:id="@+id/forgotPasswordTextView"
+                    android:id="@+id/forgot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/forgotPasswordTextViewColor"
@@ -129,7 +129,7 @@
                          android:layout_marginTop="30dp"
                          android:layout_marginBottom="30dp" />-->
             <LinearLayout
-                android:id="@+id/btnLogin"
+                android:id="@+id/login_facebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/fbbg"
@@ -224,7 +224,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/signUpTextView"
+                    android:id="@+id/register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/loginNewUser"

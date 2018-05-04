@@ -17,6 +17,6 @@
         android:text="Added to Favorites"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="#fcf6f6"
-        android:textStyle="bold" />
+        android:textStyle="normal" />
 
 </RelativeLayout>

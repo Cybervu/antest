@@ -433,108 +433,108 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         _init();
         // Kushal
-         askPermission();
+        askPermission();
 
-         apiChcekTimer = new Timer();
-         apiChcekTimer.schedule(new TimerTask() {
-             @Override
-             public void run() {
+        apiChcekTimer = new Timer();
+        apiChcekTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
 
-                 runOnUiThread(new Runnable() {
-                     @Override
-                     public void run() {
-                         if(sdkInitializerCalled && ipAdressCalled && isRegistrationEnabledCalled
-                                 && planListCalled && languageListCalled && genreCalled){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sdkInitializerCalled && ipAdressCalled && isRegistrationEnabledCalled
+                                && planListCalled && languageListCalled && genreCalled){
 
-                             if(sdkInitializerSuccessStatus == 2){
-                                 geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
-                                 noInternetLayout.setVisibility(View.GONE);
-                                 geoBlockedLayout.setVisibility(View.VISIBLE);
-                                 stopApicheckTimer();
-                                 return;
-                             }
+                            if(sdkInitializerSuccessStatus == 2){
+                                geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
+                                noInternetLayout.setVisibility(View.GONE);
+                                geoBlockedLayout.setVisibility(View.VISIBLE);
+                                stopApicheckTimer();
+                                return;
+                            }
 
-                             if(sdkInitializerSuccessStatus == 5){
+                            if(sdkInitializerSuccessStatus == 5){
 
-                                 Log.v("MUVI123","step = 1");
+                                Log.v("MUVI123","step = 1");
 
-                                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
-                                 noInternetLayout.setVisibility(View.VISIBLE);
-                                 geoBlockedLayout.setVisibility(View.GONE);
-                                 stopApicheckTimer();
-                                 return;
-                             }
+                                noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
 
-                             if(ipAdressSuccessStatus == 5){
+                            if(ipAdressSuccessStatus == 5){
 
-                                 Log.v("MUVI123","step = 2");
-
-
-                                 noInternetTextView.setText("Could not detect your IP.");
-                                 noInternetLayout.setVisibility(View.VISIBLE);
-                                 geoBlockedLayout.setVisibility(View.GONE);
-                                 stopApicheckTimer();
-                                 return;
-                             }
+                                Log.v("MUVI123","step = 2");
 
 
-
-                             if(geoBloackCalled){
-                                 if(geoBloackSuccessStatus == 3 || geoBloackSuccessStatus == 5){
-
-                                     Log.v("MUVI123","step = 3");
-
-
-                                     noInternetTextView.setText("Oops something went wrong.Please try again later .");
-                                     noInternetLayout.setVisibility(View.VISIBLE);
-                                     geoBlockedLayout.setVisibility(View.GONE);
-                                     stopApicheckTimer();
-                                     return;
-                                 }
-                                 if(geoBloackSuccessStatus == 2){
-                                     noInternetLayout.setVisibility(View.GONE);
-                                     geoBlockedLayout.setVisibility(View.VISIBLE);
-                                     stopApicheckTimer();
-                                     return;
-                                 }
-                             }else{
-                                 return;
-                             }
-
-
-                             if(isRegistrationEnabledSuccessStatus == 5){
-
-                                 Log.v("MUVI123","step = 4");
-
-
-                                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
-                                 noInternetLayout.setVisibility(View.VISIBLE);
-                                 geoBlockedLayout.setVisibility(View.GONE);
-                                 stopApicheckTimer();
-                                 return;
-                             }
-
-                             if(!languageTranslationCalled) {
-                                 return;
-                             }
-
-                             if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
-                                 if(!profileCalled) {
-                                     return;
-                                 }
-                             }
-
-                             // This Code Is Done For The One Step Registration.
-                             Call_One_Step_Procedure();
-
-                         }
-                     }
-                 });
+                                noInternetTextView.setText("Could not detect your IP.");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
 
 
 
-             }
-         },0,100);
+                            if(geoBloackCalled){
+                                if(geoBloackSuccessStatus == 3 || geoBloackSuccessStatus == 5){
+
+                                    Log.v("MUVI123","step = 3");
+
+
+                                    noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                    noInternetLayout.setVisibility(View.VISIBLE);
+                                    geoBlockedLayout.setVisibility(View.GONE);
+                                    stopApicheckTimer();
+                                    return;
+                                }
+                                if(geoBloackSuccessStatus == 2){
+                                    noInternetLayout.setVisibility(View.GONE);
+                                    geoBlockedLayout.setVisibility(View.VISIBLE);
+                                    stopApicheckTimer();
+                                    return;
+                                }
+                            }else{
+                                return;
+                            }
+
+
+                            if(isRegistrationEnabledSuccessStatus == 5){
+
+                                Log.v("MUVI123","step = 4");
+
+
+                                noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
+
+                            if(!languageTranslationCalled) {
+                                return;
+                            }
+
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                                if(!profileCalled) {
+                                    return;
+                                }
+                            }
+
+                            // This Code Is Done For The One Step Registration.
+                            Call_One_Step_Procedure();
+
+                        }
+                    }
+                });
+
+
+
+            }
+        },0,100);
 
 
     }
@@ -599,25 +599,25 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message) {
 
-       geoBloackCalled = true ;
+        geoBloackCalled = true ;
 
         if (checkGeoBlockOutputModel == null) {
 
             geoBloackSuccessStatus = 3;
 
+        } else {
+            if (status > 0 && status == 200) {
+                preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
+
+                geoBloackSuccessStatus = 1;
+
+            } else if (status == 454) {
+                geoBloackSuccessStatus = 2;
+
             } else {
-                if (status > 0 && status == 200) {
-                    preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
+                geoBloackSuccessStatus = 5;
 
-                    geoBloackSuccessStatus = 1;
-
-                } else if (status == 454) {
-                    geoBloackSuccessStatus = 2;
-
-                } else {
-                    geoBloackSuccessStatus = 5;
-
-                }
+            }
         }
 
     }
@@ -919,7 +919,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void Call_One_Step_Procedure() {
 
 
-       stopApicheckTimer();
+        stopApicheckTimer();
 
 
         if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
