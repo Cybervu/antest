@@ -7,13 +7,17 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 
 import com.home.vod.R;
@@ -61,6 +65,10 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
     AsynGetIpAddress asynGetIpAddress;
     AsyncVideoLogDetails asyncVideoLogDetails;
 
+    String VideoUrl;
+    String Playble_VideoUrl;
+    int count = 0;
+
     @SuppressLint("JavascriptInterface")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
@@ -68,30 +76,11 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_third_party_player);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
-
-    /*    mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mActionBarToolbar != null) {
-            setSupportActionBar(mActionBarToolbar);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-            mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-
-        }*/
-
-        // getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        getSupportActionBar().hide();
         playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         LogUtil.showLog("BISHALK","ThirdpartyUrl=="+playerModel.getVideoUrl());
 
+        hideSystemUI();
 
 
         if (playerModel.getVideoUrl().matches("")){
@@ -99,16 +88,17 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
             overridePendingTransition(0, 0);
         }
 
+        VideoUrl = playerModel.getVideoUrl();
 
-        if (playerModel.getVideoUrl().substring(playerModel.getVideoUrl().lastIndexOf("&") + 1).equalsIgnoreCase("autoplay=1")){
-        }else{
-            playerModel.setVideoUrl("\""+playerModel.getVideoUrl()+"\"");
-            frameVideo += "<html><body style=\"margin:0 ; padding :0;\">";
-            frameVideo += "<iframe style=\"width :100%; height: 100%; margin:0 ; padding :0;";
-            frameVideo += "\"src="+playerModel.getVideoUrl().trim()+"frameborder=\"0\" allowfullscreen></iframe>\"";
-            frameVideo += "</body></html>";
 
+        if(VideoUrl.startsWith("//")){
+            Playble_VideoUrl = "http:"+VideoUrl;
+        }else if(!VideoUrl.startsWith("http")){
+            Playble_VideoUrl = "http://"+VideoUrl;
+        }else {
+            Playble_VideoUrl = VideoUrl;
         }
+
 
 
         mWebView = (WebView) findViewById(R.id.webView);
@@ -120,7 +110,6 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2){
             mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         }
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
         {
@@ -136,8 +125,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
             @Override
             public void onProgressChanged(WebView view, int progress) {
 
-                asyncpDialog = new ProgressBarHandler(ThirdPartyPlayer.this);
-                asyncpDialog.show();
+
 
                 if (progress == 100) {
                     if (asyncpDialog != null && asyncpDialog.isShowing()) {
@@ -152,12 +140,45 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
+                try {
+                Log.v("MUVI12","loaded");
+                    emulateClick(view);
+
+                    Log.v("MUVI12","clicked=======");
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                onBackPressed();
+
+                if(count <1){
+                    count = count + 1;
+
+                    if(VideoUrl.startsWith("//")){
+                        Playble_VideoUrl = "https:"+VideoUrl;
+                    }else if(!VideoUrl.startsWith("http")){
+                        Playble_VideoUrl = "https://"+VideoUrl;
+                    }else {
+                        Playble_VideoUrl = VideoUrl;
+                    }
+
+
+
+                    asyncpDialog = new ProgressBarHandler(ThirdPartyPlayer.this);
+                    asyncpDialog.show();
+
+                    mWebView.loadUrl(Playble_VideoUrl.trim());
+
+                }else {
+                    onBackPressed();
+                }
+
+
 
             }
 
@@ -168,35 +189,15 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
             }
 
         });
-
         mWebView.getSettings().setAllowFileAccess(true);
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.setBackgroundColor(0);
         mWebView.setBackgroundColor(Color.parseColor("#000000"));
-        if (playerModel.getVideoUrl().substring(playerModel.getVideoUrl().lastIndexOf("&") + 1).equalsIgnoreCase("autoplay=1")){
-            mWebView.loadUrl(playerModel.getVideoUrl().trim());
-        }else{
-            mWebView.loadData(frameVideo, "text/html", "utf-8");
 
-        }
+        asyncpDialog = new ProgressBarHandler(ThirdPartyPlayer.this);
+        asyncpDialog.show();
 
-
-     /*   mWebView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    if (mActionBarToolbar.isShown()){
-                        getSupportActionBar().hide();
-                    }else{
-                        getSupportActionBar().show();
-
-                    }
-                }
-
-                return false;
-            }
-        });*/
+        mWebView.loadUrl(Playble_VideoUrl.trim());
 
         asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
@@ -463,5 +464,40 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         overridePendingTransition(0, 0);
         super.onUserLeaveHint();
 
+    }
+
+    private void emulateClick(final WebView webview) {
+        long delta = 100;
+        long downTime = SystemClock.uptimeMillis();
+        float x = webview.getLeft() + webview.getWidth()/2; //in the middle of the webview
+        float y = webview.getTop() + webview.getHeight()/2;
+
+        final MotionEvent downEvent = MotionEvent.obtain( downTime, downTime + delta, MotionEvent.ACTION_DOWN, x, y, 0 );
+        // change the position of touch event, otherwise, it'll show the menu.
+        final MotionEvent upEvent = MotionEvent.obtain( downTime, downTime+ delta, MotionEvent.ACTION_UP, x+10, y+10, 0 );
+
+        webview.post(new Runnable() {
+            @Override
+            public void run() {
+                if (webview != null) {
+                    webview.dispatchTouchEvent(downEvent);
+                    webview.dispatchTouchEvent(upEvent);
+                }
+            }
+        });
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 }

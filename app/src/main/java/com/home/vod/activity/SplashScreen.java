@@ -574,11 +574,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         } else {
             ipAdressSuccessStatus = 1;
             this.ipAddressStr = ipAddressStr;
-            CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-            checkGeoBlockInputModel.setAuthToken(authTokenStr);
-            checkGeoBlockInputModel.setIp(ipAddressStr);
-            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
-            asynGetCountry.executeOnExecutor(threadPoolExecutor);
+
+
+            if(!Util.isIPExist(this.ipAddressStr)) {
+                CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
+                checkGeoBlockInputModel.setAuthToken(authTokenStr);
+                checkGeoBlockInputModel.setIp(ipAddressStr);
+                CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
+                asynGetCountry.executeOnExecutor(threadPoolExecutor);
+            }else {
+                preferenceManager.setCountryCodeToPref("IN");
+                geoBloackSuccessStatus = 1;
+                geoBloackCalled = true ;
+            }
+
         }
     }
 

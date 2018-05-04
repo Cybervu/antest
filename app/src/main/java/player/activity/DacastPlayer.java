@@ -18,11 +18,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.home.vod.R;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.ResizableCustomView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -50,7 +50,6 @@ import javax.net.ssl.HttpsURLConnection;
 import player.utils.SensorOrientationChangeNotifier;
 
 
-
 public class DacastPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener {
     WebView mWebView;
     Player playerModel;
@@ -69,6 +68,7 @@ public class DacastPlayer extends AppCompatActivity implements SensorOrientation
     AsyncVideoLogDetails asyncVideoLogDetails;
 
     String VideoUrl = "";
+    String Playble_VideoUrl = "";
 
     @SuppressLint("JavascriptInterface")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -111,10 +111,12 @@ public class DacastPlayer extends AppCompatActivity implements SensorOrientation
 
         VideoUrl = playerModel.getVideoUrl();
         if(VideoUrl.startsWith("//")){
-            VideoUrl = "http:"+VideoUrl;
+            Playble_VideoUrl = "http:"+VideoUrl;
         }else if(!VideoUrl.contains("http")){
-            VideoUrl = "http://"+VideoUrl;
+            Playble_VideoUrl = "http://"+VideoUrl;
         }
+
+
 
 
 
@@ -163,7 +165,10 @@ public class DacastPlayer extends AppCompatActivity implements SensorOrientation
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                onBackPressed();
+
+                Toast.makeText(getApplicationContext(),"description = "+description ,Toast.LENGTH_LONG).show();
+//                onBackPressed();
+                mWebView.loadUrl("http://techslides.com/demos/sample-videos/small.webm");
 
             }
 
@@ -187,6 +192,7 @@ public class DacastPlayer extends AppCompatActivity implements SensorOrientation
 
         asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+        hideSystemUI();
 
     }
 

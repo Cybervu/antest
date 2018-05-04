@@ -928,6 +928,19 @@ public class Util {
         return inSampleSize;
     }
 
+    /**
+     * Method to check IP is exist in iplist.
+     * @param ip
+     * @return
+     */
+
+    public static boolean isIPExist(String ip){
+        boolean status = Arrays.asList(Constant.PUBLIC_IPS_FOR_DISABLE_GEOBLOCK).contains(ip);
+        return status;
+    }
+
+
+
 
 
 }
