@@ -114,10 +114,6 @@ public class EpisodeListOptionMenuHandler {
             menu_language.setVisible(true);
             visibility[LANGUAGE_INDEX] = true;
         }
-<<<<<<< HEAD:app/src/defaultFlavor_Prod_DefaultFlavor/java/com/home/vod/EpisodeListOptionMenuHandler.java
-=======
-
->>>>>>> origin/RESOURCE_ID:app/src/defaultFlavor_Prod_DefaultFlavor/java/com/home/vod/EpisodeListOptionMenuHandler.java
 
         if (loggedInStr != null) {
 
