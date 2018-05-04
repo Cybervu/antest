@@ -608,6 +608,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 //        playerModel.setThirdPartyPlayer(true);
 //        playerModel.setVideoUrl("//iframe.dacast.com/b/106615/c/463712");
+//        playerModel.setVideoUrl("//app.viloud.tv/player/embed/channel/a28603eccb4c4d1b3e4fdc0f43bc8da5?autoplay=1&volume=1&controls=1&title=1&share=1&random=0");
+//        playerModel.setVideoUrl("http://techslides.com/demos/sample-videos/small.webm");
 
         //****************************************8
 
@@ -633,14 +635,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         return;
                     }
                 }
-                else if(playerModel.getVideoUrl().contains("dacast.com")){
+               /* else if(playerModel.getVideoUrl().contains("dacast.com")){
+
+
+
+                    playerModel.setVideoUrl("https://techslides.com/demos/sample-videos/small.webm");
+
                     final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, DacastPlayer.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
                     finish();
                     return;
-                }
+                }*/
 
                 else {
                     final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
