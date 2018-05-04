@@ -261,15 +261,15 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
         findViewById(R.id.subtitle_change_btn).setVisibility(View.INVISIBLE);
         compress_layout=(LinearLayout)findViewById(R.id.compress_layout);
-        emVideoView = (VideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.player_screen);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
+        videoTitle = (TextView) findViewById(R.id.content_title);
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
-        GenreTextView = (TextView) findViewById(R.id.GenreTextView);
+        GenreTextView = (TextView) findViewById(R.id.genre);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
@@ -278,7 +278,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
 
         Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
@@ -288,7 +288,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         videoStoryTextView.setTypeface(videoStoryTextViewTypeface);
         //storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
 
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
