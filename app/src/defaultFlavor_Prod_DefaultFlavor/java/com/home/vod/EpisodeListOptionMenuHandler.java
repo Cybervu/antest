@@ -114,6 +114,10 @@ public class EpisodeListOptionMenuHandler {
             menu_language.setVisible(true);
             visibility[LANGUAGE_INDEX] = true;
         }
+<<<<<<< HEAD:app/src/defaultFlavor_Prod_DefaultFlavor/java/com/home/vod/EpisodeListOptionMenuHandler.java
+=======
+
+>>>>>>> origin/RESOURCE_ID:app/src/defaultFlavor_Prod_DefaultFlavor/java/com/home/vod/EpisodeListOptionMenuHandler.java
 
         if (loggedInStr != null) {
 
@@ -128,7 +132,7 @@ public class EpisodeListOptionMenuHandler {
 
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE)))
-                favorite_menu.setVisible(false);
+                favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
 
@@ -139,7 +143,7 @@ public class EpisodeListOptionMenuHandler {
             visibility[LOGOUT_INDEX] = true;
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(false);
+                mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);
 
