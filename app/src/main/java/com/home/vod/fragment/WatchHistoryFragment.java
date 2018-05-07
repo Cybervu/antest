@@ -28,6 +28,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -466,6 +467,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
            // sectionTitle.setText(titleListName);
@@ -1682,8 +1686,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         /***************chromecast**********************/
         MenuItem item,item1,item2,item3;
         item = menu.findItem(R.id.action_filter);
-        item1 = menu.findItem(R.id.submenu);
-        item2 = menu.findItem(R.id.action_search);
+        item1 = menu.findItem(R.id.option);
+        item2 = menu.findItem(R.id.search);
         item3 = menu.findItem(R.id.media_route_menu_item);
         item.setVisible(false);
         item1.setVisible(false);
@@ -2403,6 +2407,11 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
@@ -2453,5 +2462,31 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         }
     }
 /***************chromecast**********************/
+
+ /*
+    Kushal- To set id to back button in Action Bar
+     */
+private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+    for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+        View v = mActionBarToolbar.getChildAt(i);
+        if (v instanceof ImageButton) {
+            ImageButton b = (ImageButton) v;
+            b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+        } else if (v instanceof TextView) {
+            TextView t = (TextView) v;
+            t.setId(R.id.page_title_watch_history);
+        }
+    }
+
+}
 
 }

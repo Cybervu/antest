@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -43,10 +42,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -60,7 +57,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
 import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
 import com.google.ads.interactivemedia.v3.api.AdEvent;
@@ -91,7 +88,6 @@ import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
-import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -103,9 +99,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -130,9 +124,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -155,8 +146,6 @@ import javax.net.ssl.HttpsURLConnection;
 import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
-
-
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -165,31 +154,21 @@ import player.utils.DBHelper;
 import player.utils.SensorOrientationChangeNotifier;
 import player.utils.Util;
 
-import static android.R.attr.format;
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.BTN_DISCARD;
-import static com.home.vod.preferences.LanguagePreference.BTN_KEEP;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_DISCARD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_KEEP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELED;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELLED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -197,22 +176,17 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELED;
-import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELLED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -221,12 +195,10 @@ import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.WANT_DOWNLOAD_CANCEL;
 import static com.home.vod.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.YES;
-import static com.home.vod.preferences.LanguagePreference.YOUR_VIDEO_WONT_BE_SAVED;
 
 
 
@@ -309,6 +281,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     TextView percentg;
     private static final int REQUEST_STORAGE = 1;
     File mediaStorageDir, mediaStorageDir1;
+    LinearLayout new_detailsLayout;
 
     String mlvfile = "";
     String token = "";
@@ -381,7 +354,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             videoCastCrewTitleTextView;
     TextView story;
 
-    private EMVideoView emVideoView;
+    private VideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
 
@@ -567,7 +540,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int)emVideoView.getCurrentPosition());
                 updateProgressBar();
             }
         }
@@ -601,6 +574,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         featureHandler = FeatureHandler.getFeaturePreference(ExoPlayerActivity.this);
 
+
+        //****************************************8
+
+
+//        playerModel.setThirdPartyPlayer(true);
+//        playerModel.setVideoUrl("//iframe.dacast.com/b/106615/c/463712");
+//        playerModel.setVideoUrl("//app.viloud.tv/player/embed/channel/a28603eccb4c4d1b3e4fdc0f43bc8da5?autoplay=1&volume=1&controls=1&title=1&share=1&random=0");
+//        playerModel.setVideoUrl("http://techslides.com/demos/sample-videos/small.webm");
+
+        //****************************************8
+
+
+
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
 
@@ -620,7 +606,22 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         finish();
                         return;
                     }
-                } else {
+                }
+               /* else if(playerModel.getVideoUrl().contains("dacast.com")){
+
+
+
+                    playerModel.setVideoUrl("https://techslides.com/demos/sample-videos/small.webm");
+
+                    final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, DacastPlayer.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
+                    finish();
+                    return;
+                }*/
+
+                else {
                     final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     playVideoIntent.putExtra("PlayerModel", playerModel);
@@ -685,9 +686,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         }
 
-        download = (ImageView) findViewById(R.id.downloadImageView);
+        download = (ImageView) findViewById(R.id.download);
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
+        new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
 
 
         //Check for offline content // Added By sanjay
@@ -712,7 +714,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mAquery = new AQuery(ExoPlayerActivity.this);
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
@@ -763,18 +765,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         movieId = playerModel.getMovieUniqueId();
         episodeId = playerModel.getEpisode_id();
 
-        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        emVideoView = (VideoView) findViewById(R.id.player_screen);
         cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
-        subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
-        subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
-        latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
+        subtitleText = (TextView) findViewById(R.id.subtitle);
+        subtitle_change_btn = (ImageView) findViewById(R.id.setting);
+        latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
+        videoTitle = (TextView) findViewById(R.id.content_title);
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
-        GenreTextView = (TextView) findViewById(R.id.GenreTextView);
+        GenreTextView = (TextView) findViewById(R.id.genre);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
@@ -789,7 +791,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         story = (TextView) findViewById(R.id.story);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
@@ -1122,20 +1124,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         last_ll = (LinearLayout) findViewById(R.id.last_ll);
         linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
 
-        ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
-        emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
-        dateTextView = (TextView) findViewById(R.id.dateTextView);
+        ipAddressTextView = (TextView) findViewById(R.id.ip);
+        emailAddressTextView = (TextView) findViewById(R.id.email);
+        dateTextView = (TextView) findViewById(R.id.date);
 
         ipAddressTextView.setVisibility(View.GONE);
         emailAddressTextView.setVisibility(View.GONE);
         dateTextView.setVisibility(View.GONE);
 
-        compress_expand = (ImageView) findViewById(R.id.compress_expand);
+        compress_expand = (ImageView) findViewById(R.id.max_min);
         back = (ImageButton) findViewById(R.id.back);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
-        seekBar = (SeekBar) findViewById(R.id.progress);
-        center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
+        seekBar = (SeekBar) findViewById(R.id.progress_bar);
+        center_play_pause = (ImageButton) findViewById(R.id.play);
 
         current_time = (TextView) findViewById(R.id.current_time);
         total_time = (TextView) findViewById(R.id.total_time);
@@ -1188,7 +1190,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mHandler.removeCallbacks(updateTimeTask);
-                playerStartPosition = emVideoView.getCurrentPosition();
+                playerStartPosition = (int)emVideoView.getCurrentPosition();
 
                 // Call New Video Log Api.
 
@@ -1216,7 +1218,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 playerPreviousPosition = playerStartPosition;
 
                 log_temp_id = "0";
-                player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+                player_start_time = millisecondsToString((int)emVideoView.getCurrentPosition());
                 playerPosition = player_start_time;
 
                 // ============End=====================//
@@ -1412,7 +1414,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     change_resolution = false;
                     emVideoView.start();
                     emVideoView.seekTo(seekBarProgress);
-                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    seekBar.setProgress((int)emVideoView.getCurrentPosition());
 
                     if (is_paused) {
                         is_paused = false;
@@ -1480,7 +1482,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                                 }
                                 emVideoView.start();
-                                seekBar.setProgress(emVideoView.getCurrentPosition());
+                                seekBar.setProgress((int)emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
                                 if (SubTitlePath.size() > 0) {
@@ -2026,7 +2028,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     public void run() {
                         if (emVideoView != null) {
 
-                            int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
+                            int currentPositionStr = millisecondsToString((int)emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
 
@@ -2036,7 +2038,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 log_temp_id = "0";
 
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "complete";
@@ -2051,7 +2053,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                                 playerPreviousPosition = 0;
 
-                                int duration = emVideoView.getDuration() / 1000;
+                                int duration = (int)emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
@@ -2389,20 +2391,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         public void run() {
 
 
-            seekBarProgress = emVideoView.getCurrentPosition();
+            seekBarProgress = (int)emVideoView.getCurrentPosition();
 
-            if (emVideoView.getCurrentPosition() % 2 == 0)
+            if ((int)emVideoView.getCurrentPosition() % 2 == 0)
                 BufferBandWidth();
 
-            current_played_length = emVideoView.getCurrentPosition();
+            current_played_length = (int)emVideoView.getCurrentPosition();
 
           /*  if (played_length > 0) {
                 emVideoView.seekTo(34000);
                 seekBar.setProgress(34000);
             }else {*/
-            seekBar.setProgress(emVideoView.getCurrentPosition());
+            seekBar.setProgress((int)emVideoView.getCurrentPosition());
 //            }
-            seekBar.setMax(emVideoView.getDuration());
+            seekBar.setMax((int)emVideoView.getDuration());
             Calcute_Currenttime_With_TotalTime();
             mHandler.postDelayed(this, 1000);
 
@@ -2411,7 +2413,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
             }
 
-            current_matching_time = emVideoView.getCurrentPosition();
+            current_matching_time = (int)emVideoView.getCurrentPosition();
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
@@ -3137,7 +3139,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 emVideoView.start();
              /*   emVideoView.seekTo(played_length);
                 seekBar.setProgress(played_length);*/
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int)emVideoView.getCurrentPosition());
 
                 updateProgressBar();
 
@@ -3155,7 +3157,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 seekBar.setProgress(played_length);
                 updateProgressBar();
                 emVideoView.start();*/
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int)emVideoView.getCurrentPosition());
                 updateProgressBar();
 
             }
@@ -3271,7 +3273,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
                     } else {
                         emVideoView.start();
-                        seekBar.setProgress(emVideoView.getCurrentPosition());
+                        seekBar.setProgress((int)emVideoView.getCurrentPosition());
                         updateProgressBar();
                     }
                 }
@@ -3567,7 +3569,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         public void run() {
             if (emVideoView != null && emVideoView.isPlaying()) {
-                int currentPos = emVideoView.getCurrentPosition();
+                int currentPos = (int)emVideoView.getCurrentPosition();
                 Collection<Caption> subtitles = srt.captions.values();
                 for (Caption caption : subtitles) {
                     if (currentPos >= caption.start.mseconds
@@ -3632,6 +3634,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
     private void hideSystemUI() {
+        new_detailsLayout.setVisibility(View.GONE);
         story.setText("");
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
@@ -3647,6 +3650,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
     private void showSystemUI() {
+        new_detailsLayout.setVisibility(View.VISIBLE);
 //        story.setText(playerModel.getVideoStory());
         story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
         ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
@@ -4999,6 +5003,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
 
 
@@ -5527,7 +5536,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
                     return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
                 }
-                Log.v("MUVI", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("MUVI", "emVideoView.getCurrentPosition()" + (int)emVideoView.getCurrentPosition());
                 Log.v("MUVI", "emVideoView.getDuration()" + emVideoView.getDuration());
 
                /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
@@ -5535,7 +5544,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             emVideoView.getDuration());
                 }
 */
-                return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                return new VideoProgressUpdate((int)emVideoView.getCurrentPosition(),
                         emVideoView.getDuration());
             }
         });
@@ -5624,7 +5633,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
-                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setProgress((int)emVideoView.getCurrentPosition());
 
               /*  emVideoView.seekTo(played_length);
                 seekBar.setProgress(played_length);*/
@@ -5656,7 +5665,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
         latest_center_play_pause.setVisibility(View.GONE);
         center_play_pause.setImageResource(R.drawable.ic_media_pause);
-        seekBar.setProgress(emVideoView.getCurrentPosition());
+        seekBar.setProgress((int)emVideoView.getCurrentPosition());
         updateProgressBar();
     }
 

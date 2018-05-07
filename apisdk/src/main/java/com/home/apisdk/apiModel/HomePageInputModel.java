@@ -10,6 +10,16 @@ public class HomePageInputModel {
 
     private String authToken;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    private String userId ="";
+
     /**
      * This Method is use to Get the Language Code
      *

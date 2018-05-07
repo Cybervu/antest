@@ -122,6 +122,7 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.homePageInputModel.getAuthToken());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.homePageInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.USER_ID, this.homePageInputModel.getUserId());
 
             Log.v("MUVISDK", "authToken = " + this.homePageInputModel.getAuthToken());
 

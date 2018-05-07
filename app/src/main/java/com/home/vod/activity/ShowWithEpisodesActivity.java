@@ -25,11 +25,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -46,6 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
@@ -96,31 +97,30 @@ import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
 import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
-import com.home.apisdk.apiModel.MonitizationDetailsInput;
-import com.home.apisdk.apiModel.MonitizationDetailsOutput;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MonitizationDetailsInput;
+import com.home.apisdk.apiModel.MonitizationDetailsOutput;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.ValidateVoucherInputModel;
+import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.CheckVoucherOrPpvPaymentHandler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
-import com.home.vod.R;
-import com.home.vod.BuildConfig;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
@@ -132,7 +132,8 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
-
+import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -153,17 +154,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ResumePopupActivity;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
+
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.ALERT;
-import static com.home.vod.preferences.LanguagePreference.ALREADY_MEMBER;
 import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
@@ -176,6 +180,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
@@ -185,9 +190,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
@@ -197,7 +202,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -205,7 +212,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHAS
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
@@ -214,10 +220,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
-
-
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
@@ -227,17 +233,16 @@ import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
@@ -253,17 +258,6 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-
-
-import com.home.vod.util.Util;
-import com.squareup.picasso.Picasso;
-
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
 
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements
@@ -336,6 +330,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
+
+    // Kushal
+    int option_menu_id[]={R.id.login,R.id.register,R.id.language_popup,R.id.profile,R.id.purchase,R.id.logout};
+    PopupWindow changeSortPopUp;
+    LinearLayout linearLayout[];
+    boolean[] visibility;
+    String[] lang;
+    //
 
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
@@ -692,6 +694,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 season_spinner.setVisibility(View.VISIBLE);
                 ArrayAdapter adapter = new ArrayAdapter(ShowWithEpisodesActivity.this, R.layout.dropdownlist, season);
                 season_spinner.setAdapter(adapter);
+
+                // Kushal - set id to spinner adapter Seasons
             }
 
 
@@ -2101,31 +2105,35 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        btnmore = (Button) findViewById(R.id.btnMore);
-        favorite_view_episode = (ImageView) findViewById(R.id.favorite_view_episode);
+        btnmore = (Button) findViewById(R.id.viewall);
+        favorite_view_episode = (ImageView) findViewById(R.id.favourite);
 
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
 
         btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
-        playButton = (ImageView) findViewById(R.id.playButton);
-        watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
+        playButton = (ImageView) findViewById(R.id.play);
+        watchTrailerButton = (Button) findViewById(R.id.viewtrailer);
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), watchTrailerButton);
         watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
         playButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
-        videoGenreTextView = (TextView) findViewById(R.id.videoGenreTextView);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoTitle = (TextView) findViewById(R.id.content_title);
+        videoGenreTextView = (TextView) findViewById(R.id.genre);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         playButton.setVisibility(View.GONE);
 
         videoCastCrewTitleTextView.setVisibility(View.GONE);
@@ -2207,7 +2215,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
         // *** rating***////
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar = (RatingBar) findViewById(R.id.rating);
         ratingBar.setFocusable(false);
         ratingBar.setVisibility(View.GONE);
 
@@ -2216,7 +2224,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 return true;
             }
         });
-        viewRatingTextView = (TextView) findViewById(R.id.viewRatingTextView);
+        viewRatingTextView = (TextView) findViewById(R.id.review);
 
 
         // *****rating********///
@@ -2533,7 +2541,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         //setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3509,14 +3517,41 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
+        // Kushal
+        /*
+        Set translation key to array
+         */
+        String[] translateKey={LOGIN,
+                BTN_REGISTER,
+                LANGUAGE_POPUP_LANGUAGE,
+                PROFILE,
+                PURCHASE_HISTORY,
+                LOGOUT};
+        /*
+        Set transalation value to array
+         */
+        String[] translateValue={
+                DEFAULT_LOGIN,
+                DEFAULT_BTN_REGISTER,
+                DEFAULT_LANGUAGE_POPUP_LANGUAGE,
+                DEFAULT_PROFILE,
+                DEFAULT_PURCHASE_HISTORY,
+                DEFAULT_LOGOUT};
+        /*
+        Set the lang array with the langugePreference of key and value array
+         */
+        lang= new String[translateKey.length];
+        for(int i=0 ;i<lang.length;i++)
+            lang[i]=languagePreference.getTextofLanguage(translateKey[i],translateValue[i]);
+
+        visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference,featureHandler);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(ShowWithEpisodesActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -3636,12 +3671,184 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 dlgAlert.create().show();
 
                 return false;
+            case R.id.option:
+                /*
+                Show to popup menu
+                 */
+                showPopupMenu(findViewById(R.id.option));
+                return false;
             default:
                 break;
         }
 
         return false;
     }
+
+    private void showPopupMenu(View viewById) {
+        CardView viewGroup = (CardView)findViewById(R.id.option_menu_layout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+        View layout = layoutInflater.inflate(R.layout.option_menu_popup_layout, viewGroup);
+        initLayouts(layout);
+
+        // Creating the PopupWindow
+        changeSortPopUp = new PopupWindow(this);
+        changeSortPopUp.setContentView(layout);
+        changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setFocusable(true);
+        changeSortPopUp.setElevation(50);
+        // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+        int OFFSET_X = 0;
+        int OFFSET_Y = getSupportActionBar().getHeight();
+
+        // Clear the default translucent background
+        changeSortPopUp.setBackgroundDrawable(getDrawable(R.drawable.white));
+        changeSortPopUp.showAsDropDown(viewById, OFFSET_X + 20, -OFFSET_Y + 20);
+
+        for (int i=0; i<option_menu_id.length; i++){
+            if (visibility[i])
+                linearLayout[i].setVisibility(View.VISIBLE);
+            else
+                linearLayout[i].setVisibility(View.GONE);
+        }
+        for (int i=0; i<option_menu_id.length;i++){
+            final int finalI = i;
+            linearLayout[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    performWork(linearLayout[finalI].getId(),changeSortPopUp);
+
+                }
+            });
+        }
+    }
+
+    private void performWork(int id, PopupWindow changeSortPopUp) {
+        switch (id){
+            case R.id.login:
+                Intent loginIntent = new Intent(ShowWithEpisodesActivity.this, LoginActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(loginIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.register:
+                Intent registerIntent = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(registerIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.language_popup:
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                if (languageModel != null && languageModel.size() > 0) {
+                    ShowLanguagePopup();
+                } else {
+                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(authTokenStr);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
+                    asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+                }
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.profile:
+                Intent profileIntent = new Intent(ShowWithEpisodesActivity.this, ProfileActivity.class);
+                profileIntent.putExtra("EMAIL", email);
+                profileIntent.putExtra("LOGID", id);
+                startActivity(profileIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.purchase:
+                Intent purchaseintent = new Intent(ShowWithEpisodesActivity.this, PurchaseHistoryActivity.class);
+                startActivity(purchaseintent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.logout:
+                logoutPopup();
+                changeSortPopUp.dismiss();
+                break;
+            default:
+                break;
+
+
+        }
+    }
+
+    private void logoutPopup() {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                // dialog.cancel();
+                if(NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+           /* dlgAlert.setNegativeButton(getResources().getString(R.string.no_str),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setNegativeButton(getResources().getString(R.string.no_str),
+                            new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });*/
+        dlgAlert.create().show();
+    }
+
+    private void initLayouts(View layout) {
+        linearLayout= new LinearLayout[option_menu_id.length];
+        for (int i=0; i<option_menu_id.length;i++){
+            linearLayout[i]= (LinearLayout)layout.findViewById(option_menu_id[i]);
+            setLanguageToTextViews(linearLayout[i],i);
+
+        }
+    }
+
+    private void setLanguageToTextViews(LinearLayout linearLayout, int i) {
+        int count= linearLayout.getChildCount();
+        for (int j=0;j<count;j++){
+            View vw= linearLayout.getChildAt(j);
+            if(vw instanceof TextView){
+                ((TextView) vw).setText(lang[i]);
+            }
+        }
+    }
+
 
 
     private BroadcastReceiver DELETE_ACTION = new BroadcastReceiver() {
@@ -4263,6 +4470,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+           /* @Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override
@@ -6001,6 +6213,29 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
 
 
+        }
+    }
+
+
+    /*
+   Kushal- To set id to back button in Action Bar
+    */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
         }
     }
 }

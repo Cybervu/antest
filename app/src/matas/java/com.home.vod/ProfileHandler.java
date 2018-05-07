@@ -52,10 +52,10 @@ public class ProfileHandler {
 
     public ProfileHandler(Activity context){
         this.context=context;
-        editProfileNameEditText = (EditText) context.findViewById(R.id.editProfileNameEditText);
+        editProfileNameEditText = (EditText) context.findViewById(R.id.name);
 
-        editNewPassword = (EditText) context.findViewById(R.id.editNewPassword);
-        editConfirmPassword = (EditText) context.findViewById(R.id.editConfirmPassword);
+        editNewPassword = (EditText) context.findViewById(R.id.pwd);
+        editConfirmPassword = (EditText) context.findViewById(R.id.confirm_pass);
 
         newPasswod=editNewPassword.getText().toString().trim();
 

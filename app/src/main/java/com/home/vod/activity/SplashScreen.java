@@ -134,6 +134,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     Timer GoogleIdGeneraterTimer;
     ProgressBarHandler pDialog;
+    Timer apiChcekTimer;
 
     /*Asynctask on background thread*/
     String ipAddressStr = "";
@@ -147,18 +148,53 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
     /**
-     * Splashreen Modified.
+     * Splashreen Modified to optimize loading time.
      */
 
-    int geoBlockEnable = 0;
-    int geoBlockCalled = 0;
-    int planListCalled = 0;
-    int isRegistrationEnableCalled = 0;
-    int languageListCalled = 0;
-    int languageTranslationCalled = 0;
-    int genreListCalled = 0;
-    int userProfileCalled = 0;
-    int ipAddressCalled = 0;
+
+   /* Code Details
+    0 = initial call
+    1 = success
+    2 = error form api
+    3 = null data
+    4 = no internet
+    5 = other   */
+
+    boolean sdkInitializerCalled = false ;
+    int     sdkInitializerSuccessStatus = 0 ;
+    String  sdkInitializerMsg = "";
+
+    boolean ipAdressCalled = false ;
+    int     ipAdressSuccessStatus = 0 ;
+    String  ipAdressMsg = "";
+
+    boolean geoBloackCalled = false ;
+    int     geoBloackSuccessStatus = 0 ;
+    String  geoBloackMsg = "";
+
+    boolean isRegistrationEnabledCalled = false ;
+    int     isRegistrationEnabledSuccessStatus = 0 ;
+    String  isRegistrationEnabledMsg = "";
+
+    boolean planListCalled = false ;
+    int     planListSuccessStatus = 0 ;
+    String  planListMsg = "";
+
+    boolean languageListCalled = false ;
+    int     languageListSuccessStatus = 0 ;
+    String  languageListMsg = "";
+
+    boolean languageTranslationCalled = false ;
+    int     languageTranslationSuccessStatus = 0 ;
+    String  languageTranslationMsg = "";
+
+    boolean genreCalled = false ;
+    int     genreSuccessStatus = 0 ;
+    String  genreMsg = "";
+
+    boolean profileCalled = false ;
+    int     profileSuccessStatus = 0 ;
+    String  profileMsg = "";
 
 
     // Kushal
@@ -206,30 +242,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
         ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
-       /* DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;*/
 
         Display display = getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
-
-
-        /*if ( Util.isTablet(SplashScreen.this)){
-            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }else {
-            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
-            try {
-
-            } catch (Exception e) {
-
-            }
-        }*/
-
-
-        // Kushal
-
 
         splashScreenHandler.handleSplashscreen(imageResize);
 
@@ -255,7 +272,43 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
 
         if (NetworkStatus.getInstance().isConnected(this)) {
+
+
             SDKInitializer.getInstance().init(this, this, authTokenStr);
+
+
+            SDKInitializer.setData(this);
+            /*Calling Ip-Address API*/
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+            /*Calling PlanList API*/
+            SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
+            planListInput.setAuthToken(authTokenStr);
+            planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
+            asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+
+            /*Calling isRegistrationEnabled API*/
+            IsRegistrationEnabledInputModel isRegistrationEnabledInputModel = new IsRegistrationEnabledInputModel();
+            isRegistrationEnabledInputModel.setAuthToken(authTokenStr);
+            IsRegistrationEnabledAsynTask asynIsRegistrationEnabled = new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel, this, this);
+            asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
+
+            /*Calling languageList API*/
+            LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+            languageListInputModel.setAuthToken(authTokenStr);
+            GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
+            asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+
+            /*Calling genre API*/
+            GenreListInput genreListInput = new GenreListInput();
+            genreListInput.setAuthToken(authTokenStr);
+            GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
+            asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+
+
+
         } else {
             // Go to my download page , if the user is pre loggged in and the user has some download content.
             email_Id = preferenceManager.getEmailIdFromPref();
@@ -411,7 +464,108 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         _init();
         // Kushal
-         askPermission();
+        askPermission();
+
+        apiChcekTimer = new Timer();
+        apiChcekTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sdkInitializerCalled && ipAdressCalled && isRegistrationEnabledCalled
+                                && planListCalled && languageListCalled && genreCalled){
+
+                            if(sdkInitializerSuccessStatus == 2){
+                                geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
+                                noInternetLayout.setVisibility(View.GONE);
+                                geoBlockedLayout.setVisibility(View.VISIBLE);
+                                stopApicheckTimer();
+                                return;
+                            }
+
+                            if(sdkInitializerSuccessStatus == 5){
+
+                                Log.v("MUVI123","step = 1");
+
+                                noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
+
+                            if(ipAdressSuccessStatus == 5){
+
+                                Log.v("MUVI123","step = 2");
+
+
+                                noInternetTextView.setText("Could not detect your IP.");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
+
+
+
+                            if(geoBloackCalled){
+                                if(geoBloackSuccessStatus == 3 || geoBloackSuccessStatus == 5){
+
+                                    Log.v("MUVI123","step = 3");
+
+
+                                    noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                    noInternetLayout.setVisibility(View.VISIBLE);
+                                    geoBlockedLayout.setVisibility(View.GONE);
+                                    stopApicheckTimer();
+                                    return;
+                                }
+                                if(geoBloackSuccessStatus == 2){
+                                    noInternetLayout.setVisibility(View.GONE);
+                                    geoBlockedLayout.setVisibility(View.VISIBLE);
+                                    stopApicheckTimer();
+                                    return;
+                                }
+                            }else{
+                                return;
+                            }
+
+
+                            if(isRegistrationEnabledSuccessStatus == 5){
+
+                                Log.v("MUVI123","step = 4");
+
+
+                                noInternetTextView.setText("Oops something went wrong.Please try again later .");
+                                noInternetLayout.setVisibility(View.VISIBLE);
+                                geoBlockedLayout.setVisibility(View.GONE);
+                                stopApicheckTimer();
+                                return;
+                            }
+
+                            if(!languageTranslationCalled) {
+                                return;
+                            }
+
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                                if(!profileCalled) {
+                                    return;
+                                }
+                            }
+
+                            // This Code Is Done For The One Step Registration.
+                            Call_One_Step_Procedure();
+
+                        }
+                    }
+                });
+
+
+
+            }
+        },0,100);
 
 
     }
@@ -442,19 +596,29 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Log.v("MUVI11", "ipAddressStr=====" + ipAddressStr);
         Log.v("MUVI11", "getIPAddress=====" + getIPAddress(true));
 
-//        Toast.makeText(getApplicationContext(),"response of ipaddress = "+message,Toast.LENGTH_LONG).show();
+        ipAdressCalled = true;
 
         if (ipAddressStr.equals("")) {
-            noInternetTextView.setText("Could not detect your IP.");
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
+            ipAdressMsg = "Could not detect your ip" ;
+            ipAdressSuccessStatus = 5;
+
         } else {
+            ipAdressSuccessStatus = 1;
             this.ipAddressStr = ipAddressStr;
-            CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-            checkGeoBlockInputModel.setAuthToken(authTokenStr);
-            checkGeoBlockInputModel.setIp(ipAddressStr);
-            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
-            asynGetCountry.executeOnExecutor(threadPoolExecutor);
+
+
+            if(!Util.isIPExist(this.ipAddressStr)) {
+                CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
+                checkGeoBlockInputModel.setAuthToken(authTokenStr);
+                checkGeoBlockInputModel.setIp(ipAddressStr);
+                CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
+                asynGetCountry.executeOnExecutor(threadPoolExecutor);
+            }else {
+                preferenceManager.setCountryCodeToPref("IN");
+                geoBloackSuccessStatus = 1;
+                geoBloackCalled = true ;
+            }
+
         }
     }
 
@@ -465,40 +629,27 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message) {
+
+        geoBloackCalled = true ;
+
         if (checkGeoBlockOutputModel == null) {
-            // countryCode = "";
-            noInternetLayout.setVisibility(View.GONE);
-            geoBlockedLayout.setVisibility(View.VISIBLE);
+
+            geoBloackSuccessStatus = 3;
+
         } else {
             if (status > 0 && status == 200) {
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
-                SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-                planListInput.setAuthToken(authTokenStr);
-                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
-                asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+
+                geoBloackSuccessStatus = 1;
 
             } else if (status == 454) {
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
-
+                geoBloackSuccessStatus = 2;
 
             } else {
+                geoBloackSuccessStatus = 5;
 
-                noInternetTextView.setText("Oops something went wrong.Please try again later .");
-                noInternetLayout.setVisibility(View.VISIBLE);
-                geoBlockedLayout.setVisibility(View.GONE);
             }
         }
-
-       /* if (preferenceManager != null) {
-            preferenceManager.setCountryCodeToPref("AU");
-            SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-            planListInput.setAuthToken(authTokenStr);
-            planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-            GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
-            asynGetPlanid.executeOnExecutor(threadPoolExecutor);
-        }*/
 
     }
 
@@ -509,6 +660,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetPlanListPostExecuteCompleted(ArrayList<SubscriptionPlanOutputModel> planListOutput, int status) {
+
+        planListCalled = true;
+        planListSuccessStatus = 1;
         if (status > 0) {
             if (status == 200) {
                 languagePreference.setLanguageSharedPrefernce(PLAN_ID, "1");
@@ -519,10 +673,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             }
         }
 
-        IsRegistrationEnabledInputModel isRegistrationEnabledInputModel = new IsRegistrationEnabledInputModel();
-        isRegistrationEnabledInputModel.setAuthToken(authTokenStr);
-        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled = new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel, this, this);
-        asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
@@ -533,12 +683,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message, String response) {
 
+
+        isRegistrationEnabledCalled = true ;
+        isRegistrationEnabledSuccessStatus = 1;
         try {
-
             featureHandler.setDefaultFeaturePref(response);
+        } catch (Exception e) {}
 
-        } catch (Exception e) {
-        }
         /*@BISHAL
          */
         if (status == 200) {
@@ -570,18 +721,18 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             /*@BISHAL
              *Handle 455 status
              */
+
+            callProfileAPI();
+
         } else if (status == 455) {
-            //Util.login_registration_require=false;
+            callProfileAPI();
+
             featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "0");
+        }else {
+            isRegistrationEnabledMsg = "Oops something went wrong.Please try again later .";
+            isRegistrationEnabledSuccessStatus = 5;
         }
 
-
-        LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
-
-        LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-        languageListInputModel.setAuthToken(authTokenStr);
-        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
-        asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
 
     }
 
@@ -592,6 +743,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
+
+        languageListCalled = true;
+        languageListSuccessStatus = 1;
 
         this.default_Language = defaultLanguage;
         for (int i = 0; i < languageListOutputArray.size(); i++) {
@@ -613,6 +767,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if (languageModels.size() == 1) {
             preferenceManager.setLanguageListToPref("1");
+        }else {
+            preferenceManager.setLanguageListToPref(""+languageModels.size());
         }
         if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
             languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
@@ -637,6 +793,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+
+        genreCalled = true;
+        genreSuccessStatus = 1;
 
         if (code > 0) {
 
@@ -740,34 +899,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         preferenceManager.setGenreValuesArrayToPref(sb1.toString());
 
-        // This Code Is Done For The One Step Registration.
 
-
-        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
-
-            if (preferenceManager != null) {
-                user_Id = preferenceManager.getUseridFromPref();
-                email_Id = preferenceManager.getEmailIdFromPref();
-
-                if (user_Id != null && email_Id != null) {
-
-                    Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-                    get_userProfile_input.setAuthToken(authTokenStr);
-                    get_userProfile_input.setEmail(email_Id);
-                    get_userProfile_input.setUser_id(user_Id);
-                    get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
-                    asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
-
-                } else {
-                    Call_One_Step_Procedure();
-                }
-            } else {
-                Call_One_Step_Procedure();
-            }
-        } else {
-            Call_One_Step_Procedure();
-        }
     }
 
     @Override
@@ -777,6 +909,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+
+        profileCalled = true ;
+        profileSuccessStatus = 1;
+
         if (status == null) {
             isSubscribed = "0";
         }
@@ -784,7 +920,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             isSubscribed = get_userProfile_output.getIsSubscribed();
         }
 
-        Call_One_Step_Procedure();
     }
 
     @Override
@@ -796,27 +931,27 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
 
         if (status > 0 && status == 200) {
-
-
             try {
                 Util.parseLanguage(languagePreference, jsonResponse, default_Language);
             } catch (JSONException e) {
                 e.printStackTrace();
                 noInternetLayout.setVisibility(View.GONE);
             }
-
         } else {
             noInternetLayout.setVisibility(View.GONE);
         }
 
-        GenreListInput genreListInput = new GenreListInput();
-        genreListInput.setAuthToken(authTokenStr);
+        languageTranslationCalled = true;
+        languageTranslationSuccessStatus = 1;
 
-        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
-        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+
     }
 
     public void Call_One_Step_Procedure() {
+
+
+        stopApicheckTimer();
+
 
         if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
             LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
@@ -845,6 +980,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         //============================End Added For FCM===========================//
     }
 
+    private void stopApicheckTimer() {
+        try{
+            if(apiChcekTimer != null){
+                apiChcekTimer.cancel();
+                apiChcekTimer = null;
+            }
+        }catch (Exception e){}
+    }
+
 
     /**
      * Jump to next screen by checking condition.
@@ -852,7 +996,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private void jumpToNextScreen() {
         Intent mIntent;
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
-//        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION).trim()).equals("1")) {
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
             if (loggedInStr != null) {
                 if (isSubscribed.trim().equals("1")) {
@@ -894,20 +1037,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
+        sdkInitializerCalled = true;
+
         if (status == 200) {
-
-            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-
+            sdkInitializerSuccessStatus = 1;
         } else if (status == Util.ERROR_CODE_EXPIRED_AUTHTOKEN) {
-            geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
-            noInternetLayout.setVisibility(View.GONE);
-            geoBlockedLayout.setVisibility(View.VISIBLE);
+            sdkInitializerSuccessStatus = 2;
         } else {
-
-            noInternetTextView.setText("Oops something went wrong.Please try again later .");
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
+            sdkInitializerSuccessStatus = 5;
         }
 
     }
@@ -968,5 +1105,38 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         AlertDialog alert = alertBuilder.create();
         alert.show();
+    }
+
+    public void callProfileAPI(){
+
+        if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+
+            if (preferenceManager != null) {
+                user_Id = preferenceManager.getUseridFromPref();
+                email_Id = preferenceManager.getEmailIdFromPref();
+
+                if (user_Id != null && email_Id != null) {
+
+                    Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+                    get_userProfile_input.setAuthToken(authTokenStr);
+                    get_userProfile_input.setEmail(email_Id);
+                    get_userProfile_input.setUser_id(user_Id);
+                    get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+                    asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try{
+            if(apiChcekTimer != null){
+                apiChcekTimer.cancel();
+            }
+        }catch (Exception e){}
     }
 }

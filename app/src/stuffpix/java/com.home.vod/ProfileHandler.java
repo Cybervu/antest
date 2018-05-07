@@ -39,7 +39,7 @@ public class ProfileHandler {
 
     public ProfileHandler(Activity context){
         this.context=context;
-        editProfileNameEditText = (EditText) context.findViewById(R.id.editProfileNameEditText);
+        editProfileNameEditText = (EditText) context.findViewById(R.id.name);
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editProfileNameEditText);
         languagePreference = LanguagePreference.getLanguagePreference(context);
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT,DEFAULT_NAME_HINT));

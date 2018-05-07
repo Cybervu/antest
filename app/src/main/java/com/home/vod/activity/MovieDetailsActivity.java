@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +31,6 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,16 +40,22 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.AQuery;
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
-import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.home.apisdk.APIUrlConstant;
+import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
@@ -72,17 +78,19 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.MonitizationDetailsInput;
-import com.home.apisdk.apiModel.MonitizationDetailsOutput;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MonitizationDetailsInput;
+import com.home.apisdk.apiModel.MonitizationDetailsOutput;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.ValidateVoucherInputModel;
+import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
+import com.home.apisdk.apiModel.Video_Details_Output;
+import com.home.apisdk.apiModel.ViewContentRatingInputModel;
+import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.vod.BuildConfig;
@@ -92,52 +100,28 @@ import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
-import com.home.apisdk.apiModel.ViewContentRatingInputModel;
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.adapter.LanguageCustomAdapter;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.androidquery.AQuery;
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.common.images.WebImage;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
-
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
-
 import com.squareup.picasso.Picasso;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -151,12 +135,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HttpsURLConnection;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ResumePopupActivity;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
@@ -183,12 +171,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_HAS_FAVORITE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -213,6 +199,9 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
@@ -237,10 +226,7 @@ import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
 
 
 public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.LogoutListener,
@@ -374,6 +360,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public static final int VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE = 9898;
     public static final int PAYMENT_REQUESTCODE = 8889;
 
+    // Kushal
+    int option_menu_id[] = {R.id.login, R.id.register, R.id.language_popup, R.id.profile, R.id.purchase, R.id.logout};
+    PopupWindow changeSortPopUp;
+    LinearLayout linearLayout[];
+    boolean[] visibility;
+    String[] lang;
+//
+
 
     // voucher ends here //
 
@@ -417,14 +411,42 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
+        // Kushal
+
+        /*
+        Set translation key to array
+        */
+        String[] translateKey = {LOGIN,
+                BTN_REGISTER,
+                LANGUAGE_POPUP_LANGUAGE,
+                PROFILE,
+                PURCHASE_HISTORY,
+                LOGOUT};
+            /*
+            Set transalation value to array
+            */
+        String[] translateValue = {
+                DEFAULT_LOGIN,
+                DEFAULT_BTN_REGISTER,
+                DEFAULT_LANGUAGE_POPUP_LANGUAGE,
+                DEFAULT_PROFILE,
+                DEFAULT_PURCHASE_HISTORY,
+                DEFAULT_LOGOUT};
+        /*
+        Set the lang array with the langugePreference of key and value array
+        */
+        lang = new String[translateKey.length];
+        for (int i = 0; i < lang.length; i++)
+            lang[i] = languagePreference.getTextofLanguage(translateKey[i], translateValue[i]);
+        visibility = episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference, featureHandler);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.search:
                 final Intent searchIntent = new Intent(MovieDetailsActivity.this, SearchActivity.class);
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
@@ -538,6 +560,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 dlgAlert.create().show();
 
                 return false;
+            case R.id.option:
+               /*
+               Show to popup menu
+                */
+                showPopupMenu(findViewById(R.id.option));
+                return false;
+
             default:
                 break;
         }
@@ -545,6 +574,155 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         return false;
     }
 
+    private void showPopupMenu(View viewById) {
+        CardView viewGroup = (CardView)findViewById(R.id.option_menu_layout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+        View layout = layoutInflater.inflate(R.layout.option_menu_popup_layout, viewGroup);
+        initLayouts(layout);
+
+        // Creating the PopupWindow
+        changeSortPopUp = new PopupWindow(this);
+        changeSortPopUp.setContentView(layout);
+        changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setFocusable(true);
+        changeSortPopUp.setElevation(50);
+        // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+        int OFFSET_X = 0;
+        int OFFSET_Y = getSupportActionBar().getHeight();
+
+        // Clear the default translucent background
+        changeSortPopUp.setBackgroundDrawable(getDrawable(R.drawable.white));
+        changeSortPopUp.showAsDropDown(viewById, OFFSET_X + 20, -OFFSET_Y + 20);
+
+        for (int i=0; i<option_menu_id.length; i++){
+            if (visibility[i])
+                linearLayout[i].setVisibility(View.VISIBLE);
+            else
+                linearLayout[i].setVisibility(View.GONE);
+        }
+        for (int i=0; i<option_menu_id.length;i++){
+            final int finalI = i;
+            linearLayout[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    performWork(linearLayout[finalI].getId(),changeSortPopUp);
+
+                }
+            });
+        }
+    }
+
+    private void performWork(int id, PopupWindow changeSortPopUp) {
+        switch (id){
+            case R.id.login:
+                Intent loginIntent = new Intent(MovieDetailsActivity.this, LoginActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(loginIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.register:
+                Intent registerIntent = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(registerIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.language_popup:
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                if (languageModel != null && languageModel.size() > 0) {
+                    ShowLanguagePopup();
+                } else {
+                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(authTokenStr);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
+                    asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+                }
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.profile:
+                Intent profileIntent = new Intent(MovieDetailsActivity.this, ProfileActivity.class);
+                profileIntent.putExtra("EMAIL", email);
+                profileIntent.putExtra("LOGID", id);
+                startActivity(profileIntent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.purchase:
+                Intent purchaseintent = new Intent(MovieDetailsActivity.this, PurchaseHistoryActivity.class);
+                startActivity(purchaseintent);
+                changeSortPopUp.dismiss();
+                break;
+            case R.id.logout:
+                logoutPopup();
+                changeSortPopUp.dismiss();
+                break;
+            default:
+                break;
+
+
+        }
+    }
+
+    private void logoutPopup() {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+                if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
+                    // dialog.cancel();
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+
+        dlgAlert.create().show();
+    }
+
+    private void initLayouts(View layout) {
+        linearLayout= new LinearLayout[option_menu_id.length];
+        for (int i=0; i<option_menu_id.length;i++){
+            linearLayout[i]=(LinearLayout) layout.findViewById(option_menu_id[i]);
+            setLanguageToTextViews(linearLayout[i],i);
+
+        }
+    }
+
+    private void setLanguageToTextViews(LinearLayout linearLayout, int i) {
+        int count= linearLayout.getChildCount();
+        for (int j=0;j<count;j++){
+            View vw= linearLayout.getChildAt(j);
+            if(vw instanceof TextView){
+                ((TextView) vw).setText(lang[i]);
+            }
+        }
+    }
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
@@ -805,9 +983,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-           /* @author :Bishal
-            * every time check_for_subscription is 0 in page but when we click the play button then its value chenge to 1
-            */
+        /* @author :Bishal
+         * every time check_for_subscription is 0 in page but when we click the play button then its value chenge to 1
+         */
         Util.check_for_subscription = 0;
         setContentView(R.layout.details_layout);
         playerModel = new Player();
@@ -828,15 +1006,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 onBackPressed();
             }
         });
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
+
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         Util.goToLibraryplayer = false;
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        playButton = (ImageView) findViewById(R.id.playButton);
-        watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
+        playButton = (ImageView) findViewById(R.id.play);
+        watchTrailerButton = (Button) findViewById(R.id.viewtrailer);
         preorderButton = (Button) findViewById(R.id.preOrderButton);
-        favorite_view = (ImageView) findViewById(R.id.favorite_view);
+        favorite_view = (ImageView) findViewById(R.id.favourite);
         Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         watchTrailerButton.setTypeface(submitButtonTypeface);
         Typeface preorderButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
@@ -844,25 +1026,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         preorderButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
-        videoTitle = (TextView) findViewById(R.id.videoTitle);
-        videoGenreTextView = (TextView) findViewById(R.id.videoGenreTextView);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        videoTitle = (TextView) findViewById(R.id.content_title);
+        videoGenreTextView = (TextView) findViewById(R.id.genre);
+        videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
+      //  ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         viewStoryLayout = (RelativeLayout) findViewById(R.id.viewStoryLayout);
 
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
 
 
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         videoCastCrewTitleTextView.setVisibility(View.GONE);
 
 
         // *** rating***////
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar = (RatingBar) findViewById(R.id.rating);
         ratingBar.setFocusable(false);
         ratingBar.setVisibility(View.GONE);
 
@@ -871,7 +1053,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 return true;
             }
         });
-        viewRatingTextView = (TextView) findViewById(R.id.viewRatingTextView);
+        viewRatingTextView = (TextView) findViewById(R.id.review);
         // loggedInStr = preferenceManager.getLoginStatusFromPref();
         //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
 
@@ -1455,14 +1637,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
-     /*chromecast-------------------------------------*/
+        /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -2108,6 +2290,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            /*@Override
+            public void onAdBreakStatusUpdated() {
+
+            }*/
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override
@@ -2523,7 +2710,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                 /* @author :Bishal
+                /* @author :Bishal
                  * send activity result when goes to Subscriptionactivity
                  */
                 startActivityForResult(intent, VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE);
@@ -2737,21 +2924,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
 
-            if(_video_details_output.isWatermark_status()){
+            if (_video_details_output.isWatermark_status()) {
                 playerModel.setWaterMark(true);
-                if(_video_details_output.isWatermark_email())
+                if (_video_details_output.isWatermark_email())
                     playerModel.useEmail(true);
                 else
                     playerModel.useEmail(false);
-                if(_video_details_output.isWatermark_ip())
+                if (_video_details_output.isWatermark_ip())
                     playerModel.useIp(true);
                 else
                     playerModel.useIp(false);
-                if(_video_details_output.isWatermark_date())
+                if (_video_details_output.isWatermark_date())
                     playerModel.useDate(true);
                 else
                     playerModel.useDate(false);
-            }else{
+            } else {
                 playerModel.setWaterMark(false);
             }
 
@@ -3543,7 +3730,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     preferenceManager.setLanguageChangeStatus("1");
 
 
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -3918,5 +4104,26 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
     }
 
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
+    }
 
 }

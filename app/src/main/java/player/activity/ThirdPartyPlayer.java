@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -48,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class  ThirdPartyPlayer extends ActionBarActivity {
+public class  ThirdPartyPlayer extends AppCompatActivity {
     WebView mWebView;
     Player playerModel;
     // Toolbar mActionBarToolbar;

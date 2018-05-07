@@ -5,10 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
 
     <application
         android:name=".VodApplication"
@@ -63,6 +64,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="player.activity.DacastPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name="player.activity.YouTubeAPIActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

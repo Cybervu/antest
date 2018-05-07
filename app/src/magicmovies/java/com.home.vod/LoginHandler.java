@@ -23,8 +23,8 @@ public class LoginHandler {
     private LanguagePreference languagePreference;
     public LoginHandler(LoginActivity context){
         this.context=context;
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.login_google);
+        btnLogin = (LinearLayout) context.findViewById(R.id.login_facebook);
         btnLogin.setVisibility(View.GONE);
 
     }

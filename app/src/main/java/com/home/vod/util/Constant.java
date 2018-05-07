@@ -22,4 +22,8 @@ public class Constant {
     public static final int IMAGE_PORTAIT_CONST = 1;
     public static final int IMAGE_LANDSCAPE_CONST = 0;
 
+
+    public static final String[] PUBLIC_IPS_FOR_DISABLE_GEOBLOCK = {"111.93.166.194","111.93.165.17","111.93.165.18","111.93.165.19","111.93.165.20",
+            "111.93.165.22","182.74.0.134"};
+
 }

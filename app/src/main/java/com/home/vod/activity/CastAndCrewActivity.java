@@ -7,14 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiController.GetCelibrityAsyntask;
 import com.home.apisdk.apiModel.CelibrityInputModel;
@@ -25,10 +24,8 @@ import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -58,7 +55,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
 
     Toolbar mActionBarToolbar;
-   //TextView castCrewTitleTextView;
+    //TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
     ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
@@ -90,7 +87,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -100,6 +97,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
                 finish();
             }
         });
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
@@ -110,9 +110,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         castAndCrewDetailsIntentHandler = new CastAndCrewDetailsIntentHandler(this);
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
-       // castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-       // FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
-       // castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+        // castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
+        // FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
+        // castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = NetworkStatus.getInstance().isConnected(this);
 
@@ -378,13 +378,37 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         dlgAlert.create().show();
     }
 
-   /* @Override
-    public void onBackPressed()
-    {
-        finish();
-//        overridePendingTransition(0, 0);
-        super.onBackPressed();
-    }*/
-
-
+    /* @Override
+     public void onBackPressed()
+     {
+         finish();
+ //        overridePendingTransition(0, 0);
+         super.onBackPressed();
+     }*/
+/*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if (t.getText().toString().equals(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE))) {
+                   t.setId(R.id.page_title_cast_crew);
+                }
+            }
+        }
+    }
 }
