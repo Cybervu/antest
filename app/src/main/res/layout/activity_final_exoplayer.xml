@@ -298,6 +298,12 @@
                     android:orientation="horizontal">
 
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8">
+
+
                     <TextView
                         android:id="@+id/videoTitle"
                         android:layout_width="wrap_content"
@@ -311,13 +317,16 @@
                         android:textColor="@color/player_title_color"
                         android:textSize="@dimen/videotitle_text_size"
                         android:textStyle="bold" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2">
                     <RelativeLayout
                         android:id="@+id/downloadRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textlinearlayout"
-
                         android:visibility="gone">
 
                         <ImageView
@@ -357,6 +366,7 @@
                             android:textSize="@dimen/percentage_text_size"
                             android:visibility="gone" />
                     </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -371,7 +381,7 @@
                     android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="@dimen/genre_textsize" />
+                    android:textSize="@dimen/preorderbtn_text_size" />
 
 
                 <LinearLayout
@@ -396,7 +406,7 @@
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView"
@@ -410,7 +420,7 @@
                         android:paddingRight="@dimen/padding_right4dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView1"
@@ -421,7 +431,7 @@
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
 
                     <TextView
@@ -433,7 +443,7 @@
                         android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
                 </LinearLayout>
 
@@ -448,7 +458,7 @@
                     android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="@dimen/genre_textsize" />
+                    android:textSize="@dimen/preorderbtn_text_size" />
 
                 <TextView
                     android:id="@+id/videoCastCrewTitleTextView"

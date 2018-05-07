@@ -68,6 +68,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -129,6 +130,8 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static player.utils.Util.authTokenStr;
 
 
@@ -207,7 +210,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	String resolution = "BEST";
 	String genreTextView;
 	String ipAddressStr = "";
-
+	/*@Author Bishal
+	*Added for viemore view less
+	 */
+	private static final int MAX_LINES = 2;
 	String files, filename, path, movieid, duration, rdate;
 	// load asynctask
 
@@ -464,34 +470,34 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
 		videoTitle = (TextView) findViewById(R.id.videoTitle);
-		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
 		videoTitle.setTypeface(videoTitleface);
 		GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		GenreTextView.setTypeface(GenreTextViewface);
 		videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-		Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoDurationTextView.setTypeface(videoDurationTextViewface);
 		videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-		Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
 		videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-		Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
 		videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
 		story = (TextView) findViewById(R.id.story);
-		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		story.setTypeface(storyTypeface);
 		videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
 
 		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		buttonLayoutParams.setMargins(0, 0, 0, 170);
+		buttonLayoutParams.setMargins(20, 0, 20, 170);
 		story.setLayoutParams(buttonLayoutParams);
 
 
@@ -615,6 +621,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 			}
 		});
+		if (SubTitlePath.size() < 1) {
+			cc_layout.setVisibility(View.GONE);
+		}
 
 		cc_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -665,6 +674,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			if (storydes != null && !storydes.matches("")) {
 				story.setText(storydes);
 				story.setVisibility(View.VISIBLE);
+				/*@Author Bishal
+	             *Added for viemore view less
+	            */
+				ResizableCustomView.doResizeTextView(MarlinBroadbandExample.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 			} else {
 				story.setVisibility(View.GONE);
 			}

@@ -300,6 +300,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                     }
 
+
                     // for single clips and movies
                     else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent detailsIntent = new Intent(SearchActivity.this, MovieDetailsActivity.class);

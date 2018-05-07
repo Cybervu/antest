@@ -170,7 +170,7 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 20
             targetSdkVersion 25
-            versionName '3.3.2'
+            versionName '3.3.3'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
 //            buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -634,8 +634,8 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
             buildConfigField "String", "AUTH_TOKEN", "\"9c44e5b269f6e44d0d0d26d4ef047c47\""
-            versionCode 1
-            versionName '1.1'
+            versionCode 2
+            versionName '1.2'
         }
         icablevision_staging_ {
             dimension 'environment'
@@ -917,6 +917,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:palette-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

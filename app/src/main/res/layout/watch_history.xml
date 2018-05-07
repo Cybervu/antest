@@ -17,13 +17,27 @@
         android:layout_marginLeft="@dimen/marginright5dp"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"/>-->
+    <Button
+        android:id="@+id/clearhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_radious"
+        android:textColor="@color/buttonTextColor"
+        android:textSize="@dimen/submit_text_size"
+        android:text="Clear History"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margintop5dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/marginright5dp"
+        android:visibility="gone"
+        />
 
 
     <GridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sectionTitle"
+        android:layout_below="@id/clearhistory"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_marginTop="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"

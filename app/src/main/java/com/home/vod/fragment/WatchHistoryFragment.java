@@ -43,6 +43,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -66,10 +67,12 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiController.ClearHistoryAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiController.WatchHistoryAsynTask;
+import com.home.apisdk.apiModel.ClearHistoryInputModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
@@ -161,7 +164,8 @@ import static com.home.vod.util.Constant.authTokenStr;
  */
 public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynctask.VideoDetailsListener,
         GetValidateUserAsynTask.GetValidateUserListener,
-        WatchHistoryAsynTask.WatchHistoryListener, GetIpAddressAsynTask.IpAddressListener {
+        WatchHistoryAsynTask.WatchHistoryListener, GetIpAddressAsynTask.IpAddressListener,ClearHistoryAsynTask.ClearHistoryListener {
+
 
 
     /***************chromecast**********************/
@@ -332,6 +336,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
     String videoUrlStr;
     private int mLastFirstVisibleItem;
     private boolean mIsScrollingUp;
+    private Button clearhistorybutton;
+
 
     RelativeLayout filterView;
     ArrayList<String> genreArray;
@@ -421,6 +427,27 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
+        clearhistorybutton=(Button) rootView.findViewById(R.id.clearhistory);
+        clearhistorybutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                    ClearHistoryInputModel clearHistoryInputModel = new ClearHistoryInputModel();
+                    clearHistoryInputModel.setAuthToken(authTokenStr);
+                    clearHistoryInputModel.setUser_id(preferenceManager.getUseridFromPref());
+                    clearHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    ClearHistoryAsynTask clearHistoryAsynTask = new ClearHistoryAsynTask(clearHistoryInputModel, WatchHistoryFragment.this, context);
+                    clearHistoryAsynTask.executeOnExecutor(threadPoolExecutor);
+
+                } else {
+                    noDataLayout.setVisibility(View.GONE);
+                    noInternetConnectionLayout.setVisibility(View.VISIBLE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+                }
+            }
+        });
        /* gridView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(context,2);
         gridView.setLayoutManager(mLayoutManager);
@@ -1487,6 +1514,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
                     itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
                 }
+                if (itemData!=null && itemData.size()!=0){
+                    clearhistorybutton.setVisibility(View.VISIBLE);
+                }
 
                 if (message == null)
                     message = "0";
@@ -1555,7 +1585,40 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
     }
 
+    @Override
+    public void onClearHistoryPreExecuteStarted() {
+        videoPDialog.show();
+    }
 
+    @Override
+    public void onClearHistoryPostExecuteCompleted(int status, String message) {
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (Exception ex) {
+        }
+        if (status==200){
+            itemData.clear();
+            if (firstTime == true) {
+                new RetrieveFeedTask().execute(videoImageStrToHeight);
+            } else {
+                AsynLOADUI loadUI = new AsynLOADUI();
+                loadUI.executeOnExecutor(threadPoolExecutor);
+            }
+            clearhistorybutton.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+
+        }else {
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

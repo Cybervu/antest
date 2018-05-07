@@ -28,6 +28,7 @@
     <color name="selectedHintColor">#0b8f66</color>
     <color name="hintTextColor">#999</color>
     <color name="editTexColor">#666</color>
+    <color name="downloadTextColor">#666</color>
     <color name="button_background">#2acb99</color>
     <color name="view_more_less">#2acb99</color>
     <color name="castCrewTitleTextColor">#2acb99</color>
@@ -77,6 +78,7 @@
     <color name="aboutustestcolor">#fff</color>
     <color name="purchaseBackgroundColor">#666666</color>
     <color name="purchaseTextColor">#000</color>
+    <color name="purchasepricecolor">#ffffff</color>
     <color name="chromecast_color">#ffffff</color>
 
     <!--added for subtitle color by anu-->

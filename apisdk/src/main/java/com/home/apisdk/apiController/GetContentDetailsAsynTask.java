@@ -197,25 +197,29 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         movieTypeStr = movieTypeStr.replaceAll("\\]", "");
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
+//                            movieTypeStr = movieTypeStr.replaceAll("[^\\u00]", "");
                         movieTypeStr = movieTypeStr.trim();
                         movieTypeStr =Html.fromHtml(movieTypeStr).toString();
-                        Pattern pattern = Pattern.compile("[^a-z A-Z]");
-                        Matcher matcher = pattern.matcher(movieTypeStr);
-                        movieTypeStr= matcher.replaceAll("");
-                      //  movieTypeStr = movieTypeStr.replaceAll(" ","");
-//                        movieTypeStr = movieTypeStr.replaceAll(" ,",",");
+
 
                         if(movieTypeStr.contains(",")){
                             String data[] = movieTypeStr.split(",");
                             movieTypeStr = "";
+                            Pattern pattern = Pattern.compile("[^a-z A-Z]");
+
                             for(int i=0;i<data.length;i++){
-                                movieTypeStr = movieTypeStr+(data[i].trim())+", ";
+                                String x = ((pattern.matcher(data[i].trim())).replaceAll("")).trim();
+                                movieTypeStr = movieTypeStr+(x)+", ";
                             }
                             movieTypeStr =movieTypeStr.trim();
                             if (movieTypeStr.charAt(movieTypeStr.length()-1)==','){
                                 movieTypeStr = movieTypeStr.substring(0, movieTypeStr.length() - 1);
                                 movieTypeStr =movieTypeStr.trim();
                             }
+                        }else{
+                            Pattern pattern = Pattern.compile("[^a-z A-Z]");
+                            Matcher matcher = pattern.matcher(movieTypeStr);
+                            movieTypeStr= matcher.replaceAll("");
                         }
                         contentDetailsOutput.setGenre(movieTypeStr);
 

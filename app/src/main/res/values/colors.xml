@@ -141,6 +141,7 @@
  <color name="selectedHintColor">#0b8f66</color>
  <color name="hintTextColor">#999</color>
  <color name="editTexColor">#666</color>
+ <color name="downloadTextColor">#666</color>
  <color name="buttonBackgroundColor">#2acb99</color>
  <color name="loginTextColor">#2acb99</color>
  <color name="signUpTextColor">#2acb99</color>
@@ -170,6 +171,7 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseBackground">#e2e1e1</color>
  <color name="purchaseTextColor">#000</color>
+ <color name="purchasepricecolor">#ffffff</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#000</color>
 

@@ -101,6 +101,7 @@ public class Subtitle_Resolution extends Activity {
         subtitle_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Subtitle_Resolution.this,SubtitleList.class);
                 intent.putExtra("SubTitleName",SubTitleName);
                 intent.putExtra("SubTitlePath",SubTitlePath);
@@ -114,6 +115,7 @@ public class Subtitle_Resolution extends Activity {
         main_layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Util.call_finish_at_onUserLeaveHint = true;
                 Intent playerIntent = new Intent();
                 playerIntent.putExtra("position", "nothing");
                 playerIntent.putExtra("type", "subtitle_resolution");
@@ -128,6 +130,7 @@ public class Subtitle_Resolution extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Util.call_finish_at_onUserLeaveHint = true;
         Intent playerIntent = new Intent();
         playerIntent.putExtra("position", "nothing");
         playerIntent.putExtra("type", "subtitle_resolution");

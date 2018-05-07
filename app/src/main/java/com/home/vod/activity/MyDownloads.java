@@ -330,7 +330,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
         download = dbHelper.getContactt(emailIdStr, 1);
-        if (NetworkStatus.getInstance().isConnected(MyDownloads.this)){
+
             if (download.size() > 0) {
                 adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
                 list.setAdapter(adapter);
@@ -338,10 +338,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 nodata.setVisibility(View.VISIBLE);
                 noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
             }
-        }else {
-            nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-        }
+
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

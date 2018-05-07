@@ -575,7 +575,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (mCastSession!=null && mCastSession.isConnected()) {
 
             }else{
-                if (emVideoView != null) {
+                if (emVideoView != null && Util.call_finish_at_onUserLeaveHint && video_prepared) {
                     emVideoView.start();
                 }
             }
@@ -769,28 +769,28 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
         story = (TextView) findViewById(R.id.story);
-        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
@@ -3553,7 +3553,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (mCastSession!=null && mCastSession.isConnected()) {
 
             }else{
-                if (emVideoView != null) {
+                if (emVideoView != null && Util.call_finish_at_onUserLeaveHint) {
                     emVideoView.pause();
                 }
             }
