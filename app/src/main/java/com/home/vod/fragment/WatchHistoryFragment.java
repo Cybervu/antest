@@ -428,6 +428,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
+        /*@Author:Bishal
+        *ClearHistory Button added for clear the history
+         */
         clearhistorybutton=(Button) rootView.findViewById(R.id.clearhistory);
         clearhistorybutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1518,6 +1521,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
                     itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
                 }
+                 /*@Author:Bishal
+                  *When item data not null then only we can visible the clear button bidefault it was gone
+                  */
                 if (itemData!=null && itemData.size()!=0){
                     clearhistorybutton.setVisibility(View.VISIBLE);
                 }
@@ -1588,7 +1594,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
 
 
     }
-
+    /*@Author:Bishal
+    *Call ClearHistory Api
+     */
     @Override
     public void onClearHistoryPreExecuteStarted() {
         videoPDialog.show();
@@ -1604,7 +1612,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         }
         if (status==200){
             itemData.clear();
-            if (firstTime == true) {
+            /*if (firstTime == true) {
                 new RetrieveFeedTask().execute(videoImageStrToHeight);
             } else {
                 AsynLOADUI loadUI = new AsynLOADUI();
@@ -1614,9 +1622,16 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);*/
+            customGridAdapter.notifyDataSetChanged();
+            clearhistorybutton.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
             footerView.setVisibility(View.GONE);
 
         }else {
+            clearhistorybutton.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
