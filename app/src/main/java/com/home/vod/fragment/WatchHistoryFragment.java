@@ -436,7 +436,6 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
             @Override
             public void onClick(View v) {
                 if (NetworkStatus.getInstance().isConnected(getActivity())) {
-
                     ClearHistoryInputModel clearHistoryInputModel = new ClearHistoryInputModel();
                     clearHistoryInputModel.setAuthToken(authTokenStr);
                     clearHistoryInputModel.setUser_id(preferenceManager.getUseridFromPref());
