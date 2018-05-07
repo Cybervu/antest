@@ -92,7 +92,10 @@
         <service
             android:name="player.activity.DataConsumptionService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true" />￼
+Pickbox tvAndroid
+hr.pickbox2.tv
+
 
 
         <activity

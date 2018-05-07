@@ -1,6 +1,9 @@
 package com.home.vod;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.home.apisdk.*;
 import com.crashlytics.android.Crashlytics;
@@ -14,7 +17,7 @@ import io.fabric.sdk.android.Fabric;
  * Created by muvi on 12/6/17.
  */
 
-public class VodApplication extends Application {
+public class VodApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -26,5 +29,10 @@ public class VodApplication extends Application {
         APIUrlConstant.BASE_URl=BuildConfig.SERVICE_BASE_PATH;
         LogUtil.showLog("MUVI PCKG NAME", SDKInitializer.user_Package_Name_At_Api+"::::"+getPackageName());
 
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

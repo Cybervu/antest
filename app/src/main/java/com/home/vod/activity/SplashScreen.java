@@ -299,7 +299,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
         } else {
-            if (status > 0 && status == 200) {
+            preferenceManager.setCountryCodeToPref("IN");
+            SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
+            planListInput.setAuthToken(authTokenStr);
+            planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
+            asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+           /* if (status > 0 && status == 200) {
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
                 SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
                 planListInput.setAuthToken(authTokenStr);
@@ -317,7 +323,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 noInternetTextView.setText("Oops something went wrong.Please try again later .");
                 noInternetLayout.setVisibility(View.VISIBLE);
                 geoBlockedLayout.setVisibility(View.GONE);
-            }
+            }*/
         }
 
        /* if (preferenceManager != null) {

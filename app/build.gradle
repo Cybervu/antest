@@ -925,6 +925,7 @@ dependencies {
     // Wheel Picker - Kushal
     compile 'com.github.BlackBoxVision:material-wheel-view:v0.0.1'
     compile 'com.webianks.library:scroll-choice:1.0.1'
+    compile 'com.android.support:multidex:1.0.3'
 }
 
 
