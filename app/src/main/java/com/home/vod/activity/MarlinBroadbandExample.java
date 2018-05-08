@@ -69,6 +69,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -129,6 +130,8 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static player.utils.Util.authTokenStr;
 
 
@@ -208,7 +211,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	String resolution = "BEST";
 	String genreTextView;
 	String ipAddressStr = "";
-
+	/*@Author Bishal
+	*Added for viemore view less
+	 */
+	private static final int MAX_LINES = 2;
 	String files, filename, path, movieid, duration, rdate;
 	// load asynctask
 
@@ -466,7 +472,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
 		videoTitle = (TextView) findViewById(R.id.content_title);
-		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
 		videoTitle.setTypeface(videoTitleface);
 		GenreTextView = (TextView) findViewById(R.id.genre);
 		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -616,6 +622,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 			}
 		});
+		if (SubTitlePath.size() < 1) {
+			cc_layout.setVisibility(View.GONE);
+		}
 
 		cc_layout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -666,6 +675,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			if (storydes != null && !storydes.matches("")) {
 				story.setText(storydes);
 				story.setVisibility(View.VISIBLE);
+				/*@Author Bishal
+	             *Added for viemore view less
+	            */
+				ResizableCustomView.doResizeTextView(MarlinBroadbandExample.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 			} else {
 				story.setVisibility(View.GONE);
 			}

@@ -1,6 +1,7 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.app.MediaRouteButton;
 import android.view.Display;
 import android.view.View;
@@ -37,12 +38,12 @@ public class SplashScreenHandler {
 
     }
     public void handlePhoneSplashUI(ImageView imageResize){
-        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+        //imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Display display = context.getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash1, dpWidth, dpHeight));
+        imageResize.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){

@@ -36,6 +36,18 @@
             android:textColor="@color/no_internet_textColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/noInternetTextView"
+            android:text="try again!"
+            android:background="@android:color/transparent"
+            android:textColor="@color/no_internet_textColor"
+            android:id="@+id/tryAgainButton"
+            android:layout_centerInParent="true"
+            />
+
     </RelativeLayout>
 
     <RelativeLayout

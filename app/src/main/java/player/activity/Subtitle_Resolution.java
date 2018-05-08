@@ -134,6 +134,7 @@ public class Subtitle_Resolution extends Activity {
         subtitle_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Subtitle_Resolution.this,SubtitleList.class);
                 intent.putExtra("SubTitleName",SubTitleName);
                 intent.putExtra("SubTitlePath",SubTitlePath);

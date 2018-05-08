@@ -23,6 +23,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -85,6 +87,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
 import static com.home.vod.preferences.LanguagePreference.HAS_FAVORITE;
@@ -100,6 +103,7 @@ import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
 import static com.home.vod.preferences.LanguagePreference.SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
@@ -120,6 +124,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private String[] genreValueArrayToSend;
     private RelativeLayout noInternetLayout;
     private RelativeLayout geoBlockedLayout;
+    private Button tryagainbutton;
     private String default_Language = "";
     private ArrayList<LanguageModel> languageModels = new ArrayList<>();
     private TextView noInternetTextView, geoTextView;
@@ -128,6 +133,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private String user_Id = "", email_Id = "", isSubscribed = "0";
 
     Timer GoogleIdGeneraterTimer;
+    ProgressBarHandler pDialog;
     Timer apiChcekTimer;
 
     /*Asynctask on background thread*/
@@ -196,8 +202,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
     private void _init() {
-
-
+        pDialog = new ProgressBarHandler(SplashScreen.this);
         Util.getDPI(this);
         Util.printMD5Key(this);
         dbHelper = new DBHelper(SplashScreen.this);
@@ -208,6 +213,31 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         geoBlockedLayout = (RelativeLayout) findViewById(R.id.geoBlocked);
+        /*@Author :Bishal
+        *If there is no internet connection then we shoe try agin button and call again apicall method in the click listner
+         */
+        tryagainbutton=(Button) findViewById(R.id.tryAgainButton);
+        tryagainbutton.setText(languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN));
+        tryagainbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noInternetLayout.setVisibility(View.GONE);
+                pDialog.show();
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        pDialog.dismiss();
+                        if (NetworkStatus.getInstance().isConnected(SplashScreen.this)) {
+                            apiCall();
+                        }else {
+                            noInternetLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, 1000);
+
+            }
+        });
 
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
@@ -233,6 +263,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     private void apiCall() {
+
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Do something for lollipop and above versions
             noInternetTextView.setText("The app is not compatible for this OS.");

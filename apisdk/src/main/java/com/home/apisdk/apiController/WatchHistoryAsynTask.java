@@ -117,7 +117,6 @@ public class WatchHistoryAsynTask extends AsyncTask<MyLibraryInputModel, Void, V
             httppost.addHeader(HeaderConstants.COUNTRY, this.watchHistoryInputModel.getCountry());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.watchHistoryInputModel.getLang_code());
 
-
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);

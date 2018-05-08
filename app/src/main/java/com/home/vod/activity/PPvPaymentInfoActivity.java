@@ -573,6 +573,32 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
         voucher_code = (EditText) findViewById(R.id.voucher_code);
         couponCodeEditText.addTextChangedListener(filterTextWatcher);
+         /*@Author Bishal
+                *This issue is reported in Blenhim films while we click voucher radio button and at that time coupan edit text is visible
+                * and we click coupan code and apply it then voucher and payment layout override with each other this id fixed here
+                 */
+        couponCodeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creditCardLayout.setVisibility(View.VISIBLE);
+                paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                voucherLinearLayout.setVisibility(View.GONE);
+                voucherRadioButton.setChecked(false);
+                payWithCreditCardRadioButton.setChecked(true);
+            }
+        });
+        couponCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    creditCardLayout.setVisibility(View.VISIBLE);
+                    paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                    voucherLinearLayout.setVisibility(View.GONE);
+                    voucherRadioButton.setChecked(false);
+                    payWithCreditCardRadioButton.setChecked(true);
+                }
+            }
+        });
 
         FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts), nameOnCardEditText);
         FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts), cardNumberEditText);
@@ -644,6 +670,14 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         voucherRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*@Author Bishal
+                *This issue is reported in Blenhim films while we click voucher radio button and at that time coupan edit text is visible
+                * and we click coupan code and apply it then voucher and payment layout override with each other this id fixed here
+                 */
+                voucherRadioButton.setChecked(true);
+                payWithCreditCardRadioButton.setChecked(false);
+                couponCodeEditText.getText().clear();
+           //end
                 creditCardLayout.setVisibility(View.GONE);
                 paymentOptionLinearLayout.setVisibility(View.VISIBLE);
                 voucherLinearLayout.setVisibility(View.VISIBLE);

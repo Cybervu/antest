@@ -168,6 +168,11 @@ public class APIUrlConstant {
      * endpoint to get Watch History Details API
      */
     public static String WATCH_HISTORY = "watchHistory";
+
+    /**
+     * endpoint to get Clear Watch History Details API
+     */
+    public static String Clear_WATCH_HISTORY = "clearWatchHistory";
     /**
      * endpoint to get Register User Payment Details API
      */
@@ -520,6 +525,9 @@ public class APIUrlConstant {
 
     public static String getWatchHistory() {
         return BASE_URl + WATCH_HISTORY;
+    }
+    public static String getClearWatchHistory() {
+        return BASE_URl + Clear_WATCH_HISTORY;
     }
 
     public static String getRegisterUserPaymentUrl() {
