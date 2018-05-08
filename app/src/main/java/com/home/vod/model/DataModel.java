@@ -79,7 +79,7 @@ public class DataModel {
     String purchase_type = "show";
     String thirdPartyUrl = "";
     String movieUniqueId,streamUniqueId;
-    String videoResolution = "BEST";
+    String videoResolution = "";
     String videoUrl = "";
     private String videoTitle = "";
     private String videoGenre = "";

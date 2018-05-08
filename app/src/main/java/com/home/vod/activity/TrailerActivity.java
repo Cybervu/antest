@@ -259,7 +259,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             userIdStr = "";
         }
 
-        findViewById(R.id.subtitle_change_btn).setVisibility(View.INVISIBLE);
+        findViewById(R.id.setting).setVisibility(View.INVISIBLE);
         compress_layout=(LinearLayout)findViewById(R.id.compress_layout);
         emVideoView = (VideoView) findViewById(R.id.player_screen);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);

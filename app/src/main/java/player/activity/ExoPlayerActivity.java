@@ -771,28 +771,28 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         subtitle_change_btn = (ImageView) findViewById(R.id.setting);
         latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
         videoTitle = (TextView) findViewById(R.id.content_title);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.genre);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
         videoDurationTextView = (TextView) findViewById(R.id.video_duration);
-        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
         story = (TextView) findViewById(R.id.story);
-        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
-        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
@@ -826,7 +826,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (!isDrm) {
 
-            Util.VideoResolution = "Auto";
+           // Util.VideoResolution = "Auto";
+            if(playerModel.getVideoResolution()!=null) {
+                if (playerModel.getVideoResolution().isEmpty() || playerModel.getVideoResolution().equals(""))
+                    Util.VideoResolution = "BEST";
+                else {
+                    if (playerModel.getVideoResolution().trim().equals("BEST")) {
+                        Util.VideoResolution = "BEST";
+                    } else {
+                        Util.VideoResolution = playerModel.getVideoResolution().trim() + "p";
+                    }
+                }
+            }else
+                Util.VideoResolution = "BEST";
+
+
             /**ad **/
 
             if (playerModel.getMidRoll() == 1) {
@@ -851,21 +865,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 ResolutionUrl.clear();
             }
 
-            if (ResolutionUrl.size() < 1) {
+           /* if (ResolutionUrl.size() < 1) {
                 Log.v("MUVI", "resolution image Invisible called");
             } else {
                 ResolutionUrl.add(playerModel.getVideoUrl().trim());
                 ResolutionFormat.add("Auto");
-            }
+            }*/
 
             if (ResolutionFormat.size() > 0) {
-                Collections.reverse(ResolutionFormat);
+                //Collections.reverse(ResolutionFormat);
                 for (int m = 0; m < ResolutionFormat.size(); m++) {
                     Log.v("MUVI", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
                 }
             }
             if (ResolutionUrl.size() > 0) {
-                Collections.reverse(ResolutionUrl);
+                //Collections.reverse(ResolutionUrl);
                 for (int n = 0; n < ResolutionUrl.size(); n++) {
                     Log.v("MUVI", "RESOLUTION URL======" + ResolutionUrl.get(n));
                 }
@@ -3509,7 +3523,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             return;
         }
 
-        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         subtitleText.setTypeface(videoGenreTextViewTypeface);
         subtitleText.setText(Html.fromHtml(text.content));
         subtitleText.setVisibility(View.VISIBLE);
@@ -3979,9 +3993,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 Log.v("MUVI1", "url = " + jsonArray.getJSONObject(i).optString("url"));
                             }
 
-                            Collections.reverse(List_Of_Resolution_Format);
-                            Collections.reverse(List_Of_Resolution_Url);
-                            Collections.reverse(List_Of_Resolution_Url_Used_For_Download);
+                           // Collections.reverse(List_Of_Resolution_Format);
+                            //Collections.reverse(List_Of_Resolution_Url);
+                            //Collections.reverse(List_Of_Resolution_Url_Used_For_Download);
 
                         }
                         //=======================End====================//

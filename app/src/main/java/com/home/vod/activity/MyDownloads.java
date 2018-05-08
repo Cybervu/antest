@@ -85,6 +85,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.hideBcakIcon;
 import static java.lang.Thread.sleep;
 
 public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTask.IpAddressListener, VideoDetailsAsynctask.VideoDetailsListener {
@@ -220,18 +221,18 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     MediaInfo mediaInfo;
     /*chromecast-------------------------------------*/
 
+    //boolean hideBack= hideBcakIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydownload);
         dbHelper = new DBHelper(MyDownloads.this);
-
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         dbHelper.getWritableDatabase();
         registerReceiver(UpadateDownloadList, new IntentFilter("NewVodeoAvailable"));
-
         /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
@@ -282,7 +283,16 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             @Override
             public void onClick(View v) {
                 //onBackPressed();
-                finish();
+                if(hideBcakIcon){
+                    finish();
+                }else{
+                    Intent intent= new Intent(MyDownloads.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -290,10 +300,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);
 
-        if (com.home.vod.util.Util.hideBcakIcon) {
+        if (hideBcakIcon) {
             mActionBarToolbar.setNavigationIcon(null);
+            //hideBcakIcon= true;
 //            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            com.home.vod.util.Util.hideBcakIcon = false;
         }
 
 
@@ -316,7 +326,6 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
         download = dbHelper.getContactt(emailIdStr, 1);
-        if (NetworkStatus.getInstance().isConnected(MyDownloads.this)) {
             if (download.size() > 0) {
                 adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
                 list.setAdapter(adapter);
@@ -324,10 +333,6 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 nodata.setVisibility(View.VISIBLE);
                 noDataTextView.setText(languagePreference.getTextofLanguage(NO_DOWNLOADED_VIDEOS, DEFAULT_NO_DOWNLOADED_VIDEOS));
             }
-        } else {
-            nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-        }
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -405,6 +410,7 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(UpadateDownloadList);
+        hideBcakIcon=false;
     }
 
 
@@ -432,7 +438,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
         item7 = menu.findItem(R.id.search);
-        item7.setVisible(true);
+        if(hideBcakIcon)
+        item7.setVisible(false);
+        else
+            item7.setVisible(true);
         item8 = menu.findItem(R.id.option);
         item8.setVisible(false);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
@@ -1548,6 +1557,21 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
                 if (t.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD)))
                     t.setId(R.id.page_title_my_download);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(hideBcakIcon){
+            finish();
+        }else{
+            Intent intent= new Intent(MyDownloads.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
     }
 }

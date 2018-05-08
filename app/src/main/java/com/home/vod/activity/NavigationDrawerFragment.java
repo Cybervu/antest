@@ -338,11 +338,17 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 mDrawerLayout.closeDrawers();
                             } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
 
-                                Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
+                                /*Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
                                 favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(favoriteIntent);
-                                mDrawerLayout.closeDrawers();
+                                mDrawerLayout.closeDrawers();*/
+                                 Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
+                    Bundle bundle = new Bundle();
+                                    bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                    mDrawerLayout.closeDrawers();
                             } else {
 
                                 if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")) {

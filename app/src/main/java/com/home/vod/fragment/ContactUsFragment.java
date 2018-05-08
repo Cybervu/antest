@@ -506,7 +506,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             View v = mActionBarToolbar.getChildAt(i);
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
-                b.setId(R.id.back);
+                b.setId(R.id.menu);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

@@ -163,7 +163,7 @@
                     android:gravity="right">
 
                     <ImageView
-                        android:id="@+id/subtitle_change_btn"
+                        android:id="@+id/setting"
                         android:layout_width="@dimen/subtitle_width"
                         android:layout_height="@dimen/subtitle_height"
                         android:layout_marginRight="@dimen/payment_relative_margin"
@@ -367,6 +367,7 @@
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/textColor_margin"
                 android:text=""
+                android:textStyle="bold"
                 android:textColor="@color/videotextColor"
                 android:textSize="@dimen/vdiogenere_text_size" />
 

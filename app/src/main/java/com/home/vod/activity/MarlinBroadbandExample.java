@@ -460,34 +460,34 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
 		emVideoView = (VideoView) findViewById(R.id.player_screen);
 		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
-		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
+		subtitleText = (TextView) findViewById(R.id.subtitle);
 		subtitle_change_btn = (ImageView) findViewById(R.id.setting);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
 		videoTitle = (TextView) findViewById(R.id.content_title);
-		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+		Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoTitle.setTypeface(videoTitleface);
 		GenreTextView = (TextView) findViewById(R.id.genre);
-		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		GenreTextView.setTypeface(GenreTextViewface);
 		videoDurationTextView = (TextView) findViewById(R.id.video_duration);
-		Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoDurationTextView.setTypeface(videoDurationTextViewface);
 		videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-		Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
 		videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-		Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
 		videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
 		story = (TextView) findViewById(R.id.story);
-		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		story.setTypeface(storyTypeface);
 		videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
-		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
@@ -1889,7 +1889,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			return;
 		}
 
-		Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+		Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		subtitleText.setTypeface(videoGenreTextViewTypeface);
 		subtitleText.setText(Html.fromHtml(text.content));
 		subtitleText.setVisibility(View.VISIBLE);

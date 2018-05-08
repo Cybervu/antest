@@ -41,7 +41,9 @@ public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAd
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.language.setText(languageModels.get(position).getLanguageName());
 
-      /*  if (Util.getTextofLanguage(mContext, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE).equalsIgnoreCase(languageModels.get(position).getLanguageId())){
+    /*    if(LanguagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE))
+
+        if (Util.getTextofLanguage(mContext, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE).equalsIgnoreCase(languageModels.get(position).getLanguageId())){
             holder.imageView.setImageResource(R.drawable.selected);
         }else{
             holder.imageView.setImageResource(R.drawable.unselected);
@@ -62,6 +64,8 @@ public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAd
         }
         else
         {
+            String code= LanguagePreference.getLanguagePreference(mContext).getTextofLanguage(SELECTED_LANGUAGE_CODE,
+                    DEFAULT_SELECTED_LANGUAGE_CODE);
             if (LanguagePreference.getLanguagePreference(mContext).getTextofLanguage(SELECTED_LANGUAGE_CODE,
                     DEFAULT_SELECTED_LANGUAGE_CODE).equals(languageModels.get(position).getLanguageId())){
                 holder.imageView.setImageResource(R.drawable.selected);

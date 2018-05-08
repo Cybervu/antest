@@ -1799,7 +1799,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }*/
             }else if (v instanceof TextView) {
                 TextView t = (TextView) v;
-                t.setId(R.id.page_title);
+                t.setId(R.id.app_title);
             }
         }
     }

@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,9 +63,11 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -143,6 +147,9 @@ public class HomeFragment extends Fragment implements
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
 
 
  /*       *//***************chromecast**********************//*
@@ -768,6 +775,27 @@ public class HomeFragment extends Fragment implements
           /*  phandler = new ProgressBarHandler(getActivity());
             phandler.show();*/
 
+        }
+    }
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.menu);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                    t.setId(R.id.app_title);
+            }
         }
     }
 }
