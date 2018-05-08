@@ -1523,9 +1523,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                  /*@Author:Bishal
                   *When item data not null then only we can visible the clear button bidefault it was gone
                   */
-                if (itemData!=null && itemData.size()!=0){
+                /*if (itemData!=null && itemData.size()!=0){
                     clearhistorybutton.setVisibility(View.VISIBLE);
-                }
+                }*/
 
                 if (message == null)
                     message = "0";

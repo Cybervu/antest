@@ -105,6 +105,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
+
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
@@ -113,111 +114,111 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by user on 28-06-2015.
  */
-public class MyFavouriteFragment extends Fragment  implements
- ViewFavouriteAsynTask.ViewFavouriteListener, DeleteFavAsync.DeleteFavListener {
+public class MyFavouriteFragment extends Fragment implements
+        ViewFavouriteAsynTask.ViewFavouriteListener, DeleteFavAsync.DeleteFavListener {
 
-public static ProgressBarHandler progressBarHandler;
-        String email, id;
-        LanguageCustomAdapter languageCustomAdapter;
-        LanguagePreference languagePreference;
-        FeatureHandler featureHandler;
-        String Default_Language = "";
-        String Previous_Selected_Language = "";
-        int prevPosition = 0;
-        public static String isEpisodeStr;
-        AlertDialog alert;
-        ProgressBarHandler pDialog;
+    public static ProgressBarHandler progressBarHandler;
+    String email, id;
+    LanguageCustomAdapter languageCustomAdapter;
+    LanguagePreference languagePreference;
+    FeatureHandler featureHandler;
+    String Default_Language = "";
+    String Previous_Selected_Language = "";
+    int prevPosition = 0;
+    public static String isEpisodeStr;
+    AlertDialog alert;
+    ProgressBarHandler pDialog;
 
-       int index;
-        String sucessMsg;
+    int index;
+    String sucessMsg;
 
 
-        ProgressBarHandler videoPDialog;
-        String videoImageStrToHeight;
-private boolean mIsScrollingUp;
-private int mLastFirstVisibleItem;
+    ProgressBarHandler videoPDialog;
+    String videoImageStrToHeight;
+    private boolean mIsScrollingUp;
+    private int mLastFirstVisibleItem;
 
-        int videoHeight = 185;
-        int videoWidth = 256;
-        GridItem itemToPlay;
-        Toolbar mActionBarToolbar;
-        GridLayoutManager mLayoutManager;
+    int videoHeight = 185;
+    int videoWidth = 256;
+    GridItem itemToPlay;
+    Toolbar mActionBarToolbar;
+    GridLayoutManager mLayoutManager;
 
-        // private TextView sectionTitle;
-        //Register Dialog
-        ////////
-        String movieUniqueId, FavMoviePoster = "";
-        String FebMoviename = "";
+    // private TextView sectionTitle;
+    //Register Dialog
+    ////////
+    String movieUniqueId, FavMoviePoster = "";
+    String FebMoviename = "";
 
-private final String KEY_RECYCLER_STATE = "recycler_state";
-private static Bundle mBundleRecyclerViewState;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle mBundleRecyclerViewState;
 
 //for no internet
 
-private RelativeLayout noInternetConnectionLayout;
+    private RelativeLayout noInternetConnectionLayout;
 
-        //firsttime load
-        boolean firstTime = false;
-
-
-        /* Handling GridView Scrolling*/
-
-        int scrolledPosition = 0;
-        boolean scrolling;
-private static final String KEY_TRANSITION_EFFECT = "transition_effect";
-
-        // private int mCurrentTransitionEffect = JazzyHelper.HELIX;
-
-        //no data
-        RelativeLayout noDataLayout;
-
-        /*The Data to be posted*/
-        int offset = 1;
-        int limit = 10;
-        int listSize = 0;
-        int itemsInServer = 0;
-
-        GridItem data_send;
-
-        /*Asynctask on background thread*/
-        int corePoolSize = 60;
-         int maximumPoolSize = 80;
-         int keepAliveTime = 10;
-         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
-         Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-        TextView noDataTextView;
-        TextView noInternetTextView;
-        //Set Context
-        int isLogin = 0;
-        public static PreferenceManager preferenceManager;
-//Adapter for GridView
-private FavoriteFragmentAdapter customGridAdapter;
-        boolean a = false;
+    //firsttime load
+    boolean firstTime = false;
 
 
-        //Model for GridView
-        ArrayList<GridItem> itemData = new ArrayList<GridItem>();
-        String posterUrl, loggedInStr;
-        String sectionName;
-        String sectionId;
-        // UI
-        ViewFavouriteAsynTask asyncViewFavorite;
-private GridView gridView;
-        // private JazzyGridView gridView;
-        RelativeLayout footerView;
-public EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    /* Handling GridView Scrolling*/
+
+    int scrolledPosition = 0;
+    boolean scrolling;
+    private static final String KEY_TRANSITION_EFFECT = "transition_effect";
+
+    // private int mCurrentTransitionEffect = JazzyHelper.HELIX;
+
+    //no data
+    RelativeLayout noDataLayout;
+
+    /*The Data to be posted*/
+    int offset = 1;
+    int limit = 10;
+    int listSize = 0;
+    int itemsInServer = 0;
+
+    GridItem data_send;
+
+    /*Asynctask on background thread*/
+    int corePoolSize = 60;
+    int maximumPoolSize = 80;
+    int keepAliveTime = 10;
+    BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+    Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+    TextView noDataTextView;
+    TextView noInternetTextView;
+    //Set Context
+    int isLogin = 0;
+    public static PreferenceManager preferenceManager;
+    //Adapter for GridView
+    private FavoriteFragmentAdapter customGridAdapter;
+    boolean a = false;
+
+
+    //Model for GridView
+    ArrayList<GridItem> itemData = new ArrayList<GridItem>();
+    String posterUrl, loggedInStr;
+    String sectionName;
+    String sectionId;
+    // UI
+    ViewFavouriteAsynTask asyncViewFavorite;
+    private GridView gridView;
+    // private JazzyGridView gridView;
+    RelativeLayout footerView;
+    public EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
 ///
 
-//////
-        Context context;
-        public static DeleteFavAsync.DeleteFavListener listener;
+    //////
+    Context context;
+    public static DeleteFavAsync.DeleteFavListener listener;
 
-@Override
- public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_view_more, container, false);
-       context = getActivity();
-       rootView.setFocusableInTouchMode(true);
+        context = getActivity();
+        rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -242,10 +243,12 @@ public EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
                 return false;
             }
         });
-    setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         featureHandler = FeatureHandler.getFeaturePreference(getActivity());
+        mActionBarToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        mActionBarToolbar.setVisibility(View.GONE);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("sectionName"));
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
@@ -338,163 +341,163 @@ public void onClick(View v) {
         gridView.setAdapter(customGridAdapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-@Override
-public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-        a = true;
-        index = i;
-        if (customGridAdapter.getItem(i).isSelected() == false) {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                a = true;
+                index = i;
+                if (customGridAdapter.getItem(i).isSelected() == false) {
 
-        customGridAdapter.getItem(i).setSelected(true);
-        customGridAdapter.getItem(i).setClicked(true);
+                    customGridAdapter.getItem(i).setSelected(true);
+                    customGridAdapter.getItem(i).setClicked(true);
 
-        data_send = itemData.get(i);
+                    data_send = itemData.get(i);
 
-        String url = data_send.getImage();
+                    String url = data_send.getImage();
 
 
-        } else {
-        customGridAdapter.getItem(i).setSelected(false);
+                } else {
+                    customGridAdapter.getItem(i).setSelected(false);
 
-        }
-        customGridAdapter.notifyDataSetChanged();
-        return false;
-        }
+                }
+                customGridAdapter.notifyDataSetChanged();
+                return false;
+            }
         });
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-@Override
-public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        GridItem item = itemData.get(position);
-        itemToPlay = item;
+                GridItem item = itemData.get(position);
+                itemToPlay = item;
 
-        String posterUrl = item.getImage();
-        String movieName = item.getTitle();
-        String movieGenre = item.getMovieGenre();
-        String moviePermalink = item.getPermalink();
-
-
-        LogUtil.showLog("bibhu", "moviePermalink =" + moviePermalink);
-        String movieTypeId = item.getVideoTypeId();
-        if (a) {
-        a = false;
-        return;
-        } else {
-
-        if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity());
-        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
-        new DialogInterface.OnClickListener() {
-public void onClick(DialogInterface dialog, int id) {
-        dialog.cancel();
-        }
-        });
-        dlgAlert.create().show();
-
-        } else {
-
-        if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-final Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailsActivity.class);
-        movieDetailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
-        movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        getActivity().runOnUiThread(new Runnable() {
-public void run() {
-        movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(movieDetailsIntent);
-        }
-        });
+                String posterUrl = item.getImage();
+                String movieName = item.getTitle();
+                String movieGenre = item.getMovieGenre();
+                String moviePermalink = item.getPermalink();
 
 
-        } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-final Intent detailsIntent = new Intent(getActivity(), ShowWithEpisodesActivity.class);
-        detailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
-        getActivity().runOnUiThread(new Runnable() {
-public void run() {
-        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(detailsIntent);
-        }
-        });
-        }
-        }
-        }
+                LogUtil.showLog("bibhu", "moviePermalink =" + moviePermalink);
+                String movieTypeId = item.getVideoTypeId();
+                if (a) {
+                    a = false;
+                    return;
+                } else {
+
+                    if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity());
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setCancelable(false);
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        dlgAlert.create().show();
+
+                    } else {
+
+                        if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
+                            final Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailsActivity.class);
+                            movieDetailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
+                            movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(movieDetailsIntent);
+                                }
+                            });
 
 
-        }
+                        } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
+                            final Intent detailsIntent = new Intent(getActivity(), ShowWithEpisodesActivity.class);
+                            detailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(detailsIntent);
+                                }
+                            });
+                        }
+                    }
+                }
+
+
+            }
         });
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
-@Override
-public void onScrollStateChanged(AbsListView view, int scrollState) {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-        if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
-        footerView.setVisibility(View.GONE);
-        return;
+                if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                    footerView.setVisibility(View.GONE);
+                    return;
 
-        }
+                }
 
-        if (view.getId() == gridView.getId()) {
-final int currentFirstVisibleItem = gridView.getFirstVisiblePosition();
+                if (view.getId() == gridView.getId()) {
+                    final int currentFirstVisibleItem = gridView.getFirstVisiblePosition();
 
-        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-        mIsScrollingUp = false;
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                        mIsScrollingUp = false;
 
-        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-        mIsScrollingUp = true;
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        mIsScrollingUp = true;
 
-        }
+                    }
 
-        mLastFirstVisibleItem = currentFirstVisibleItem;
-        }
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-        scrolling = false;
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    scrolling = false;
 
-        } else if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                } else if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
 
-        scrolling = true;
+                    scrolling = true;
 
-        }
-        }
+                }
+            }
 
-@Override
-public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-
-        if (scrolling == true && mIsScrollingUp == false) {
-
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-
-        listSize = itemData.size();
-        if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
-        return;
-
-        }
-        offset += 1;
-
-        if (NetworkStatus.getInstance().isConnected(getActivity())) {
-
-        // default data
-
-        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(authTokenStr);
-        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
-
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,MyFavouriteFragment.this, context);
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
-        scrolling = false;
+                if (scrolling == true && mIsScrollingUp == false) {
 
-        }
+                    if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
-        }
+                        listSize = itemData.size();
+                        if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                            return;
 
-        }
+                        }
+                        offset += 1;
 
-        }
+                        if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                            // default data
+
+                            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+                            viewFavouriteInputModel.setAuthToken(authTokenStr);
+                            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
+
+                            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, MyFavouriteFragment.this, context);
+                            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+
+
+                            scrolling = false;
+
+                        }
+
+                    }
+
+                }
+
+            }
         });
 
 
@@ -509,38 +512,38 @@ public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCoun
         //Load first 10 data items
 
         if (itemData != null && itemData.size() > 0) {
-        itemData.clear();
+            itemData.clear();
         }
         offset = 1;
         scrolledPosition = 0;
         listSize = 0;
         itemsInServer = 0;
         if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-        limit = 20;
+            limit = 20;
         } else {
-        limit = 15;
+            limit = 15;
         }
         scrolling = false;
 
         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-        ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(authTokenStr);
-        viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
+            ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
+            viewFavouriteInputModel.setAuthToken(authTokenStr);
+            viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, this, getActivity());
-        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, this, getActivity());
+            asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
         } else {
-        noInternetConnectionLayout.setVisibility(View.VISIBLE);
-        noDataLayout.setVisibility(View.GONE);
-        gridView.setVisibility(View.GONE);
-        footerView.setVisibility(View.GONE);
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
         }
         LogUtil.showLog("MUVI", "authtokenn = " + authTokenStr);
         LogUtil.showLog("MUVI", "user id = " + preferenceManager.getUseridFromPref());
 
-return rootView;
-        }
+        return rootView;
+    }
 
 /*
 
@@ -557,22 +560,22 @@ public void onBackPressed() {
 */
 
 
-@Override
-public void onViewFavouritePreExecuteStarted() {
+    @Override
+    public void onViewFavouritePreExecuteStarted() {
         pDialog = new ProgressBarHandler(getActivity());
         pDialog.show();
-        }
+    }
 
-@Override
-public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
+    @Override
+    public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
 
         LogUtil.showLog("MUVI", "item data ==" + itemData);
 
         try {
-        if (pDialog != null && pDialog.isShowing()) {
-        pDialog.hide();
-        pDialog = null;
-        }
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
         } catch (IllegalArgumentException ex) {
 
         }
@@ -581,43 +584,43 @@ public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputMod
 
         for (int i = 0; i < viewFavouriteOutputModelArray.size(); i++) {
 
-        String movieName = viewFavouriteOutputModelArray.get(i).getTitle();
-        String contentTypesId = viewFavouriteOutputModelArray.get(i).getContentTypesId();
-        movieImageStr = viewFavouriteOutputModelArray.get(i).getPoster();
-        String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
-        isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
-        movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
-        itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
-        LogUtil.showLog("MUVI", "item data ==" + itemData);
+            String movieName = viewFavouriteOutputModelArray.get(i).getTitle();
+            String contentTypesId = viewFavouriteOutputModelArray.get(i).getContentTypesId();
+            movieImageStr = viewFavouriteOutputModelArray.get(i).getPoster();
+            String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
+            isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
+            movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
+            LogUtil.showLog("MUVI", "item data ==" + itemData);
 
         }
         if (itemData.size() <= 0) {
 
-        try {
-        if (videoPDialog != null && videoPDialog.isShowing()) {
-        videoPDialog.hide();
-        videoPDialog = null;
-        }
-        } catch (IllegalArgumentException ex) {
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
 
-        noDataLayout.setVisibility(View.VISIBLE);
-        noInternetConnectionLayout.setVisibility(View.GONE);
-        gridView.setVisibility(View.GONE);
-        footerView.setVisibility(View.GONE);
-        }
-        noDataLayout.setVisibility(View.VISIBLE);
-        noInternetConnectionLayout.setVisibility(View.GONE);
-        gridView.setVisibility(View.GONE);
-        footerView.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
         } else {
-        footerView.setVisibility(View.GONE);
-        gridView.setVisibility(View.VISIBLE);
-        noInternetConnectionLayout.setVisibility(View.GONE);
-        noDataLayout.setVisibility(View.GONE);
-        videoImageStrToHeight = movieImageStr;
-        if (firstTime == true) {
+            footerView.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            videoImageStrToHeight = movieImageStr;
+            if (firstTime == true) {
 
-        new RetrieveFeedTask().execute(videoImageStrToHeight);
+                new RetrieveFeedTask().execute(videoImageStrToHeight);
 
                /* Picasso.with(this).load(videoImageStrToHeight
                 ).error(R.drawable.no_image).into(new Target() {
@@ -648,121 +651,121 @@ public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputMod
                     }
                 });*/
 
-        } else {
-        AsynLOADUI loadUI = new AsynLOADUI();
-        loadUI.executeOnExecutor(threadPoolExecutor);
+            } else {
+                AsynLOADUI loadUI = new AsynLOADUI();
+                loadUI.executeOnExecutor(threadPoolExecutor);
+            }
         }
-        }
-        }
+    }
 
-@Override
-public void onDeleteFavPreExecuteStarted() {
+    @Override
+    public void onDeleteFavPreExecuteStarted() {
         pDialog = new ProgressBarHandler(getActivity());
         pDialog.show();
-        }
+    }
 
-@Override
-public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
+    @Override
+    public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
 
         if (pDialog.isShowing() && pDialog != null) {
-        pDialog.hide();
+            pDialog.hide();
         }
         if (status == 200) {
 
-        this.sucessMsg = sucessMsg;
-        showToast();
+            this.sucessMsg = sucessMsg;
+            showToast();
 
-        LogUtil.showLog("ANU", "REMOVED");
-        if (itemData != null && itemData.size() > 0)
-        itemData.remove(index);
-        gridView.invalidateViews();
-        customGridAdapter.notifyDataSetChanged();
-        gridView.setAdapter(customGridAdapter);
+            LogUtil.showLog("ANU", "REMOVED");
+            if (itemData != null && itemData.size() > 0)
+                itemData.remove(index);
+            gridView.invalidateViews();
+            customGridAdapter.notifyDataSetChanged();
+            gridView.setAdapter(customGridAdapter);
 
-        Intent Sintent = new Intent("ITEM_STATUS");
-        Sintent.putExtra("movie_uniq_id", movieUniqueId);
+            Intent Sintent = new Intent("ITEM_STATUS");
+            Sintent.putExtra("movie_uniq_id", movieUniqueId);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(Sintent);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(Sintent);
         }
-        }
-
-
-private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
-    @Override
-    protected Void doInBackground(Void... voids) {
-        return null;
     }
 
-    protected void onPostExecute(Void result) {
-        float density = getResources().getDisplayMetrics().density;
 
-        if (firstTime == true) {
-            try {
-                if (videoPDialog != null && videoPDialog.isShowing()) {
-                    videoPDialog.hide();
-                    videoPDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
+    private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
 
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
-                footerView.setVisibility(View.GONE);
-            }
+        protected void onPostExecute(Void result) {
+            float density = getResources().getDisplayMetrics().density;
 
-            gridView.smoothScrollToPosition(0);
-            firstTime = false;
-            ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
-            layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-            gridView.setLayoutParams(layoutParams);
-            gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-            gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (firstTime == true) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
 
-            if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-                if (videoWidth > videoHeight) {
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
-                } else {
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
                 }
 
-            } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-                if (videoWidth > videoHeight) {
+                gridView.smoothScrollToPosition(0);
+                firstTime = false;
+                ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
+                gridView.setLayoutParams(layoutParams);
+                gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+                gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    if (videoWidth > videoHeight) {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    if (videoWidth > videoHeight) {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                    } else {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    }
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
                     gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+
+
                 } else {
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    if (videoWidth > videoHeight) {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    } else {
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                    }
+
                 }
-
-            } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
-
-
-            } else {
                 if (videoWidth > videoHeight) {
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
-                } else {
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
-                }
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout_land, itemData);
+                    } else {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_280_grid_layout, itemData);
 
-            }
-            if (videoWidth > videoHeight) {
-                if (density >= 3.5 && density <= 4.0) {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout_land, itemData);
+                    }
+                    gridView.setAdapter(customGridAdapter);
                 } else {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_280_grid_layout, itemData);
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout, itemData);
+                    } else {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_grid_layout, itemData);
 
+                    }
+                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
                 }
-                gridView.setAdapter(customGridAdapter);
-            } else {
-                if (density >= 3.5 && density <= 4.0) {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout, itemData);
-                } else {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_grid_layout, itemData);
-
-                }
-                // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
-                gridView.setAdapter(customGridAdapter);
-            }
 
               /*  if (videoWidth > videoHeight) {
                     customGridAdapter = new VideoFilterAdapter(getActivity(), R.layout.videos_280_grid_layout, itemData);
@@ -773,11 +776,11 @@ private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
                 }*/
 
 
-        } else {
-            // save RecyclerView state
-            mBundleRecyclerViewState = new Bundle();
-            Parcelable listState = gridView.onSaveInstanceState();
-            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+            } else {
+                // save RecyclerView state
+                mBundleRecyclerViewState = new Bundle();
+                Parcelable listState = gridView.onSaveInstanceState();
+                mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
               /*  if (videoWidth > videoHeight) {
@@ -788,33 +791,33 @@ private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
                     gridView.setAdapter(customGridAdapter);
                 }*/
 
-            if (videoWidth > videoHeight) {
-                if (density >= 3.5 && density <= 4.0) {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout_land, itemData);
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout_land, itemData);
+                    } else {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_280_grid_layout, itemData);
+
+                    }
+                    gridView.setAdapter(customGridAdapter);
                 } else {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_280_grid_layout, itemData);
+                    if (density >= 3.5 && density <= 4.0) {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout, itemData);
+                    } else {
+                        customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_grid_layout, itemData);
 
+                    }
+                    gridView.setAdapter(customGridAdapter);
                 }
-                gridView.setAdapter(customGridAdapter);
-            } else {
-                if (density >= 3.5 && density <= 4.0) {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.nexus_videos_grid_layout, itemData);
-                } else {
-                    customGridAdapter = new FavoriteFragmentAdapter(getActivity(), R.layout.videos_grid_layout, itemData);
 
+                if (mBundleRecyclerViewState != null) {
+                    gridView.onRestoreInstanceState(listState);
                 }
-                gridView.setAdapter(customGridAdapter);
-            }
 
-            if (mBundleRecyclerViewState != null) {
-                gridView.onRestoreInstanceState(listState);
             }
-
         }
+
+
     }
-
-
-}
  /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -868,7 +871,7 @@ private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         return false;
     }*/
 
-  @Override
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
 /***************chromecast**********************/
@@ -905,18 +908,17 @@ private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
     }
 
 
+    public enum PlaybackLocation {
+        LOCAL,
+        REMOTE
+    }
 
-public enum PlaybackLocation {
-    LOCAL,
-    REMOTE
-}
-
-/**
- * List of various states that we can be in
- */
-public enum PlaybackState {
-    PLAYING, PAUSED, BUFFERING, IDLE
-}
+    /**
+     * List of various states that we can be in
+     */
+    public enum PlaybackState {
+        PLAYING, PAUSED, BUFFERING, IDLE
+    }
 
     private FavoriteActivity.PlaybackLocation mLocation;
     private FavoriteActivity.PlaybackState mPlaybackState;
@@ -929,52 +931,52 @@ public enum PlaybackState {
     private CastContext mCastContext;
     private CastSession mCastSession;
 
-private class MySessionManagerListener implements SessionManagerListener<CastSession> {
+    private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
-    @Override
-    public void onSessionEnded(CastSession session, int error) {
-        if (session == mCastSession) {
-            mCastSession = null;
+        @Override
+        public void onSessionEnded(CastSession session, int error) {
+            if (session == mCastSession) {
+                mCastSession = null;
+            }
+            // invalidateOptionsMenu();
         }
-       // invalidateOptionsMenu();
-    }
 
-    @Override
-    public void onSessionResumed(CastSession session, boolean wasSuspended) {
-        mCastSession = session;
-        //invalidateOptionsMenu();
-    }
+        @Override
+        public void onSessionResumed(CastSession session, boolean wasSuspended) {
+            mCastSession = session;
+            //invalidateOptionsMenu();
+        }
 
-    @Override
-    public void onSessionStarted(CastSession session, String sessionId) {
-        mCastSession = session;
-        //invalidateOptionsMenu();
-    }
+        @Override
+        public void onSessionStarted(CastSession session, String sessionId) {
+            mCastSession = session;
+            //invalidateOptionsMenu();
+        }
 
-    @Override
-    public void onSessionStarting(CastSession session) {
-    }
+        @Override
+        public void onSessionStarting(CastSession session) {
+        }
 
-    @Override
-    public void onSessionStartFailed(CastSession session, int error) {
-    }
+        @Override
+        public void onSessionStartFailed(CastSession session, int error) {
+        }
 
-    @Override
-    public void onSessionEnding(CastSession session) {
-    }
+        @Override
+        public void onSessionEnding(CastSession session) {
+        }
 
-    @Override
-    public void onSessionResuming(CastSession session, String sessionId) {
-    }
+        @Override
+        public void onSessionResuming(CastSession session, String sessionId) {
+        }
 
-    @Override
-    public void onSessionResumeFailed(CastSession session, int error) {
-    }
+        @Override
+        public void onSessionResumeFailed(CastSession session, int error) {
+        }
 
-    @Override
-    public void onSessionSuspended(CastSession session, int reason) {
+        @Override
+        public void onSessionSuspended(CastSession session, int reason) {
+        }
     }
-}
 
 
     MediaInfo mediaInfo;
@@ -1112,8 +1114,6 @@ private class MySessionManagerListener implements SessionManagerListener<CastSes
 
         return false;
     }*/
-
-
     public void ShowLanguagePopup() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
@@ -1227,55 +1227,55 @@ private class MySessionManagerListener implements SessionManagerListener<CastSes
 
     }
 
-public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
+    public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
 
-    private GestureDetector gestureDetector;
-    private FavoriteActivity.ClickListener1 clickListener;
+        private GestureDetector gestureDetector;
+        private FavoriteActivity.ClickListener1 clickListener;
 
-    public RecyclerTouchListener1(Context context, final RecyclerView recyclerView, final FavoriteActivity.ClickListener1 clickListener) {
-        this.clickListener = clickListener;
-        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && clickListener != null) {
-                    clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+        public RecyclerTouchListener1(Context context, final RecyclerView recyclerView, final FavoriteActivity.ClickListener1 clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
                 }
-            }
-        });
-    }
 
-    @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-        View child = rv.findChildViewUnder(e.getX(), e.getY());
-        if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-            clickListener.onClick(child, rv.getChildPosition(child));
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    }
+                }
+            });
         }
-        return false;
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
     }
 
-    @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    public interface ClickListener1 {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
     }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-    }
-}
-
-
-public interface ClickListener1 {
-    void onClick(View view, int position);
-
-    void onLongClick(View view, int position);
-}
 
 
     public void removeFavorite(GridItem gridItem, int pos) {
@@ -1287,15 +1287,14 @@ public interface ClickListener1 {
         deleteFavInputModel.setIsEpisode(isEpisodeStr);
         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel,MyFavouriteFragment.this, context);
+        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MyFavouriteFragment.this, context);
         deleteFavAsync.executeOnExecutor(threadPoolExecutor);
 
 
     }
 
 
-
-        public void showToast() {
+    public void showToast() {
         // Create layout inflator object to inflate toast.xml file
         LayoutInflater inflater = getLayoutInflater();
 
@@ -1314,51 +1313,51 @@ public interface ClickListener1 {
 
     }
 
-class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+    class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
 
-    private Exception exception;
-    private ProgressBarHandler phandler;
+        private Exception exception;
+        private ProgressBarHandler phandler;
 
-    protected Void doInBackground(String... urls) {
-        try {
-
-
-            URL url = new URL(urls[0]);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            videoHeight = bmp.getHeight();
-            videoWidth = bmp.getWidth();
+        protected Void doInBackground(String... urls) {
+            try {
 
 
-            LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
-            LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+                URL url = new URL(urls[0]);
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight();
+                videoWidth = bmp.getWidth();
 
-            return null;
-        } catch (Exception e) {
-            this.exception = e;
-            return null;
+
+                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+
+                return null;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
         }
-    }
 
-    protected void onPostExecute(Void feed) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
+        protected void onPostExecute(Void feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
 
            /* if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }*/
 
-        AsynLOADUI loadUI = new AsynLOADUI();
-        loadUI.executeOnExecutor(threadPoolExecutor);
-    }
+            AsynLOADUI loadUI = new AsynLOADUI();
+            loadUI.executeOnExecutor(threadPoolExecutor);
+        }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
           /*  phandler = new ProgressBarHandler(getActivity());
             phandler.show();*/
 
+        }
     }
-}
 
     private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
         for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
@@ -1375,9 +1374,9 @@ class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
-            }else if (v instanceof TextView) {
+            } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
-                if (t.getText().toString().equals(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE))) {
+                if (t.getText().toString().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
                     t.setId(R.id.page_title_my_favourite);
                 }
             }
@@ -1385,46 +1384,40 @@ class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
     }
 
 
-
-
     ///
 
 
-        public class FavoriteFragmentAdapter extends ArrayAdapter<GridItem> {
-                private int layoutResourceId;
-                boolean close = false;
-                private ArrayList<GridItem> data = new ArrayList<GridItem>();
-                private Activity mActivity;
-                LanguagePreference languagePreference;
+    public class FavoriteFragmentAdapter extends ArrayAdapter<GridItem> {
+        private int layoutResourceId;
+        boolean close = false;
+        private ArrayList<GridItem> data = new ArrayList<GridItem>();
+        private Activity mActivity;
+        LanguagePreference languagePreference;
 
-                public FavoriteFragmentAdapter(Activity mActivity, int layoutResourceId, ArrayList<GridItem> data) {
-                        super(mActivity, layoutResourceId, data);
-                        this.mActivity = mActivity;
-                        this.layoutResourceId = layoutResourceId;
-                        this.data = data;
-                        languagePreference = LanguagePreference.getLanguagePreference(mActivity);
-                }
-
-
-                @Override
-                public View getView(final int position, View convertView, ViewGroup parent) {
-                        View row = convertView;
-                        FavoriteFragmentAdapter1.ViewHolder holder = null;
-
-                        if (row == null) {
-                                LayoutInflater inflater = (mActivity).getLayoutInflater();
-                                row = inflater.inflate(layoutResourceId, parent, false);
-                                holder = new FavoriteFragmentAdapter1.ViewHolder();
-                                holder.title = (TextView) row.findViewById(R.id.movieTitle);
-                                holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
-                                holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
+        public FavoriteFragmentAdapter(Activity mActivity, int layoutResourceId, ArrayList<GridItem> data) {
+            super(mActivity, layoutResourceId, data);
+            this.mActivity = mActivity;
+            this.layoutResourceId = layoutResourceId;
+            this.data = data;
+            languagePreference = LanguagePreference.getLanguagePreference(mActivity);
+        }
 
 
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            FavoriteFragmentAdapter1.ViewHolder holder = null;
+
+            if (row == null) {
+                LayoutInflater inflater = (mActivity).getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+                holder = new FavoriteFragmentAdapter1.ViewHolder();
+                holder.title = (TextView) row.findViewById(R.id.movieTitle);
+                holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
+                holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
 
 
-
-
-                                FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.title);
+                FontUtls.loadFont(mActivity, mActivity.getResources().getString(R.string.regular_fonts), holder.title);
 /*
             Typeface castDescriptionTypeface = Typeface.createFromAsset(mActivity.getAssets(),mActivity.getResources().getString(R.string.regular_fonts));
             holder.title.setTypeface(castDescriptionTypeface);*/
@@ -1434,73 +1427,67 @@ class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
             holder.videoImageview.getLayoutParams().height = height;
             holder.videoImageview.getLayoutParams().width = width;*/
 
-                                if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-                                        holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+                if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView, holder.videoImageview.getDrawable().getIntrinsicWidth(), holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
-                                }
-                                else if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-                                        holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
-
-
-                                }
-                                else if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-                                        holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+                } else if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView, holder.videoImageview.getDrawable().getIntrinsicWidth(), holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
-                                }
-                                else {
-                                        holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
+                } else if ((mActivity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                    holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView, holder.videoImageview.getDrawable().getIntrinsicWidth(), holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
-                                }
-                                row.setTag(holder);
-
-                        } else {
-                                holder = (FavoriteFragmentAdapter1.ViewHolder) row.getTag();
-                        }
-
-                        final GridItem item = data.get(position);
-                        holder.title.setText(item.getTitle());
-                        String imageId = item.getImage();
-                        LogUtil.showLog("Nihar_feb",""+imageId);
+                } else {
+                    holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(mActivity.getResources(), R.id.movieImageView, holder.videoImageview.getDrawable().getIntrinsicWidth(), holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
 
+                }
+                row.setTag(holder);
 
-                        holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                        close=true;
-                                        if (data.get(position).isClicked()){
+            } else {
+                holder = (FavoriteFragmentAdapter1.ViewHolder) row.getTag();
+            }
 
-                                                LogUtil.showLog("ANU","movieUniqueId  ========"+item.getMovieUniqueId());
-
-                                                removeFavorite(item,position);
-
-                                        }
-
-                                }
-                        });
+            final GridItem item = data.get(position);
+            holder.title.setText(item.getTitle());
+            String imageId = item.getImage();
+            LogUtil.showLog("Nihar_feb", "" + imageId);
 
 
+            holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close = true;
+                    if (data.get(position).isClicked()) {
+
+                        LogUtil.showLog("ANU", "movieUniqueId  ========" + item.getMovieUniqueId());
+
+                        removeFavorite(item, position);
+
+                    }
+
+                }
+            });
 
 
-                        if (data.get(position).isSelected()){
-                                holder.closeAlbumArt.setVisibility(View.VISIBLE);
+            if (data.get(position).isSelected()) {
+                holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite);
-                        }else {
-                                holder.closeAlbumArt.setVisibility(View.GONE);
+            } else {
+                holder.closeAlbumArt.setVisibility(View.GONE);
 //            feb_bt.setImageResource(R.drawable.favorite_unselected);
 
-                        }
+            }
 
-                        if(imageId.matches("") || imageId.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
-                                holder.videoImageview.setImageResource(R.drawable.logo);
+            if (imageId.matches("") || imageId.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+                holder.videoImageview.setImageResource(R.drawable.logo);
 
 
-                        }else {
-                                Picasso.with(mActivity)
-                                        .load(imageId)
-                                        .into(holder.videoImageview);
+            } else {
+                Picasso.with(mActivity)
+                        .load(imageId)
+                        .into(holder.videoImageview);
 
 //            Picasso.with(mActivity)
 //                    .load(imageId).error(R.drawable.logo).placeholder(R.drawable.logo)
@@ -1516,40 +1503,41 @@ class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
                     .showImageOnLoading(R.drawable.no_thumbnail).build();
             ImageAware imageAware = new ImageViewAware(holder.videoImageview, false);
             imageLoader.displayImage(imageId, imageAware,options);*/
-                        }
+            }
 
 
-
-                        return row;
-                }
-
-                 class ViewHolder {
-                        public TextView title;
-                        public ImageView videoImageview,closeAlbumArt;
-
-
-                }
-                public  Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight){
-                        final BitmapFactory.Options opt =new BitmapFactory.Options();
-                        opt.inJustDecodeBounds=true;
-                        BitmapFactory.decodeResource(res, resId, opt);
-                        opt.inSampleSize = calculateInSampleSize(opt,reqWidth,reqHeight);
-                        opt.inJustDecodeBounds=false;
-                        return BitmapFactory.decodeResource(res, resId, opt);
-                }
-                public  int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
-                        final int height = opt.outHeight;
-                        final int width = opt.outWidth;
-                        int sampleSize=1;
-                        if (height > reqHeight || width > reqWidth){
-                                final int halfWidth = width/2;
-                                final int halfHeight = height/2;
-                                while ((halfHeight/sampleSize) > reqHeight && (halfWidth/sampleSize) > reqWidth){
-                                        sampleSize *=2;
-                                }
-
-                        }
-                        return sampleSize;
-                }
+            return row;
         }
+
+        class ViewHolder {
+            public TextView title;
+            public ImageView videoImageview, closeAlbumArt;
+
+
+        }
+
+        public Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+            final BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inJustDecodeBounds = true;
+            BitmapFactory.decodeResource(res, resId, opt);
+            opt.inSampleSize = calculateInSampleSize(opt, reqWidth, reqHeight);
+            opt.inJustDecodeBounds = false;
+            return BitmapFactory.decodeResource(res, resId, opt);
+        }
+
+        public int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight) {
+            final int height = opt.outHeight;
+            final int width = opt.outWidth;
+            int sampleSize = 1;
+            if (height > reqHeight || width > reqWidth) {
+                final int halfWidth = width / 2;
+                final int halfHeight = height / 2;
+                while ((halfHeight / sampleSize) > reqHeight && (halfWidth / sampleSize) > reqWidth) {
+                    sampleSize *= 2;
+                }
+
+            }
+            return sampleSize;
+        }
+    }
 }

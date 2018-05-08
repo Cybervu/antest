@@ -41,25 +41,27 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<String> expandableListTitle;
+    private ArrayList<String> idArrayList;
     private HashMap<String, ArrayList<String>> expandableListDetail;
     private ArrayList<MenusOutputModel.MainMenu> mainMenuModelArrayList;
     // add by subha
     private ArrayList<MenusOutputModel.FooterMenu> footerMenuModelArrayList;
 
 
-    public ExpandableListAdapter(Context context, ArrayList<String> expandableListTitle,
+    public ExpandableListAdapter(Context context, ArrayList<String> idArrayList,ArrayList<String> expandableListTitle,
                                  HashMap<String, ArrayList<String>> expandableListDetail, ArrayList<MenusOutputModel.MainMenu> mainMenuModelArrayList, ArrayList<MenusOutputModel.FooterMenu> footerMenuModelArrayList) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
         this.mainMenuModelArrayList = mainMenuModelArrayList;
         this.footerMenuModelArrayList = footerMenuModelArrayList;
+        this.idArrayList=idArrayList;
 
     }
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
+        return this.expandableListDetail.get(this.idArrayList.get(listPosition))
                 .get(expandedListPosition);
     }
 
@@ -87,7 +89,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int listPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
+        return this.expandableListDetail.get(this.idArrayList.get(listPosition))
                 .size();
     }
 
@@ -98,7 +100,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return this.expandableListTitle.size();
+        return this.idArrayList.size();
     }
 
     @Override
@@ -185,7 +187,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //listTitleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, isExpanded ? 0 : android.R.drawable.ic_menu_more, 0);
 
 
-        if (expandableListDetail.get(this.expandableListTitle.get(listPosition)).size() > 0) {
+        if (expandableListDetail.get(this.idArrayList.get(listPosition)).size() > 0) {
             iconimage.setVisibility(View.VISIBLE);
             Log.v("SUBHA", "iconimage visible Position ===== " + listPosition);
         }

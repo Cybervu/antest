@@ -95,6 +95,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     public HashMap<String, ArrayList<String>> expandableListDetail;
     ArrayList<String> titleArray = new ArrayList<>();
+    ArrayList<String> idArray = new ArrayList<>();
     ExpandableListAdapter adapter;
     SharedPreferences pref;
     PreferenceManager preferenceManager;
@@ -656,6 +657,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         }
 
         titleArray.clear();
+        idArray.clear();
         /* Adding Home Menu*/
         MenusOutputModel.MainMenu mainMenuHome = new MenusOutputModel().new MainMenu();
         mainMenuHome.setTitle(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME));
@@ -851,6 +853,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
             for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
                 titleArray.add(menusOutputModelLocal.getMainMenuModel().get(i).getTitle());
+                idArray.add(menusOutputModelLocal.getMainMenuModel().get(i).getId());
                 ArrayList<String> childArray = new ArrayList<>();
 
                 for (int j = 0; j < menusOutputModelLocal.getMainMenuModel().get(i).getMainMenuChildModel().size(); j++) {
@@ -858,16 +861,17 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                         childArray.add(menusOutputModelLocal.getMainMenuModel().get(i).getMainMenuChildModel().get(j).getTitle());
                     }
                 }
-                expandableListDetail.put(menusOutputModelLocal.getMainMenuModel().get(i).getTitle(), childArray);
+                expandableListDetail.put(menusOutputModelLocal.getMainMenuModel().get(i).getId(), childArray);
             }
         }
 
 
         for (int k = 0; k < menusOutputModelLocal.getFooterMenuModel().size(); k++) {
             titleArray.add(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name());
+            idArray.add(menusOutputModelLocal.getFooterMenuModel().get(k).getId());
             ArrayList<String> childArray = new ArrayList<>();
 
-            expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getDisplay_name(), childArray);
+            expandableListDetail.put(menusOutputModelLocal.getFooterMenuModel().get(k).getId(), childArray);
 
         }
 
@@ -881,7 +885,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
-            adapter = new ExpandableListAdapter(getActivity(), titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
+            adapter = new ExpandableListAdapter(getActivity(), idArray,titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
             mDrawerListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }

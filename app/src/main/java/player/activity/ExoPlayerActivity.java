@@ -1656,49 +1656,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                downloadClick();
 
+            }
+        });
 
-                    download.setEnabled(false);
-
-                    if (isDrm) {
-                        // This is applicable for DRM content.
-
-                        List_Of_Resolution_Format.clear();
-                        List_Of_FileSize.clear();
-                        List_Of_Resolution_Url.clear();
-                        List_Of_Resolution_Url_Used_For_Download.clear();
-
-
-                        asynWithdrm = new AsynWithdrm();
-                        asynWithdrm.executeOnExecutor(threadPoolExecutor);
-                    } else {
-                        // This is applicable for NON-DRM contnet.
-
-                        List_Of_Resolution_Url.clear();
-                        List_Of_Resolution_Format.clear();
-                        List_Of_FileSize.clear();
-                        if (ResolutionUrl.size() > 0) {
-                            for (int i = 1; i < ResolutionUrl.size(); i++) {
-                                List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
-                                List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
-                            }
-
-                            pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
-                            pDialog_for_gettig_filesize.show();
-
-                            new DetectDownloadingFileSize().execute();
-                        } else {
-                            new DownloadFileFromURL().execute(playerModel.getVideoUrl());
-                        }
-
-                    }
-
-
-                    if (playerModel.getOfflineUrl().size() > 0) {
-                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
-                    }
-
-
+        download_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadClick();
             }
         });
 
@@ -1817,6 +1783,50 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
 
+    }
+
+    private void downloadClick() {
+
+
+        download.setEnabled(false);
+
+        if (isDrm) {
+            // This is applicable for DRM content.
+
+            List_Of_Resolution_Format.clear();
+            List_Of_FileSize.clear();
+            List_Of_Resolution_Url.clear();
+            List_Of_Resolution_Url_Used_For_Download.clear();
+
+
+            asynWithdrm = new AsynWithdrm();
+            asynWithdrm.executeOnExecutor(threadPoolExecutor);
+        } else {
+            // This is applicable for NON-DRM contnet.
+
+            List_Of_Resolution_Url.clear();
+            List_Of_Resolution_Format.clear();
+            List_Of_FileSize.clear();
+            if (ResolutionUrl.size() > 0) {
+                for (int i = 1; i < ResolutionUrl.size(); i++) {
+                    List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                    List_Of_Resolution_Format.add(playerModel.ResolutionFormat.get(i));
+                }
+
+                pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
+                pDialog_for_gettig_filesize.show();
+
+                new DetectDownloadingFileSize().execute();
+            } else {
+                new DownloadFileFromURL().execute(playerModel.getVideoUrl());
+            }
+
+        }
+
+
+        if (playerModel.getOfflineUrl().size() > 0) {
+            Download_SubTitle(playerModel.getOfflineUrl().get(0));
+        }
     }
 
     // This is added for the movable water mark //

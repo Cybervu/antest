@@ -323,6 +323,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	Animation myAnim;
 	LinearLayout volume_brightness_control_layout,back_layout,cc_layout;
+	RelativeLayout download_layout;
 	ImageButton volume_brightness_control;
 	TextView volume_bright_value;
 	Window mWindow;
@@ -469,6 +470,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		subtitleText = (TextView) findViewById(R.id.subtitle);
 		subtitle_change_btn = (ImageView) findViewById(R.id.setting);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
+		download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+
+		// Kushal
+		subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
+		subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
+		download_layout.setVisibility(View.GONE);
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
 		videoTitle = (TextView) findViewById(R.id.content_title);
