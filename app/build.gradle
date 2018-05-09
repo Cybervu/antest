@@ -678,6 +678,8 @@ android {
         pickbox_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://pb.muvi.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.pickbox.tv/rest/\""
+
         }
         nollyfiesta {
             minSdkVersion 21

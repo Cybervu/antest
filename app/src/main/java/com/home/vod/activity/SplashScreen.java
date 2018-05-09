@@ -320,7 +320,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             }
         }
 
-       /* if (preferenceManager != null) {
+        /*if (preferenceManager != null) {
             preferenceManager.setCountryCodeToPref("AU");
             SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
             planListInput.setAuthToken(authTokenStr);

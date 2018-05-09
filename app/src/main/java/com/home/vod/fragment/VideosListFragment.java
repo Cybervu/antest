@@ -643,7 +643,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         mainActivity.setTitle(getArguments().getString("title"));*/
         //Kushal
       //  ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
-
         videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
