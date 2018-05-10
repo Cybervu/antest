@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
@@ -518,7 +519,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                                 return;
                             }
 
-                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP)) &&  preferenceManager.getUseridFromPref()!=null) {
+
                                 if(!profileCalled) {
                                     return;
                                 }
@@ -528,6 +530,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                             Call_One_Step_Procedure();
 
                         }
+
                     }
                 });
 
@@ -603,7 +606,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 geoBloackSuccessStatus = 1;
 
             } else if (status == 454) {
-                geoBloackSuccessStatus = 2;
+                //geoBloackSuccessStatus = 2;
+                preferenceManager.setCountryCodeToPref("IN");
+                geoBloackSuccessStatus = 1;
 
             } else {
                 geoBloackSuccessStatus = 5;

@@ -35,6 +35,7 @@ import com.home.apisdk.apiModel.HomePageSectionModel;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
 import com.home.vod.R;
+import com.home.vod.ToolbarTitleHandler;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
@@ -130,6 +131,7 @@ public class HomeFragment extends Fragment implements
     int ui_completed = 0;
     int loading_completed = 0;
     PreferenceManager preferenceManager;
+    private ToolbarTitleHandler toolbarTitleHandler;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -143,8 +145,7 @@ public class HomeFragment extends Fragment implements
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-
-
+//        toolbarTitleHandler=new ToolbarTitleHandler((MainActivity) getActivity());
  /*       *//***************chromecast**********************//*
 
         mCastStateListener = new CastStateListener() {
