@@ -592,6 +592,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             if(!theTextArea.getText().toString().equals(" ")) {
+                // To check for blank space in Search
                 //if (theTextArea.getText().toString().length() >= 1) {
 
                     if (searchDataAsynTask != null) {
