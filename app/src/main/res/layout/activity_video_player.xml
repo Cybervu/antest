@@ -198,8 +198,8 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/my_download_margin"
-                    android:layout_marginTop="@dimen/my_download_margin"
+                    android:paddingBottom="@dimen/my_download_margin"
+                    android:paddingTop="@dimen/my_download_margin"
                     android:background="@color/playPauseColor"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -207,10 +207,10 @@
                     <ImageButton
                         android:id="@+id/center_play_pause"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/ppv_margin"
+                        android:paddingLeft="@dimen/ppv_margin"
                         android:paddingBottom="8dp"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
@@ -496,12 +496,12 @@
 
             <TextView
                 android:id="@+id/cast_crew"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
-                android:textColor="@color/castCrewTitleTextColor"
+                android:textColor="@color/cast_crew_titleCololr"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />
 

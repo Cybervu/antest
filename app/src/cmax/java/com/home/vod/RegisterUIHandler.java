@@ -39,7 +39,6 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.R.id.loginWithFacebookButton;
-import static com.home.vod.R.id.registerButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -84,7 +83,7 @@ public class RegisterUIHandler {
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
 
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");

@@ -72,6 +72,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_PLACEHOLDER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY_ENTER_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -79,6 +80,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION
 import static com.home.vod.preferences.LanguagePreference.NO_RESULT_FOUND_REFINE_YOUR_SEARCH;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_PLACEHOLDER;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.SORRY_ENTER_NAME;
 import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -589,22 +591,21 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if(!theTextArea.getText().toString().equals(" ")) {
+                //if (theTextArea.getText().toString().length() >= 1) {
 
-                if(theTextArea.getText().toString().trim().length()>=1){
-
-                    if(searchDataAsynTask!=null){
+                    if (searchDataAsynTask != null) {
                         searchDataAsynTask.cancel(true);
                     }
 
                     searchTextStr = theTextArea.getText().toString().trim();
                     getSearchData();
-                    Log.v("MUVI","theTextArea.addTextChangedListener ==== ");
+                    Log.v("MUVI", "theTextArea.addTextChangedListener ==== ");
 
-                    if(toast != null){
+                    if (toast != null) {
                         toast.cancel();
                     }
-                }
-                else{
+                } else {
                     try {
                         if (searchDataAsynTask != null) {
                             searchDataAsynTask.cancel(true);
@@ -613,7 +614,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                         if (searchProgressBarHandler != null && searchProgressBarHandler.isShowing()) {
                             searchProgressBarHandler.hide();
                         }
-                        if(toast != null){
+                        if (toast != null) {
                             toast.cancel();
                         }
 
@@ -622,8 +623,10 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
 
                     // Show message.
-                 //   ShowToast(SearchActivity.this,"Please enter one letters for search .");
+                    //   ShowToast(SearchActivity.this,"Please enter one letters for search .");
                 }
+            /*}else
+                ShowToast(getApplicationContext(),languagePreference.getTextofLanguage(SORRY_ENTER_NAME,DEFAULT_SORRY_ENTER_NAME));*/
                 resetData();
                 noDataLayout.setVisibility(View.GONE);
 //                titleLayout.setVisibility(View.GONE);
@@ -1027,7 +1030,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
     public void ShowToast(Context context, String info) {
-        toast = Toast.makeText(context, Html.fromHtml("<font color='"+getResources().getColor(R.color.hint_background)+"' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
+        //toast = Toast.makeText(context, Html.fromHtml("<font color='"+getResources().getColor(R.color.hint_background)+"' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
+        toast = Toast.makeText(context, Html.fromHtml("<font color='"+getResources().getColor(R.color.white)+"' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }

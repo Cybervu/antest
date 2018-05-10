@@ -19,7 +19,8 @@
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->
-    <string name="app_id">7B4A6B91</string>
+    <string name="app_id">9A401D55</string>
+   <!-- <string name="app_id">83F0771C</string>-->
 
     <!--<string name="app_id">9C631550</string>-->
     <string name="action_settings">Settings</string>

@@ -548,7 +548,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                                 return;
                             }
 
-                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP)) &&  preferenceManager.getUseridFromPref()!=null) {
                                 if(!profileCalled) {
                                     return;
                                 }
@@ -725,7 +725,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         } else if (status == 455) {
             callProfileAPI();
-
+            preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
             featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "0");
         }else {
             isRegistrationEnabledMsg = "Oops something went wrong.Please try again later .";

@@ -45,7 +45,7 @@
             android:textColor="@color/no_internet_textColor"
             android:id="@+id/tryAgainButton"
             android:layout_centerInParent="true"
-            android:visibility="gone"
+            android:visibility="visible"
             />
     </RelativeLayout>
 

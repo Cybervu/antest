@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -337,6 +338,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     LinearLayout linearLayout[];
     boolean[] visibility;
     String[] lang;
+    Snackbar snackbar = null;
     //
 
     @Override
@@ -640,7 +642,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
             if (castStr) {
-                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoCastCrewTitleTextView);
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), videoCastCrewTitleTextView);
                 videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
 
                 videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
@@ -1138,7 +1140,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }else {
             ShowWithEpisodesActivity.this.sucessMsg = languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING);;
         }
-       showToast();
+       showToast(ShowWithEpisodesActivity.this.sucessMsg );
     }
 
     @Override
@@ -1160,7 +1162,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
         favorite_view_episode.setImageResource(R.drawable.favorite_unselected);
-        showToast();
+        showToast(ShowWithEpisodesActivity.this.sucessMsg);
         isFavorite = 0;
         if (pDialog != null && pDialog.isShowing()) {
             LogUtil.showLog("PINTU", "delete fav pdlog hide");
@@ -5498,11 +5500,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     }*/
 
-    public void showToast() {
+    public void showToast(String message) {
         LogUtil.showLog("ANU", "SHOWTOASTisepisode" + isEpisode);
         LogUtil.showLog("ANU", "Value" + movieUniqueId);
 
-        Context context = getApplicationContext();
+      /*  Context context = getApplicationContext();
         // Create layout inflator object to inflate toast.xml file
         LayoutInflater inflater = getLayoutInflater();
 
@@ -5518,9 +5520,36 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
 
         toast.setDuration(Toast.LENGTH_LONG);
-        toast.show();
+        toast.show();*/
+
+        showSnackBar(message);
 
     }
+    private void showSnackBar(String message) {
+        View v= findViewById(android.R.id.content);
+        if(!message.equals(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING))) {
+            if (snackbar != null) {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                    snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+                } else {
+                    snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+                }
+
+            } else
+                snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+        }else{
+            snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+            // set Retry button in Snackbar
+           /* snackbar.make(v, message, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }).show();*/
+        }
+    }
+
 
     /* private class AsynFavoriteDelete extends AsyncTask<String, Void, Void> {
 

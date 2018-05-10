@@ -833,8 +833,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         regEmailStr = editEmail.getText().toString().trim();
-        regPasswordStr = editPassword.getText().toString().trim();
-        regConfirmPasswordStr = editConfirmPassword.getText().toString().trim();
+        regPasswordStr = editPassword.getText().toString();
+        regConfirmPasswordStr = editConfirmPassword.getText().toString();
 
 
 
@@ -858,17 +858,17 @@ public class RegisterActivity extends AppCompatActivity implements
                 return;
             }
 
-            if(regPasswordStr.trim().equals("")){
+            if(regPasswordStr.equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
 
                 return;
             }
 
-            if(regConfirmPasswordStr.trim().equals("")){
+            if(regConfirmPasswordStr.equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD), Toast.LENGTH_LONG).show();
                 return;
             }
-            if (!regPasswordStr.trim().equals(regConfirmPasswordStr.trim())){
+            if (!regPasswordStr.equals(regConfirmPasswordStr)){
                 Toast.makeText(RegisterActivity.this,languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH,DEFAULT_PASSWORDS_DO_NOT_MATCH),Toast.LENGTH_LONG).show();
                 return;
             }

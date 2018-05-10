@@ -359,12 +359,12 @@
 
                     <TextView
                         android:id="@+id/cast_crew"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:layout_marginTop="@dimen/textColor_margin"
-                        android:textColor="@color/castCrewTitleTextColor"
+                        android:textColor="@color/cast_crew_titleCololr"
                         android:textSize="@dimen/forgot_text_size"
                         android:textStyle="bold" />
 

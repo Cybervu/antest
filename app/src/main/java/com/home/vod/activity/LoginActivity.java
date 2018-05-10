@@ -1782,7 +1782,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void loginButtonClicked() {
 
         regEmailStr = editEmailStr.getText().toString().trim();
-        regPasswordStr = editPasswordStr.getText().toString().trim();
+        regPasswordStr = editPasswordStr.getText().toString();
 
 
         if (NetworkStatus.getInstance().isConnected(this)) {
