@@ -79,7 +79,7 @@ public class RegisterUIHandler {
     public RegisterUIHandler(Activity context) {
         this.context = context;
         termsTextView = (TextView) context.findViewById(R.id.terms);
-        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
+       // termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
 
@@ -88,8 +88,8 @@ public class RegisterUIHandler {
         googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
-        btnLogin.setVisibility(View.VISIBLE);
         btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
+        btnLogin.setVisibility(View.VISIBLE);
         googleSignView.setVisibility(View.VISIBLE);
         editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
@@ -116,7 +116,7 @@ public class RegisterUIHandler {
     }
 
     public void setTermsTextView(LanguagePreference languagePreference) {
-        termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+       // termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
         editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
