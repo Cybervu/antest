@@ -2864,6 +2864,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }
 
     public void removeFocusFromViews() {
+        // Kushal
+        editEmailStr.clearFocus();
+        editPasswordStr.clearFocus();
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -5767,7 +5770,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                                     registerButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
-                                    btnLogin.setVisibility(View.GONE);
+                                    //btnLogin.setVisibility(View.GONE);
                                     handleFbUserDetails(fbUserId, fbEmail, fbName);
                                 }
 
