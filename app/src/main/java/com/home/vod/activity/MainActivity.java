@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
-    private ToolbarTitleHandler toolbarTitleHandler;
+    public static ToolbarTitleHandler toolbarTitleHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -282,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     LinearLayout linearLayout[];
     boolean[] visibility;
     String[] lang;
+    public ImageView toolbarimage;
     //
 
     @Override
@@ -304,11 +306,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarimage=(ImageView) findViewById(R.id.toolbarimage);
         setSupportActionBar(mToolbar);
         toolbarTitleHandler=new ToolbarTitleHandler(this);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         LogUtil.showLog("Abhishek", "Toolbar");
 

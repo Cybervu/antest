@@ -32,7 +32,7 @@
         android:layout_marginTop="@dimen/margintop5dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/marginright5dp"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
 
