@@ -92,6 +92,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
+        ((MainActivity) getActivity()).toolbarimage.setVisibility(View.GONE);
 
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
@@ -403,7 +404,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 //        if (isNetwork) {
 //            if (!regEmailStr.equals("")) {
 //                boolean isValidEmail = Util.isValidMail(regEmailStr);
-//                boolean isValidname = Util.isValidMail(regNameStr);
+//                boolean isValidname = Util.isValfidMail(regNameStr);
 //                boolean isValidMessage = Util.isValidMail(regEmailStr);
 //                if (isValidEmail == true) {
 //

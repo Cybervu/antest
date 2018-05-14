@@ -475,6 +475,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
+        ((MainActivity) getActivity()).toolbarimage.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         if (getArguments().getString("title") != null) {
             titleListName = getArguments().getString("title");
            // sectionTitle.setText(titleListName);
@@ -1526,9 +1528,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                  /*@Author:Bishal
                   *When item data not null then only we can visible the clear button bidefault it was gone
                   */
-                /*if (itemData!=null && itemData.size()!=0){
-                    clearhistorybutton.setVisibility(View.VISIBLE);
-                }*/
+                if (itemData!=null && itemData.size()!=0){
+                    //.setVisibility(View.VISIBLE);
+                }
 
                 if (message == null)
                     message = "0";

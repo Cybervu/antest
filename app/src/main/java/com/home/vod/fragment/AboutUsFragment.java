@@ -97,7 +97,8 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
-
+        ((MainActivity) getActivity()).toolbarimage.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
 
 

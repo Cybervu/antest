@@ -135,7 +135,6 @@ public class HomeFragment extends Fragment implements
     int ui_completed = 0;
     int loading_completed = 0;
     PreferenceManager preferenceManager;
-    private ToolbarTitleHandler toolbarTitleHandler;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -148,12 +147,14 @@ public class HomeFragment extends Fragment implements
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-        //((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-                toolbarTitleHandler=new ToolbarTitleHandler((MainActivity) getActivity());
+     //   ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
-
+        /*@Author:Bishal
+        *call toolbarhandler if one have title then show title otherwise set image in toolbarhandler
+         */
+        ((MainActivity) getActivity()).toolbarTitleHandler=new ToolbarTitleHandler((MainActivity) getActivity());
 
  /*       *//***************chromecast**********************//*
 

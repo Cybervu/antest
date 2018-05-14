@@ -5793,7 +5793,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+           // Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
             //progressDialog.dismiss();
         }
 
