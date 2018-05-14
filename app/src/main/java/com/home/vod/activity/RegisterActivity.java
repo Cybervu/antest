@@ -91,6 +91,7 @@ import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -515,7 +516,8 @@ public class RegisterActivity extends AppCompatActivity implements
         /*********fb****/
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
+       // getWindow().setBackgroundDrawableResource(R.drawable.app_background);
+        StatusBarColor.changeColor(RegisterActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);

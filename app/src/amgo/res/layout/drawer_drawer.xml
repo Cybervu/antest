@@ -1,0 +1,15 @@
+
+
+<ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_slidermenu"
+    android:layout_width="@dimen/slider_menu_width"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:alpha="255"
+    android:background="@color/amgo_navigation_color"
+    android:choiceMode="singleChoice"
+    android:dividerHeight="0.2dp"
+    android:groupIndicator="@null"
+    android:scrollbars="none">
+
+</ExpandableListView>

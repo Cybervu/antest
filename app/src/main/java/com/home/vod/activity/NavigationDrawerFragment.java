@@ -23,9 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiModel.GetMenusInputModel;
@@ -176,7 +174,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mDrawerListView = (ExpandableListView) inflater.inflate(R.layout.drawer_drawer, container, false);
+        View rootView= inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
+        mDrawerListView = (ExpandableListView) rootView.findViewById(R.id.list_slidermenu);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -187,11 +186,11 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
 
-      /* expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
-        mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
-     */
+//       expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
+//        mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
+
         //for expand the child content in navigation
-        mDrawerListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+        mDrawerListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
             @Override
             public void onGroupExpand(int groupPosition) {
@@ -262,22 +261,23 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             mDrawerLayout.closeDrawers();
                         } else {
 
+                            Intent browserIntent;
 
                             if (menusOutputModelLocal.getFooterMenuModel().get(i).getLink_type().trim().equalsIgnoreCase("2")) {
-                               /* Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
+                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);
 
                                 //isNavigated = 1;
-                                Log.v("SUBHA","hello"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());*/
-                              /*  LogUtil.showLog("MUVI","url of link type 2==="+menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink());
+                                Log.v("SUBHA","hello"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
+                                LogUtil.showLog("MUVI","url of link type 2==="+menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink());
                                 mDrawerLayout.openDrawer(Gravity.LEFT);
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim()));
+                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(browserIntent);*/
+                                startActivity(browserIntent);
 
                                 String externalLink = menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                                browserIntent = new Intent(Intent.ACTION_VIEW);
                                 browserIntent.setData(Uri.parse(externalLink));
                                 getActivity().startActivity(browserIntent);
 
@@ -339,11 +339,11 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 mDrawerLayout.closeDrawers();
                             } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
 
-                                /*Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
+                                Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
                                 favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(favoriteIntent);
-                                mDrawerLayout.closeDrawers();*/
+                                mDrawerLayout.closeDrawers();
                                  Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
                     Bundle bundle = new Bundle();
                                     bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
@@ -421,12 +421,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-
+/*
         View header = inflater.inflate(R.layout.drawer_header, null);
         mDrawerListView.addHeaderView(header);
 
+        View footer = inflater.inflate(R.layout.drawer_footer, null);
+        mDrawerListView.addFooterView(footer);
+        return mDrawerListView;*/
 
-        return mDrawerListView;
+        return rootView;
     }
 
 

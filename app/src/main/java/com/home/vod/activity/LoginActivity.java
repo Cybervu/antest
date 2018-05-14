@@ -99,6 +99,7 @@ import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -1454,8 +1455,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        getWindow().setBackgroundDrawableResource(R.drawable.app_background);
-
+       // getWindow().setBackgroundDrawableResource(R.drawable.app_background);
+        StatusBarColor.changeColor(LoginActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_login);
         loginA = this;
         languagePreference = LanguagePreference.getLanguagePreference((this));

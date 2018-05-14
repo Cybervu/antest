@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.devbrackets.android.exomedia"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="41000"
     android:versionName="4.1.0" >
 

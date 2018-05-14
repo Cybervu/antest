@@ -27,6 +27,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 import java.util.concurrent.BlockingQueue;
@@ -43,7 +44,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -53,7 +53,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
-import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -88,12 +87,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        StatusBarColor.changeColor(ForgotPasswordActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_forgot_password);
         getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
+        // Kushal- No toolbar Title required
+        //mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");

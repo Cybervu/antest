@@ -390,7 +390,7 @@
     <!---this is for trailer  button padding-->
     <dimen name="trailer_btn_padding">6dp</dimen>
     <!---this is for videolistfragment   Textview padding-->
-    <dimen name="videolistleftmargin">5dp</dimen>
+    <dimen name="videolistleftmargin">10dp</dimen>
     <!--added for subtitle outline by anu-->
     <dimen name="subtitle_text_size">15sp</dimen>
     <item name="stroke_width" format="float" type="dimen">0.45</item>

@@ -88,7 +88,8 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
         /*categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(getArguments().getString("title"));*/
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        // Kushal- No title required in Amgo
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("");
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);

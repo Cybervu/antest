@@ -662,7 +662,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         filterOrderByStr = "";
         /*MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setTitle(getArguments().getString("title"));*/
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
         // Kushal - set Id to back button and text in Toolabr
         android.support.v7.widget.Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
@@ -687,11 +687,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-       // TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-       // categoryTitle.setTypeface(castDescriptionTypeface);
-        //FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);
-     //f,   categoryTitle.setText(getArguments().getString("title"));
+        FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), categoryTitle);
+        categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);

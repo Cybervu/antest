@@ -9,6 +9,7 @@
     <color name="textAmgoColor">#a6a6a6</color>
     <color name="buttonAmgo">#e1e1e1</color>
     <color name="amgo_statusbar_color">#000000</color>
+    <color name="amgo_navigation_color">#050505</color>
 
 
     <!--added for app background color by bishal-->
