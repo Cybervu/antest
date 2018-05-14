@@ -37,6 +37,7 @@ import com.home.apisdk.apiModel.HomePageSectionModel;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
 import com.home.vod.R;
+import com.home.vod.ToolbarTitleHandler;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
@@ -146,11 +147,14 @@ public class HomeFragment extends Fragment implements
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+     //   ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
-
+        /*@Author:Bishal
+        *call toolbarhandler if one have title then show title otherwise set image in toolbarhandler
+         */
+        ((MainActivity) getActivity()).toolbarTitleHandler=new ToolbarTitleHandler((MainActivity) getActivity());
 
  /*       *//***************chromecast**********************//*
 

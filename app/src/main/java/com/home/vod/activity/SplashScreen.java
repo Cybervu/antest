@@ -643,6 +643,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             } else if (status == 454) {
                 geoBloackSuccessStatus = 2;
+                /*preferenceManager.setCountryCodeToPref("IN");
+
+                geoBloackSuccessStatus = 1;*/
 
             } else {
                 geoBloackSuccessStatus = 5;

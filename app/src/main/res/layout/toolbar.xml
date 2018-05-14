@@ -10,6 +10,12 @@
     android:minHeight="?attr/actionBarSize"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
+    <ImageView
+        android:id="@+id/toolbarimage"
+        android:layout_width="108dp"
+        android:layout_height="56dp"
+        android:src="@drawable/transparent"
+        android:visibility="gone"
+        />
 
 </android.support.v7.widget.Toolbar>

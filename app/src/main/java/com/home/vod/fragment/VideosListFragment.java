@@ -666,6 +666,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         // Kushal - set Id to back button and text in Toolabr
         android.support.v7.widget.Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
+        /*@Author:Bishal
+        *Implement toolbar image in activity_main and here we hide that image
+        * Toolbar image is only available in muvinow and stupfix
+         */
+        ((MainActivity) getActivity()).toolbarimage.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
 
         videosListFragment = new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {

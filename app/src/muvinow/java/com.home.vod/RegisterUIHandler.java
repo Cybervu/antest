@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,10 +44,12 @@ import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -61,8 +64,10 @@ public class RegisterUIHandler {
     private LinearLayout btnLogin;
     LoginButton loginWithFacebookButton;
     private EditText editName;
+    private RelativeLayout googleSignView;
     String fbUserId = "";
     String fbEmail = "";
+    TextView gmailTest;
     String fbName = "";
     private Button registerButton;
     private LanguagePreference languagePreference;
@@ -78,6 +83,9 @@ public class RegisterUIHandler {
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
+        gmailTest=(TextView) context.findViewById(R.id.textView);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
+        googleSignView.setVisibility(View.VISIBLE);
         editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
@@ -87,6 +95,11 @@ public class RegisterUIHandler {
             btnLogin.setVisibility(View.VISIBLE);
         }else {
             btnLogin.setVisibility(View.GONE);
+        }
+        if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
+            googleSignView.setVisibility(View.VISIBLE);
+        }else {
+            googleSignView.setVisibility(View.GONE);
         }
 
     }
@@ -233,7 +246,7 @@ public class RegisterUIHandler {
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+          //  Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
             //progressDialog.dismiss();
         }
 
@@ -250,6 +263,13 @@ public class RegisterUIHandler {
     };
 
     public void callSignin(LanguagePreference languagePreference){
+        gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP));
+        googleSignView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                ((RegisterActivity)context).signIn();
+            }
+        });
     }
 }

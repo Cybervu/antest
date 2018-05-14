@@ -253,6 +253,8 @@ public class MyFavouriteFragment extends Fragment implements
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
+        ((MainActivity) getActivity()).toolbarimage.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
 
     /*if (getArguments().getString("title") != null) {
         titleListName = getArguments().getString("title");

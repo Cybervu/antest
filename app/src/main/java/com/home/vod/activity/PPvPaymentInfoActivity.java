@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -75,6 +78,7 @@ import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.apisdk.apiModel.WithouPaymentSubscriptionRegDetailsInput;
 import com.home.vod.R;
+import com.home.vod.ToolbarTitleHandler;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.CardModel;
@@ -119,6 +123,7 @@ import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 
 import static com.home.apisdk.apiModel.CommonConstants.VOUCHER_CODE;
+import static com.home.vod.activity.MainActivity.toolbarTitleHandler;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.BTN_NEXT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
@@ -299,6 +304,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
     PreferenceManager preferenceManager;
 
     Toolbar mActionBarToolbar;
+    public ImageView toolbarimage;
     boolean isCouponCodeAdded = false;
     String validCouponCode;
 
@@ -410,6 +416,8 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        toolbarimage=(ImageView) findViewById(R.id.toolbarimage);
+        toolbarTitleHandler=new ToolbarTitleHandler(PPvPaymentInfoActivity.this);
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -556,6 +564,9 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         cardExpiryMonthSpinner = (Spinner) findViewById(R.id.cardExpiryMonthEditText);
         cardExpiryYearSpinner = (Spinner) findViewById(R.id.cardExpiryYearEditText);
         creditCardSaveSpinner = (Spinner) findViewById(R.id.creditCardSaveEditText);
+        ViewCompat.setBackgroundTintList(cardExpiryMonthSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(cardExpiryYearSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(creditCardSaveSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
 
 
         apply = (Button) findViewById(R.id.apply);

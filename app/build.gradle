@@ -326,7 +326,7 @@ android {
             applicationId 'com.release.quickflix'
             versionCode 1
             targetSdkVersion 25
-            versionName "1.2.4"
+            versionName "1.2.6"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
         }
@@ -455,6 +455,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
         gabejaramillo {
             minSdkVersion 21
             dimension 'vendor'
@@ -756,6 +757,26 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
+        enotvplus {
+            minSdkVersion 21
+            applicationId 'com.release.enotvplus'
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"8131dfa241221012ab91f9e1770cc3f4\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            dimension 'vendor'
+        }
+        enotvplus_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        enotvplus_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -910,6 +931,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('blenheimfilms') && (environment.equals('blenheimfilms_staging_') || environment.equals('blenheimfilms_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('enotvplus') && (environment.equals('enotvplus_staging_') || environment.equals('enotvplus_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
