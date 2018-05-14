@@ -1419,7 +1419,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     //AsynLogInDetails asyncReg;
     VideoDetailsAsynctask asynLoadVideoUrls;
     EditText editEmailStr, editPasswordStr;
-    TextView forgotPassword, loginNewUser, signUpTextView;
+    TextView forgotPassword, loginNewUser;
+    //TextView signUpTextView;
+    Button signUpTextView;
     Button loginButton;
     LoginButton loginWithFacebookButton;
     int corePoolSize = 60;
@@ -1465,8 +1467,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+        // Kushal - No Title required for Amgo
+       /* mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
         setSupportActionBar(mActionBarToolbar);
         //playerModel = new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
@@ -1528,7 +1531,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         loginNewUser.setText(languagePreference.getTextofLanguage(NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
-        signUpTextView = (TextView) findViewById(R.id.register);
+        signUpTextView = (Button) findViewById(R.id.register);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
 

@@ -84,7 +84,7 @@ public class RegisterUIHandler {
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
 
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");

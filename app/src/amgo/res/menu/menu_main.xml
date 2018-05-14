@@ -24,7 +24,7 @@
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/search"
         android:icon="@drawable/search"
         android:orderInCategory="103"
         android:title="search"
@@ -39,7 +39,7 @@
         app:showAsAction="always|never" />
 
     <item
-        android:id="@+id/submenu"
+        android:id="@+id/option"
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"
         android:title=""

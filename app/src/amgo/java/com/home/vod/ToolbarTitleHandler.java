@@ -14,7 +14,7 @@ public class ToolbarTitleHandler {
 
     public ToolbarTitleHandler(MainActivity activity){
         this.activity=activity;
-        activity.getSupportActionBar().setTitle(R.string.app_name);
+        activity.getSupportActionBar().setTitle("");
 
     }
 }

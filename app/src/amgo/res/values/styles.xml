@@ -145,4 +145,11 @@
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
+    <!--Amgo radio button styles-->
+
+
+    <style name="AmgoRadioButtonStyle" parent="@android:style/Widget.CompoundButton">
+        <item name="android:background">@drawable/red_checkbox</item>
+        <item name="android:button">@drawable/red_checkbox_selected</item>
+    </style>
 </resources>

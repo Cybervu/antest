@@ -475,7 +475,9 @@ public class RegisterActivity extends AppCompatActivity implements
     private ImageView registerImageView;
     private EditText editEmail, editName, editPassword, editConfirmPassword, editName_first, editName_last;
     private Button registerButton;
-    private TextView alreadyMemmberText, loginTextView;
+    private TextView alreadyMemmberText;
+    //private TextView loginTextView;
+    private Button loginTextView;
     String regEmailStr, regPasswordStr, regConfirmPasswordStr;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -527,8 +529,9 @@ public class RegisterActivity extends AppCompatActivity implements
         deviceName = myDevice.getName();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+        //Kushal- Toolbar Title not required in Amgo
+       /* mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
         setSupportActionBar(mActionBarToolbar);
         //playerModel=new Player();
 
@@ -566,7 +569,7 @@ public class RegisterActivity extends AppCompatActivity implements
         editConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
         registerButton = (Button) findViewById(R.id.register);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
-        loginTextView = (TextView) findViewById(R.id.login);
+        loginTextView = (Button) findViewById(R.id.login);
 
         /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);

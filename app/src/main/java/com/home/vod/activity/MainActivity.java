@@ -73,6 +73,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -288,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        // Kushal- Chnage status bar color
+        StatusBarColor.changeColor(MainActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);

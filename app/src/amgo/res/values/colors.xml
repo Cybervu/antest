@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Amgo colour scheme-->
+    <color name="colorPrimary">#121212</color>
+    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorAccent">#e6151f</color>
+    <color name="colorAmgoRed">#e6151f</color>
+    <color name="colorAccentOld">#d23232</color>
+    <color name="textAmgoColor">#a6a6a6</color>
+    <color name="buttonAmgo">#e1e1e1</color>
+    <color name="amgo_statusbar_color">#000000</color>
+
+
     <!--added for app background color by bishal-->
     <color name="seasonBackgroundColor">#fff</color>
     <color name="background_start_color">#5c6873</color>
@@ -53,9 +64,7 @@
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#5c6873</color>
     <color name="navlogobackgroundcolor">#ffffff</color>
-    <color name="colorPrimaryDark">#5c6873</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
 
@@ -73,7 +82,7 @@
     <color name="pre_order_button_background">#fff</color>
     <color name="color_card_background">#000</color>
     <color name="fb_button_background">#3b5998</color>
-    <color name="colorAccent">#d23232</color>
+
     <color name="textColorPrimary">#d23232</color>
     <color name="windowBackground">#000</color>
     <color name="selected_color">#000</color>

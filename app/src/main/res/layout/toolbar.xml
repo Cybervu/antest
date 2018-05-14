@@ -8,8 +8,18 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:minHeight="?attr/actionBarSize"
+    android:gravity="center"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="?attr/actionBarSize"
+        android:contentDescription="AmgoLogo"
+        android:layout_gravity="center"
+        android:padding="15dp"
+        android:src="@drawable/amgologo"
+        android:textAlignment="center"/>
 
 
 </android.support.v7.widget.Toolbar>
