@@ -84,8 +84,8 @@ public class EpisodeListOptionMenuHandler {
         register_menu = menu.findItem(R.id.action_register);
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
-        action_searchmenu = menu.findItem(R.id.action_search);
-        submenu = menu.findItem(R.id.submenu);
+        action_searchmenu = menu.findItem(R.id.search);
+        submenu = menu.findItem(R.id.option);
 
         /***************chromecast**********************/
 
