@@ -106,9 +106,9 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
        if (orientation == Configuration.ORIENTATION_PORTRAIT){
            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
        }else {*/
-        if(getIntent().getStringExtra("activity").equals("MyLibraryPlayer")){
+        /*if(getIntent().getStringExtra("activity").equals("MyLibraryPlayer")){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }else{
+        }else{*/
            if (Util.player_description) {
                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
            } else {
@@ -133,7 +133,7 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
                }
 
            }
-       }
+//       }
 
     }
 }
