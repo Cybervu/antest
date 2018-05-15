@@ -248,6 +248,31 @@ public class Util {
         return check;
     }
 
+    public static boolean emailVerificationNormal(String email){
+        if(email.contains("@") && email.contains("."))
+            return true;
+        else
+            return false;
+
+    }
+
+    public static class EmailAddressValidator {
+
+        private static final String domainChars = "a-z0-9\\-";
+        private static final String atomChars = "a-z0-9\\Q!#$%&'*+-/=?^_`{|}~\\E";
+        private static final String emailRegex = "^" + dot(atomChars) + "@" + dot(domainChars) + "$";
+        private static final Pattern emailPattern = Pattern.compile(emailRegex);
+
+        private static String dot(String chars) {
+            return "[" + chars + "]+(?:\\.[" + chars + "]+)*";
+        }
+
+        public static boolean isValidEmailAddress(String address) {
+            return address != null && emailPattern.matcher(address).matches();
+        }
+
+    }
+
     public static boolean isValidPhone(String phone) {
 
         return (phone.length() >= 10) && (phone.length() <= 15);

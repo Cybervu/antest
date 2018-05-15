@@ -114,7 +114,7 @@
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
-    <dimen name="movie_videotitle_size">14sp</dimen>
+    <dimen name="movie_videotitle_size">18sp</dimen>
     <dimen name="gridbottom8dp">1dp</dimen>
 
 </resources>

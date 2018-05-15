@@ -162,7 +162,7 @@
     <dimen name="homescreen_title_text_size">16sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
-    <dimen name="movie_videotitle_size">17sp</dimen>
+    <dimen name="movie_videotitle_size">20sp</dimen>
     <dimen name="gridbottom8dp">8dp</dimen>
     <!---this is for facebook button padding-->
     <dimen name="facebook_padding">0dp</dimen>

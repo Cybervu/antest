@@ -112,6 +112,7 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -191,6 +192,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
@@ -219,6 +221,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_LESS;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
@@ -272,6 +275,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String PlanId = "";
     ImageButton offlineImageButton;
     Button watchTrailerButton;
+    ImageView watchTrailerButton1;
     Button preorderButton;
     int loginresultcode = 0;
     //for resume play
@@ -289,7 +293,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     //Add By Bibhu Later.
     TextView videoStoryTextView;
-    Button storyViewMoreButton;
+    TextView storyViewMoreButton;
 
     boolean isExpanded = false;
 
@@ -368,6 +372,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     boolean[] visibility;
     String[] lang;
     Snackbar snackbar = null;
+    Button NewPlay;
 //
 
 
@@ -989,6 +994,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
          * every time check_for_subscription is 0 in page but when we click the play button then its value chenge to 1
          */
         Util.check_for_subscription = 0;
+        StatusBarColor.changeColor(MovieDetailsActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
@@ -1001,6 +1007,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
+        NewPlay= (Button)findViewById(R.id.newPLayButton);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -1019,6 +1026,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.play);
         watchTrailerButton = (Button) findViewById(R.id.viewtrailer);
+        watchTrailerButton1 = (ImageView) findViewById(R.id.viewtrailer1);
         preorderButton = (Button) findViewById(R.id.preOrderButton);
         favorite_view = (ImageView) findViewById(R.id.favourite);
         Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
@@ -1038,7 +1046,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         viewStoryLayout = (RelativeLayout) findViewById(R.id.viewStoryLayout);
 
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
+        storyViewMoreButton = (TextView) findViewById(R.id.storyViewMoreButton);
+        storyViewMoreButton.setVisibility(View.GONE);
+        storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
 
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
@@ -1131,131 +1141,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playButtonAction();
+            }
+        });
 
-                //playermodel set data
-// *****************set data into playermdel for play in exoplayer************
-
-                isVoucher = 0;
-                playerModel.setStreamUniqueId(movieStreamUniqueId);
-                playerModel.setMovieUniqueId(movieUniqueId);
-                playerModel.setUserId(preferenceManager.getUseridFromPref());
-                playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-                playerModel.setAuthTokenStr(authTokenStr.trim());
-                playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
-                playerModel.setEpisode_id("0");
-                playerModel.setIsFreeContent(isFreeContent);
-                playerModel.setVideoTitle(movieNameStr);
-                playerModel.setVideoStory(movieDetailsStr);
-                playerModel.setVideoGenre(videoGenreTextView.getText().toString());
-                playerModel.setVideoDuration(videoDurationTextView.getText().toString());
-                playerModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
-                playerModel.setCensorRating(censorRatingStr);
-                playerModel.setContentTypesId(contentTypesId);
-                playerModel.setPosterImageId(posterImageId);
-                playerModel.setCastCrew(castStr);
-
-                Log.v("BKS", "stramid=" + playerModel.getStreamUniqueId());
-                Log.v("BKS", "movieID=" + playerModel.getMovieUniqueId());
-                Log.v("BKS", "userid=" + preferenceManager.getUseridFromPref());
-                Log.v("BKS", "emailid=" + playerModel.getEmailId());
-
-
-                DataModel dbModel = new DataModel();
-                dbModel.setIsFreeContent(isFreeContent);
-                dbModel.setIsAPV(isAPV);
-                dbModel.setIsPPV(isPPV);
-                dbModel.setIsConverted(isConverted);
-                dbModel.setMovieUniqueId(movieUniqueId);
-                dbModel.setStreamUniqueId(movieStreamUniqueId);
-                dbModel.setThirdPartyUrl(movieThirdPartyUrl);
-                dbModel.setVideoTitle(movieNameStr);
-                dbModel.setVideoStory(movieDetailsStr);
-                dbModel.setVideoGenre(videoGenreTextView.getText().toString());
-                dbModel.setVideoDuration(videoDurationTextView.getText().toString());
-                dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
-                dbModel.setCensorRating(censorRatingStr);
-                dbModel.setCastCrew(castStr);
-                dbModel.setEpisode_id("0");
-                dbModel.setSeason_id("0");
-                dbModel.setPurchase_type("show");
-                dbModel.setPosterImageId(posterImageId);
-                dbModel.setContentTypesId(contentTypesId);
-
-                Util.dataModel = dbModel;
-                SubTitleName.clear();
-                SubTitlePath.clear();
-                ResolutionUrl.clear();
-                ResolutionFormat.clear();
-                Util.check_for_subscription = 1;
-                if (preferenceManager.getLoginFeatureFromPref() == 1) {
-                    if (preferenceManager != null) {
-                        String loggedInStr = preferenceManager.getUseridFromPref();
-
-                        if (loggedInStr == null) {
-
-                            Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
-                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            registerActivity.putExtra("PlayerModel", playerModel);
-                            startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-                        } else {
-
-                            if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
-
-
-                                if (playerModel.getIsFreeContent() == 1) {
-
-                                    Log.v("MUVI", "video details");
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                    Log.v("BKS", "contentid" + getVideoDetailsInput.getContent_uniq_id());
-                                } else {
-                                    //for check this flabour should voucher payment or normal payment like card and ppv payment
-
-                                    new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
-                                    //callValidateUserAPI();
-                                }
-                            } else {
-                                Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-                    } else {
-                        Util.check_for_subscription = 1;
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
-                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        registerActivity.putExtra("PlayerModel", playerModel);
-//                        startActivity(registerActivity);
-                        startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-
-                    }
-                } else {
-                    if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
-                        // MUVIlaxmi
-
-                        Log.v("MUVI", "VV");
-                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
-                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                    } else {
-                        Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-
+        NewPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playButtonAction();
             }
         });
 
@@ -1404,181 +1297,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         watchTrailerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataModel dbModel = new DataModel();
-                dbModel.setIsFreeContent(isFreeContent);
-                dbModel.setIsAPV(isAPV);
-                dbModel.setIsPPV(isPPV);
-                dbModel.setIsConverted(isConverted);
-                dbModel.setMovieUniqueId(movieUniqueId);
-                dbModel.setStreamUniqueId(movieStreamUniqueId);
-                dbModel.setThirdPartyUrl(movieThirdPartyUrl);
-                dbModel.setVideoTitle(movieNameStr);
-                dbModel.setVideoStory(movieDetailsStr);
-                dbModel.setVideoGenre(videoGenreTextView.getText().toString());
-                dbModel.setVideoDuration(videoDurationTextView.getText().toString());
-                dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
-                dbModel.setCensorRating(censorRatingStr);
-                dbModel.setCastCrew(castStr);
-                dbModel.setVideoUrl(movieTrailerUrlStr);
-                dbModel.setVideoResolution("BEST");
-                dbModel.setContentTypesId(contentTypesId);
+                viewTrailerAction();
+            }
+        });
 
-                Util.dataModel = dbModel;
-
-                if (movieTrailerUrlStr == null) {
-
-                    Util.showNoDataAlert(MovieDetailsActivity.this);
-                    /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();*/
-                    return;
-
-                } else if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
-                    Util.showNoDataAlert(MovieDetailsActivity.this);
-                   /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();*/
-                    return;
-
-                } else {
-                    /*chromecast-------------------------------------*/
-                    if (isThirdPartyTrailer == false) {
-
-                        if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                            MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
-
-                            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
-                            movieMetadata.putString(MediaMetadata.KEY_TITLE, movieNameStr + " - Trailer");
-                            movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
-                            movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
-                            JSONObject jsonObj = null;
-                            try {
-                                jsonObj = new JSONObject();
-                                jsonObj.put("description", movieNameStr);
-
-
-                                //  This Code Is Added For Video Log By Bibhu..
-
-                                jsonObj.put("authToken", authTokenStr.trim());
-                                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-                                jsonObj.put("ip_address", ipAddressStr.trim());
-                                jsonObj.put("movie_id", movieUniqueId);
-                                jsonObj.put("episode_id", "");
-
-
-                                jsonObj.put("played_length", "0");
-
-
-                                jsonObj.put("watch_status", "start");
-                                jsonObj.put("device_type", "2");
-                                jsonObj.put("log_id", "0");
-
-                                // restrict_stream_id is always set to be "0" , bcoz it's a triler.
-                                jsonObj.put("restrict_stream_id", "0");
-
-                                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
-                                jsonObj.put("is_log", "1");
-
-                                //=====================End===================//
-
-
-                                // This  Code Is Added For Drm BufferLog By Bibhu ...
-
-                                jsonObj.put("resolution", "BEST");
-                                jsonObj.put("start_time", "0");
-                                jsonObj.put("end_time", "0");
-                                jsonObj.put("log_unique_id", "0");
-                                jsonObj.put("location", "0");
-                                jsonObj.put("video_type", "");
-                                jsonObj.put("totalBandwidth", "0");
-                                // This is added only to identify, the videolog is called for trailer
-                                jsonObj.put("content_type", "2");
-
-                                //====================End=====================//
-
-                            } catch (JSONException e) {
-                            }
-
-                            mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
-                                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                                    .setContentType("videos/mp4")
-                                    .setMetadata(movieMetadata)
-                                    .setStreamDuration(15 * 1000)
-                                    .setCustomData(jsonObj)
-                                    .build();
-                            mSelectedMedia = mediaInfo;
-                            // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
-
-                            togglePlayback();
-                        } else {
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, TrailerActivity.class);
-
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(playVideoIntent);
-
-                                }
-                            });
-                        }
-                    } else {
-                        if (movieTrailerUrlStr.contains("://www.youtube") || movieTrailerUrlStr.contains("://www.youtu.be")) {
-                            if (movieTrailerUrlStr.contains("live_stream?channel")) {
-                                final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(playVideoIntent);
-
-                                    }
-                                });
-                            } else {
-
-                                final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, YouTubeAPIActivity.class);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(playVideoIntent);
-
-
-                                    }
-                                });
-
-                            }
-                        } else {
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(playVideoIntent);
-
-                                }
-                            });
-                        }
-
-                    }
-                }
+        watchTrailerButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewTrailerAction();
             }
         });
 
@@ -1736,6 +1462,312 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 /***************chromecast**********************/
 
+    }
+
+    private void playButtonAction() {
+
+        //playermodel set data
+// *****************set data into playermdel for play in exoplayer************
+
+        isVoucher = 0;
+        playerModel.setStreamUniqueId(movieStreamUniqueId);
+        playerModel.setMovieUniqueId(movieUniqueId);
+        playerModel.setUserId(preferenceManager.getUseridFromPref());
+        playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+        playerModel.setAuthTokenStr(authTokenStr.trim());
+        playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
+        playerModel.setEpisode_id("0");
+        playerModel.setIsFreeContent(isFreeContent);
+        playerModel.setVideoTitle(movieNameStr);
+        playerModel.setVideoStory(movieDetailsStr);
+        playerModel.setVideoGenre(videoGenreTextView.getText().toString());
+        playerModel.setVideoDuration(videoDurationTextView.getText().toString());
+        playerModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
+        playerModel.setCensorRating(censorRatingStr);
+        playerModel.setContentTypesId(contentTypesId);
+        playerModel.setPosterImageId(posterImageId);
+        playerModel.setCastCrew(castStr);
+
+        Log.v("BKS", "stramid=" + playerModel.getStreamUniqueId());
+        Log.v("BKS", "movieID=" + playerModel.getMovieUniqueId());
+        Log.v("BKS", "userid=" + preferenceManager.getUseridFromPref());
+        Log.v("BKS", "emailid=" + playerModel.getEmailId());
+
+
+        DataModel dbModel = new DataModel();
+        dbModel.setIsFreeContent(isFreeContent);
+        dbModel.setIsAPV(isAPV);
+        dbModel.setIsPPV(isPPV);
+        dbModel.setIsConverted(isConverted);
+        dbModel.setMovieUniqueId(movieUniqueId);
+        dbModel.setStreamUniqueId(movieStreamUniqueId);
+        dbModel.setThirdPartyUrl(movieThirdPartyUrl);
+        dbModel.setVideoTitle(movieNameStr);
+        dbModel.setVideoStory(movieDetailsStr);
+        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
+        dbModel.setVideoDuration(videoDurationTextView.getText().toString());
+        dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
+        dbModel.setCensorRating(censorRatingStr);
+        dbModel.setCastCrew(castStr);
+        dbModel.setEpisode_id("0");
+        dbModel.setSeason_id("0");
+        dbModel.setPurchase_type("show");
+        dbModel.setPosterImageId(posterImageId);
+        dbModel.setContentTypesId(contentTypesId);
+
+        Util.dataModel = dbModel;
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionUrl.clear();
+        ResolutionFormat.clear();
+        Util.check_for_subscription = 1;
+        if (preferenceManager.getLoginFeatureFromPref() == 1) {
+            if (preferenceManager != null) {
+                String loggedInStr = preferenceManager.getUseridFromPref();
+
+                if (loggedInStr == null) {
+
+                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("PlayerModel", playerModel);
+                    startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                } else {
+
+                    if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
+
+
+                        if (playerModel.getIsFreeContent() == 1) {
+
+                            Log.v("MUVI", "video details");
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                            Log.v("BKS", "contentid" + getVideoDetailsInput.getContent_uniq_id());
+                        } else {
+                            //for check this flabour should voucher payment or normal payment like card and ppv payment
+
+                            new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
+                            //callValidateUserAPI();
+                        }
+                    } else {
+                        Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            } else {
+                Util.check_for_subscription = 1;
+                Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                registerActivity.putExtra("PlayerModel", playerModel);
+//                        startActivity(registerActivity);
+                startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+
+            }
+        } else {
+            if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
+                // MUVIlaxmi
+
+                Log.v("MUVI", "VV");
+                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                getVideoDetailsInput.setAuthToken(authTokenStr);
+                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+    }
+
+    private void viewTrailerAction() {
+        DataModel dbModel = new DataModel();
+        dbModel.setIsFreeContent(isFreeContent);
+        dbModel.setIsAPV(isAPV);
+        dbModel.setIsPPV(isPPV);
+        dbModel.setIsConverted(isConverted);
+        dbModel.setMovieUniqueId(movieUniqueId);
+        dbModel.setStreamUniqueId(movieStreamUniqueId);
+        dbModel.setThirdPartyUrl(movieThirdPartyUrl);
+        dbModel.setVideoTitle(movieNameStr);
+        dbModel.setVideoStory(movieDetailsStr);
+        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
+        dbModel.setVideoDuration(videoDurationTextView.getText().toString());
+        dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
+        dbModel.setCensorRating(censorRatingStr);
+        dbModel.setCastCrew(castStr);
+        dbModel.setVideoUrl(movieTrailerUrlStr);
+        dbModel.setVideoResolution("BEST");
+        dbModel.setContentTypesId(contentTypesId);
+
+        Util.dataModel = dbModel;
+
+        if (movieTrailerUrlStr == null) {
+
+            Util.showNoDataAlert(MovieDetailsActivity.this);
+                    /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dlgAlert.create().show();*/
+            return;
+
+        } else if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
+            Util.showNoDataAlert(MovieDetailsActivity.this);
+                   /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage( Util.SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dlgAlert.create().show();*/
+            return;
+
+        } else {
+            /*chromecast-------------------------------------*/
+            if (isThirdPartyTrailer == false) {
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+
+
+                    MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                    movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
+                    movieMetadata.putString(MediaMetadata.KEY_TITLE, movieNameStr + " - Trailer");
+                    movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                    movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                    JSONObject jsonObj = null;
+                    try {
+                        jsonObj = new JSONObject();
+                        jsonObj.put("description", movieNameStr);
+
+
+                        //  This Code Is Added For Video Log By Bibhu..
+
+                        jsonObj.put("authToken", authTokenStr.trim());
+                        jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                        jsonObj.put("ip_address", ipAddressStr.trim());
+                        jsonObj.put("movie_id", movieUniqueId);
+                        jsonObj.put("episode_id", "");
+
+
+                        jsonObj.put("played_length", "0");
+
+
+                        jsonObj.put("watch_status", "start");
+                        jsonObj.put("device_type", "2");
+                        jsonObj.put("log_id", "0");
+
+                        // restrict_stream_id is always set to be "0" , bcoz it's a triler.
+                        jsonObj.put("restrict_stream_id", "0");
+
+                        jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                        jsonObj.put("is_log", "1");
+
+                        //=====================End===================//
+
+
+                        // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                        jsonObj.put("resolution", "BEST");
+                        jsonObj.put("start_time", "0");
+                        jsonObj.put("end_time", "0");
+                        jsonObj.put("log_unique_id", "0");
+                        jsonObj.put("location", "0");
+                        jsonObj.put("video_type", "");
+                        jsonObj.put("totalBandwidth", "0");
+                        // This is added only to identify, the videolog is called for trailer
+                        jsonObj.put("content_type", "2");
+
+                        //====================End=====================//
+
+                    } catch (JSONException e) {
+                    }
+
+                    mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
+                            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                            .setContentType("videos/mp4")
+                            .setMetadata(movieMetadata)
+                            .setStreamDuration(15 * 1000)
+                            .setCustomData(jsonObj)
+                            .build();
+                    mSelectedMedia = mediaInfo;
+                    // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
+
+                    togglePlayback();
+                } else {
+                    final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, TrailerActivity.class);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(playVideoIntent);
+
+                        }
+                    });
+                }
+            } else {
+                if (movieTrailerUrlStr.contains("://www.youtube") || movieTrailerUrlStr.contains("://www.youtu.be")) {
+                    if (movieTrailerUrlStr.contains("live_stream?channel")) {
+                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(playVideoIntent);
+
+                            }
+                        });
+                    } else {
+
+                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, YouTubeAPIActivity.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(playVideoIntent);
+
+
+                            }
+                        });
+
+                    }
+                } else {
+                    final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(playVideoIntent);
+
+                        }
+                    });
+                }
+
+            }
+        }
     }
 
     /******* Subtitle*****/
@@ -3434,24 +3466,30 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             /***play button visibility condition *****/
             if (contentDetailsOutput.getIsConverted() != 1) {
                 playButton.setVisibility(View.INVISIBLE);
+                NewPlay.setVisibility(View.INVISIBLE);
+
             }
             if (contentDetailsOutput.getIsApv() == 1) {
                 playButton.setVisibility(View.INVISIBLE);
+                NewPlay.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
             } else if (contentDetailsOutput.getContentTypesId() == 4) {
                 playButton.setVisibility(View.VISIBLE);
+                NewPlay.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
             } else if ((contentDetailsOutput.getIsFreeContent().equals("1") || contentDetailsOutput.getIsPpv() == 1)
                     && contentDetailsOutput.getIsConverted() == 1) {
 
                 playButton.setVisibility(View.VISIBLE);
+                NewPlay.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
             } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 &&
                     contentDetailsOutput.getIsConverted() == 1) {
                 playButton.setVisibility(View.VISIBLE);
+                NewPlay.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
             }
@@ -3464,13 +3502,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 watchTrailerButton.setVisibility(View.INVISIBLE);
+                watchTrailerButton1.setVisibility(View.INVISIBLE);
             } else {
                 watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
-                watchTrailerButton.setVisibility(View.VISIBLE);
+                watchTrailerButton.setVisibility(View.GONE);
+                watchTrailerButton1.setVisibility(View.VISIBLE);
             }
 
             if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                videoGenreTextView.setVisibility(View.GONE);
+                videoGenreTextView.setVisibility(View.INVISIBLE);
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
@@ -3526,7 +3566,31 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 videoStoryTextView.setTypeface(videoGenreTextViewTypeface);
                 videoStoryTextView.setText(Util.getTextViewTextFromApi(contentDetailsOutput.getStory()));
-                ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+
+                if(!videoStoryTextView.getText().toString().isEmpty())
+                {
+                    storyViewMoreButton.setVisibility(View.VISIBLE);
+                }else{
+                    storyViewMoreButton.setVisibility(View.GONE);
+                }
+                // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+                ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, "", true);
+
+                storyViewMoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        videoStoryTextView.setLayoutParams(videoStoryTextView.getLayoutParams());
+                        videoStoryTextView.setText(videoStoryTextView.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        videoStoryTextView.invalidate();
+                        if(storyViewMoreButton.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE))){
+                            ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, -1, "", true);
+                            storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_LESS,DEFAULT_VIEW_LESS));
+                        }else if(storyViewMoreButton.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(VIEW_LESS,DEFAULT_VIEW_LESS))){
+                            ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, 2, "", false);
+                            storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
+                        }
+                    }
+                });
             }
 
             if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {

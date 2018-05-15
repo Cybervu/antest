@@ -66,6 +66,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -160,7 +161,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
 
-  //  private TextView sectionTitle;
+    private TextView sectionTitle;
     //Register Dialog
 
 
@@ -231,13 +232,14 @@ public class ViewMoreActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarColor.changeColor(ViewMoreActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_view_more);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(ViewMoreActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+       /* mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -262,7 +264,8 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
-      //  sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+        sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+        sectionTitle.setText(getIntent().getStringExtra("sectionName"));
        // FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
       /*  if (getIntent().getStringExtra("sectionName") != null) {
            // mActionBarToolbar.setTitle(getIntent().getStringExtra("sectionName"));

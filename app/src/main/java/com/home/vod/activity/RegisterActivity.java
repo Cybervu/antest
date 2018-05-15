@@ -852,7 +852,9 @@ public class RegisterActivity extends AppCompatActivity implements
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
                 return false;
             }
-            boolean isValidEmail = Util.isValidMail(regEmailStr);
+            //boolean isValidEmail = Util.isValidMail(regEmailStr);
+            boolean isValidEmail = Util.EmailAddressValidator.isValidEmailAddress(regEmailStr);
+            //boolean isValidEmail = Util.emailVerificationNormal(regEmailStr);
             if(!isValidEmail){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 return false;

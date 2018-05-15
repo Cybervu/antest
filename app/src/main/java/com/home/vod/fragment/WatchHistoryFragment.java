@@ -471,7 +471,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+       // ((MainActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
+        ((MainActivity)getActivity()).getSupportActionBar();
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);

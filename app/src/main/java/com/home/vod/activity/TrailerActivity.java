@@ -40,6 +40,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 
 
@@ -225,6 +226,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarColor.changeColor(TrailerActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_video_player);
         content_types_id = Util.dataModel.getContentTypesId();
         new_detailsLayout = (LinearLayout)findViewById(R.id.new_detailsLayout);

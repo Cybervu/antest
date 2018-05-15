@@ -249,7 +249,8 @@ public class MyFavouriteFragment extends Fragment implements
         featureHandler = FeatureHandler.getFeaturePreference(getActivity());
         mActionBarToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         mActionBarToolbar.setVisibility(View.GONE);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("sectionName"));
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("sectionName"));
+        ((MainActivity) getActivity()).getSupportActionBar();
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);

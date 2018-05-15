@@ -133,6 +133,7 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -213,6 +214,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHAS
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
@@ -244,6 +246,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_LESS;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
@@ -584,13 +587,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             if (movieTrailerUrlStr.matches("") || movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 watchTrailerButton.setVisibility(View.INVISIBLE);
+                watchTrailerButton1.setVisibility(View.INVISIBLE);
             } else {
 
                 watchTrailerButton.setVisibility(View.GONE);
+                watchTrailerButton1.setVisibility(View.VISIBLE);
             }
 
             if (movieTypeStr != null && movieTypeStr.matches("") || movieTypeStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                videoGenreTextView.setVisibility(View.GONE);
+                videoGenreTextView.setVisibility(View.INVISIBLE);
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
@@ -648,6 +653,22 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
                 ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, "", true);
+
+                storyViewMoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        videoStoryTextView.setLayoutParams(videoStoryTextView.getLayoutParams());
+                        videoStoryTextView.setText(videoStoryTextView.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        videoStoryTextView.invalidate();
+                        if(storyViewMoreButton.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE))){
+                            ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, -1, "", true);
+                            storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_LESS,DEFAULT_VIEW_LESS));
+                        }else if(storyViewMoreButton.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(VIEW_LESS,DEFAULT_VIEW_LESS))){
+                            ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, 2, "", false);
+                            storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
+                        }
+                    }
+                });
 
             }
 
@@ -2093,6 +2114,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         Util.check_for_subscription=0;
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
+        StatusBarColor.changeColor(ShowWithEpisodesActivity.this, R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_show_with_episodes);
 //        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));

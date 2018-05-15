@@ -4,13 +4,10 @@ package com.home.vod.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.transition.Visibility;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
@@ -26,28 +22,20 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
-import com.home.vod.util.FontUtls;
-import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.Util;
+import com.home.vod.util.ProgressBarHandler;
 
 import static com.home.vod.preferences.LanguagePreference.ABOUT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ABOUT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -93,7 +81,8 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
         noInternet.setVisibility(View.GONE);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getArguments().getString("title")));
+       // ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getArguments().getString("title")));
+        ((MainActivity) getActivity()).getSupportActionBar();
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
@@ -245,7 +234,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         if (status == 200) {
           /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setText(getStyledTextFromHtml(bodyData));*/
-            int color = getActivity().getResources().getColor(R.color.aboutustextcolor);
+            int color = getActivity().getResources().getColor(R.color.colorAmgoRed);
             String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
             String text = "<html><head>"
                     + "<style type=\"text/css\" >body{color:" + aboutUSTextColor + ";}"
@@ -255,8 +244,10 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
                     + "</body></html>";
 
             webView.loadData(text, "text/html", "utf-8");
-            webView.setBackgroundColor(getResources().getColor(R.color.aboutustestcolor));
+            webView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             webView.getSettings().setJavaScriptEnabled(true);
+
+            webView.setVisibility(View.VISIBLE);
         }else {
 
             noInternetTextView.setText(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
