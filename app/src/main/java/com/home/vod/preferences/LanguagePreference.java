@@ -468,7 +468,7 @@ public class LanguagePreference {
     public static String WANT_DOWNLOAD_CANCEL = "WANT_DOWNLOAD_CANCEL";
     public static String DEFAULT_WANT_DOWNLOAD_CANCEL = "Do you want to cancel the download ?";
     public static String DOWNLOAD_CANCEL = "DOWNLOAD_CANCEL";
-    public static String DEFAULT_DOWNLOAD_CANCEL = "Download Cancelled";
+    public static String DEFAULT_DOWNLOAD_CANCEL = "Cancel Download ";
     public static String NO_DOWNLOADED_VIDEOS = "NO_DOWNLOADED_VIDEOS";
     public static String DEFAULT_NO_DOWNLOADED_VIDEOS = "No downloaded video(s) available";
     public static String DOWNLOADED_ACCESS_EXPIRED = "DOWNLOADED_ACCESS_EXPIRED";
