@@ -40,5 +40,7 @@
         android:layout_marginLeft="@dimen/my_download_margin"
         android:layout_marginRight="@dimen/my_download_margin"
         android:layout_marginTop="@dimen/my_download_margin"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:listSelector="@color/transparent"
+        />
 </LinearLayout>
