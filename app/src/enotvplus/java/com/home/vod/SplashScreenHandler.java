@@ -38,12 +38,11 @@ public class SplashScreenHandler {
 
     }
     public void handlePhoneSplashUI(ImageView imageResize){
-        //imageResize.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Display display = context.getWindowManager().getDefaultDisplay();
         float dpHeight = display.getHeight();
         float dpWidth = display.getWidth();
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.splash1, dpWidth, dpHeight));
-        imageResize.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     public void changeFeatureProperties(FeatureHandler featureHandler){
