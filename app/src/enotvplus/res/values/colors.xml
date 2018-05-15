@@ -23,9 +23,9 @@
     <color name="aboutustextcolor">#FFFFFF</color>
     <color name="lollipop_spiner_color">#e2e1e1</color>
     <color name="lollipop_spiner_color2">#7a7a7a</color>
-    <color name="spinner_card_color">#FF0000</color>
+    <color name="spinner_card_color">#4da30c</color>
     <color name="style_circular_color">#999999</color>
-    <color name="style_circular_color_2">#ff0400</color>
+    <color name="style_circular_color_2">#4da30c</color>
     <color name="spinner_card_color2">#FAFAFA</color>
     <color name="forgotPasswordTextViewColor">#4da30c</color>
     <color name="iv_check_box_default_color">#4da30c</color>
@@ -50,6 +50,7 @@
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
     <color name="pageTitleColor">#ffffff</color>
+    <color name="episodetextcolor">#000000</color>
     <color name="amount_color">#000</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>

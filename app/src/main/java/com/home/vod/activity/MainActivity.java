@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
-
+    Menu menu;
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -427,6 +427,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu=menu;
+
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
@@ -1527,6 +1529,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         mCastContext.removeCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().removeSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
+      //  closeOptionsMenu();
         super.onPause();
     }
 
