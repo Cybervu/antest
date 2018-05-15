@@ -26,6 +26,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -84,11 +85,12 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarColor.changeColor(CastAndCrewActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+       /* mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {

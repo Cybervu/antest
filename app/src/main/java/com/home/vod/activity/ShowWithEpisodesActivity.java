@@ -559,6 +559,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 favorite_view_episode.setVisibility(View.GONE);
             }
 
+            /*Share button visibility*/
+
+            handleRatingbar.handleVisibleUnvisibleShareIcon(share);
+
 
             //Enable/Disable Play button
 
@@ -582,7 +586,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 watchTrailerButton.setVisibility(View.INVISIBLE);
             } else {
 
-                watchTrailerButton.setVisibility(View.VISIBLE);
+                watchTrailerButton.setVisibility(View.GONE);
             }
 
             if (movieTypeStr != null && movieTypeStr.matches("") || movieTypeStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -636,7 +640,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 //                videoStoryTextView.setText(movieDetailsStr.trim());
                 videoStoryTextView.setText(Util.getTextViewTextFromApi(contentDetailsOutput.getStory()));
-                ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+                if(!videoStoryTextView.getText().toString().isEmpty())
+                {
+                    storyViewMoreButton.setVisibility(View.VISIBLE);
+                }else{
+                    storyViewMoreButton.setVisibility(View.GONE);
+                }
+               // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+                ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, "", true);
 
             }
 
@@ -2011,7 +2022,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     //Add By Bibhu Later.
     TextView videoStoryTextView;
-    Button storyViewMoreButton;
+    TextView storyViewMoreButton;
 
     boolean isExpanded = false;
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -2028,11 +2039,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     GetEpisodeDeatailsAsynTask asynEpisodeDetails;
     int spinnerPosition = 0;
     ImageView moviePoster, favorite_view_episode;
-    ImageView playButton;
+    ImageView playButton,watchTrailerButton1;
     ImageButton offlineImageButton;
     Button viewTrailerButton, btnmore, watchTrailerButton;
     TextView videoTitle, videoGenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView, videoCastCrewTitleTextView;
     RatingBar ratingBar;
+    ImageView share;
     SharedPreferences pref;
     Spinner season_spinner;
     ArrayList<String> season;
@@ -2125,6 +2137,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), watchTrailerButton);
         watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
+
+        watchTrailerButton1 = (ImageView) findViewById(R.id.viewtrailer1);
+
+
         playButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
@@ -2157,7 +2173,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (asynEpisodeDetails != null) {
                     asynEpisodeDetails.cancel(true);
                 }
-                btnmore.setVisibility(View.VISIBLE);
+                btnmore.setVisibility(View.GONE);
 
 
                 LogUtil.showLog("MUVI", "episode details  call 1");
@@ -2207,7 +2223,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
-        mLayoutManager = new LinearLayoutManager(ShowWithEpisodesActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(ShowWithEpisodesActivity.this, LinearLayoutManager.VERTICAL, false);
         iconImageRelativeLayout = (RelativeLayout) findViewById(R.id.iconImageRelativeLayout);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
         story_layout = (LinearLayout) findViewById(R.id.story_layout);
@@ -2215,11 +2231,16 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         episodeVideoUrlStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         seasontiveLayout.addItemDecoration(new HorizotalSpaceItemDecoration(20));
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
+        storyViewMoreButton = (TextView) findViewById(R.id.storyViewMoreButton);
+        storyViewMoreButton.setVisibility(View.GONE);
+        storyViewMoreButton.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
         // *** rating***////
         ratingBar = (RatingBar) findViewById(R.id.rating);
         ratingBar.setFocusable(false);
         ratingBar.setVisibility(View.GONE);
+
+        share= (ImageView)findViewById(R.id.share);
+        share.setVisibility(View.GONE);
 
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -2227,6 +2248,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
         });
         viewRatingTextView = (TextView) findViewById(R.id.review);
+        viewRatingTextView.setVisibility(View.GONE);
 
 
         // *****rating********///
@@ -2271,165 +2293,18 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         /***favorite *****/
 
 
+
         watchTrailerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataModel dbModel = new DataModel();
-                dbModel.setIsFreeContent(isFreeContent);
-                dbModel.setIsAPV(isAPV);
-                dbModel.setIsPPV(isPPV);
-                dbModel.setIsConverted(isConverted);
-                dbModel.setMovieUniqueId(movieUniqueId);
-                dbModel.setStreamUniqueId(movieStreamUniqueId);
-                dbModel.setThirdPartyUrl("");
-                dbModel.setVideoTitle(movieNameStr);
-                dbModel.setVideoStory(movieDetailsStr);
-                dbModel.setVideoGenre(videoGenreTextView.getText().toString());
-                dbModel.setVideoDuration(videoDurationTextView.getText().toString());
-                dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
-                dbModel.setCensorRating(censorRatingStr);
-                dbModel.setCastCrew(castStr);
-                dbModel.setVideoUrl(movieTrailerUrlStr);
-                dbModel.setVideoResolution("BEST");
-                dbModel.setContentTypesId(contentTypesId);
+                viewTrailerAction();
+            }
+        });
 
-                Util.dataModel = dbModel;
-
-
-                if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
-                    Util.showNoDataAlert(ShowWithEpisodesActivity.this);
-                   /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();*/
-                    return;
-                } else if (isThirdPartyTrailer == false) {
-                    if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
-
-                        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
-                        movieMetadata.putString(MediaMetadata.KEY_TITLE, movieNameStr + " - Trailer");
-                        movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
-                        movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
-                        JSONObject jsonObj = null;
-                        try {
-                            jsonObj = new JSONObject();
-                            jsonObj.put("description", movieNameStr);
-
-
-                            //  This Code Is Added For Video Log By Bibhu..
-
-                            jsonObj.put("authToken", authTokenStr.trim());
-                            jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-                            jsonObj.put("ip_address", ipAddres.trim());
-                            jsonObj.put("movie_id", movieUniqueId);
-                            jsonObj.put("episode_id", "");
-
-
-                            jsonObj.put("played_length", "0");
-
-
-                            jsonObj.put("watch_status", "start");
-                            jsonObj.put("device_type", "2");
-                            jsonObj.put("log_id", "0");
-
-                            // restrict_stream_id is always set to be "0" , bcoz it's a triler.
-                            jsonObj.put("restrict_stream_id", "0");
-
-                            jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
-                            jsonObj.put("is_log", "1");
-
-                            //=====================End===================//
-
-
-                            // This  Code Is Added For Drm BufferLog By Bibhu ...
-
-                            jsonObj.put("resolution", "BEST");
-                            jsonObj.put("start_time", "0");
-                            jsonObj.put("end_time", "0");
-                            jsonObj.put("log_unique_id", "0");
-                            jsonObj.put("location", "0");
-                            jsonObj.put("video_type", "");
-                            jsonObj.put("totalBandwidth", "0");
-                            // This is added only to identify, the videolog is called for trailer
-                            jsonObj.put("content_type", "2");
-
-                            //====================End=====================//
-
-                        } catch (JSONException e) {
-                        }
-
-                        mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
-                                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                                .setContentType("videos/mp4")
-                                .setMetadata(movieMetadata)
-                                .setStreamDuration(15 * 1000)
-                                .setCustomData(jsonObj)
-                                .build();
-                        mSelectedMedia = mediaInfo;
-                        // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
-
-                        togglePlayback();
-
-                    } else {
-                        final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, TrailerActivity.class);
-
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(playVideoIntent);
-
-                            }
-                        });
-                    }
-                } else {
-                    if (movieTrailerUrlStr.contains("://www.youtube") || movieTrailerUrlStr.contains("://www.youtu.be")) {
-                        if (movieTrailerUrlStr.contains("live_stream?channel")) {
-                            final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ThirdPartyPlayer.class);
-
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(playVideoIntent);
-
-                                }
-                            });
-                        } else {
-
-                            final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, YouTubeAPIActivity.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(playVideoIntent);
-
-
-                                }
-                            });
-
-                        }
-                    } else {
-                        final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ThirdPartyPlayer.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(playVideoIntent);
-
-                            }
-                        });
-                    }
-
-                }
-
+        watchTrailerButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewTrailerAction();
             }
         });
 
@@ -2633,6 +2508,165 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 /***************chromecast**********************/
 
+
+    }
+
+    private void viewTrailerAction(){
+        DataModel dbModel = new DataModel();
+        dbModel.setIsFreeContent(isFreeContent);
+        dbModel.setIsAPV(isAPV);
+        dbModel.setIsPPV(isPPV);
+        dbModel.setIsConverted(isConverted);
+        dbModel.setMovieUniqueId(movieUniqueId);
+        dbModel.setStreamUniqueId(movieStreamUniqueId);
+        dbModel.setThirdPartyUrl("");
+        dbModel.setVideoTitle(movieNameStr);
+        dbModel.setVideoStory(movieDetailsStr);
+        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
+        dbModel.setVideoDuration(videoDurationTextView.getText().toString());
+        dbModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
+        dbModel.setCensorRating(censorRatingStr);
+        dbModel.setCastCrew(castStr);
+        dbModel.setVideoUrl(movieTrailerUrlStr);
+        dbModel.setVideoResolution("BEST");
+        dbModel.setContentTypesId(contentTypesId);
+
+        Util.dataModel = dbModel;
+
+
+        if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
+            Util.showNoDataAlert(ShowWithEpisodesActivity.this);
+                   /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dlgAlert.create().show();*/
+            return;
+        } else if (isThirdPartyTrailer == false) {
+            if (mCastSession != null && mCastSession.isConnected()) {
+
+
+                MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
+                movieMetadata.putString(MediaMetadata.KEY_TITLE, movieNameStr + " - Trailer");
+                movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                JSONObject jsonObj = null;
+                try {
+                    jsonObj = new JSONObject();
+                    jsonObj.put("description", movieNameStr);
+
+
+                    //  This Code Is Added For Video Log By Bibhu..
+
+                    jsonObj.put("authToken", authTokenStr.trim());
+                    jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                    jsonObj.put("ip_address", ipAddres.trim());
+                    jsonObj.put("movie_id", movieUniqueId);
+                    jsonObj.put("episode_id", "");
+
+
+                    jsonObj.put("played_length", "0");
+
+
+                    jsonObj.put("watch_status", "start");
+                    jsonObj.put("device_type", "2");
+                    jsonObj.put("log_id", "0");
+
+                    // restrict_stream_id is always set to be "0" , bcoz it's a triler.
+                    jsonObj.put("restrict_stream_id", "0");
+
+                    jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                    jsonObj.put("is_log", "1");
+
+                    //=====================End===================//
+
+
+                    // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                    jsonObj.put("resolution", "BEST");
+                    jsonObj.put("start_time", "0");
+                    jsonObj.put("end_time", "0");
+                    jsonObj.put("log_unique_id", "0");
+                    jsonObj.put("location", "0");
+                    jsonObj.put("video_type", "");
+                    jsonObj.put("totalBandwidth", "0");
+                    // This is added only to identify, the videolog is called for trailer
+                    jsonObj.put("content_type", "2");
+
+                    //====================End=====================//
+
+                } catch (JSONException e) {
+                }
+
+                mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
+                        .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                        .setContentType("videos/mp4")
+                        .setMetadata(movieMetadata)
+                        .setStreamDuration(15 * 1000)
+                        .setCustomData(jsonObj)
+                        .build();
+                mSelectedMedia = mediaInfo;
+                // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
+
+                togglePlayback();
+
+            } else {
+                final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, TrailerActivity.class);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(playVideoIntent);
+
+                    }
+                });
+            }
+        } else {
+            if (movieTrailerUrlStr.contains("://www.youtube") || movieTrailerUrlStr.contains("://www.youtu.be")) {
+                if (movieTrailerUrlStr.contains("live_stream?channel")) {
+                    final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ThirdPartyPlayer.class);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(playVideoIntent);
+
+                        }
+                    });
+                } else {
+
+                    final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, YouTubeAPIActivity.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(playVideoIntent);
+
+
+                        }
+                    });
+
+                }
+            } else {
+                final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ThirdPartyPlayer.class);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(playVideoIntent);
+
+                    }
+                });
+            }
+
+        }
 
     }
 

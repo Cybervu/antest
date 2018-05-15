@@ -16,14 +16,20 @@ public class HandleRatingbar {
     public HandleRatingbar(Activity context){
         this.context=context;
     }
+
+
     public void handleVisibleUnvisibleRating(RatingBar ratingBar){
         ratingBar.setVisibility(View.VISIBLE);
 
     }
     public void handleVisibleUnvisibleRatingTextView(TextView viewRatingTextView){
-        viewRatingTextView.setVisibility(View.VISIBLE);
+        viewRatingTextView.setVisibility(View.GONE);
     }
     public void handleVisibleUnvisibleFavicon(ImageView favorite_view){
         favorite_view.setVisibility(View.VISIBLE);
+    }
+
+    public void handleVisibleUnvisibleShareIcon(ImageView share){
+        share.setVisibility(View.VISIBLE);
     }
 }

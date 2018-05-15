@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -76,6 +77,8 @@ public class RegisterUIHandler {
     private LanguagePreference languagePreference;
     private Button registerButton;
     TextView fbLoginTextView;
+    CheckBox termsCheckBox;
+
 
     public RegisterUIHandler(Activity context) {
         this.context = context;
@@ -93,6 +96,7 @@ public class RegisterUIHandler {
         btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         googleSignView.setVisibility(View.VISIBLE);
         editName = (EditText) context.findViewById(R.id.name);
+        termsCheckBox= (CheckBox) context.findViewById(R.id.termsCheckBox);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
 
@@ -134,10 +138,19 @@ public class RegisterUIHandler {
 
     public void getRegisterName() {
         regNameStr = editName.getText().toString().trim();
-        if (!regNameStr.equals("")) {
+        /*if (!regNameStr.equals("")) {
             ((RegisterActivity) context).registerButtonClicked(regNameStr, last_name, regPhone);
         } else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        }*/
+        if (regNameStr.equals("")) {
+            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        } else if(((RegisterActivity) context).registerButtonClicked(regNameStr, last_name, regPhone)){
+            if(!termsCheckBox.isChecked()){
+                Toast.makeText(context, "Please accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
+            }else{
+                ((RegisterActivity)context).registerNetworkAction(regNameStr, last_name, regPhone);
+            }
         }
     }
 

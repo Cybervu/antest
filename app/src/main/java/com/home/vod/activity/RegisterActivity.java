@@ -671,8 +671,8 @@ public class RegisterActivity extends AppCompatActivity implements
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                /*InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);*/
                 registerUIHandler.getRegisterName();
                 // registerButtonClicked();
             }
@@ -830,7 +830,7 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    public void registerButtonClicked(String first_name, String last_name, String phone) {
+    public boolean registerButtonClicked(String first_name, String last_name, String phone) {
 
      /*   regNameStr_first = editName_first.getText().toString().trim();
         regNameStr_last = editName_last.getText().toString().trim();
@@ -843,40 +843,42 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
 
-
-
-
-        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-
             if(first_name.trim().equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(FIRST_NAME, DEFAULT_FIRST_NAME), Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             if(regEmailStr.trim().equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
             boolean isValidEmail = Util.isValidMail(regEmailStr);
             if(!isValidEmail){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             if(regPasswordStr.equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
 
-                return;
+                return false;
             }
 
             if(regConfirmPasswordStr.equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(VALID_CONFIRM_PASSWORD, DEFAULT_VALID_CONFIRM_PASSWORD), Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
             if (!regPasswordStr.equals(regConfirmPasswordStr)){
                 Toast.makeText(RegisterActivity.this,languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH,DEFAULT_PASSWORDS_DO_NOT_MATCH),Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
+
+        return true;
+
+    }
+
+    public void registerNetworkAction(String first_name, String last_name, String phone){
+        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
 
 
 
@@ -901,7 +903,6 @@ public class RegisterActivity extends AppCompatActivity implements
         } else {
             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.home.vod.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -11,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,9 +26,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.home.apisdk.apiController.GetAppMenuAsync;
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiModel.GetMenusInputModel;
+import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.ExpandableListAdapter;
@@ -45,6 +50,8 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -54,20 +61,40 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.WATCH_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -76,7 +103,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsync.GetMenusListener {
+public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsync.GetMenusListener, LogoutAsynctask.LogoutListener {
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
@@ -86,6 +113,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     private DrawerLayout mDrawerLayout;
     private ExpandableListView mDrawerListView;
+    private Button Login, Register;
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
@@ -124,6 +152,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     Button Send;
+    private ProgressBarHandler pDialog = null;
 
     public NavigationDrawerFragment() {
     }
@@ -176,6 +205,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView= inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
         mDrawerListView = (ExpandableListView) rootView.findViewById(R.id.list_slidermenu);
+        Login= (Button)rootView.findViewById(R.id.navigation_login);
+        Register= (Button)rootView.findViewById(R.id.navigation_register);
+        setTextToButton();
+        handleClickFunction();
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -184,6 +217,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
             }
         });
+
+
 
 
 //       expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
@@ -432,6 +467,170 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         return rootView;
     }
 
+    private void setTextToButton() {
+
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        int isLogin = preferenceManager.getLoginFeatureFromPref();
+
+        if (loggedInStr != null) {
+            Login.setText(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
+            Register.setText(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
+        }else if (loggedInStr == null) {
+
+            if (isLogin == 1) {
+                Login.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+                Register.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+            }else{
+                Login.setText(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
+                Register.setText(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
+            }
+
+        }
+
+
+
+
+    }
+
+    private void handleClickFunction() {
+        Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN))){
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                    Util.check_for_subscription = 0;
+                    startActivity(loginIntent);
+                }else if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT))){
+                    logoutPopup();
+                }
+            }
+        });
+
+        Register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER))){
+                    Intent registerIntent = new Intent(getActivity(), RegisterActivity.class);
+                    Util.check_for_subscription = 0;
+                    startActivity(registerIntent);
+                }else if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE))){
+                    String id = preferenceManager.getUseridFromPref();
+                    String email = preferenceManager.getEmailIdFromPref();
+                    Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+                    profileIntent.putExtra("EMAIL", email);
+                    profileIntent.putExtra("LOGID", id);
+                    startActivity(profileIntent);
+                }
+
+            }
+        });
+    }
+    private void logoutPopup() {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.logout_layout, null);
+
+        final TextView logoutText= (TextView) alertLayout.findViewById(R.id.logout_text);
+        final Button yes= (Button) alertLayout.findViewById(R.id.logout_yes);
+        final Button no= (Button) alertLayout.findViewById(R.id.logout_no);
+
+        logoutText.setText(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        yes.setText(languagePreference.getTextofLanguage(YES, DEFAULT_YES));
+        no.setText(languagePreference.getTextofLanguage(NO, DEFAULT_NO));
+
+        dlgAlert.setView(alertLayout);
+        dlgAlert.setCancelable(false);
+        final AlertDialog dialog = dlgAlert.create();
+        dialog.show();
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(NetworkStatus.getInstance().isConnected(getActivity())) {
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, NavigationDrawerFragment.this, getActivity());
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(getContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+
+      //  dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+     //   dlgAlert.setTitle("");
+
+       /* dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                // dialog.cancel();
+                if(NetworkStatus.getInstance().isConnected(getActivity())) {
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, NavigationDrawerFragment.this, getActivity());
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(getContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+           *//* dlgAlert.setNegativeButton(getResources().getString(R.string.no_str),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setNegativeButton(getResources().getString(R.string.no_str),
+                            new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });*//*
+        dlgAlert.create().show();*/
+    }
+
+
+
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -598,6 +797,68 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     private ActionBar getActionBar() {
         return ((AppCompatActivity) getActivity()).getSupportActionBar();
+    }
+
+    @Override
+    public void onLogoutPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(getActivity());
+        pDialog.show();
+    }
+
+    @Override
+    public void onLogoutPostExecuteCompleted(int code, String status, String message) {{
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+        if (code != 200) {
+            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code == 0) {
+            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code > 0) {
+            if (code == 200) {
+                preferenceManager.clearLoginPref();
+
+                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                    final Intent startIntent = new Intent(getActivity(), SplashScreen.class);
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                            getActivity().finish();
+
+                        }
+                    });
+                } else {
+                    final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                            getActivity().finish();
+
+                        }
+                    });
+                }
+
+
+            } else {
+                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     }
 
     /**

@@ -667,7 +667,8 @@ android {
             targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             dimension 'vendor'
-            buildConfigField "String", "AUTH_TOKEN", "\"41c57591182975a229fb788b42ddb859\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"41c57591182975a229fb788b42ddb859\""//-- Amgo auth Token
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//-- Mob auth Token
             versionCode 1
             versionName '1.0'
         }

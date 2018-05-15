@@ -311,21 +311,17 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 
-           /* if (!firstTime) {
-                firstTime = true;*/
-                //for dynamic banner
-                loadDynamicBanners(mDemoSlider, view, this);
+            loadDynamicBanners(mDemoSlider, view, this);
 
-                // for static banner
-                //loadStaticBanners(mDemoSlider,view,this);
 
-            //}
+            // Kushal-- banner scroll indicator Not required in Amgo
 
             if (bannerUrls.size() > 1) {
                 mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(10000);
                 mDemoSlider.addOnPageChangeListener(this);
+                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
             } else {
                 mDemoSlider.stopAutoCycle();
                 mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);

@@ -41,6 +41,7 @@ import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.StatusBarColor;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -127,6 +128,7 @@ public class ProfileActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarColor.changeColor(ProfileActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_profile);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -184,8 +186,9 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+        // Kushal- Not required for Amgo
+      /*  mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
+        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

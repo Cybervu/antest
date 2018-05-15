@@ -95,7 +95,7 @@ public class EpisodeListOptionMenuHandler {
         menu_language.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
 
 
-        submenu.setVisible(true);
+        submenu.setVisible(false);
         // Kushal
         visibility = new boolean[6];
 

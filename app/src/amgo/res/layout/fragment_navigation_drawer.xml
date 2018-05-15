@@ -4,23 +4,10 @@
     android:gravity="center"
     android:background="@color/amgo_navigation_color">
 
-    <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/list_slidermenu"
-        android:layout_width="@dimen/slider_menu_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:alpha="255"
-        android:background="@color/amgo_navigation_color"
-        android:choiceMode="singleChoice"
-        android:dividerHeight="0.2dp"
-        android:groupIndicator="@null"
-        android:scrollbars="none">
-
-    </ExpandableListView>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@drawable/app_background"
+        android:background="#000000"
         android:layout_below="@+id/toolbar"/>
 
     <android.support.v7.widget.Toolbar
@@ -53,20 +40,40 @@
 
     </android.support.v7.widget.Toolbar>
 
+
+    <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/list_slidermenu"
+        android:layout_width="@dimen/slider_menu_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:alpha="255"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/buttonLayout"
+        android:background="@color/amgo_navigation_color"
+        android:choiceMode="singleChoice"
+        android:dividerHeight="0.2dp"
+        android:groupIndicator="@null"
+        android:scrollbars="none">
+
+    </ExpandableListView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#000000"
         android:weightSum="2"
+        android:id="@+id/buttonLayout"
         android:layout_alignParentBottom="true">
         <Button
+            android:id="@+id/navigation_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Login"
             android:background="#000000"
             android:textAlignment="center"
+            android:textAllCaps="false"
             android:textColor="@color/colorAmgoRed"
             android:textSize="18sp"/>
 
@@ -76,11 +83,13 @@
             android:background="@color/colorAmgoRed"/>
 
         <Button
+            android:id="@+id/navigation_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Register"
             android:textAlignment="center"
+            android:textAllCaps="false"
             android:background="#000000"
             android:textColor="@color/colorAmgoRed"
             android:textSize="18sp"/>

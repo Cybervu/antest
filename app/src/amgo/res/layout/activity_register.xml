@@ -136,6 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
+                    android:id="@+id/termsCheckBox"
                     android:button="@drawable/custom_checkbox"/>
 
                 <TextView
