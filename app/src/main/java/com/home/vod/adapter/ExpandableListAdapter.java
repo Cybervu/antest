@@ -126,7 +126,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 
 
-        TextView textViewLine = (TextView) convertView.findViewById(R.id.textViewLine);
+        View textViewLine = (View) convertView.findViewById(R.id.textViewLine);
 
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);

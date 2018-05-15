@@ -26,7 +26,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/horizontal_spacing"
-        android:verticalSpacing="@dimen/vertical_spacing">
+        android:verticalSpacing="@dimen/vertical_spacing"
+        android:listSelector="@color/transparent">
 
     </GridView>
     <!--<com.twotoasters.jazzylistview.JazzyGridView

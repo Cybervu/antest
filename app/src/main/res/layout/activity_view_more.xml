@@ -32,9 +32,7 @@
         android:layout_margin="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/horizontal_spacing"
         android:verticalSpacing="@dimen/vertical_spacing"
-
-
-
+        android:listSelector="@color/transparent"
         />
     <!--<com.twotoasters.jazzylistview.JazzyGridView
         android:id="@+id/imagesGridView"

@@ -234,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     public void onGmailRegPreExecuteStarted() {
 
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
+
         pDialog.show();
     }
 
@@ -517,7 +517,7 @@ public class RegisterActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
-
+        pDialog = new ProgressBarHandler(RegisterActivity.this);
         languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         featureHandler = FeatureHandler.getFeaturePreference(RegisterActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -901,9 +901,10 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onRegistrationDetailsPreExecuteStarted() {
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
 
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
 
     }
 
@@ -913,7 +914,6 @@ public class RegisterActivity extends AppCompatActivity implements
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
         } catch (IllegalArgumentException ex) {
             status = 0;
@@ -1052,8 +1052,9 @@ public class RegisterActivity extends AppCompatActivity implements
         SubTitlePath.clear();
         ResolutionUrl.clear();
         ResolutionFormat.clear();
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -1194,7 +1195,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -1216,7 +1216,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -1529,7 +1528,6 @@ public class RegisterActivity extends AppCompatActivity implements
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
-                    pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
                 playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -1731,8 +1729,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onGetValidateUserPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -1747,7 +1746,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     status = 0;
@@ -1776,7 +1774,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     status = 0;
@@ -1809,7 +1806,6 @@ public class RegisterActivity extends AppCompatActivity implements
                     try {
                         if (pDialog != null && pDialog.isShowing()) {
                             pDialog.hide();
-                            pDialog = null;
                         }
                     } catch (IllegalArgumentException ex) {
                         status = 0;
@@ -3544,8 +3540,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onSocialAuthPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
 
     }
 
@@ -3666,7 +3663,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } else {
                     Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -3675,7 +3671,6 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 }
             }
@@ -3793,17 +3788,16 @@ public class RegisterActivity extends AppCompatActivity implements
         if (accessToken != null) {
             LoginManager.getInstance().logOut();
         }
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
-
     @Override
     public void onCheckFbUserDetailsAsynPostExecuteCompleted(int code) {
 
         if (code == 0) {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
             android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
@@ -3822,7 +3816,6 @@ public class RegisterActivity extends AppCompatActivity implements
         if (code == 200) {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
 
             SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
@@ -3841,7 +3834,6 @@ public class RegisterActivity extends AppCompatActivity implements
         } else {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
             android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
@@ -3896,8 +3888,9 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     public void onCheckDevicePreExecuteStarted() {
 
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -3906,7 +3899,6 @@ public class RegisterActivity extends AppCompatActivity implements
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
         } catch (IllegalArgumentException ex) {
             code = 0;
@@ -4148,15 +4140,15 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onLogoutPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(RegisterActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
-            pDialog = null;
         }
 
         if (status == null) {
@@ -4180,6 +4172,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+
                             }
                         });
                 dlgAlert.create().show();
@@ -4368,7 +4361,6 @@ public class RegisterActivity extends AppCompatActivity implements
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
-                    pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
 

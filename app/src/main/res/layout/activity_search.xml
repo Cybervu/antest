@@ -19,7 +19,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:verticalSpacing="@dimen/pre_order_button_margin"/>
+        android:verticalSpacing="@dimen/pre_order_button_margin"
+        android:listSelector="@color/transparent"/>
 
 
 

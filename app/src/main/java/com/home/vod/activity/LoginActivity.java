@@ -234,8 +234,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onLoginPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(LoginActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -243,7 +244,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
         } catch (IllegalArgumentException ex) {
 
@@ -269,7 +269,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
 
                     if ((featureHandler.getFeatureStatus(FeatureHandler.IS_RESTRICTIVE_DEVICE, FeatureHandler.DEFAULT_IS_RESTRICTIVE_DEVICE))) {
@@ -347,15 +346,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
-                    pDialog = null;
-
                 }
                 show_logout_popup(login_output.getMsg());
             } else {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     status = 0;
@@ -378,7 +374,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
-                    pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
 
@@ -403,8 +398,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     public void onGetValidateUserPreExecuteStarted() {
 
-        pDialog = new ProgressBarHandler(LoginActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
 
     }
 
@@ -416,7 +412,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
             }
         } catch (IllegalArgumentException ex) {
             status = 0;
@@ -571,8 +566,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         SubTitlePath.clear();
         ResolutionUrl.clear();
         ResolutionFormat.clear();
-        pDialog = new ProgressBarHandler(LoginActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
 
     }
 
@@ -722,7 +718,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -744,7 +739,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -1056,7 +1050,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
-                    pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
                 playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
@@ -1258,8 +1251,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onLogoutPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(LoginActivity.this);
-        pDialog.show();
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -1267,7 +1261,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
 
             }
         } catch (IllegalArgumentException ex) {
@@ -1456,6 +1449,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         setContentView(R.layout.activity_login);
         loginA = this;
+        pDialog = new ProgressBarHandler(LoginActivity.this);
         languagePreference = LanguagePreference.getLanguagePreference((this));
         featureHandler = FeatureHandler.getFeaturePreference(LoginActivity.this);
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();

@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public CharSequence mTitle;
     public DrawerLayout mDrawerLayout;
     TextView text;
-
+    Menu menu;
     private Timer mControllersTimer;
     private PlaybackLocation mLocation;
     private PlaybackState mPlaybackState;
@@ -427,6 +427,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu=menu;
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
