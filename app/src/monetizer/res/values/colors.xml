@@ -28,6 +28,7 @@
     <color name="buttonTextColor">#fff</color>
     <color name="downloadresolutionTextColor">#000</color>
     <color name="pageTitleColor">#fff</color>
+    <color name="episodetextcolor">#fff</color>
     <color name="buttonBackgroundColor">#580661</color>
     <color name="loginTextColor">#580661</color>
     <color name="signUpTextColor">#580661</color>

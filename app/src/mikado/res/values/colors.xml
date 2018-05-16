@@ -45,6 +45,7 @@
     <color name="FilterTitleTextColor">#784128</color>
     <color name="subtitleListColor">#fff</color>
     <color name="pageTitleColor">#784128</color>
+    <color name="episodetextcolor">#784128</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#fff</color>
     <color name="navlogobackgroundcolor">#FEF0E3</color>
