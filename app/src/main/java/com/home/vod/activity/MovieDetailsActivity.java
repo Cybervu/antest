@@ -3171,7 +3171,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             try {
                 jsonObj = new JSONObject();
                 jsonObj.put("description", playerModel.getVideoTitle());
-//                jsonObj.put("licenseUrl","https://wv.test.expressplay.com/hms/wv/rights/?ExpressPlayToken=BAAAAxEcaY0AAABgPorDdOyLSUHKw7GbXmDE_29lER8F1FJJYTZoiv9TBpwvjzpzLi6cdRhAV-mByV8h9s9lIBBcjUBy6qsHWihEyxEYUoB_pSJdi4izRzf4hwYYR4_IiQ8Nnre0Jit8etegxODEINGdpdbOIgjFOtZ7wKgoJHw");
+//                jsonObj.put("licenseUrl","https://wv.test.expressplay.com/hms/wv/rights/?ExpressPlayToken=BAAAAxEcaWMAAABglnKJYyt7DJhdA8_8U7nF8ddxt4YM4VgRSTEWEVmlTCD0b8eFeR79GPOhPKdDXhRgce8njal7JMh6Kvxx1tgdcg3artKdQLFZBfv_kbZ9sakaZ8sBKLXAm54WPT7ochDacoAFKD6lz8V2IVgbu9byJu8roUk");
                 jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
 
                 //  This Code Is Added For Video Log By Bibhu..
@@ -3240,7 +3240,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
 
-//            mediaInfo = new MediaInfo.Builder("https://s3.amazonaws.com/stagingstudio/405/EncodedVideo/uploads/movie_stream/full_movie/37008/stream.mpd")
+//            mediaInfo = new MediaInfo.Builder("https://s3.amazonaws.com/stagingstudio/405/EncodedVideo/uploads/movie_stream/full_movie/37235/stream.mpd")
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                     .setContentType(mediaContentType)

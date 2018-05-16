@@ -367,7 +367,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '3.2.0'
+            versionName '3.3.0'
         }
         magicmovies_staging_ {
             dimension 'environment'

@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,8 +29,11 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.home.apisdk.apiController.GetAppHomeFeatureAsyncTask;
 import com.home.apisdk.apiController.GetAppHomePageAsync;
 import com.home.apisdk.apiController.GetLoadVideosAsync;
+import com.home.apisdk.apiModel.AppHomeFeatureInputModel;
+import com.home.apisdk.apiModel.AppHomeFeatureOutputModel;
 import com.home.apisdk.apiModel.AppHomePageOutput;
 import com.home.apisdk.apiModel.HomePageBannerModel;
 import com.home.apisdk.apiModel.HomePageInputModel;
@@ -52,6 +56,10 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -78,13 +86,14 @@ import static com.home.vod.util.Constant.authTokenStr;
  * Created by Muvi on 11/24/2016.
  */
 public class HomeFragment extends Fragment implements
-        GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
+        GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener , GetAppHomeFeatureAsyncTask.AppHomeFeature {
 
     //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
     GetLoadVideosAsync asynLoadVideos;
+    ArrayList<String> sectionImageList = new ArrayList<>();
     //    AsynLOADUI loadui;
     View rootView;
     int item_CountOfSections = 0;
@@ -114,6 +123,7 @@ public class HomeFragment extends Fragment implements
 
     //AsynLoadImageUrls as = null;
     GetAppHomePageAsync asynLoadMenuItems = null;
+    GetAppHomeFeatureAsyncTask getAppHomeFeatureAsyncTask = null;
     /* int bannerArray[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
      int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
     int corePoolSize = 60;
@@ -145,10 +155,7 @@ public class HomeFragment extends Fragment implements
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
-        String GOOGLE_FCM_TOKEN;
-        // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-        //   ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        // Kushal - set Id to back button and text in Toolabr
+
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
         /*@Author:Bishal
@@ -156,30 +163,6 @@ public class HomeFragment extends Fragment implements
          */
         ((MainActivity) getActivity()).toolbarTitleHandler=new ToolbarTitleHandler((MainActivity) getActivity());
 
- /*       *//***************chromecast**********************//*
-
-        mCastStateListener = new CastStateListener() {
-            @Override
-            public void onCastStateChanged(int newState) {
-                if (newState != CastState.NO_DEVICES_AVAILABLE) {
-
-                    showIntroductoryOverlay();
-                }
-            }
-        };
-        mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
-
-
-
-        // int startPosition = getInt("startPosition", 0);
-        // mVideoView.setVideoURI(Uri.parse(item.getContentId()));
-
-        setupCastListener();
-        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
-
-*//***************chromecast**********************//*
-*/
         allSampleData = new ArrayList<SectionDataModel>();
         // createDummyData();
         footerView = (RelativeLayout) v.findViewById(R.id.loadingPanel);
@@ -206,6 +189,8 @@ public class HomeFragment extends Fragment implements
 
             url_maps = new ArrayList<String>();
 
+
+
             HomePageInputModel homePageInputModel = new HomePageInputModel();
             homePageInputModel.setAuthToken(authTokenStr);
 
@@ -217,7 +202,26 @@ public class HomeFragment extends Fragment implements
 
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
-            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+            //asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+
+
+            AppHomeFeatureInputModel appHomeFeatureInputModel = new AppHomeFeatureInputModel();
+            appHomeFeatureInputModel.setAuthToken(authTokenStr);
+
+            if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                appHomeFeatureInputModel.setUserId(preferenceManager.getUseridFromPref());
+            }else{
+                appHomeFeatureInputModel.setUserId("");
+            }
+
+            appHomeFeatureInputModel.setFeatureSectionLimit("0");
+            appHomeFeatureInputModel.setGetFeatureSectionOffset("0");
+            appHomeFeatureInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+            getAppHomeFeatureAsyncTask = new GetAppHomeFeatureAsyncTask(appHomeFeatureInputModel, this, context);
+            getAppHomeFeatureAsyncTask.executeOnExecutor(threadPoolExecutor);
+
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
         }
@@ -700,10 +704,10 @@ public class HomeFragment extends Fragment implements
     public void onResume() {
         super.onResume();
 
-        if (mProgressBarHandler != null) {
+       /* if (mProgressBarHandler != null) {
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
-        }
+        }*/
      /*   *//***************chromecast**********************//*
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
@@ -730,6 +734,8 @@ public class HomeFragment extends Fragment implements
 
         return false;
     }
+
+
 
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
 
@@ -776,8 +782,6 @@ public class HomeFragment extends Fragment implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-          /*  phandler = new ProgressBarHandler(getActivity());
-            phandler.show();*/
 
         }
     }
@@ -787,19 +791,185 @@ public class HomeFragment extends Fragment implements
             if (v instanceof ImageButton) {
                 ImageButton b = (ImageButton) v;
                 b.setId(R.id.menu);
-                /*try {
-                    if (b.getContentDescription().equals("Open")) {
-                        b.setId(R.id.drawer_menu);
-                    } else {
-                        b.setId(R.id.back_btn);
-                    }
-                }catch (Exception e){
-                    b.setId(R.id.back_btn);
-                }*/
+
             } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
                 t.setId(R.id.app_title);
             }
+        }
+    }
+
+
+    /**
+     * Author Bibhu Prasad Jena
+     * This api result of API clubbing .
+     */
+
+    @Override
+    public void AppHomeFeaturePreExecute() {
+        mProgressBarHandler = new ProgressBarHandler(getActivity());
+        mProgressBarHandler.show();
+    }
+
+    @Override
+    public void AppHomeFeaturePostExecute(AppHomeFeatureOutputModel appHomeFeatureOutputModel, int status) {
+
+        url_maps.clear();
+
+
+        if (singleItem != null && singleItem.size() > 0) {
+            singleItem.clear();
+        }
+
+        if (allSampleData != null && allSampleData.size() > 0) {
+            allSampleData.clear();
+        }
+
+
+        if(appHomeFeatureOutputModel==null){
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+            return;
+        }
+
+        for (int i = 0; i < appHomeFeatureOutputModel.getHomePageBannerModelArrayList().size(); i++) {
+            if ((appHomeFeatureOutputModel.getHomePageBannerModelArrayList().get(i).getImage_path()!= null)
+                    && (!appHomeFeatureOutputModel.getHomePageBannerModelArrayList().get(i).getImage_path().equals(""))) {
+
+                url_maps.add(appHomeFeatureOutputModel.getHomePageBannerModelArrayList().get(i).getImage_path().trim());
+            }
+        }
+
+
+        my_recycler_view.setLayoutManager(mLayoutManager);
+        adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+        my_recycler_view.setAdapter(adapter);
+        my_recycler_view.setVisibility(View.VISIBLE);
+
+
+
+        for (int j = 0; j < appHomeFeatureOutputModel.getHomePageSectionModelArrayList().size(); j++) {
+
+            menuList.add(new GetMenuItem(appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(j).getTitle(),
+                    appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(j).getSection_id(),
+                    appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(j).getStudio_id(),
+                    appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(j).getLanguage_id()));
+
+        }
+        sectionImageList.clear();
+
+
+
+        for (int k = 0; k < appHomeFeatureOutputModel.getHomePageSectionModelArrayList().size(); k++) {
+
+            singleItem = new ArrayList<SingleItemModel>();
+
+            String movieImageStr = "";
+            for(int l=0 ;l<appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().size();l++){
+                movieImageStr = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getPoster_url();
+                String movieName = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getName();
+                String videoTypeIdStr = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getContent_types_id();
+                String movieGenreStr = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getGenre();
+                String moviePermalinkStr = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getPermalink();
+                String isEpisodeStr = appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getIs_episode();
+                int isConverted = Integer.parseInt(appHomeFeatureOutputModel.getHomePageSectionModelArrayList().get(k).getHomeFeaturePageSectionDetailsModel().get(l).getIs_converted());
+                int isPPV = 0;
+                int isAPV = 0;
+
+                singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+
+            }
+            sectionImageList.add(movieImageStr);
+
+            allSampleData.add(new SectionDataModel(menuList.get(k).getName(), menuList.get(k).getSectionId(), singleItem));
+
+        }
+
+        if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+            if (getActivity() != null && sectionImageList.size()>0) {
+
+                new DetectImageOrientation().execute(sectionImageList.get(0));
+            }else {
+                if (mProgressBarHandler != null) {
+                    mProgressBarHandler.hide();
+                    mProgressBarHandler = null;
+                }
+            }
+
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            if (mProgressBarHandler != null) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+        }
+    }
+
+    class DetectImageOrientation extends AsyncTask<String, Void, Void> {
+
+        int IMAGE_WIDTH = 100;
+        int IMAGE_HEIGHT = 200;
+
+        protected Void doInBackground(String... urls) {
+            try {
+
+
+                URL url = new URL(urls[0]);
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                IMAGE_HEIGHT = bmp.getHeight();
+                IMAGE_WIDTH = bmp.getWidth();
+
+
+                LogUtil.showLog("MUVI1", "IMAGE_HEIGHT==============" + IMAGE_HEIGHT);
+                LogUtil.showLog("MUVI1", "IMAGE_WIDTH==============" + IMAGE_WIDTH);
+
+                return null;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+            if (IMAGE_WIDTH > IMAGE_HEIGHT) {
+
+                Util.image_orentiation.add(Constant.IMAGE_LANDSCAPE_CONST);
+
+            } else {
+                Util.image_orentiation.add(Constant.IMAGE_PORTAIT_CONST);
+            }
+
+
+            try{
+                sectionImageList.remove(0);
+                if(sectionImageList.size()>0){
+                    new DetectImageOrientation().execute(sectionImageList.get(0));
+                }else{
+
+                    if (mProgressBarHandler != null) {
+                        mProgressBarHandler.hide();
+                        mProgressBarHandler = null;
+                    }
+
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                        my_recycler_view.setAdapter(adapter);
+                    }
+
+                }
+            }catch (Exception e){}
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
         }
     }
 }
