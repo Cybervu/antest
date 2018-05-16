@@ -70,7 +70,7 @@
 
 
         <Button
-            android:id="@+id/viewwall"
+            android:id="@+id/viewall"
             android:layout_width="@dimen/viewmore_btn_width"
             android:layout_height="@dimen/viewmore_btn_height"
             android:layout_alignParentEnd="true"

@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment implements
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-     //   ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        //   ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
@@ -259,7 +259,7 @@ public class HomeFragment extends Fragment implements
 
         if (firstTime == false) {
 
-           mProgressBarHandler = new ProgressBarHandler(context);
+            mProgressBarHandler = new ProgressBarHandler(context);
             mProgressBarHandler.show();
 
         } else {
@@ -279,62 +279,62 @@ public class HomeFragment extends Fragment implements
 
         }
         String movieImageStr = "";
-         if (code==200) {
-             if (loadVideoOutputs != null) {
+        if (code==200) {
+            if (loadVideoOutputs != null) {
 
-                 singleItem = new ArrayList<SingleItemModel>();
+                singleItem = new ArrayList<SingleItemModel>();
 
-                 for (int i = 0; i < loadVideoOutputs.size(); i++) {
-                     movieImageStr = loadVideoOutputs.get(i).getPoster_url();
-                     String movieName = loadVideoOutputs.get(i).getName();
-                     String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
-                     String movieGenreStr = loadVideoOutputs.get(i).getGenre();
-                     String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
-                     String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
-                     int isConverted = loadVideoOutputs.get(i).getIs_converted();
-                     int isPPV = loadVideoOutputs.get(i).getIs_ppv();
-                     int isAPV = loadVideoOutputs.get(i).getIs_advance();
-
-
-                     singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
-                 }
-
-                 allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
+                for (int i = 0; i < loadVideoOutputs.size(); i++) {
+                    movieImageStr = loadVideoOutputs.get(i).getPoster_url();
+                    String movieName = loadVideoOutputs.get(i).getName();
+                    String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
+                    String movieGenreStr = loadVideoOutputs.get(i).getGenre();
+                    String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
+                    String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
+                    int isConverted = loadVideoOutputs.get(i).getIs_converted();
+                    int isPPV = loadVideoOutputs.get(i).getIs_ppv();
+                    int isAPV = loadVideoOutputs.get(i).getIs_advance();
 
 
-                 if (NetworkStatus.getInstance().isConnected(getActivity())) {
+                    singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                }
 
-                     if (getActivity() != null) {
-                         new RetrieveFeedTask().execute(movieImageStr);
-                     }
+                allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
 
-                 } else {
-                     noInternetLayout.setVisibility(View.VISIBLE);
-                 }
-             }
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-         }
-         else {
-             if (counter >= 0 && counter < menuList.size() - 1) {
-                 counter++;
-                 LoadVideoInput loadVideoInput = new LoadVideoInput();
-                 loadVideoInput.setAuthToken(authTokenStr);
+                    if (getActivity() != null) {
+                        new RetrieveFeedTask().execute(movieImageStr);
+                    }
 
-                 if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
-                     loadVideoInput.setUserId(preferenceManager.getUseridFromPref());
-                 }else{
-                     loadVideoInput.setUserId("");
-                 }
 
-                 loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                 loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                 asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
-                 asynLoadVideos.executeOnExecutor(threadPoolExecutor);
-             }else {
-                 footerView.setVisibility(View.GONE);
-             }
-         }
+                } else {
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }
+        else {
+            if (counter >= 0 && counter < menuList.size() - 1) {
+                counter++;
+                LoadVideoInput loadVideoInput = new LoadVideoInput();
+                loadVideoInput.setAuthToken(authTokenStr);
+
+                if(preferenceManager.getUseridFromPref()!=null && !preferenceManager.getUseridFromPref().equals("")){
+                    loadVideoInput.setUserId(preferenceManager.getUseridFromPref());
+                }else{
+                    loadVideoInput.setUserId("");
+                }
+
+                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+            }else {
+                footerView.setVisibility(View.GONE);
+            }
+        }
         return;
 
     }
@@ -798,7 +798,7 @@ public class HomeFragment extends Fragment implements
                 }*/
             } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
-                    t.setId(R.id.app_title);
+                t.setId(R.id.app_title);
             }
         }
     }
