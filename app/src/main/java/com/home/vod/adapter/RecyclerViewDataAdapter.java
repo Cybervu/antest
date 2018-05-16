@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -314,6 +315,15 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
            /* if (!firstTime) {
                 firstTime = true;*/
                 //for dynamic banner
+           /* mDemoSliderLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent bannerviewintent =
+                            new Intent("android.intent.action.VIEW",
+                                    Uri.parse("https://www.muvinow.com.au/new-releases"));
+                    mContext.startActivity(bannerviewintent);
+                }
+            });*/
                 loadDynamicBanners(mDemoSlider, view, this);
 
                 // for static banner
