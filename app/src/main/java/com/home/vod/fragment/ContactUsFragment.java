@@ -344,7 +344,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         boolean isNetwork = NetworkStatus.getInstance().isConnected(context);
         if (isNetwork) {
             if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regMessageStr.matches(""))) {
-                boolean isValidEmail = Util.isValidMail(regEmailStr);
+                boolean isValidEmail = Util.EmailAddressValidator.isValidEmailAddress(regEmailStr);
                 if (isValidEmail) {
                     if (validate){
                         ContactUsInputModel contactUsInputModel=new ContactUsInputModel();

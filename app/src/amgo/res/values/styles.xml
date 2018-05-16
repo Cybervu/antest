@@ -129,6 +129,7 @@
     <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
         <item name="android:divider">#d0cece</item>
         <item name="android:dividerHeight">1dp</item>
+        <item name="android:textColor">@color/textAmgoColor</item>
     </style>
 
     <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">

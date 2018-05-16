@@ -41,7 +41,9 @@ import java.util.List;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.R.id.loginWithFacebookButton;
 import static com.home.vod.R.id.registerButton;
+import static com.home.vod.preferences.LanguagePreference.ACCEPT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACCEPT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
@@ -147,7 +149,7 @@ public class RegisterUIHandler {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         } else if(((RegisterActivity) context).registerButtonClicked(regNameStr, last_name, regPhone)){
             if(!termsCheckBox.isChecked()){
-                Toast.makeText(context, "Please accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, languagePreference.getTextofLanguage(ACCEPT_TERMS, DEFAULT_ACCEPT_TERMS), Toast.LENGTH_SHORT).show();
             }else{
                 ((RegisterActivity)context).registerNetworkAction(regNameStr, last_name, regPhone);
             }

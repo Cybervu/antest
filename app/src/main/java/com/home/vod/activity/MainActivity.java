@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         toolbarTitleHandler=new ToolbarTitleHandler(this);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
-        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        //,mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         LogUtil.showLog("Abhishek", "Toolbar");

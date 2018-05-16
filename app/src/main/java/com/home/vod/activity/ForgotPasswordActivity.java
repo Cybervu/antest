@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.home.apisdk.apiController.ForgotpassAsynTask;
 import com.home.apisdk.apiModel.Forgotpassword_input;
@@ -47,6 +48,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORD_RESET_LINK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
@@ -56,6 +58,7 @@ import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.PASSWORD_RESET_LINK;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
@@ -214,7 +217,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     public void forgotPasswordButtonClicked() {
 
         loginEmailStr = editEmailStr.getText().toString().trim();
-        boolean isValidEmail = Util.isValidMail(loginEmailStr);
+        boolean isValidEmail = Util.EmailAddressValidator.isValidEmailAddress(loginEmailStr);
 
         if (!loginEmailStr.equals("")) {
 
@@ -228,8 +231,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                     ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input, this, this);
                     asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
                 } else {
-                    ShowDialog(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
+                    Toast.makeText(ForgotPasswordActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
 

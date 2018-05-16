@@ -218,9 +218,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/ppv_margin"
                             android:layout_marginRight="@dimen/ppv_margin"
-                            android:background="@drawable/white_border"
                             android:textColor="@color/movieTitleColor"
                             android:textSize="@dimen/review_btn_textsize"
+                            android:visibility="gone"/>
+                        <TextView
+                            android:id="@+id/season_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/ppv_margin"
+                            android:layout_marginRight="@dimen/ppv_margin"
+                            android:textColor="@color/movieTitleColor"
+                            android:textSize="@dimen/review_btn_textsize"
+                            android:background="@drawable/white_border"
                             android:visibility="gone"/>
 
                     </LinearLayout>
@@ -488,7 +497,7 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="@color/seasonBackgroundColor"
+                    android:popupBackground="@color/amgo_spinner_back"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
                     android:visibility="gone" />

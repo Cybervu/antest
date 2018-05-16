@@ -22,13 +22,20 @@
         android:background="@color/amgo_navigation_color"
         android:orientation="horizontal">
 
+        <View
+            android:layout_width="12dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAmgoRed"
+            android:id="@+id/selector"
+            android:visibility="invisible"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:padding="10dp"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:id="@+id/listTitle"
             android:gravity="center_vertical"
             android:layout_weight="0.9"/>

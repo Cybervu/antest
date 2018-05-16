@@ -209,6 +209,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASONS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
@@ -241,6 +242,7 @@ import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
+import static com.home.vod.preferences.LanguagePreference.SEASONS;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -726,8 +728,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             if (season != null && season.size() > 0) {
                 season_spinner.setVisibility(View.VISIBLE);
+                seasonCount.setVisibility(View.VISIBLE);
                 ArrayAdapter adapter = new ArrayAdapter(ShowWithEpisodesActivity.this, R.layout.dropdownlist, season);
                 season_spinner.setAdapter(adapter);
+                if(season.size()>1){
+                    seasonCount.setText(""+season.size()+" "+languagePreference.getTextofLanguage(SEASONS, DEFAULT_SEASONS) );
+                }else{
+                    seasonCount.setText(""+season.size()+" "+languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) );
+                }
 
                 // Kushal - set id to spinner adapter Seasons
             }
@@ -2063,7 +2071,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     ImageView playButton,watchTrailerButton1;
     ImageButton offlineImageButton;
     Button viewTrailerButton, btnmore, watchTrailerButton;
-    TextView videoTitle, videoGenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView, videoCastCrewTitleTextView;
+    TextView videoTitle, videoGenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView, videoCastCrewTitleTextView, seasonCount;
     RatingBar ratingBar;
     ImageView share;
     SharedPreferences pref;
@@ -2171,6 +2179,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoDurationTextView = (TextView) findViewById(R.id.video_duration);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
+        seasonCount= (TextView)findViewById(R.id.season_count);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);

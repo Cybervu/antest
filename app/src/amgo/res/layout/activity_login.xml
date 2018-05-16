@@ -95,6 +95,7 @@
                     android:gravity="center"
                     android:stateListAnimator="@null"
                     android:ellipsize="end"
+                    android:textAllCaps="false"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
 
@@ -237,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@color/buttonAmgo"
-
+                        android:textAllCaps="false"
                         android:text="sign up"
                         android:textColor="@color/sign_up_text_color"
                         android:textStyle="bold" />

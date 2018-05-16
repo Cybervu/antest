@@ -216,7 +216,7 @@ public class MyFavouriteFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_view_more, container, false);
+        View rootView = inflater.inflate(R.layout.my_favourite_fragment, container, false);
         context = getActivity();
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
@@ -247,13 +247,18 @@ public class MyFavouriteFragment extends Fragment implements
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         featureHandler = FeatureHandler.getFeaturePreference(getActivity());
-        mActionBarToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        mActionBarToolbar.setVisibility(View.GONE);
         //((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("sectionName"));
-        ((MainActivity) getActivity()).getSupportActionBar();
+       // ((MainActivity) getActivity()).getSupportActionBar();
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);
+
+        TextView sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        if (getArguments().getString("sectionName") != null) {
+            sectionTitle.setText(getArguments().getString("sectionName"));
+            // sectionTitle.setText(titleListName);
+        }
+
 
     /*if (getArguments().getString("title") != null) {
         titleListName = getArguments().getString("title");

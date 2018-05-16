@@ -1791,7 +1791,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (NetworkStatus.getInstance().isConnected(this)) {
             if ((!regEmailStr.equals("")) && (!regPasswordStr.equals(""))) {
-                boolean isValidEmail = Util.isValidMail(regEmailStr);
+                boolean isValidEmail = Util.EmailAddressValidator.isValidEmailAddress(regEmailStr);
                 if (isValidEmail == true) {
 
                     LogUtil.showLog("MUVI", "activity_login valid");

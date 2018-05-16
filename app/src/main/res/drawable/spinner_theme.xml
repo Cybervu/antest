@@ -23,7 +23,7 @@
     <item
         android:width="@dimen/listview_img_width"
         android:height="@dimen/listview_img_height"
-        android:drawable="@drawable/spinner_arrow"
+        android:drawable="@drawable/spinner_arrow1"
         android:gravity="right|center"
         android:right="10dp" />
 

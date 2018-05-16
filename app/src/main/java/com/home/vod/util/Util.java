@@ -808,6 +808,13 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, CLEAR_HISTORY, DEFAULT_CLEAR_HISTORY, "clear_history", json);
         setTranslationLanguageToPref(languagePreference, SORRY_ENTER_NAME, DEFAULT_SORRY_ENTER_NAME, "sorry_enter_name", json);
 
+
+        setTranslationLanguageToPref(languagePreference, SEASONS, DEFAULT_SEASONS, "seasons", json);
+        setTranslationLanguageToPref(languagePreference, ACCEPT_TERMS,DEFAULT_ACCEPT_TERMS, "accept_terms", json);
+        setTranslationLanguageToPref(languagePreference, USER_LOGIN,DEFAULT_USER_LOGIN, "user_login", json);
+        setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "join_amgo", json);
+        setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "forgot_password", json);
+
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
 

@@ -76,6 +76,7 @@ public class LanguagePreference {
     public static final String TRANSACTION_STATUS = "TRANSACTION_STATUS";
     public static final String PLAN_NAME = "PLAN_NAME";
     public static final String SEASON = "SEASON";
+    public static final String SEASONS = "SEASONS";
     public static String NEXT = "NEXT";
     public static String SELECT_PURCHASE_TYPE = "SELECT_PURCHASE_TYPE";
     public static String COMPLETE_SEASON = "COMPLETE_SEASON";
@@ -346,6 +347,7 @@ public class LanguagePreference {
     public static final String DEFAULT_LOGOUT = "Logout";
     public static final String DEFAULT_CHANGE_PASSWORD = "Change Password";
     public static final String DEFAULT_SEASON = "Season";
+    public static final String DEFAULT_SEASONS = "Seasons";
     public static String DEFAULT_NEXT = "Next";
     public static String DEFAULT_COMPLETE_SEASON = "Complete Season";
     public static String DEFAULT_SELECT_PURCHASE_TYPE = "Select Purchase Type";
@@ -486,6 +488,16 @@ public class LanguagePreference {
     public static String DEFAULT_CLEAR_HISTORY= "Clear History";
     public static String SORRY_ENTER_NAME= "SORRY_ENTER_NAME";
     public static String DEFAULT_SORRY_ENTER_NAME= "Sorry! enter a name";
+
+
+    public static String ACCEPT_TERMS= "ACCEPT_TERMS";
+    public static String DEFAULT_ACCEPT_TERMS= "Please accept Terms and Conditions";
+
+    public static String USER_LOGIN= "USER_LOGIN";
+    public static String DEFAULT_USER_LOGIN= "User Login";
+
+    public static String JOIN_AMGO= "JOIN_AMGO";
+    public static String DEFAULT_JOIN_AMGO= "Join Amgo";
 
 
 

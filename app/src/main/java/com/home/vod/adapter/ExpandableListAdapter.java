@@ -11,6 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
@@ -80,9 +81,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.list_item1, null);
 
         }
+
+
+        //parent.getChildAt(0).setBackground(context.getResources().getDrawable(R.drawable.red_border));
+
+
         TextView expandedListTextView = (TextView) convertView.findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
         FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), expandedListTextView);
+
 
         return convertView;
     }
@@ -131,6 +138,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
         listTitleTextView.setText(Html.fromHtml(listTitle));
+
+        // Kushal- Default Home selected
+        if(listPosition==0){
+            convertView.findViewById(R.id.selector).setVisibility(View.VISIBLE);
+            //convertView.setBackground(context.getResources().getDrawable(R.drawable.red_border));
+        }
 
         // Kushal - set id to the layout
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(context);
@@ -215,6 +228,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 */
 
+
         try {
             String expand_collapse_image_info[] = Util.drawer_collapse_expand_imageview.get(listPosition).split(",");
             if (listPosition == Integer.parseInt(expand_collapse_image_info[0]) && Integer.parseInt(expand_collapse_image_info[1]) == 1) {
@@ -253,5 +267,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int listPosition, int expandedListPosition) {
         return true;
     }
+
 
 }

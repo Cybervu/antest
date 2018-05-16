@@ -263,6 +263,28 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         mDrawerListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             public boolean onGroupClick(ExpandableListView parent, View v, int listPosition, long id) {
+                Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
+
+                // Kushal
+                for (int i=0; i<parent.getAdapter().getCount();i++) {
+                  //  Log.e("Error",parent.getChildAt(i).findViewById(R.id.listTitle).toString());
+                        if (i==listPosition) {
+                            //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
+                            try {
+                                parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }else {
+                            try {
+
+                                parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+
+                }
                 boolean retVal = true;
                 boolean mylibrary_title_added = false;
 
@@ -374,11 +396,11 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 mDrawerLayout.closeDrawers();
                             } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
 
-                                Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
+                                /*Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
                                 favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(favoriteIntent);
-                                mDrawerLayout.closeDrawers();
+                                mDrawerLayout.closeDrawers();*/
                                  Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
                     Bundle bundle = new Bundle();
                                     bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
@@ -456,6 +478,19 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        mDrawerListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
+                parent.setItemChecked(index, true);
+                return true;
+            }
+        });
+
+
+
 /*
         View header = inflater.inflate(R.layout.drawer_header, null);
         mDrawerListView.addHeaderView(header);
@@ -499,8 +534,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN))){
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     Util.check_for_subscription = 0;
+                    mDrawerLayout.closeDrawers();
                     startActivity(loginIntent);
                 }else if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT))){
+                    mDrawerLayout.closeDrawers();
                     logoutPopup();
                 }
             }
@@ -513,6 +550,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER))){
                     Intent registerIntent = new Intent(getActivity(), RegisterActivity.class);
                     Util.check_for_subscription = 0;
+                    mDrawerLayout.closeDrawers();
                     startActivity(registerIntent);
                 }else if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE))){
                     String id = preferenceManager.getUseridFromPref();
@@ -520,6 +558,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
                     profileIntent.putExtra("EMAIL", email);
                     profileIntent.putExtra("LOGID", id);
+                    mDrawerLayout.closeDrawers();
+
                     startActivity(profileIntent);
                 }
 
@@ -733,6 +773,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -1152,6 +1193,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             adapter = new ExpandableListAdapter(getActivity(), idArray,titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
             mDrawerListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+
         }
 
 
