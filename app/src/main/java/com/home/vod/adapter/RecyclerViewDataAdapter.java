@@ -175,7 +175,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 itemRowHolder.itemTitle.setVisibility(View.GONE);
                 itemRowHolder.btnMore.setVisibility(View.GONE);
                 // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-            } else if (singleSectionItems.size() == 1) {
+                //As discussed with Abhinav the btn more shoul be visible if more than 5 contents come
+            } else if (singleSectionItems.size() <=5) {
                 itemRowHolder.btnMore.setVisibility(View.GONE);
                 // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
 
