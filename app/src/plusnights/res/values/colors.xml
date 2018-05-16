@@ -60,6 +60,7 @@
     <color name="playerBgColor">#000</color>
     <color name="pageTitleTextColor">#666666</color>
     <color name="pageTitleColor">#6e6f76</color>
+    <color name="episodetextcolor">#6e6f76</color>
     <color name="castNameTextColor">#C81E6E</color>
     <color name="castDescTextColor">#A9A9A9</color>
     <color name="seasonTextColor">#666666</color>

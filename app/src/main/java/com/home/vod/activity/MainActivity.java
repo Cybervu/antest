@@ -163,14 +163,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public CharSequence mTitle;
     public DrawerLayout mDrawerLayout;
     TextView text;
-    Menu menu;
+
     private Timer mControllersTimer;
     private PlaybackLocation mLocation;
     private PlaybackState mPlaybackState;
     private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
-
+    Menu menu;
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -428,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu=menu;
+
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();

@@ -79,6 +79,7 @@
     <color name="censorRatingBackground">#EB0609</color>
     <color name="hint_background">#EB0609  </color>
     <color name="pageTitleColor">#FFFFFF </color>
+    <color name="episodetextcolor">#FFFFFF</color>
     <color name="noInternetColor">#FFFFFF</color>
     <color name="no_internet_textColor">#FFFFFF</color>
     <color name="editTextColor">#FFFFFF</color>

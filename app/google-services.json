@@ -280,6 +280,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-9jl3v22vjivccih8ltj1e531oo913st4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.aeonvideotest",
+            "certificate_hash": "e17416d83c1662b93989bacf113593510e08c951"
+          }
+        },
+        {
           "client_id": "914358570958-2e5f39dod12309a0eu2hg2rcs4cdtrik.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -749,6 +757,37 @@
         "mobilesdk_app_id": "1:914358570958:android:6225a8e2def67e20",
         "android_client_info": {
           "package_name": "com.release.dsplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:16e78766e89c76ca",
+        "android_client_info": {
+          "package_name": "com.release.enotvplus"
         }
       },
       "oauth_client": [
@@ -1307,19 +1346,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-0doimm46g0am9nrc0d792i03sdf6s0q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.muvisdk",
+            "certificate_hash": "377ea6502afb9f171abffcd76c766fe2f7850d14"
+          }
+        },
+        {
           "client_id": "914358570958-dui4n94io8flk7ite40c9269hhvugb4e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.release.muvisdk",
             "certificate_hash": "968a70608aa2ac95833c37379ec6647e681da511"
-          }
-        },
-        {
-          "client_id": "914358570958-nfvpa0ps5ru7nmgjooei9ic8reaqpr86.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.release.muvisdk",
-            "certificate_hash": "f9b22478039376f308e6ac8cf97a2e4f4a4c147d"
           }
         },
         {
@@ -1926,20 +1965,12 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:914358570958:android:240a66c9482afd60",
+        "mobilesdk_app_id": "1:914358570958:android:04926cf40bfcd48a",
         "android_client_info": {
-          "package_name": "hr.aviion.Pickbox"
+          "package_name": "hr.pickbox2.tv"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "914358570958-dqoogl0r69998eov8nj5uk7rbsrmbmpk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "hr.aviion.Pickbox",
-            "certificate_hash": "469da53330a7e37aebbdd5f7527df580ffd5838c"
-          }
-        },
         {
           "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
           "client_type": 3
@@ -1955,20 +1986,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.release.digiosmosis"
-              }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
