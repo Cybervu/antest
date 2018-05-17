@@ -77,7 +77,6 @@
                             android:textColor="#80ffffff">
 
                         </TextView>
-
                         <TextView
                             android:id="@+id/ip"
                             android:layout_width="wrap_content"
