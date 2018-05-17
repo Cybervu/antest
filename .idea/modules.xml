@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DEVELOPMENT.iml" filepath="$PROJECT_DIR$/DEVELOPMENT.iml" />
+      <module fileurl="file://F:\Vod26_feb_newgitcode\VOD\DEVELOPMENT.iml" filepath="F:\Vod26_feb_newgitcode\VOD\DEVELOPMENT.iml" />
       <module fileurl="file://$PROJECT_DIR$/MediaLib/MediaLib.iml" filepath="$PROJECT_DIR$/MediaLib/MediaLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
       <module fileurl="file://D:\Workspace\DEVELOPMENT\VOD.iml" filepath="D:\Workspace\DEVELOPMENT\VOD.iml" />
       <module fileurl="file://F:\Vod26_feb_newgitcode\VOD\VOD_CLONE.iml" filepath="F:\Vod26_feb_newgitcode\VOD\VOD_CLONE.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
