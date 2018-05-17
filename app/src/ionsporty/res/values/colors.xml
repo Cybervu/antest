@@ -32,11 +32,8 @@
  <color name="colorPrimaryDark">#252626</color>
  <color name="languagePopupColor">#000000</color>
  <color name="languagePopupFadeColor">#50696969</color>
-
-
  <color name="languagePopupBackgroundColor">#50696969</color>
  <color name="languagePopupViewBackgroundColor">#930f18</color>
-
  <color name="filterTextColor">#fff</color>
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_drawer_text_Color">#525252</color>
@@ -51,12 +48,11 @@
  <color name="windowBackground">#000</color>
  <color name="selected_color">#000</color>
  <color name="unselected_color">#fff</color>
-
  <color name="filter_text_color">#000</color>
-
  <color name="loader_color">#3593d9</color>
  <color name="hint_background">#930f18</color>
  <color name="pageTitleColor">#ffffff</color>
+ <color name="episodetextcolor">#ffffff</color>
  <color name="noInternetColor">#fff</color>
  <color name="editTextColor">#fff</color>
  <color name="movieTitleColor">#ffffff</color>

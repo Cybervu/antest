@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/ppv_margin"
-                    android:textColor="@color/pageTitleColor"
+                    android:textColor="@color/episodetextcolor"
                     android:textSize="@dimen/testview1_text_size"
                     android:textStyle="bold" />
 
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/ppv_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
-                    android:textColor="@color/pageTitleColor"
+                    android:textColor="@color/episodetextcolor"
                     android:textSize="@dimen/episodename_text_size"
                     android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/ppv_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
-                    android:textColor="@color/pageTitleColor"
+                    android:textColor="@color/episodetextcolor"
                     android:textSize="@dimen/episodedate_text_size" />
 
             </LinearLayout>

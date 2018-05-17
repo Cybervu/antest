@@ -75,7 +75,7 @@ public class EpisodeListOptionMenuHandler {
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         action_searchmenu = menu.findItem(R.id.search);
-        submenu = menu.findItem(R.id.submenu);
+        submenu = menu.findItem(R.id.option);
 
         /***************chromecast**********************/
 
@@ -150,7 +150,7 @@ public class EpisodeListOptionMenuHandler {
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
-                register_menu.setVisible(true);
+               // register_menu.setVisible(true);
                 // Kushal
                 visibility[LOGIN_INDEX] = true;
                 visibility[REGISTER_INDEX] = true;

@@ -9,6 +9,7 @@
     android:divider="#ffffff"
     android:dividerHeight="0.2dp"
     android:groupIndicator="@null"
+    android:listSelector="@color/transparent"
     android:scrollbars="none">
 
 

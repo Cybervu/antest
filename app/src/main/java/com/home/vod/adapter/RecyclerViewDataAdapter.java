@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.home.vod.ListItemAllignmentHandler;
 import com.home.vod.R;
+import com.home.vod.SliderBannerClickHandler;
 import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
@@ -174,7 +176,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 itemRowHolder.itemTitle.setVisibility(View.GONE);
                 itemRowHolder.btnMore.setVisibility(View.GONE);
                 // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-            } else if (singleSectionItems.size() == 1) {
+                //As discussed with Abhinav the btn more shoul be visible if more than 5 contents come
+            } else if (singleSectionItems.size() <=5) {
                 itemRowHolder.btnMore.setVisibility(View.GONE);
                 // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
 
@@ -235,8 +238,18 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 textSliderView
                         .description("")
                         .image(bannerUrls.get(i))
-                        .setScaleType(BaseSliderView.ScaleType.Fit)
-                        .setOnSliderClickListener(onSliderClickListener);
+                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                /*@Author:Bishal
+                *Provide click listner on Banner for Muvi now and Stupffix
+                 */
+
+                textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                    @Override
+                    public void onSliderClick(BaseSliderView slider) {
+                        SliderBannerClickHandler sliderBannerClickHandler=new SliderBannerClickHandler(mContext);
+                        sliderBannerClickHandler.handleClickOnBanner();
+                    }
+                });
                 mDemoSlider.addSlider(textSliderView);
 
             }
