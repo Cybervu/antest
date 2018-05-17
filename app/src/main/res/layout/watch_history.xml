@@ -48,6 +48,7 @@
 
         android:paddingLeft="@dimen/padding_left"
         android:paddingRight="@dimen/padding_right"
+        android:listSelector="@color/transparent"
        >
 
     </GridView>

@@ -1640,7 +1640,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
 
                 String[] strValues_chargedPriceTextView = String.valueOf(chargedPrice).split("\\.");
                 if (strValues_chargedPriceTextView[1].length() == 1) {
-                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
+                    chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice));
 
                 } else {
                     chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + String.format("%.2f", chargedPrice));
@@ -1662,7 +1662,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
                     withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON, DEFAULT_FREE_FOR_COUPON));
 
                     if (strValues_chargedPriceTextView[1].length() == 1) {
-                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice) + "0");
+                        withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice));
 
                     } else {
                         withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + String.format("%.2f", chargedPrice));

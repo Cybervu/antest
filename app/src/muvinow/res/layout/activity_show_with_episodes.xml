@@ -455,7 +455,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/ppv_margin"
                 android:layout_marginLeft="@dimen/terms_text_view_margin_right"
-
+                android:listSelector="@color/transparent"
                 />
         </RelativeLayout>
 
