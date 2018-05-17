@@ -38,6 +38,7 @@ import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.NavigationDrawerFragment;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
 import com.home.vod.model.SectionDataModel;
@@ -141,6 +142,7 @@ public class HomeFragment extends Fragment implements
         context = getActivity();
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
+        NavigationDrawerFragment.homeSelected=true;
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));

@@ -138,6 +138,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PPvPaymentInfoActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"

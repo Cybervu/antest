@@ -407,6 +407,7 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
 
 
         //Set toolbar
+        // Kushal- Toolbar title not required in Amgo
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));

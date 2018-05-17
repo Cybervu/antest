@@ -292,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // Kushal- Chnage status bar color
         StatusBarColor.changeColor(MainActivity.this,R.color.amgo_statusbar_color);
         setContentView(R.layout.activity_main);
+        NavigationDrawerFragment.homeSelected=true;
         getWindow().setBackgroundDrawableResource(R.drawable.app_background);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
 

@@ -197,6 +197,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         setContentView(R.layout.activity_search);
         languagePreference = LanguagePreference.getLanguagePreference(SearchActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Remove amgo icon in search toolbar
+        findViewById(R.id.toolbar).findViewById(R.id.amgoicon).setVisibility(View.GONE);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {

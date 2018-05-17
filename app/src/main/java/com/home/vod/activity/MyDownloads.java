@@ -275,8 +275,8 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-        setSupportActionBar(mActionBarToolbar);
+      //  mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+        //setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {

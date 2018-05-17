@@ -3510,7 +3510,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
             if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                videoGenreTextView.setVisibility(View.INVISIBLE);
+                videoGenreTextView.setVisibility(View.GONE);
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
@@ -3554,7 +3554,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
 
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
-                videoReleaseDateTextView.setText(movieReleaseDateStr);
+                videoReleaseDateTextView.setText(" "+movieReleaseDateStr+" ");
 
             }
 

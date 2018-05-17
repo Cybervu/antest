@@ -85,7 +85,7 @@
             android:layout_gravity="center_vertical"
             android:text="Sample title"
             android:textAllCaps="true"
-            android:textColor="@color/white"
+            android:textColor="@color/textAmgoColor"
             android:textSize="@dimen/email_text_size"
             android:layout_marginLeft="5dp"
             />

@@ -75,6 +75,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
@@ -90,6 +91,7 @@ import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
@@ -133,6 +135,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     boolean watch_history_added = false;
     boolean my_favourite_added = false;
     boolean my_download_added = false;
+    boolean purchase_history_added = false;
     MenusOutputModel menusOutputModelLocal, menusOutputModelFromAPI = new MenusOutputModel();
     int status;
     String message;
@@ -153,6 +156,9 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     Button Send;
     private ProgressBarHandler pDialog = null;
+
+
+    public static boolean homeSelected= true;
 
     public NavigationDrawerFragment() {
     }
@@ -263,8 +269,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         mDrawerListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             public boolean onGroupClick(ExpandableListView parent, View v, int listPosition, long id) {
-                Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
 
+                if(((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
+                    homeSelected=true;
+                else
+                    homeSelected= false;
                 // Kushal
                 for (int i=0; i<parent.getAdapter().getCount();i++) {
                   //  Log.e("Error",parent.getChildAt(i).findViewById(R.id.listTitle).toString());
@@ -316,7 +326,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             fragment.setArguments(bundle);
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        } else {
+                        } else if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("purchasehistory")){
+                            Intent purchaseintent = new Intent(getActivity(), PurchaseHistoryActivity.class);
+                            startActivity(purchaseintent);
+                        }
+
+                        else {
 
                             Intent browserIntent;
 
@@ -358,16 +373,18 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     }
                 }
 
+                try{
 
-                if (listPosition == 0) {
-                    // isNavigated = 1;
+                    if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))) {
+                        // isNavigated = 1;
 
-                    Fragment fragment = new HomeFragment();
-                    Bundle bundle = new Bundle();
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                    mDrawerLayout.closeDrawers();
-                }
+                        Fragment fragment = new HomeFragment();
+                        Bundle bundle = new Bundle();
+                        fragment.setArguments(bundle);
+                        getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                        mDrawerLayout.closeDrawers();
+                    }
+
                 // this is for if child is not there then another fragment open
                 else {
                     if (retVal) {
@@ -435,6 +452,73 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                         }
                     }
                 }
+            }catch (Exception e){
+                e.printStackTrace();
+                    if (retVal) {
+
+                        if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
+                            if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
+                                // isNavigated = 1;
+
+                                fragment = new MyLibraryFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                fragment.setArguments(bundle);
+                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                mDrawerLayout.closeDrawers();
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
+                                fragment = new WatchHistoryFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                fragment.setArguments(bundle);
+                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                mDrawerLayout.closeDrawers();
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
+
+                                Intent mydownload = new Intent(getActivity(), MyDownloads.class);
+                                startActivity(mydownload);
+                                mDrawerLayout.closeDrawers();
+                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
+
+                                /*Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
+                                favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(favoriteIntent);
+                                mDrawerLayout.closeDrawers();*/
+                                Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                                fragment.setArguments(bundle);
+                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                mDrawerLayout.closeDrawers();
+                            } else {
+
+                                if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")) {
+                                    //  isNavigated = 1;
+
+                                    // getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink().trim()));
+                                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(browserIntent);
+                                    return retVal;
+
+
+                                } else {
+                                    // isNavigated = 1;
+
+                                    fragment = new VideosListFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                    bundle.putString("item", menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink());
+                                    fragment.setArguments(bundle);
+                                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                    mDrawerLayout.closeDrawers();
+                                }
+                            }
+                        }
+                    }
+            }
 
                 return retVal;
             }
@@ -954,78 +1038,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         menusOutputModelLocal = new MenusOutputModel();
         // Kushal - Handel crashing of app when no menu item is fetched
-        try {
-            menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
-            menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        titleArray.clear();
-        idArray.clear();
-        /* Adding Home Menu*/
-        MenusOutputModel.MainMenu mainMenuHome = new MenusOutputModel().new MainMenu();
-        mainMenuHome.setTitle(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME));
-        menusOutputModelLocal.getMainMenuModel().add(0, mainMenuHome);
-        MenusOutputModel.FooterMenu footerMenu = new MenusOutputModel().new FooterMenu();
-        footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
-        footerMenu.setPermalink("contactus");
-        menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
-
-
-        /* Adding MyDownload*/
-
-        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
-
-            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
-                my_download_added = true;
-            }
-        }
-
-
-        if (featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE) && loggedInStr != null) {
-            if (!my_download_added) {
-                MenusOutputModel.MainMenu mainMenuMydownload = new MenusOutputModel().new MainMenu();
-                mainMenuMydownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-                menusOutputModelLocal.getMainMenuModel().add(mainMenuMydownload);
-            }
-        } else {
-            if (my_download_added) {
-                menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
-            }
-        }
-
-
-        /* Adding My Favourite */
-
-
-        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
-
-            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
-                my_favourite_added = true;
-            }
-        }
-
-
-        if (featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE) && loggedInStr != null) {
-            if (!my_favourite_added) {
-                MenusOutputModel.MainMenu mainMenuMyfavourite = new MenusOutputModel().new MainMenu();
-                mainMenuMyfavourite.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
-                if (checkMyDownloadAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuMyfavourite);
-                } else {
-                    menusOutputModelLocal.getMainMenuModel().add(mainMenuMyfavourite);
-                }
-            }
-        } else {
-            if (my_favourite_added) {
-                if (checkMyDownloadAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
-                } else {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
-                }
-            }
-        }
 
 
         /* Adding My Library*/
@@ -1042,28 +1054,81 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             if (!my_libary_added) {
                 MenusOutputModel.MainMenu mainMenuLibrary = new MenusOutputModel().new MainMenu();
                 mainMenuLibrary.setTitle(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY));
-
-                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuLibrary);
-                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(mainMenuLibrary);
-                } else {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuLibrary);
-                }
+                menusOutputModelLocal.getMainMenuModel().add(0, mainMenuLibrary);
 
             }
         } else {
             if (my_libary_added) {
-                if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
-                } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
-                } else {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
+                if (checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(0);
                 }
             }
         }
 
+        /* Adding My Favourite */
+
+
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
+                my_favourite_added = true;
+            }
+        }
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.HAS_FAVOURITE, FeatureHandler.DEFAULT_HAS_FAVOURITE) && loggedInStr != null) {
+            if (!my_favourite_added) {
+                MenusOutputModel.MainMenu mainMenuMyfavourite = new MenusOutputModel().new MainMenu();
+                mainMenuMyfavourite.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+                if (checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(1, mainMenuMyfavourite);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().add(0,mainMenuMyfavourite);
+                }
+            }
+        } else {
+            if (my_favourite_added) {
+                if (checkMyLibAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(1);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().remove(0);
+                }
+            }
+        }
+
+        /* Adding MyDownload*/
+
+        for (int i = 0; i < menusOutputModelLocal.getMainMenuModel().size(); i++) {
+
+            if (menusOutputModelLocal.getMainMenuModel().get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
+                my_download_added = true;
+            }
+        }
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE) && loggedInStr != null) {
+            if (!my_download_added) {
+                MenusOutputModel.MainMenu mainMenuMydownload = new MenusOutputModel().new MainMenu();
+                mainMenuMydownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+                if (checkMyLibAdded(menusOutputModelLocal) & checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(2, mainMenuMydownload);
+                }else if(!checkMyLibAdded(menusOutputModelLocal) & !checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(0, mainMenuMydownload);
+                }
+                else {
+                    menusOutputModelLocal.getMainMenuModel().add(1,mainMenuMydownload);
+                }
+            }
+        } else {
+            if (my_download_added) {
+                if(checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal))
+                menusOutputModelLocal.getMainMenuModel().remove(2);
+                else if (!checkMyLibAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal))
+                    menusOutputModelLocal.getMainMenuModel().remove(0);
+                else
+                    menusOutputModelLocal.getMainMenuModel().remove(1);
+            }
+        }
 
 
         /* Adding Watch History */
@@ -1083,21 +1148,21 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 mainMenuWatchHistory.setTitle(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY));
 
                 if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 3, mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add(3, mainMenuWatchHistory);
 
                 } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(mainMenuWatchHistory);
-                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add(0,mainMenuWatchHistory);
+                } else if (checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(2, mainMenuWatchHistory);
 
                 } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add(2, mainMenuWatchHistory);
 
-                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 2, mainMenuWatchHistory);
+                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyDownloadAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().add(2, mainMenuWatchHistory);
 
                 } else {
-                    menusOutputModelLocal.getMainMenuModel().add(menusOutputModelLocal.getMainMenuModel().size() - 1, mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add( 1, mainMenuWatchHistory);
                 }
 
             }
@@ -1105,21 +1170,82 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             if (watch_history_added) {
 
                 if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 4);
+                    menusOutputModelLocal.getMainMenuModel().remove(3);
                 } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 1);
-                } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                    menusOutputModelLocal.getMainMenuModel().remove(0);
+                } else if (checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(2);
                 } else if (checkMyDownloadAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
-                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 3);
+                    menusOutputModelLocal.getMainMenuModel().remove(2);
+                } else if (checkMyfavouritrAdded(menusOutputModelLocal) && checkMyDownloadAdded(menusOutputModelLocal)) {
+                    menusOutputModelLocal.getMainMenuModel().remove(2);
                 } else {
-                    menusOutputModelLocal.getMainMenuModel().remove(menusOutputModelLocal.getMainMenuModel().size() - 2);
+                    menusOutputModelLocal.getMainMenuModel().remove(1);
                 }
 
             }
         }
+
+        MenusOutputModel.MainMenu mainMenuHome = new MenusOutputModel().new MainMenu();
+        mainMenuHome.setTitle(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME));
+        menusOutputModelLocal.getMainMenuModel().add(mainMenuHome);
+
+
+
+        try {
+            menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
+            menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        titleArray.clear();
+        idArray.clear();
+        /* Adding Home Menu*/
+        MenusOutputModel.FooterMenu footerMenu = new MenusOutputModel().new FooterMenu();
+        MenusOutputModel.FooterMenu footerMenu1 = new MenusOutputModel().new FooterMenu();
+        /*footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
+        footerMenu.setPermalink("contactus");
+        */
+        /*Kushal Check Pruchase history added*/
+
+
+
+
+        if (featureHandler.getFeatureStatus(FeatureHandler.IS_PURCHASEHISTORY, FeatureHandler.DEFAULT_IS_PURCHASEHISTORY) && loggedInStr != null) {
+            if (!checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(),languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY))) {
+                footerMenu.setDisplay_name(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+                footerMenu.setPermalink("purchasehistory");
+                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
+                footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
+                footerMenu1.setPermalink("contactus");
+                menusOutputModelLocal.getFooterMenuModel().add(1, footerMenu1);
+
+
+            }
+
+        }else if(loggedInStr==null) {
+            if(checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(),languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY))){
+                menusOutputModelLocal.getFooterMenuModel().remove(0);
+                footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
+                footerMenu1.setPermalink("contactus");
+                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
+            }else{
+                footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
+                footerMenu1.setPermalink("contactus");
+                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
+            }
+
+        }
+
+
+
+
+
+
+
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1204,6 +1330,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         }
 
+    }
+
+    private boolean checkForMenuPresence(ArrayList<MenusOutputModel.FooterMenu> arrayModel, String textofLanguage) {
+        for (int i=0; i<arrayModel.size();i++){
+            if(arrayModel.get(i).getDisplay_name().trim().equalsIgnoreCase(textofLanguage)){
+               return true;
+            }
+        }
+        return false;
     }
 
     private boolean checkMyLibAdded(MenusOutputModel menusOutputModelLocal) {

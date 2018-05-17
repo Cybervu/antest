@@ -18,6 +18,7 @@
         android:contentDescription="AmgoLogo"
         android:layout_gravity="center"
         android:padding="15dp"
+        android:id="@+id/amgoicon"
         android:src="@drawable/amgologo"
         android:textAlignment="center"/>
 

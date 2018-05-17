@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.NavigationDrawerFragment;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
@@ -30,11 +31,13 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.WATCH_HISTORY;
 
 
@@ -138,32 +141,51 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
         listTitleTextView.setText(Html.fromHtml(listTitle));
-
-        // Kushal- Default Home selected
-        if(listPosition==0){
-            convertView.findViewById(R.id.selector).setVisibility(View.VISIBLE);
-            //convertView.setBackground(context.getResources().getDrawable(R.drawable.red_border));
+        for (int i=0; i<footerMenuModelArrayList.size();i++){
+            if(listTitle.equalsIgnoreCase(footerMenuModelArrayList.get(i).getDisplay_name())){
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
+            }
         }
 
         // Kushal - set id to the layout
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(context);
 
+
+        // Kushal- Default Home selected
+        if(listTitleTextView.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME))){
+            if(NavigationDrawerFragment.homeSelected)
+            convertView.findViewById(R.id.selector).setVisibility(View.VISIBLE);
+            //convertView.setBackground(context.getResources().getDrawable(R.drawable.red_border));
+        }
+
+
         if(convertView instanceof LinearLayout){
             LinearLayout l = (LinearLayout) convertView;
-            if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US)))
+            if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(CONTACT_US,DEFAULT_CONTACT_US))) {
                 l.setId(R.id.contact_us);
-            else  if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
+            }
+            else  if (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME))) {
                 l.setId(R.id.home);
-            else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US))){
+                //listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US))){
                 l.setId(R.id.about_us);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
             }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(WATCH_HISTORY,DEFAULT_WATCH_HISTORY))){
                 l.setId(R.id.watch_history);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
             }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD))){
                 l.setId(R.id.my_download);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
             }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE))){
                 l.setId(R.id.my_favourite);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
             }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))){
                 l.setId(R.id.my_library);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
+            }else if  (listTitleTextView.getText().toString().equals(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY))){
+                l.setId(R.id.purchase_history);
+                listTitleTextView.setTextColor(context.getResources().getColor(R.color.textAmgoColor));
             }
         }
 
@@ -249,7 +271,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (footerMenuModelArrayList.size() > 0) {
             if (listPosition == mainMenuModelArrayList.size()) {
-                textViewLine.setVisibility(View.VISIBLE);
+                //textViewLine.setVisibility(View.VISIBLE);
             }
         }
 

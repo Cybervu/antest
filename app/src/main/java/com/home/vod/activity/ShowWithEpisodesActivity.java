@@ -344,6 +344,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     boolean[] visibility;
     String[] lang;
     Snackbar snackbar = null;
+
+    TextView episodePricing;
     //
 
     @Override
@@ -732,9 +734,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 ArrayAdapter adapter = new ArrayAdapter(ShowWithEpisodesActivity.this, R.layout.dropdownlist, season);
                 season_spinner.setAdapter(adapter);
                 if(season.size()>1){
-                    seasonCount.setText(""+season.size()+" "+languagePreference.getTextofLanguage(SEASONS, DEFAULT_SEASONS) );
+                    seasonCount.setText(" "+season.size()+" "+languagePreference.getTextofLanguage(SEASONS, DEFAULT_SEASONS)+" " );
                 }else{
-                    seasonCount.setText(""+season.size()+" "+languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) );
+                    seasonCount.setText(" "+season.size()+" "+languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON)+" " );
                 }
 
                 // Kushal - set id to spinner adapter Seasons
@@ -2152,6 +2154,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);
+        episodePricing= (TextView) findViewById(R.id.episode_pricing);
+
 
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         btnmore = (Button) findViewById(R.id.viewall);
@@ -2180,6 +2184,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
         videoReleaseDateTextView = (TextView) findViewById(R.id.video_release_date);
         seasonCount= (TextView)findViewById(R.id.season_count);
+        FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), seasonCount);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);

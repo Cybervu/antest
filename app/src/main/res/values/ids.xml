@@ -9,6 +9,7 @@
     <item name="my_favourite" type="id"/>
     <item name="my_download" type="id"/>
     <item name="watch_history" type="id"/>
+    <item name="purchase_history" type="id"/>
 
     <!--hamburger icon and back button id-->
     <item name="menu" type="id"/>
