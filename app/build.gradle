@@ -757,7 +757,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         enotvplus {
             minSdkVersion 21
             applicationId 'com.release.enotvplus'
