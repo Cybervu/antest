@@ -21,6 +21,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.home.vod.ListItemAllignmentHandler;
 import com.home.vod.R;
+import com.home.vod.SliderBannerClickHandler;
 import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
@@ -237,8 +238,18 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 textSliderView
                         .description("")
                         .image(bannerUrls.get(i))
-                        .setScaleType(BaseSliderView.ScaleType.Fit)
-                        .setOnSliderClickListener(onSliderClickListener);
+                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                /*@Author:Bishal
+                *Provide click listner on Banner for Muvi now and Stupffix
+                 */
+
+                textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                    @Override
+                    public void onSliderClick(BaseSliderView slider) {
+                        SliderBannerClickHandler sliderBannerClickHandler=new SliderBannerClickHandler(mContext);
+                        sliderBannerClickHandler.handleClickOnBanner();
+                    }
+                });
                 mDemoSlider.addSlider(textSliderView);
 
             }
@@ -316,15 +327,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
            /* if (!firstTime) {
                 firstTime = true;*/
                 //for dynamic banner
-           /* mDemoSliderLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent bannerviewintent =
-                            new Intent("android.intent.action.VIEW",
-                                    Uri.parse("https://www.muvinow.com.au/new-releases"));
-                    mContext.startActivity(bannerviewintent);
-                }
-            });*/
                 loadDynamicBanners(mDemoSlider, view, this);
 
                 // for static banner
