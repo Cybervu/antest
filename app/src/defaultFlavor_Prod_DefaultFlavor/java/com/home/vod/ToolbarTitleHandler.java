@@ -20,15 +20,16 @@ public class ToolbarTitleHandler {
         try {
             if (activity instanceof MainActivity){
                 ((MainActivity)activity).getSupportActionBar().setTitle(R.string.app_name);
-                ((MainActivity)activity).toolbarimage.setVisibility(View.GONE);
+                ((MainActivity)activity).toolbarimage.setVisibility(View.VISIBLE);
             }
             if (activity instanceof PPvPaymentInfoActivity){
                 ((PPvPaymentInfoActivity)activity).getSupportActionBar().setTitle(R.string.app_name);
-                ((PPvPaymentInfoActivity)activity).toolbarimage.setVisibility(View.GONE);
+                ((PPvPaymentInfoActivity)activity).toolbarimage.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
+
 }

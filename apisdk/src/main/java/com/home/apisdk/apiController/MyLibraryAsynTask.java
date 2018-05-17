@@ -204,6 +204,14 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
                             content.setIs_episode(jsonChildNode.optString("is_episode"));
 
                         }
+                        if ((jsonChildNode.has("story")) && jsonChildNode.optString("story").trim() != null && !jsonChildNode.optString("story").trim().isEmpty() && !jsonChildNode.optString("story").trim().equals("null") && !jsonChildNode.optString("story").trim().matches("")) {
+                            content.setStory(jsonChildNode.optString("story"));
+
+                        }
+                        if ((jsonChildNode.has("video_duration")) && jsonChildNode.optString("video_duration").trim() != null && !jsonChildNode.optString("video_duration").trim().isEmpty() && !jsonChildNode.optString("video_duration").trim().equals("null") && !jsonChildNode.optString("video_duration").trim().matches("")) {
+                            content.setDuration(jsonChildNode.optString("video_duration"));
+
+                        }
                         myLibraryOutputModel.add(content);
                     } catch (Exception e) {
                         status = 0;

@@ -185,9 +185,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 20
+            versionCode 21
             targetSdkVersion 25
-            versionName '3.3.3'
+            versionName '3.4.3'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
 //            buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
@@ -367,7 +367,7 @@ android {
             // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
-            versionName '3.2.0'
+            versionName '3.3.0'
         }
         magicmovies_staging_ {
             dimension 'environment'

@@ -567,7 +567,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
             }
-        },0,100);
+        },0,300);
 
 
     }

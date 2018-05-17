@@ -4,7 +4,15 @@
     android:layout_height="wrap_content"
     android:background="#fff"
     android:padding="@dimen/main_padding"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="18dp"
+        android:src="@drawable/selected_resolution"
+        android:id="@+id/selected_subtitle"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:layout_height="23dp" />
 
     <TextView
         android:layout_width="match_parent"

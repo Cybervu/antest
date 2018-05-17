@@ -18,6 +18,12 @@ public class APIUrlConstant {
      * endpoint to initialize SDK API
      */
     public static String INITIALIZATION_URL = "initialiseSdk";
+
+    /**
+     * endpoint to GetAppHomeFeature API
+     */
+    public static String GET_APP_HOME_FEATURE = "GetAppHomeFeature";
+
     /**
      * endpoint to get Menu List API
      */
@@ -540,6 +546,10 @@ public class APIUrlConstant {
 
     public static String getGetCardListForPpvUrl() {
         return BASE_URl + GET_CARD_LIST_FOR_PPV_URL;
+    }
+
+    public static String getGetAppHomeFeature() {
+        return BASE_URl + GET_APP_HOME_FEATURE;
     }
 
     public static String getValidateCouponCodeUrl() {

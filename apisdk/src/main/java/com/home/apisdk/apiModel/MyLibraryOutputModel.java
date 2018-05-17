@@ -6,9 +6,27 @@ package com.home.apisdk.apiModel;
  * @author MUVI
  */
 public class MyLibraryOutputModel {
-    String movieId ="",
-            permalink="", name="" , story="", releaseDate="",
-            contentTypesId="", posterUrl="", genre = "", is_episode="", muvi_uniq_id="", movie_stream_uniq_id="";
+    String movieId ="";
+    String permalink="";
+    String name="";
+    String story="";
+    String releaseDate="";
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    String duration="";
+    String contentTypesId="";
+    String posterUrl="";
+    String genre = "";
+    String is_episode="";
+    String muvi_uniq_id="";
+    String movie_stream_uniq_id="";
     int isConverted;
 
     int season_id;

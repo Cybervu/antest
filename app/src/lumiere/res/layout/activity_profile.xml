@@ -115,7 +115,7 @@
                         android:textSize="@dimen/edit_text_size" />
 
                     <EditText
-                        android:id="@+id/name"
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
