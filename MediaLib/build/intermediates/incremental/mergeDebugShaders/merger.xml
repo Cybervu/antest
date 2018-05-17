@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="F:\Vod26_feb_newgitcode\VOD\MediaLib\src\main\shaders"/></dataSet><dataSet config="debug"><source path="F:\Vod26_feb_newgitcode\VOD\MediaLib\src\debug\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Workspace\DEVELOPMENT\MediaLib\src\main\shaders"/></dataSet><dataSet config="debug"><source path="D:\Workspace\DEVELOPMENT\MediaLib\src\debug\shaders"/></dataSet></merger>

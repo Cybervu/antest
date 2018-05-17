@@ -1,55 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Workspace\\VOD\\MediaLib\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+            "outputFile": "D:\\Workspace\\DEVELOPMENT\\MediaLib\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\MUVI\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.1.aar\\6550ee0340e7454406ef174a9f1bb456\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,124,193,263,337,413,472,543",
-                        "endColumns": "68,68,69,73,75,58,70,67",
-                        "endOffsets": "119,188,258,332,408,467,538,606"
-                    }
-                }
-            ]
-        },
-        {
-            "outputFile": "F:\\Vod26_feb_newgitcode\\VOD\\MediaLib\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\BISHAL\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.1.aar\\90d7ef1709b0091654a57dbb5fd90829\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,124,193,263,337,413,472,543",
-                        "endColumns": "68,68,69,73,75,58,70,67",
-                        "endOffsets": "119,188,258,332,408,467,538,606"
-                    }
-                }
-            ]
-        },
-        {
-            "outputFile": "D:\\home\\muvi\\LatestVOD\\VOD\\MediaLib\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-            "map": [
-                {
-                    "source": "D:\\home\\muvi\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.1.aar\\935b81ddd91e1a60e07290903b6d9810\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,124,193,263,337,413,472,543",
-                        "endColumns": "68,68,69,73,75,58,70,67",
-                        "endOffsets": "119,188,258,332,408,467,538,606"
-                    }
-                }
-            ]
-        },
-        {
-            "outputFile": "D:\\home\\muvi\\LatestVOD\\VOD\\D:\\Workspace\\VOD\\MediaLib\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
-            "map": [
-                {
-                    "source": "D:\\home\\muvi\\LatestVOD\\VOD\\C:\\Users\\MUVI\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.1.aar\\6550ee0340e7454406ef174a9f1bb456\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\MUVI\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.1.aar\\feba370544fc1e57c5466ca26fd76d65\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

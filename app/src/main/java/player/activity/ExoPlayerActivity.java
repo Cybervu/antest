@@ -939,20 +939,28 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     }
                     Util.call_finish_at_onUserLeaveHint = false;
 
-                    if (isDrm) {
+
+
+                    if (mCastSession != null && mCastSession.isConnected()) {
                         Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
                         intent.putExtra("SubTitleName", SubTitleName);
                         intent.putExtra("SubTitlePath", SubTitlePath);
                         startActivityForResult(intent, 222);
-                    } else {
-                        Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
-                        intent.putExtra("ResolutionFormat", ResolutionFormat);
-                        intent.putExtra("ResolutionUrl", ResolutionUrl);
-                        intent.putExtra("SubTitleName", SubTitleName);
-                        intent.putExtra("SubTitlePath", SubTitlePath);
-                        startActivityForResult(intent, 222);
+                    }else{
+                        if (isDrm) {
+                            Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
+                            intent.putExtra("SubTitleName", SubTitleName);
+                            intent.putExtra("SubTitlePath", SubTitlePath);
+                            startActivityForResult(intent, 222);
+                        } else {
+                            Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                            intent.putExtra("ResolutionFormat", ResolutionFormat);
+                            intent.putExtra("ResolutionUrl", ResolutionUrl);
+                            intent.putExtra("SubTitleName", SubTitleName);
+                            intent.putExtra("SubTitlePath", SubTitlePath);
+                            startActivityForResult(intent, 222);
+                        }
                     }
-
 
                 } catch (Exception e) {
                 }
@@ -970,19 +978,25 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         return;
                     }
                     Util.call_finish_at_onUserLeaveHint = false;
-
-                    if (isDrm) {
+                    if (mCastSession != null && mCastSession.isConnected()) {
                         Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
                         intent.putExtra("SubTitleName", SubTitleName);
                         intent.putExtra("SubTitlePath", SubTitlePath);
                         startActivityForResult(intent, 222);
-                    } else {
-                        Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
-                        intent.putExtra("ResolutionFormat", ResolutionFormat);
-                        intent.putExtra("ResolutionUrl", ResolutionUrl);
-                        intent.putExtra("SubTitleName", SubTitleName);
-                        intent.putExtra("SubTitlePath", SubTitlePath);
-                        startActivityForResult(intent, 222);
+                    }else{
+                        if (isDrm) {
+                            Intent intent = new Intent(ExoPlayerActivity.this, SubtitleList.class);
+                            intent.putExtra("SubTitleName", SubTitleName);
+                            intent.putExtra("SubTitlePath", SubTitlePath);
+                            startActivityForResult(intent, 222);
+                        } else {
+                            Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                            intent.putExtra("ResolutionFormat", ResolutionFormat);
+                            intent.putExtra("ResolutionUrl", ResolutionUrl);
+                            intent.putExtra("SubTitleName", SubTitleName);
+                            intent.putExtra("SubTitlePath", SubTitlePath);
+                            startActivityForResult(intent, 222);
+                        }
                     }
 
 
@@ -4838,6 +4852,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 if (SubTitlePath.size() > 0)
                     subtitle_change_btn.setVisibility(View.VISIBLE);
+                else{
+                    subtitle_change_btn.setVisibility(View.GONE);
+                }
                 mediaRouteButton.setVisibility(View.VISIBLE);
                 primary_ll.setVisibility(View.VISIBLE);
 

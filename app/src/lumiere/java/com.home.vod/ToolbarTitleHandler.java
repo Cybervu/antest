@@ -2,19 +2,33 @@ package com.home.vod;
 
 
 import android.app.Activity;
+import android.view.View;
+
 import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.PPvPaymentInfoActivity;
 
 /**
  * Created by Android on 1/10/2018.
  */
 
+
 public class ToolbarTitleHandler {
     Activity activity;
 
 
-    public ToolbarTitleHandler(MainActivity activity){
-        this.activity=activity;
-        activity.getSupportActionBar().setTitle(R.string.app_name);
-
+    public ToolbarTitleHandler(Activity activity) {
+        this.activity = activity;
+        try {
+            if (activity instanceof MainActivity) {
+                ((MainActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
+                ((MainActivity) activity).toolbarimage.setVisibility(View.VISIBLE);
+            }
+            if (activity instanceof PPvPaymentInfoActivity) {
+                ((PPvPaymentInfoActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
+                ((PPvPaymentInfoActivity) activity).toolbarimage.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

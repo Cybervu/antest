@@ -129,7 +129,7 @@
                     android:textSize="@dimen/cancelbtn_text_size" />
 
                 <TextView
-                    android:id="@+id/termsTextView"
+                    android:id="@+id/terms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/termsTextView1"
@@ -157,7 +157,7 @@
                 android:textSize="@dimen/selectopt_text_size" />
 
             <LinearLayout
-                android:id="@+id/btnLogin"
+                android:id="@+id/register_facebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/registerButton"
