@@ -19,7 +19,7 @@ public class SliderBannerClickHandler {
     }
     public void handleClickOnBanner(){
         Intent bannerviewintent =new Intent("android.intent.action.VIEW",
-                Uri.parse("https://www.stuffpix.com.au/new-releases"));
+                Uri.parse("https://www.stuffpix.co.nz/new-pix "));
         context.startActivity(bannerviewintent);
     }
 }
