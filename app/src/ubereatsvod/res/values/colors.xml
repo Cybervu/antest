@@ -184,6 +184,7 @@
     <color name="resumepopupcolor">#555</color>
     <color name="resume_view_line_color">#737373</color>
     <color name="pageTitleColor">#57ad57</color>
+    <color name="episodetextcolor">#57ad57</color>
     <color name="borderColor">#555</color>
     <color name="castCrewTitleTextColor">#57ad57</color>
     <color name="chromecast_color">#ffffff</color>

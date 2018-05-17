@@ -48,6 +48,7 @@
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
     <color name="pageTitleColor">#3f444a</color>
+    <color name="episodetextcolor">#3f444a</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>

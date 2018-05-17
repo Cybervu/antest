@@ -26,7 +26,7 @@ public class SplashScreenHandler {
 
 
         if ( Util.isTablet(context)){
-            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }else {
             try {
                 handlePhoneSplashUI(imageResize);

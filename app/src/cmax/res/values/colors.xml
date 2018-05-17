@@ -63,6 +63,7 @@
     <color name="loader_color">#3084E3</color>
     <color name="hint_background">#3084E3</color>
     <color name="pageTitleColor">#fff</color>
+    <color name="episodetextcolor">#ffffff</color>
     <color name="noInternetColor">#fff</color>
     <color name="editTextColor">#fff</color>
     <color name="movieTitleColor">#fff</color>
