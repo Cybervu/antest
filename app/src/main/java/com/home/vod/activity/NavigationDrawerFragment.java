@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,7 @@ import com.home.vod.fragment.AboutUsFragment;
 import com.home.vod.fragment.ContactUsFragment;
 import com.home.vod.fragment.HomeFragment;
 import com.home.vod.fragment.MyLibraryFragment;
+import com.home.vod.fragment.PurchaseHistoryFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.fragment.WatchHistoryFragment;
 import com.home.vod.model.NavDrawerItem;
@@ -271,9 +273,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             public boolean onGroupClick(ExpandableListView parent, View v, int listPosition, long id) {
                 //Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
 
-                if(((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME,DEFAULT_HOME)))
-                    homeSelected=true;
-                else
+                if (((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))){
+                    ((TextView) v.findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
+                    homeSelected = true;
+            }else
                     homeSelected= false;
                 // Kushal
                 for (int i=0; i<parent.getAdapter().getCount();i++) {
@@ -282,6 +285,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
                             try {
                                 parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
+                                ((TextView)parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null),Typeface.BOLD);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -289,6 +293,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             try {
 
                                 parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+                                ((TextView)parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null),Typeface.NORMAL);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -327,8 +332,14 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
                         } else if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("purchasehistory")){
-                            Intent purchaseintent = new Intent(getActivity(), PurchaseHistoryActivity.class);
-                            startActivity(purchaseintent);
+                            /*Intent purchaseintent = new Intent(getActivity(), PurchaseHistoryActivity.class);
+                            startActivity(purchaseintent);*/
+                            fragment = new PurchaseHistoryFragment();
+                            /*Bundle bundle = new Bundle();
+                            bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                            fragment.setArguments(bundle);*/
+                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                            mDrawerLayout.closeDrawers();
                         }
 
                         else {
@@ -1194,6 +1205,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         try {
             menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
+        /*    // Kushal add blank
+            MenusOutputModel.MainMenu blank = new MenusOutputModel().new MainMenu();
+            mainMenuHome.setTitle("");
+            menusOutputModelLocal.getMainMenuModel().add(blank);*/
             menusOutputModelLocal.getFooterMenuModel().addAll(menusOutputModelFromAPI.getFooterMenuModel());
         } catch (Exception e) {
             e.printStackTrace();

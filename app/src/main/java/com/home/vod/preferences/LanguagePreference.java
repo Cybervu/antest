@@ -389,7 +389,7 @@ public class LanguagePreference {
     public static final String DEFAULT_OLD_PASSWORD = "New Password";
     public static final String DEFAULT_NEW_PASSWORD = "Confirm Password";
     public static final String DEFAULT_CAST_CREW_BUTTON_TITLE = "Cast and Crew";
-    public static final String DEFAULT_EPISODE_TITLE = "All Episodes";
+    public static final String DEFAULT_EPISODE_TITLE = "EPISODES";
 
     public static final String DEFAULT_UPDATE_PROFILE_ALERT = "We could not be able to update your profile. Please try again.";
     public static final String DEFAULT_NO_DETAILS_AVAILABLE = "No details available";
@@ -498,6 +498,9 @@ public class LanguagePreference {
 
     public static String JOIN_AMGO= "JOIN_AMGO";
     public static String DEFAULT_JOIN_AMGO= "Join Amgo";
+
+    public static String RELATED_CONTENT_TITLE= "RELATED_CONTENT_TITLE";
+    public static String DEFAULT_RELATED_CONTENT_TITLE= "RELATED TV SHOWS";
 
 
 

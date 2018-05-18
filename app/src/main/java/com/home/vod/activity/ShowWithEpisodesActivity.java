@@ -77,6 +77,7 @@ import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMonitizationDetailsAsync;
+import com.home.apisdk.apiController.GetRelatedContentAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.GetVoucherPlanAsynTask;
@@ -104,6 +105,7 @@ import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MonitizationDetailsInput;
 import com.home.apisdk.apiModel.MonitizationDetailsOutput;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.apisdk.apiModel.RelatedContentOutput;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.ValidateVoucherInputModel;
@@ -125,6 +127,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.model.RelatedContentModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -191,6 +194,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AV
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EPISODE_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
@@ -207,6 +211,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_RELATED_CONTENT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASONS;
@@ -224,6 +229,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
+import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
@@ -240,6 +246,7 @@ import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.RELATED_CONTENT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SEASONS;
@@ -276,9 +283,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         AddToFavAsync.AddToFavListener,
         DeleteFavAsync.DeleteFavListener,
         ViewContentRatingAsynTask.ViewContentRatingListener, GetIpAddressAsynTask.IpAddressListener,
-        GetMonitizationDetailsAsync.GetMonitizationDetailsListner
-        , VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener,
-        GetVoucherPlanAsynTask.GetVoucherPlanListener {
+        GetMonitizationDetailsAsync.GetMonitizationDetailsListner,
+        VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener,
+        GetVoucherPlanAsynTask.GetVoucherPlanListener,
+        GetRelatedContentAsynTask.GetRelatedContentListener{
 
 
     String movieDetailsStr = "";
@@ -634,7 +642,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }else {
                     FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoReleaseDateTextView);
                 }
-                movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", contentDetailsOutput.getReleaseDate());
+                movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
             }
 
@@ -651,13 +659,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 videoStoryTextView.setText(Util.getTextViewTextFromApi(contentDetailsOutput.getStory()));
                 if(!videoStoryTextView.getText().toString().isEmpty())
                 {
-                    storyViewMoreButton.setVisibility(View.VISIBLE);
+                    // Change to make the View more button visible
+                    storyViewMoreButton.setVisibility(View.GONE);
                 }else{
                     storyViewMoreButton.setVisibility(View.GONE);
                 }
-               // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
-                ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, "", true);
+                ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+               // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, "", true);
 
+                // Kushal - View more button for story
                 storyViewMoreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -862,6 +872,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 LogUtil.showLog("BISHAL", "data show...");
                 seasontiveLayout.setVisibility(View.VISIBLE);
+                EpisodeTitle.setVisibility(View.VISIBLE);
                 seasontiveLayout.setLayoutManager(mLayoutManager);
                 seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
                 EpisodesListAdapter mAdapter = new EpisodesListAdapter(ShowWithEpisodesActivity.this, R.layout.list_card_multipart, itemData, new EpisodesListAdapter.OnItemClickListener() {
@@ -1924,7 +1935,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     }
 
 
-        /*subtitle-------------------------------------*/
+
+    /*subtitle-------------------------------------*/
 
 
     public enum PlaybackLocation {
@@ -2089,7 +2101,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     AlertDialog alert;
     Player playerModel;
 
-    RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView.LayoutManager mLayoutManager ,mLayoutManager1;
     String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr;
     String movieTrailerUrlStr, isEpisode = "";
     String movieTypeStr = "";
@@ -2100,7 +2112,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
     LinearLayout story_layout;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
-    RecyclerView seasontiveLayout;
+    RecyclerView seasontiveLayout, relatedContent;
     int status = 0;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -2109,6 +2121,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     ArrayList<EpisodesListModel> itemData;
+    ArrayList<RelatedContentModel> itemData1;
     String movieNameStr;
     // TextView seasonTitleTextView;
     String episodeVideoUrlStr;
@@ -2118,6 +2131,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     PreferenceManager preferenceManager;
     Episode_Details_output content = new Episode_Details_output();
 
+    TextView EpisodeTitle, RelatedContentTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -2189,6 +2203,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
         playButton.setVisibility(View.GONE);
+        EpisodeTitle= (TextView)findViewById(R.id.episode_title);
+        RelatedContentTitle= (TextView)findViewById(R.id.related_content_title);
+
+        EpisodeTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
+        RelatedContentTitle.setText(languagePreference.getTextofLanguage(RELATED_CONTENT_TITLE, DEFAULT_RELATED_CONTENT_TITLE));
+
+
 
         videoCastCrewTitleTextView.setVisibility(View.GONE);
         ppvmodel = new PPVModel();
@@ -2251,6 +2272,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         seasonTitleTextView.setText(languagePreference.getTextofLanguage(SEASON, Util.DEFAULT_SEASON));
 */
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
+        relatedContent= (RecyclerView)findViewById(R.id.related_content);
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         //noDataLayout.setVisibility(View.GONE);
@@ -2260,6 +2282,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         mLayoutManager = new LinearLayoutManager(ShowWithEpisodesActivity.this, LinearLayoutManager.VERTICAL, false);
+        mLayoutManager1 = new LinearLayoutManager(ShowWithEpisodesActivity.this, LinearLayoutManager.HORIZONTAL, false);
         iconImageRelativeLayout = (RelativeLayout) findViewById(R.id.iconImageRelativeLayout);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
         story_layout = (LinearLayout) findViewById(R.id.story_layout);
@@ -6337,4 +6360,101 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
         }
     }
+
+    @Override
+    public void onGetRelatedContentPreExecuteStarted() {
+        LogUtil.showLog("Kushal", "getRelatedContent pdlog show");
+        /*if (pDialog != null && !pDialog.isShowing())
+            pDialog.show();*/
+    }
+
+    @Override
+    public void onGetRelatedContentPostExecuteCompleted(RelatedContentOutput relatedContentOutput, int status, String message) {
+       /* try {
+            if (pDialog != null && pDialog.isShowing()) {
+                LogUtil.showLog("PINTU", "getepisodedetails pdlog hide");
+                pDialog.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+            LogUtil.showLog("BKS", "exception==" + ex);
+        }
+
+
+        LogUtil.showLog("MUVI", "episode show...");
+
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        if (status == 200) {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            itemData1 = new ArrayList<RelatedContentModel>();
+            isAPV =
+            isPPV = episode_details_output.getIs_ppv();
+
+            Util.currencyModel = episode_details_output.getCurrencyDetails();
+            Util.apvModel = episode_details_output.getApvDetails();
+            Util.ppvModel = episode_details_output.getPpvDetails();
+            for (int a = 0; a < episode_details_output.getEpisodeArray().size(); a++) {
+
+                String episodeNoStr = episode_details_output.getEpisodeArray().get(a).getEpisode_number();
+                String episodeStoryStr = episode_details_output.getEpisodeArray().get(a).getEpisode_story();
+                String episodeDateStr = episode_details_output.getEpisodeArray().get(a).getEpisode_date();
+                String episodeImageStr = episode_details_output.getEpisodeArray().get(a).getPoster_url();
+                String episodeTitleStr = episode_details_output.getEpisodeArray().get(a).getEpisode_title();
+                String episodeSeriesNoStr = episode_details_output.getEpisodeArray().get(a).getSeries_number();
+                String episodeMovieStreamUniqueIdStr = episode_details_output.getEpisodeArray().get(a).getMovie_stream_uniq_id();
+                String episodeThirdParty = episode_details_output.getEpisodeArray().get(a).getThirdparty_url();
+                int episodeContenTTypesId = episode_details_output.getEpisodeArray().get(a).getContent_types_id();
+                String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
+
+
+
+
+                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
+                        movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId));
+
+            }
+            LogUtil.showLog("MUVI", "episode show...1");
+
+            LogUtil.showLog("BISHAL", "itemdata==" + itemData);
+            if (itemData.size() <= 0) {
+
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+
+                }
+
+                //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
+            } else {
+                if (pDialog != null && pDialog.isShowing()) {
+
+                    pDialog.hide();
+
+                }
+                LogUtil.showLog("Kushal", "data show...");
+                relatedContent.setVisibility(View.VISIBLE);
+                RelatedContentTitle.setVisibility(View.VISIBLE);
+                relatedContent.setLayoutManager(mLayoutManager1);
+                relatedContent.setItemAnimator(new DefaultItemAnimator());
+                EpisodesListAdapter mAdapter = new EpisodesListAdapter(ShowWithEpisodesActivity.this, R.layout.list_card_related, itemData, new EpisodesListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(EpisodesListModel item) {
+                        clickItem(item);
+
+                    }
+                });
+                seasontiveLayout.setAdapter(mAdapter);
+
+            }
+        }
+
+        if (loggedInStr != null && isFavorite == 1) {
+
+            favorite_view_episode.setImageResource(R.drawable.favorite_red);
+        }
+    }*/
+    }
+
 }

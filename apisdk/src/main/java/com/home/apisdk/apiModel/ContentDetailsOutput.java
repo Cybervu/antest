@@ -34,6 +34,7 @@ public class ContentDetailsOutput {
     String rating = "";
     String review = "";
     String id = "";
+    String movieStreamId= "";
 
     /**
      * This Method is use to Get the Season
@@ -707,5 +708,22 @@ public class ContentDetailsOutput {
         this.genre = genre;
     }
 
+    /**
+     * Method is use to Get the MovieStreamId
+     *
+     * @return MovieStreamId
+     */
+    public String getMovieStreamId() {
+        return movieStreamId;
+    }
+
+    /**N
+     * Method is use to Set the MovieStreamId
+     *
+     * @param movieStreamId For Setting The MovieStreamId
+     */
+    public void setMovieStreamId(String movieStreamId) {
+        this.movieStreamId = movieStreamId;
+    }
 
 }

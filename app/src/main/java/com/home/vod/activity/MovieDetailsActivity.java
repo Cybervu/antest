@@ -3569,13 +3569,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 if(!videoStoryTextView.getText().toString().isEmpty())
                 {
-                    storyViewMoreButton.setVisibility(View.VISIBLE);
+                    // Change to make the View more button visible
+                    storyViewMoreButton.setVisibility(View.GONE);
                 }else{
                     storyViewMoreButton.setVisibility(View.GONE);
                 }
-                // ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
-                ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, "", true);
+                 ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+                //ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, "", true);
 
+                // Kushal - button for view more
                 storyViewMoreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

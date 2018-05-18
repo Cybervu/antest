@@ -10,6 +10,7 @@
     <color name="buttonAmgo">#e1e1e1</color>
     <color name="amgo_statusbar_color">#000000</color>
     <color name="amgo_navigation_color">#050505</color>
+    <color name="amgo_navigation_menu_color">#95989a</color>
     <color name="amgo_spinner_back">#262626</color>
 
 

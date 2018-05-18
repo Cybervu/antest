@@ -23,7 +23,7 @@
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
-    <dimen name="forgot_logo_width">150dp</dimen>
+    <dimen name="forgot_logo_width">120dp</dimen>
     <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>

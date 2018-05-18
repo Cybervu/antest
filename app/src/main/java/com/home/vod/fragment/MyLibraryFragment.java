@@ -452,7 +452,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
       //  ((MainActivity) getActivity()).getSupportActionBar().setTitle(getArguments().getString("title"));
-        ((MainActivity) getActivity()).getSupportActionBar();
+      //  ((MainActivity) getActivity()).getSupportActionBar();
+        TextView sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        if (getArguments().getString("title") != null) {
+            sectionTitle.setText(getArguments().getString("title"));
+            // sectionTitle.setText(titleListName);
+        }
         // Kushal - set Id to back button and text in Toolabr
         Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
         setIdToActionBarBackButton(toolbar);

@@ -152,7 +152,7 @@ public class ResizableCustomView {
         @Override
         public void updateDrawState(TextPaint ds) {
             ds.setUnderlineText(isUnderline);
-            ds.setColor(mcontext.getResources().getColor(R.color.view_more_less));
+            ds.setColor(mcontext.getResources().getColor(R.color.colorAmgoRed));
 
         }
         @Override

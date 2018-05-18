@@ -75,7 +75,7 @@
             android:visibility="visible">
 
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout xmlns:fandroid="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/detailsRelativeLayout"
                 android:layout_width="match_parent"
@@ -366,6 +366,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    fandroid:id="@+id/bottomLine"
                     android:layout_below="@+id/ratingLayout"
                     android:layout_margin="@dimen/marginleft10dp"
                     android:background="#000000" />
@@ -374,8 +375,7 @@
                     android:id="@+id/story_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ratingLayout"
-                    android:layout_marginTop="@dimen/ppv_margin"
+                    android:layout_below="@+id/bottomLine"
                     android:background="@color/transparent"
                     android:orientation="vertical"
                     android:visibility="visible">
@@ -431,7 +431,7 @@
                                 android:layout_marginLeft="@dimen/ppv_margin"
                                 android:layout_marginTop="@dimen/textColor_margin"
                                 android:text="Cast and Crew"
-                                android:textColor="@color/cast_crew_titleCololr"
+                                android:textColor="@color/colorAmgoRed"
                                 android:textSize="@dimen/forgot_text_size"
                                 android:textStyle="bold" />
 
@@ -536,16 +536,49 @@
                 android:text="Buy"
                 android:textColor="@color/white" />
 
+            <TextView
+                android:id="@+id/episode_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/terms_text_view_margin_right"
+                android:textColor="@color/textAmgoColor"
+                android:textSize="@dimen/itemtitle_text_size"
+                android:textStyle="normal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:visibility="gone"
+                android:layout_below="@+id/playBuyButton"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/featureContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/playBuyButton"
+                android:layout_below="@+id/episode_title"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/terms_text_view_margin_right"
-                android:layout_marginTop="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/ppv_margin" />
 
-                />
+            <TextView
+                android:id="@+id/related_content_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/terms_text_view_margin_right"
+                android:textColor="@color/white"
+                android:textSize="@dimen/itemtitle_text_size"
+                android:textStyle="normal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:visibility="gone"
+                android:layout_below="@+id/featureContent"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/related_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/related_content_title"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/terms_text_view_margin_right"
+                android:layout_marginTop="@dimen/ppv_margin" />
         </RelativeLayout>
 
     </ScrollView>

@@ -814,6 +814,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, USER_LOGIN,DEFAULT_USER_LOGIN, "user_login", json);
         setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "join_amgo", json);
         setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "forgot_password", json);
+        setTranslationLanguageToPref(languagePreference, RELATED_CONTENT_TITLE,DEFAULT_RELATED_CONTENT_TITLE, "related_content_title", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

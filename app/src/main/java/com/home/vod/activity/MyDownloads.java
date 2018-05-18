@@ -299,7 +299,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
 
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);
+        TextView sectionTitle = (TextView)findViewById(R.id.sectionTitle);
 
+            sectionTitle.setText(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+            // sectionTitle.setText(titleListName);
         if (hideBcakIcon) {
             mActionBarToolbar.setNavigationIcon(null);
             //hideBcakIcon= true;

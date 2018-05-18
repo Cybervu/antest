@@ -1,13 +1,16 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,6 +21,9 @@ import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
 import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.PurchaseHistoryActivity;
+import com.home.vod.activity.TransactionDetailsActivity;
 import com.home.vod.adapter.PurchaseHistoryAdapter;
 import com.home.vod.model.PurchaseHistoryModel;
 import com.home.vod.model.RecyclerItemClickListener;
@@ -47,8 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PurchaseHistoryActivity extends AppCompatActivity implements
-        PurchaseHistoryAsyntask.PurchaseHistoryListener {
+public class PurchaseHistoryFragment extends Fragment implements PurchaseHistoryAsyntask.PurchaseHistoryListener {
     Toolbar mActionBarToolbar;
     RecyclerView recyclerView;
     ArrayList<PurchaseHistoryModel> purchaseData = new ArrayList<PurchaseHistoryModel>();
@@ -74,57 +79,49 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
     ArrayList<String> Id_Purchase_History;
 
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        StatusBarColor.changeColor(PurchaseHistoryActivity.this,R.color.amgo_statusbar_color);
-        setContentView(R.layout.activity_purchase_history);
-
-        languagePreference = LanguagePreference.getLanguagePreference(PurchaseHistoryActivity.this);
-        noInternet = (RelativeLayout) findViewById(R.id.noInternet);
-        primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
-        noData = (RelativeLayout) findViewById(R.id.noData);
-        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
-        tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
-        no_internet_text = (TextView) findViewById(R.id.no_internet_text);
-        recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
-       // purchaseHistoryTitleTextView = (TextView) findViewById(R.id.purchaseHistoryTitleTextView);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_purchase_history, container, false);
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
+        noInternet = (RelativeLayout) rootView.findViewById(R.id.noInternet);
+        primary_layout = (LinearLayout) rootView.findViewById(R.id.primary_layout);
+        noData = (RelativeLayout) rootView.findViewById(R.id.noData);
+        noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
+        tryAgainButton = (Button) rootView.findViewById(R.id.tryAgainButton);
+        no_internet_text = (TextView) rootView.findViewById(R.id.no_internet_text);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.purchase_history_recyclerview);
+        // purchaseHistoryTitleTextView = (TextView) rootView.findViewById(R.id.purchaseHistoryTitleTextView);
 
         no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN, DEFAULT_TRY_AGAIN));
 
-        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         user_id = preferenceManager.getUseridFromPref();
-       // FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts), purchaseHistoryTitleTextView);
+        // FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), purchaseHistoryTitleTextView);
 
-      //  purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+        //  purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
 
 
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         // Kushal- not required in amgo
        /* mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));*/
-        setSupportActionBar(mActionBarToolbar);
-        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
-        TextView sectionTitle = (TextView) findViewById(R.id.sectionTitle);
+        TextView sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
 
-            sectionTitle.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
-            // sectionTitle.setText(titleListName);
-        // Kushal - To set Id to action bar back button
-        setIdToActionBarBackButton(mActionBarToolbar);
+        sectionTitle.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+        // sectionTitle.setText(titleListName);
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
+
 
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (NetworkStatus.getInstance().isConnected(PurchaseHistoryActivity.this))
+                if (NetworkStatus.getInstance().isConnected(getActivity()))
                     GetPurchaseHistoryDetails();
                 else {
                     noInternet.setVisibility(View.VISIBLE);
@@ -145,16 +142,16 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
+        PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(getActivity(),purchaseData);
         recyclerView.setAdapter(purchaseHistoryAdapter);*/
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(PurchaseHistoryActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         // TODO Handle item click
 
-                        final Intent detailsIntent = new Intent(PurchaseHistoryActivity.this, TransactionDetailsActivity.class);
+                        final Intent detailsIntent = new Intent(getActivity(), TransactionDetailsActivity.class);
 
                         detailsIntent.putExtra("id", Id_Purchase_History.get(position));
                         detailsIntent.putExtra("user_id", user_id);
@@ -167,6 +164,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
                     }
                 })
         );
+        return rootView;
 
     }
 
@@ -178,13 +176,13 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
         purchaseHistoryInputModel.setUser_id(user_id);
         purchaseHistoryInputModel.setAuthToken(authTokenStr);
         purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel, this, this);
+        PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel, PurchaseHistoryFragment.this, getActivity());
         asynGetPurchaseDetail.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
     public void onPurchaseHistoryPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(PurchaseHistoryActivity.this);
+        pDialog = new ProgressBarHandler(getActivity());
         pDialog.show();
     }
 
@@ -210,9 +208,9 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
 
                 if (purchaseData.size() > 0) {
 
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
-                    PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this, purchaseData);
+                    PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(getActivity(), purchaseData);
                     recyclerView.setAdapter(purchaseHistoryAdapter);
 
                 } else {
@@ -381,7 +379,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
 //
 //                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 //                recyclerView.setLayoutManager(layoutManager);
-//                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
+//                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(getActivity(),purchaseData);
 //                recyclerView.setAdapter(purchaseHistoryAdapter);
 //            }
 //        }
@@ -389,17 +387,11 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
 //        @Override
 //        protected void onPreExecute() {
 //
-//            pDialog = new ProgressBarHandler(PurchaseHistoryActivity.this);
+//            pDialog = new ProgressBarHandler(getActivity());
 //            pDialog.show();
 //        }
 //    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        overridePendingTransition(0, 0);
-        super.onBackPressed();
-    }
+    
 
 
     /*
@@ -426,5 +418,6 @@ Kushal- To set id to back button in Action Bar
             }
         }
     }
+
 
 }

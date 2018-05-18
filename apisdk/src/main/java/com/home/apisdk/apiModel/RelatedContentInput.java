@@ -9,6 +9,7 @@ public class RelatedContentInput {
     String authtoken;
     String contentId;
     String content_stream_id;
+    String language;
 
     /**
      * This Method is use to Get the Content Id
@@ -68,7 +69,7 @@ public class RelatedContentInput {
         this.language = language;
     }
 
-    String language;
+
 
 
     /**
