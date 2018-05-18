@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -556,7 +558,9 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         cardExpiryMonthSpinner = (Spinner) findViewById(R.id.cardExpiryMonthEditText);
         cardExpiryYearSpinner = (Spinner) findViewById(R.id.cardExpiryYearEditText);
         creditCardSaveSpinner = (Spinner) findViewById(R.id.creditCardSaveEditText);
-
+        ViewCompat.setBackgroundTintList(cardExpiryMonthSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(cardExpiryYearSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(creditCardSaveSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
 
         apply = (Button) findViewById(R.id.apply);
         watch_now = (Button) findViewById(R.id.watch_now);

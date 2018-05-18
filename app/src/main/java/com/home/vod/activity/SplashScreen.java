@@ -549,7 +549,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                                 return;
                             }
 
-                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP)) && preferenceManager.getUseridFromPref()!=null) {
                                 if(!profileCalled) {
                                     return;
                                 }
