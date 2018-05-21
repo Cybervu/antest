@@ -4,7 +4,6 @@ package player.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -84,7 +83,6 @@ import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
-import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
@@ -127,7 +125,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -5023,10 +5020,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             public void onSendingRemoteMediaRequest() {
             }
 
-           /* @Override
+            @Override
             public void onAdBreakStatusUpdated() {
 
-            }*/
+            }
         });
 
 

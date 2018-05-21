@@ -1691,10 +1691,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onSendingRemoteMediaRequest() {
             }
 
-           /* @Override
+            @Override
             public void onAdBreakStatusUpdated() {
 
-            }*/
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }

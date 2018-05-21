@@ -687,10 +687,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             public void onSendingRemoteMediaRequest() {
             }
 
-           /* @Override
+            @Override
             public void onAdBreakStatusUpdated() {
 
-            }*/
+            }
         });
         remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
             @Override

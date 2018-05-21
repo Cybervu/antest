@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -29,7 +28,6 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.SupportActivity;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +42,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,6 +52,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
@@ -84,7 +82,6 @@ import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.AlertActivity;
 import com.home.vod.activity.CastAndCrewActivity;
-import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.SupportActivity1;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FeatureHandler;
@@ -142,7 +139,6 @@ import javax.net.ssl.HttpsURLConnection;
 import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
-
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
@@ -156,11 +152,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-
 import static com.home.vod.preferences.LanguagePreference.SAVE;
 import static com.home.vod.preferences.LanguagePreference.SAVE_OFFLINE_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
@@ -4516,6 +4510,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             @Override
             public void onSendingRemoteMediaRequest() {
+            }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
             }
         });
 

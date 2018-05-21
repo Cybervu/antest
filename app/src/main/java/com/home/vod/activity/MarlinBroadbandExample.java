@@ -2636,10 +2636,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				public void onSendingRemoteMediaRequest() {
 				}
 
-				/*@Override
+				@Override
 				public void onAdBreakStatusUpdated() {
 
-				}*/
+				}
 			});
 
 			remoteMediaClient.load(mSelectedMedia, autoPlay, position);

@@ -937,10 +937,10 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             public void onSendingRemoteMediaRequest() {
             }
 
-           /* @Override
+            @Override
             public void onAdBreakStatusUpdated() {
 
-            }*/
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }

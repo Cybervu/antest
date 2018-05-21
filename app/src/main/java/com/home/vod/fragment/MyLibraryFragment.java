@@ -3842,10 +3842,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             public void onSendingRemoteMediaRequest() {
             }
 
-           /* @Override
+            @Override
             public void onAdBreakStatusUpdated() {
 
-            }*/
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
