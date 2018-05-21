@@ -4689,6 +4689,36 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 mHandler.removeCallbacks(updateTimeTask);
                 updateProgressBar();
 
+
+
+
+
+
+
+
+                if (isDrm) {
+                    if (SubTitlePath.size() < 1) {
+                        subtitle_change_btn.setVisibility(View.GONE);
+                        cc_layout.setVisibility(View.GONE);
+                    } else {
+                        subtitle_change_btn.setVisibility(View.VISIBLE);
+                        cc_layout.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
+                        subtitle_change_btn.setVisibility(View.GONE);
+                        cc_layout.setVisibility(View.GONE);
+                    } else {
+                        subtitle_change_btn.setVisibility(View.VISIBLE);
+                        cc_layout.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
+
+
+                primary_ll.setVisibility(View.GONE);
+
             }
 
 
@@ -4850,11 +4880,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     current_time.setVisibility(View.GONE);
                 }
 
-                if (SubTitlePath.size() > 0)
+                if (SubTitlePath.size() > 0) {
                     subtitle_change_btn.setVisibility(View.VISIBLE);
+                    cc_layout.setVisibility(View.VISIBLE);
+                }
                 else{
                     subtitle_change_btn.setVisibility(View.GONE);
+                    cc_layout.setVisibility(View.GONE);
                 }
+
                 mediaRouteButton.setVisibility(View.VISIBLE);
                 primary_ll.setVisibility(View.VISIBLE);
 

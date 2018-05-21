@@ -67,7 +67,7 @@ android {
             applicationId 'com.release.muvisdk'
             minSdkVersion 21
             targetSdkVersion 23
-            versionCode 4
+            versionCode 1
             versionName "2.0.1"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""

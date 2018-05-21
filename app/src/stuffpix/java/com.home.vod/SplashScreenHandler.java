@@ -50,5 +50,6 @@ public class SplashScreenHandler {
     public void changeFeatureProperties(FeatureHandler featureHandler){
 
         featureHandler.setFeatureFlag(FeatureHandler.GOOGLE,"0");
+        featureHandler.setFeatureFlag(FeatureHandler.STUFF_LOGIN_REGISTER,"1");
     }
 }

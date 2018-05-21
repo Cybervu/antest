@@ -191,6 +191,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private RelativeLayout googleSignView;
     private Button registerButton;
     TextView fbLoginTextView;
+    public static final int STUFFPIX_RESULT = 10001;
 
 
     /***************************************************************************/
@@ -1437,6 +1438,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
+    LinearLayout login_stuff;
+    TextView stuff_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1524,6 +1527,23 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         signUpTextView = (TextView) findViewById(R.id.register);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
+
+
+
+        if ((featureHandler.getFeatureStatus(FeatureHandler.STUFF_LOGIN_REGISTER, FeatureHandler.DEFAULT_STUFF_LOGIN_REGISTER))) {
+            login_stuff = (LinearLayout) findViewById(R.id.login_stuff);
+            stuff_text = (TextView) findViewById(R.id.stuff_text);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), stuff_text);
+            login_stuff.setVisibility(View.VISIBLE);
+            login_stuff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    naviagteStuffpixLoginPage();
+                }
+            });
+
+        }
+
 
 
         /*
@@ -3698,6 +3718,40 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == STUFFPIX_RESULT){
+
+            if(resultCode == RESULT_OK){
+
+                String stuff_name = "";
+                String stuff_mail = "";
+                String stuff_user_id = "";
+
+
+                /**
+                 * Calling social auth API after getting response form stuffpix.
+                 */
+                SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
+                socialAuthInputModel.setAuthToken(authTokenStr);
+                socialAuthInputModel.setName(stuff_name.trim());
+                socialAuthInputModel.setEmail(stuff_mail.trim());
+                socialAuthInputModel.setPassword("");
+                socialAuthInputModel.setFb_userid(stuff_user_id.trim());
+                socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                socialAuthInputModel.setDevice_type("1");
+                socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
+                asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+
+            }else{
+                Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
+            }
+
+
+            return;
+        }
+
+
         if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
@@ -5835,6 +5889,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }*/
             }
         }
+    }
+
+
+
+    public void naviagteStuffpixLoginPage (){
+        Intent intent = new Intent(LoginActivity.this,StuffPixLoginRegisterActivity.class);
+        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectLogin?openid_device_type=2");
+        startActivityForResult(intent,STUFFPIX_RESULT);
     }
 
 }

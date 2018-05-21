@@ -146,6 +146,11 @@
             android:screenOrientation="portrait"
             />
         <activity
+            android:name=".activity.StuffPixLoginRegisterActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            />
+        <activity
             android:name=".activity.RegisterActivity"
             android:label=""
             android:screenOrientation="portrait" />
