@@ -133,11 +133,13 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CLEAR_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CLEAR_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -432,6 +434,7 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
         *ClearHistory Button added for clear the history
          */
         clearhistorybutton=(Button) rootView.findViewById(R.id.clearhistory);
+        clearhistorybutton.setText(languagePreference.getTextofLanguage(CLEAR_HISTORY,DEFAULT_CLEAR_HISTORY));
         clearhistorybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1523,9 +1526,9 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
                  /*@Author:Bishal
                   *When item data not null then only we can visible the clear button bidefault it was gone
                   */
-                if (itemData!=null && itemData.size()!=0){
+                /*if (itemData!=null && itemData.size()!=0){
                     clearhistorybutton.setVisibility(View.VISIBLE);
-                }
+                }*/
 
                 if (message == null)
                     message = "0";
@@ -2485,7 +2488,7 @@ private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
         View v = mActionBarToolbar.getChildAt(i);
         if (v instanceof ImageButton) {
             ImageButton b = (ImageButton) v;
-            b.setId(R.id.back);
+            b.setId(R.id.menu);
                 /*try {
                     if (b.getContentDescription().equals("Open")) {
                         b.setId(R.id.drawer_menu);

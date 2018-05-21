@@ -76,4 +76,5 @@
     <item name="page_title_video_list" type="id"/>
     <item name="page_title_purchase_history" type="id"/>
     <item name="page_title_footer_menu" type="id"/>
+    <item name="app_title" type="id"/>
 </resources>

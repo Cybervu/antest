@@ -25,14 +25,14 @@
         android:textColor="@color/buttonTextColor"
         android:textSize="@dimen/submit_text_size"
         android:text="Clear History"
-        android:padding="2dp"
+        android:padding="5dp"
         android:gravity="center"
         android:stateListAnimator="@null"
         android:textAllCaps="false"
         android:layout_marginTop="@dimen/margintop5dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/marginright5dp"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
 

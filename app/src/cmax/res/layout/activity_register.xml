@@ -110,7 +110,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/terms"
+                    android:id="@+id/termsTextView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -121,7 +121,7 @@
                     android:textSize="@dimen/playbtn_text_size" />
 
                 <TextView
-                    android:id="@+id/termsTextView"
+                    android:id="@+id/terms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

@@ -780,12 +780,15 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, COMPLETE_SEASON, DEFAULT_COMPLETE_SEASON, "complete_season", json);
         setTranslationLanguageToPref(languagePreference, NEXT, DEFAULT_NEXT, "btn_next", json);
         setTranslationLanguageToPref(languagePreference, VOUCHER_SUCCESS, DEFAULT_VOUCHER_SUCCESS, "voucher_applied_success", json);
+        setTranslationLanguageToPref(languagePreference, CLEAR_HISTORY, DEFAULT_CLEAR_HISTORY, "clear_history", json);
+        setTranslationLanguageToPref(languagePreference, SORRY_ENTER_NAME, DEFAULT_SORRY_ENTER_NAME, "sorry_enter_name", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
+
     }
 
-    /**
+    /**d
      * This method is used to set translation language from json keyword.
      * @param languagePreference
      * @param lanngKey

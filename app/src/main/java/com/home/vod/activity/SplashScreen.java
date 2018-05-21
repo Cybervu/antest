@@ -317,7 +317,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 if (Size_Of_Download_Content.size() > 0) {
 
                     Util.hideBcakIcon = true;
-
                     Intent intent = new Intent(SplashScreen.this, MyDownloads.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -549,7 +548,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                                 return;
                             }
 
-                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                            if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP)) &&  preferenceManager.getUseridFromPref()!=null) {
                                 if(!profileCalled) {
                                     return;
                                 }
@@ -726,7 +725,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         } else if (status == 455) {
             callProfileAPI();
-
+            preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
             featureHandler.setFeatureFlag(FeatureHandler.IS_LOGIN_REGISTRATION_REQUIRE, "0");
         }else {
             isRegistrationEnabledMsg = "Oops something went wrong.Please try again later .";
@@ -747,13 +746,21 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         languageListCalled = true;
         languageListSuccessStatus = 1;
 
-        this.default_Language = defaultLanguage;
+
+        if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
+            languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
+            default_Language = defaultLanguage;
+        } else {
+            default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+        }
+
+
         for (int i = 0; i < languageListOutputArray.size(); i++) {
 
             LanguageModel languageModel = new LanguageModel();
             languageModel.setLanguageId(languageListOutputArray.get(i).getLanguageCode());
             languageModel.setLanguageName(languageListOutputArray.get(i).getLanguageName());
-            if (defaultLanguage.equalsIgnoreCase(languageListOutputArray.get(i).getLanguageCode())) {
+            if (default_Language.equalsIgnoreCase(languageListOutputArray.get(i).getLanguageCode())) {
                 languageModel.setIsSelected(true);
 
             } else {
@@ -770,22 +777,17 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }else {
             preferenceManager.setLanguageListToPref(""+languageModels.size());
         }
-        if (languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
-            languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
-        } else {
-            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
-        }
+
 
         // Call For Language Translation.
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(authTokenStr);
-        languageListInputModel.setLangCode(defaultLanguage);
+        languageListInputModel.setLangCode(default_Language);
         GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, this, this);
         asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
 
     }
-
     @Override
     public void onGetGenreListPreExecuteStarted() {
 

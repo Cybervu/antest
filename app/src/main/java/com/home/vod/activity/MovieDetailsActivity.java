@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -366,6 +367,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     LinearLayout linearLayout[];
     boolean[] visibility;
     String[] lang;
+    Snackbar snackbar = null;
 //
 
 
@@ -2420,7 +2422,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
     public void showMessageToUser(String message) {
-
+/*
         Context context = getApplicationContext();
         // Create layout inflator object to inflate toast.xml file
         LayoutInflater inflater = getLayoutInflater();
@@ -2436,9 +2438,37 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //        toast.setText("Added to Favorites");
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
-        toast.show();
+        toast.show();*/
+
+        showSnackBar(message);
 
     }
+
+    private void showSnackBar(String message) {
+        View v= findViewById(android.R.id.content);
+        if(!message.equals(languagePreference.getTextofLanguage(ERROR_IN_DATA_FETCHING,DEFAULT_ERROR_IN_DATA_FETCHING))) {
+            if (snackbar != null) {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                    snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+                } else {
+                    snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+                }
+
+            } else
+                snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+        }else{
+            snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
+            // set Retry button in Snackbar
+          /*  snackbar.make(v, message, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }).show();*/
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

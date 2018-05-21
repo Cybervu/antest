@@ -647,7 +647,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         subtitle_change_btn = (ImageView) findViewById(R.id.setting);
         latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
         videoTitle = (TextView) findViewById(R.id.content_title);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.genre);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
@@ -699,7 +699,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         //===============================This is used for Resolution Change ===================================//
 
         if (!isDrm) {
-            Util.VideoResolution = "Auto";
+            //Util.VideoResolution = "Auto";
+            if(playerModel.getVideoResolution()!=null) {
+                if (playerModel.getVideoResolution().isEmpty() || playerModel.getVideoResolution().equals(""))
+                    Util.VideoResolution = "BEST";
+                else {
+                    if (playerModel.getVideoResolution().trim().equals("BEST")) {
+                        Util.VideoResolution = "BEST";
+                    } else {
+                        Util.VideoResolution = playerModel.getVideoResolution().trim() + "p";
+                    }
+                }
+            }else
+                Util.VideoResolution = "BEST";
 
             if (playerModel.getMidRoll() == 1) {
 
@@ -723,12 +735,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             Log.v("BIBHU1", "ResolutionUrl = " + ResolutionUrl.size());
 
-            if (ResolutionUrl.size() < 1) {
+            /*if (ResolutionUrl.size() < 1) {
                 Log.v("SUBHA", "resolution image Invisible called");
             } else {
                 ResolutionUrl.add(playerModel.getVideoUrl().trim());
                 ResolutionFormat.add("Auto");
-            }
+            }*/
 
             if (ResolutionFormat.size() > 0) {
                 Collections.reverse(ResolutionFormat);

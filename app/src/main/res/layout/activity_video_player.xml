@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/player_layout1"
         android:background="@drawable/app_background"
         android:orientation="vertical">
 
@@ -163,7 +164,7 @@
                     android:gravity="right">
 
                     <ImageView
-                        android:id="@+id/subtitle_change_btn"
+                        android:id="@+id/setting"
                         android:layout_width="@dimen/subtitle_width"
                         android:layout_height="@dimen/subtitle_height"
                         android:layout_marginRight="@dimen/payment_relative_margin"
@@ -197,8 +198,8 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/my_download_margin"
-                    android:layout_marginTop="@dimen/my_download_margin"
+                    android:paddingBottom="@dimen/my_download_margin"
+                    android:paddingTop="@dimen/my_download_margin"
                     android:background="@color/playPauseColor"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -206,10 +207,10 @@
                     <ImageButton
                         android:id="@+id/center_play_pause"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/ppv_margin"
+                        android:paddingLeft="@dimen/ppv_margin"
                         android:paddingBottom="8dp"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
@@ -271,7 +272,15 @@
             </LinearLayout>
 
         </RelativeLayout>
-
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/player_layout1"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/new_detailsLayout"
@@ -367,6 +376,7 @@
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/textColor_margin"
                 android:text=""
+                android:textStyle="bold"
                 android:textColor="@color/videotextColor"
                 android:textSize="@dimen/vdiogenere_text_size" />
 
@@ -486,15 +496,16 @@
 
             <TextView
                 android:id="@+id/cast_crew"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
-                android:textColor="@color/castCrewTitleTextColor"
+                android:textColor="@color/cast_crew_titleCololr"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />
 
         </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
 </ScrollView>
+</RelativeLayout>

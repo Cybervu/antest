@@ -78,6 +78,14 @@ android {
             //   buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""// sapphire store
 //            buildConfigField "String", "AUTH_TOKEN", "\"445882348316089103b8729dcb397c51\""//idogic
 //liveStripe
+            signingConfigs {
+                release {
+                    storeFile file("app/MuviReleaseCertificate.jks")
+                    storePassword "muvi123"
+                    keyAlias "muvi"
+                    keyPassword "muvi123"
+                }
+            }
         }
         defaultFlavor_staging_ {
             dimension 'environment'

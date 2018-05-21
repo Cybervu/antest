@@ -323,6 +323,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	Animation myAnim;
 	LinearLayout volume_brightness_control_layout,back_layout,cc_layout;
+	RelativeLayout download_layout;
 	ImageButton volume_brightness_control;
 	TextView volume_bright_value;
 	Window mWindow;
@@ -466,9 +467,15 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		new_detailsLayout = (LinearLayout) findViewById(R.id.new_detailsLayout);
 		emVideoView = (VideoView) findViewById(R.id.player_screen);
 		cc_layout = (LinearLayout) findViewById(R.id.cc_layout);
-		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
+		subtitleText = (TextView) findViewById(R.id.subtitle);
 		subtitle_change_btn = (ImageView) findViewById(R.id.setting);
 		back_layout = (LinearLayout) findViewById(R.id.back_layout);
+		download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+
+		// Kushal
+		subtitle_change_btn.setBackgroundResource(R.drawable.cc_button_radious);
+		subtitle_change_btn.setImageResource(R.drawable.subtitle_image_drm);
+		download_layout.setVisibility(View.GONE);
 
 		latest_center_play_pause = (ImageButton) findViewById(R.id.play_centre);
 		videoTitle = (TextView) findViewById(R.id.content_title);
@@ -493,7 +500,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		story.setTypeface(storyTypeface);
 		videoCastCrewTitleTextView = (TextView) findViewById(R.id.cast_crew);
-		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
 		videoCensorRatingTextView.setVisibility(View.GONE);
 		videoCensorRatingTextView1.setVisibility(View.GONE);
@@ -1902,7 +1909,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			return;
 		}
 
-		Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+		Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		subtitleText.setTypeface(videoGenreTextViewTypeface);
 		subtitleText.setText(Html.fromHtml(text.content));
 		subtitleText.setVisibility(View.VISIBLE);
