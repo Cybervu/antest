@@ -55,9 +55,9 @@
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#333</color>
+    <color name="colorPrimary">#000000</color>
     <color name="navlogobackgroundcolor">#ffffff</color>
-    <color name="colorPrimaryDark">#333</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
 
