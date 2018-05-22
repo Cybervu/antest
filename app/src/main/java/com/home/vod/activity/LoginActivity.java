@@ -1529,7 +1529,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
 
-
         if ((featureHandler.getFeatureStatus(FeatureHandler.STUFF_LOGIN_REGISTER, FeatureHandler.DEFAULT_STUFF_LOGIN_REGISTER))) {
             login_stuff = (LinearLayout) findViewById(R.id.login_stuff);
             stuff_text = (TextView) findViewById(R.id.stuff_text);
@@ -1673,7 +1672,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3719,9 +3718,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == STUFFPIX_RESULT){
+        if (requestCode == STUFFPIX_RESULT) {
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
                 String stuff_name = "";
                 String stuff_mail = "";
@@ -3729,22 +3728,22 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 String stuff_msg = "";
                 int code;
 
-                try{
+                try {
 
                     String Data_Frm_Stuff = data.getStringExtra("sutff_response").trim();
-                    Log.v("STUFF_RES1","Response == "+Data_Frm_Stuff);
+                    Log.v("STUFF_RES1", "Response == " + Data_Frm_Stuff);
 
 
                     JSONObject jsonObject = new JSONObject(Data_Frm_Stuff);
                     code = Integer.parseInt(jsonObject.optString("code").trim());
                     stuff_msg = jsonObject.optString("msg").trim();
 
-                    if(code == 200){
+                    if (code == 200) {
                         stuff_mail = jsonObject.optString("email").trim();
-                        stuff_name =  jsonObject.optString("name").trim();
+                        stuff_name = jsonObject.optString("name").trim();
                         stuff_user_id = jsonObject.optString("openid_userid").trim();
 
-                        if(true)
+                        if (true)
                             return;
 
 
@@ -3763,7 +3762,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
                         asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
 
-                    }else{
+                    } else {
 
                         android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
                         dlgAlert.setMessage(stuff_msg);
@@ -3780,7 +3779,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     }
 
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
 
             }/*else{
                 Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
@@ -5878,7 +5878,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-           // Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+            // Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
             //progressDialog.dismiss();
         }
 
@@ -5894,8 +5894,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     };
 
-    public void sendBroadCast()
-    {
+    public void sendBroadCast() {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         sendBroadcast(Sintent);
     }
@@ -5918,7 +5917,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
-            }else if (v instanceof TextView) {
+            } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
                 t.setId(R.id.page_title_login);
                 /*if (t.getText().toString().contains(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD))) {
@@ -5929,12 +5928,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }
 
 
-
-    public void naviagteStuffpixLoginPage (){
-        Intent intent = new Intent(LoginActivity.this,StuffPixLoginRegisterActivity.class);
-        intent.putExtra("titel",languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='"+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"'");
-        startActivityForResult(intent,STUFFPIX_RESULT);
+    public void naviagteStuffpixLoginPage() {
+        Intent intent = new Intent(LoginActivity.this, StuffPixLoginRegisterActivity.class);
+        intent.putExtra("titel", languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        intent.putExtra("LoadUrl", "https://player.edocent.com/OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='" + languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE) + "'");
+        startActivityForResult(intent, STUFFPIX_RESULT);
     }
 
 }

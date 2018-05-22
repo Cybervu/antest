@@ -108,6 +108,40 @@
                          android:layout_gravity="center_horizontal"
                          android:layout_marginTop="30dp"
                          android:layout_marginBottom="30dp" />-->
+
+        <LinearLayout
+            android:id="@+id/login_stuff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/alreadyLoginLinearLayout"
+            android:layout_marginTop="@dimen/login_linear_margin_top"
+            android:background="@drawable/button_radious_stuff"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="@dimen/login_linear_padding"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/stuff_icon"
+                android:layout_width="wrap_content"
+                android:clickable="false"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/login_imageview_linear"
+                android:src="@drawable/stuff_login" />
+
+            <TextView
+                android:id="@+id/stuff_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
+                android:layout_margin="@dimen/linear_text_margin"
+                android:gravity="center"
+                android:text="@string/stuff_login_text"
+                android:textColor="@color/fb_text_color"
+                android:textSize="@dimen/fb_text_size" />
             <LinearLayout
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
