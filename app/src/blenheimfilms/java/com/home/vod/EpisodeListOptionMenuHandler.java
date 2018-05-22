@@ -150,7 +150,7 @@ public class EpisodeListOptionMenuHandler {
             visibility[LOGOUT_INDEX] = true;
 
             if ((featureHandler.getFeatureStatus(FeatureHandler.IS_OFFLINE, FeatureHandler.DEFAULT_IS_OFFLINE)))
-                mydownload_menu.setVisible(false);
+                mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);
 
