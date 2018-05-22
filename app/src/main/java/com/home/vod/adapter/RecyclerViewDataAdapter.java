@@ -229,7 +229,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
      * @param view
      * @param onSliderClickListener
      */
-    private void loadDynamicBanners(SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
+    private void loadDynamicBanners(final SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
         if (bannerUrls.size() >= 0) {
             for (int i = 0; i < bannerUrls.size(); i++) {
 
@@ -246,12 +246,14 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
+
+                        if(bannerUrls.size() >1)
+                            mDemoSlider.startAutoCycle();
                         SliderBannerClickHandler sliderBannerClickHandler=new SliderBannerClickHandler(mContext);
                         sliderBannerClickHandler.handleClickOnBanner();
                     }
                 });
                 mDemoSlider.addSlider(textSliderView);
-
             }
         }
     }
