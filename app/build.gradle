@@ -15,7 +15,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-
 android {
     flavorDimensions 'environment', 'vendor'
     compileSdkVersion 27
