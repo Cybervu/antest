@@ -331,7 +331,7 @@
                             android:id="@+id/downloadRelativeLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/download"

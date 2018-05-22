@@ -1645,7 +1645,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
+                .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
