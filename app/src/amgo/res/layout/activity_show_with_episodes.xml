@@ -64,6 +64,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_toEndOf="@+id/noInternet"
         android:layout_toRightOf="@+id/noInternet"
+        android:scrollbars="none"
         android:background="@color/colorPrimary"
         android:fillViewport="true">
 
@@ -525,16 +526,38 @@
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/playBuyButton"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/seasonRelativeLayout"
-                android:layout_marginLeft="@dimen/marginright10dp"
-                android:layout_marginRight="@dimen/marginright10dp"
                 android:background="@color/colorAmgoRed"
-                android:text="Buy"
-                android:textColor="@color/white" />
+                android:id="@+id/playBuyButton"
+                android:visibility="gone"
+                android:layout_below="@+id/seasonRelativeLayout"
+                android:layout_margin="@dimen/marginright10dp"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/new_play_button_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/marginright15dp"
+                    android:paddingBottom="@dimen/marginright15dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/new_play" />
+                <TextView
+                    android:id="@+id/new_play_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="PLAY"
+                    android:textSize="20sp"
+                    android:layout_marginTop="@dimen/marginright10dp"
+                    android:layout_marginBottom="@dimen/marginright10dp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/episode_title"
@@ -578,7 +601,8 @@
                 android:layout_below="@+id/related_content_title"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/terms_text_view_margin_right"
-                android:layout_marginTop="@dimen/ppv_margin" />
+                android:layout_marginTop="@dimen/ppv_margin"
+                android:layout_marginBottom="@dimen/ppv_margin"/>
         </RelativeLayout>
 
     </ScrollView>

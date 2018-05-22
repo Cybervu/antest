@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This Class gives all the important content about movie/series such as story, poster, Release Date etc.
@@ -40,6 +41,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
     private String message, status;
     private String PACKAGE_NAME;
     private GetRelatedContentListener listener;
+    private ArrayList<ContentData> contentDataArrayList;
     private Context context;
 
     /**
@@ -105,7 +107,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
+            HttpPost httppost = new HttpPost(APIUrlConstant.getRelatedContent());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.relatedContentInput.getAuthToken());
             httppost.addHeader(HeaderConstants.CONTENT_ID, this.relatedContentInput.getContentId());
@@ -131,7 +133,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
             }
 
             JSONObject myJson = null;
-            if (responseStr != null) {
+            if (responseStr != null) {      
                 myJson = new JSONObject(responseStr);
                 code = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("msg");
@@ -151,7 +153,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
 
                 /** rating*///
 
-
+                contentDataArrayList= new ArrayList<>();
                 if (code == 200) {
 
                     JSONArray mainJson = myJson.optJSONArray("contentData");
@@ -287,7 +289,10 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
                                 contentData.setPosterForTv(obj.optString("posterForTv").trim());
 
 
+                            contentDataArrayList.add(contentData);
                         }
+                        relatedContentOutput.setContentData(contentDataArrayList);
+
                     }
                 }
             } else {

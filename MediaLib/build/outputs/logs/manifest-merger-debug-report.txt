@@ -1,39 +1,39 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
 	package
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:11-53
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:11-53
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
 	android:versionCode
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:2:1-5:12
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
 uses-sdk
-ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
 	android:targetSdkVersion
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
-		ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
-		INJECTED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
+		ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:3:5-16
+		INJECTED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml
 application
-ADDED from /Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:4:5-20
+ADDED from /home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/AndroidManifest.xml:4:5-20

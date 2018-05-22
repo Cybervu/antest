@@ -1,6 +1,10 @@
 package com.home.vod.model;
 
 
+import com.home.apisdk.apiModel.ContentData;
+
+import java.util.ArrayList;
+
 /**
  * Created by User on 02-07-2015.
  */
@@ -16,7 +20,25 @@ public class RelatedContentModel {
     private String episodeImageButton;
     private String thirdPartyUrl;
     private int episodeContentTypesId;
+    private int isEpisode;
 
+    public int getIsEpisode() {
+        return isEpisode;
+    }
+
+    public void setIsEpisode(int isEpisode) {
+        this.isEpisode = isEpisode;
+    }
+
+    public String getcPermalink() {
+        return cPermalink;
+    }
+
+    public void setcPermalink(String cPermalink) {
+        this.cPermalink = cPermalink;
+    }
+
+    private String cPermalink;
 
     public int getEpisodeContentTypesId() {
         return episodeContentTypesId;
@@ -89,7 +111,7 @@ public class RelatedContentModel {
     public RelatedContentModel(String episodeNumber, String episodeDescription, String episodeTelecastOn,
                                String episodeThumbnailImageView, String episodeTitle, String episodeVideoUrl,
                                String episodeSeriesNo, String episodeMuviUniqueId, String episodeStreamUniqueId,
-                               String thirdPartyUrl, String episodeDuration, int episodeContenTTypesId) {
+                               String thirdPartyUrl, String episodeDuration, int episodeContenTTypesId, int isEpisode, String cPermalink) {
         this.episodeNumber = episodeNumber;
         this.episodeDescription = episodeDescription;
         this.episodeTelecastOn = episodeTelecastOn;
@@ -102,6 +124,8 @@ public class RelatedContentModel {
         this.thirdPartyUrl = thirdPartyUrl;
         this.episodeDuration = episodeDuration;
         this.episodeContentTypesId=episodeContenTTypesId;
+        this.isEpisode= isEpisode;
+        this.cPermalink= cPermalink;
 
 
     }

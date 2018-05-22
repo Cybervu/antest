@@ -12,9 +12,9 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="12dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:background="@color/colorAmgoRed"
+            android:background="@color/amgo_navigation_selector"
             android:id="@+id/selector"
             android:visibility="invisible"/>
 
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/marginBottom5dp"
-            android:textColor="@color/white"
+            android:textColor="@color/amgo_navigation_menu_color_user"
             android:textSize="16sp"
             android:layout_marginLeft="5dp"
             android:id="@+id/listTitle"

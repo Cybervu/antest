@@ -62,7 +62,6 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.listener = listener;
         this.movieUniqueId = movieUniqueId;
 
-
     }
 
 
@@ -70,12 +69,13 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public TextView episodeTitleTextView;
         public TextView episodeNameTextView;
         public TextView episodeDateTextView;
+        public TextView episodePricing;
 
         public ImageView episodeImageView;
         public ViewHolder(View view) {
             super(view);
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
-            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),episodeTitleTextView);
 
            /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
             episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
@@ -83,11 +83,21 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
+            episodePricing= (TextView)view.findViewById(R.id.episode_pricing);
+            episodePricing.setVisibility(View.GONE);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),episodePricing);
+
             //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
         }
 
         public void bind(final EpisodesListModel item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getEpisodeTitle());
+            if(item.getPrice().equalsIgnoreCase("0")){
+                episodePricing.setVisibility(View.GONE);
+            }else{
+                episodePricing.setVisibility(View.VISIBLE);
+                episodePricing.setText(" "+item.getPrice()+" ");
+            }
            // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getEpisodeThumbnailImageView();

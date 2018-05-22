@@ -95,6 +95,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Constant;
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -435,6 +436,8 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
          */
         clearhistorybutton=(Button) rootView.findViewById(R.id.clearhistory);
         clearhistorybutton.setText(languagePreference.getTextofLanguage(CLEAR_HISTORY,DEFAULT_CLEAR_HISTORY));
+        FontUtls.loadFont(getActivity(), getResources().getString(R.string.light_fonts), clearhistorybutton);
+
         clearhistorybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

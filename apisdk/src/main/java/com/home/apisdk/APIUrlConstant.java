@@ -299,6 +299,19 @@ public class APIUrlConstant {
 
     public static final String GetAppMenu = "getAppMenu";
 
+
+    /**
+     * endpoint to get all the menu lists including sub menus
+     */
+
+    public static final String GetRelatedContent = "RelatedContent";
+
+    /**
+     * endpoint to get all the menu lists including sub menus
+     */
+
+    public static final String GetContentPriceDetails = "getContentPriceDetail";
+
     /**
      * endpoint to get all the Sub Category lists including
      */
@@ -569,6 +582,14 @@ public class APIUrlConstant {
 
     public static String getUpdateBufferLogUrl() {
         return BASE_URl + updateBufferLogUrl;
+    }
+
+    public static String getRelatedContent() {
+        return BASE_URl + GetRelatedContent;
+    }
+
+    public static String getContentPriceDetails() {
+        return BASE_URl + GetContentPriceDetails;
     }
 
 

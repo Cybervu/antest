@@ -48,6 +48,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -160,7 +161,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     private ProgressBarHandler pDialog = null;
 
 
-    public static boolean homeSelected= true;
+    public static boolean homeSelected = true;
 
     public NavigationDrawerFragment() {
     }
@@ -211,10 +212,10 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView= inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView = (ExpandableListView) rootView.findViewById(R.id.list_slidermenu);
-        Login= (Button)rootView.findViewById(R.id.navigation_login);
-        Register= (Button)rootView.findViewById(R.id.navigation_register);
+        Login = (Button) rootView.findViewById(R.id.navigation_login);
+        Register = (Button) rootView.findViewById(R.id.navigation_register);
         setTextToButton();
         handleClickFunction();
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -227,8 +228,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
 
-
-
 //       expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
 //        mDrawerListView.setAdapter(new ExpandableListAdapter(getActivity(),mainMenuModelArrayList, mainMenuChildModelArrayList));
 
@@ -239,7 +238,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             public void onGroupExpand(int groupPosition) {
 
                 Util.drawer_collapse_expand_imageview.remove(groupPosition);
-                Util.drawer_collapse_expand_imageview.add(groupPosition,groupPosition+","+1);
+                Util.drawer_collapse_expand_imageview.add(groupPosition, groupPosition + "," + 1);
                 Log.v("SUBHA1", "setOnGroupExpandListener===" + groupPosition);
 
 
@@ -273,31 +272,32 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             public boolean onGroupClick(ExpandableListView parent, View v, int listPosition, long id) {
                 //Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
 
-                if (((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))){
-                    ((TextView) v.findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
+                if (((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))) {
+                    FontUtls.loadFont(getContext(), getResources().getString(R.string.regular_fonts),  ((TextView) v.findViewById(R.id.listTitle)));
+                    //((TextView) v.findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
                     homeSelected = true;
-            }else
-                    homeSelected= false;
+                } else
+                    homeSelected = false;
                 // Kushal
-                for (int i=0; i<parent.getAdapter().getCount();i++) {
-                  //  Log.e("Error",parent.getChildAt(i).findViewById(R.id.listTitle).toString());
-                        if (i==listPosition) {
-                            //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
-                            try {
-                                parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
-                                ((TextView)parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null),Typeface.BOLD);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }else {
-                            try {
-
-                                parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
-                                ((TextView)parent.getChildAt(i-parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null),Typeface.NORMAL);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
+                for (int i = 0; i < parent.getAdapter().getCount(); i++) {
+                    //  Log.e("Error",parent.getChildAt(i).findViewById(R.id.listTitle).toString());
+                    if (i == listPosition) {
+                        //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
+                        try {
+                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
+                            ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+                    } else {
+                        try {
+
+                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+                            ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null), Typeface.NORMAL);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                 }
                 boolean retVal = true;
@@ -331,7 +331,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             fragment.setArguments(bundle);
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        } else if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("purchasehistory")){
+                        } else if (menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("purchasehistory")) {
                             /*Intent purchaseintent = new Intent(getActivity(), PurchaseHistoryActivity.class);
                             startActivity(purchaseintent);*/
                             fragment = new PurchaseHistoryFragment();
@@ -340,9 +340,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             fragment.setArguments(bundle);*/
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        }
-
-                        else {
+                        } else {
 
                             Intent browserIntent;
 
@@ -352,8 +350,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                                 startActivity(browserIntent);
 
                                 //isNavigated = 1;
-                                Log.v("SUBHA","hello"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
-                                LogUtil.showLog("MUVI","url of link type 2==="+menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink());
+                                Log.v("SUBHA", "hello" + menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
+                                LogUtil.showLog("MUVI", "url of link type 2===" + menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink());
                                 mDrawerLayout.openDrawer(Gravity.LEFT);
                                 browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -384,7 +382,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     }
                 }
 
-                try{
+                try {
 
                     if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))) {
                         // isNavigated = 1;
@@ -396,75 +394,75 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                         mDrawerLayout.closeDrawers();
                     }
 
-                // this is for if child is not there then another fragment open
-                else {
-                    if (retVal) {
+                    // this is for if child is not there then another fragment open
+                    else {
+                        if (retVal) {
 
-                        if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
-                            if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
-                                // isNavigated = 1;
+                            if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
+                                if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY))) {
+                                    // isNavigated = 1;
 
-                                fragment = new MyLibraryFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
-                                fragment.setArguments(bundle);
-                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                                mDrawerLayout.closeDrawers();
-                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
-                                fragment = new WatchHistoryFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
-                                fragment.setArguments(bundle);
-                                getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                                mDrawerLayout.closeDrawers();
-                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
+                                    fragment = new MyLibraryFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                    fragment.setArguments(bundle);
+                                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                    mDrawerLayout.closeDrawers();
+                                } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(WATCH_HISTORY, DEFAULT_WATCH_HISTORY))) {
+                                    fragment = new WatchHistoryFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                    fragment.setArguments(bundle);
+                                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                    mDrawerLayout.closeDrawers();
+                                } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD))) {
 
-                                Intent mydownload = new Intent(getActivity(), MyDownloads.class);
-                                startActivity(mydownload);
-                                mDrawerLayout.closeDrawers();
-                            } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
+                                    Intent mydownload = new Intent(getActivity(), MyDownloads.class);
+                                    startActivity(mydownload);
+                                    mDrawerLayout.closeDrawers();
+                                } else if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle().equals(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE))) {
 
                                 /*Intent favoriteIntent = new Intent(getActivity(), FavoriteActivity.class);
                                 favoriteIntent.putExtra("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(favoriteIntent);
                                 mDrawerLayout.closeDrawers();*/
-                                 Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
-                    Bundle bundle = new Bundle();
-                                    bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                    mDrawerLayout.closeDrawers();
-                            } else {
-
-                                if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")) {
-                                    //  isNavigated = 1;
-
-                                    // getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                                    mDrawerLayout.openDrawer(Gravity.LEFT);
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink().trim()));
-                                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(browserIntent);
-                                    return retVal;
-
-
-                                } else {
-                                    // isNavigated = 1;
-
-                                    fragment = new VideosListFragment();
+                                    Fragment fragment = new com.home.vod.fragment.MyFavouriteFragment();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
-                                    bundle.putString("item", menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink());
+                                    bundle.putString("sectionName", languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
                                     fragment.setArguments(bundle);
                                     getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                                     mDrawerLayout.closeDrawers();
+                                } else {
+
+                                    if (menusOutputModelLocal.getMainMenuModel().get(listPosition).getLink_type().equalsIgnoreCase("2")) {
+                                        //  isNavigated = 1;
+
+                                        // getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                        mDrawerLayout.openDrawer(Gravity.LEFT);
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink().trim()));
+                                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(browserIntent);
+                                        return retVal;
+
+
+                                    } else {
+                                        // isNavigated = 1;
+
+                                        fragment = new VideosListFragment();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("title", menusOutputModelLocal.getMainMenuModel().get(listPosition).getTitle());
+                                        bundle.putString("item", menusOutputModelLocal.getMainMenuModel().get(listPosition).getPermalink());
+                                        fragment.setArguments(bundle);
+                                        getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                                        mDrawerLayout.closeDrawers();
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                     if (retVal) {
 
                         if (menusOutputModelLocal.getMainMenuModel().size() > listPosition) {
@@ -529,7 +527,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             }
                         }
                     }
-            }
+                }
 
                 return retVal;
             }
@@ -602,22 +600,24 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         int isLogin = preferenceManager.getLoginFeatureFromPref();
 
+        FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), Login);
+        FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), Register);
+
+
         if (loggedInStr != null) {
             Login.setText(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             Register.setText(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-        }else if (loggedInStr == null) {
+        } else if (loggedInStr == null) {
 
             if (isLogin == 1) {
                 Login.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
                 Register.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            }else{
+            } else {
                 Login.setText(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
                 Register.setText(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             }
 
         }
-
-
 
 
     }
@@ -626,12 +626,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN))){
+                if (Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN))) {
                     Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                     Util.check_for_subscription = 0;
                     mDrawerLayout.closeDrawers();
                     startActivity(loginIntent);
-                }else if(Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT))){
+                } else if (Login.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT))) {
                     mDrawerLayout.closeDrawers();
                     logoutPopup();
                 }
@@ -642,12 +642,12 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             @Override
             public void onClick(View v) {
 
-                if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER))){
+                if (Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER))) {
                     Intent registerIntent = new Intent(getActivity(), RegisterActivity.class);
                     Util.check_for_subscription = 0;
                     mDrawerLayout.closeDrawers();
                     startActivity(registerIntent);
-                }else if(Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE))){
+                } else if (Register.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE))) {
                     String id = preferenceManager.getUseridFromPref();
                     String email = preferenceManager.getEmailIdFromPref();
                     Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
@@ -661,14 +661,15 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
             }
         });
     }
+
     private void logoutPopup() {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.logout_layout, null);
 
-        final TextView logoutText= (TextView) alertLayout.findViewById(R.id.logout_text);
-        final Button yes= (Button) alertLayout.findViewById(R.id.logout_yes);
-        final Button no= (Button) alertLayout.findViewById(R.id.logout_no);
+        final TextView logoutText = (TextView) alertLayout.findViewById(R.id.logout_text);
+        final Button yes = (Button) alertLayout.findViewById(R.id.logout_yes);
+        final Button no = (Button) alertLayout.findViewById(R.id.logout_no);
 
         logoutText.setText(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
         yes.setText(languagePreference.getTextofLanguage(YES, DEFAULT_YES));
@@ -681,7 +682,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(NetworkStatus.getInstance().isConnected(getActivity())) {
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
                     LogoutInput logoutInput = new LogoutInput();
                     logoutInput.setAuthToken(authTokenStr);
                     LogUtil.showLog("Abhi", authTokenStr);
@@ -693,9 +694,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 
-
                     dialog.dismiss();
-                }else {
+                } else {
                     Toast.makeText(getContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
@@ -709,9 +709,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         });
 
 
-
-      //  dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
-     //   dlgAlert.setTitle("");
+        //  dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        //   dlgAlert.setTitle("");
 
        /* dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
 
@@ -763,8 +762,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     });*//*
         dlgAlert.create().show();*/
     }
-
-
 
 
     public boolean isDrawerOpen() {
@@ -942,58 +939,59 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     @Override
-    public void onLogoutPostExecuteCompleted(int code, String status, String message) {{
-        if (pDialog != null && pDialog.isShowing()) {
-            pDialog.hide();
-            pDialog = null;
+    public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+        {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
 
-        }
-        if (code != 200) {
-            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-        }
-        if (code == 0) {
-            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-        }
-        if (code > 0) {
-            if (code == 200) {
-                preferenceManager.clearLoginPref();
-
-                if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
-                    final Intent startIntent = new Intent(getActivity(), SplashScreen.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-
-                            getActivity().finish();
-
-                        }
-                    });
-                } else {
-                    final Intent startIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startIntent);
-                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-
-                            getActivity().finish();
-
-                        }
-                    });
-                }
-
-
-            } else {
+            }
+            if (code != 200) {
                 Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+            if (code == 0) {
+                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+            if (code > 0) {
+                if (code == 200) {
+                    preferenceManager.clearLoginPref();
+
+                    if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))) {
+                        final Intent startIntent = new Intent(getActivity(), SplashScreen.class);
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                                getActivity().finish();
+
+                            }
+                        });
+                    } else {
+                        final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(startIntent);
+                                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+
+                                getActivity().finish();
+
+                            }
+                        });
+                    }
+
+
+                } else {
+                    Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                }
             }
         }
-    }
 
     }
 
@@ -1094,7 +1092,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 if (checkMyLibAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(1, mainMenuMyfavourite);
                 } else {
-                    menusOutputModelLocal.getMainMenuModel().add(0,mainMenuMyfavourite);
+                    menusOutputModelLocal.getMainMenuModel().add(0, mainMenuMyfavourite);
                 }
             }
         } else {
@@ -1123,17 +1121,16 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 mainMenuMydownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
                 if (checkMyLibAdded(menusOutputModelLocal) & checkMyfavouritrAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(2, mainMenuMydownload);
-                }else if(!checkMyLibAdded(menusOutputModelLocal) & !checkMyfavouritrAdded(menusOutputModelLocal)) {
+                } else if (!checkMyLibAdded(menusOutputModelLocal) & !checkMyfavouritrAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(0, mainMenuMydownload);
-                }
-                else {
-                    menusOutputModelLocal.getMainMenuModel().add(1,mainMenuMydownload);
+                } else {
+                    menusOutputModelLocal.getMainMenuModel().add(1, mainMenuMydownload);
                 }
             }
         } else {
             if (my_download_added) {
-                if(checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal))
-                menusOutputModelLocal.getMainMenuModel().remove(2);
+                if (checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal))
+                    menusOutputModelLocal.getMainMenuModel().remove(2);
                 else if (!checkMyLibAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal))
                     menusOutputModelLocal.getMainMenuModel().remove(0);
                 else
@@ -1162,7 +1159,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     menusOutputModelLocal.getMainMenuModel().add(3, mainMenuWatchHistory);
 
                 } else if (!checkMyDownloadAdded(menusOutputModelLocal) && !checkMyfavouritrAdded(menusOutputModelLocal) && !checkMyLibAdded(menusOutputModelLocal)) {
-                    menusOutputModelLocal.getMainMenuModel().add(0,mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add(0, mainMenuWatchHistory);
                 } else if (checkMyLibAdded(menusOutputModelLocal) && checkMyfavouritrAdded(menusOutputModelLocal)) {
                     menusOutputModelLocal.getMainMenuModel().add(2, mainMenuWatchHistory);
 
@@ -1173,7 +1170,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     menusOutputModelLocal.getMainMenuModel().add(2, mainMenuWatchHistory);
 
                 } else {
-                    menusOutputModelLocal.getMainMenuModel().add( 1, mainMenuWatchHistory);
+                    menusOutputModelLocal.getMainMenuModel().add(1, mainMenuWatchHistory);
                 }
 
             }
@@ -1202,7 +1199,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         menusOutputModelLocal.getMainMenuModel().add(mainMenuHome);
 
 
-
         try {
             menusOutputModelLocal.getMainMenuModel().addAll(menusOutputModelFromAPI.getMainMenuModel());
         /*    // Kushal add blank
@@ -1225,10 +1221,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         /*Kushal Check Pruchase history added*/
 
 
-
-
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_PURCHASEHISTORY, FeatureHandler.DEFAULT_IS_PURCHASEHISTORY) && loggedInStr != null) {
-            if (!checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(),languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY))) {
+            if (!checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(), languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY))) {
                 footerMenu.setDisplay_name(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
                 footerMenu.setPermalink("purchasehistory");
                 menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
@@ -1239,27 +1233,19 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
             }
 
-        }else if(loggedInStr==null) {
-            if(checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(),languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY))){
+        } else if (loggedInStr == null) {
+            if (checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(), languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY))) {
                 menusOutputModelLocal.getFooterMenuModel().remove(0);
                 footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
                 footerMenu1.setPermalink("contactus");
                 menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
-            }else{
+            } else {
                 footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
                 footerMenu1.setPermalink("contactus");
                 menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
             }
 
         }
-
-
-
-
-
-
-
-
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1331,7 +1317,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
             Util.main_menu_list_size = menusOutputModelLocal.getMainMenuModel().size();
-            adapter = new ExpandableListAdapter(getActivity(), idArray,titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
+            adapter = new ExpandableListAdapter(getActivity(), idArray, titleArray, expandableListDetail, menusOutputModelLocal.getMainMenuModel(), menusOutputModelLocal.getFooterMenuModel());
             mDrawerListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -1348,9 +1334,9 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     }
 
     private boolean checkForMenuPresence(ArrayList<MenusOutputModel.FooterMenu> arrayModel, String textofLanguage) {
-        for (int i=0; i<arrayModel.size();i++){
-            if(arrayModel.get(i).getDisplay_name().trim().equalsIgnoreCase(textofLanguage)){
-               return true;
+        for (int i = 0; i < arrayModel.size(); i++) {
+            if (arrayModel.get(i).getDisplay_name().trim().equalsIgnoreCase(textofLanguage)) {
+                return true;
             }
         }
         return false;

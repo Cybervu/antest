@@ -26,13 +26,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="180dp"
-            android:background="@color/amgo_navigation_color">
+            android:background="@color/amgo_navigation_color"
+            android:padding="30dp">
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/logo"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="25dp"
                 android:layout_alignParentStart="true" />
@@ -81,7 +83,7 @@
             android:textSize="18sp"/>
 
         <View
-            android:layout_width="2dp"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/colorAmgoRed"/>
 

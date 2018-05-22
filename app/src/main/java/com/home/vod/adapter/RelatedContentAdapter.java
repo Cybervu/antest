@@ -12,7 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
-import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.RelatedContentModel;
+import com.home.vod.model.RelatedContentModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
@@ -42,18 +43,19 @@ public class RelatedContentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     private  OnItemClickListener listener;
-    private ArrayList<EpisodesListModel> data = new ArrayList<EpisodesListModel>();
+    private ArrayList<RelatedContentModel> data = new ArrayList();
+    private String isEpisode,cPermalink;
 
 
 
     public interface OnItemClickListener {
-        void onItemClick(EpisodesListModel item);
+        void onItemClick(RelatedContentModel item);
 
     }
 
 
     public RelatedContentAdapter(Context context, int layoutResourceId,
-                                 ArrayList<EpisodesListModel> data, OnItemClickListener listener) {
+                                 ArrayList<RelatedContentModel> data, OnItemClickListener listener) {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
@@ -73,23 +75,14 @@ public class RelatedContentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ViewHolder(View view) {
             super(view);
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
-            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
-
-           /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
-          //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
-            //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
-
+            FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),episodeTitleTextView);
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
-            //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
         }
 
-        public void bind(final EpisodesListModel item, final OnItemClickListener listener) {
+        public void bind(final RelatedContentModel item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getEpisodeTitle());
-           // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getEpisodeThumbnailImageView();
-            LogUtil.showLog("MUVI","kjshdvuih");
 
 
             if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){

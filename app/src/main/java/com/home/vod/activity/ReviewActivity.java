@@ -114,9 +114,9 @@ public class ReviewActivity extends AppCompatActivity implements
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(REVIEWS,DEFAULT_REVIEWS));
-        mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
-        setSupportActionBar(mActionBarToolbar);
+       // mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(REVIEWS,DEFAULT_REVIEWS));
+       // mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
+       // setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

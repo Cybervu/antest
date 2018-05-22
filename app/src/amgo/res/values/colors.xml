@@ -4,13 +4,15 @@
     <color name="colorPrimary">#121212</color>
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#e6151f</color>
-    <color name="colorAmgoRed">#e6151f</color>
+    <color name="colorAmgoRed">#E6151F</color>
     <color name="colorAccentOld">#d23232</color>
     <color name="textAmgoColor">#a6a6a6</color>
     <color name="buttonAmgo">#e1e1e1</color>
     <color name="amgo_statusbar_color">#000000</color>
     <color name="amgo_navigation_color">#050505</color>
     <color name="amgo_navigation_menu_color">#95989a</color>
+    <color name="amgo_navigation_menu_color_user">#D7D7D7</color>
+    <color name="amgo_navigation_selector">#A60000</color>
     <color name="amgo_spinner_back">#262626</color>
 
 

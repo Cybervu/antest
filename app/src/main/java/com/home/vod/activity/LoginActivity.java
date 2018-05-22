@@ -1533,7 +1533,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         loginNewUser.setText(languagePreference.getTextofLanguage(NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
         signUpTextView = (Button) findViewById(R.id.register);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), signUpTextView);
 
 
         /*
@@ -1546,7 +1546,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
 
         loginButton = (Button) findViewById(R.id.login);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
@@ -1615,7 +1615,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         loginWithFacebookButton.setVisibility(View.GONE);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
-        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), fbLoginTextView);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), fbLoginTextView);
 
 
         btnLogin = (LinearLayout) findViewById(R.id.login_facebook);
@@ -4270,9 +4270,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
             // Font implemented Here//
-            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), logout_text);
-            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), ok);
-            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), cancel);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), logout_text);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), ok);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), cancel);
 
             //==============end===============//
 

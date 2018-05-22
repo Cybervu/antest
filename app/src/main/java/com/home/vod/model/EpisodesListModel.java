@@ -16,7 +16,15 @@ public class EpisodesListModel {
     private String episodeImageButton;
     private String thirdPartyUrl;
     private int episodeContentTypesId;
+    private String Price;
 
+    public String getPrice() {
+        return Price;
+    }
+
+    public void setPrice(String price) {
+        Price = price;
+    }
 
     public int getEpisodeContentTypesId() {
         return episodeContentTypesId;
@@ -89,7 +97,7 @@ public class EpisodesListModel {
     public EpisodesListModel(String episodeNumber, String episodeDescription, String episodeTelecastOn,
                              String episodeThumbnailImageView, String episodeTitle, String episodeVideoUrl,
                              String episodeSeriesNo, String episodeMuviUniqueId, String episodeStreamUniqueId,
-                             String thirdPartyUrl, String episodeDuration,int episodeContenTTypesId) {
+                             String thirdPartyUrl, String episodeDuration,int episodeContenTTypesId, String price) {
         this.episodeNumber = episodeNumber;
         this.episodeDescription = episodeDescription;
         this.episodeTelecastOn = episodeTelecastOn;
@@ -102,6 +110,7 @@ public class EpisodesListModel {
         this.thirdPartyUrl = thirdPartyUrl;
         this.episodeDuration = episodeDuration;
         this.episodeContentTypesId=episodeContenTTypesId;
+        this.Price= price;
 
 
     }

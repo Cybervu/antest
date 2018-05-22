@@ -20,6 +20,6 @@
             android:paddingLeft="60dp"
             android:paddingTop="10dp"
             android:text="Menu"
-            android:textColor="@color/white" />
+            android:textColor="@color/amgo_navigation_menu_color_user"/>
     </LinearLayout>
 </LinearLayout>

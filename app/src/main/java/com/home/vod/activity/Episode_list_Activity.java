@@ -1160,9 +1160,16 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
             String episodeVideoUrlStr = episode_details_output.getEpisodeArray().get(a).getVideo_url();
 
-            itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr,
-                    episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
-                    movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId));
+
+
+            if(ShowWithEpisodesActivity.subs) {
+                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
+                        movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId,ShowWithEpisodesActivity.SubscribedEpisodePrice));
+
+            }else{
+                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
+                        movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId,ShowWithEpisodesActivity.NonSubscribedEpisodePrice));
+            }
 
         }
 

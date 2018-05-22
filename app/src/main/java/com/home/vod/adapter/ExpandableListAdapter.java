@@ -91,7 +91,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView expandedListTextView = (TextView) convertView.findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
-        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), expandedListTextView);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), expandedListTextView);
 
 
         return convertView;
@@ -142,6 +142,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         try {
             listTitleTextView.setText(Html.fromHtml(listTitle));
+
            /* if (!listTitleTextView.getText().toString().trim().equalsIgnoreCase(""))
                 listTitleTextView.setTypeface(null, Typeface.NORMAL);*/
 
@@ -161,7 +162,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 if (listTitleTextView.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))) {
                     if (NavigationDrawerFragment.homeSelected) {
                         convertView.findViewById(R.id.selector).setVisibility(View.VISIBLE);
-                        ((TextView)convertView.findViewById(R.id.listTitle)).setTypeface(null,Typeface.BOLD);
+                        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), listTitleTextView);
+                        //((TextView)convertView.findViewById(R.id.listTitle)).setTypeface(null,Typeface.BOLD);
                         //listTitleTextView.setTypeface(null, Typeface.BOLD);
                     }
                     //convertView.setBackground(context.getResources().getDrawable(R.drawable.red_border));
