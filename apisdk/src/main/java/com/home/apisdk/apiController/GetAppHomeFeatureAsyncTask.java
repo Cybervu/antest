@@ -85,8 +85,6 @@ public class GetAppHomeFeatureAsyncTask extends AsyncTask<AppHomeFeatureInputMod
 
         this.appHomeFeatureInputModel = appHomeFeatureInputModel;
         PACKAGE_NAME = context.getPackageName();
-
-
     }
 
     /**
@@ -138,8 +136,8 @@ public class GetAppHomeFeatureAsyncTask extends AsyncTask<AppHomeFeatureInputMod
                     //************************************************************************************************************//
 
                     HomeFeaturePageBannerModel homeFeaturePageBannerModel = null;
-                    if (myJson.has("BannerSectionList")) {
-                        JSONArray jsonMainNode = myJson.getJSONArray("BannerSectionList");
+                    if (myJson.has("banner_section_list")) {
+                        JSONArray jsonMainNode = myJson.getJSONArray("banner_section_list");
                         int lengthJsonArr = jsonMainNode.length();
                         if (lengthJsonArr > 0) {
                             for (int i = 0; i < lengthJsonArr; i++) {
@@ -163,8 +161,8 @@ public class GetAppHomeFeatureAsyncTask extends AsyncTask<AppHomeFeatureInputMod
                     //************************************************************************************************************//
 
 
-                    if (myJson.has("SectionName")) {
-                        JSONArray sectionName = myJson.getJSONArray("SectionName");
+                    if (myJson.has("section_name")) {
+                        JSONArray sectionName = myJson.getJSONArray("section_name");
                         HomeFeaturePageSectionModel homeFeaturePageSectionModel;
 
                         if (sectionName.length() > 0) {

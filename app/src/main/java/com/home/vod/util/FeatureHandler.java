@@ -119,6 +119,13 @@ public class FeatureHandler {
                 setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
             }
 
+
+            // Hve to change
+
+            setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
+
+
+
             if(myJson1.has("isMylibrary") && myJson1.optString("isMylibrary").trim() != null && !myJson1.optString("isMylibrary").trim().isEmpty() && !myJson1.optString("isMylibrary").trim().equals("null") && !myJson1.optString("isMylibrary").trim().matches("")) {
                 setFeatureFlag( IS_MYLIBRARY , (myJson1.optString("isMylibrary")));
             }else{
