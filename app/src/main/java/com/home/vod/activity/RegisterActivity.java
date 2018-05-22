@@ -3878,28 +3878,64 @@ public class RegisterActivity extends AppCompatActivity implements
                 String stuff_name = "";
                 String stuff_mail = "";
                 String stuff_user_id = "";
+                String stuff_msg = "";
+                int code;
+
+                try{
+
+                    String Data_Frm_Stuff = data.getStringExtra("sutff_response").trim();
+                    Log.v("STUFF_RES1","Response == "+Data_Frm_Stuff);
 
 
-                /**
-                 * Calling social auth API after getting response form stuffpix.
-                 */
-                SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
-                socialAuthInputModel.setAuthToken(authTokenStr);
-                socialAuthInputModel.setName(stuff_name.trim());
-                socialAuthInputModel.setEmail(stuff_mail.trim());
-                socialAuthInputModel.setPassword("");
-                socialAuthInputModel.setFb_userid(stuff_user_id.trim());
-                socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                socialAuthInputModel.setDevice_type("1");
-                socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
-                asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+                    JSONObject jsonObject = new JSONObject(Data_Frm_Stuff);
+                    code = Integer.parseInt(jsonObject.optString("code").trim());
+                    stuff_msg = jsonObject.optString("msg").trim();
 
-            }else{
-                 Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
-            }
+                    if(code == 200){
+                        stuff_mail = jsonObject.optString("email").trim();
+                        stuff_name =  jsonObject.optString("name").trim();
+                        stuff_user_id = jsonObject.optString("openid_userid").trim();
 
+                        if(true)
+                            return;
 
+                        /**
+                         * Calling social auth API after getting response form stuffpix.
+                         */
+                        SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
+                        socialAuthInputModel.setAuthToken(authTokenStr);
+                        socialAuthInputModel.setName(stuff_name.trim());
+                        socialAuthInputModel.setEmail(stuff_mail.trim());
+                        socialAuthInputModel.setPassword("");
+                        socialAuthInputModel.setFb_userid(stuff_user_id.trim());
+                        socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        socialAuthInputModel.setDevice_type("1");
+                        socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
+                        asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+
+                    }else{
+
+                        android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+                        dlgAlert.setMessage(stuff_msg);
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+                        dlgAlert.setCancelable(false);
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        dlgAlert.create().show();
+
+                    }
+
+                }catch (Exception e){}
+
+            }/*else{
+                Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
+            }*/
             return;
         }
 
@@ -4537,7 +4573,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
     public void naviagteStuffpixRegisterPage (){
         Intent intent = new Intent(RegisterActivity.this,StuffPixLoginRegisterActivity.class);
-        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectSignup?openid_device_type=2");
+        intent.putExtra("titel",languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectSignup?openid_device_type=1&lang_code='"+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"'");
         startActivityForResult(intent,STUFFPIX_RESULT);
     }
 }

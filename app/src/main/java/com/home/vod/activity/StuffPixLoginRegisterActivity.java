@@ -1,6 +1,7 @@
 package com.home.vod.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -69,7 +70,8 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
 
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+//        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        mActionBarToolbar.setTitle(getIntent().getStringExtra("titel"));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -89,6 +91,12 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
 
         stuff_webView.getSettings().setJavaScriptEnabled(true);
         stuff_webView.addJavascriptInterface(new MyJavaScriptInterface(), "INTERFACE");
+
+        stuff_webView.clearHistory();
+        stuff_webView.clearFormData();
+        stuff_webView.clearCache(true);
+        stuff_webView.clearView();
+
         stuff_webView.loadUrl(getIntent().getStringExtra("LoadUrl"));
 //      stuff_webView.loadUrl("https://player.edocent.com/OpenidConnect/OpenidConnectLogin?openid_device_type=2");
 
@@ -101,7 +109,7 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                view.loadUrl("javascript:window.INTERFACE.processContent(document.getElementById('message').innerText);");
+                view.loadUrl("javascript:window.INTERFACE.processContent(document.getElementById('openid_response').innerText);");
             }
 
         });
@@ -113,15 +121,19 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(WebView view, int progress) {
-                if (mProgress == null) {
-                    mProgress = new ProgressDialog(StuffPixLoginRegisterActivity.this);
-                    mProgress.show();
-                }
-                mProgress.setMessage("Loading " + String.valueOf(progress) + "%");
-                if (progress == 100) {
-                    mProgress.dismiss();
-                    mProgress = null;
-                }
+
+
+                try{
+                    if (mProgress == null) {
+                        mProgress = new ProgressDialog(StuffPixLoginRegisterActivity.this);
+                        mProgress.show();
+                    }
+                    mProgress.setMessage("Loading " + String.valueOf(progress) + "%");
+                    if (progress == 100) {
+                        mProgress.dismiss();
+                        mProgress = null;
+                    }
+                }catch (Exception e){}
             }
         });
 
@@ -141,7 +153,12 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("sutff_response",content);
+                    setResult(RESULT_OK,intent);
+                    finish();
+
+//                    Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
                 }
             });
         }
