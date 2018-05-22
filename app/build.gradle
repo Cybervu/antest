@@ -324,9 +324,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.quickflix'
-            versionCode 1
+            versionCode 2
             targetSdkVersion 25
-            versionName "1.2.6"
+            versionName "1.2.7"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
         }
@@ -554,9 +554,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.stuffpix'
-            versionCode 2
+            versionCode 3
             targetSdkVersion 25
-            versionName "2.0"
+            versionName "2.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
         }
