@@ -102,6 +102,7 @@
             android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
             android:textAllCaps="false"
+            android:visibility="gone"
             android:textColor="@color/buttonTextColor"
             android:textSize="@dimen/email_text_size" />
 

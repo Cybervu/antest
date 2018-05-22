@@ -120,6 +120,7 @@
  <!--<color name="purchaseTextColor">#000</color>-->
  <color name="buttonbg">#E34A00</color>
  <color name="chromecast_color">#ffffff</color>
+ <color name="register_login_stuffpix">#37BB7E</color>
 
  <!---this part is added for manage device-->
  <color name="device_name_color">#ffffff</color>

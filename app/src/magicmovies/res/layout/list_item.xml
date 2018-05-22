@@ -79,6 +79,7 @@
             android:minHeight="@dimen/btnMore_min_height"
             android:stateListAnimator="@null"
             android:text="vfewgafeqfgqeg"
+            android:visibility="gone"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
             android:textSize="@dimen/viewmore_text_size" />

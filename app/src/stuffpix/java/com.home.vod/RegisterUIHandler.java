@@ -57,8 +57,9 @@ import static com.home.vod.util.Constant.authTokenStr;
 
 public class RegisterUIHandler {
     private Activity context;
-    private TextView termsTextView,termsTextView1;
+    private TextView termsTextView,termsTextView1,stuff_text;
     private LinearLayout btnLogin;
+    private LinearLayout register_stuff;
     LoginButton loginWithFacebookButton;
     private EditText editName;
     String fbUserId = "";

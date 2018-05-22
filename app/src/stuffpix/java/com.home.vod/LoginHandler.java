@@ -36,6 +36,7 @@ public class LoginHandler {
     private LinearLayout btnLogin;
     private LanguagePreference languagePreference;
     LoginButton loginWithFacebookButton;
+    LinearLayout LoginWithStuff;
 
     String fbUserId =   "";
     String fbEmail = "";
@@ -46,6 +47,7 @@ public class LoginHandler {
        // GoogleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
         btnLogin = (LinearLayout) context.findViewById(R.id.login_facebook);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
+        LoginWithStuff = (LinearLayout) context.findViewById(R.id.login_stuff);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");

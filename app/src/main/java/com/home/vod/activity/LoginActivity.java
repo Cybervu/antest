@@ -191,6 +191,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private RelativeLayout googleSignView;
     private Button registerButton;
     TextView fbLoginTextView;
+    public static final int STUFFPIX_RESULT = 10001;
 
 
     /***************************************************************************/
@@ -1437,6 +1438,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
+    LinearLayout login_stuff;
+    TextView stuff_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1524,6 +1527,22 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         signUpTextView = (TextView) findViewById(R.id.register);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
+
+
+        if ((featureHandler.getFeatureStatus(FeatureHandler.STUFF_LOGIN_REGISTER, FeatureHandler.DEFAULT_STUFF_LOGIN_REGISTER))) {
+            login_stuff = (LinearLayout) findViewById(R.id.login_stuff);
+            stuff_text = (TextView) findViewById(R.id.stuff_text);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), stuff_text);
+            login_stuff.setVisibility(View.VISIBLE);
+            login_stuff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    naviagteStuffpixLoginPage();
+                }
+            });
+
+        }
+
 
 
         /*
@@ -1653,7 +1672,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         // setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-       // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        // mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
         boolean shouldStartPlayback = false;
@@ -3698,6 +3717,78 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == STUFFPIX_RESULT) {
+
+            if (resultCode == RESULT_OK) {
+
+                String stuff_name = "";
+                String stuff_mail = "";
+                String stuff_user_id = "";
+                String stuff_msg = "";
+                int code;
+
+                try {
+
+                    String Data_Frm_Stuff = data.getStringExtra("sutff_response").trim();
+                    Log.v("STUFF_RES1", "Response == " + Data_Frm_Stuff);
+
+
+                    JSONObject jsonObject = new JSONObject(Data_Frm_Stuff);
+                    code = Integer.parseInt(jsonObject.optString("code").trim());
+                    stuff_msg = jsonObject.optString("msg").trim();
+
+                    if (code == 200) {
+                        stuff_mail = jsonObject.optString("email").trim();
+                        stuff_name = jsonObject.optString("name").trim();
+                        stuff_user_id = jsonObject.optString("openid_userid").trim();
+
+                        if (true)
+                            return;
+
+
+                        /**
+                         * Calling social auth API after getting response form stuffpix.
+                         */
+                        SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
+                        socialAuthInputModel.setAuthToken(authTokenStr);
+                        socialAuthInputModel.setName(stuff_name.trim());
+                        socialAuthInputModel.setEmail(stuff_mail.trim());
+                        socialAuthInputModel.setPassword("");
+                        socialAuthInputModel.setFb_userid(stuff_user_id.trim());
+                        socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        socialAuthInputModel.setDevice_type("1");
+                        socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
+                        asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+
+                    } else {
+
+                        android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                        dlgAlert.setMessage(stuff_msg);
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+                        dlgAlert.setCancelable(false);
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        dlgAlert.create().show();
+
+                    }
+
+                } catch (Exception e) {
+                }
+
+            }/*else{
+                Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
+            }*/
+            return;
+        }
+
+
         if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
@@ -5787,7 +5878,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-           // Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+            // Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
             //progressDialog.dismiss();
         }
 
@@ -5803,8 +5894,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     };
 
-    public void sendBroadCast()
-    {
+    public void sendBroadCast() {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         sendBroadcast(Sintent);
     }
@@ -5827,7 +5917,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }catch (Exception e){
                     b.setId(R.id.back_btn);
                 }*/
-            }else if (v instanceof TextView) {
+            } else if (v instanceof TextView) {
                 TextView t = (TextView) v;
                 t.setId(R.id.page_title_login);
                 /*if (t.getText().toString().contains(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD))) {
@@ -5835,6 +5925,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }*/
             }
         }
+    }
+
+
+    public void naviagteStuffpixLoginPage() {
+        Intent intent = new Intent(LoginActivity.this, StuffPixLoginRegisterActivity.class);
+        intent.putExtra("titel", languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        intent.putExtra("LoadUrl", "https://player.edocent.com/OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='" + languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE) + "'");
+        startActivityForResult(intent, STUFFPIX_RESULT);
     }
 
 }

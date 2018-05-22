@@ -67,7 +67,7 @@ android {
             applicationId 'com.release.muvisdk'
             minSdkVersion 21
             targetSdkVersion 23
-            versionCode 4
+            versionCode 1
             versionName "2.0.1"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
@@ -185,9 +185,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 21
+            versionCode 22
             targetSdkVersion 25
-            versionName '3.4.3'
+            versionName '3.4.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
 //            buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
