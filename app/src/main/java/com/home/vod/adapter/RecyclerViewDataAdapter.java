@@ -229,7 +229,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
      * @param view
      * @param onSliderClickListener
      */
-    private void loadDynamicBanners(SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
+    private void loadDynamicBanners(final SliderLayout mDemoSlider, View view, BaseSliderView.OnSliderClickListener onSliderClickListener) {
         if (bannerUrls.size() >= 0) {
             for (int i = 0; i < bannerUrls.size(); i++) {
 
@@ -242,10 +242,15 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                 /*@Author:Bishal
                 *Provide click listner on Banner for Muvi now and Stupffix
                  */
-
                 textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
+                        /*@Author:Bishal
+                        * this part is for scroll when i click the banner previously when i click then scroll is
+                         *not working automatically after this so i insert below code
+                         */
+                        if (bannerUrls.size() > 1)
+                        mDemoSlider.startAutoCycle();
                         SliderBannerClickHandler sliderBannerClickHandler=new SliderBannerClickHandler(mContext);
                         sliderBannerClickHandler.handleClickOnBanner();
                     }
@@ -372,4 +377,5 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     public long getItemId(int position) {
         return super.getItemId(position);
     }*/
+
 }
