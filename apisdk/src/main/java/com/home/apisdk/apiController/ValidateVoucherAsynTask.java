@@ -120,7 +120,7 @@ public class ValidateVoucherAsynTask extends AsyncTask<ValidateVoucherInputModel
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Payment", "ValidateVoucher" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
+import com.home.apisdk.apiController.HeaderConstants;
 import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
 import com.home.apisdk.apiModel.Get_UserProfile_Input;
 import com.home.apisdk.apiModel.Get_UserProfile_Output;
@@ -123,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity implements
     PreferenceManager preferenceManager;
     List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
     FeatureHandler featureHandler;
+    TextView heading;
 
 
     @Override
@@ -139,6 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements
         editNewPassword = (EditText) findViewById(R.id.pwd);
         editConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
         profileHandler = new ProfileHandler(this);
+        heading= (TextView)findViewById(R.id.heading);
         // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
 
         emailAddressEditText = (EditText) findViewById(R.id.email);
@@ -176,6 +179,7 @@ public class ProfileActivity extends AppCompatActivity implements
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), changePassword);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), update_profile);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), heading);
 
         //  editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
@@ -196,6 +200,7 @@ public class ProfileActivity extends AppCompatActivity implements
                 onBackPressed();
             }
         });
+        heading.setText(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
 
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);

@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/marginright5dp"
+        android:layout_marginLeft="@dimen/videolistleftmargin"
         android:textColor="@color/white"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="normal"
@@ -30,6 +30,7 @@
         android:layout_below="@+id/sectionTitle"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/pre_order_button_margin"
+        android:listSelector="@drawable/transparent"
         android:horizontalSpacing="@dimen/horizontal_spacing"
         android:verticalSpacing="@dimen/vertical_spacing"
 

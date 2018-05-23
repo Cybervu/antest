@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
     android:background="@color/colorPrimary">
 
     <include
@@ -77,7 +78,9 @@
                 android:paddingLeft="@dimen/layout_padding_left"
                 android:layout_marginTop="@dimen/loginImageViewMarging_top"
                 android:layout_marginBottom="@dimen/loginImageViewMarging_top"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:id="@+id/heading"/>
 
             <RelativeLayout
                 android:id="@+id/profileLayout"
@@ -314,7 +317,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/textColor"
                         android:textSize="@dimen/user_text_size"
-                        android:textStyle="bold" />
+                        android:textStyle="normal" />
 
 
                     <ImageView

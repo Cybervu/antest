@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/transparent"
     android:orientation="horizontal"
     >
@@ -15,7 +15,7 @@
         android:layout_marginRight="@dimen/my_download_margin"
         android:layout_marginTop="@dimen/my_download_margin"
         android:layout_weight="1"
-        android:background="@color/episodeBackgroundColor"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <ImageView
@@ -37,14 +37,14 @@
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/downloadTextColor" />
+                android:textColor="@color/textAmgoColor" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/downloadTextColor"
+                android:textColor="@color/textAmgoColor"
 
                 />
 
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/downloadTextColor"
+                android:textColor="@color/textAmgoColor"
 
                 />
 
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/downloadTextColor"
+                android:textColor="@color/textAmgoColor"
 
                 />
         </LinearLayout>

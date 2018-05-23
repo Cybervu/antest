@@ -30,6 +30,8 @@ public class PreferenceManager {
     public  final String PREFS_LOGIN_HISTORYID_KEY = "loginHistId";
     public  final String PREFS_LOGIN_DATE = "date";
     public  final String PREFS_LANGUAGE_CHANGED = "language_changed";
+    public  final String PREFS_SUBSCRIBED = "is_subscribed";
+    public  final String PREFS_PURCHASED = "is_purchased";
 
 
     private PreferenceManager(Context mContext){
@@ -184,6 +186,23 @@ public class PreferenceManager {
         mEditor.commit();
     }
 
+    public String getIsSubscribed() {
+        return mSharedPreferences.getString(PREFS_SUBSCRIBED, "0");
+    }
+    public void setIsSubscribed(String subs) {
+        mEditor.putString(PREFS_SUBSCRIBED,subs);
+        mEditor.commit();
+        mEditor.apply();
+    }
+  public String getIsPurchase() {
+        return mSharedPreferences.getString(PREFS_PURCHASED, "0");
+    }
+    public void setIsPurchased(String subs) {
+        mEditor.putString(PREFS_PURCHASED,subs);
+        mEditor.commit();
+        mEditor.apply();
+    }
+
 
 
     public void clearLoginPref(){
@@ -195,6 +214,8 @@ public class PreferenceManager {
         mEditor.remove(PREFS_LOGIN_PROFILE_IMAGE_KEY);
         mEditor.remove(PREFS_LOGIN_ISSUBSCRIBED_KEY);
         mEditor.remove(PREFS_LOGIN_HISTORYID_KEY);
+        mEditor.remove(PREFS_SUBSCRIBED);
+        mEditor.remove(PREFS_PURCHASED);
         mEditor.apply();
         mEditor.commit();
     }

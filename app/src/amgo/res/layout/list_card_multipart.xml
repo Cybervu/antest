@@ -37,7 +37,7 @@
                 android:layout_height="@dimen/listcard_height"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/logo" />
 
             <ImageView
@@ -46,6 +46,8 @@
                 android:layout_height="@dimen/listcard_height"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
+                android:visibility="gone"
+
                 android:background="@drawable/content_list_overlay"
 
                 />

@@ -157,7 +157,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
     private ProgressBarHandler pDialog = null;
 
 
-    public static boolean homeSelected = true;
+    public static boolean homeSelected = true, blankSelected = false;
 
     public NavigationDrawerFragment() {
     }
@@ -269,7 +269,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 //Toast.makeText(getContext(), ""+listPosition, Toast.LENGTH_SHORT).show();
 
                 if (((TextView) v.findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME))) {
-                    FontUtls.loadFont(getContext(), getResources().getString(R.string.regular_fonts),  ((TextView) v.findViewById(R.id.listTitle)));
+                    FontUtls.loadFont(getContext(), getResources().getString(R.string.regular_fonts), ((TextView) v.findViewById(R.id.listTitle)));
                     //((TextView) v.findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
                     homeSelected = true;
                 } else
@@ -277,26 +277,25 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 // Kushal
                 for (int i = 0; i < parent.getAdapter().getCount(); i++) {
                     //  Log.e("Error",parent.getChildAt(i).findViewById(R.id.listTitle).toString());
-                    if (i == listPosition) {
-                        //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
-                        try {
-                            if(((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(" ")){
-                                parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
-                            }else {
+                    String selectedmenu = ((TextView) parent.getChildAt(listPosition - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).getText().toString();
+                    if (!selectedmenu.equalsIgnoreCase("")) {
+                        if (i == listPosition) {
+                            try {
                                 parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
                                 FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
-                            FontUtls.loadFont(getActivity(), getResources().getString(R.string.light_fonts), ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)));
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } else {
+                            try {
+                                parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+                                FontUtls.loadFont(getActivity(), getResources().getString(R.string.light_fonts), ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+
 
                 }
                 boolean retVal = true;
@@ -339,13 +338,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             fragment.setArguments(bundle);*/
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        }else if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("blank")){
-                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
-
-                        }
-
-
-                        else {
+                        } else {
 
                             Intent browserIntent;
 
@@ -1264,7 +1257,6 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                 menusOutputModelLocal.getFooterMenuModel().add(1, footerMenu1);
             }
         }
-
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

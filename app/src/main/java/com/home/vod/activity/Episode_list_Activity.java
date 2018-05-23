@@ -4254,6 +4254,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                preferenceManager.setIsPurchased("1");
                 if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);

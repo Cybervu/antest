@@ -397,7 +397,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/login_linear_margin_top"
                             android:ellipsize="end"
-                            android:textColor="@color/videostorytextcolor"
+                            android:textColor="@color/textAmgoColor"
                             android:textSize="@dimen/review_btn_textsize" />
 
 
@@ -552,7 +552,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="PLAY"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:layout_marginTop="@dimen/marginright10dp"
                     android:layout_marginBottom="@dimen/marginright10dp"
                     android:gravity="center"/>

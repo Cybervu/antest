@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/pre_order_button_margin"
+        android:listSelector="@drawable/transparent"
         android:horizontalSpacing="@dimen/horizontal_spacing"
         android:verticalSpacing="@dimen/vertical_spacing">
 

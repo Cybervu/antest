@@ -140,6 +140,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         textViewLine.setVisibility(View.GONE);
 
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
+        listTitleTextView.setTextColor(context.getResources().getColor(R.color.amgo_navigation_menu_color_user));
+
         try {
             listTitleTextView.setText(Html.fromHtml(listTitle));
 

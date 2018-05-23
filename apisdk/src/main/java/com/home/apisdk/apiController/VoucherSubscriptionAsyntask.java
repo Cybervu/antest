@@ -119,7 +119,7 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Payment", "Voucher Subscription" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;

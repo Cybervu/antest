@@ -126,7 +126,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Payment", "Auth User Payment" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;

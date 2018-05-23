@@ -7,7 +7,7 @@
                 android:top="3px"
                 android:right="3px"
                 android:bottom="3px"/>
-            <size android:height="18dp" android:width="18dp"/>
+            <size android:height="12dp" android:width="12dp"/>
             <solid android:color="@color/colorAmgoRed"/>
 
         </shape>
@@ -20,7 +20,7 @@
                 android:right="8px"
                 android:bottom="8px"/>
             <stroke android:width="8px" android:color="@color/colorPrimary" />
-            <size android:height="18dp" android:width="18dp"/>
+            <size android:height="12dp" android:width="12dp"/>
         </shape>
     </item>
     <item >
@@ -28,7 +28,7 @@
             <gradient android:startColor="@color/colorPrimary"
                 android:endColor="@color/colorPrimary"
                 android:angle="-90"/>
-            <size android:height="18dp" android:width="18dp"/>
+            <size android:height="12dp" android:width="12dp"/>
         </shape>
     </item>
 

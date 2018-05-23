@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
@@ -463,6 +465,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         _init();
         // Kushal
+        checkGooglePlaySeviceUpdate();
         askPermission();
 
         apiChcekTimer = new Timer();
@@ -567,6 +570,38 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         },0,100);
 
 
+    }
+
+    private void checkGooglePlaySeviceUpdate() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        if (resultCode != ConnectionResult.SUCCESS) {
+
+            // show your own AlertDialog for example:
+            AlertDialog.Builder builder = new AlertDialog.Builder(SplashScreen.this);
+            // set the message
+            builder.setMessage("This app use google play services only for optional features")
+                    .setTitle("Do you want to update?"); // set a title
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+
+                    final String appPackageName = "com.google.android.gms";
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    }catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+            AlertDialog dialog = builder.create();
+
+        }
     }
 
     @Override

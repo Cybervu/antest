@@ -31,7 +31,9 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTACT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_YOUR_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
@@ -97,7 +99,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
-        contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
+        contactFormTitle.setText(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
 
         //Log.v("SUBHA","ontact = "+ languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 

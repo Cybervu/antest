@@ -85,6 +85,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     LanguagePreference languagePreference;
     FeatureHandler featureHandler;
+    TextView heading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +97,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         languagePreference = LanguagePreference.getLanguagePreference(this);
         featureHandler = FeatureHandler.getFeaturePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        heading= (TextView) findViewById(R.id.heading);
+
         // Kushal- No toolbar Title required
         //mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
         mActionBarToolbar.setTitleTextColor(getResources().getColor(R.color.toolbarTitleColor));
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        heading.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
 /*
         if ((featureHandler.getFeatureStatus(FeatureHandler.SIGNUP_STEP, FeatureHandler.DEFAULT_SIGNUP_STEP))){
             mActionBarToolbar.setNavigationIcon(null);
@@ -123,10 +127,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         logoImageView = (ImageView) findViewById(R.id.logoImageView);
         editEmailStr = (EditText) findViewById(R.id.email);
         logintextView = (TextView) findViewById(R.id.login);
+        logintextView.setVisibility(View.GONE);
         submitButton = (Button) findViewById(R.id.submit);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.regular_fonts), submitButton);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts), editEmailStr);
         FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts), logintextView);
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts), heading);
+
 
         editEmailStr.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         submitButton.setText(languagePreference.getTextofLanguage(BTN_SUBMIT, DEFAULT_BTN_SUBMIT));

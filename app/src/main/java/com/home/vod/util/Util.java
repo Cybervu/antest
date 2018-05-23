@@ -813,8 +813,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, ACCEPT_TERMS,DEFAULT_ACCEPT_TERMS, "accept_terms", json);
         setTranslationLanguageToPref(languagePreference, USER_LOGIN,DEFAULT_USER_LOGIN, "user_login", json);
         setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "join_amgo", json);
-        setTranslationLanguageToPref(languagePreference, JOIN_AMGO,DEFAULT_JOIN_AMGO, "forgot_password", json);
         setTranslationLanguageToPref(languagePreference, RELATED_CONTENT_TITLE,DEFAULT_RELATED_CONTENT_TITLE, "related_content_title", json);
+        setTranslationLanguageToPref(languagePreference, BUY_BUTTON,DEFAULT_BUY_BUTTON, "buy_button", json);
+        setTranslationLanguageToPref(languagePreference, PLAY_BUTTON,DEFAULT_PLAY_BUTTON, "play_now", json);
+        setTranslationLanguageToPref(languagePreference, SHARE_APP_ANDROID,DEFAULT_SHARE_APP_ANDROID, "share_app_android", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 

@@ -20,6 +20,7 @@ import com.home.vod.activity.MyDownloads;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.squareup.picasso.Picasso;
 
@@ -106,6 +107,14 @@ public class MyDownloadAdapter extends BaseAdapter {
         TextView duration = (TextView) v.findViewById(R.id.textView4);
         ImageView image = (ImageView) v.findViewById(R.id.imageView);
         ImageView image1 = (ImageView) v.findViewById(R.id.imageView1);
+
+        FontUtls.loadFont(activity, activity.getResources().getString(R.string.light_fonts), title);
+        FontUtls.loadFont(activity, activity.getResources().getString(R.string.light_fonts), realise_date);
+        FontUtls.loadFont(activity, activity.getResources().getString(R.string.light_fonts), genre);
+        FontUtls.loadFont(activity, activity.getResources().getString(R.string.light_fonts), duration);
+
+
+
 //
         Picasso.with(activity)
                 .load(downloadModel.get(position).getPoster())

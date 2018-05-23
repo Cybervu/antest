@@ -24,7 +24,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
-            android:src="@drawable/content_list_overlay" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/movieImageOverlay"
@@ -34,7 +35,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="@drawable/content_list_overlay"
 
             />
@@ -58,6 +59,7 @@
             android:layout_marginLeft="@dimen/loginImageViewMarging_top_padding"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
+            android:visibility="gone"
             android:textStyle="normal" />
 
     </RelativeLayout>

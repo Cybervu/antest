@@ -166,6 +166,7 @@ import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.BUY_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
@@ -179,6 +180,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LAN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUY_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
@@ -196,12 +198,14 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAY_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_RELATED_CONTENT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SHARE_APP_ANDROID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
@@ -226,12 +230,14 @@ import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.PLAY_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.RELATED_CONTENT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SHARE_APP_ANDROID;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
@@ -1057,7 +1063,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Text");
+                        languagePreference.getTextofLanguage(SHARE_APP_ANDROID,DEFAULT_SHARE_APP_ANDROID));
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
@@ -3989,6 +3995,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                preferenceManager.setIsPurchased("1");
+                setPriceToButton();
                 if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                     Log.v("MUVI", "VV VV VV");
 
@@ -4615,7 +4623,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         }catch (Exception e){
             newPlayImage.setVisibility(View.VISIBLE);
-            newPlayText.setText("PLAY");
+            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
+
         }
     }
 
@@ -4625,21 +4634,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         if (makePlayVisible) {
             if (Integer.parseInt(free) == 1) {
                 newPlayImage.setVisibility(View.VISIBLE);
-                newPlayText.setText("PLAY");
+                newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
+
             } else {
-                if(isLogin==1) {
-                    if(isSubscribed.equalsIgnoreCase("1")) {
-                        subs=true;
-                        newPlayImage.setVisibility(View.GONE);
-                        newPlayText.setText("BUY " + contetPriceSubscribed);
+                if(preferenceManager.getLoginStatusFromPref()!=null) {
+                    if(!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                        if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                            subs = true;
+                            newPlayImage.setVisibility(View.GONE);
+                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + contetPriceSubscribed);
+                        } else {
+                            subs = false;
+                            newPlayImage.setVisibility(View.GONE);
+                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + contentPriceNonSubscribed);
+                        }
                     }else{
-                        subs=false;
-                        newPlayImage.setVisibility(View.GONE);
-                        newPlayText.setText("BUY " + contentPriceNonSubscribed);
+                        newPlayImage.setVisibility(View.VISIBLE);
+                        newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
                     }
                 }else{
                     newPlayImage.setVisibility(View.GONE);
-                    newPlayText.setText("BUY " + contentPriceNonSubscribed);
+                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+  contentPriceNonSubscribed);
                 }
             }
             NewPlay.setVisibility(View.VISIBLE);
@@ -4682,9 +4697,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (status == null) {
             isSubscribed = "0";
+            preferenceManager.setIsSubscribed(isSubscribed);
         }
         if (code == 200) {
             isSubscribed = get_userProfile_output.getIsSubscribed();
+            preferenceManager.setIsSubscribed(isSubscribed);
             if(reloadPrice==1){
                 setPriceToButton();
             }

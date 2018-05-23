@@ -138,6 +138,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_REGIS
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_JOIN_AMGO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
@@ -158,6 +159,7 @@ import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
+import static com.home.vod.preferences.LanguagePreference.JOIN_AMGO;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -490,6 +492,7 @@ public class RegisterActivity extends AppCompatActivity implements
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
+    TextView heading;
     @Override
     protected void onResume() {
         super.onResume();
@@ -572,6 +575,8 @@ public class RegisterActivity extends AppCompatActivity implements
         registerButton = (Button) findViewById(R.id.register);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (Button) findViewById(R.id.login);
+        heading= (TextView)findViewById(R.id.heading);
+
 
         /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);
@@ -601,9 +606,13 @@ public class RegisterActivity extends AppCompatActivity implements
 
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editPassword);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
-        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), registerButton);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.regular_fonts), registerButton);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), alreadyMemmberText);
-        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), loginTextView);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.regular_fonts), loginTextView);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), heading);
+
+
+        heading.setText(languagePreference.getTextofLanguage(JOIN_AMGO,DEFAULT_JOIN_AMGO));
 
 
         /*editName_first.setHint(languagePreference.getTextofLanguage(FIRST_NAME,DEFAULT_FIRST_NAME));
@@ -4383,6 +4392,7 @@ public class RegisterActivity extends AppCompatActivity implements
             }
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+               preferenceManager.setIsPurchased("1");
                 if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);

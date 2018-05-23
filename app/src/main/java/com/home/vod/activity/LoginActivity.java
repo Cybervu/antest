@@ -155,6 +155,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_USER_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
@@ -175,6 +176,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.USER_LOGIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener, GoogleApiClient.OnConnectionFailedListener,
@@ -1447,6 +1449,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     PreferenceManager preferenceManager;
     FeatureHandler featureHandler;
+    TextView heading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1529,6 +1532,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         forgotPassword.setText(languagePreference.getTextofLanguage(FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
         loginNewUser = (TextView) findViewById(R.id.loginNewUser);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), loginNewUser);
+        heading= (TextView)findViewById(R.id.heading);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), heading);
+        heading.setText(languagePreference.getTextofLanguage(USER_LOGIN,DEFAULT_USER_LOGIN));
+
 
         loginNewUser.setText(languagePreference.getTextofLanguage(NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
@@ -5590,6 +5597,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                preferenceManager.setIsPurchased("1");
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);

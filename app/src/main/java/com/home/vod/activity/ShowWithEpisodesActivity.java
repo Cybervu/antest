@@ -174,102 +174,7 @@ import player.activity.ResumePopupActivity;
 import player.activity.ThirdPartyPlayer;
 import player.activity.YouTubeAPIActivity;
 
-import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.APP_ON;
-import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
-import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
-import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_EPISODE_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_RELATED_CONTENT_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASONS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_LESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
-import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
-import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
-import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.NEXT;
-import static com.home.vod.preferences.LanguagePreference.NO;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.RELATED_CONTENT_TITLE;
-import static com.home.vod.preferences.LanguagePreference.REVIEWS;
-import static com.home.vod.preferences.LanguagePreference.SEASON;
-import static com.home.vod.preferences.LanguagePreference.SEASONS;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_LESS;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
-import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.VOUCHER_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.YES;
+import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.CAST_INTENT_KEY;
 import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
 import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
@@ -868,7 +773,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 int episodeContenTTypesId = episode_details_output.getEpisodeArray().get(a).getContent_types_id();
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
-                if (subs) {
+                if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
                     itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
                             movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr, episodeContenTTypesId, SubscribedEpisodePrice));
 
@@ -2317,7 +2222,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Text");
+                        languagePreference.getTextofLanguage(SHARE_APP_ANDROID,DEFAULT_SHARE_APP_ANDROID));
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
@@ -2640,14 +2545,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             if (data1[1].equalsIgnoreCase(SeasonID.get(i))) {
                                 if (isFreeContent == 1) {
                                     newPlayImage.setVisibility(View.VISIBLE);
-                                    newPlayText.setText("PLAY");
+                                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
 
                                 } else {
                                     newPlayImage.setVisibility(View.GONE);
                                     if (subs) {
-                                        newPlayText.setText("BUY " + SubscribedSeasonPrice.get(i));
+                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+ SubscribedSeasonPrice.get(i));
                                     } else {
-                                        newPlayText.setText("BUY " + NonSubscribedSeasonPrice.get(i));
+                                        newPlayText.setText( languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+ NonSubscribedSeasonPrice.get(i));
 
                                     }
                                 }
@@ -5782,6 +5687,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                preferenceManager.setIsPurchased("1");
+                setPriceToButton();
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -6403,7 +6310,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             SubscribedEpisodePrice="0";
             NonSubscribedEpisodePrice= "0";
             newPlayImage.setVisibility(View.VISIBLE);
-            newPlayText.setText("PLAY");
+            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
+
         } else {
             newPlayImage.setVisibility(View.GONE);
             String data = season.get(season_spinner.getSelectedItemPosition());
@@ -6413,23 +6321,28 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     if (data1[1].equalsIgnoreCase(SeasonID.get(i))) {
                         if (isFreeContent == 1) {
                             newPlayImage.setVisibility(View.VISIBLE);
-                            newPlayText.setText("PLAY");
+                            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON));
 
                         } else {
                             newPlayImage.setVisibility(View.GONE);
-                            if (isLogin == 1) {
-                                if (isSubscribed.equalsIgnoreCase("1")) {
-                                    subs = true;
-                                    newPlayImage.setVisibility(View.GONE);
-                                    newPlayText.setText("BUY " + SubscribedSeasonPrice.get(i));
-                                } else {
-                                    subs = false;
-                                    newPlayImage.setVisibility(View.GONE);
-                                    newPlayText.setText("BUY " + NonSubscribedSeasonPrice.get(i));
+                            if (preferenceManager.getLoginStatusFromPref()!=null) {
+                                if(!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                                    if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                        subs = true;
+                                        newPlayImage.setVisibility(View.GONE);
+                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + SubscribedSeasonPrice.get(i));
+                                    } else {
+                                        subs = false;
+                                        newPlayImage.setVisibility(View.GONE);
+                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
+                                    }
+                                }else{
+                                    newPlayImage.setVisibility(View.VISIBLE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON));
                                 }
                             } else {
                                 newPlayImage.setVisibility(View.GONE);
-                                newPlayText.setText("BUY " + NonSubscribedSeasonPrice.get(i));
+                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+  NonSubscribedSeasonPrice.get(i));
 
                             }
                         }
@@ -6472,9 +6385,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         if (status == null) {
             isSubscribed = "0";
+            preferenceManager.setIsSubscribed(isSubscribed);
         }
         if (code == 200) {
             isSubscribed = get_userProfile_output.getIsSubscribed();
+            preferenceManager.setIsSubscribed(isSubscribed);
             if(reloadPrice==1){
                 setPriceToButton();
             }

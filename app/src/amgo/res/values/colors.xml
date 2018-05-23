@@ -23,7 +23,7 @@
     <color name="appBackgroundColor">#fff</color>
     <color name="textColor">#8f8f8f</color>
     <color name="player_title_color">#8f8f8f</color>
-    <color name="videotextColor">#8f8f8f</color>
+    <color name="videotextColor">#a6a6a6</color>
     <!--added by bishal in detaills layout story color id-->
     <color name="videostorytextcolor">#8f8f8f</color>
     <color name="banner_line_color">#d23232</color>

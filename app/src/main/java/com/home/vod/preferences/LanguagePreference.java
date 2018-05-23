@@ -497,10 +497,19 @@ public class LanguagePreference {
     public static String DEFAULT_USER_LOGIN= "User Login";
 
     public static String JOIN_AMGO= "JOIN_AMGO";
-    public static String DEFAULT_JOIN_AMGO= "Join Amgo";
+    public static String DEFAULT_JOIN_AMGO= "Join AMGO";
 
     public static String RELATED_CONTENT_TITLE= "RELATED_CONTENT_TITLE";
     public static String DEFAULT_RELATED_CONTENT_TITLE= "RELATED TV SHOWS";
+
+    public static String BUY_BUTTON= "BUY_BUTTON";
+    public static String DEFAULT_BUY_BUTTON= "BUY";
+
+    public static String PLAY_BUTTON= "PLAY_BUTTON";
+    public static String DEFAULT_PLAY_BUTTON= "PLAY";
+
+    public static String SHARE_APP_ANDROID= "SHARE_APP";
+    public static String DEFAULT_SHARE_APP_ANDROID= "Hey! checkout AMGO by visting the link: http://myamgo.com/";
 
 
 

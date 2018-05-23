@@ -317,7 +317,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text=""
-                    android:textColor="@color/videomovieTitleColor"
+                    android:textColor="@color/textAmgoColor"
                     android:textSize="@dimen/forgot_text_size"
                     android:textStyle="bold" />
 
@@ -378,7 +378,7 @@
                 android:layout_marginTop="@dimen/textColor_margin"
                 android:text=""
                 android:textStyle="bold"
-                android:textColor="@color/videotextColor"
+                android:textColor="@color/textAmgoColor"
                 android:textSize="@dimen/vdiogenere_text_size" />
 
 
@@ -403,7 +403,7 @@
                     android:layout_marginRight="@dimen/textColor_margin"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""
-                    android:textColor="@color/videotextColor"
+                    android:textColor="@color/textAmgoColor"
                     android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 
@@ -417,7 +417,7 @@
                     android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
                     android:paddingRight="@dimen/videoCensorRatingTextView_padding"
                     android:text=""
-                    android:textColor="@color/videotextColor"
+                    android:textColor="@color/textAmgoColor"
                     android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 

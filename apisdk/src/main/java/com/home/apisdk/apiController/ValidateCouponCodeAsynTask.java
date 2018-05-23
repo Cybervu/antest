@@ -121,7 +121,7 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Payment", "ValidateCouponCode" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;

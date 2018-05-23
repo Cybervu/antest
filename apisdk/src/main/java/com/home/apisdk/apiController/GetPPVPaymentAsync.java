@@ -128,7 +128,7 @@ public class GetPPVPaymentAsync extends AsyncTask<RegisterUserPaymentInputModel,
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Payment", "PPV Payment" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;

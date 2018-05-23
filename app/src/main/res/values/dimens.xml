@@ -184,7 +184,7 @@
     <dimen name="already_login_size">16sp</dimen>
     <dimen name="register_button">18dp</dimen>
     <dimen name="changepas_edittest">16dp</dimen>
-    <dimen name="user_text_size">30sp</dimen>
+    <dimen name="user_text_size">24sp</dimen>
     <dimen name="preorderbtn_width">90dp</dimen>
     <dimen name="preorderbtn_height">38dp</dimen>
     <dimen name="preorderbtn_text_size">14sp</dimen>
@@ -261,7 +261,7 @@
     <dimen name="recylerview_width">250dp</dimen>
     <dimen name="tryagainbtn_text_size">20sp</dimen>
     <dimen name="resumetitle_text_size">16sp</dimen>
-    <dimen name="playbtn_text_size">13sp</dimen>
+    <dimen name="playbtn_text_size">15sp</dimen>
     <dimen name="cancelbtn_text_size">13sp</dimen>
     <dimen name="transcationdetail_text_size">20sp</dimen>
     <dimen name="transcation_text_size">16sp</dimen>

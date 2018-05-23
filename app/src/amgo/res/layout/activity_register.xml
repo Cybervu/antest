@@ -40,8 +40,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Join AMGO"
+                android:id="@+id/heading"
+                android:textColor="@color/white"
                 android:layout_marginTop="@dimen/loginImageViewMarging_top"
-                android:layout_marginBottom="@dimen/loginImageViewMarging_top"
+                android:layout_marginBottom="30dp"
                 android:textSize="20sp"/>
 
             <EditText

@@ -47,6 +47,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 
 import org.json.JSONException;
@@ -300,9 +301,10 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
         // Kushal - To set Id to action bar back button
         setIdToActionBarBackButton(mActionBarToolbar);
         TextView sectionTitle = (TextView)findViewById(R.id.sectionTitle);
+        sectionTitle.setText(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+        FontUtls.loadFont(MyDownloads.this, getResources().getString(R.string.light_fonts), sectionTitle);
 
-            sectionTitle.setText(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            // sectionTitle.setText(titleListName);
+        // sectionTitle.setText(titleListName);
         if (hideBcakIcon) {
             mActionBarToolbar.setNavigationIcon(null);
             //hideBcakIcon= true;

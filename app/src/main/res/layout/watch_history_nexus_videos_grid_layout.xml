@@ -22,6 +22,7 @@
             android:layout_height="@dimen/movieimg_height"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:src="@drawable/logo" />
 
         <ImageView
@@ -32,7 +33,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="@drawable/content_list_vertical_overlay"
 
             />
@@ -55,7 +56,7 @@
             android:padding="@dimen/loginImageViewMarging_top_padding"
             android:layout_marginLeft="@dimen/loginImageViewMarging_top_padding"
             android:text=""
-            android:visibility="visible"
+            android:visibility="gone"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="normal" />
