@@ -1,11 +1,9 @@
 package com.home.vod.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,8 +50,6 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -216,7 +212,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         mDrawerListView = (ExpandableListView) rootView.findViewById(R.id.list_slidermenu);
         Login = (Button) rootView.findViewById(R.id.navigation_login);
         Register = (Button) rootView.findViewById(R.id.navigation_register);
-        setTextToButton();
+
         handleClickFunction();
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -284,16 +280,19 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                     if (i == listPosition) {
                         //parent.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.red_border));
                         try {
-                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
-                            ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null), Typeface.BOLD);
+                            if(((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).getText().toString().equalsIgnoreCase(" ")){
+                                parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+                            }else {
+                                parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.VISIBLE);
+                                FontUtls.loadFont(getActivity(), getResources().getString(R.string.regular_fonts), ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)));
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
-
                             parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
-                            ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)).setTypeface((null), Typeface.NORMAL);
+                            FontUtls.loadFont(getActivity(), getResources().getString(R.string.light_fonts), ((TextView) parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.listTitle)));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -340,7 +339,13 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
                             fragment.setArguments(bundle);*/
                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                             mDrawerLayout.closeDrawers();
-                        } else {
+                        }else if(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim().equalsIgnoreCase("blank")){
+                            parent.getChildAt(i - parent.getFirstVisiblePosition()).findViewById(R.id.selector).setVisibility(View.INVISIBLE);
+
+                        }
+
+
+                        else {
 
                             Intent browserIntent;
 
@@ -1046,6 +1051,8 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         loggedInStr = preferenceManager.getUseridFromPref();
         expandableListDetail = new LinkedHashMap<String, ArrayList<String>>();
         menusOutputModelLocal = new MenusOutputModel();
+
+        setTextToButton();
         // Kushal - Handel crashing of app when no menu item is fetched
 
 
@@ -1215,6 +1222,7 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         /* Adding Home Menu*/
         MenusOutputModel.FooterMenu footerMenu = new MenusOutputModel().new FooterMenu();
         MenusOutputModel.FooterMenu footerMenu1 = new MenusOutputModel().new FooterMenu();
+        MenusOutputModel.FooterMenu footerMenu2 = new MenusOutputModel().new FooterMenu();
         /*footerMenu.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
         footerMenu.setPermalink("contactus");
         */
@@ -1223,29 +1231,40 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
         if (featureHandler.getFeatureStatus(FeatureHandler.IS_PURCHASEHISTORY, FeatureHandler.DEFAULT_IS_PURCHASEHISTORY) && loggedInStr != null) {
             if (!checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(), languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY))) {
-                footerMenu.setDisplay_name(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-                footerMenu.setPermalink("purchasehistory");
+                footerMenu.setDisplay_name(" ");
+                footerMenu.setPermalink("blank");
                 menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
-                footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
-                footerMenu1.setPermalink("contactus");
+
+                footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+                footerMenu1.setPermalink("purchasehistory");
                 menusOutputModelLocal.getFooterMenuModel().add(1, footerMenu1);
+
+                footerMenu2.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
+                footerMenu2.setPermalink("contactus");
+                menusOutputModelLocal.getFooterMenuModel().add(2, footerMenu2);
 
 
             }
 
         } else if (loggedInStr == null) {
             if (checkForMenuPresence(menusOutputModelLocal.getFooterMenuModel(), languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY))) {
-                menusOutputModelLocal.getFooterMenuModel().remove(0);
+                menusOutputModelLocal.getFooterMenuModel().remove(1);
+                footerMenu.setDisplay_name(" ");
+                footerMenu.setPermalink("blank");
+                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
                 footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
                 footerMenu1.setPermalink("contactus");
-                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
+                menusOutputModelLocal.getFooterMenuModel().add(1, footerMenu1);
             } else {
+                footerMenu.setDisplay_name(" ");
+                footerMenu.setPermalink("blank");
+                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu);
                 footerMenu1.setDisplay_name(languagePreference.getTextofLanguage(CONTACT_US, DEFAULT_CONTACT_US));
                 footerMenu1.setPermalink("contactus");
-                menusOutputModelLocal.getFooterMenuModel().add(0, footerMenu1);
+                menusOutputModelLocal.getFooterMenuModel().add(1, footerMenu1);
             }
-
         }
+
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

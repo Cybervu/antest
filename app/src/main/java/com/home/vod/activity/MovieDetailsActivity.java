@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -31,7 +30,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +66,7 @@ import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMonitizationDetailsAsync;
 import com.home.apisdk.apiController.GetRelatedContentAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
+import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.ValidateVoucherAsynTask;
@@ -85,6 +84,8 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.Get_UserProfile_Input;
+import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
@@ -129,7 +130,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -256,7 +256,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         GetIpAddressAsynTask.IpAddressListener, GetMonitizationDetailsAsync.GetMonitizationDetailsListner
         , VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener,
         GetRelatedContentAsynTask.GetRelatedContentListener,
-        GetContentPriceDetailsAsyncTask.GetContentPriceDetailsListener{
+        GetContentPriceDetailsAsyncTask.GetContentPriceDetailsListener,
+        GetUserProfileAsynctask.Get_UserProfileListener{
    
    
    
@@ -404,11 +405,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     private String movieStreamId;
     GetRelatedContentAsynTask asyncRelatedContent;
     GetContentPriceDetailsAsyncTask asyncContentPriceDetails;
-    private String contetPrice;
+    private String contetPriceSubscribed, contentPriceNonSubscribed;
     boolean makePlayVisible= false, freeContent=false;
     String free;
     boolean subs=true;
     ImageView ShareButton;
+    public static String isSubscribed = "0";
+    int reloadPrice=0;
 //
 
 
@@ -1119,6 +1122,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts), videoGenreTextView);
         FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts), videoTitle);
         FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts), newPlayText);
+
+
+        callProfileAPI(reloadPrice);
 
         // *** rating***////
         ratingBar = (RatingBar) findViewById(R.id.rating);
@@ -2625,11 +2631,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 finish();
             }
         } else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK) {
+            reloadPrice=1;
+            callProfileAPI(reloadPrice);
             new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
 
         } else if (requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK) {
+            reloadPrice=1;
+            callProfileAPI(reloadPrice);
             getVideoInfo();
         } else if (requestCode == VIDEO_PLAY_BUTTON_CLICK_SUBSCRIPTION_REQUESTCODE && resultCode == RESULT_OK) {
+            reloadPrice=1;
+            callProfileAPI(reloadPrice);
             new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
         }
 
@@ -4597,27 +4609,88 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         LogUtil.showLog("Kushal contentPrice", contentPriceDetailsOutput.toString());
         try {
-            if(isLogin==1)
-                contetPrice = contentPriceDetailsOutput.getContentPrice().get(0).getPPV().get(0).getSubscriber_price();
-            else
-                contetPrice = contentPriceDetailsOutput.getContentPrice().get(0).getPPV().get(0).getNonsubscriber_price();
+            contetPriceSubscribed = contentPriceDetailsOutput.getContentPrice().get(0).getPPV().get(0).getSubscriber_price();
+            contentPriceNonSubscribed = contentPriceDetailsOutput.getContentPrice().get(0).getPPV().get(0).getNonsubscriber_price();
+            setPriceToButton();
 
-            if (makePlayVisible) {
-                if (Integer.parseInt(free) == 1) {
-                    newPlayImage.setVisibility(View.VISIBLE);
-                    newPlayText.setText("PLAY");
-                } else {
-                    newPlayImage.setVisibility(View.GONE);
-                    newPlayText.setText("BUY " + contetPrice);
-                }
-                NewPlay.setVisibility(View.VISIBLE);
-            } else {
-                NewPlay.setVisibility(View.GONE);
-            }
         }catch (Exception e){
             newPlayImage.setVisibility(View.VISIBLE);
             newPlayText.setText("PLAY");
         }
     }
+
+
+    private void setPriceToButton() {
+        isLogin = preferenceManager.getLoginFeatureFromPref();
+        if (makePlayVisible) {
+            if (Integer.parseInt(free) == 1) {
+                newPlayImage.setVisibility(View.VISIBLE);
+                newPlayText.setText("PLAY");
+            } else {
+                if(isLogin==1) {
+                    if(isSubscribed.equalsIgnoreCase("1")) {
+                        subs=true;
+                        newPlayImage.setVisibility(View.GONE);
+                        newPlayText.setText("BUY " + contetPriceSubscribed);
+                    }else{
+                        subs=false;
+                        newPlayImage.setVisibility(View.GONE);
+                        newPlayText.setText("BUY " + contentPriceNonSubscribed);
+                    }
+                }else{
+                    newPlayImage.setVisibility(View.GONE);
+                    newPlayText.setText("BUY " + contentPriceNonSubscribed);
+                }
+            }
+            NewPlay.setVisibility(View.VISIBLE);
+        } else {
+            NewPlay.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private void callProfileAPI(int requestCode) {
+        if (preferenceManager != null) {
+            String user_Id = preferenceManager.getUseridFromPref();
+            String email_Id = preferenceManager.getEmailIdFromPref();
+
+            if (user_Id != null && email_Id != null) {
+
+                Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
+                get_userProfile_input.setAuthToken(authTokenStr);
+                get_userProfile_input.setEmail(email_Id);
+                get_userProfile_input.setUser_id(user_Id);
+                get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
+                asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+
+            }
+        }
+    }
+
+
+
+
+    @Override
+    public void onGet_UserProfilePreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+
+        if (status == null) {
+            isSubscribed = "0";
+        }
+        if (code == 200) {
+            isSubscribed = get_userProfile_output.getIsSubscribed();
+            if(reloadPrice==1){
+                setPriceToButton();
+            }
+        }
+
+    }
+
 
 }
