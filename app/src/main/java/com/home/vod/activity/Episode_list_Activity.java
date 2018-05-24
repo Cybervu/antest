@@ -286,6 +286,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public static boolean isLoading = false;
     private String movieVideoUrlStr = "";
     private String videoResolution = "";
+    int TOTAL_EPISODE_COUNT = 0;
 
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
@@ -334,7 +335,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     String videoUrlStr = "";
     String priceForUnsubscribedStr, priceFosubscribedStr;
     private boolean loading = true;
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
     MonetizationHandler monetizationHandler;
     CheckVoucherOrPpvPaymentHandler checkVoucherOrPpvPaymentHandler;
     GetMonitizationDetailsAsync getMonitizationDetailsAsync;
@@ -1110,7 +1110,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }
 
     @Override
-    public void onGetEpisodeDetailsPostExecuteCompleted(Episode_Details_output episode_details_output, int status, int i, String message, String movieUniqueId) {
+    public void onGetEpisodeDetailsPostExecuteCompleted(Episode_Details_output episode_details_output, int status, int total_item_count, String message, String movieUniqueId) {
 
         LogUtil.showLog("BKS", "onget eisode details ca;l==");
         try {
@@ -1123,26 +1123,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             noDataLayout.setVisibility(View.VISIBLE);
         }
 
-        /*try{
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
-                pDialog = null;
-            }
-        }
-        catch(IllegalArgumentException ex)
-        {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        TOTAL_EPISODE_COUNT = total_item_count;
 
-                    footerView.setVisibility(View.GONE);
-                    noDataLayout.setVisibility(View.VISIBLE);
-                    episodelist.setVisibility(View.GONE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                }
-
-            });
-        }*/
         isAPV = episode_details_output.getIsAPV();
         isPPV = episode_details_output.getIs_ppv();
         movieNameStr = episode_details_output.getName();
@@ -1192,49 +1174,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     }
 
- /*   @Override
-    public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int status, int i, String message,String movieUniqueId) {
 
-        LogUtil.showLog("BKS", "onget eisode details ca;l==");
-
-        for (int a = 0; a < episode_details_output.size(); a++) {
-
-            String episodeNoStr = episode_details_output.get(a).getEpisode_number();
-            String episodeStoryStr = episode_details_output.get(a).getEpisode_story();
-            String episodeDateStr = episode_details_output.get(a).getEpisode_date();
-            String episodeImageStr = episode_details_output.get(a).getPoster_url();
-            String episodeTitleStr = episode_details_output.get(a).getEpisode_title();
-            String episodeSeriesNoStr = episode_details_output.get(a).getSeries_number();
-            String episodeMovieStreamUniqueIdStr = episode_details_output.get(a).getMovie_stream_uniq_id();
-            String episodeThirdParty = episode_details_output.get(a).getThirdparty_url();
-            int episodeContenTTypesId = episode_details_output.get(a).getContent_types_id();
-            String videodurationStr = episode_details_output.get(a).getVideo_duration();
-            String episodeVideoUrlStr = episode_details_output.get(a).getVideo_url();
-
-            itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, episodeContenTTypesId, videodurationStr));
-
-        }
-        LogUtil.showLog("BKS", "onget eisode details itemdata==" + itemData);
-
-        if (itemData.size() <= 0) {
-            footerView.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
-            episodelist.setVisibility(View.VISIBLE);
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            AsynLOADUI loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
-
-            //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
-        } else {
-            footerView.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            episodelist.setVisibility(View.VISIBLE);
-            AsynLOADUI loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
-        }
-
-    }*/
 
     @Override
     public void onGetLanguageListPreExecuteStarted() {
@@ -1671,6 +1611,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         resetData();
 
+
+
+
+
+
         boolean isNetwork = NetworkStatus.getInstance().isConnected(Episode_list_Activity.this);
         if (isNetwork) {
 
@@ -1712,33 +1657,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-            }
 
+                int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
+                if((itemData.size() < TOTAL_EPISODE_COUNT) && (lastVisibleItemPosition == itemData.size()-1) && newState == 0){
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-
-                int visibleItemCount = recyclerView.getChildCount();
-                int totalItemCount = mLayoutManager.getItemCount();
-                int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (isLoading) {
-                    if (totalItemCount > previousTotal) {
-                        isLoading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!isLoading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem)) {
-                    // End has been reached
-                    listSize = itemData.size();
-                    if (mLayoutManager.findLastVisibleItemPosition() >= itemsInServer - 1) {
-                        isLoading = true;
-                        footerView.setVisibility(View.GONE);
-                        return;
-
-                    }
                     offset += 1;
                     if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                         // default data
@@ -1755,8 +1677,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
                         asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
                     }
-
                 }
+            }
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
             }
         });
@@ -1991,171 +1917,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 }
             }
 
-   /*     String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        if (isLogin == 1) {
-            if (preferenceManager.getUseridFromPref() != null) {
-                //String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
-                if (loggedInStr == null) {
-                    final Intent register = new Intent(Episode_list_Activity.this, RegisterActivity.class);
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            Util.check_for_subscription = 1;
-                            register.putExtra("PlayerModel", playerModel);
-                            startActivity(register);
-
-
-                        }
-                    });
-                    //showLoginDialog();
-                } else {
-                    //String loggedinDateStr = pref.getString("date", null);
-                    String loggedinDateStr = preferenceManager.getLoginDateFromPref();
-                    if (loggedinDateStr != null) {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        Date loggedInDate = null;
-                        try {
-                            loggedInDate = formatter.parse(loggedinDateStr);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        Date today = new Date();
-                        long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
-                        if (differenceInDays >= 7) {
-                            SharedPreferences.Editor editor = pref.edit();
-                            editor.clear();
-                            editor.commit();
-
-                            final Intent register = new Intent(Episode_list_Activity.this, RegisterActivity.class);
-
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    Util.check_for_subscription = 1;
-                                    register.putExtra("PlayerModel", playerModel);
-                                    startActivity(register);
-
-
-                                }
-                            });
-                        } else {
-
-                            if (NetworkStatus.getInstance().isConnected(this)) {
-
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Episode_list_Activity.this, Episode_list_Activity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                            } else {
-                                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                                //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-                            }
-
-
-                        }
-                    }
-                }
-            } else {
-
-                final Intent register = new Intent(Episode_list_Activity.this, RegisterActivity.class);
-
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        register.putExtra("PlayerModel", playerModel);
-                        startActivity(register);
-
-
-                    }
-                });
-            }
-        } else {
-            if (NetworkStatus.getInstance().isConnected(this)) {
-                // MUVIlaxmi
-
-                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(authTokenStr);
-                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
-                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-            }
-        }
-*/
-
-            //comment by bishal
-  /*      if (isLogin == 1) {
-
-                String loggedInStr = preferenceManager.getUseridFromPref();
-
-                if (loggedInStr == null) {
-                    Intent i = new Intent(Episode_list_Activity.this, RegisterActivity.class);
-                    Util.check_for_subscription = 1;
-                    startActivity(i);
-                    //showLoginDialog();
-                } else {
-                    if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-
-
-                        if (isFreeContent == 1) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, this, this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                        }
-                    } else {
-                        Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-        } else {
-            if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-                // MUVIlaxmi
-
-                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-            }
-        }*/
         } catch (NumberFormatException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -2167,570 +1929,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
 
-/*
-    private class AsynEpisodeDetails extends AsyncTask<Void, Void, Void> {
-        // ProgressDialog pDialog;
-        String responseStr;
-        String movieThirdPartyUrl = "";
-        int episodeContenTTypesId = 0;
-        private String movieUniqueId;
-
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            String urlRouteList = APIUrlConstant.getGetEpisodeDetailsUrl();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
-                httppost.addHeader("permalink", permalinkStr.trim());
-                httppost.addHeader("limit", String.valueOf(limit));
-                httppost.addHeader("offset", String.valueOf(offset));
-                //httppost.addHeader("deviceType", "roku");
-                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-                if (countryCodeStr != null) {
-
-                    httppost.addHeader("country", countryCodeStr);
-                } else {
-                    httppost.addHeader("country", "IN");
-
-                }
-                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
-
-                    httppost.addHeader("series_number", getIntent().getStringExtra(SEASON_INTENT_KEY));
-
-                } else {
-
-                }
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            if (itemData != null) {
-                                noInternetConnectionLayout.setVisibility(View.GONE);
-                                episodelist.setVisibility(View.VISIBLE);
-                                noDataLayout.setVisibility(View.GONE);
-
-
-                            } else {
-                                noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                                episodelist.setVisibility(View.GONE);
-                                noDataLayout.setVisibility(View.GONE);
-                            }
-                            footerView.setVisibility(View.GONE);
-
-                            Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            footerView.setVisibility(View.GONE);
-                            noDataLayout.setVisibility(View.GONE);
-                            episodelist.setVisibility(View.GONE);
-                            noInternetConnectionLayout.setVisibility(View.VISIBLE);
-
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                        }
-
-                    });
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    String items = myJson.optString("item_count");
-                    movieUniqueId = myJson.optString("muvi_uniq_id");
-                    itemsInServer = Integer.parseInt(items);
-                }
-
-
-                if (status > 0) {
-
-                    if (status == 200) {
-
-
-                        itemData.clear();
-
-                        if ((myJson.has("is_ppv")) && myJson.getString("is_ppv").trim() != null && !myJson.getString("is_ppv").trim().isEmpty() && !myJson.getString("is_ppv").trim().equals("null") && !myJson.getString("is_ppv").trim().matches("")) {
-
-                            isPPV = Integer.parseInt(myJson.getString("is_ppv"));
-                        } else {
-                            isPPV = 0;
-
-
-                        }
-                        if ((myJson.has("is_advance")) && myJson.getString("is_advance").trim() != null && !myJson.getString("is_advance").trim().isEmpty() && !myJson.getString("is_advance").trim().equals("null") && !myJson.getString("is_advance").trim().matches("")) {
-
-                            isAPV = Integer.parseInt(myJson.getString("is_advance"));
-                        } else {
-                            isAPV = 0;
-                        }
-
-
-                        if (isPPV == 1) {
-                            JSONObject ppvJson = null;
-                            if ((myJson.has("ppv_pricing"))) {
-
-
-                                ppvJson = myJson.getJSONObject("ppv_pricing");
-                                if ((ppvJson.has("price_for_unsubscribed")) && ppvJson.getString("price_for_unsubscribed").trim() != null && !ppvJson.getString("price_for_unsubscribed").trim().isEmpty() && !ppvJson.getString("price_for_unsubscribed").trim().equals("null") && !ppvJson.getString("price_for_unsubscribed").trim().matches("")) {
-                                    // priceForUnsubscribedStr = ppvJson.getString("price_for_unsubscribed");
-                                    ppvmodel.setPPVPriceForUnsubscribedStr(ppvJson.getString("price_for_unsubscribed"));
-                                } else {
-                                    // priceForUnsubscribedStr = "0.0";
-                                    ppvmodel.setPPVPriceForUnsubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("price_for_subscribed")) && ppvJson.getString("price_for_subscribed").trim() != null && !ppvJson.getString("price_for_subscribed").trim().isEmpty() && !ppvJson.getString("price_for_subscribed").trim().equals("null") && !ppvJson.getString("price_for_subscribed").trim().matches("")) {
-                                    //priceFosubscribedStr = ppvJson.getString("price_for_subscribed");
-                                    ppvmodel.setPPVPriceForUnsubscribedStr(ppvJson.getString("price_for_subscribed"));
-
-                                } else {
-                                    // priceFosubscribedStr = "0.0";
-                                    ppvmodel.setPPVPriceForUnsubscribedStr("0.0");
-
-                                }
-                                if ((ppvJson.has("id")) && ppvJson.getString("id").trim() != null && !ppvJson.getString("id").trim().isEmpty() && !ppvJson.getString("id").trim().equals("null") && !ppvJson.getString("id").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvPlanId(ppvJson.getString("id"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvPlanId("0");
-
-                                }
-                                //MUVIShree
-                                if ((ppvJson.has("show_unsubscribed")) && ppvJson.getString("show_unsubscribed").trim() != null && !ppvJson.getString("show_unsubscribed").trim().isEmpty() && !ppvJson.getString("show_unsubscribed").trim().equals("null") && !ppvJson.getString("show_unsubscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvShowUnsubscribedStr(ppvJson.getString("show_unsubscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvShowUnsubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("show_subscribed")) && ppvJson.getString("show_subscribed").trim() != null && !ppvJson.getString("show_subscribed").trim().isEmpty() && !ppvJson.getString("show_subscribed").trim().equals("null") && !ppvJson.getString("show_subscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvShowSubscribedStr(ppvJson.getString("show_subscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvShowSubscribedStr("0.0");
-
-
-                                }
-
-                                if ((ppvJson.has("season_unsubscribed")) && ppvJson.getString("season_unsubscribed").trim() != null && !ppvJson.getString("season_unsubscribed").trim().isEmpty() && !ppvJson.getString("season_unsubscribed").trim().equals("null") && !ppvJson.getString("season_unsubscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvSeasonUnsubscribedStr(ppvJson.getString("season_unsubscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvSeasonUnsubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("season_subscribed")) && ppvJson.getString("season_subscribed").trim() != null && !ppvJson.getString("season_subscribed").trim().isEmpty() && !ppvJson.getString("season_subscribed").trim().equals("null") && !ppvJson.getString("season_subscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvSeasonSubscribedStr(ppvJson.getString("season_subscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvSeasonSubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("episode_unsubscribed")) && ppvJson.getString("episode_unsubscribed").trim() != null && !ppvJson.getString("episode_unsubscribed").trim().isEmpty() && !ppvJson.getString("episode_unsubscribed").trim().equals("null") && !ppvJson.getString("episode_unsubscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvEpisodeUnsubscribedStr(ppvJson.getString("episode_unsubscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvEpisodeUnsubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("episode_subscribed")) && ppvJson.getString("episode_subscribed").trim() != null && !ppvJson.getString("episode_subscribed").trim().isEmpty() && !ppvJson.getString("episode_subscribed").trim().equals("null") && !ppvJson.getString("episode_subscribed").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setPpvEpisodeSubscribedStr(ppvJson.getString("episode_subscribed"));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setPpvEpisodeSubscribedStr("0.0");
-
-
-                                }
-                                if ((ppvJson.has("is_show")) && ppvJson.getString("is_show").trim() != null && !ppvJson.getString("is_show").trim().isEmpty() && !ppvJson.getString("is_show").trim().equals("null") && !ppvJson.getString("is_show").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setIsShow(Integer.parseInt(ppvJson.getString("is_show")));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setIsShow(0);
-
-
-                                }
-                                if ((ppvJson.has("is_season")) && ppvJson.getString("is_season").trim() != null && !ppvJson.getString("is_season").trim().isEmpty() && !ppvJson.getString("is_season").trim().equals("null") && !ppvJson.getString("is_season").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setIsSeason(Integer.parseInt(ppvJson.getString("is_season")));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setIsSeason(0);
-
-
-                                }
-                                if ((ppvJson.has("is_episode")) && ppvJson.getString("is_episode").trim() != null && !ppvJson.getString("is_episode").trim().isEmpty() && !ppvJson.getString("is_episode").trim().equals("null") && !ppvJson.getString("is_episode").trim().matches("")) {
-                                    //  planIdStr = ppvJson.getString("id");
-                                    ppvmodel.setIsEpisode(Integer.parseInt(ppvJson.getString("is_episode")));
-
-                                } else {
-                                    //  planIdStr = "0";
-                                    ppvmodel.setIsEpisode(0);
-                                }
-
-                                Util.ppvModel = ppvmodel;
-                            }
-                        }
-                        if (isAPV == 1) {
-                            JSONObject advJson = null;
-                            if ((myJson.has("adv_pricing"))) {
-
-
-                                advJson = myJson.getJSONObject("adv_pricing");
-                                if ((advJson.has("price_for_unsubscribed")) && advJson.getString("price_for_unsubscribed").trim() != null && !advJson.getString("price_for_unsubscribed").trim().isEmpty() && !advJson.getString("price_for_unsubscribed").trim().equals("null") && !advJson.getString("price_for_unsubscribed").trim().matches("")) {
-                                    //priceForUnsubscribedStr = advJson.getString("price_for_unsubscribed");
-                                    advmodel.setAPVPriceForUnsubscribedStr(advJson.getString("price_for_unsubscribed"));
-                                } else {
-                                    //priceForUnsubscribedStr = "0.0";
-                                    advmodel.setAPVPriceForUnsubscribedStr("0.0");
-
-
-                                }
-                                if ((advJson.has("price_for_subscribed")) && advJson.getString("price_for_subscribed").trim() != null && !advJson.getString("price_for_subscribed").trim().isEmpty() && !advJson.getString("price_for_subscribed").trim().equals("null") && !advJson.getString("price_for_subscribed").trim().matches("")) {
-                                    //priceFosubscribedStr = advJson.getString("price_for_subscribed");
-                                    advmodel.setAPVPriceForsubscribedStr(advJson.getString("price_for_subscribed"));
-                                } else {
-                                    //priceFosubscribedStr = "0.0";
-                                    advmodel.setAPVPriceForsubscribedStr("0.0");
-
-                                }
-                                if ((advJson.has("id")) && advJson.getString("id").trim() != null && !advJson.getString("id").trim().isEmpty() && !advJson.getString("id").trim().equals("null") && !advJson.getString("id").trim().matches("")) {
-                                    //planIdStr = advJson.getString("id");
-                                    advmodel.setApvPlanId(advJson.getString("id"));
-                                } else {
-                                    // planIdStr = "0";
-                                    advmodel.setApvPlanId("0");
-
-                                }
-
-                                Util.apvModel = advmodel;
-                            }
-
-                        }
-
-                        if (isPPV == 1 || isAPV == 1) {
-                            LogUtil.showLog("MUVI", "currency");
-
-                            JSONObject currencyJson = null;
-                            if (myJson.has("currency") && myJson.getString("currency") != null && !myJson.getString("currency").equals("null")) {
-                                currencyJson = myJson.getJSONObject("currency");
-
-
-                                if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")) {
-                                    // currencyIdStr = currencyJson.getString("id");
-                                    currencymodel.setCurrencyId(currencyJson.getString("id"));
-                                    LogUtil.showLog("MUVI", "currency id" + currencymodel.getCurrencyId());
-
-                                } else {
-                                    // currencyIdStr = "";
-                                    currencymodel.setCurrencyId("");
-                                }
-
-                                if (currencyJson.has("country_code") && currencyJson.getString("country_code").trim() != null && !currencyJson.getString("country_code").trim().isEmpty() && !currencyJson.getString("country_code").trim().equals("null") && !currencyJson.getString("country_code").trim().matches("")) {
-                                    //currencyCountryCodeStr = currencyJson.getString("country_code");
-                                    currencymodel.setCurrencyCode(currencyJson.getString("country_code"));
-                                } else {
-                                    //currencyCountryCodeStr = "";
-                                    currencymodel.setCurrencyCode("153");
-                                }
-                                if (currencyJson.has("symbol") && currencyJson.getString("symbol").trim() != null && !currencyJson.getString("symbol").trim().isEmpty() && !currencyJson.getString("symbol").trim().equals("null") && !currencyJson.getString("symbol").trim().matches("")) {
-                                    //currencySymbolStr = currencyJson.getString("symbol");
-                                    currencymodel.setCurrencySymbol(currencyJson.getString("symbol"));
-                                } else {
-                                    //currencySymbolStr = "";
-                                    currencymodel.setCurrencySymbol("$");
-                                }
-
-                                Util.currencyModel = currencymodel;
-                            }
-                        }
-
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("episode");
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            JSONObject jsonChildNode;
-
-                            try {
-                                jsonChildNode = jsonMainNode.getJSONObject(i);
-                                if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
-                                    movieThirdPartyUrl = jsonChildNode.getString("thirdparty_url");
-
-                                }
-
-
-                                String episodeTitleStr = "";
-                                if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
-                                    episodeTitleStr = jsonChildNode.getString("episode_title");
-
-                                }
-                                String episodeNoStr = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
-
-                                if ((jsonChildNode.has("episode_number")) && jsonChildNode.getString("episode_number").trim() != null && !jsonChildNode.getString("episode_number").trim().isEmpty() && !jsonChildNode.getString("episode_number").trim().equals("null") && !jsonChildNode.getString("episode_number").trim().matches("")) {
-                                    episodeNoStr = jsonChildNode.getString("episode_number");
-
-                                }
-
-
-                                if ((myJson.has("is_ppv")) && myJson.getString("is_ppv").trim() != null && !myJson.getString("is_ppv").trim().isEmpty() && !myJson.getString("is_ppv").trim().equals("null") && !myJson.getString("is_ppv").trim().matches("")) {
-
-                                    isPPV = Integer.parseInt(myJson.getString("is_ppv"));
-                                } else {
-                                    isPPV = 0;
-
-
-                                }
-                                if ((myJson.has("is_advance")) && myJson.getString("is_advance").trim() != null && !myJson.getString("is_advance").trim().isEmpty() && !myJson.getString("is_advance").trim().equals("null") && !myJson.getString("is_advance").trim().matches("")) {
-
-                                    isAPV = Integer.parseInt(myJson.getString("is_advance"));
-                                } else {
-                                    isAPV = 0;
-
-
-                                }
-                                String episodeVideoUrlStr = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
-
-                                if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
-                                    episodeVideoUrlStr = jsonChildNode.getString("embeddedUrl");
-
-                                }
-
-
-                                String episodeImageStr = "";
-
-                                if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
-                                    episodeImageStr = jsonChildNode.getString("poster_url");
-
-                                }
-                                String episodeDateStr = "";
-
-                                if ((jsonChildNode.has("episode_date")) && jsonChildNode.getString("episode_date").trim() != null && !jsonChildNode.getString("episode_date").trim().isEmpty() && !jsonChildNode.getString("episode_date").trim().equals("null") && !jsonChildNode.getString("episode_date").trim().matches("")) {
-                                    episodeDateStr = jsonChildNode.getString("episode_date");
-                                    //episodeDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", episodeDateStr);
-                                    episodeDateStr = "";
-                                }
-                                String episodeStoryStr = "";
-
-                                if ((jsonChildNode.has("episode_story")) && jsonChildNode.getString("episode_story").trim() != null && !jsonChildNode.getString("episode_story").trim().isEmpty() && !jsonChildNode.getString("episode_story").trim().equals("null") && !jsonChildNode.getString("episode_story").trim().matches("")) {
-                                    episodeStoryStr = jsonChildNode.getString("episode_story");
-
-                                }
-                                String episodeSeriesNoStr = "";
-
-                                if ((jsonChildNode.has("series_number")) && jsonChildNode.getString("series_number").trim() != null && !jsonChildNode.getString("series_number").trim().isEmpty() && !jsonChildNode.getString("series_number").trim().equals("null") && !jsonChildNode.getString("series_number").trim().matches("")) {
-                                    episodeSeriesNoStr = jsonChildNode.getString("series_number");
-
-                                }
-                                String episodeMovieStreamUniqueIdStr = "";
-
-                                if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.getString("movie_stream_uniq_id").trim() != null && !jsonChildNode.getString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_uniq_id").trim().matches("")) {
-                                    episodeMovieStreamUniqueIdStr = jsonChildNode.getString("movie_stream_uniq_id");
-
-                                }
-
-                                String episodeThirdParty = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
-
-                                if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
-                                    episodeThirdParty = jsonChildNode.getString("thirdparty_url");
-
-                                }
-                                String videodurationStr = "";
-
-                                if ((jsonChildNode.has("video_duration")) && jsonChildNode.getString("video_duration").trim() != null && !jsonChildNode.getString("video_duration").trim().isEmpty() && !jsonChildNode.getString("video_duration").trim().equals("null") && !jsonChildNode.getString("video_duration").trim().matches("")) {
-                                    videodurationStr = jsonChildNode.getString("video_duration");
-
-                                }
-
-                                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, episodeContenTTypesId, videodurationStr));
-                            } catch (Exception e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (pDialog != null && pDialog.isShowing()) {
-                                            pDialog.hide();
-                                            pDialog = null;
-                                        }
-                                        footerView.setVisibility(View.GONE);
-                                        noDataLayout.setVisibility(View.VISIBLE);
-                                        episodelist.setVisibility(View.GONE);
-                                        noInternetConnectionLayout.setVisibility(View.GONE);
-
-                                    }
-
-                                });
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    } else {
-                        responseStr = "0";
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (pDialog != null && pDialog.isShowing()) {
-                                    pDialog.hide();
-                                    pDialog = null;
-                                }
-                                footerView.setVisibility(View.GONE);
-                                noDataLayout.setVisibility(View.VISIBLE);
-                                episodelist.setVisibility(View.GONE);
-                                noInternetConnectionLayout.setVisibility(View.GONE);
-                            }
-
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                        footerView.setVisibility(View.GONE);
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        episodelist.setVisibility(View.GONE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                    }
-
-                });
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        footerView.setVisibility(View.GONE);
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        episodelist.setVisibility(View.GONE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                    }
-
-                });
-            }
-            if (responseStr == null) {
-                responseStr = "0";
-                footerView.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.VISIBLE);
-                episodelist.setVisibility(View.GONE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-
-            }
-            if ((responseStr.trim().equals("0"))) {
-                footerView.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.VISIBLE);
-                episodelist.setVisibility(View.GONE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-
-
-                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
-            } else {
-                if (itemData.size() <= 0) {
-                    footerView.setVisibility(View.GONE);
-                    noDataLayout.setVisibility(View.GONE);
-                    episodelist.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    AsynLOADUI loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-
-                    //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
-                } else {
-                    footerView.setVisibility(View.GONE);
-                    noDataLayout.setVisibility(View.GONE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    episodelist.setVisibility(View.VISIBLE);
-                    AsynLOADUI loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-                }
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            if (listSize == 0) {
-                // hide loader for first time
-
-                pDialog = new ProgressBarHandler(Episode_list_Activity.this);
-                pDialog.show();
-
-                footerView.setVisibility(View.GONE);
-            } else {
-                // show loader for first time
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                footerView.setVisibility(View.VISIBLE);
-
-            }
-
-        }
-
-
-    }
-*/
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
@@ -2797,14 +1995,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);*/
 
 
-                customListAdapter = new EpisodesListViewMoreAdapter(Episode_list_Activity.this, R.layout.episode_list_item, itemData, new EpisodesListViewMoreAdapter.OnItemClickListener() {
+              /*  customListAdapter = new EpisodesListViewMoreAdapter(Episode_list_Activity.this, R.layout.episode_list_item, itemData, new EpisodesListViewMoreAdapter.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(EpisodesListModel item) {
                         clickItem(item);
                     }
-                });
-                episodelist.setAdapter(customListAdapter);
+                });*/
+                //episodelist.setAdapter(customListAdapter);
+                customListAdapter.notifyDataSetChanged();
 
 
                 /*if (mBundleRecyclerViewState != null) {

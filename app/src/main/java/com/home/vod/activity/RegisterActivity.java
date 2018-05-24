@@ -171,6 +171,7 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.VALID_CONFIRM_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.OPEN_ID_BASE_URL;
 
 public class RegisterActivity extends AppCompatActivity implements
         RegistrationAsynTask.RegistrationDetailsListener,
@@ -3896,8 +3897,8 @@ public class RegisterActivity extends AppCompatActivity implements
                         stuff_name =  jsonObject.optString("name").trim();
                         stuff_user_id = jsonObject.optString("openid_userid").trim();
 
-                        if(true)
-                            return;
+                      /*  if(true)
+                            return;*/
 
                         /**
                          * Calling social auth API after getting response form stuffpix.
@@ -3917,9 +3918,8 @@ public class RegisterActivity extends AppCompatActivity implements
                     }else{
 
                         android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(stuff_msg);
                         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-                        dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+                        dlgAlert.setMessage(stuff_msg);
                         dlgAlert.setCancelable(false);
                         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
@@ -4574,7 +4574,7 @@ public class RegisterActivity extends AppCompatActivity implements
     public void naviagteStuffpixRegisterPage (){
         Intent intent = new Intent(RegisterActivity.this,StuffPixLoginRegisterActivity.class);
         intent.putExtra("titel",languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectSignup?openid_device_type=1&lang_code='"+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"'");
+        intent.putExtra("LoadUrl",OPEN_ID_BASE_URL+"OpenidConnect/OpenidConnectSignup?openid_device_type=1&lang_code='"+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"'");
         startActivityForResult(intent,STUFFPIX_RESULT);
     }
 }

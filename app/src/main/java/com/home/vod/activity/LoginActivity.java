@@ -175,6 +175,7 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.OPEN_ID_BASE_URL;
 
 public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener, GoogleApiClient.OnConnectionFailedListener,
         GetValidateUserAsynTask.GetValidateUserListener,
@@ -3743,8 +3744,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         stuff_name = jsonObject.optString("name").trim();
                         stuff_user_id = jsonObject.optString("openid_userid").trim();
 
-                        if (true)
-                            return;
+                      /*  if (true)
+                            return;*/
 
 
                         /**
@@ -3765,9 +3766,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     } else {
 
                         android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(stuff_msg);
                         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-                        dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+                        dlgAlert.setMessage(stuff_msg);
                         dlgAlert.setCancelable(false);
                         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
@@ -5931,7 +5931,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void naviagteStuffpixLoginPage() {
         Intent intent = new Intent(LoginActivity.this, StuffPixLoginRegisterActivity.class);
         intent.putExtra("titel", languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        intent.putExtra("LoadUrl", "https://player.edocent.com/OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='" + languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE) + "'");
+        intent.putExtra("LoadUrl", OPEN_ID_BASE_URL+"OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='" + languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE) + "'");
         startActivityForResult(intent, STUFFPIX_RESULT);
     }
 

@@ -3,12 +3,16 @@ package com.home.vod.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -95,7 +99,20 @@ public class StuffPixLoginRegisterActivity extends AppCompatActivity {
         stuff_webView.clearHistory();
         stuff_webView.clearFormData();
         stuff_webView.clearCache(true);
-        stuff_webView.clearView();
+//        (CookieManager.getInstance().getCookie("https://yahoo.com");
+
+        android.webkit.CookieManager cookieManager = CookieManager.getInstance();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
+                // a callback which is executed when the cookies have been removed
+                @Override
+                public void onReceiveValue(Boolean aBoolean) {
+
+                }
+            });
+        }
+        else cookieManager.removeAllCookie();
 
         stuff_webView.loadUrl(getIntent().getStringExtra("LoadUrl"));
 //      stuff_webView.loadUrl("https://player.edocent.com/OpenidConnect/OpenidConnectLogin?openid_device_type=2");
