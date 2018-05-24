@@ -12,8 +12,8 @@ public class HeaderConstants {
      * Constant for Auth Token Header used in API Call
      */
     public static final String AUTH_TOKEN = "authToken";
-    public static final String FEATURE_SECTION_LIMIT = "featureSecLimit";
-    public static final String FEATURE_SECTION_OFFSET = "featureSecOffset";
+    public static final String FEATURE_SECTION_LIMIT = "feature_sec_limit";
+    public static final String FEATURE_SECTION_OFFSET = "feature_sec_limit";
 
 
     /**

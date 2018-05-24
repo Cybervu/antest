@@ -17,6 +17,9 @@
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
 
+    <string name="stuff_login_text">Login With Stuff</string>
+    <string name="stuff_register_text">Register With Stuff</string>
+
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->

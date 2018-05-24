@@ -256,7 +256,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
                     }
                 });
                 mDemoSlider.addSlider(textSliderView);
-
             }
         }
     }

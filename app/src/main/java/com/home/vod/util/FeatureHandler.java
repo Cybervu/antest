@@ -30,6 +30,7 @@ public class FeatureHandler {
     public static final String IS_OFFLINE = "is_offline";
     public static final String IS_PLAYLIST = "isPlayList";
     public static final String IS_QUEUE = "isQueue";
+    public static final String STUFF_LOGIN_REGISTER = "is_stuff";
 
     public static final String IS_SUBTITLE = "isSubtitle";
     public static final String IS_RESOLUTION = "isResolution";
@@ -59,6 +60,7 @@ public class FeatureHandler {
     public static final String DEFAULT_IS_QUEUE = "0";
 
     public static final String DEFAULT_IS_SUBTITLE = "1";
+    public static final String DEFAULT_STUFF_LOGIN_REGISTER = "0";
     public static final String DEFAULT_IS_RESOLUTION = "1";
     public static final String DEFAULT_IS_FORGOTPASSWORD = "1";
     public static final String DEFAULT_IS_PURCHASEHISTORY = "1";
@@ -110,6 +112,19 @@ public class FeatureHandler {
             }else{
                 setFeatureFlag( IS_LOGIN , DEFAULT_IS_LOGIN);
             }
+
+            if(myJson1.has("openid_enabled") && myJson1.optString("openid_enabled").trim() != null && !myJson1.optString("openid_enabled").trim().isEmpty() && !myJson1.optString("is_stuff").trim().equals("null") && !myJson1.optString("openid_enabled").trim().matches("")) {
+                setFeatureFlag( STUFF_LOGIN_REGISTER , (myJson1.optString("openid_enabled")));
+            }else{
+                setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
+            }
+
+
+            // Hve to change
+
+            setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
+
+
 
             if(myJson1.has("isMylibrary") && myJson1.optString("isMylibrary").trim() != null && !myJson1.optString("isMylibrary").trim().isEmpty() && !myJson1.optString("isMylibrary").trim().equals("null") && !myJson1.optString("isMylibrary").trim().matches("")) {
                 setFeatureFlag( IS_MYLIBRARY , (myJson1.optString("isMylibrary")));

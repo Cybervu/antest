@@ -194,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity implements
     int countryPosition = 0;
     int langPosition = 0;
     /*********fb****/
-
+    public static final int STUFFPIX_RESULT = 10001;
 
     //for resume play
     String seek_status = "";
@@ -230,6 +230,7 @@ public class RegisterActivity extends AppCompatActivity implements
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
     public static ProgressBarHandler progressBarHandler;
     Player playerModel;
+    private TextView stuff_text;
 
     @Override
     public void onGmailRegPreExecuteStarted() {
@@ -483,6 +484,7 @@ public class RegisterActivity extends AppCompatActivity implements
     String isSubscribedStr = "";
     int keepAliveTime = 10;
     PreferenceManager preferenceManager;
+    LinearLayout register_stuff;
     Toolbar mActionBarToolbar;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -556,10 +558,24 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         registerImageView = (ImageView) findViewById(R.id.registerImageView);
-        /*editName = (EditText) findViewById(R.id.back_btn);
+        
 
-        editName_first = (EditText) findViewById(R.id.back_btn_first);
-        editName_last = (EditText) findViewById(R.id.back_btn_last);*/
+        if(featureHandler.getFeatureStatus(FeatureHandler.STUFF_LOGIN_REGISTER,FeatureHandler.DEFAULT_STUFF_LOGIN_REGISTER)){
+            register_stuff = (LinearLayout) findViewById(R.id.register_stuff);
+            stuff_text = (TextView) findViewById(R.id.stuff_text);
+            register_stuff.setVisibility(View.VISIBLE);
+            FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), stuff_text);
+
+            register_stuff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    naviagteStuffpixRegisterPage();
+                }
+            });
+        }
+
+        
+
 
         editEmail = (EditText) findViewById(R.id.email);
         editPassword = (EditText) findViewById(R.id.pwd);
@@ -3855,6 +3871,75 @@ public class RegisterActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == STUFFPIX_RESULT){
+
+            if(resultCode == RESULT_OK){
+
+                String stuff_name = "";
+                String stuff_mail = "";
+                String stuff_user_id = "";
+                String stuff_msg = "";
+                int code;
+
+                try{
+
+                    String Data_Frm_Stuff = data.getStringExtra("sutff_response").trim();
+                    Log.v("STUFF_RES1","Response == "+Data_Frm_Stuff);
+
+
+                    JSONObject jsonObject = new JSONObject(Data_Frm_Stuff);
+                    code = Integer.parseInt(jsonObject.optString("code").trim());
+                    stuff_msg = jsonObject.optString("msg").trim();
+
+                    if(code == 200){
+                        stuff_mail = jsonObject.optString("email").trim();
+                        stuff_name =  jsonObject.optString("name").trim();
+                        stuff_user_id = jsonObject.optString("openid_userid").trim();
+
+                        if(true)
+                            return;
+
+                        /**
+                         * Calling social auth API after getting response form stuffpix.
+                         */
+                        SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
+                        socialAuthInputModel.setAuthToken(authTokenStr);
+                        socialAuthInputModel.setName(stuff_name.trim());
+                        socialAuthInputModel.setEmail(stuff_mail.trim());
+                        socialAuthInputModel.setPassword("");
+                        socialAuthInputModel.setFb_userid(stuff_user_id.trim());
+                        socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        socialAuthInputModel.setDevice_type("1");
+                        socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
+                        asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+
+                    }else{
+
+                        android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+                        dlgAlert.setMessage(stuff_msg);
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
+                        dlgAlert.setCancelable(false);
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        dlgAlert.create().show();
+
+                    }
+
+                }catch (Exception e){}
+
+            }/*else{
+                Toast.makeText(getApplicationContext(),"Cancelled",Toast.LENGTH_SHORT).show();
+            }*/
+            return;
+        }
+
+
         if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
@@ -4484,6 +4569,13 @@ public class RegisterActivity extends AppCompatActivity implements
                 }*/
             }
         }
+    }
+
+    public void naviagteStuffpixRegisterPage (){
+        Intent intent = new Intent(RegisterActivity.this,StuffPixLoginRegisterActivity.class);
+        intent.putExtra("titel",languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        intent.putExtra("LoadUrl","https://player.edocent.com/OpenidConnect/OpenidConnectSignup?openid_device_type=1&lang_code='"+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"'");
+        startActivityForResult(intent,STUFFPIX_RESULT);
     }
 }
 

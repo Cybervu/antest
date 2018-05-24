@@ -14,21 +14,19 @@ import com.home.vod.activity.PPvPaymentInfoActivity;
 public class ToolbarTitleHandler {
     Activity activity;
 
-
-    public ToolbarTitleHandler(Activity activity){
-        this.activity=activity;
+    public ToolbarTitleHandler(Activity activity) {
+        this.activity = activity;
         try {
-            if (activity instanceof MainActivity){
-                ((MainActivity)activity).getSupportActionBar().setTitle("");
-                ((MainActivity)activity).toolbarimage.setVisibility(View.VISIBLE);
+            if (activity instanceof MainActivity) {
+                ((MainActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
+                ((MainActivity) activity).toolbarimage.setVisibility(View.GONE);
             }
-            if (activity instanceof PPvPaymentInfoActivity){
-                ((PPvPaymentInfoActivity)activity).getSupportActionBar().setTitle("");
-                ((PPvPaymentInfoActivity)activity).toolbarimage.setVisibility(View.VISIBLE);
+            if (activity instanceof PPvPaymentInfoActivity) {
+                ((PPvPaymentInfoActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
+                ((PPvPaymentInfoActivity) activity).toolbarimage.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
