@@ -13,7 +13,7 @@ public class HeaderConstants {
      */
     public static final String AUTH_TOKEN = "authToken";
     public static final String FEATURE_SECTION_LIMIT = "feature_sec_limit";
-    public static final String FEATURE_SECTION_OFFSET = "feature_sec_limit";
+    public static final String FEATURE_SECTION_OFFSET = "feature_sec_offset";
 
 
     /**
