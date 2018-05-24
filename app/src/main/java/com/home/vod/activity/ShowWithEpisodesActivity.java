@@ -2518,7 +2518,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Episode_Details_input episodeDetailsInput = new Episode_Details_input();
                 episodeDetailsInput.setAuthtoken(authTokenStr);
                 episodeDetailsInput.setPermalink(permalinkStr.trim());
-                episodeDetailsInput.setLimit("4");
+                episodeDetailsInput.setLimit("100");
                 episodeDetailsInput.setOffset("1");
                 episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
