@@ -672,6 +672,14 @@ android {
             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//-- Mob auth Token
             versionCode 1
             versionName '1.0'
+            signingConfigs {
+                release {
+                    storeFile file("app/Amgo.jks")
+                    storePassword "amgo123"
+                    keyAlias "amgo"
+                    keyPassword "amgo123"
+                }
+            }
         }
         amgo_staging_ {
             dimension 'environment'
