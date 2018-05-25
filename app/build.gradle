@@ -325,9 +325,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.quickflix'
-            versionCode 2
+            versionCode 3
             targetSdkVersion 25
-            versionName "1.2.7"
+            versionName "1.2.8"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
         }
@@ -555,9 +555,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.stuffpix'
-            versionCode 3
+            versionCode 4
             targetSdkVersion 25
-            versionName "2.1"
+            versionName "2.2"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"c7e66abf3072121103bfa3ee9cb097af\""
         }
@@ -771,11 +771,11 @@ android {
         }
         enotvplus_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://enotv.muvi.com/rest/\""
         }
         enotvplus_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://enotv.muvi.com/rest/\""
         }
     }
 }
