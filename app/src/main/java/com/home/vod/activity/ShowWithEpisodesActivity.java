@@ -5880,6 +5880,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        validateUserInput.setCountry(preferenceManager.getCountryCodeFromPref());
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }

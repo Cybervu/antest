@@ -692,6 +692,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         validateUserInput.setSeasonId("" + season_id);
                         validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
                         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        validateUserInput.setCountry(preferenceManager.getCountryCodeFromPref());
                         GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 

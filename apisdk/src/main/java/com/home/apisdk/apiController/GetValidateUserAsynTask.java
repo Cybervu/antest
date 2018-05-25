@@ -120,7 +120,8 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                     .appendQueryParameter(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
                     .appendQueryParameter(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId())
                     .appendQueryParameter(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
-                    .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
+                    .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType())
+                    .appendQueryParameter(HeaderConstants.COUNTRY, this.validateUserInput.getCountry());;
             String query = builder.build().getEncodedQuery();
             responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
