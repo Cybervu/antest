@@ -3759,6 +3759,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         socialAuthInputModel.setFb_userid(stuff_user_id.trim());
                         socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                         socialAuthInputModel.setDevice_type("1");
+                        socialAuthInputModel.setIs_openId(true);
                         socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
                         asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
@@ -3867,6 +3868,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             socialAuthInputModel.setFb_userid(fbUserId.trim());
             socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             socialAuthInputModel.setDevice_type("1");
+            socialAuthInputModel.setIs_openId(false);
+
             socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, this, this);
             asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
@@ -5931,7 +5934,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     public void naviagteStuffpixLoginPage() {
         Intent intent = new Intent(LoginActivity.this, StuffPixLoginRegisterActivity.class);
         intent.putExtra("titel", languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-        intent.putExtra("LoadUrl", OPEN_ID_BASE_URL+"OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='" + languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE) + "'");
+        intent.putExtra("LoadUrl", OPEN_ID_BASE_URL+"OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code="+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE)+"");
+//        intent.putExtra("LoadUrl", "https://player.edocent.com/OpenidConnect/OpenidConnectlogin?openid_device_type=1&lang_code='hi'");
         startActivityForResult(intent, STUFFPIX_RESULT);
     }
 
