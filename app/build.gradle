@@ -41,6 +41,7 @@ android {
 
     buildTypes {
         release {
+           // signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -346,8 +347,17 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
             targetSdkVersion 23
-            versionCode 4
+            versionCode 5
             versionName '3.0.1'
+
+            signingConfigs {
+                release {
+                    storeFile file("MuviReleaseCertificate.jks")
+                    storePassword "muvi123"
+                    keyAlias "muvi"
+                    keyPassword "muvi123"
+                }
+            }
         }
         onyx_staging_ {
             dimension 'environment'
