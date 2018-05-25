@@ -107,7 +107,7 @@
     <color name="spinnerTextColor">#fff</color>
     <color name="filterBgColor">#fff</color>
     <color name="alertPopupColor">#fff</color>
-    <color name="contactFormTitle">#333</color>
+    <color name="contactFormTitle">#ffffff</color>
     <color name="teal_100">#FFCDD2</color>
     <color name="teal_500">#F44336</color>
     <color name="disableTextColor">#50757575</color>
