@@ -480,7 +480,8 @@
                     android:id="@+id/new_play_button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
+                    android:textColor="@color/white"
                     android:layout_marginTop="@dimen/marginright10dp"
                     android:layout_marginBottom="@dimen/marginright10dp"
                     android:gravity="center"/>

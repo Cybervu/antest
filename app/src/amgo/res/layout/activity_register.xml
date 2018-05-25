@@ -24,7 +24,7 @@
             android:layout_marginLeft="@dimen/layout_padding_left"
             android:layout_marginRight="@dimen/layout_padding_right"
             android:orientation="vertical"
-            android:padding="@dimen/Login_drawing_padding">
+            >
 
 
             <ImageView
@@ -119,11 +119,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/ll"
-                android:layout_marginTop="@dimen/payment_relative_margin"
                 android:background="@color/buttonAmgo"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
+                android:padding="@dimen/register_edittext_padding"
                 android:textColor="@color/colorAmgoRed"
+                android:layout_marginTop="@dimen/login_maring_top"
                 android:textSize="@dimen/register_button" />
 
             <LinearLayout
@@ -302,6 +303,7 @@
                     android:layout_height="wrap_content"
                     android:text="Login"
                     android:textAllCaps="false"
+                    android:padding="@dimen/register_edittext_padding"
                     android:textColor="@color/white"
                     android:background="@color/colorAmgoRed"/>
                 </LinearLayout>

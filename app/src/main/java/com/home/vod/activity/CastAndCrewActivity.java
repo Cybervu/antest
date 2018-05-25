@@ -24,6 +24,7 @@ import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.StatusBarColor;
@@ -56,7 +57,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
 
     Toolbar mActionBarToolbar;
-    //TextView castCrewTitleTextView;
+    TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
     ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
@@ -112,9 +113,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         castAndCrewDetailsIntentHandler = new CastAndCrewDetailsIntentHandler(this);
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
-        // castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-        // FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
-        // castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+         castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
+         FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.light_fonts), castCrewTitleTextView);
+         castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = NetworkStatus.getInstance().isConnected(this);
 

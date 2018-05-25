@@ -97,6 +97,8 @@
                     android:stateListAnimator="@null"
                     android:ellipsize="end"
                     android:textAllCaps="false"
+                    android:paddingBottom="@dimen/login_padding_bottom"
+                    android:paddingTop="@dimen/login_padding_bottom"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
 
@@ -241,6 +243,8 @@
                         android:background="@color/buttonAmgo"
                         android:textAllCaps="false"
                         android:text="sign up"
+                        android:paddingBottom="@dimen/login_padding_bottom"
+                        android:paddingTop="@dimen/login_padding_bottom"
                         android:textColor="@color/sign_up_text_color"
                         android:textStyle="bold" />
                 </LinearLayout>

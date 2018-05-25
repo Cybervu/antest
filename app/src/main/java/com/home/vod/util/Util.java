@@ -267,7 +267,8 @@ public class Util {
             return "[" + chars + "]+(?:\\.[" + chars + "]+)*";
         }
 
-        public static boolean isValidEmailAddress(String address) {
+        public static boolean isValidEmailAddress(String Address) {
+            String address= Address.toLowerCase();
             return address != null && emailPattern.matcher(address).matches();
         }
 

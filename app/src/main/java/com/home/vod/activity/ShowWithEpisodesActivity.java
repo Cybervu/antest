@@ -2518,7 +2518,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Episode_Details_input episodeDetailsInput = new Episode_Details_input();
                 episodeDetailsInput.setAuthtoken(authTokenStr);
                 episodeDetailsInput.setPermalink(permalinkStr.trim());
-                episodeDetailsInput.setLimit("100");
+                episodeDetailsInput.setLimit("1000");
                 episodeDetailsInput.setOffset("1");
                 episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -2539,20 +2539,37 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
 
-                try {
-                    if (SeasonID.size() > 0) {
+                contentPriceDetailsAPICall();
+
+               /* try {
+                    if (SeasonID.size()>0) {
+                        NewPlayButton.setVisibility(View.VISIBLE);
                         for (int i = 0; i < SeasonID.size(); i++) {
-                            if (data1[1].equalsIgnoreCase(SeasonID.get(i))) {
+                            if (data1[1].equalsIgnoreCase(season.get(i))) {
                                 if (isFreeContent == 1) {
                                     newPlayImage.setVisibility(View.VISIBLE);
-                                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
+                                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
 
                                 } else {
                                     newPlayImage.setVisibility(View.GONE);
-                                    if (subs) {
-                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+ SubscribedSeasonPrice.get(i));
+                                    if (preferenceManager.getLoginStatusFromPref() != null) {
+                                        if (!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                                            if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                                subs = true;
+                                                newPlayImage.setVisibility(View.GONE);
+                                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + SubscribedSeasonPrice.get(i));
+                                            } else {
+                                                subs = false;
+                                                newPlayImage.setVisibility(View.GONE);
+                                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
+                                            }
+                                        } else {
+                                            newPlayImage.setVisibility(View.VISIBLE);
+                                            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
+                                        }
                                     } else {
-                                        newPlayText.setText( languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+ NonSubscribedSeasonPrice.get(i));
+                                        newPlayImage.setVisibility(View.GONE);
+                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
 
                                     }
                                 }
@@ -2562,8 +2579,37 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         }
                     }
                 } catch (Exception e) {
+
                     e.printStackTrace();
-                }
+                    if (isFreeContent == 1) {
+                        NewPlayButton.setVisibility(View.VISIBLE);
+                        newPlayImage.setVisibility(View.VISIBLE);
+                        newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
+
+                    } else {
+                        NewPlayButton.setVisibility(View.VISIBLE);
+                        newPlayImage.setVisibility(View.GONE);
+                        if (preferenceManager.getLoginStatusFromPref() != null) {
+                            if (!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                                if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                    subs = true;
+                                    newPlayImage.setVisibility(View.GONE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonSubscribedPrice);
+                                } else {
+                                    subs = false;
+                                    newPlayImage.setVisibility(View.GONE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
+                                }
+                            } else {
+                                newPlayImage.setVisibility(View.VISIBLE);
+                                newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
+                            }
+                        } else {
+                            newPlayImage.setVisibility(View.GONE);
+                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
+                        }
+                    }
+                }*/
 
 
             }
@@ -6271,7 +6317,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
         LogUtil.showLog("Kushal contentPrice", contentPriceDetailsOutput.toString());
-        try {
+       /* try {*/
             SubscribedSeasonPrice = new ArrayList<>();
             NonSubscribedSeasonPrice = new ArrayList<>();
             SeasonID = new ArrayList<>();
@@ -6290,9 +6336,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
             setPriceToButton();
 
-            NewPlayButton.setVisibility(View.VISIBLE);
-
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             SubscribedSeasonPrice = new ArrayList<>();
             NonSubscribedSeasonPrice = new ArrayList<>();
             SeasonID = new ArrayList<>();
@@ -6300,58 +6344,119 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             NonSubscribedEpisodePrice = "0";
             DefaultSeasonSubscribedPrice = "0";
             DefaultSeasonNonSubscribedPrice = "0";
-        }
+        }*/
 
     }
 
     private void setPriceToButton() {
-        isLogin = preferenceManager.getLoginFeatureFromPref();
         if (isFreeContent == 1) {
+            NewPlayButton.setVisibility(View.VISIBLE);
             SubscribedEpisodePrice="0";
             NonSubscribedEpisodePrice= "0";
             newPlayImage.setVisibility(View.VISIBLE);
             newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON) );
 
         } else {
-            newPlayImage.setVisibility(View.GONE);
-            String data = season.get(season_spinner.getSelectedItemPosition());
-            String[] data1 = data.split(" ");
-            if (SeasonID.size() > 0) {
-                for (int i = 0; i < SeasonID.size(); i++) {
-                    if (data1[1].equalsIgnoreCase(SeasonID.get(i))) {
-                        if (isFreeContent == 1) {
-                            newPlayImage.setVisibility(View.VISIBLE);
-                            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON));
+            try {
+                if (SeasonID.size() > 0) {
+                    String data = SeasonID.get(season_spinner.getSelectedItemPosition());
+                    String[] data1 = data.split(" ");
+                    for (int i = 0; i < SeasonID.size(); i++) {
+                        if (data1[1].equalsIgnoreCase(SeasonID.get(i))) {
+                            if (isFreeContent == 1) {
+                                NewPlayButton.setVisibility(View.VISIBLE);
+                                newPlayImage.setVisibility(View.VISIBLE);
+                                newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
 
-                        } else {
-                            newPlayImage.setVisibility(View.GONE);
-                            if (preferenceManager.getLoginStatusFromPref()!=null) {
-                                if(!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
-                                    if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
-                                        subs = true;
-                                        newPlayImage.setVisibility(View.GONE);
-                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + SubscribedSeasonPrice.get(i));
+                            } else {
+                                NewPlayButton.setVisibility(View.VISIBLE);
+                                newPlayImage.setVisibility(View.GONE);
+                                if (preferenceManager.getLoginStatusFromPref() != null) {
+                                    if (!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                                        if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                            subs = true;
+                                            newPlayImage.setVisibility(View.GONE);
+                                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + SubscribedSeasonPrice.get(i));
+                                        } else {
+                                            subs = false;
+                                            newPlayImage.setVisibility(View.GONE);
+                                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
+                                        }
                                     } else {
-                                        subs = false;
-                                        newPlayImage.setVisibility(View.GONE);
-                                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
+                                        newPlayImage.setVisibility(View.VISIBLE);
+                                        newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
                                     }
-                                }else{
-                                    newPlayImage.setVisibility(View.VISIBLE);
-                                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON,DEFAULT_PLAY_BUTTON));
+                                } else {
+                                    newPlayImage.setVisibility(View.GONE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + NonSubscribedSeasonPrice.get(i));
+
+                                }
+                            }
+
+
+                        }
+                    }
+                }else{
+                    if (isFreeContent == 1) {
+                        NewPlayButton.setVisibility(View.VISIBLE);
+                        newPlayImage.setVisibility(View.VISIBLE);
+                        newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
+
+                    } else {
+                        NewPlayButton.setVisibility(View.VISIBLE);
+                        newPlayImage.setVisibility(View.GONE);
+                        if (preferenceManager.getLoginStatusFromPref() != null) {
+                            if (!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                                if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                    subs = true;
+                                    newPlayImage.setVisibility(View.GONE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonSubscribedPrice);
+                                } else {
+                                    subs = false;
+                                    newPlayImage.setVisibility(View.GONE);
+                                    newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
                                 }
                             } else {
-                                newPlayImage.setVisibility(View.GONE);
-                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON,DEFAULT_BUY_BUTTON) +" "+  NonSubscribedSeasonPrice.get(i));
-
+                                newPlayImage.setVisibility(View.VISIBLE);
+                                newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
                             }
+                        } else {
+                            newPlayImage.setVisibility(View.GONE);
+                            newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
                         }
+                    }
+                }
+            }catch (Exception e) {
+                if (isFreeContent == 1) {
+                    NewPlayButton.setVisibility(View.VISIBLE);
+                    newPlayImage.setVisibility(View.VISIBLE);
+                    newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
 
-
+                } else {
+                    NewPlayButton.setVisibility(View.VISIBLE);
+                    newPlayImage.setVisibility(View.GONE);
+                    if (preferenceManager.getLoginStatusFromPref() != null) {
+                        if (!preferenceManager.getIsPurchase().equalsIgnoreCase("1")) {
+                            if (preferenceManager.getIsSubscribed().equalsIgnoreCase("1")) {
+                                subs = true;
+                                newPlayImage.setVisibility(View.GONE);
+                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonSubscribedPrice);
+                            } else {
+                                subs = false;
+                                newPlayImage.setVisibility(View.GONE);
+                                newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
+                            }
+                        } else {
+                            newPlayImage.setVisibility(View.VISIBLE);
+                            newPlayText.setText(languagePreference.getTextofLanguage(PLAY_BUTTON, DEFAULT_PLAY_BUTTON));
+                        }
+                    } else {
+                        newPlayImage.setVisibility(View.GONE);
+                        newPlayText.setText(languagePreference.getTextofLanguage(BUY_BUTTON, DEFAULT_BUY_BUTTON) + " " + DefaultSeasonNonSubscribedPrice);
                     }
                 }
             }
-        }
+            }
     }
 
 

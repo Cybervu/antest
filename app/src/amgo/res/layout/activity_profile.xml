@@ -221,12 +221,13 @@
                     <Button
                         android:id="@+id/update_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/changepas_height"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@color/colorAmgoRed"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
+                        android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -235,12 +236,13 @@
                     <Button
                         android:id="@+id/change_password"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/changepas_height"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@color/colorAmgoRed"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
+                        android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -249,12 +251,13 @@
                     <Button
                         android:id="@+id/manage_devices"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/changepas_height"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@color/colorAmgoRed"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
+                        android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/changepas_edittest"
 

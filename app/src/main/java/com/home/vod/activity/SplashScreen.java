@@ -201,6 +201,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     // Kushal
     private static final int RC_SETTINGS = 6739;
+    private static final int RC_PLAY_SERVICE = 6733;
 
 
     private void _init() {
@@ -448,6 +449,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (requestCode == RC_SETTINGS ) {
             askPermission();
         }
+        else if(requestCode == RC_PLAY_SERVICE){
+            askPermission();
+        }
         // finish();
     }
 
@@ -465,7 +469,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         _init();
         // Kushal
-        checkGooglePlaySeviceUpdate();
+        //if(checkGooglePlaySeviceUpdate())
         askPermission();
 
         apiChcekTimer = new Timer();
@@ -572,12 +576,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     }
 
-    private void checkGooglePlaySeviceUpdate() {
+    private boolean checkGooglePlaySeviceUpdate() {
+        boolean ifTrue= false;
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode != ConnectionResult.SUCCESS) {
 
             // show your own AlertDialog for example:
             AlertDialog.Builder builder = new AlertDialog.Builder(SplashScreen.this);
+            builder.setCancelable(false);
             // set the message
             builder.setMessage("This app use google play services only for optional features")
                     .setTitle("Do you want to update?"); // set a title
@@ -588,20 +594,27 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                     final String appPackageName = "com.google.android.gms";
                     try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)),RC_PLAY_SERVICE);
+                       // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                     }catch (android.content.ActivityNotFoundException anfe) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)),RC_PLAY_SERVICE);
+                        //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                     }
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+           /* builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    finish();
                     // User cancelled the dialog
                 }
-            });
+            });*/
             AlertDialog dialog = builder.create();
+            dialog.show();
 
+        }else{
+            ifTrue=true;
         }
+        return ifTrue;
     }
 
     @Override

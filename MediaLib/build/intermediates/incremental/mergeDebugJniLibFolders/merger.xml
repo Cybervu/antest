@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Files/AndroidApplications/VOD_CLONE/MediaLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/Files/AndroidApplications/VOD_CLONE/MediaLib/src/debug/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/home/muvi/Desktop/Kushal/VOD_CLONE/MediaLib/src/debug/jniLibs"/></dataSet></merger>

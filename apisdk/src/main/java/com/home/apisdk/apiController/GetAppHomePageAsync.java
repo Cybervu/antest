@@ -174,7 +174,7 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
                         }
                     } else {
                         homePageBannerModel = new HomePageBannerModel();
-                        homePageBannerModel.setImage_path("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
+                        homePageBannerModel.setImage_path("https://www.beautycolorcode.com/121212-1280x1024.png");
                         homePageBannerModelArrayList.add(homePageBannerModel);
                     }
                 }
