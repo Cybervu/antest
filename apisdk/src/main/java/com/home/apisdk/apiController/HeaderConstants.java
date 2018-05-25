@@ -85,6 +85,8 @@ public class HeaderConstants {
      * Constant for Facebook User Id Header used in API Call
      */
     public static final String FB_USER_ID = "fb_userid";
+
+    public static final String OPEN_ID_USER_ID = "openid_userid";
     /**
      * Constant for IP Header used in API Call
      */

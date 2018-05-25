@@ -61,7 +61,8 @@
             <EditText
                 android:id="@+id/voucher_code"
                 android:layout_width="@dimen/main_frame_height"
-                android:layout_height="@dimen/card_expiry_height"
+                android:minHeight="@dimen/card_expiry_height"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/textColor_margin"
                 android:layout_weight="2"
                 android:hint="Enter Voucher Code"

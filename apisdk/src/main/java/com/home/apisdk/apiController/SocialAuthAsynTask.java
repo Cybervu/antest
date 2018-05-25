@@ -109,10 +109,17 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
             httppost.addHeader(HeaderConstants.EMAIL, this.socialAuthInputModel.getEmail());
             httppost.addHeader(HeaderConstants.PASSWORD, this.socialAuthInputModel.getPassword());
             httppost.addHeader(HeaderConstants.NAME, this.socialAuthInputModel.getName());
-            httppost.addHeader(HeaderConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.socialAuthInputModel.getLanguage());
             httppost.addHeader(HeaderConstants.DEVICE_ID, this.socialAuthInputModel.getDevice_id());
             httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.socialAuthInputModel.getDevice_type());
+
+
+            if(this.socialAuthInputModel.getIs_openId()){
+                httppost.addHeader(HeaderConstants.OPEN_ID_USER_ID, this.socialAuthInputModel.getFb_userid());
+            }else{
+                httppost.addHeader(HeaderConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
+            }
+
 
             // Execute HTTP Post Request
             try {
