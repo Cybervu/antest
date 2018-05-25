@@ -122,7 +122,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
  */
 public class Util {
 
-    public static String OPEN_ID_BASE_URL = "https://player.edocent.com/";
+    public static String OPEN_ID_BASE_URL = "https://muvi618.edocent.com/";
 
     public static MediaInfo mSendingMedia;
     public static boolean drawer_line_visibility = true;

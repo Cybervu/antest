@@ -13,6 +13,16 @@ public class SocialAuthInputModel {
     String password;
     String name;
 
+    public boolean getIs_openId() {
+        return is_openId;
+    }
+
+    public void setIs_openId(boolean is_openId) {
+        this.is_openId = is_openId;
+    }
+
+    boolean is_openId = false;
+
     /**
      * This Method is use to Get the Device Type
      *
