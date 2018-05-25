@@ -39,7 +39,7 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.R.id.loginWithFacebookButton;
-import static com.home.vod.R.id.registerButton;
+
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -79,22 +79,19 @@ public class RegisterUIHandler {
 
     public RegisterUIHandler(Activity context) {
         this.context = context;
+        languagePreference = LanguagePreference.getLanguagePreference(context);
         termsTextView = (TextView) context.findViewById(R.id.terms);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
-
-        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
+        TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
+        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK));
+        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
-        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-        fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
-        btnLogin.setVisibility(View.VISIBLE);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         googleSignView.setVisibility(View.VISIBLE);
         editName = (EditText) context.findViewById(R.id.name);
-        languagePreference = LanguagePreference.getLanguagePreference(context);
-
 
 
         FeatureHandler featureHandler = FeatureHandler.getFeaturePreference(context);
@@ -103,12 +100,12 @@ public class RegisterUIHandler {
         }else {
             btnLogin.setVisibility(View.GONE);
         }
-
         if(featureHandler.getFeatureStatus(FeatureHandler.GOOGLE,FeatureHandler.DEFAULT_GOOGLE)) {
             googleSignView.setVisibility(View.VISIBLE);
         }else {
             googleSignView.setVisibility(View.GONE);
         }
+
     }
 
     public void setCountryList(PreferenceManager preferenceManager) {
@@ -144,7 +141,6 @@ public class RegisterUIHandler {
     public void callFblogin(final CallbackManager callbackManager, Button registerButton, LanguagePreference languagePreference) {
         this.registerButton = registerButton;
         this.languagePreference = languagePreference;
-        fbLoginTextView.setText(languagePreference.getTextofLanguage(LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
