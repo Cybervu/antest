@@ -111,6 +111,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
@@ -860,12 +861,12 @@ public class RegisterActivity extends AppCompatActivity implements
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL), Toast.LENGTH_LONG).show();
                 return;
             }
+
             boolean isValidEmail = Util.isValidMail(regEmailStr);
             if(!isValidEmail){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 return;
             }
-
             if(regPasswordStr.trim().equals("")){
                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD), Toast.LENGTH_LONG).show();
 

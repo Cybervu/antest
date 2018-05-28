@@ -41,7 +41,7 @@
     <color name="style_circular_color_2">#0faae3</color>
     <color name="spinner_card_color2">#FAFAFA</color>
     <color name="forgotPasswordTextViewColor">#0faae3</color>
-    <color name="iv_check_box_default_color">#000000</color>
+    <color name="iv_check_box_default_color">#8f8f8f</color>
     <color name="fb_text_color">#fff</color>
     <color name="layout_background_color">#fdf3f3</color>
     <color name="login_new_user_text_color">#6e6f76</color>
