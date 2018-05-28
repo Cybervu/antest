@@ -217,6 +217,12 @@ public class APIUrlConstant {
      */
     public static String GmailRegUrl = "socialAuth";
 
+    public static String OpenId = "socialAuth";
+
+    public static String getOpenIdUrl() {
+        return BASE_URl + OpenId;
+    }
+
     public static String getGmailRegUrl() {
         return BASE_URl + GmailRegUrl;
     }

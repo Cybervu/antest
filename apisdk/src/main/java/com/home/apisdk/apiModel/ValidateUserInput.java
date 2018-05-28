@@ -6,7 +6,31 @@ package com.home.apisdk.apiModel;
  * @author MUVI
  */
 public class ValidateUserInput {
-    String authToken, userId, muviUniqueId, episodeStreamUniqueId, purchaseType, seasonId, languageCode;
+    String authToken;
+    String userId;
+    String muviUniqueId;
+    String episodeStreamUniqueId;
+    String purchaseType;
+    String seasonId;
+    String languageCode;
+    /**
+     * This Method is use to Get the Country
+     *
+     * @return country
+     */
+    public String getCountry() {
+        return country;
+    }
+    /**
+     * This Method is use to Set the Country
+     *
+     * @param country For Setting The Auth Token
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    String country;
 
     /**
      * This Method is use to Get the Auth Token

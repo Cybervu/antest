@@ -1348,6 +1348,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                                         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                        validateUserInput.setCountry(preferenceManager.getCountryCodeFromPref());
                                         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                     } else {
@@ -4029,6 +4030,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        validateUserInput.setCountry(preferenceManager.getCountryCodeFromPref());
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }

@@ -3812,6 +3812,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        validateUserInput.setCountry(preferenceManager.getCountryCodeFromPref());
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Episode_list_Activity.this, Episode_list_Activity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }
