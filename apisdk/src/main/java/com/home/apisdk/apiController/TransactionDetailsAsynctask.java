@@ -93,12 +93,6 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
 
     @Override
     protected Void doInBackground(TransactionInputModel... params) {

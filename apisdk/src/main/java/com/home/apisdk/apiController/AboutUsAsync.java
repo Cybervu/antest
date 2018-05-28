@@ -84,12 +84,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return Null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(AboutUsInput... params) {

@@ -38,7 +38,7 @@ public class VoucherSubscriptionInputModel {
     /**
      * This Method is use to Set the Season
      *
-     * @param season
+     * @param season Season
      */
     public void setSeason(String season) {
         this.season = season;

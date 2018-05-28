@@ -86,12 +86,7 @@ public class GetTranslateLanguageAsync extends AsyncTask<Void, Void, String> {
         Log.v("MUVISDK", "register user payment");
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return resultJsonString
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected String doInBackground(Void... params) {

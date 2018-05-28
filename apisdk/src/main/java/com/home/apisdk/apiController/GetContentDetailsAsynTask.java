@@ -99,12 +99,6 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
     @Override
     protected Void doInBackground(ContentDetailsInput... params) {
 

@@ -80,12 +80,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(Void... params) {

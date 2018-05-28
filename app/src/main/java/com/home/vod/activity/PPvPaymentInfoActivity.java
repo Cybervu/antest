@@ -3338,6 +3338,11 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 

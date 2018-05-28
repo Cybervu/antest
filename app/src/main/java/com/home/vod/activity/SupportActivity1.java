@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.home.vod.R;
 
 

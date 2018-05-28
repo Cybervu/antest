@@ -690,6 +690,11 @@ public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTa
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 

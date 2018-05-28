@@ -945,6 +945,11 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 

@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.home.vod.R;
 import com.home.vod.activity.MyDownloads;
 import com.home.vod.preferences.LanguagePreference;
@@ -107,11 +108,18 @@ public class MyDownloadAdapter extends BaseAdapter {
         ImageView image = (ImageView) v.findViewById(R.id.imageView);
         ImageView image1 = (ImageView) v.findViewById(R.id.imageView1);
 //
-        Picasso.with(activity)
+        /*Picasso.with(activity)
                 .load(downloadModel.get(position).getPoster())
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.logo)
+                .into(image);*/
+        Glide.with(activity)
+                .load(downloadModel.get(position).getPoster())
+                .placeholder(R.drawable.logo)
+                .error(R.drawable.logo)
+                .thumbnail(0.1f)
                 .into(image);
+
         title.setText(downloadModel.get(position).getMUVIID());
         realise_date.setText("");
 

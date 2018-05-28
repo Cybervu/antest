@@ -97,12 +97,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(ValidateUserInput... params) {

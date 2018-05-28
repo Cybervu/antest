@@ -85,13 +85,6 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
-
     @Override
     protected Void doInBackground(GmailLoginInput... params) {
 //            String urlRouteList = "https://www.muvi.com/rest/socialAuth";

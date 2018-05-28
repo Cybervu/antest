@@ -93,12 +93,7 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(VideoLogsInputModel... params) {

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.home.vod.R;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
@@ -65,6 +66,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     private ArrayList<SingleItemModel> itemsList;
     private Context mContext;
+    public static int sampleSize=100;
 
     public SectionListDataAdapter(Context context, ArrayList<SingleItemModel> itemsList, int layoutname) {
         this.itemsList = itemsList;
@@ -116,21 +118,34 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                         .error(R.drawable.transparent)      // optional
                         .into(holder.itemImage);
             }else {*/
-                Picasso.with(mContext)
+                /*Picasso.with(mContext)
                         .load(singleItem.getImage())
                         .placeholder(R.drawable.logo)   // optional
                         .error(R.drawable.logo)      // optional
+                        .into(holder.itemImage);*/
+
+
+                Glide.with(mContext)
+                        .load(singleItem.getImage())
+                        .placeholder(R.drawable.logo)
+                        .error(R.drawable.logo)
+                        .thumbnail(0.3f)
                         .into(holder.itemImage);
 //            }
             }else{
-                Picasso.with(mContext)
+                /*Picasso.with(mContext)
                         .load(R.drawable.logo)
                         .placeholder(R.drawable.logo)   // optional
                         .error(R.drawable.logo)      // optional
+                        .into(holder.itemImage);*/
+
+                Glide.with(mContext)
+                        .load(R.drawable.logo)
+                        .placeholder(R.drawable.logo)
+                        .error(R.drawable.logo)
                         .into(holder.itemImage);
             }
         }catch (Exception e){ Log.v("BIBHU12", "section adapter Exception==============" + e.toString());}
-
 
 
     }
@@ -188,14 +203,15 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight){
         final BitmapFactory.Options opt =new BitmapFactory.Options();
         opt.inJustDecodeBounds=true;
+        opt.inSampleSize=sampleSize;
         BitmapFactory.decodeResource(res, resId, opt);
         opt.inSampleSize = calculateInSampleSize(opt,reqWidth,reqHeight);
         opt.inJustDecodeBounds=false;
         return BitmapFactory.decodeResource(res, resId, opt);
     }
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
-        final int height = opt.outHeight;
-        final int width = opt.outWidth;
+        final int height = opt.outHeight*sampleSize;
+        final int width = opt.outWidth*sampleSize;
         int sampleSize=1;
         if (height > reqHeight || width > reqWidth){
             final int halfWidth = width/2;

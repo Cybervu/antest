@@ -92,12 +92,7 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
         Log.v("MUVISDK", "authToken = " + this.loadVideoInput.getAuthToken());
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(LoadVideoInput... params) {

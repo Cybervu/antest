@@ -92,12 +92,6 @@ public class UpdateGoogleIdAsynTask extends AsyncTask<UpdateGoogleIdInputModel, 
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
 
     @Override
     protected Void doInBackground(UpdateGoogleIdInputModel... params) {

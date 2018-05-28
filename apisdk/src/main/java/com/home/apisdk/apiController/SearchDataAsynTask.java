@@ -92,12 +92,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
         Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(Search_Data_input... params) {

@@ -90,12 +90,7 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
         Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
     @Override
     protected Void doInBackground(Forgotpassword_input... params) {
 

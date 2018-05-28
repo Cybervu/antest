@@ -73,6 +73,7 @@ import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
+import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMonitizationDetailsAsync;
@@ -94,6 +95,8 @@ import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.Episode_Details_input;
 import com.home.apisdk.apiModel.Episode_Details_output;
+import com.home.apisdk.apiModel.GenreListInput;
+import com.home.apisdk.apiModel.GenreListOutput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
 import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
@@ -161,94 +164,17 @@ import player.activity.ResumePopupActivity;
 import player.activity.ThirdPartyPlayer;
 import player.activity.YouTubeAPIActivity;
 
-import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.APP_ON;
-import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
-import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.COMPLETE_SEASON;
-import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADDED_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_COMPLETE_SEASON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PURCHASE_TYPE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
-import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
-import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
-import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
-import static com.home.vod.preferences.LanguagePreference.NEXT;
-import static com.home.vod.preferences.LanguagePreference.NO;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
-import static com.home.vod.preferences.LanguagePreference.NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
-import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static com.home.vod.preferences.LanguagePreference.REVIEWS;
-import static com.home.vod.preferences.LanguagePreference.SEASON;
-import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.SELECT_PURCHASE_TYPE;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
-import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
-import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
-import static com.home.vod.preferences.LanguagePreference.VOUCHER_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
-import static com.home.vod.preferences.LanguagePreference.YES;
+import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.util.Constant.CAST_INTENT_KEY;
 import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
 import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
@@ -272,7 +198,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         ViewContentRatingAsynTask.ViewContentRatingListener, GetIpAddressAsynTask.IpAddressListener,
         GetMonitizationDetailsAsync.GetMonitizationDetailsListner
         , VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener,
-        GetVoucherPlanAsynTask.GetVoucherPlanListener {
+        GetVoucherPlanAsynTask.GetVoucherPlanListener,
+        GetGenreListAsynctask.GenreListListener{
 
 
     String movieDetailsStr = "";
@@ -337,6 +264,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     LinearLayout linearLayout[];
     boolean[] visibility;
     String[] lang;
+    private ArrayList<String> genreArrayList = new ArrayList<String>();
+    private ArrayList<String> genreValueArrayList = new ArrayList<String>();
+    private String[] genreArrToSend;
+    private String[] genreValueArrayToSend;
     //
 
     @Override
@@ -359,20 +290,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             try {
                 Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
+                getGenreData(Default_Language);
 
-                languageCustomAdapter.notifyDataSetChanged();
-
-               /* Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);*/
-
-                final Intent detailsIntent = new Intent(ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.class);
-                detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(detailsIntent);
-                finish();
-
-                preferenceManager.setLanguageChangeStatus("1");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -4488,6 +4407,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 
@@ -6198,5 +6122,146 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+    }
+
+
+    @Override
+    public void onGetGenreListPreExecuteStarted() {
+            pDialog= new ProgressBarHandler(ShowWithEpisodesActivity.this);
+            pDialog.show();
+    }
+
+    @Override
+    public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+        if (code > 0) {
+
+            if (code == 200) {
+                genreArrayList.clear();
+                genreValueArrayList.clear();
+                int lengthJsonArr = genreListOutput.size();
+                if (lengthJsonArr > 0) {
+                    genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
+                    genreValueArrayList.add(0, "");
+
+                }
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    genreArrayList.add(genreListOutput.get(i).getGenre_name());
+                    genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
+                }
+
+                if (genreArrayList.size() > 1) {
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                    genreValueArrayList.add(genreValueArrayList.size(), "");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                }
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+            } else {
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+
+            }
+        } else {
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+            genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+            genreArrToSend = new String[genreArrayList.size()];
+            genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+            genreValueArrayToSend = new String[genreValueArrayList.size()];
+            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+        }
+
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < genreArrToSend.length; i++) {
+            sb.append(genreArrToSend[i]).append(",");
+        }
+        preferenceManager.setGenreArrayToPref(sb.toString());
+
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < genreValueArrayToSend.length; i++) {
+            sb1.append(genreValueArrayToSend[i]).append(",");
+        }
+
+        preferenceManager.setGenreValuesArrayToPref(sb1.toString());
+        languageCustomAdapter.notifyDataSetChanged();
+
+               /* Intent intent = new Intent(ShowWithEpisodesActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);*/
+
+        final Intent detailsIntent = new Intent(ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.class);
+        detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(detailsIntent);
+        finish();
+
+        preferenceManager.setLanguageChangeStatus("1");
+
+
+    }
+    private void getGenreData(String lang) {
+        GenreListInput genreListInput = new GenreListInput();
+        genreListInput.setAuthToken(authTokenStr);
+        genreListInput.setLang_code(lang);
+
+        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
     }
 }

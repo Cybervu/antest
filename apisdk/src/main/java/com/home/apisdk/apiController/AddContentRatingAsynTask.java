@@ -93,12 +93,7 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return Null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(AddContentRatingInputModel... params) {

@@ -108,6 +108,7 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput, Void, Void>
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.genreListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.genreListInput.getLang_code());
 
             // Execute HTTP Post Request
             try {

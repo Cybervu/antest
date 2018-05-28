@@ -92,12 +92,7 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
         Log.v("MUVISDK", "authToken = " + this.planListInput.getAuthToken());
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(SubscriptionPlanInputModel... params) {

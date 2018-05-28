@@ -16,7 +16,7 @@
   -->
 <resources>
 
-    <style name="Theme.CastVideosTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.CastVideosTheme" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Set AppCompat’s color theming attrs -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -30,7 +30,7 @@
         </item>
     </style>
 
-    <style name="Theme.CastVideosDark" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.CastVideosDark" parent="android:Theme.Material.NoActionBar">
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="castMiniControllerStyle">@style/CustomCastMiniController</item>
         <item name="castIntroOverlayStyle">@style/CustomCastIntroOverlay</item>
@@ -67,7 +67,7 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
-    <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AppThemeDialog" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
@@ -80,12 +80,12 @@
     </style>
 
     <style name="TextAppearance.CustomCastIntroOverlay.Button"
-           parent="android:style/TextAppearance">
+           parent="@android:style/TextAppearance">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="TextAppearance.CustomCastIntroOverlay.Title"
-           parent="android:style/TextAppearance.Large">
+           parent="@android:style/TextAppearance.Large">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 

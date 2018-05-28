@@ -93,12 +93,6 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
 
     @Override
     protected Void doInBackground(CheckGeoBlockInputModel... params) {

@@ -232,7 +232,7 @@ public class Util {
     }
 
     //Email Validation for activity_login
-    public static boolean isValidMail(String email2) {
+  /*  public static boolean isValidMail(String email2) {
         boolean check;
         Pattern p;
         Matcher m;
@@ -244,6 +244,20 @@ public class Util {
         if (!check) {
         }
         return check;
+    } */
+
+    private static final String domainChars = "a-z0-9\\-";
+    private static final String atomChars = "a-z0-9\\Q!#$%&'*+-/=?^_`{|}~\\E";
+    private static final String emailRegex = "^" + dot(atomChars) + "@" + dot(domainChars) + "$";
+    private static final Pattern emailPattern = Pattern.compile(emailRegex);
+
+    private static String dot(String chars) {
+        return "[" + chars + "]+(?:\\.[" + chars + "]+)*";
+    }
+
+    public static boolean isValidMail(String email2) {
+            String address= email2.toLowerCase();
+            return address != null && emailPattern.matcher(address).matches();
     }
 
     public static boolean isValidPhone(String phone) {

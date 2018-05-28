@@ -132,6 +132,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         LoadFilterVideoAsync.LoadFilterVideoListner {
 
     public static boolean clearClicked = false;
+    int sampleSize= 100;
 
 
     @Override
@@ -2394,6 +2395,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 
@@ -2480,9 +2486,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
                 URL url = new URL(urls[0]);
-                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                videoHeight = bmp.getHeight();
-                videoWidth = bmp.getWidth();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                options.inJustDecodeBounds=true;
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream(), null, options);
+               // Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight()*sampleSize;
+                videoWidth = bmp.getWidth()*sampleSize;
 
 
                 LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);

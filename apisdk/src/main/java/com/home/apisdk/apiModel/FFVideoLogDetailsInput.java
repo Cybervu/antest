@@ -133,7 +133,7 @@ public class FFVideoLogDetailsInput {
     /**
      * This Method is use to Set the Watch Status
      *
-     * @param watch_status
+     * @param watch_status Status
      */
     public void setWatch_status(String watch_status) {
         this.watch_status = watch_status;

@@ -454,6 +454,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         else {
             defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE);
+            this.default_Language = defaultLanguage;
+            languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
         }
 
         // Call For Language Translation.
@@ -647,6 +649,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         GenreListInput genreListInput = new GenreListInput();
         genreListInput.setAuthToken(authTokenStr);
+        genreListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
         GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
         asynGetGenreList.executeOnExecutor(threadPoolExecutor);

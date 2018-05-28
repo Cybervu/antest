@@ -2340,6 +2340,11 @@ public class WatchHistoryFragment extends Fragment implements VideoDetailsAsynct
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
            /* @Override
             public void onAdBreakStatusUpdated() {
 

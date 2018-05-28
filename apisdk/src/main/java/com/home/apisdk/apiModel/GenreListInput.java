@@ -9,6 +9,9 @@ package com.home.apisdk.apiModel;
 public class GenreListInput {
 
     String authToken;
+    String lang_code;
+
+
 
     /**
      * This Method is use to Set the Auth Token
@@ -26,6 +29,14 @@ public class GenreListInput {
      */
     public String getAuthToken() {
         return authToken;
+    }
+
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
     }
 
 }

@@ -89,12 +89,7 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(Login_input... params) {

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
@@ -71,8 +72,13 @@ public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.
 
         }else {
 
-            Picasso.with(context)
+           /* Picasso.with(context)
                     .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.no_image)
+                    .into(holder.videoImageview);*/
+
+            Glide.with(context)
+                    .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.no_image)
+                    .thumbnail(0.1f)
                     .into(holder.videoImageview);
 
 

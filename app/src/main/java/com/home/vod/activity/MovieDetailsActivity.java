@@ -59,6 +59,7 @@ import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
+import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMonitizationDetailsAsync;
@@ -77,6 +78,8 @@ import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
+import com.home.apisdk.apiModel.GenreListInput;
+import com.home.apisdk.apiModel.GenreListOutput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
@@ -171,6 +174,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -190,6 +194,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VOUCHER_BLANK_MESSAGE;
@@ -199,6 +208,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DELETE_FROM_FAV;
 import static com.home.vod.preferences.LanguagePreference.ENTER_VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_DATA_FETCHING;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
@@ -218,6 +228,11 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
@@ -236,7 +251,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         AddToFavAsync.AddToFavListener, ViewContentRatingAsynTask.ViewContentRatingListener
         , DeleteFavAsync.DeleteFavListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
         GetIpAddressAsynTask.IpAddressListener, GetMonitizationDetailsAsync.GetMonitizationDetailsListner
-        , VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener {
+        , VoucherSubscriptionAsyntask.VoucherSubscriptionListener, ValidateVoucherAsynTask.ValidateVoucherListener,
+        GetGenreListAsynctask.GenreListListener{
+
+
+
     int prevPosition = 0;
     PreferenceManager preferenceManager;
     private static final int MAX_LINES = 3;
@@ -366,6 +385,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     LinearLayout linearLayout[];
     boolean[] visibility;
     String[] lang;
+    private ArrayList<String> genreArrayList = new ArrayList<String>();
+    private ArrayList<String> genreValueArrayList = new ArrayList<String>();
+    private String[] genreArrToSend;
+    private String[] genreValueArrayToSend;
 //
 
 
@@ -2315,6 +2338,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             public void onSendingRemoteMediaRequest() {
             }
 
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
+
             /*@Override
             public void onAdBreakStatusUpdated() {
 
@@ -3737,21 +3765,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 try {
 
                     Util.parseLanguage(languagePreference, jsonResponse, default_Language);
+                    getGenreData(Default_Language);
                     //Call For Language PopUp Dialog
-
-                    languageCustomAdapter.notifyDataSetChanged();
-
-                   /* Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);*/
-
-                    final Intent detailsIntent = new Intent(MovieDetailsActivity.this, MovieDetailsActivity.class);
-                    detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(detailsIntent);
-                    finish();
-
-                    preferenceManager.setLanguageChangeStatus("1");
 
 
                 } catch (JSONException e) {
@@ -4094,5 +4109,147 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
 
+
+    @Override
+    public void onGetGenreListPreExecuteStarted() {
+            pDialog= new ProgressBarHandler(MovieDetailsActivity.this);
+            pDialog.show();
+    }
+
+    @Override
+    public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+        if (code > 0) {
+
+            if (code == 200) {
+                genreArrayList.clear();
+                genreValueArrayList.clear();
+                int lengthJsonArr = genreListOutput.size();
+                if (lengthJsonArr > 0) {
+                    genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
+                    genreValueArrayList.add(0, "");
+
+                }
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    genreArrayList.add(genreListOutput.get(i).getGenre_name());
+                    genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
+                }
+
+                if (genreArrayList.size() > 1) {
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                    genreValueArrayList.add(genreValueArrayList.size(), "");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                }
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+            } else {
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+
+            }
+        } else {
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+            genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+            genreArrToSend = new String[genreArrayList.size()];
+            genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+            genreValueArrayToSend = new String[genreValueArrayList.size()];
+            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+        }
+
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < genreArrToSend.length; i++) {
+            sb.append(genreArrToSend[i]).append(",");
+        }
+        preferenceManager.setGenreArrayToPref(sb.toString());
+
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < genreValueArrayToSend.length; i++) {
+            sb1.append(genreValueArrayToSend[i]).append(",");
+        }
+
+        preferenceManager.setGenreValuesArrayToPref(sb1.toString());
+
+        languageCustomAdapter.notifyDataSetChanged();
+
+                   /* Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);*/
+
+        final Intent detailsIntent = new Intent(MovieDetailsActivity.this, MovieDetailsActivity.class);
+        detailsIntent.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(detailsIntent);
+        finish();
+
+        preferenceManager.setLanguageChangeStatus("1");
+
+
+
+    }
+    private void getGenreData(String lang) {
+        GenreListInput genreListInput = new GenreListInput();
+        genreListInput.setAuthToken(authTokenStr);
+        genreListInput.setLang_code(lang);
+
+        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+    }
 
 }

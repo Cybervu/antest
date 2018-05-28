@@ -124,6 +124,7 @@ public class HomeFragment extends Fragment implements
     String videoImageStrToHeight;
     int ui_completed = 0;
     int loading_completed = 0;
+    int sampleSize=100;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -701,9 +702,13 @@ public class HomeFragment extends Fragment implements
                 LogUtil.showLog("MUVI1", "image url==============" + videoHeight);
 
                 URL url = new URL(urls[0]);
-                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                videoHeight = bmp.getHeight();
-                videoWidth = bmp.getWidth();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                options.inSampleSize = sampleSize;
+                Bitmap bmp = BitmapFactory.decodeStream((url.openConnection().getInputStream()), null, options);
+                //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                videoHeight = bmp.getHeight()*sampleSize;
+                videoWidth = bmp.getWidth()*sampleSize;
 
 
                 LogUtil.showLog("MUVI1", "videoHeight==============" + videoHeight);

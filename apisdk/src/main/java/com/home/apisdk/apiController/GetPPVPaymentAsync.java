@@ -59,6 +59,7 @@ public class GetPPVPaymentAsync extends AsyncTask<RegisterUserPaymentInputModel,
          *
          * @param registerUserPaymentOutputModel A Model Class which contain responses. To get that responses we need to call the respective getter methods.
          * @param status                         Response Code From The Server
+*        * @param response                       Response
          */
 
         void onGetPPVPaymentPostExecuteCompleted(RegisterUserPaymentOutputModel registerUserPaymentOutputModel, int status, String response);

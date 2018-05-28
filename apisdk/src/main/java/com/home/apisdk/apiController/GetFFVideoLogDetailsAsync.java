@@ -59,13 +59,6 @@ public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput,
 
         void onGetFFVideoLogsPreExecuteStarted();
 
-        /**
-         * This method will be invoked after controller complete execution.
-         * This method to handle post-execution work.
-         *
-         * @param code       Response Code From the Server.
-         * @param videoLogId For getting the Video Log Id
-         */
 
         void onGetFFVideoLogsPostExecuteCompleted(int code, String status, String videoLogId);
     }

@@ -91,12 +91,7 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
-     */
+
 
     @Override
     protected Void doInBackground(DeleteInvoicePdfInputModel... params) {

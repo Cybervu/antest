@@ -94,12 +94,7 @@ public class GetFFVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsIn
 
     VideoBufferLogsOutputModel videoBufferLogsOutputModel = new VideoBufferLogsOutputModel();
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(VideoBufferLogsInputModel... params) {

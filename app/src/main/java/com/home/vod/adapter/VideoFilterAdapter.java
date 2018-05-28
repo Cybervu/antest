@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
@@ -96,9 +97,16 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
 
         }else {
 
-            Picasso.with(context)
+              Glide.with(context)
+                      .load(item.getImage())
+                      .placeholder(R.drawable.logo)
+                      .error(R.drawable.no_image)
+                      .thumbnail(0.1f)
+                      .into(holder.videoImageview);
+
+           /* Picasso.with(context)
                     .load(item.getImage()).error(R.drawable.no_image).placeholder(R.drawable.logo)
-                    .into(holder.videoImageview);
+                    .into(holder.videoImageview);*/
 
 
           /*  ImageLoader imageLoader = ImageLoader.getInstance();

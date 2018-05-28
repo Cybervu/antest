@@ -3630,6 +3630,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onSendingRemoteMediaRequest() {
             }
+
+            @Override
+            public void onAdBreakStatusUpdated() {
+
+            }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
         finish();

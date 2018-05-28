@@ -14,13 +14,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
+import com.home.apisdk.apiController.GetUserProfileAsynctask;
+import com.home.apisdk.apiModel.GenreListInput;
+import com.home.apisdk.apiModel.GenreListOutput;
+import com.home.apisdk.apiModel.Get_UserProfile_Input;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -33,22 +40,35 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEXT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_LOCATION;
+import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.NEXT;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
+import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.YOUR_LOCATION;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class PickboxChooseCountry extends AppCompatActivity implements
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
+        GetGenreListAsynctask.GenreListListener{
     WheelView wheelView;
     ImageView upArrow, downArrow;
-    public static ArrayList<LanguageModel> languageModel = null;
+    public static ArrayList<LanguageModel> languageModel = new ArrayList<>();
     String Default_Language = "";
     LanguagePreference languagePreference;
     ArrayList<String> languages = new ArrayList<>();
@@ -70,10 +90,18 @@ public class PickboxChooseCountry extends AppCompatActivity implements
     private int CHOOSE_COUNTRY=1001;
     String Response=null;
 
+    private ArrayList<String> genreArrayList = new ArrayList<String>();
+    private ArrayList<String> genreValueArrayList = new ArrayList<String>();
+    private String[] genreArrToSend;
+    private String[] genreValueArrayToSend;
+    private PreferenceManager preferenceManager;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_picker);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         initViews();
         setLanguage();
         getPreviousIntentValue();
@@ -169,6 +197,7 @@ public class PickboxChooseCountry extends AppCompatActivity implements
         }
 
         languageModel.get(seletedIndex).setIsSelected(true);
+        //Util.languageModel.get(seletedIndex).setIsSelected(true);
 
         Default_Language = languageModel.get(seletedIndex).getLanguageId();
 
@@ -215,6 +244,7 @@ public class PickboxChooseCountry extends AppCompatActivity implements
         languagePreference = LanguagePreference.getLanguagePreference(this);
         noInternetLayout.setVisibility(View.GONE);
         headingText= (TextView)findViewById(R.id.headingText);
+
     }
 
     /* public List getList() {
@@ -311,7 +341,7 @@ public class PickboxChooseCountry extends AppCompatActivity implements
                 Response=jsonResponse;
                 Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
                 languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, Default_Language);
-                intentToDesiredScreen(intentType);
+                getGenreData(Default_Language);
 
 
             } catch (JSONException e) {
@@ -325,6 +355,15 @@ public class PickboxChooseCountry extends AppCompatActivity implements
             noInternetLayout.setVisibility(View.GONE);
         }
 
+    }
+
+    private void getGenreData(String lang) {
+        GenreListInput genreListInput = new GenreListInput();
+        genreListInput.setAuthToken(authTokenStr);
+        genreListInput.setLang_code(lang);
+
+        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, PickboxChooseCountry.this, PickboxChooseCountry.this);
+        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
     }
 
     private void intentToDesiredScreen(String intentType) {
@@ -362,4 +401,131 @@ public class PickboxChooseCountry extends AppCompatActivity implements
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
+
+    @Override
+    public void onGetGenreListPreExecuteStarted() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }else {
+            pDialog= new ProgressBarHandler(PickboxChooseCountry.this);
+            pDialog.show();
+        }
+    }
+
+    @Override
+    public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+        if (code > 0) {
+
+            if (code == 200) {
+                genreArrayList.clear();
+                genreValueArrayList.clear();
+                int lengthJsonArr = genreListOutput.size();
+                if (lengthJsonArr > 0) {
+                    genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
+                    genreValueArrayList.add(0, "");
+
+                }
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    genreArrayList.add(genreListOutput.get(i).getGenre_name());
+                    genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
+                }
+
+                if (genreArrayList.size() > 1) {
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                    genreValueArrayList.add(genreValueArrayList.size(), "");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                }
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+            } else {
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+
+            }
+        } else {
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+            genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+            genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+            genreArrToSend = new String[genreArrayList.size()];
+            genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+            genreValueArrayToSend = new String[genreValueArrayList.size()];
+            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+        }
+
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < genreArrToSend.length; i++) {
+            sb.append(genreArrToSend[i]).append(",");
+        }
+        preferenceManager.setGenreArrayToPref(sb.toString());
+
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < genreValueArrayToSend.length; i++) {
+            sb1.append(genreValueArrayToSend[i]).append(",");
+        }
+
+        preferenceManager.setGenreValuesArrayToPref(sb1.toString());
+
+        intentToDesiredScreen(intentType);
+
+
+    }
 }

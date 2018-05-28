@@ -94,12 +94,7 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
 
     }
 
-    /**
-     * Background thread to execute.
-     *
-     * @return null
-     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
-     */
+
 
     @Override
     protected Void doInBackground(GetCastDetailsInput... params) {

@@ -25,6 +25,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:src="@drawable/content_list_overlay" />
 
         <ImageView

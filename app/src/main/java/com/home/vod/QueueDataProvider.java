@@ -314,6 +314,11 @@ public class QueueDataProvider {
         public void onSendingRemoteMediaRequest() {
         }
 
+        @Override
+        public void onAdBreakStatusUpdated() {
+
+        }
+
         /*@Override
         public void onAdBreakStatusUpdated() {
 
