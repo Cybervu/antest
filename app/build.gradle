@@ -11,10 +11,11 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
-
 
 android {
     flavorDimensions 'environment', 'vendor'
@@ -774,6 +775,25 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+        yodha {
+            minSdkVersion 21
+            applicationId 'com.release.yodha'
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"34f14aa4e77a38d2cf116a7d068aab03\""//yodha
+            //buildConfigField "String", "AUTH_TOKEN", "\"6cba2c86057aa859f805cd349dc53781\""//shwstream
+            dimension 'vendor'
+        }
+        yodha_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        yodha_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -932,6 +952,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('shwestreammovies') && (environment.equals('shwestreammovies_staging_') || environment.equals('shwestreammovies_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('yodha') && (environment.equals('yodha_staging_') || environment.equals('yodha_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
