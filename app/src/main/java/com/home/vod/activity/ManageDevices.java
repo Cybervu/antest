@@ -7,10 +7,10 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.home.apisdk.apiController.LoadRegisteredDevicesAsync;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
@@ -21,7 +21,6 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -84,6 +83,9 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
                 onBackPressed();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
         userId = preferenceManager.getUseridFromPref();
         emailId = preferenceManager.getEmailIdFromPref();
@@ -249,5 +251,30 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_manage_device);
+            }
+        }
     }
 }

@@ -132,6 +132,8 @@ public class SDKInitializer {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             sdkInitializerListner.onPostExecuteListner(status);
+
+
         }
 
         @Override
@@ -171,19 +173,19 @@ public class SDKInitializer {
 
                     if (status == 200) {
 
-                        sdkInitializerPreference.clearSDKPref();
+//                        sdkInitializerPreference.clearSDKPref();
 
                         if ((myJson.has("pkgname")) && myJson.optString("pkgname").trim() != null && !myJson.optString("pkgname").trim().isEmpty() && !myJson.optString("pkgname").trim().equals("null") && !myJson.optString("pkgname").trim().matches("")) {
                             String PNAME = myJson.optString("pkgname");
-                            sdkInitializerPreference.setPackage_namePref(PNAME);
-                            Log.v("MUVI", "pkgname at class=" + (myJson.optString("pkgname")));
+//                            sdkInitializerPreference.setPackage_namePref(PNAME);
+//                            Log.v("MUVI", "pkgname at class=" + (myJson.optString("pkgname")));
                         }
 
 
                         if ((myJson.has("hashkey")) && myJson.optString("hashkey").trim() != null && !myJson.optString("hashkey").trim().isEmpty() && !myJson.optString("hashkey").trim().equals("null") && !myJson.optString("hashkey").trim().matches("")) {
                             String hashKey = (myJson.optString("hashkey"));
-                            sdkInitializerPreference.setHash_KeyPref(hashKey);
-                            Log.v("MUVI", "Hash Key at class=" + (myJson.optString("hashkey")));
+//                            sdkInitializerPreference.setHash_KeyPref(hashKey);
+//                            Log.v("MUVI", "Hash Key at class=" + (myJson.optString("hashkey")));
                         }
 
                         if ((myJson.has("server_time")) && myJson.optString("server_time").trim() != null && !myJson.optString("server_time").trim().isEmpty() && !myJson.optString("server_time").trim().equals("null") && !myJson.optString("server_time").trim().matches("")) {

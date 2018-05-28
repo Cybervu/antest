@@ -8,6 +8,7 @@ import android.support.transition.Visibility;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,6 +21,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +36,8 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
+import static com.home.vod.preferences.LanguagePreference.ABOUT_US;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ABOUT_US;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -90,6 +94,10 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         noInternet.setVisibility(View.GONE);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml(getArguments().getString("title")));
+        // Kushal - set Id to back button and text in Toolabr
+        Toolbar toolbar = ((MainActivity) getActivity()).mToolbar;
+        setIdToActionBarBackButton(toolbar);
+
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
 
 
@@ -263,5 +271,34 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     public static String replaceNewlinesWithBreaks(String source) {
         return source != null ? source.replaceAll("(?:\n|\r\n)","<br>") : "";
     }*/
+
+    /*
+     Kushal- To set id to back button in Action Bar
+      */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.menu);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            } else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                if(t.getText().toString().equalsIgnoreCase(languagePreference.getTextofLanguage(ABOUT_US,DEFAULT_ABOUT_US)))
+                    t.setId(R.id.page_title_about_us);
+                else
+                    t.setId(R.id.page_title_footer_menu);
+            }
+        }
+
+    }
 }
 

@@ -18,8 +18,9 @@ public class VideolistFragmentHandler {
     public VideolistFragmentHandler(Activity context){
         this.context=context;
         featureHandler = FeatureHandler.getFeaturePreference(context);
-
     }
+
+
 
     public void handleMenuFilter(Menu menu){
 

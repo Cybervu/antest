@@ -44,7 +44,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/yesButton"
+                android:id="@+id/resume"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/login_maring_top"
@@ -56,7 +56,7 @@
                 android:textSize="@dimen/button_textsize" />
 
             <Button
-                android:id="@+id/cancelButton"
+                android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cancel_button_radious"

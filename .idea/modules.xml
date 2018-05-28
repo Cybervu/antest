@@ -8,8 +8,8 @@
       <module fileurl="file://$PROJECT_DIR$/VOD.iml" filepath="$PROJECT_DIR$/VOD.iml" />
       <module fileurl="file://D:/Workspace/FINAL_VOD/VOD.iml" filepath="D:/Workspace/FINAL_VOD/VOD.iml" />
       <module fileurl="file://$PROJECT_DIR$/VOD_CLONE.iml" filepath="$PROJECT_DIR$/VOD_CLONE.iml" />
-      <module fileurl="file://$PROJECT_DIR$/VOD_Final.iml" filepath="$PROJECT_DIR$/VOD_Final.iml" />
       <module fileurl="file://D:/Workspace/FINAL_VOD/VOD_Final.iml" filepath="D:/Workspace/FINAL_VOD/VOD_Final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VOD_Final.iml" filepath="$PROJECT_DIR$/VOD_Final.iml" />
       <module fileurl="file://$PROJECT_DIR$/apisdk/apisdk.iml" filepath="$PROJECT_DIR$/apisdk/apisdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

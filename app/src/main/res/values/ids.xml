@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Navigation Drawer static menu id-->
+    <item name="contact_us" type="id"/>
+    <item name="home" type="id"/>
+    <item name="about_us" type="id"/>
+    <item name="my_library" type="id"/>
+    <item name="my_favourite" type="id"/>
+    <item name="my_download" type="id"/>
+    <item name="watch_history" type="id"/>
+
+    <!--hamburger icon and back button id-->
+    <item name="menu" type="id"/>
+    <item name="back" type="id"/>
+
+    <!--season id-->
+    <item name="season_one" type="id"/>
+    <item name="season_two" type="id"/>
+    <item name="season_more" type="id"/>
+
+    <!--Resolutions id-->
+
+    <item name="resolution_144" type="id"/>
+    <item name="resolution_240" type="id"/>
+    <item name="resolution_360" type="id"/>
+    <item name="resolution_480" type="id"/>
+    <item name="resolution_720" type="id"/>
+    <item name="resolution_1080" type="id"/>
+    <item name="resolution_1440" type="id"/>
+    <item name="resolution_2048" type="id"/>
+    <item name="resolution_4096" type="id"/>
+    <item name="resolution_7680" type="id"/>
+    <item name="resolution_best" type="id"/>
+    <item name="resolution_auto" type="id"/>
+
+    <!--Download id-->
+
+    <item name="download_144" type="id"/>
+    <item name="download_240" type="id"/>
+    <item name="download_360" type="id"/>
+    <item name="download_480" type="id"/>
+    <item name="download_640" type="id"/>
+    <item name="download_720" type="id"/>
+    <item name="download_1080" type="id"/>
+    <item name="download_1440" type="id"/>
+    <item name="download_2048" type="id"/>
+    <item name="download_4096" type="id"/>
+    <item name="download_7680" type="id"/>
+    <item name="download_best" type="id"/>
+    <item name="download_auto" type="id"/>
+
+
+    <!--subtitile-->
+    <item name="off" type="id"/>
+
+   <!-- Page Titles-->
+    <item name="page_title_cast_crew" type="id"/>
+    <item name="page_title_season" type="id"/>
+    <item name="page_title_my_favourite" type="id"/>
+    <item name="page_title_filter" type="id"/>
+    <item name="page_title_forgot_password" type="id"/>
+    <item name="page_title_login" type="id"/>
+    <item name="page_title" type="id"/>
+    <item name="page_title_manage_device" type="id"/>
+    <item name="page_title_my_download" type="id"/>
+    <item name="page_title_profile" type="id"/>
+    <item name="page_title_register" type="id"/>
+    <item name="page_title_review" type="id"/>
+    <item name="page_title_search" type="id"/>
+    <item name="page_title_viewall" type="id"/>
+    <item name="page_title_my_library" type="id"/>
+    <item name="page_title_watch_history" type="id"/>
+    <item name="page_title_about_us" type="id"/>
+    <item name="page_title_contact_us" type="id"/>
+    <item name="page_title_video_list" type="id"/>
+    <item name="page_title_purchase_history" type="id"/>
+    <item name="page_title_footer_menu" type="id"/>
+    <item name="app_title" type="id"/>
+</resources>

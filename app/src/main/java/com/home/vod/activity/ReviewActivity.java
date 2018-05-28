@@ -10,15 +10,14 @@ import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.home.apisdk.apiController.AddContentRatingAsynTask;
 import com.home.apisdk.apiController.ViewContentRatingAsynTask;
@@ -26,7 +25,6 @@ import com.home.apisdk.apiModel.AddContentRatingInputModel;
 import com.home.apisdk.apiModel.AddContentRatingOutputModel;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
-
 import com.home.vod.R;
 import com.home.vod.adapter.ReviewsAdapter;
 import com.home.vod.model.ReviewsItem;
@@ -44,12 +42,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import android.widget.Toast;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_POST_REVIEW;
-import static com.home.vod.preferences.LanguagePreference.ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADD_A_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.CLICK_HERE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_POST_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -60,7 +55,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEED_LOGIN_TO_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REVIEWS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBMIT_YOUR_RATING_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TO_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REVIEW_HERE;
@@ -130,6 +124,9 @@ public class ReviewActivity extends AppCompatActivity implements
                 finish();
             }
         });
+
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
 
         submitRatingLayout = (RelativeLayout)findViewById(R.id.submitRatingLayout);
         clickHereToLogin = (TextView) findViewById(R.id.clickHereToLogin);
@@ -743,6 +740,30 @@ public class ReviewActivity extends AppCompatActivity implements
     }
 */
 
+    /*
+     Kushal- To set id to back button in Action Bar
+      */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_button);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_button);
+                }*/
+            }else if (v instanceof TextView) {
+                TextView t = (TextView) v;
+                t.setId(R.id.page_title_review);
+            }
+        }
+    }
 
 
 }

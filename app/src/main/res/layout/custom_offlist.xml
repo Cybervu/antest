@@ -37,14 +37,14 @@
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/editTextColor" />
+                android:textColor="@color/downloadTextColor" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/editTextColor"
+                android:textColor="@color/downloadTextColor"
 
                 />
 
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/editTextColor"
+                android:textColor="@color/downloadTextColor"
 
                 />
 
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:textColor="@color/editTextColor"
+                android:textColor="@color/downloadTextColor"
 
                 />
         </LinearLayout>

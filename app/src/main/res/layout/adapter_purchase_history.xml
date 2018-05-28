@@ -175,6 +175,7 @@
                 android:gravity="center"
                 android:paddingLeft="@dimen/login_new_user_padding"
                 android:text="$299"
+                android:textColor="@color/purchasepricecolor"
                 android:textSize="@dimen/transcationshowprice_text_size" />
 
 

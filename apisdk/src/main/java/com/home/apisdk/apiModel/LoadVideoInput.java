@@ -8,7 +8,19 @@ package com.home.apisdk.apiModel;
 
 public class LoadVideoInput {
 
+
+
     String authToken;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    String userId;
 
     /**
      * This Method is use to Get the Auth Token

@@ -161,10 +161,12 @@ public class Util {
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
-    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+ /*   public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
     public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
-    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
-
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";*/
+    public static String pdf_download_url(Context context){
+        return context.getString(R.string.pdf_download_url);
+    }
     public static boolean app_is_in_player_context = false;
     public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
     public static int image_compressed = 3;
@@ -800,12 +802,15 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, COMPLETE_SEASON, DEFAULT_COMPLETE_SEASON, "complete_season", json);
         setTranslationLanguageToPref(languagePreference, NEXT, DEFAULT_NEXT, "btn_next", json);
         setTranslationLanguageToPref(languagePreference, VOUCHER_SUCCESS, DEFAULT_VOUCHER_SUCCESS, "voucher_applied_success", json);
+        setTranslationLanguageToPref(languagePreference, CLEAR_HISTORY, DEFAULT_CLEAR_HISTORY, "clear_history", json);
+        setTranslationLanguageToPref(languagePreference, SORRY_ENTER_NAME, DEFAULT_SORRY_ENTER_NAME, "sorry_enter_name", json);
 
         languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, default_Language);
 
+
     }
 
-    /**
+    /**d
      * This method is used to set translation language from json keyword.
      * @param languagePreference
      * @param lanngKey
@@ -947,6 +952,19 @@ public class Util {
 
         return inSampleSize;
     }
+
+    /**
+     * Method to check IP is exist in iplist.
+     * @param ip
+     * @return
+     */
+
+    public static boolean isIPExist(String ip){
+        boolean status = Arrays.asList(Constant.PUBLIC_IPS_FOR_DISABLE_GEOBLOCK).contains(ip);
+        return status;
+    }
+
+
 
 
 

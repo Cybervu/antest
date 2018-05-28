@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,17 +24,10 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FeatureHandler;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.home.vod.R.id.loginWithFacebookButton;
-import static com.home.vod.R.id.registerButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -74,19 +62,19 @@ public class RegisterUIHandler {
 
     public RegisterUIHandler(Activity context) {
         this.context = context;
-        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
+        termsTextView = (TextView) context.findViewById(R.id.terms);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
 
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         gmailTest=(TextView) context.findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.register_google);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
         btnLogin.setVisibility(View.VISIBLE);
-        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) context.findViewById(R.id.register_facebook);
         googleSignView.setVisibility(View.VISIBLE);
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        editName = (EditText) context.findViewById(R.id.name);
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
 

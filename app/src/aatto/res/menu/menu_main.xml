@@ -22,7 +22,7 @@
         android:id="@+id/media_route_menu_item"
         android:title="@string/media_route_menu_title"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        android:orderInCategory="102"
+        android:orderInCategory="101"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_search"
@@ -36,13 +36,13 @@
         android:id="@+id/action_filter"
         android:title="filter"
         android:icon="@drawable/filter"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         app:showAsAction="always|never"
         android:visible="false"
     />
 
     <item
-        android:id="@+id/submenu"
+        android:id="@+id/option"
         android:title=""
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"

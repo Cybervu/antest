@@ -484,6 +484,12 @@ public class LanguagePreference {
     public static String REMOVE_DEVICE_SUCCESS = "REMOVE_DEVICE_SUCCESS";
     public static String DEFAULT_REMOVE_DEVICE_SUCCESS = "Remove device request successful.";
 
+    public static String CLEAR_HISTORY= "CLEAR_HISTORY";
+    public static String DEFAULT_CLEAR_HISTORY= "Clear History";
+    public static String SORRY_ENTER_NAME= "SORRY_ENTER_NAME";
+    public static String DEFAULT_SORRY_ENTER_NAME= "Sorry! enter a name";
+
+
 
     //Kushal
     public static String LANDING_TEXT = "LANDING_TEXT";

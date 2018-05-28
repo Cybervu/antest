@@ -96,6 +96,8 @@
  <color name="loader_color">#5d6c7e</color>
  <color name="hint_background">#b70000</color>
  <color name="pageTitleColor">#6e6f76</color>
+ <color name="episodeTitleColor">#000000</color>
+ <color name="subscription_purchase_color">#000000</color>
  <color name="noInternetColor">#5c6873</color>
  <color name="editTextColor">#5c6873</color>
  <color name="movieTitleColor">#fff</color>
@@ -106,7 +108,7 @@
  <color name="playPauseColor">#00000000</color>
  <color name="waterMarkTextColor">#80ffffff</color>
  <color name="seekTimeTextColor">#80ffffff</color>
- <color name="aboutustextcolor">#FFFFFF</color>
+ <color name="aboutustextcolor">#000000</color>
  <color name="subTitleTextColor">#000</color>
  <color name="totalTimeTxtColor">#ffffff</color>
  <color name="contentTitleColor">#fff</color>
@@ -141,6 +143,7 @@
  <color name="selectedHintColor">#0b8f66</color>
  <color name="hintTextColor">#999</color>
  <color name="editTexColor">#666</color>
+ <color name="downloadTextColor">#666</color>
  <color name="buttonBackgroundColor">#2acb99</color>
  <color name="loginTextColor">#2acb99</color>
  <color name="signUpTextColor">#2acb99</color>
@@ -170,6 +173,7 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseBackground">#e2e1e1</color>
  <color name="purchaseTextColor">#000</color>
+ <color name="purchasepricecolor">#ffffff</color>
  <color name="nav_drawer_lineColor_menu">#000</color>
  <color name="nav_header_line_color">#000</color>
 

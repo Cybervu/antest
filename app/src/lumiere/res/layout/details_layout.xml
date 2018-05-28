@@ -123,7 +123,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/favorite_view"
+                        android:id="@+id/favourite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/payment_relative_margin"
@@ -166,8 +166,8 @@
 
 
                     <Button
-                        android:id="@+id/viewTrailerButton"
-                        android:layout_width="@dimen/btnmore_width"
+                        android:id="@+id/viewtrailer"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/btnmore_height"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/button_radious"
@@ -194,10 +194,9 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/videoDurationTextView"
+                        android:id="@+id/video_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:text=""
                         android:textColor="@color/detailsPageTextColor"
@@ -207,7 +206,6 @@
                         android:id="@+id/videoCensorRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:background="@drawable/button_bg_orange"
                         android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
@@ -220,17 +218,15 @@
                         android:id="@+id/videoCensorRatingTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/name_user_margin_bottom"
                         android:textColor="@color/detailsPageTextColor"
                         android:textSize="@dimen/preorderbtn_text_size" />
 
 
                     <TextView
-                        android:id="@+id/videoReleaseDateTextView"
+                        android:id="@+id/video_release_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:textColor="@color/detailsPageTextColor"
                         android:textSize="@dimen/preorderbtn_text_size" />
@@ -238,7 +234,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/playButton"
+                    android:id="@+id/play"
                     android:layout_width="@dimen/playbtn_width"
                     android:layout_height="@dimen/playbtn_height"
                     android:layout_centerHorizontal="true"
@@ -246,7 +242,7 @@
                     android:src="@drawable/play" />
 
                 <TextView
-                    android:id="@+id/videoGenreTextView"
+                    android:id="@+id/genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/durationcensorLinearlayout"
@@ -257,10 +253,10 @@
                     android:textSize="@dimen/preorderbtn_text_size" />
 
                 <TextView
-                    android:id="@+id/videoTitle"
+                    android:id="@+id/content_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/videoGenreTextView"
+                    android:layout_above="@+id/genre"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="@dimen/ppv_margin"
@@ -309,14 +305,14 @@
                 android:visibility="visible">
 
                 <RatingBar
-                    android:id="@+id/ratingBar"
+                    android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ppv_margin"
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/viewRatingTextView"
+                    android:id="@+id/review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -342,7 +338,7 @@
                     android:textSize="@dimen/preorderbtn_text_size" />
 
                 <TextView
-                    android:id="@+id/videoCastCrewTitleTextView"
+                    android:id="@+id/cast_crew"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

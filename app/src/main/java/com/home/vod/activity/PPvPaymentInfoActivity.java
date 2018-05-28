@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -417,6 +420,9 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
             }
         });
 
+        // Kushal - To set Id to action bar back button
+        setIdToActionBarBackButton(mActionBarToolbar);
+
       /*  if (pDialog == null) {
             pDialog = new ProgressDialog(PPvPaymentInfoActivity.this, R.style.CustomDialogTheme);
             pDialog.setCancelable(false);
@@ -552,7 +558,9 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         cardExpiryMonthSpinner = (Spinner) findViewById(R.id.cardExpiryMonthEditText);
         cardExpiryYearSpinner = (Spinner) findViewById(R.id.cardExpiryYearEditText);
         creditCardSaveSpinner = (Spinner) findViewById(R.id.creditCardSaveEditText);
-
+        ViewCompat.setBackgroundTintList(cardExpiryMonthSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(cardExpiryYearSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
+        ViewCompat.setBackgroundTintList(creditCardSaveSpinner, ColorStateList.valueOf(getResources().getColor(R.color.hint_color)));
 
         apply = (Button) findViewById(R.id.apply);
         watch_now = (Button) findViewById(R.id.watch_now);
@@ -569,6 +577,32 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
         voucher_code = (EditText) findViewById(R.id.voucher_code);
         couponCodeEditText.addTextChangedListener(filterTextWatcher);
+         /*@Author Bishal
+                *This issue is reported in Blenhim films while we click voucher radio button and at that time coupan edit text is visible
+                * and we click coupan code and apply it then voucher and payment layout override with each other this id fixed here
+                 */
+        couponCodeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creditCardLayout.setVisibility(View.VISIBLE);
+                paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                voucherLinearLayout.setVisibility(View.GONE);
+                voucherRadioButton.setChecked(false);
+                payWithCreditCardRadioButton.setChecked(true);
+            }
+        });
+        couponCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    creditCardLayout.setVisibility(View.VISIBLE);
+                    paymentOptionLinearLayout.setVisibility(View.VISIBLE);
+                    voucherLinearLayout.setVisibility(View.GONE);
+                    voucherRadioButton.setChecked(false);
+                    payWithCreditCardRadioButton.setChecked(true);
+                }
+            }
+        });
 
         FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts), nameOnCardEditText);
         FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts), cardNumberEditText);
@@ -640,6 +674,14 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         voucherRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*@Author Bishal
+                *This issue is reported in Blenhim films while we click voucher radio button and at that time coupan edit text is visible
+                * and we click coupan code and apply it then voucher and payment layout override with each other this id fixed here
+                 */
+                voucherRadioButton.setChecked(true);
+                payWithCreditCardRadioButton.setChecked(false);
+                couponCodeEditText.getText().clear();
+           //end
                 creditCardLayout.setVisibility(View.GONE);
                 paymentOptionLinearLayout.setVisibility(View.VISIBLE);
                 voucherLinearLayout.setVisibility(View.VISIBLE);
@@ -3393,6 +3435,28 @@ public class PPvPaymentInfoActivity extends AppCompatActivity implements
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /*
+    Kushal- To set id to back button in Action Bar
+     */
+    private void setIdToActionBarBackButton(Toolbar mActionBarToolbar) {
+        for (int i = 0; i < mActionBarToolbar.getChildCount(); i++) {
+            View v = mActionBarToolbar.getChildAt(i);
+            if (v instanceof ImageButton) {
+                ImageButton b = (ImageButton) v;
+                b.setId(R.id.back);
+                /*try {
+                    if (b.getContentDescription().equals("Open")) {
+                        b.setId(R.id.drawer_menu);
+                    } else {
+                        b.setId(R.id.back_btn);
+                    }
+                }catch (Exception e){
+                    b.setId(R.id.back_btn);
+                }*/
+            }
+        }
     }
 
 }

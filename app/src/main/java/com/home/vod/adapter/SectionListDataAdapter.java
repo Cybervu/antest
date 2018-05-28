@@ -206,7 +206,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         opt.inSampleSize=sampleSize;
         BitmapFactory.decodeResource(res, resId, opt);
         opt.inSampleSize = calculateInSampleSize(opt,reqWidth,reqHeight);
-        opt.inJustDecodeBounds=false;
+        opt.inJustDecodeBounds=true;
         return BitmapFactory.decodeResource(res, resId, opt);
     }
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
