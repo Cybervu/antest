@@ -71,7 +71,9 @@
             android:id="@+id/imageView1"
             android:layout_width="@dimen/recylerimg_width"
             android:layout_height="@dimen/recylerimg_height"
-            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/marginright5dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/marginright5dp"
             android:src="@drawable/delete" />
 
     </LinearLayout>

@@ -122,7 +122,8 @@ public class FeatureHandler {
 
             // Hve to change
 
-           // setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
+
+            //setFeatureFlag( STUFF_LOGIN_REGISTER , DEFAULT_STUFF_LOGIN_REGISTER);
 
 
 
