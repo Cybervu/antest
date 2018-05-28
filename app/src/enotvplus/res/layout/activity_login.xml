@@ -140,6 +140,7 @@
                 android:text="@string/stuff_login_text"
                 android:textColor="@color/fb_text_color"
                 android:textSize="@dimen/fb_text_size" />
+        </LinearLayout>
             <LinearLayout
                 android:id="@+id/login_facebook"
                 android:layout_width="match_parent"
@@ -262,7 +263,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
 
