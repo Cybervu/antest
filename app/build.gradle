@@ -71,9 +71,9 @@ android {
             versionName "2.0.1"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
-            buildConfigField "String", "AUTH_TOKEN", "\"a9e62721a6a232cb283b253ccec352fa\""//edocent
+//            buildConfigField "String", "AUTH_TOKEN", "\"a9e62721a6a232cb283b253ccec352fa\""//edocent
 //            buildConfigField "String", "AUTH_TOKEN", "\"fa2fdc4d02f71137946bb8eedb041830\""
             //   buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""// sapphire store
 //            buildConfigField "String", "AUTH_TOKEN", "\"445882348316089103b8729dcb397c51\""//idogic
@@ -96,8 +96,8 @@ android {
         defaultFlavor_Prod_ {
             dimension 'environment'
 //            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
-//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://muvi618.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://muvi618.edocent.com/rest/\""
         }
         /*Structuring vishwamtv flavour with dimension*/
         vishwamtv {
