@@ -9,4 +9,4 @@
 .externalNativeBuild
 /.idea/
 .idea/misc.xml
-MediaLib/build
+/MediaLib/build
